@@ -11836,12 +11836,12 @@ a.anchor-link {
 <div align="right">
 <small>
 <br>October 13, 2016: presentation time
+<br>October 12, 2016: final review
 <br>October 11, 2016: review
 <br>October 10, 2016: first draft, Pythonic style
 </small>
 </div>
 </p>
-<br>
 <br>
 <p>
 <div align="center">
@@ -11960,7 +11960,10 @@ in Computer Science, XXXI cycle @ UniFI
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Introduction-to-Process-Calculi-and-related-Type-Systems">Introduction to Process Calculi and related Type Systems<a class="anchor-link" href="#Introduction-to-Process-Calculi-and-related-Type-Systems">&#182;</a></h2><p>taught by Rosario Pugliese and Ilaria Castellani, 4 CFU.</p>
 <p>Here I studied <strong><em>co</em>-recursive definitions</strong>, in the spirit of:</p>
-<div class="highlight"><pre><span></span><span class="nf">fib</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><span class="nf">nats</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
+<span class="nf">nats</span> <span class="ow">=</span> <span class="mi">0</span> <span class="kt">:</span> <span class="n">map</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="n">nats</span>
+
+<span class="nf">fib</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
 <span class="nf">fib</span> <span class="ow">=</span> <span class="mi">0</span> <span class="kt">:</span> <span class="mi">1</span> <span class="kt">:</span> <span class="n">zipWith</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="n">fib</span> <span class="p">(</span><span class="n">tail</span> <span class="n">fib</span><span class="p">)</span>
 
 <span class="nf">sieve&#39;</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
@@ -11978,7 +11981,8 @@ in Computer Science, XXXI cycle @ UniFI
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Mathematical-methods-for-Computer-Science">Mathematical methods for Computer Science<a class="anchor-link" href="#Mathematical-methods-for-Computer-Science">&#182;</a></h2><p>taught by Elena Barcucci, 3 CFU.</p>
 <p>Here I studied <strong>Gray codes</strong>, all implementations use <em>bit-masking</em> techniques;<br>
-moreover, I collect theory and practice in this <a href="http://nbviewer.jupyter.org/github/massimo-nocentini/competitive-programming/blob/master/tutorials/graycodes.ipynb?flush_cache=true">notebook</a>.</p>
+moreover, I collect theory and practice in this <a href="http://nbviewer.jupyter.org/github/massimo-nocentini/competitive-programming/blob/master/tutorials/graycodes.ipynb?flush_cache=true">notebook</a>, with applications<br>
+to binary counting and enumeration of combinations.</p>
 
 </div>
 </div>
