@@ -1,0 +1,406 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>A Primer &#8212; microkanrenpy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Reasoned Schemer" href="reasoned_schemer.html" />
+    <link rel="prev" title="Intro" href="write_the_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="a-primer">
+<span id="primer"></span><h1>A Primer<a class="headerlink" href="#a-primer" title="Permalink to this headline">¶</a></h1>
+<p>This short document aims to show the basic concepts underlying <em>μkanren</em>,
+namely relations as goals, and how to use primitive goals as building blocks to
+build and define relations. We start from two primitive relations toward
+recursive relations, through constructors, fresh logic variables, unification
+and η-inversion.</p>
+<p>First of all we start importing objects and definitions of the logic system:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">muk.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">muk.ext</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>We use the interface function <a class="reference internal" href="under_the_hood.html#muk.core.run" title="muk.core.run"><code class="xref py py-func docutils literal"><span class="pre">run</span></code></a> to ask for
+substitutions that satisfy the relation under study; moreover, nouns <em>relation</em>,
+<em>goal</em> and <em>predicate</em> are equivalent notions and denotes the same concept in
+the rest of this presentation.</p>
+<div class="section" id="primitive-goals">
+<h2>Primitive goals<a class="headerlink" href="#primitive-goals" title="Permalink to this headline">¶</a></h2>
+<p>The two primitive goals <a class="reference internal" href="under_the_hood.html#muk.core.succeed" title="muk.core.succeed"><code class="xref py py-func docutils literal"><span class="pre">succeed</span></code></a> and
+<a class="reference internal" href="under_the_hood.html#muk.core.fail" title="muk.core.fail"><code class="xref py py-func docutils literal"><span class="pre">fail</span></code></a> denote <em>truth</em> and <em>falsehood</em> in classic
+logic, respectively.</p>
+<div class="section" id="succeed">
+<h3><code class="docutils literal"><span class="pre">succeed</span></code><a class="headerlink" href="#succeed" title="Permalink to this headline">¶</a></h3>
+<p>Asking for all substitutions that satisfy the <code class="docutils literal"><span class="pre">succeed</span></code>
+relation yields a tautology, namely any substitution works:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">succeed</span><span class="p">)</span>
+<span class="go">[Tautology]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fail">
+<h3><code class="docutils literal"><span class="pre">fail</span></code><a class="headerlink" href="#fail" title="Permalink to this headline">¶</a></h3>
+<p>On the other hand, there is no substitution that satisfies the <code class="docutils literal"><span class="pre">fail</span></code> relation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fail</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="goal-ctors">
+<h2>Goal ctors<a class="headerlink" href="#goal-ctors" title="Permalink to this headline">¶</a></h2>
+<p>Before introducing goal constructors we show how a logic variable is
+represented when it doesn&#8217;t get any association:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvar</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">▢₀</span>
+</pre></div>
+</div>
+<p>where class <code class="docutils literal"><span class="pre">rvar</span></code> builds a <em>reified variable</em> providing an
+integer, namely <code class="docutils literal"><span class="pre">0</span></code>, to track the variable&#8217;s birthdate.</p>
+<div class="section" id="fresh">
+<h3><code class="docutils literal"><span class="pre">fresh</span></code><a class="headerlink" href="#fresh" title="Permalink to this headline">¶</a></h3>
+<p>It is a goal ctor that introduces <em>new</em> logic variables, namely variables without
+associations, according to the plugged-in lambda expression, which receives
+vars and returns a goal. Consider the following query where the variable <code class="docutils literal"><span class="pre">q</span></code>
+is introduced fresh:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">succeed</span><span class="p">))</span>
+<span class="go">[▢₀]</span>
+</pre></div>
+</div>
+<p>since the returned goal is <code class="docutils literal"><span class="pre">succeed</span></code> and var <code class="docutils literal"><span class="pre">q</span></code> doesn&#8217;t get any
+association, it remains fresh in the list of values, result of the whole
+<code class="docutils literal"><span class="pre">run</span></code> invocation, that satisfy the goal <code class="docutils literal"><span class="pre">fresh(lambda</span> <span class="pre">q:</span> <span class="pre">succeed)</span></code>.</p>
+<p>As particular case, it is possible to plugin a <em>thunk</em>, namely a lambda
+expression without argument:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">succeed</span><span class="p">))</span>
+<span class="go">[Tautology]</span>
+</pre></div>
+</div>
+<p>at a first this could look useless but it is of great help for the definition
+of <em>recursive relations</em> as we will see in later examples (it is an instance of
+η-inversion, formally).</p>
+</div>
+<div class="section" id="unify">
+<h3><code class="docutils literal"><span class="pre">unify</span></code><a class="headerlink" href="#unify" title="Permalink to this headline">¶</a></h3>
+<p>It is a goal ctor that attempts to make two arbitrary objects equal, recording
+associations when fresh variables appears in the nested structures under
+unification. Here we show two simple examples of unification, the first succeeds
+while the second doesn&#8217;t:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">[Tautology]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[[</span><span class="mi">1</span><span class="p">]]))</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<p>On the other hand, things get interesting when fresh variables are mixed in:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="p">)))</span>
+<span class="go">[3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">q</span><span class="p">)))</span>
+<span class="go">[[2, 3]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">q</span><span class="p">)))</span>
+<span class="go">[[2, 3]]</span>
+</pre></div>
+</div>
+<p>When two fresh vars are unified it is said that they <em>share</em> or <em>co-refer</em>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">)))</span>
+<span class="go">[▢₀]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">3</span><span class="p">))),</span>
+<span class="gp">... </span>    <span class="n">var_selector</span><span class="o">=</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">q</span><span class="p">)</span>
+<span class="go">[3]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disj">
+<h3><code class="docutils literal"><span class="pre">disj</span></code><a class="headerlink" href="#disj" title="Permalink to this headline">¶</a></h3>
+<p>It is a goal ctor that consumes two goals and returns a new goal that can be
+satisfied when <em>either</em> the former <em>or</em> the latter goal can be satisfied:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">disj</span><span class="p">(</span><span class="n">succeed</span><span class="p">,</span> <span class="n">fail</span><span class="p">))</span>
+<span class="go">[Tautology]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">disj</span><span class="p">(</span><span class="n">fail</span><span class="p">,</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
+<span class="go">[Tautology]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">disj</span><span class="p">(</span><span class="n">fail</span><span class="p">,</span> <span class="n">fail</span><span class="p">)))</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
+<span class="go">[False, True]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conj">
+<h3><code class="docutils literal"><span class="pre">conj</span></code><a class="headerlink" href="#conj" title="Permalink to this headline">¶</a></h3>
+<p>It is a goal ctor that consumes two goals and returns a new goal that can be
+satisfied when <em>both</em> the former <em>and</em> the latter goal can be satisfied:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">conj</span><span class="p">(</span><span class="n">succeed</span><span class="p">,</span> <span class="n">fail</span><span class="p">))</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">conj</span><span class="p">(</span><span class="n">fail</span><span class="p">,</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">succeed</span><span class="p">)))</span>
+<span class="go">[3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+<span class="gp">... </span>                         <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
+<span class="go">[True]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="facts-and-recursive-relations">
+<h2>Facts and recursive relations<a class="headerlink" href="#facts-and-recursive-relations" title="Permalink to this headline">¶</a></h2>
+<p>In order to represent <em>facts</em> we introduce the <code class="xref py py-obj docutils literal"><span class="pre">conde</span></code> goal ctor,
+which is defined as a combination of conjs and disjs and we show how to write
+recursive relation, possibly satisfied by a countably infinite number of values.</p>
+<div class="section" id="conde">
+<h3><code class="docutils literal"><span class="pre">conde</span></code><a class="headerlink" href="#conde" title="Permalink to this headline">¶</a></h3>
+<p>The following simple example resembles facts declaration in Prolog:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">conde</span><span class="p">([</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">),</span> <span class="n">succeed</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="p">[</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;lemon&#39;</span><span class="p">),</span> <span class="n">fail</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="p">[</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;pear&#39;</span><span class="p">),</span> <span class="n">succeed</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="p">[</span><span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;apple&#39;</span><span class="p">),</span> <span class="n">succeed</span><span class="p">])))</span>
+<span class="go">[&#39;orange&#39;, &#39;pear&#39;, &#39;apple&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="inversion">
+<h3><code class="docutils literal"><span class="pre">η-inversion</span></code><a class="headerlink" href="#inversion" title="Permalink to this headline">¶</a></h3>
+<p>Let us define a relation that yields countably many 5 objects; in order to do
+that, the usual solution is to write a recursive definition. However, we
+proceed step by step, adjusting and learning from the Python semantic of
+argument evaluation at <em>function-call time</em>.  Consider the following as initial
+definition:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">RecursionError</span>: <span class="n">maximum recursion depth exceeded while calling a Python object</span>
+</pre></div>
+</div>
+<p>Exception <code class="docutils literal"><span class="pre">RecursionError</span></code> is raised because in the body of function <code class="docutils literal"><span class="pre">fives</span></code> it
+is required to evaluate <code class="docutils literal"><span class="pre">fives(x)</span></code> in order to return a <code class="docutils literal"><span class="pre">disj</span></code> object, but this is
+the point from were we started, hence no progress for recursion.</p>
+<p>Keeping in mind the previous argument, why not wrapping the recursion on
+<code class="docutils literal"><span class="pre">fives(x)</span></code> inside a <code class="docutils literal"><span class="pre">fresh</span></code> ctor in order to refresh the var <code class="docutils literal"><span class="pre">x</span></code> at
+each invocation?</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">RecursionError</span>: <span class="n">maximum recursion depth exceeded while calling a Python object</span>
+</pre></div>
+</div>
+<p>Again the same exception as before, this time for a different reason, however:
+since we ask for all associations that satisfy the <em>countably infinite</em>
+relation <code class="docutils literal"><span class="pre">fives</span></code>, function <code class="docutils literal"><span class="pre">run</span></code> continue to look for such values which are
+infinite, of course. So, select only the first 10 objects:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">[5, ▢₀, ▢₀, ▢₀, ▢₀, ▢₀, ▢₀, ▢₀, ▢₀, ▢₀]</span>
+</pre></div>
+</div>
+<p>Although not a list of 10 fives objects, it makes sense: the very first 5 gets
+associated to the var <code class="docutils literal"><span class="pre">x</span></code> introduced by the goal provided to <code class="docutils literal"><span class="pre">run</span></code> by the
+<code class="docutils literal"><span class="pre">fresh</span></code> ctor, and this association is only one way to satisfy the <code class="docutils literal"><span class="pre">disj</span></code> in
+the definition of relation <code class="docutils literal"><span class="pre">fives</span></code>. Looking for other associations that work,
+we attempt to satisfy the second goal in the <code class="docutils literal"><span class="pre">disj</span></code>, namely <code class="docutils literal"><span class="pre">fresh(lambda</span> <span class="pre">x:</span>
+<span class="pre">fives(x))</span></code>: it introduces a new var <code class="docutils literal"><span class="pre">x</span></code>, different from the previous one,
+and then recurs, leaving the original var without association. Since associations shown
+in the output list refer to the very first var <code class="docutils literal"><span class="pre">x</span></code>, we get many <code class="docutils literal"><span class="pre">▢₀</span></code> symbols
+which represent the absence of association, therefore <code class="docutils literal"><span class="pre">x</span></code> remains fresh.</p>
+<div class="section" id="fives">
+<h4><code class="docutils literal"><span class="pre">fives</span></code><a class="headerlink" href="#fives" title="Permalink to this headline">¶</a></h4>
+<p>One way to actually get a list of fives is to unify inside the inner <code class="docutils literal"><span class="pre">fresh</span></code>, as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span>
+<span class="gp">... </span>                <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">fives</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">))))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]</span>
+</pre></div>
+</div>
+<p>or to use <code class="docutils literal"><span class="pre">fresh</span></code> as <em>η-inversion</em> rule, as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nats">
+<h4><code class="docutils literal"><span class="pre">nats</span></code><a class="headerlink" href="#nats" title="Permalink to this headline">¶</a></h4>
+<p>Just for fun, using the previous trick and abstracting out the 5s,
+we can generate the naturals, taking only the first 10 as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">nats</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">nats</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nats</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="append">
+<h4><code class="docutils literal"><span class="pre">append</span></code><a class="headerlink" href="#append" title="Permalink to this headline">¶</a></h4>
+<p>Here we want to define the relation <code class="docutils literal"><span class="pre">append(r,</span> <span class="pre">s,</span> <span class="pre">o)</span></code> which holds if
+<code class="docutils literal"><span class="pre">r</span> <span class="pre">+</span> <span class="pre">s</span> <span class="pre">==</span> <span class="pre">o</span></code> where <code class="docutils literal"><span class="pre">r,</span> <span class="pre">s,</span> <span class="pre">o</span></code> are both lists. First of all we need an
+helper relation <code class="docutils literal"><span class="pre">nullo</span></code> which holds if <code class="docutils literal"><span class="pre">l</span> <span class="pre">==</span> <span class="pre">[]</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">nullo</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">unify</span><span class="p">([],</span> <span class="n">l</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>so it follows the recursive definition, as usual:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">A</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">conde</span><span class="p">([</span><span class="n">nullo</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">)],</span>
+<span class="gp">... </span>                     <span class="n">else_clause</span><span class="o">=</span><span class="p">[</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span>
+<span class="gp">... </span>                                           <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">d</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span>
+<span class="gp">... </span>                                                <span class="n">unify</span><span class="p">([</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">res</span><span class="p">,</span> <span class="n">out</span><span class="p">),</span>
+<span class="gp">... </span>                                                <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">A</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">)),))])</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">A</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Some examples follow:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">append</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">q</span><span class="p">)))</span>
+<span class="go">[[1, 2, 3, 4, 5, 6]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">append</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">q</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">l</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> 
+<span class="go">[[1, 2, 3, 4, 5, 6],</span>
+<span class="go"> [1, 2, 3, ▢₀, 4, 5, 6],</span>
+<span class="go"> [1, 2, 3, ▢₀, ▢₁, 4, 5, 6],</span>
+<span class="go"> [1, 2, 3, ▢₀, ▢₁, ▢₂, 4, 5, 6]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="n">conj</span><span class="p">(</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;cake&#39;</span><span class="p">,</span> <span class="s1">&#39;with&#39;</span><span class="p">,</span> <span class="s1">&#39;ice&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">]),</span>
+<span class="gp">... </span>                 <span class="n">unify</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">r</span><span class="p">))))</span> 
+<span class="go">[[[], [&#39;cake&#39;, &#39;with&#39;, &#39;ice&#39;, &#39;d&#39;, &#39;t&#39;]],</span>
+<span class="go"> [[&#39;cake&#39;], [&#39;with&#39;, &#39;ice&#39;, &#39;d&#39;, &#39;t&#39;]],</span>
+<span class="go"> [[&#39;cake&#39;, &#39;with&#39;], [&#39;ice&#39;, &#39;d&#39;, &#39;t&#39;]],</span>
+<span class="go"> [[&#39;cake&#39;, &#39;with&#39;, &#39;ice&#39;], [&#39;d&#39;, &#39;t&#39;]],</span>
+<span class="go"> [[&#39;cake&#39;, &#39;with&#39;, &#39;ice&#39;, &#39;d&#39;], [&#39;t&#39;]],</span>
+<span class="go"> [[&#39;cake&#39;, &#39;with&#39;, &#39;ice&#39;, &#39;d&#39;, &#39;t&#39;], []]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">A Primer</a><ul>
+<li><a class="reference internal" href="#primitive-goals">Primitive goals</a><ul>
+<li><a class="reference internal" href="#succeed"><code class="docutils literal"><span class="pre">succeed</span></code></a></li>
+<li><a class="reference internal" href="#fail"><code class="docutils literal"><span class="pre">fail</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#goal-ctors">Goal ctors</a><ul>
+<li><a class="reference internal" href="#fresh"><code class="docutils literal"><span class="pre">fresh</span></code></a></li>
+<li><a class="reference internal" href="#unify"><code class="docutils literal"><span class="pre">unify</span></code></a></li>
+<li><a class="reference internal" href="#disj"><code class="docutils literal"><span class="pre">disj</span></code></a></li>
+<li><a class="reference internal" href="#conj"><code class="docutils literal"><span class="pre">conj</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#facts-and-recursive-relations">Facts and recursive relations</a><ul>
+<li><a class="reference internal" href="#conde"><code class="docutils literal"><span class="pre">conde</span></code></a></li>
+<li><a class="reference internal" href="#inversion"><code class="docutils literal"><span class="pre">η-inversion</span></code></a><ul>
+<li><a class="reference internal" href="#fives"><code class="docutils literal"><span class="pre">fives</span></code></a></li>
+<li><a class="reference internal" href="#nats"><code class="docutils literal"><span class="pre">nats</span></code></a></li>
+<li><a class="reference internal" href="#append"><code class="docutils literal"><span class="pre">append</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="write_the_doc.html" title="previous chapter">Intro</a></li>
+      <li>Next: <a href="reasoned_schemer.html" title="next chapter">The Reasoned Schemer</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/primer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Massimo Nocentini.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/primer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Monte Carlo Lock puzzle &#8212; microkanrenpy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="muk.core module" href="under_the_hood.html" />
+    <link rel="prev" title="The Reasoned Schemer" href="reasoned_schemer.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="monte-carlo-lock-puzzle">
+<span id="montecarlo-lock"></span><h1>Monte Carlo Lock puzzle<a class="headerlink" href="#monte-carlo-lock-puzzle" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default"><div class="highlight"><pre><span></span>
+<span class="kn">from</span> <span class="nn">muk.sexp</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">muk.core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">muk.ext</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">machine</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span>
+    <span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">M</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">condi</span><span class="p">(</span><span class="o">*</span><span class="p">[[</span><span class="n">r</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">M</span><span class="p">),</span> <span class="n">succeed</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">M</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">nullo</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">unify</span><span class="p">([],</span> <span class="n">l</span><span class="p">)</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">appendo</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">A</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">conde</span><span class="p">([</span><span class="n">nullo</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">)],</span>
+                     <span class="n">else_clause</span><span class="o">=</span><span class="p">[</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span>
+                                            <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">d</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span>
+                                                 <span class="n">unify</span><span class="p">([</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">res</span><span class="p">,</span> <span class="n">out</span><span class="p">),</span>
+                                                 <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">A</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">res</span><span class="p">)),))])</span>
+    <span class="k">return</span> <span class="n">A</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">reverseo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">conde</span><span class="p">([</span><span class="n">nullo</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">nullo</span><span class="p">(</span><span class="n">l</span><span class="p">)],</span>
+                 <span class="n">else_clause</span><span class="o">=</span><span class="p">[</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">car</span><span class="p">,</span> <span class="n">cdr</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span> 
+                                        <span class="n">conji</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="n">car</span><span class="p">]</span><span class="o">+</span><span class="n">cdr</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> 
+                                              <span class="n">appendo</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[</span><span class="n">car</span><span class="p">],</span> <span class="n">l</span><span class="p">),</span>
+                                              <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">reverseo</span><span class="p">(</span><span class="n">cdr</span><span class="p">,</span> <span class="n">res</span><span class="p">)),))])</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">associateo</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">γ2γ</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">appendo</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">γ</span><span class="p">,</span> <span class="n">γ2γ</span><span class="p">)</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">symmetrico</span><span class="p">(</span><span class="n">α</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">reverseo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">α</span><span class="p">)</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">repeato</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">γγ</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">appendo</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">γ</span><span class="p">,</span> <span class="n">γγ</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_first_ruleo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">η</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">η</span><span class="p">,</span> <span class="n">α</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">η</span><span class="p">,</span> <span class="n">β</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_second_ruleo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">δ2δ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">η</span><span class="p">,</span> <span class="n">α</span><span class="p">),</span> <span class="n">associateo</span><span class="p">(</span><span class="n">δ</span><span class="p">,</span> <span class="n">δ2δ</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_third_ruleo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">δ_reversed</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="n">η</span><span class="p">,</span> <span class="n">α</span><span class="p">),</span> <span class="n">reverseo</span><span class="p">(</span><span class="n">δ</span><span class="p">,</span> <span class="n">δ_reversed</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_fourth_ruleo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">δδ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="n">η</span><span class="p">,</span> <span class="n">α</span><span class="p">),</span> <span class="n">repeato</span><span class="p">(</span><span class="n">δ</span><span class="p">,</span> <span class="n">δδ</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_fifth_ruleo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">appendo</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">β</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">α</span><span class="p">)</span>
+    <span class="c1">#return conji(appendo([2]+β, [2], α), complement(nullo(β)))</span>
+    <span class="c1">#return fresh(lambda η: conji(appendo([2]+η, [2], α), unify(η, β)))</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_sixth_ruleo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">_2δ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">:</span> <span class="n">conji</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="mi">6</span><span class="p">]</span><span class="o">+</span><span class="n">η</span><span class="p">,</span> <span class="n">α</span><span class="p">),</span> <span class="n">unify</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">δ</span><span class="p">,</span> <span class="n">_2δ</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">η</span><span class="p">,</span> <span class="n">δ</span><span class="p">)))</span>
+
+<span class="n">mccullocho</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">rules</span><span class="o">=</span><span class="p">[</span> <span class="n">mcculloch_second_ruleo</span><span class="p">,</span> <span class="n">mcculloch_first_ruleo</span><span class="p">,</span> <span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">mcculloch_lawo</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">αγ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">mccullocho</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">:</span> <span class="n">conji</span><span class="p">(</span><span class="n">appendo</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">α</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">γ</span><span class="p">),</span> 
+                                 <span class="n">appendo</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">γ</span><span class="p">,</span> <span class="n">αγ</span><span class="p">),</span> 
+                                 <span class="n">complement</span><span class="p">(</span><span class="n">nullo</span><span class="p">(</span><span class="n">α</span><span class="p">)),</span> 
+                                 <span class="n">complement</span><span class="p">(</span><span class="n">nullo</span><span class="p">(</span><span class="n">γ</span><span class="p">)),</span> 
+                                 <span class="n">machine</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">αγ</span><span class="p">)))</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="p">{</span><span class="n">α</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">lengtho</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">L</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">acc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">conde</span><span class="p">([</span><span class="n">nullo</span><span class="p">(</span><span class="n">α</span><span class="p">),</span> <span class="n">unify</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">acc</span><span class="p">)],</span>
+                     <span class="n">else_clause</span><span class="o">=</span><span class="p">[</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">β</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">unify</span><span class="p">([</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">β</span><span class="p">,</span> <span class="n">α</span><span class="p">),</span>  
+                                                          <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">L</span><span class="p">(</span><span class="n">β</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="n">acc</span><span class="o">+</span><span class="mi">1</span><span class="p">))))])</span>
+
+    <span class="k">return</span> <span class="n">L</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">leqo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">project</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">into</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">))</span>
+
+
+<span class="n">mcculloch_o</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">rules</span><span class="o">=</span><span class="p">[</span> <span class="n">mcculloch_second_ruleo</span><span class="p">,</span> <span class="n">mcculloch_third_ruleo</span><span class="p">,</span> <span class="n">mcculloch_first_ruleo</span><span class="p">,</span> <span class="p">])</span>
+<span class="n">mcculloch__o</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">rules</span><span class="o">=</span><span class="p">[</span> <span class="n">mcculloch_second_ruleo</span><span class="p">,</span> <span class="n">mcculloch_fourth_ruleo</span><span class="p">,</span> <span class="n">mcculloch_third_ruleo</span><span class="p">,</span> <span class="n">mcculloch_first_ruleo</span><span class="p">,</span> <span class="p">])</span>
+
+<span class="nd">@adapt_iterables_to_conses</span><span class="p">(</span><span class="n">all_arguments</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">opnumbero</span><span class="p">(</span><span class="n">α</span><span class="p">):</span>
+     <span class="k">return</span> <span class="n">disj</span><span class="p">(</span><span class="n">nullo</span><span class="p">(</span><span class="n">α</span><span class="p">),</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">β</span><span class="p">:</span> <span class="n">conj</span><span class="p">(</span><span class="n">appendo</span><span class="p">(</span><span class="n">β</span><span class="p">,</span> <span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">α</span><span class="p">),</span> 
+                                     <span class="n">condi</span><span class="p">([</span><span class="n">unify</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">succeed</span><span class="p">],</span>
+                                           <span class="p">[</span><span class="n">unify</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">succeed</span><span class="p">],</span>
+                                           <span class="p">[</span><span class="n">unify</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">succeed</span><span class="p">]),</span> 
+                                     <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">opnumbero</span><span class="p">(</span><span class="n">β</span><span class="p">)))))</span>
+
+
+<span class="k">def</span> <span class="nf">operationo</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">χ</span><span class="p">,</span> <span class="n">M_of_χ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">mcculloch__o</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">M2χ</span><span class="p">:</span> <span class="n">conji</span><span class="p">(</span><span class="n">appendo</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">χ</span><span class="p">,</span> <span class="n">M2χ</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">M2χ</span><span class="p">,</span> <span class="n">M_of_χ</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">craig_lawo</span><span class="p">(</span><span class="n">Mγ</span><span class="p">,</span> <span class="n">M_of_Mγ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">mcculloch__o</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">γ</span><span class="p">:</span> <span class="n">conji</span><span class="p">(</span><span class="n">mcculloch_lawo</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">Mγ</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">Mγ</span><span class="p">,</span> <span class="n">M_of_Mγ</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">craig_second_lawo</span><span class="p">(</span><span class="n">Mγ</span><span class="p">,</span> <span class="n">M_of_Mγ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">mcculloch__o</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">γ</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">conji</span><span class="p">(</span><span class="n">mcculloch_lawo</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">Mγ</span><span class="p">),</span> <span class="n">appendo</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">Mγ</span><span class="p">),</span> <span class="n">machine</span><span class="p">(</span><span class="n">Mγ</span><span class="p">,</span> <span class="n">M_of_Mγ</span><span class="p">)))</span>
+
+<span class="n">mcculloch___o</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">rules</span><span class="o">=</span><span class="p">[</span> <span class="n">mcculloch_fourth_ruleo</span><span class="p">,</span> <span class="n">mcculloch_third_ruleo</span><span class="p">,</span> <span class="n">mcculloch_sixth_ruleo</span><span class="p">,</span><span class="n">mcculloch_fifth_ruleo</span> <span class="p">])</span>
+
+
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="reasoned_schemer.html" title="previous chapter">The Reasoned Schemer</a></li>
+      <li>Next: <a href="under_the_hood.html" title="next chapter"><code class="docutils literal"><span class="pre">muk.core</span></code> module</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/mclock.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Massimo Nocentini.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/mclock.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
