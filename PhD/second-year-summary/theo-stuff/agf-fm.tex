@@ -55,8 +55,8 @@
 % does not look nice, try deleting the line with the fontenc.
 
 
-\title[Algebraic gfs for languages avoiding Riordan patterns] % (optional, use only with long paper titles)
-{Algebraic generating functions for languages  avoiding Riordan patterns}
+\title{Algebraic generating functions for languages  avoiding Riordan patterns and 
+matrices functions for the Riordan group}
 
 %\subtitle {Presentation Subtitle} % (optional)
 
@@ -73,8 +73,7 @@
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
 
-\date[Short Occasion] % (optional)
-{\today \\ AORC2017}
+\date{\today}
 
 \subject{
 We study the languages  $\mathfrak{L}^{[\mathfrak{p}]}\subset \{0,1\}^*$ of
@@ -154,35 +153,6 @@ $$d_{n,k}=[t^n]d(t)h(t)^k$$
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{The $A$ and $Z$ sequences}
-An alternative definition, is in terms of the so-called $A$-sequence and $Z$-sequence, with generating functions $A(t)$ and $Z(t)$ satisfying
-the relations:
-$$ h(t)=tA(h(t)), \quad d(t)={d_0\over 1-tZ(h(t))} \quad \mbox{with} \quad d_0=d(0).$$
-$$
-d_{n+1,k+1}=a_0d_{n,k}+a_1d_{n,k+1}+a_2d_{n,k+2}+\cdots
-$$
-$$
-d_{n+1,0}=z_0d_{n,0}+z_1d_{n,1}+z_2d_{n,2}+\cdots
-$$
-\end{frame}
-
-
-\begin{frame}\frametitle{The $A$-matrix {\tiny [MSRV97]}}
-$$ d_{n+1,k+1}={\underset{i\geq0}{ \displaystyle\sum }}{\underset{j\geq0}{ \displaystyle\sum }}\alpha_{i,j}d_{n-i,k+j}+ \underset{j\geq
-0}{\displaystyle\sum}\rho_jd_{n+1,k+j+2}
-$$
-Matrix $(\alpha_{i,j})_{i,j\in \mathbb{N}}$  is called the
-$A$-matrix of the Riordan array. If,  for $i \geq 0:$
-$$P^{[i]}(t)=\alpha_{i,0}+\alpha_{i,1}t+\alpha_{i,2}t^2+\alpha_{i,3}t^3+\ldots$$
- and $Q(t)$ is the generating function for the
-sequence $(\rho_j)_{j\in \mathbb{N}}$, then we have:
-$$
-\dfrac{h(t)}{t}=\underset{i\geq 0}{\displaystyle\sum}t^iP^{[i]}(h(t))+\dfrac{h(t)^{2}}{t}Q(h(t))
-$$
-$$
-A(t) =\underset{i\geq 0}{\displaystyle\sum}t^iA(t)^{-i}P^{[i]}(t)+tA(t)Q(t)
-$$
-\end{frame}
 
 \section{Binary words avoiding patterns}
 
@@ -412,45 +382,14 @@ $$h^{[\mathfrak{p}]}(t)={C^{[\mathfrak{p}]}(t) -\sqrt{C^{[\mathfrak{p}]}(t)^2-4t
 
 
 
-\begin{frame}\frametitle{Formulae for classes of patterns}
-{\small
+\begin{frame}\frametitle{Classes of patterns}
 \begin{itemize}
-\item $\mathfrak{p}=1^{j+1}0^j$
-$$ d^{[\mathfrak{p}]}(t)={1 \over \sqrt{1-4t+4t^{j+1}}}, \quad h^{[\mathfrak{p}]}(t)={1 -\sqrt{1-4t+4t^{j+1}} \over 2 }$$
-\item $\mathfrak{p}=0^{j+1}1^j$
-$$ d^{[\mathfrak{p}]}(t)={1 \over \sqrt{1-4t+4t^{j+1}}}, \quad h^{[\mathfrak{p}]}(t)={1 -\sqrt{1-4t+4t^{j+1}} \over 2(1-t^j) }$$
-\item $\mathfrak{p}=1^{j}0^j$ and $\mathfrak{p}=0^{j}1^j$
-$$ d^{[\mathfrak{p}]}(t)={1 \over \sqrt{1-4t+2t^j+t^{2j}}}, \quad h^{[\mathfrak{p}]}(t)={{1+t^j -\sqrt{1-4t+2t^j+t^{2j}} } \over 2 }$$
+    \item $\mathfrak{p}=1^{j+1}0^j$
+    \item $\mathfrak{p}=0^{j+1}1^j$
+    \item $\mathfrak{p}=1^{j}0^j$ and $\mathfrak{p}=0^{j}1^j$
+    \item $\mathfrak{p}=(10)^j1$
+    \item $\mathfrak{p}=(01)^j0$
 \end{itemize}
-}
-\end{frame}
-
-\begin{frame}\frametitle{Formulae for classes of patterns}
-{\small
-\begin{itemize}
-\item $\mathfrak{p}=(10)^j1$
-\begin{displaymath}
-\begin{split}
-d^{[\mathfrak{p}]}(t)&={
-\sum_{i=0}^j t^i \over \sqrt{1-2\sum_{i=1}^jt^i-3 \left(
-\sum_{i=1}^j t^i \right)^2}}, \\
-h^{[\mathfrak{p}]}(t)&={\sum_{i=0}^jt^i
--\sqrt{1-2\sum_{i=1}^jt^i-3\left( \sum_{i=1}^j t^i \right)^2}
-\over 2 \sum_{i=0}^jt^i}
-\end{split}
-\end{displaymath}
-\item
-$\mathfrak{p}=(01)^j0$
-\begin{displaymath}
-\begin{split}
-d^{[\mathfrak{p}]}(t)&={
-\sum_{i=0}^j t^i \over \sqrt{1-2\sum_{i=1}^jt^i-3 \left( \sum_{i=1}^j t^i \right)^2}}, \\
-h^{[\mathfrak{p}]}(t)&={\sum_{i=0}^jt^i -\sqrt{1-2\sum_{i=1}^jt^i-3\left( \sum_{i=1}^j t^i \right)^2} \over 2 \sum_{i=0}^{j-1}t^i}
-\end{split}
-\end{displaymath}
-
-\end{itemize}
-}
 \end{frame}
 
 \begin{frame}\frametitle{A combinatorial interpretation for $\mathfrak{p}=10$}
@@ -593,38 +532,6 @@ $$L^{[\mathfrak{p}]}(t)=\sum_{n\geq 0}L_n^{[\mathfrak{p}]}t^n=R^{[\mathfrak{p}]}
 
 \section{Series developments and closed formulae}
 
-\begin{frame}\frametitle{Formulae for classes of patterns}
-{\small
-\begin{itemize}
-
-\item for $\mathfrak{p}=1^{j+1}0^j$ we have:
-$$ S^{[\mathfrak{p}]}(t)={2 \over \sqrt{Q(t)}\left(1+ \sqrt{Q(t)}\right) }, \quad Q(t)=1-4t+4t^{j+1}$$
-
-\item for $\mathfrak{p}=0^{j+1}1^j$ we have:
-$$ S^{[\mathfrak{p}]}(t)={2(1-t^j) \over \sqrt{Q(t)} \left(1-2t^j+ \sqrt{Q(t)}\right)}, \quad Q(t)=1-4t+4t^{j+1}$$
-
-\item for $\mathfrak{p}=1^{j}0^j$ and $\mathfrak{p}=0^{j}1^j$ we have:
-$$ S^{[\mathfrak{p}]}(t)={2 \over \sqrt{Q(t)} \left(1-t^j+\sqrt{Q(t)}  \right)}, \quad Q(t)=1-4t+2t^j+t^{2j}$$
-
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}\frametitle{Formulae for classes of patterns}
-{\small
-\begin{itemize}
-
-\item for $\mathfrak{p}=(10)^j1$ we have:
-$$ S^{[\mathfrak{p}]}(t)={2 (1-t^{j+1})\over 1-4t+3t^{j+1}+\sqrt{Q(t)}}$$
-where $Q(t)=1-4t+2t^{j+1}+4t^{j+2}-3t^{2j+2}$
-
-\item for $\mathfrak{p}=(01)^j0$ we have:
-$$ S^{[\mathfrak{p}]}(t)={2 (1-t^j-t^{j+1}+t^{2j+1})\over \sqrt{Q(t)} \left(1-2t^j+t^{j+1}+\sqrt{Q(t)}  \right)}$$
-where $Q(t)={1-4t+2t^{j+1}+4t^{j+2}-3t^{2j+2}}$
-
-\end{itemize}
-}
-\end{frame}
 
 \begin{frame}\frametitle{Series development for $S^{[1^{j+1}0^{j}]}(t)$}
 {\tiny
@@ -644,38 +551,6 @@ sequence corresponds to $A261058$.}
 }
 \end{frame}
 
-\begin{frame}\frametitle{formulae for classes of patterns}
-{\small
-\begin{itemize}
-
-\item for $\mathfrak{p}=1^{j+1}0^j$ we have:
-$$ L^{[\mathfrak{p}]}(t)={2t \over \sqrt{Q(t)}\left(2t-1+ \sqrt{Q(t)}\right) }, \quad Q(t)=1-4t^2+4t^{2(j+1)}$$
-
-\item for $\mathfrak{p}=0^{j+1}1^j$ we have:
-$$ L^{[\mathfrak{p}]}(t)={2t(t^{2j}-1) \over \sqrt{Q(t)} \left(1-2t+2t^{2j+1} -\sqrt{Q(t)}\right)}, \quad Q(t)=1-4t^2+4t^{2(j+1)}$$
-
-\item for $\mathfrak{p}=1^{j}0^j$ and $\mathfrak{p}=0^{j}1^j$ we have:
-$$ L^{[\mathfrak{p}]}(t)={2 t \over \sqrt{Q(t)} \left(-1+2t-t^{2j}+\sqrt{Q(t)}  \right)}, \quad Q(t)=1-4t^{2}+2t^{2j}+t^{4j}$$
-
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}\frametitle{formulae for classes of patterns}
-{\small
-\begin{itemize}
-
-\item for $\mathfrak{p}=(10)^j1$ we have:
-$$ L^{[\mathfrak{p}]}(t)={2 t (t^{2j+2}-1)\over 1-4t^2+3t^{2j+2}+(2t-1)\sqrt{Q(t)} }$$
-where $Q(t)=1-4t^2+2t^{2j+2}+4t^{2j+4}-3t^{4j+4}$
-
-\item for $\mathfrak{p}=(01)^j0$ we have:
-$$ L^{[\mathfrak{p}]}(t)={2 t (t^{2j+2}-1)(t^{2j}-1)\over  \sqrt{Q(t)} \left(t^{2j+2}-2t^{2j+1}+2t-1+ \sqrt{Q(t)}\right) }$$
-where $Q(t)={1-4t^2+2t^{2j+2}+4t^{2j+4}-3t^{4j+4}}$
-
-\end{itemize}
-}
-\end{frame}
 
 \begin{frame}\frametitle{Series development for $L^{[1^{j+1}0^{j}]}(t)$}
 {\tiny
@@ -686,6 +561,7 @@ $j=1$ the sequence corresponds to $A052551$.}
 \end{table}
 }
 \end{frame}
+
 \begin{frame}\frametitle{Closed formulae for particular cases}
 
 When the parameter $j$ for a pattern $\mathfrak{p}$ assumes values $0$ and $1$
@@ -730,8 +606,6 @@ j/\mathfrak{p} & {1^{j+1}0^{j}} & {0^{j+1}1^{j}} & {1^{j}0^{j}} \\
 \end{block}
 \end{frame}
 
-\section*{Summary}
-
 \begin{frame}{Summary}
 
   % Keep the summary *very short*.
@@ -754,19 +628,146 @@ j/\mathfrak{p} & {1^{j+1}0^{j}} & {0^{j+1}1^{j}} & {1^{j}0^{j}} \\
       \end{itemize}
   \end{block}
 \end{frame}
-  
-\begin{frame}{Outlook}
-  % The following outlook is optional.
-  \vskip0pt plus.5fill
-    \begin{itemize}
-    \item provide combinatorial interpretations for both pattern classes $(10)^{j}1$ and
-    $(01)^{j}0$, at least for $j\in \lbrace 0,1 \rbrace$
-    \item conjecture: when $j > 1$ in pattern classes it seems that $R^{[\mathfrak{p}]}$ is
-    a binomial transformation
-    \item build the Riordan graph for both RAs $R^{[\mathfrak{p}]}$ and $R^{[\bar{\mathfrak{p}}]}$
-        to study the meaning of pattern avoidance at graph level
-    \end{itemize}
+
+\section{Matrices functions}
+
+
+\begin{frame}{Defs}
+
+Let $A\in\mathbb{C}^{m\times m}$ be a matrix and denote with $\sigma$ the
+spectre of $A$, formally $\sigma(A) =
+\lbrace \lambda_{i}: 1\leq i\leq \nu\rbrace$, with multiplicities $\lbrace
+m_{i}: 1\leq i\leq \nu\rbrace$, respectively, such that
+$\sum_{i=1}^{\nu}{m_{i}}=m$
+
+\vfill
+
+We say that function $f$ 
+\emph{is defined on the spectre $\sigma$ of matrix $A$} if exists
+        $\left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}$
+for $i\in \lbrace 1, \ldots, \nu \rbrace$, for $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$.    
+
+\vfill
+
+Given a function $f$ defined on the spectre of a matrix $A$, define the polynomial $g$ such that
+it takes the same values of $f$ on the spectre of $A$, formally:
+        $\left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{i}} =
+        \left. \frac{\partial^{(j)}{g}}{\partial{z}} \right|_{z=\lambda_{i}}$
+for $i\in \lbrace 1, \ldots, \nu \rbrace$, for $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$,
+then $f(A) = g(A)$. 
+
 \end{frame}
+
+\begin{frame}{Defs}
+
+\vfill
+
+Polynomial $g$ is an \emph{interpolating Hermite polynomial} which
+can be defined using the generalized Lagrange base $ \lbrace \Phi_{ij} \rbrace$, formally:
+\begin{displaymath}
+g(z) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{
+        \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(z)
+    }}
+\end{displaymath}
+where each polynomial $\Phi_{ij}$, of degree $m-1$, is defined implicitly as the solution of the system:
+\begin{displaymath}
+    \left. \frac{\partial^{(r-1)}{\Phi_{ij}}}{\partial{z}} \right|_{z=\lambda_{l}} = \delta_{il}\delta_{jr}
+\end{displaymath}
+for $l\in \lbrace 1, \ldots, \nu \rbrace$, for $r \in \lbrace 1, \ldots, m_{l} \rbrace$, where
+$\delta$ is the Kroneker delta, defined as $\delta_{ij}=1 \leftrightarrow i=j$.
+\end{frame}
+
+\begin{frame}{Defs}
+Let $\mathcal{R}_{m}\in\mathbb{C}^{m\times m}$ be a \emph{finite Riordan matrix}, 
+hence $\sigma(\mathcal{R}_{m})= \lbrace \lambda_{1} \rbrace$, so $\nu=1$, where $\lambda_{1}=1$ 
+with multiplicity $m_{1}=m$. 
+
+\vfill
+
+Therefore, the generalized Lagrange base is composed of polynomials
+\begin{displaymath}
+  \Phi_{1j}(z) = \sum_{k=0}^{j-1}{\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
+\end{displaymath}
+
+\vfill
+
+For the sake of clarity we show polynomials $\Phi_{1j}$ for $j\in \lbrace
+1,\ldots,m \rbrace$ relative to any finite Riordan matrix $\mathcal{R}_{m}$
+where $m=8$:
+{\tiny
+\begin{displaymath}
+\begin{array}{c}
+ \Phi_{ 1, 1 }{\left (z \right )} = 1\\
+ \Phi_{ 1, 2 }{\left (z \right )} = z - 1\\
+ \Phi_{ 1, 3 }{\left (z \right )} = \frac{z^{2}}{2} - z + \frac{1}{2}\\
+ \Phi_{ 1, 4 }{\left (z \right )} = \frac{z^{3}}{6} - \frac{z^{2}}{2} + \frac{z}{2} - \frac{1}{6}\\
+ \Phi_{ 1, 5 }{\left (z \right )} = \frac{z^{4}}{24} - \frac{z^{3}}{6} + \frac{z^{2}}{4} - \frac{z}{6} + \frac{1}{24}\\
+ \Phi_{ 1, 6 }{\left (z \right )} = \frac{z^{5}}{120} - \frac{z^{4}}{24} + \frac{z^{3}}{12} - \frac{z^{2}}{12} + \frac{z}{24} - \frac{1}{120}\\
+ \Phi_{ 1, 7 }{\left (z \right )} = \frac{z^{6}}{720} - \frac{z^{5}}{120} + \frac{z^{4}}{48} - \frac{z^{3}}{36} + \frac{z^{2}}{48} - \frac{z}{120} + \frac{1}{720}\\
+ \Phi_{ 1, 8 }{\left (z \right )} = \frac{z^{7}}{5040} - \frac{z^{6}}{720} + \frac{z^{5}}{240} - \frac{z^{4}}{144} + \frac{z^{3}}{144} - \frac{z^{2}}{240} + \frac{z}{720} - \frac{1}{5040}\\
+ %\Phi_{ 1, 9 }{\left (z \right )} = \frac{z^{8}}{40320} - \frac{z^{7}}{5040} + \frac{z^{6}}{1440} - \frac{z^{5}}{720} + \frac{z^{4}}{576} - \frac{z^{3}}{720} + \frac{z^{2}}{1440} - \frac{z}{5040} + \frac{1}{40320}\\
+ %\Phi_{ 1, 10 }{\left (z \right )} = \frac{z^{9}}{362880} - \frac{z^{8}}{40320} + \frac{z^{7}}{10080} - \frac{z^{6}}{4320} + \frac{z^{5}}{2880} - \frac{z^{4}}{2880} + \frac{z^{3}}{4320} - \frac{z^{2}}{10080} + \frac{z}{40320} - \frac{1}{362880}\\
+\end{array}
+\end{displaymath}
+}
+\end{frame}
+
+
+\begin{frame}{$f(z)=\frac{1}{z}$}
+
+The general form of $j$th derivative of function $f$ is 
+$$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \frac{(-1)^{j}j!}{z^{j+1}}$$ 
+therefore
+\begin{displaymath}
+  g(z) = \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{{{j-1}\choose{k}}(-z)^{k}}} 
+   = \sum_{k=0}^{m-1}{{{m}\choose{k+1}}(-z)^{k}}
+\end{displaymath}
+
+\vfill
+
+Polynomial $g$ where $m=8$ is defined according to 
+ \[g{\left (z \right )} = - z^{7} + 8 z^{6} - 28 z^{5} + 56 z^{4} - 70 z^{3} + 56 z^{2} - 28 z + 8\]
+\end{frame}
+
+\begin{frame}{$\mathcal{P}^{-1}$ and $\mathcal{C}^{-1}$}
+{\footnotesize
+\begin{displaymath}
+g(\mathcal{P})=\mathcal{P}^{-1}= \left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\1 & -2 & 1 &   &   &   &   &  \\-1 & 3 & -3 & 1 &   &   &   &  \\1 & -4 & 6 & -4 & 1 &   &   &  \\-1 & 5 & -10 & 10 & -5 & 1 &   &  \\1 & -6 & 15 & -20 & 15 & -6 & 1 &  \\-1 & 7 & -21 & 35 & -35 & 21 & -7 & 1\end{matrix}\right]
+\end{displaymath}
+\begin{displaymath}
+g(\mathcal{C})=\mathcal{C}^{-1}=\left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\  & -2 & 1 &   &   &   &   &  \\  & 1 & -3 & 1 &   &   &   &  \\  &   & 3 & -4 & 1 &   &   &  \\  &   & -1 & 6 & -5 & 1 &   &  \\  &   &   & -4 & 1  & -6 & 1 &  \\  &   &   & 1 & -1  & 15 & -7 & 1\end{matrix}\right]
+\end{displaymath}
+}
+\end{frame}
+
+\begin{frame}{Fibonacci numbers}
+
+\begin{displaymath}
+\mathcal{F} = \left[\begin{matrix}1 & 1\\1 & 0\end{matrix}\right],
+\quad  \lambda_{1} =  \frac{1}{2}- \frac{\sqrt{5}}{2} ,
+\quad \lambda_{2} = \frac{1}{2} + \frac{\sqrt{5}}{2}
+\end{displaymath}
+\vfill
+\begin{displaymath}
+ \Phi_{ 1, 1 }{\left (z \right )} = \frac{z}{\lambda_{1} - \lambda_{2}} - \frac{\lambda_{2}}{\lambda_{1} - \lambda_{2}}, \quad  \Phi_{ 2, 1 }{\left (z \right )} = - \frac{z}{\lambda_{1} - \lambda_{2}} + \frac{\lambda_{1}}{\lambda_{1} - \lambda_{2}}
+\end{displaymath}
+\vfill
+\begin{displaymath}
+g{\left (z \right )} = z \left(\frac{\lambda_{1}^{r}}{\lambda_{1} - \lambda_{2}} - \frac{\lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}}\right) + \frac{\lambda_{1} \lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}} - \frac{\lambda_{1}^{r} \lambda_{2}}{\lambda_{1} - \lambda_{2}}
+\end{displaymath}
+\vfill
+\begin{displaymath}
+\mathcal{F}^{r}=\left[\begin{matrix}\frac{1}{\lambda_{1} - \lambda_{2}} \left(\lambda_{1} \lambda_{2}^{r} - \lambda_{1}^{r} \lambda_{2} + \lambda_{1}^{r} - \lambda_{2}^{r}\right) & \frac{\lambda_{1}^{r} - \lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}}\\\frac{\lambda_{1}^{r} - \lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1} \lambda_{2}^{r} - \lambda_{1}^{r} \lambda_{2}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right]
+\end{displaymath}
+\vfill
+\begin{displaymath}
+\mathcal{F}^{8} = \left[\begin{matrix}f_{9} & f_{8}\\f_{8} & f_{7}\end{matrix}\right] = \left[\begin{matrix}34 & 21\\21 & 13\end{matrix}\right]
+\end{displaymath}
+
+\end{frame}
+
+
+  
 
 \begin{frame}{ }
 \begin{CJK}{UTF8}{mj}
