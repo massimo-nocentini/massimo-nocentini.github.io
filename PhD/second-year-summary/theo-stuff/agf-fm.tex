@@ -43,7 +43,7 @@
 \usepackage{pstricks,pst-text}
 \usepackage{pst-node,pst-tree}
 \usepackage{concrete}
-
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}%
 \usepackage{amsthm}
 \usepackage{amssymb}%
@@ -55,13 +55,14 @@
 % does not look nice, try deleting the line with the fontenc.
 
 
-\title{Algebraic generating functions for languages  avoiding Riordan patterns and 
-matrices functions for the Riordan group}
+\title{Algebraic generating functions for languages avoiding Riordan
+patterns\footnote{\scriptsize submitted to the \emph{Journal of Integer Sequences} in
+January and recently reviewed} and\\ matrices functions for the Riordan group}
 
 %\subtitle {Presentation Subtitle} % (optional)
 
 \author[Merlini, Nocentini] % (optional, use only with lots of authors)
-{Donatella Merlini \and Massimo Nocentini}
+{Massimo Nocentini}
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
 
@@ -144,12 +145,17 @@ particular patterns, algebraically and combinatorially.}
 \begin{frame}
 \frametitle{Definition in terms of $d(t)$ and $h(t)$}
 \begin{itemize}
-\item A \emph{Riordan array} is a pair
-$$D=\mathcal{R}(d(t),\ h(t))$$
-in which $d(t)$ and $h(t)$ are formal power series such that $d(0)\neq 0$ and  $h(0)= 0$
+
+\item A \emph{Riordan array} $\mathcal{R}$ is a pair
+$$\mathcal{R}=(d(t),\ h(t))$$
+where $d(t)$ and $h(t)$ are formal power series in the undeterminate $t$, such
+that $d(0)\neq 0$ and  $h(0)= 0$ 
+
 \item if $h^\prime(0)\neq 0$ the Riordan array is called \emph{proper}
-\item it denotes an infinite, lower triangular array $(d_{n,k})_{n,k\in N}$ where:
+
+\item $\mathcal{R}$ denotes an infinite, lower triangular array $(d_{n,k})_{n,k\in N}$ where:
 $$d_{n,k}=[t^n]d(t)h(t)^k$$
+
 \end{itemize}
 \end{frame}
 
@@ -336,7 +342,8 @@ By specializing this result  to the cases
 $\left|n_1^{[\mathfrak{p}]}-n_0^{[\mathfrak{p}]}\right|\in \{0,1\}$ and by
 setting
 $C^{[\mathfrak{p}]}(t)=C^{[\mathfrak{p}]}\left(\sqrt{t},\sqrt{t}\right)=\sum_{i
-\geq 0}c_{2i}t^i,$ we have
+\geq 0}c_{2i}t^i,$ we have explicit formulae for both functions $d(t)$ and $h(t)$
+wrt polynomial $C^{[\mathfrak{p}]}(t)$.
 \end{block}
 
 \end{frame}
@@ -429,7 +436,7 @@ $\mathfrak{p}.$
 \begin{itemize}
 \item let $|w|_{i}$ be the number of bits $i$ in word $w$
 \item enumeration of binary words avoiding a pattern $\mathfrak{p}$, without the
-constraint $|w|_0\leq |w|_1,$ gives a rational bivariate generating function
+constraint $|w|_0\leq |w|_1,$ gives a {\bf \red rational} bivariate generating function
 for the sequence $F^{[\mathfrak{p}]}_n=\sum_{k=0}^nF_{n,k}^{[\mathfrak{p}]}$
 \item under the restriction such that words have to have no more bits $0$ than
 bits $1$, then the language is no longer regular and its enumeration becomes
@@ -450,7 +457,7 @@ Recall that
 Let $S^{[\mathfrak{p}]}(t)=\sum_{n\geq 0}S_n^{[\mathfrak{p}]}t^n$ be the gf
 enumerating the set of binary words $\left\lbrace
 w\in\mathcal{L}^{[\mathfrak{p}]} : |w|_0\leq |w|_1\right\rbrace$ according to
-the number of bits $1$
+{\bf \red the number of bits $1$}
 \begin{itemize}
 \item if $n_1^{[\mathfrak{p}]}=n_0^{[\mathfrak{p}]}+1:$
 $$S^{[\mathfrak{p}]}(t)={2C^{[\mathfrak{p}]}(t) \over \sqrt{Q(t)}\left(\sqrt{C^{[\mathfrak{p}]}(t)}+ \sqrt{Q(t)} \right)} $$
@@ -487,7 +494,7 @@ fundamental rule with $f_k=1$.
 Let $L^{[\mathfrak{p}]}(t)=\sum_{n\geq 0}L_n^{[\mathfrak{p}]}t^n$ be the
 gf enumerating the set of binary words $\left\lbrace
 w\in\mathcal{L}^{[\mathfrak{p}]} : |w|_0\leq |w|_1\right\rbrace$ according to
-the length
+{\bf \red the length}
 
 \begin{itemize}
 \item if $n_1^{[\mathfrak{p}]}=n_0^{[\mathfrak{p}]}+1:$
