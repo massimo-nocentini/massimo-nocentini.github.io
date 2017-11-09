@@ -11861,26 +11861,10 @@ a.anchor-link {
 
 <span class="s1">&#39;&#39;&#39;</span>
 
-<span class="n">reference_to_this_talk</span><span class="p">()</span>
+<span class="n">__SELF__</span> <span class="o">=</span> <span class="s1">r&#39;http://massimo-nocentini.github.io/PhD/mkpy/talk.html&#39;</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
-
-<div class="output_markdown rendered_html output_subarea output_execute_result">
-<p><a href="http://massimo-nocentini.github.io/PhD/second-year-summary/talk.html">http://massimo-nocentini.github.io/PhD/second-year-summary/talk.html</a></p>
-
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -12174,7 +12158,26 @@ $$d_{n, k} = d_{n-1, k-1} + d_{n-1, k}$$<p>Questions:</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="by-refutation">by refutation<a class="anchor-link" href="#by-refutation">&#182;</a></h2>
+<h2 id="by-refutation">by refutation<a class="anchor-link" href="#by-refutation">&#182;</a></h2><p>Let $\alpha$ be a <em>CNF</em> sentence and $M(\alpha)$ the set of models that satisfy it;<br>
+a model is a set of assignments that make $\alpha$ true.</p>
+<p>$\alpha$ is <em>valid</em> if it is true in <em>all</em> models;
+oth, it is <em>satisfiable</em> if it is true in <em>some</em> model.</p>
+<p><em>Logical reasoning</em> boils down to <em>entailment</em> relation $\models$ between sentences</p>
+$$
+    M(\alpha) \subseteq M(\beta) \leftrightarrow \alpha \models \beta \leftrightarrow 
+    (\alpha \Rightarrow \beta) \text{ is valid } \leftrightarrow (\neg\alpha \vee \beta) \text{ is unsatisfiable}
+$$<p>the <em>resolution rule</em> is a <em>complete</em> inference algorithm</p>
+$$
+    {
+    l_{0}\vee \ldots \vee l_{i} \vee \ldots \vee l_{j-1} \quad m_{0}\vee \ldots\vee m_{i}\vee\ldots\vee m_{k-1} \quad l_{i} = \neg m_{i}
+    \over
+    l_{0}\vee \ldots \vee l_{i-1}\vee l_{i+1} \vee \ldots\vee l_{j-1} \vee  
+    m_{0}\vee \ldots \vee m_{i-1}\vee m_{i+1}\vee\ldots\vee m_{k-1}
+    }
+$$<p>if two clauses resolve to yield the empty clause $\varepsilon$ then $\alpha\models\beta$ holds</p>
+<p>algorithm <a href="https://en.wikipedia.org/wiki/DPLL_algorithm">DPLL</a> is a recursive, depth-first enumeration of models using resolution<br>
+paired with <em>early termination</em>, <em>pure symbol</em> and <em>unit clause</em> heuristics to speed up.</p>
+
 </div>
 </div>
 </div></section><section>
