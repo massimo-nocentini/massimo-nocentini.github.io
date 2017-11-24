@@ -11835,7 +11835,9 @@ a.anchor-link {
         alt="UniFI logo" style="float: left; width: 20%; height: 20%;">
 <div align="right">
 <small>
-<br>November 9, 2017: refutation
+<br>November 24, 2017: seminar time
+<br>November 11-23, 2017: minor reviews 
+<br>November 9, 2017: refutation methods
 <br>November 8, 2017: sets
 <br>November 7, 2017: init
 </small>
@@ -11846,7 +11848,7 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">__AUTHOR__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Massimo Nocentini&quot;</span><span class="p">,</span> 
@@ -11952,7 +11954,7 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">assert</span> <span class="p">(</span><span class="n">filter_primes</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">52</span><span class="p">))</span> <span class="o">==</span> 
@@ -11975,7 +11977,7 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">filter_primes</span><span class="p">(</span><span class="n">primes</span><span class="p">):</span>
@@ -11997,7 +11999,7 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">assert</span> <span class="p">(</span><span class="n">filter_primes</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">52</span><span class="p">))</span> <span class="o">==</span> 
@@ -12023,7 +12025,7 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">primes</span> <span class="ow">=</span> <span class="n">filte_prime</span> <span class="p">[</span><span class="mi">2</span><span class="o">..</span><span class="mi">51</span><span class="p">]</span> 
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">primes</span> <span class="ow">=</span> <span class="n">filte_prime</span> <span class="p">[</span><span class="mi">2</span><span class="o">..</span><span class="p">]</span> <span class="c1">-- infinite list! </span>
     <span class="kr">where</span> <span class="n">filter_prime</span> <span class="p">(</span><span class="n">p</span><span class="kt">:</span><span class="n">xs</span><span class="p">)</span> <span class="ow">=</span> 
         <span class="n">p</span> <span class="kt">:</span> <span class="n">filter_prime</span> <span class="p">[</span><span class="n">x</span> <span class="o">|</span> <span class="n">x</span> <span class="ow">&lt;-</span> <span class="n">xs</span><span class="p">,</span> <span class="n">x</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="n">p</span> <span class="o">/=</span> <span class="mi">0</span><span class="p">]</span> <span class="c1">-- lazily</span>
 
@@ -12105,7 +12107,7 @@ $$<p>Questions:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">P</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">r&#39;\mathcal</span><span class="si">{P}</span><span class="s1">_</span><span class="si">{6}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># the *Pascal matrix*</span>
@@ -12120,7 +12122,7 @@ $$<p>Questions:</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12169,8 +12171,8 @@ oth, it is <em>satisfiable</em> if it is true in <em>some</em> model.</p>
 <p><em>Logical reasoning</em> boils down to <em>entailment</em> relation $\models$ between sentences</p>
 $$
     M(\alpha) \subseteq M(\beta) \leftrightarrow \alpha \models \beta \leftrightarrow 
-    (\alpha \Rightarrow \beta) \text{ is valid } \leftrightarrow (\neg\alpha \vee \beta) \text{ is unsatisfiable}
-$$<p>the <em>resolution rule</em> is a <em>complete</em> inference algorithm</p>
+    (\alpha \Rightarrow \beta) \text{ is valid } \leftrightarrow \neg(\neg\alpha \vee \beta) \text{ is unsatisfiable}
+$$<p>the <em>resolution rule</em> is a <em>complete</em> inference algorithm, let $l_{q}, m_{w} \in\lbrace 0,1\rbrace$ in</p>
 $$
     {
     l_{0}\vee \ldots \vee l_{i} \vee \ldots \vee l_{j-1} \quad m_{0}\vee \ldots\vee m_{o}\vee\ldots\vee m_{k-1} \quad l_{i} = \neg m_{o}
@@ -12178,7 +12180,7 @@ $$
     l_{0}\vee \ldots \vee l_{i-1}\vee l_{i+1} \vee \ldots\vee l_{j-1} \vee  
     m_{0}\vee \ldots \vee m_{o-1}\vee m_{o+1}\vee\ldots\vee m_{k-1}
     } 
-$$<p>where $l_{q}, m_{w} \in\lbrace 0,1\rbrace$; finally, if two clauses resolve to yield the empty clause $\varepsilon$ then $\alpha\models\beta$ holds</p>
+$$<p>finally, if two clauses resolve to yield the empty clause $\varepsilon$ then $\alpha\models\beta$ holds</p>
 <p>algorithm <a href="https://en.wikipedia.org/wiki/DPLL_algorithm">DPLL</a> is a recursive, depth-first enumeration of models using resolution<br>
 paired with <em>early termination</em>, <em>pure symbol</em> and <em>unit clause</em> heuristics to speed up.</p>
 
@@ -12190,18 +12192,18 @@ paired with <em>early termination</em>, <em>pure symbol</em> and <em>unit clause
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="by-unification">by unification<a class="anchor-link" href="#by-unification">&#182;</a></h2><p>it is a process of solving <em>equations between symbolic expressions</em></p>
-<p>a <em>solution</em> is denoted as a <em>substitution</em>, namely a mapping assigning<br> 
+<h2 id="by-unification">by unification<a class="anchor-link" href="#by-unification">&#182;</a></h2><p>it is a process of solving <em>equations between symbolic expressions</em>;<br>
+a <em>solution</em> is denoted as a <em>substitution</em> $\theta$, namely a mapping assigning<br> 
 a symbolic value to each variable of the problem's expressions</p>
-<p><em>finite terms</em>: $\lbrace cons(x,cons(x,nil)) = cons(2,y)\rbrace \theta $ holds in subs $\theta = \lbrace x \mapsto 2, y \mapsto cons(2,nil) \rbrace$<br>
-<em>infinite terms</em>: $ \lbrace y = cons(2,y) \rbrace \theta $ holds in subs $\theta = \lbrace y \mapsto cons(2,cons(2,cons(2,...))) \rbrace$</p>
+<p><em>finite terms</em>: $$\lbrace cons(x,cons(x,nil)) = cons(2,y)\rbrace \theta \leftrightarrow \theta = \lbrace x \mapsto 2, y \mapsto cons(2,nil) \rbrace$$
+<em>infinite terms</em>: $$ \lbrace y = cons(2,y) \rbrace \theta \leftrightarrow \theta = \lbrace y \mapsto cons(2,cons(2,cons(2,...))) \rbrace$$</p>
 <p>let $G$ be a set of equations, unification proceeds according to the following rules:</p>
 <ul>
-<li><em>delete</em>: $G \cup \lbrace t = t \rbrace \rightarrow G$</li>
-<li><em>decompose</em>: $G \cup \lbrace f(s_{0}, \ldots, s_{k}) = f(t_{0}, \ldots, t_{k})\rbrace \rightarrow G \cup \lbrace s_{0}=t_{0},\ldots, s_{k}=t_{k} \rbrace$</li>
-<li><em>conflict</em>: if $f\neq g \vee k\neq m$ then $G \cup \lbrace f(s_{0}, \ldots, s_{k}) = g(t_{0}, \ldots, t_{m})\rbrace \rightarrow \,\perp$</li>
-<li><em>eliminate</em>:     if $x \not\in vars(t)$ and $x \in vars(G)$ then $G \cup \lbrace x = t\rbrace \rightarrow G\lbrace x \mapsto t\rbrace \cup \left\lbrace x \triangleq t\right\rbrace $</li>
-<li><em>occur check</em>: if $x \in vars(f(s_{0},\ldots,s_{k}))$ then $G \cup \lbrace x = t(s_{0}, \ldots, s_{k}\rbrace \rightarrow \,\perp$</li>
+<li><em>delete</em>: $$G \cup \lbrace t = t \rbrace \rightarrow G$$</li>
+<li><em>decompose</em>: $$G \cup \lbrace f(s_{0}, \ldots, s_{k}) = f(t_{0}, \ldots, t_{k})\rbrace \rightarrow G \cup \lbrace s_{0}=t_{0},\ldots, s_{k}=t_{k} \rbrace$$</li>
+<li><em>conflict</em>: if $f\neq g \vee k\neq m$ then $$G \cup \lbrace f(s_{0}, \ldots, s_{k}) = g(t_{0}, \ldots, t_{m})\rbrace \rightarrow \,\perp$$</li>
+<li><em>eliminate</em>:     if $x \not\in vars(t)$ and $x \in vars(G)$ then $$G \cup \lbrace x = t\rbrace \rightarrow G\lbrace x \mapsto t\rbrace \cup \left\lbrace x \triangleq t\right\rbrace $$</li>
+<li><em>occur check</em>: if $x \in vars(f(s_{0},\ldots,s_{k}))$ then $$G \cup \lbrace x = t(s_{0}, \ldots, s_{k}\rbrace \rightarrow \,\perp$$</li>
 </ul>
 <p>without <em>occur checks</em>, generating a substitution $\theta$ is a <em>recursive enumerable</em> problem</p>
 
@@ -12244,7 +12246,7 @@ a symbolic value to each variable of the problem's expressions</p>
 </div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rvar</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># a logic variable</span>
@@ -12258,7 +12260,7 @@ a symbolic value to each variable of the problem's expressions</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12273,68 +12275,10 @@ a symbolic value to each variable of the problem's expressions</p>
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">succeed</span><span class="p">)</span> <span class="c1"># a goal that always succeeds</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[Tautology]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div></div><div class="fragment">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fail</span><span class="p">)</span> <span class="c1"># a goal that always fails</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
-
-
-<div class="output_latex output_subarea output_execute_result">
-$$\left [ \right ]$$
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div></div><div class="fragment">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">succeed</span><span class="p">))</span> <span class="c1"># a free variable without association</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">succeed</span><span class="p">)</span> <span class="c1"># a goal that always succeeds</span>
 </pre></div>
 
 </div>
@@ -12349,7 +12293,7 @@ $$\left [ \right ]$$
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[▢₀]</pre>
+<pre>[Tautology]</pre>
 </div>
 
 </div>
@@ -12363,7 +12307,7 @@ $$\left [ \right ]$$
 <div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c1"># unification of ground values</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fail</span><span class="p">)</span> <span class="c1"># a goal that always fails</span>
 </pre></div>
 
 </div>
@@ -12375,6 +12319,64 @@ $$\left [ \right ]$$
 
 
 <div class="output_area"><div class="prompt output_prompt">Out[10]:</div>
+
+
+<div class="output_latex output_subarea output_execute_result">
+$$\left [ \right ]$$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">succeed</span><span class="p">))</span> <span class="c1"># a free variable without association</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[11]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[▢₀]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">unify</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c1"># unification of ground values</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12389,68 +12391,10 @@ $$\left [ \right ]$$
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="p">)))</span> <span class="c1"># unification of a variable</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[11]:</div>
-
-
-<div class="output_latex output_subarea output_execute_result">
-$$\left [ 3\right ]$$
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div></div><div class="fragment">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">q</span><span class="p">)))</span> <span class="c1"># list unification</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
-
-
-<div class="output_latex output_subarea output_execute_result">
-$$\left [ \left [ 2, \quad 3\right ]\right ]$$
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div></div></section><section>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">unify</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span> <span class="c1"># co-sharing</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="p">)))</span> <span class="c1"># unification of a variable</span>
 </pre></div>
 
 </div>
@@ -12473,10 +12417,68 @@ $$\left [ 3\right ]$$
 </div>
 </div>
 
-</div><div class="fragment">
+</div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">q</span><span class="p">)))</span> <span class="c1"># list unification</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[14]:</div>
+
+
+<div class="output_latex output_subarea output_execute_result">
+$$\left [ \left [ 2, \quad 3\right ]\right ]$$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></div></section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">unify</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span> <span class="c1"># co-sharing</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
+
+
+<div class="output_latex output_subarea output_execute_result">
+$$\left [ 3\right ]$$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="o">|</span> <span class="n">unify</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">True</span><span class="p">)))</span> <span class="c1"># disjunction</span>
@@ -12490,7 +12492,7 @@ $$\left [ 3\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[14]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12505,7 +12507,7 @@ $$\left [ 3\right ]$$
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> 
@@ -12521,7 +12523,7 @@ $$\left [ 3\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12536,7 +12538,7 @@ $$\left [ 3\right ]$$
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">father</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
@@ -12560,7 +12562,7 @@ $$\left [ 3\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12582,20 +12584,20 @@ $$\left [ 3\right ]$$
 $$
 \mathcal{C} =  \left \lbrace{ \over 2▢ \stackrel{\circ}{\rightarrow} ▢} , {▢ \stackrel{\circ}{\rightarrow} \triangle \over 3▢ \stackrel{\circ}{\rightarrow} \triangle 2 \triangle} \right \rbrace
 $$<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">machine</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">rules</span><span class="p">):</span> <span class="c1"># an abstract machine</span>
-    <span class="k">def</span> <span class="nf">M</span><span class="p">(</span><span class="err">α</span><span class="p">,</span> <span class="err">β</span><span class="p">):</span>           
-        <span class="k">return</span> <span class="n">condi</span><span class="p">(</span><span class="o">*</span><span class="p">[[</span><span class="n">r</span><span class="p">(</span><span class="err">α</span><span class="p">,</span> <span class="err">β</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">M</span><span class="p">),</span> <span class="n">succeed</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">],</span> <span class="n">dovetail</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>         
+    <span class="k">def</span> <span class="nf">M</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>           
+        <span class="k">return</span> <span class="n">condi</span><span class="p">(</span><span class="o">*</span><span class="p">[[</span><span class="n">r</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">machine</span><span class="o">=</span><span class="n">M</span><span class="p">),</span> <span class="n">succeed</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">M</span> 
 
-<span class="k">def</span> <span class="nf">associateo</span><span class="p">(</span><span class="err">γ</span><span class="p">,</span> <span class="err">γ</span><span class="mi">2</span><span class="err">γ</span><span class="p">):</span> <span class="c1"># a number ctor</span>
-    <span class="k">return</span> <span class="n">appendo</span><span class="p">(</span><span class="err">γ</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="err">γ</span><span class="p">,</span> <span class="err">γ</span><span class="mi">2</span><span class="err">γ</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">associateo</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">g2g</span><span class="p">):</span> <span class="c1"># a number ctor</span>
+    <span class="k">return</span> <span class="n">appendo</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">g</span><span class="p">,</span> <span class="n">g2g</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">mcculloch_first_ruleo</span><span class="p">(</span><span class="err">α</span><span class="p">,</span> <span class="err">β</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span> <span class="c1"># McCulloch machine&#39;s first rule</span>
-    <span class="k">return</span> <span class="n">unify</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="err">β</span><span class="p">,</span> <span class="err">α</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">mcculloch_first_ruleo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span> <span class="c1"># machine&#39;s first rule</span>
+    <span class="k">return</span> <span class="n">unify</span><span class="p">([</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">mcculloch_second_ruleo</span><span class="p">(</span><span class="err">α</span><span class="p">,</span> <span class="err">δ</span><span class="mi">2</span><span class="err">δ</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span> <span class="c1"># McCulloch machine&#39;s second rule</span>
-    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="err">η</span><span class="p">,</span> <span class="err">δ</span><span class="p">:</span> <span class="n">unify</span><span class="p">([</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="err">η</span><span class="p">,</span> <span class="err">α</span><span class="p">)</span> 
-                            <span class="o">&amp;</span> <span class="n">associateo</span><span class="p">(</span><span class="err">δ</span><span class="p">,</span> <span class="err">δ</span><span class="mi">2</span><span class="err">δ</span><span class="p">)</span> 
-                            <span class="o">&amp;</span> <span class="n">machine</span><span class="p">(</span><span class="err">η</span><span class="p">,</span> <span class="err">δ</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">mcculloch_second_ruleo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">g2g</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">machine</span><span class="p">):</span> <span class="c1"># machine&#39;s second rule</span>
+    <span class="k">return</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">unify</span><span class="p">([</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> 
+                            <span class="o">&amp;</span> <span class="n">associateo</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">g2g</span><span class="p">)</span> 
+                            <span class="o">&amp;</span> <span class="n">machine</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span>
 
 <span class="n">mccullocho</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">rules</span><span class="o">=</span><span class="p">[</span> <span class="n">mcculloch_second_ruleo</span><span class="p">,</span> <span class="n">mcculloch_first_ruleo</span><span class="p">,</span> <span class="p">])</span>
 </pre></div>
@@ -12614,7 +12616,7 @@ $$<div class="highlight"><pre><span></span><span class="k">def</span> <span clas
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">mccullocho</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span> <span class="c1"># check</span>
@@ -12628,7 +12630,7 @@ $$<div class="highlight"><pre><span></span><span class="k">def</span> <span clas
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[11]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12643,7 +12645,7 @@ $$<div class="highlight"><pre><span></span><span class="k">def</span> <span clas
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">([</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="n">β</span><span class="p">,</span> <span class="n">α</span><span class="p">)))</span> <span class="c1"># attempt to break rules</span>
@@ -12657,7 +12659,7 @@ $$<div class="highlight"><pre><span></span><span class="k">def</span> <span clas
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[10]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[20]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12672,7 +12674,7 @@ $$\left [ \right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">α</span><span class="p">)))</span> <span class="c1"># computing forwards</span>
@@ -12686,7 +12688,7 @@ $$\left [ \right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12701,7 +12703,7 @@ $$\left [ \left [ 3, \quad 4, \quad 5\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span> <span class="c1"># computing backwards</span>
@@ -12715,7 +12717,7 @@ $$\left [ \left [ 3, \quad 4, \quad 5\right ]\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12739,7 +12741,7 @@ $$\left [ \left [ 2, \quad 3, \quad 4, \quad 5\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">mccullocho</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
@@ -12753,7 +12755,7 @@ $$\left [ \left [ 2, \quad 3, \quad 4, \quad 5\right ]\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[23]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12768,7 +12770,7 @@ $$\left [ \left [ 2, \quad 3, \quad 4, \quad 5\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">α</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -12782,7 +12784,7 @@ $$\left [ \left [ 2, \quad 3, \quad 4, \quad 5\right ]\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[24]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12797,7 +12799,7 @@ $$\left [ \left [ 5, \quad 2, \quad 5, \quad 2, \quad 5, \quad 2, \quad 5\right 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">β</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">(</span><span class="n">β</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">])))</span>
@@ -12811,7 +12813,7 @@ $$\left [ \left [ 5, \quad 2, \quad 5, \quad 2, \quad 5, \quad 2, \quad 5\right 
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12835,10 +12837,10 @@ $$\left [ \left [ 3, \quad 3, \quad 2, \quad 5\right ], \quad \left [ 2, \quad 5
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">unify</span><span class="p">([</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">],</span> <span class="n">p</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># enumeration</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">unify</span><span class="p">([</span><span class="n">α</span><span class="p">,</span> <span class="n">β</span><span class="p">],</span> <span class="n">p</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># enum</span>
 </pre></div>
 
 </div>
@@ -12849,7 +12851,7 @@ $$\left [ \left [ 3, \quad 3, \quad 2, \quad 5\right ], \quad \left [ 2, \quad 5
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[24]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12873,7 +12875,7 @@ $$\left [ \left [ 3, \quad 3, \quad 2, \quad 5\right ], \quad \left [ 2, \quad 5
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">α</span><span class="p">:</span> <span class="n">mccullocho</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">α</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># fixpoint</span>
@@ -12887,7 +12889,7 @@ $$\left [ \left [ 3, \quad 3, \quad 2, \quad 5\right ], \quad \left [ 2, \quad 5
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[27]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -12902,7 +12904,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">out</span><span class="p">,</span> <span class="n">γ</span><span class="p">,</span> <span class="n">αγ</span><span class="p">:</span> 
@@ -12918,7 +12920,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[30]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[28]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12947,7 +12949,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">dycko</span><span class="p">(</span><span class="n">α</span><span class="p">):</span>
@@ -12969,7 +12971,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span><span class="n">dyck</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">paths</span> <span class="ow">in</span> <span class="p">[</span><span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span>
@@ -12983,7 +12985,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[28]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[31]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -13011,7 +13013,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">P</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">)</span>
@@ -13035,7 +13037,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Matrix</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="n">unfoldings</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
@@ -13049,7 +13051,7 @@ $$\left [ \left [ 3, \quad 2, \quad 3\right ]\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[30]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[33]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -13064,13 +13066,10 @@ $$\left[\begin{matrix}P_{n - 1,m} + P_{n - 1,m - 1}\\P_{n - 2,m} + P_{n - 2,m - 
 </div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span> 
-    <span class="n">next_topic</span><span class="p">()</span>
-<span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span> 
-    <span class="kn">import</span> <span class="nn">this</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">this</span> <span class="c1"># Easter egg!!</span>
 </pre></div>
 
 </div>
@@ -13114,7 +13113,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">greetings</span><span class="p">(</span><span class="n">smiley</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -13128,7 +13127,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[31]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[35]:</div>
 
 <div class="output_markdown rendered_html output_subarea output_execute_result">
 <h1>Thanks for coming  :)</h1>
@@ -13142,7 +13141,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 </div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -13161,7 +13160,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -13178,7 +13177,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[37]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -13193,7 +13192,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
@@ -13209,7 +13208,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[38]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -13228,7 +13227,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fives</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -13245,7 +13244,7 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[20]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[39]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -13260,7 +13259,7 @@ $$\left [ 5, \quad 5, \quad 5, \quad 5, \quad 5\right ]$$
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fives</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
@@ -13276,7 +13275,7 @@ $$\left [ 5, \quad 5, \quad 5, \quad 5, \quad 5\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[40]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -13295,7 +13294,7 @@ $$\left [ 5, \quad 5, \quad 5, \quad 5, \quad 5\right ]$$
 </div></div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">nats</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -13312,7 +13311,7 @@ $$\left [ 5, \quad 5, \quad 5, \quad 5, \quad 5\right ]$$
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[41]:</div>
 
 
 <div class="output_latex output_subarea output_execute_result">
@@ -13327,7 +13326,7 @@ $$\left [ 0, \quad 1, \quad 2, \quad 3, \quad 4, \quad 5, \quad 6, \quad 7, \qua
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">appendo</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">q</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">l</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -13341,7 +13340,7 @@ $$\left [ 0, \quad 1, \quad 2, \quad 3, \quad 4, \quad 5, \quad 6, \quad 7, \qua
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[24]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[43]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -13360,7 +13359,7 @@ $$\left [ 0, \quad 1, \quad 2, \quad 3, \quad 4, \quad 5, \quad 6, \quad 7, \qua
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">fresh</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span>
@@ -13376,7 +13375,7 @@ $$\left [ 0, \quad 1, \quad 2, \quad 3, \quad 4, \quad 5, \quad 6, \quad 7, \qua
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[14]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[44]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
