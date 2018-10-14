@@ -1,20 +1,26 @@
 
-\documentclass{beamer}
+\documentclass[9pt]{beamer}
 
 \usepackage{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{euler}
 \usepackage{fontspec}
 \usepackage{minted}
 \usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{amssymb}
 \usepackage{fancyvrb}
+\usepackage{bbold}
 
+\usetheme[titleformat=smallcaps,block=fill]{metropolis}
+
+%\renewcommand{\rmdefault}{eulervm}
+
+%\usefonttheme{professionalfonts}
 \setmonofont[Scale=0.8]{Menlo}
-\usefonttheme[onlymath]{serif}
+%\usefonttheme[onlymath]{serif}
 
 \usemintedstyle{xcode}
 
@@ -33,7 +39,7 @@
 
 \begin{frame}[fragile]
 \frametitle{}
-\begin{minted}[fontsize=\small,escapeinside=||,mathescape=true]{smalltalk}
+\begin{minted}[escapeinside=||,mathescape=true]{smalltalk}
 outline
     ^ LinkedList new
         add: 'me, seminars and conferences';
@@ -48,7 +54,7 @@ outline
 
 \begin{frame}[fragile]
 \frametitle{Hi, again!}
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}
 $ whoami
 Massimo Nocentini
 PhD student @ University of Florence
@@ -85,7 +91,11 @@ n-k}^{[\bar{\mathfrak{p}]}}}$; moreover, let
 $\mathcal{R}^{[\mathfrak{p}]}=\left(R_{n,k}^{[\mathfrak{p}]}\right)_{n,k\in\mathbb{N}}$
 be the enclosing matrix and ${\cal{R}^{[\mathfrak{p}]}}$ is a
 \textit{Riordan array} if and only if  $\mathfrak{p}$ is a Riordan pattern.
-
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Algebraic Generating Functions for Languages
+Avoiding Riordan Patterns}.  Journal of Integer Sequences, 2018.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -99,6 +109,11 @@ $$d^{[\mathfrak{p}]}(t)={C^{[\mathfrak{p}]}(t)
 $$h^{[\mathfrak{p}]}(t)={C^{[\mathfrak{p}]}(t) -\sqrt{C^{[\mathfrak{p}]}(t)^2-4tC^{[\mathfrak{p}]}(t)(C^{[\mathfrak{p}]}(t)-t^{n_0^{[\mathfrak{p}]}})}
 \over 2 C^{[\mathfrak{p}]}(t)},$$
 where $C^{[\mathfrak{p}]}(t)=C^{[\mathfrak{p}]}(\sqrt{t},\sqrt{t})$.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Algebraic Generating Functions for Languages
+Avoiding Riordan Patterns}.  Journal of Integer Sequences, 2018.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -117,12 +132,17 @@ $$S^{[\mathfrak{p}]}(t)={2C^{[\mathfrak{p}]}(t) \over \sqrt{Q(t)}\left(\sqrt{C^{
 $$L^{[\mathfrak{p}]}(t)= {2tC^{[\mathfrak{p}]}(t^2)^2 \over \sqrt{Q(t)}\left((2t-1)C(t^2)+ \sqrt{ Q(t) } \right)}$$
 where $Q(t)=C^{[\mathfrak{p}]}(t^2)\left( (1-4t^2)C^{[\mathfrak{p}]}(t^2)+4t^{2n_1^{[\mathfrak{p}]}}\right).$
 \end{itemize}
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Algebraic Generating Functions for Languages
+Avoiding Riordan Patterns}.  Journal of Integer Sequences, 2018.}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{what you know about my work}
 
-\begin{minted}[fontsize=\footnotesize]{python}
+\begin{minted}[baselinestretch=0.8]{python}
 """
 *      * * *   
 *          *   
@@ -131,7 +151,8 @@ where $Q(t)=C^{[\mathfrak{p}]}(t^2)\left( (1-4t^2)C^{[\mathfrak{p}]}(t^2)+4t^{2n
 V_shape = shape_spec(name='V', isomorphisms=lambda r, c: [
                 ((r,c), (r+1,c),  (r+2,c),   (r+2, c+1), (r+2, c+2)),
                 ((r,c), (r, c+1), (r,c+2),   (r+1, c+2), (r+2, c+2)), ])
-# define here more shapes...
+
+# define here more shapes wrt the anchor position (r,c)
 
 dim = (6,10)
 tilings = polyominoes(
@@ -168,8 +189,83 @@ manipulation via \textit{bitmasking} techniques, the board itself $\in\mathbb{N}
 
 \begin{frame}[fragile]
 \frametitle{what you know about my work}
+\begin{Verbatim}[baselinestretch=0.5, fontsize=\footnotesize]
+ ▢ ▢ ▢    ▢ ▢ ▢      ▢ ▢        ▢ ▢        ▢ ▢ ▢ ▢    ▢ ▢ ▢
+ ▢ ▢ ▢    ▢ ▢ ▢      ▢ ▢ ▢      ▢ ▢        ▢ ▢ ▢ ▢    ▢ ▢ ▢
+ ▢ ▢ ▢      ▢ ▢      ▢ ▢ ▢      ▢ ▢                       ▢
+                                ▢ ▢
+
+
+ ▢ ▢ ▢    ▢ ▢        ▢ ▢        ▢          ▢          ▢ ▢
+   ▢ ▢    ▢ ▢        ▢ ▢ ▢      ▢ ▢ ▢      ▢ ▢        ▢ ▢
+   ▢ ▢    ▢ ▢ ▢        ▢ ▢      ▢ ▢ ▢      ▢ ▢        ▢ ▢
+                                           ▢ ▢          ▢
+
+
+ ▢ ▢ ▢    ▢ ▢ ▢      ▢ ▢        ▢ ▢ ▢      ▢ ▢        ▢
+   ▢ ▢    ▢ ▢ ▢ ▢    ▢ ▢          ▢ ▢      ▢ ▢ ▢      ▢ ▢
+                       ▢ ▢          ▢          ▢      ▢ ▢ ▢
+
+
+ ▢        ▢ ▢        ▢          ▢ ▢ ▢      ▢ ▢        ▢ ▢ ▢ ▢
+ ▢ ▢ ▢      ▢ ▢      ▢ ▢          ▢ ▢ ▢    ▢ ▢ ▢ ▢        ▢ ▢
+   ▢ ▢      ▢ ▢      ▢ ▢
+                       ▢
+
+
+ ▢ ▢      ▢          ▢ ▢ ▢      ▢          ▢          ▢ ▢
+ ▢ ▢      ▢              ▢      ▢ ▢        ▢ ▢ ▢        ▢
+   ▢      ▢ ▢            ▢        ▢ ▢          ▢        ▢ ▢
+   ▢      ▢ ▢
+
+
+ ▢ ▢      ▢          ▢          ▢ ▢        ▢          ▢ ▢ ▢
+   ▢ ▢    ▢          ▢ ▢ ▢ ▢      ▢        ▢              ▢ ▢
+     ▢    ▢ ▢ ▢                   ▢        ▢
+                                  ▢        ▢ ▢
+
+
+ ▢        ▢ ▢ ▢ ▢    ▢          ▢ ▢        ▢          ▢ ▢ ▢ ▢ ▢
+ ▢              ▢    ▢ ▢          ▢ ▢ ▢    ▢
+ ▢ ▢                   ▢                   ▢
+   ▢                   ▢                   ▢
+                                           ▢
+\end{Verbatim}
+The set of \textit{parallelogram polyominoes} of semi-perimeter $6$
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{what you know about my work}
+We have a generator of \textit{parallelogram polyominoes} of arbitrary
+semi-perimeter; moreover, pps can be use to tile square boards
+\vfill
+\begin{Verbatim}[baselinestretch=0.1, fontsize=\footnotesize]
+ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _       _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+|     |   | |_    |_ _ _ _ _| |●    |     |   | |_    | |_  |_ _    |
+|     |   |   |_  |   |   | |   |   |     |   |   |_  |   |_ _ _|_ _|
+|_ _ _|   |   | |_|_  |   | |_  |   |_ _ _|   |   | |_|_ _ _|_ _ _  |
+|     |_ _|_ _|_    | |_  | | |_|   |     |_ _|_ _|_    |   | |_  |_|
+|_    |     |   |_ _|_| |_| | |●    |_    |     |   |_ _|   | | |   |
+| |_ _|_ _  |_  |_    |_  |_|   |   | |_ _|_ _  |_  | | |_  | | |_ _|
+|     |   |_| |_ _|_ _ _|_ _|_ _|   |     |   |_| | | |_  |_| | |_  |
+|_ _ _|_ _  |   |_  |_  |_  | |●    |_ _ _|_ _  | |_|_  |_ _|_|_ _| |
+|   |_    |_|_ _ _|_  |   | |_  |   |   |_    |_|_ _ _|_| |_  |   | |
+|     |   |     |_  |_|_ _|_ _| |   |     |   |     |_  |_  | |_  |_|
+|_ _ _|_ _|_ _ _ _|_ _ _|_  | |_|   |_ _ _|_ _|_ _ _ _|_  | |_ _|_ _|
+|       |_      |   |_ _  | | |●    |       |_      |   |_|_| |_ _  |
+|_ _ _ _| |_ _ _|_ _ _ _| | | |●    |_ _ _ _| |_ _ _|_ _ _ _|   | | |
+|   |   |_ _  |_ _ _  | |_|_|_ _|   |   |   |_ _  |_ _ _ _ _|_  | |_|
+|   |_    | |_|_ _  |_| |_ _    |   |   |_    | |_|_ _  |_    |_|   |
+|_ _ _|_ _|_ _ _ _|_ _|_ _ _|_ _|   |_ _ _|_ _|_ _ _ _|_ _|_ _ _|_ _|
+\end{Verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{what you (already?) know about my work}
 \begin{columns}
 \begin{column}{0.6\textwidth}
+the Big Beng
 \begin{Verbatim}[baselinestretch=0.5,fontsize=\footnotesize]
             ★
 \end{Verbatim}
@@ -213,10 +309,9 @@ the (iv) generation
 \end{Verbatim}
 \end{column}
 \begin{column}{0.4\textwidth}  %%<--- here
-An implementation of the ECO methodology, to represent
-recursive structure. For instance, on the left is shown
-the enumeration of \textit{binary trees}, defined
-according to the symbolic equation
+An implementation of the ECO methodology to represent \textit{recursive
+structure}; for instance, on the left is shown the enumeration of
+\textit{binary trees}, defined according to the symbolic equation
 \begin{Verbatim}[baselinestretch=0.5,fontsize=\footnotesize]
 ★  =   ●
       ★ ★
@@ -225,7 +320,165 @@ according to the symbolic equation
 \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Mining the OEIS: an extended grapher}
+\begin{figure}
+\includegraphics[width=12cm,height=8cm]{coloured}
+\iffalse
+\caption{Sequences network with labelel vertices, here we see that the sequence
+of \textit{Fibonacci numbers} (\url{https://oeis.org/A000045}) and of
+\textit{Catalan numbers} (\url{https://oeis.org/A000108}) are the two central
+sequences, respectively.}
+\fi
+\end{figure}
+\end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Functions of Riordan matrices}
+\begin{columns}
+    \begin{column}{0.6\textwidth}
+        \begin{displaymath}
+        \footnotesize
+        %\mathcal{P}_{8}=\left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\1 & 2 & 1 &   &   &   &   &  \\1 & 3 & 3 & 1 &   &   &   &  \\1 & 4 & 6 & 4 & 1 &   &   &  \\1 & 5 & 10 & 10 & 5 & 1 &   &  \\1 & 6 & 15 & 20 & 15 & 6 & 1 &  \\1 & 7 & 21 & 35 & 35 & 21 & 7 & 1\end{matrix}\right]
+        \mathcal{C}_{8}=\left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\2 & 2 & 1 &   &   &   &   &  \\5 & 5 & 3 & 1 &   &   &   &  \\14 & 14 & 9 & 4 & 1 &   &   &  \\42 & 42 & 28 & 14 & 5 & 1 &   &  \\132 & 132 & 90 & 48 & 20 & 6 & 1 &  \\429 & 429 & 297 & 165 & 75 & 27 & 7 & 1\end{matrix}\right]
+        \end{displaymath}
+        \begin{displaymath}
+        \footnotesize
+        e^{\mathcal{C}_{8}} = e \left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\3 & 2 & 1 &   &   &   &   &  \\\frac{23}{2} & 8 & 3 & 1 &   &   &   &  \\\frac{154}{3} & 37 & 15 & 4 & 1 &   &   &  \\\frac{1 27}{4} & \frac{572}{3} & \frac{163}{2} & 24 & 5 & 1 &   &  \\\frac{7 46}{5} & \frac{6439}{6} & 478 & 15  & 35 & 6 & 1 &  \\\frac{5 2481}{6 } & \frac{39 899}{6 } & \frac{12  5}{4} & \frac{2965}{3} & \frac{495}{2} & 48 & 7 & 1\end{matrix}\right]
+        \end{displaymath}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+    Lift the scalar function $$f: \mathbb{R} \rightarrow \mathbb{R}$$
+    to the matrix function
+    $$\hat{f}: \mathbb{R}^{m\times m} \rightarrow \mathbb{R}^{m\times m}$$
+    where $m\in\mathbb{N}$, provided that
+    \begin{displaymath}
+        \left. \frac{\partial^{(j)}{f}}{\partial{z}^{j}} \right|_{z=\lambda_{i}},\,
+        \begin{array}{l} 
+            i\in \lbrace 1, \ldots, \nu \rbrace \\
+            j \in \lbrace 0, \ldots, m_{i}-1 \rbrace
+        \end{array},
+    \end{displaymath}
+    exists, for each eigenvalue $\lambda_{i}$.
+    \end{column}
+\end{columns}
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions of Riordan matrices}
+\begin{displaymath}
+\footnotesize
+    \sqrt[3]{\mathcal{P}_{8}}= \left[\begin{matrix}1 &  &  &  &  &  &  & \\\frac{1}{3} & 1 &  &  &  &  &  & \\\frac{1}{9} & \frac{2}{3} & 1 &  &  &  &  & \\\frac{1}{27} & \frac{1}{3} & 1 & 1 &  &  &  & \\\frac{1}{81} & \frac{4}{27} & \frac{2}{3} & \frac{4}{3} & 1 &  &  & \\\frac{1}{243} & \frac{5}{81} & \frac{10}{27} & \frac{10}{9} & \frac{5}{3} & 1 &  & \\\frac{1}{729} & \frac{2}{81} & \frac{5}{27} & \frac{20}{27} & \frac{5}{3} & 2 & 1 & \\\frac{1}{2187} & \frac{7}{729} & \frac{7}{81} & \frac{35}{81} & \frac{35}{27} & \frac{7}{3} & \frac{7}{3} & 1\end{matrix}\right]
+\end{displaymath}
+such that %$\sqrt{\mathcal{P}_8} \cdot \sqrt{\mathcal{P}_8} =\mathcal{P}_8$ and
+$\sqrt[3]{\mathcal{P}_8} \cdot \sqrt[3]{\mathcal{P}_8} \cdot
+\sqrt[3]{\mathcal{P}_8} =\mathcal{P}_8$ and
+$L_{8}\left({e^{\mathcal{C}_{8}}}\right) = \mathcal{C}_{8}$, where polynomial
+\begin{displaymath}
+{L_{ 8 }}{\left (z \right )} = \frac{z^{7}}{7 e^{7}} - \frac{7 z^{6}}{6 e^{6}} + \frac{21 z^{5}}{5 e^{5}} - \frac{35 z^{4}}{4 e^{4}} + \frac{35 z^{3}}{3 e^{3}} - \frac{21 z^{2}}{2 e^{2}} + \frac{7 z}{e} - \frac{223}{140}
+\end{displaymath}
+interpolates the $log$ function; moreover, the classic identity 
+$$sin(\mathcal{P}_8)\cdot sin(\mathcal{P}_8)+
+cos(\mathcal{P}_8)\cdot cos(\mathcal{P}_8)=I_{8},$$ 
+where $I$ is the identity matrix, holds as well.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions of Riordan matrices}
+Generalized Lagrange bases and Hermite interpolating polys
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{displaymath}
+        \footnotesize
+        \left. \frac{\partial^{(r-1)}{\Phi_{i,j}}}{\partial{z}^{r-1}} \right|_{z=\lambda_{l}} = \delta_{i,l}\delta_{j,r},
+        \, 
+        \begin{array}{l} 
+            l\in \lbrace 1, \ldots, \nu \rbrace \\
+            r \in \lbrace 1, \ldots, m_{l} \rbrace
+        \end{array}
+        \end{displaymath}
+        \begin{displaymath}
+        \footnotesize
+        g(z) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.
+        \frac{\partial^{(j-1)}{f}}{\partial{z}^{j-1}} \right|_{z=\lambda_{i}}\Phi_{i,j}(z) }}
+        \end{displaymath}
+    \end{column}
+    \vrule{}
+    \begin{column}{0.5\textwidth}
+        \begin{displaymath}
+        \footnotesize
+          \Phi_{1,j}(z) = \frac{\left(z-\lambda_{1}\right)^{j-1}}{(j-1)!}, 
+          \, j\in \lbrace 1,\ldots, m_{1} \rbrace
+        \end{displaymath}
+        \begin{displaymath}
+        \footnotesize
+        g_{m}(z) = {\sum_{j=1}^{m}{ \left.
+        \frac{\partial^{(j-1)}{f}}{\partial{z}^{j-1}} \right|_{z=\lambda_{1}}}}
+        \frac{\left(z-\lambda_{1}\right)^{j-1}}{(j-1)!}
+        \end{displaymath}
+    \end{column}
+\end{columns}
+for \textit{arbitrary} and \textit{Riordan} matrices, respectively.
+We study functions
+\begin{displaymath}
+\begin{split}
+f(z)&=z^{r},\,{f(z)=\frac{1}{z}},\,{f(z)=\sqrt{z}},\,{f(z)=e^{\alpha z}},\\
+f(z)&=log\,{z},\,f(z)=sin\,{z}\quad\text{and}\quad f(z)=cos\,{z},
+\end{split}
+\end{displaymath}
+applying them to Riordan matrice $\mathcal{P}_{8}$, $\mathcal{C}_{8}$ and 
+$\mathcal{S}_{8}$.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions of Riordan matrices}
+\begin{columns}
+    \begin{column}{0.35\textwidth}
+        \begin{displaymath}
+        \begin{split}
+          P_{m}(z) &= \sum_{j=0}^{m-1}{\binom{r}{j}}{(z-1)^{j} }\\
+          I_{m}(z) &= \sum_{j=0}^{m-1}{(-1)^{j}\,\left(z-1\right)^{j}}\\
+          R_{m}(z) &= \sum_{j=0}^{m-1}{{\frac{1}{2} \choose j}\left(z-1\right)^{j}}\\
+          E_{m}(z) &= e^{\alpha} \sum_{j=0}^{m-1}{\frac{\alpha^{j}}{j!}\left(z-1\right)^{j}}\\
+          L_{m}(z) &= \sum_{j=1}^{m-1}{\frac{(-1)^{j-1}}{j}{\left(z-1\right)^{j} }}\\
+        \end{split}
+        \end{displaymath}
+    \end{column}
+    \vrule{}
+    \begin{column}{0.65\textwidth}
+        \begin{displaymath}
+        \footnotesize
+        \begin{split}
+          S_{m}(z)  &= sin\,{1}\,\sum_{k=0}^{2\,\left\lceil \frac{m}{2} \right\rceil-2}{\left(\sum_{j=\left\lceil \frac{k}{2}\right\rceil}^{\left\lceil \frac{m}{2} \right\rceil -1}{\frac{(-1)^{3j}}{(2j)!}{2j\choose k}}\right) {(-z)^{k}}}\\
+                    &+ cos\,{1}\,\sum_{k=0}^{2\,\left\lfloor \frac{m}{2} \right\rfloor-1}{\left(\sum_{j=\left\lfloor \frac{k}{2}\right\rfloor}^{\left\lfloor \frac{m}{2} \right\rfloor -1}{\frac{(-1)^{3j+1}}{(2j + 1)!} {2j+1\choose k}}\right){(-z)^{k}}}\\
+          C_{m}(z)  &= cos\,{1}\,\sum_{k=0}^{2\,\left\lceil \frac{m}{2} \right\rceil-2}{\left(\sum_{j=\left\lceil \frac{k}{2}\right\rceil}^{\left\lceil \frac{m}{2} \right\rceil -1}{\frac{(-1)^{3j}}{(2j)!}{2j\choose k}}\right) {(-z)^{k}}}\\
+                    &+ sin\,{1}\,\sum_{k=0}^{2\,\left\lfloor \frac{m}{2} \right\rfloor-1}{\left(\sum_{j=\left\lfloor \frac{k}{2}\right\rfloor}^{\left\lfloor \frac{m}{2} \right\rfloor -1}{\frac{(-1)^{3j+2}}{(2j + 1)!} {2j+1\choose k}}\right){(-z)^{k}}}\\
+        \end{split}
+        \end{displaymath}
+    \end{column}
+\end{columns}
+where $c\cdot(d_{n,k})_{n,k\in\mathbb{N}} = (c\cdot d_{n,k})_{n,k\in\mathbb{N}}$.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
 
 \iffalse
 
