@@ -108,7 +108,16 @@ $$d^{[\mathfrak{p}]}(t)={C^{[\mathfrak{p}]}(t)
 \over \sqrt{C^{[\mathfrak{p}]}(t)^2-4tC^{[\mathfrak{p}]}(t)(C^{[\mathfrak{p}]}(t)-t^{n_0^{[\mathfrak{p}]}})}}\quad\text{and}$$
 $$h^{[\mathfrak{p}]}(t)={C^{[\mathfrak{p}]}(t) -\sqrt{C^{[\mathfrak{p}]}(t)^2-4tC^{[\mathfrak{p}]}(t)(C^{[\mathfrak{p}]}(t)-t^{n_0^{[\mathfrak{p}]}})}
 \over 2 C^{[\mathfrak{p}]}(t)},$$
-where $C^{[\mathfrak{p}]}(t)=C^{[\mathfrak{p}]}(\sqrt{t},\sqrt{t})$.
+where $C^{[\mathfrak{p}]}(t)=C^{[\mathfrak{p}]}(\sqrt{t},\sqrt{t})$
+and the \textit{bivariate auto-correlation polynomial}
+\begin{displaymath}
+C^{[\mathfrak{p}]}(x,y)=C^{[\mathfrak{\bar{p}}]}(y,x)=\sum_{i=0}^{\lfloor(h-1)/2\rfloor}c_{2i}x^iy^i,
+\end{displaymath}
+is defined wrt $c_i=[\![p_0p_1\cdots p_{h-1-i}=p_{i}p_{i+1}\cdots p_{h-1}]\!]$;
+moreover, similar functions can be defined for cases
+$n_1^{[\mathfrak{p}]}-n_0^{[\mathfrak{p}]}=0$ and
+$n_1^{[\mathfrak{p}]}-n_0^{[\mathfrak{p}]}=-1$.
+
 \vfill
 \noindent\rule{\textwidth}{0.1pt}
 {\footnotesize
@@ -238,7 +247,6 @@ The set of \textit{parallelogram polyominoes} of semi-perimeter $6$
 \frametitle{what you know about my work}
 We have a generator of \textit{parallelogram polyominoes} of arbitrary
 semi-perimeter; moreover, pps can be use to tile square boards
-\vfill
 \begin{Verbatim}[baselinestretch=0.1, fontsize=\footnotesize]
  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _       _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 |     |   | |_    |_ _ _ _ _| |●    |     |   | |_    | |_  |_ _    |
@@ -258,13 +266,15 @@ semi-perimeter; moreover, pps can be use to tile square boards
 |   |_    | |_|_ _  |_| |_ _    |   |   |_    | |_|_ _  |_    |_|   |
 |_ _ _|_ _|_ _ _ _|_ _|_ _ _|_ _|   |_ _ _|_ _|_ _ _ _|_ _|_ _ _|_ _|
 \end{Verbatim}
+by a \textit{backtracking} algorithm using the "\textit{bigger things first}"
+heuristic.
 \end{frame}
 
 
 \begin{frame}[fragile]
 \frametitle{what you (already?) know about my work}
 \begin{columns}
-\begin{column}{0.6\textwidth}
+\begin{column}{0.5\textwidth}
 the Big Beng
 \begin{Verbatim}[baselinestretch=0.5,fontsize=\footnotesize]
             ★
@@ -308,14 +318,22 @@ the (iv) generation
           ★ ★        ★ ★
 \end{Verbatim}
 \end{column}
-\begin{column}{0.4\textwidth}  %%<--- here
+\begin{column}{0.5\textwidth}  %%<--- here
 An implementation of the ECO methodology to represent \textit{recursive
-structure}; for instance, on the left is shown the enumeration of
-\textit{binary trees}, defined according to the symbolic equation
+structure}; for instance, (i)~on the left is shown the enumeration of
+\textit{binary trees}, defined according to the eq
 \begin{Verbatim}[baselinestretch=0.5,fontsize=\footnotesize]
 ★  =   ●
       ★ ★
 \end{Verbatim}
+and (ii)~the mutually rec eqs
+\begin{Verbatim}[baselinestretch=0.5,fontsize=\footnotesize]
+    ☆           ☆
+★ = ▢       ☆ = ▢ ★
+\end{Verbatim}
+are enumerated by the succession rules $(1) \hookrightarrow (2)$
+and $(k) \hookrightarrow (1)\cdots(k-1)(k+1)$ for $k>1$, counted by
+the \textit{Motzkin numbers}.
 \end{column}
 \end{columns}
 \end{frame}
@@ -373,8 +391,11 @@ matrices}. \newline Linear Algebra and its Applications, under review.}
 \frametitle{Functions of Riordan matrices}
 \begin{displaymath}
 \footnotesize
+    \mathcal{P}_{8}=\left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\1 & 2 & 1 &   &   &   &   &  \\1 & 3 & 3 & 1 &   &   &   &  \\1 & 4 & 6 & 4 & 1 &   &   &  \\1 & 5 & 10 & 10 & 5 & 1 &   &  \\1 & 6 & 15 & 20 & 15 & 6 & 1 &  \\1 & 7 & 21 & 35 & 35 & 21 & 7 & 1\end{matrix}\right]
+    \quad
     \sqrt[3]{\mathcal{P}_{8}}= \left[\begin{matrix}1 &  &  &  &  &  &  & \\\frac{1}{3} & 1 &  &  &  &  &  & \\\frac{1}{9} & \frac{2}{3} & 1 &  &  &  &  & \\\frac{1}{27} & \frac{1}{3} & 1 & 1 &  &  &  & \\\frac{1}{81} & \frac{4}{27} & \frac{2}{3} & \frac{4}{3} & 1 &  &  & \\\frac{1}{243} & \frac{5}{81} & \frac{10}{27} & \frac{10}{9} & \frac{5}{3} & 1 &  & \\\frac{1}{729} & \frac{2}{81} & \frac{5}{27} & \frac{20}{27} & \frac{5}{3} & 2 & 1 & \\\frac{1}{2187} & \frac{7}{729} & \frac{7}{81} & \frac{35}{81} & \frac{35}{27} & \frac{7}{3} & \frac{7}{3} & 1\end{matrix}\right]
 \end{displaymath}
+
 such that %$\sqrt{\mathcal{P}_8} \cdot \sqrt{\mathcal{P}_8} =\mathcal{P}_8$ and
 $\sqrt[3]{\mathcal{P}_8} \cdot \sqrt[3]{\mathcal{P}_8} \cdot
 \sqrt[3]{\mathcal{P}_8} =\mathcal{P}_8$ and
@@ -433,11 +454,11 @@ We study functions
 \begin{displaymath}
 \begin{split}
 f(z)&=z^{r},\,{f(z)=\frac{1}{z}},\,{f(z)=\sqrt{z}},\,{f(z)=e^{\alpha z}},\\
-f(z)&=log\,{z},\,f(z)=sin\,{z}\quad\text{and}\quad f(z)=cos\,{z},
+f(z)&=log\,{z},\,f(z)=sin\,{z}\quad\text{and}\quad f(z)=cos\,{z}
 \end{split}
 \end{displaymath}
-applying them to Riordan matrice $\mathcal{P}_{8}$, $\mathcal{C}_{8}$ and 
-$\mathcal{S}_{8}$.
+and their applications to Riordan matrices $\mathcal{P}_{8}$, $\mathcal{C}_{8}$
+and $\mathcal{S}_{8}$.
 \vfill
 \noindent\rule{\textwidth}{0.1pt}
 {\footnotesize
@@ -472,13 +493,189 @@ matrices}. \newline Linear Algebra and its Applications, under review.}
         \end{displaymath}
     \end{column}
 \end{columns}
-where $c\cdot(d_{n,k})_{n,k\in\mathbb{N}} = (c\cdot d_{n,k})_{n,k\in\mathbb{N}}$.
+where $c\cdot(d_{n,k})_{n,k\in\mathbb{N}} = (c\cdot d_{n,k})_{n,k\in\mathbb{N}}$
+and $c\in\mathbb{R}$.
 \vfill
 \noindent\rule{\textwidth}{0.1pt}
 {\footnotesize
 Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
 matrices}. \newline Linear Algebra and its Applications, under review.}
 \end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions of Riordan matrices}
+
+    Let $r\in\mathbb{Q}$; matrices $\mathcal{P}_{8}^{r}, \mathcal{S}_{8},
+    log{\mathcal{P}_{8}}$ and $\sqrt{\mathcal{S}_{8}}$ are defined as
+    \begin{displaymath}
+    \footnotesize
+      \left[\begin{matrix}1 &   &   &   &   &   &   &  \\r & 1 &   &   &   &   &   &  \\r^{2} & 2 r & 1 &   &   &   &   &  \\r^{3} & 3 r^{2} & 3 r & 1 &   &   &   &  \\r^{4} & 4 r^{3} & 6 r^{2} & 4 r & 1 &   &   &  \\r^{5} & 5 r^{4} & 10 r^{3} & 10 r^{2} & 5 r & 1 &   &  \\r^{6} & 6 r^{5} & 15 r^{4} & 20 r^{3} & 15 r^{2} & 6 r & 1 &  \\r^{7} & 7 r^{6} & 21 r^{5} & 35 r^{4} & 35 r^{3} & 21 r^{2} & 7 r & 1\end{matrix}\right],\,
+      \left[\begin{matrix}1 &  &  &  &  &  &  & \\1 & 1 &  &  &  &  &  & \\1 & 3 & 1 &  &  &  &  & \\1 & 7 & 6 & 1 &  &  &  & \\1 & 15 & 25 & 10 & 1 &  &  & \\1 & 31 & 90 & 65 & 15 & 1 &  & \\1 & 63 & 301 & 350 & 140 & 21 & 1 & \\1 & 127 & 966 & 1701 & 1050 & 266 & 28 & 1\end{matrix}\right],\\
+    \end{displaymath}
+    \begin{displaymath}
+    \footnotesize
+       \left[\begin{matrix}   &   &   &   &   &   &   &  \\1 &     &   &   &   &   &   &  \\  & 2 &     &   &   &   &   &  \\  &   & 3 &     &   &   &   &  \\  &   &   & 4 &     &   &   &  \\  &   &   &   & 5 &     &   &  \\  &   &   &   &   & 6 &     &  \\  &   &   &   &   &   & 7 &    \end{matrix}\right]\,\text{and}\,
+       \left[\begin{matrix}1 &  &  &  &  &  &  & \\\frac{1}{2} & 1 &  &  &  &  &  & \\\frac{1}{8} & \frac{3}{2} & 1 &  &  &  &  & \\0 & \frac{5}{4} & 3 & 1 &  &  &  & \\\frac{1}{32} & \frac{5}{8} & 5 & 5 & 1 &  &  & \\- \frac{7}{128} & \frac{11}{32} & \frac{45}{8} & \frac{55}{4} & \frac{15}{2} & 1 &  & \\\frac{1}{128} & - \frac{7}{128} & \frac{161}{32} & \frac{105}{4} & \frac{245}{8} & \frac{21}{2} & 1 & \\\frac{159}{256} & - \frac{31}{64} & \frac{105}{32} & \frac{623}{16} & \frac{175}{2} & \frac{119}{2} & 14 & 1\end{matrix}\right],
+    \end{displaymath}
+
+    from left to right then top to bottom, respectively.
+
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions of the Fibonacci generator matrix}
+To compare and constrast the case $\sigma(A)=\lbrace \lambda_{1} \rbrace$, consider
+\begin{displaymath}
+\mathcal{F} = \left[\begin{matrix}1 & 1\\1 & 0\end{matrix}\right],
+\quad  \lambda_{1} =  \frac{1}{2}- \frac{\sqrt{5}}{2}
+\quad\text{and}\quad \lambda_{2} = \frac{1}{2} + \frac{\sqrt{5}}{2},
+\end{displaymath}
+\begin{displaymath}
+\Phi_{ 1, 1 }{\left (z \right )} = \frac{z}{\lambda_{1} - \lambda_{2}} - \frac{\lambda_{2}}{\lambda_{1} - \lambda_{2}} 
+\quad\text{and}\quad \Phi_{ 2, 1 }{\left (z \right )} = - \frac{z}{\lambda_{1} - \lambda_{2}} + \frac{\lambda_{1}}{\lambda_{1} - \lambda_{2}},
+\end{displaymath}
+\begin{displaymath}
+g{\left (z \right )} = z \left(\frac{\lambda_{1}^{r}}{\lambda_{1} - \lambda_{2}} - \frac{\lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}}\right) + \frac{\lambda_{1} \lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}} - \frac{\lambda_{1}^{r} \lambda_{2}}{\lambda_{1} - \lambda_{2}}\quad\text{interpolates}\quad f(z)=z^{r},
+\end{displaymath}
+\begin{displaymath}
+\mathcal{F}^{r} = \left[\begin{matrix}f_{r+1} & f_{r}\\f_{r} & f_{r-1}\end{matrix}\right] =g(\mathcal{F})=\left[\begin{matrix}\frac{1}{\lambda_{1} - \lambda_{2}} \left(\lambda_{1} \lambda_{2}^{r} - \lambda_{1}^{r} \lambda_{2} + \lambda_{1}^{r} - \lambda_{2}^{r}\right) & \frac{\lambda_{1}^{r} - \lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}}\\\frac{\lambda_{1}^{r} - \lambda_{2}^{r}}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1} \lambda_{2}^{r} - \lambda_{1}^{r} \lambda_{2}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right];
+\end{displaymath}
+for the sake of clarity, 
+$\displaystyle\mathcal{F}^{8} = \left[\begin{matrix}f_{9} & f_{8}\\f_{8} & f_{7}\end{matrix}\right] = \left[\begin{matrix}34 & 21\\21 & 13\end{matrix}\right].$
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Jordan canonical form of a Riordan matrix}
+\textit{Jordan canonical
+form} of $A$ is defined by the relation $A\,X = X\, J$, where
+\begin{displaymath}
+X = \left[X_{1},\ldots,X_{\nu} \right]\in\mathbb{R}^{m\times m} \quad\text{and}\quad
+J = \left[ \begin{array}{ccc}
+    J_{1} \\
+      & \ddots \\
+      & & J_{\nu} \\
+\end{array} \right] \in\mathbb{R}^{m\times m}
+\end{displaymath}
+for short $A\sim_{X}J$; in turn, those matrices depend on
+\begin{displaymath}
+X_{i}   = \left[\boldsymbol{x}_{i,1},\ldots,\boldsymbol{x}_{i,m_{i}} \right]\in\mathbb{R}^{m\times m_{i}}\quad\text{and}\quad
+J_{i}   = \left[ \begin{array}{cccc}
+    \lambda_{i} \\
+    1 & \lambda_{i} \\
+      & \ddots & \ddots \\
+      & & 1 &\lambda_{i} \\
+\end{array} \right] \in\mathbb{R}^{m_{i}\times m_{i}},
+\end{displaymath}
+for vectors $\boldsymbol{x}_{i,j} =
+    Z_{i,2}^{j-1}\,Z_{i,1}\,\boldsymbol{v}$, $j\in\lbrace1,\ldots,m_{i}\rbrace$ and
+    $i\in \lbrace 1,\ldots,\nu \rbrace$. Finally, $Z_{i,j} = \Phi_{i,j}(A)$
+    are $A$'s \textit{component matrices}.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Jordan canonical form of a Riordan matrix}
+\begin{theorem} 
+$ A \sim_{X} J \rightarrow g(A) \sim_{X} g(J) $
+\end{theorem}
+\begin{theorem} 
+$J_{i} = (\lambda_{i}+t,t)\rightarrow$ $f(J_{i})$ is a \emph{Toeplitz} matrix
+\end{theorem}
+\begin{displaymath}
+\footnotesize
+\hspace{-0.5cm}
+J_{i}^{r} \boldsymbol{e}_{1}        = \left[\begin{matrix}\frac{{\left(r\right)}_{1} \lambda_{i}^{r}}{0!}\\\frac{{\left(r\right)}_{i}}{1!} \lambda_{i}^{r - 1}\\\frac{{\left(r\right)}_{2}}{2!} \lambda_{i}^{r - 2}\\\frac{{\left(r\right)}_{3}}{3!} \lambda_{i}^{r - 3}\\\frac{{\left(r\right)}_{4}}{4!} \lambda_{i}^{r - 4}\\\frac{{\left(r\right)}_{5}}{5!} \lambda_{i}^{r - 5}\\\frac{{\left(r\right)}_{6}}{6!} \lambda_{i}^{r - 6}\\\frac{{\left(r\right)}_{7}}{7!} \lambda_{i}^{r - 7}\end{matrix}\right],
+\frac{\boldsymbol{e}_{1}}{J_{i}}    = \left[\begin{matrix}\frac{1}{\lambda_{i}}\\- \frac{1}{\lambda_{i}^{2}}\\\frac{1}{\lambda_{i}^{3}}\\- \frac{1}{\lambda_{i}^{4}}\\\frac{1}{\lambda_{i}^{5}}\\- \frac{1}{\lambda_{i}^{6}}\\\frac{1}{\lambda_{i}^{7}}\\- \frac{1}{\lambda_{i}^{8}}\end{matrix}\right],
+\sqrt{J_{i}} \boldsymbol{e}_{1}     = \left[\begin{matrix}\sqrt{\lambda_{i}}\\\frac{1}{2 \sqrt{\lambda_{i}}}\\- \frac{1}{8 \lambda_{i}^{\frac{3}{2}}}\\\frac{1}{16 \lambda_{i}^{\frac{5}{2}}}\\- \frac{5}{128 \lambda_{i}^{\frac{7}{2}}}\\\frac{7}{256 \lambda_{i}^{\frac{9}{2}}}\\- \frac{21}{1024 \lambda_{i}^{\frac{11}{2}}}\\\frac{33}{2048 \lambda_{i}^{\frac{13}{2}}}\end{matrix}\right],
+e^{J_{i} \alpha} \boldsymbol{e}_{1} = \left[\begin{matrix}e^{\alpha \lambda_{i}}\\\alpha e^{\alpha \lambda_{i}}\\\frac{\alpha^{2}}{2} e^{\alpha \lambda_{i}}\\\frac{\alpha^{3}}{6} e^{\alpha \lambda_{i}}\\\frac{\alpha^{4}}{24} e^{\alpha \lambda_{i}}\\\frac{\alpha^{5}}{120} e^{\alpha \lambda_{i}}\\\frac{\alpha^{6}}{720} e^{\alpha \lambda_{i}}\\\frac{\alpha^{7}}{5040} e^{\alpha \lambda_{i}}\end{matrix}\right],
+log{\left (J_{i} \right )} \boldsymbol{e}_{1} = \left[\begin{matrix}\log{\left (\lambda_{i} \right )}\\\frac{1}{\lambda_{i}}\\- \frac{1}{2 \lambda_{i}^{2}}\\\frac{1}{3 \lambda_{i}^{3}}\\- \frac{1}{4 \lambda_{i}^{4}}\\\frac{1}{5 \lambda_{i}^{5}}\\- \frac{1}{6 \lambda_{i}^{6}}\\\frac{1}{7 \lambda_{i}^{7}}\end{matrix}\right]
+\end{displaymath}
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Jordan canonical form of a Riordan matrix}
+Let $\mathcal{P}\sim_{X}J$, then Pascal's inverse can be computed by
+$\mathcal{P}^{-1} = X\,J^{-1}\,X^{-1}$, where
+\begin{displaymath}
+X = \alpha_{0} \left[\begin{matrix}1 &  &  &  &  &  &  & \\0 & 1 &  &  &  &  &  & \\0 & 1 & 2 &  &  &  &  & \\0 & 1 & 6 & 6 &  &  &  & \\0 & 1 & 14 & 36 & 24 &  &  & \\0 & 1 & 30 & 150 & 240 & 120 &  & \\0 & 1 & 62 & 540 & 1560 & 1800 & 720 & \\0 & 1 & 126 & 1806 & 8400 & 16800 & 15120 & 5040\end{matrix}\right]\,
+\end{displaymath}
+depends on $\displaystyle\boldsymbol{v}= \left[\begin{matrix} \alpha_{0} & 0 &
+0 & 0 & 0 & 0 & 0 & 0 \end{matrix}\right]$, $\alpha_{0}\in\mathbb{R}$.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Jordan canonical form of a Riordan matrix}
+\begin{theorem}
+$A\,X = X\,J$ and $B\,Y= Y\,J \rightarrow A \sim_{X\,Y^{-1}} B$. \\
+Moreover, $f(A) \sim_{X\,Y^{-1}} f(B)$ also holds, for any
+function $f$ defined on $\sigma(A)$.
+\end{theorem}
+Provided that $\mathcal{C}\sim_{Y}J$ and $\mathcal{P}\sim_{X}J$, then both
+$\mathcal{P} \sim_{X\,Y^{-1}}\mathcal{C}$ and $\mathcal{C}
+\sim_{Y\,X^{-1}}\mathcal{P}$ hold by
+\begin{displaymath}
+Y = \beta_{0} \left[\begin{matrix}1 &  &  &  &  &  &  & \\0 & 1 &  &  &  &  &  & \\0 & 2 & 2 &  &  &  &  & \\0 & 5 & 11 & 6 &  &  &  & \\0 & 14 & 52 & 62 & 24 &  &  & \\0 & 42 & 238 & 470 & 394 & 120 &  & \\0 & 132 & 1084 & 3176 & 4348 & 2844 & 720 & \\0 & 429 & 4956 & 20323 & 40562 & 42874 & 23148 & 5040\end{matrix}\right]
+\end{displaymath}
+which depends on $\displaystyle\boldsymbol{w}= \left[\begin{matrix} \beta_{0} &
+0 & 0 & 0 & 0 & 0 & 0 & 0 \end{matrix}\right]$, $\beta_{0}\in\mathbb{R}$.
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Jordan canonical form of the Fibonacci generator matrix}
+Consider again the generator matrix $\mathcal{F}$ of Fibonacci numbers,
+\begin{displaymath}
+Z_{1,1} = \left[\begin{matrix}- \frac{\lambda_{2} - 1}{\lambda_{1} - \lambda_{2}} & \frac{1}{\lambda_{1} - \lambda_{2}}\\\frac{1}{\lambda_{1} - \lambda_{2}} & - \frac{\lambda_{2}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right], \quad Z_{2,1} = \left[\begin{matrix}\frac{\lambda_{1} - 1}{\lambda_{1} - \lambda_{2}} & - \frac{1}{\lambda_{1} - \lambda_{2}}\\- \frac{1}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right]
+\end{displaymath}
+\begin{displaymath}
+\boldsymbol{x}_{1,1} = \left[\begin{matrix}- \frac{\left(\lambda_{2} - 1\right) \alpha_{0}}{\lambda_{1} - \lambda_{2}} + \frac{\alpha_{1}}{\lambda_{1} - \lambda_{2}}\\\frac{\alpha_{0}}{\lambda_{1} - \lambda_{2}} - \frac{\alpha_{1} \lambda_{2}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right], \quad \boldsymbol{x}_{2,1} = \left[\begin{matrix}\frac{\left(\lambda_{1} - 1\right) \alpha_{0}}{\lambda_{1} - \lambda_{2}} - \frac{\alpha_{1}}{\lambda_{1} - \lambda_{2}}\\- \frac{\alpha_{0}}{\lambda_{1} - \lambda_{2}} + \frac{\alpha_{1} \lambda_{1}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right]
+\end{displaymath}
+$\mathcal{F}X=XJ$ is the Jordan normal form of matrix $\mathcal{F}$, where
+\begin{displaymath}
+X = \left[\begin{matrix}- \frac{\left(\lambda_{2} - 1\right) \alpha_{0}}{\lambda_{1} - \lambda_{2}} + \frac{\alpha_{1}}{\lambda_{1} - \lambda_{2}} & \frac{\left(\lambda_{1} - 1\right) \alpha_{0}}{\lambda_{1} - \lambda_{2}} - \frac{\alpha_{1}}{\lambda_{1} - \lambda_{2}}\\\frac{\alpha_{0}}{\lambda_{1} - \lambda_{2}} - \frac{\alpha_{1} \lambda_{2}}{\lambda_{1} - \lambda_{2}} & - \frac{\alpha_{0}}{\lambda_{1} - \lambda_{2}} + \frac{\alpha_{1} \lambda_{1}}{\lambda_{1} - \lambda_{2}}\end{matrix}\right]
+\quad\text{and}\quad J = \left[\begin{matrix}\lambda_{1} & 0\\0 & \lambda_{2}\end{matrix}\right].
+\end{displaymath}
+Let $\alpha_{0} = \alpha_{1} = 1$ in
+$\displaystyle \mathcal{F}^{r} = \left(X\,J\,X^{-1}\right)^{r} = X\,J^{r}\,X^{-1}$, precisely
+$$\mathcal{F}^{r}=\left[\begin{matrix}\frac{- \lambda_{2} + 2}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1} - 2}{\lambda_{1} - \lambda_{2}}\\\frac{- \lambda_{2} + 1}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1} - 1}{\lambda_{1} - \lambda_{2}}\end{matrix}\right]\,\left[\begin{matrix}\lambda_{1}^{r} & 0\\0 & \lambda_{2}^{r}\end{matrix}\right]\,\left[\begin{matrix}\frac{- \lambda_{2} + 2}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1} - 2}{\lambda_{1} - \lambda_{2}}\\\frac{- \lambda_{2} + 1}{\lambda_{1} - \lambda_{2}} & \frac{\lambda_{1} - 1}{\lambda_{1} - \lambda_{2}}\end{matrix}\right]^{-1}.$$
+\vfill
+\noindent\rule{\textwidth}{0.1pt}
+{\footnotesize
+Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
+matrices}. \newline Linear Algebra and its Applications, under review.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \iffalse
 
