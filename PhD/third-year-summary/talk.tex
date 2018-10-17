@@ -240,7 +240,7 @@ manipulation via \textit{bitmasking} techniques, the board itself $\in\mathbb{N}
    ▢                   ▢                   ▢
                                            ▢
 \end{Verbatim}
-The set of \textit{parallelogram polyominoes} of semi-perimeter $6$
+The set of $42$ \textit{parallelogram polyominoes} of semi-perimeter $6$
 \end{frame}
 
 \begin{frame}[fragile]
@@ -339,7 +339,43 @@ the \textit{Motzkin numbers}.
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Mining the OEIS: an extended grapher}
+\frametitle{Mining the OEIS: a crawler}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \VerbatimInput[fontsize=\small]{crawler-fetching-command.txt}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+    \verb|crawling.py| is a bot that given a sequence id $Axxxxxx$, issues an
+    HTTP request to the OEIS server and waits for a response; once it is
+    received, the bot stores it locally and repeats its behaviour on each
+    referenced seq in \verb|xref| section, recursively. Our implementation
+    features neither threads nor race conditions nor data sync; on the
+    contrary, it targets \textit{pure asynchronous computation} by using
+    \textit{async/await} Python primitives only.
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Mining the OEIS: a pretty printer}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \VerbatimInput[fontsize=\small]{pprinting-pascal-matrix.txt}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+    \verb|pprinting.py| provides a proxy for searching into the OEIS,
+    therefore it shows exactly the same contents you see from usual web interface
+    on \url{http://oeis.org}; additionally, it provides (i)~tabular representations
+    of \verb|data| sections in \textit{one and two dimensions} using list and
+    matrix notations, respectively, (ii)~filtering capabilities on most response's
+    sections and (iii)~interoperability with the crawler tool by taking advantage of
+    cached sequences.
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Mining the OEIS: a grapher}
 \begin{figure}
 \includegraphics[width=12cm,height=8cm]{coloured}
 \iffalse
@@ -528,7 +564,7 @@ matrices}. \newline Linear Algebra and its Applications, under review.}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Functions of the Fibonacci generator matrix}
+\frametitle{Powers of the Fibonacci generator matrix}
 To compare and constrast the case $\sigma(A)=\lbrace \lambda_{1} \rbrace$, consider
 \begin{displaymath}
 \mathcal{F} = \left[\begin{matrix}1 & 1\\1 & 0\end{matrix}\right],
@@ -553,6 +589,7 @@ $\displaystyle\mathcal{F}^{8} = \left[\begin{matrix}f_{9} & f_{8}\\f_{8} & f_{7}
 Merlini \& Nocentini. \textit{Functions and Jordan Canonical Forms of Riordan
 matrices}. \newline Linear Algebra and its Applications, under review.}
 \end{frame}
+
 
 \begin{frame}[fragile]
 \frametitle{Jordan canonical form of a Riordan matrix}
