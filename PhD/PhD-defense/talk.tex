@@ -28,9 +28,13 @@
 
 %Information to be included in the title page:
 \title{PhD defense}
-\author{{\small candidate:} Massimo Nocentini \hfill {\small advisor:} prof. Donatella Merlini }
+\author{\textbf{An algebraic and combinatorial study\newline
+        of some infinite sequences of numbers\newline
+        supported by symbolic and logic computation}\\\\\\
+{\small candidate:} Massimo Nocentini \hfill {\small advisor:} prof. Donatella Merlini }
+
 \institute{University of Florence, Italy.}
-%\vfill\includegraphics[width=\textwidth]{logo}}
+
 \date{\today}
 
 \begin{document}
@@ -45,7 +49,7 @@ $ whoami
 Massimo Nocentini
 PhD candidate @ University of Florence
 Mathematician (algebraic combinatorics, formal methods for algs)
-Programmer (automated reasoning, logics and symbolic comp)
+Computer Scientist (automated reasoning, logics and symbolic comp)
 https://github.com/massimo-nocentini (50 public repos)
 \end{Verbatim}
 
@@ -57,7 +61,6 @@ Their combination shows that the study of the former entails the study of the
 latter and the study of the latter entails the study of the former,
 recursively.
 \end{block}
-
 \end{frame}
 
 \begin{frame}[fragile]
@@ -72,7 +75,7 @@ A Riordan array is a l.t.i. matrix denoted by a pair $(d(t), h(t))$ s.t. $h(0)=0
 \begin{itemize}
 \item whose $k$-th column $\textbf{c}_{k}$ is recursively defined as 
 \begin{displaymath}
- \textbf{c}_{k+1} =h(t) \textbf{c}_{k} \quad\text{provided that}\quad \textbf{c}_{k} = d(t)h(t)^{k} ;
+ \textbf{c}_{k+1} =h(t) \textbf{c}_{k} \quad\text{provided that}\quad \textbf{c}_{0} = d(t) ;
 \end{displaymath}
 \item whose coefficients are recursively defined as
 \begin{displaymath}
@@ -871,6 +874,7 @@ val it : term =
 \end{minted}
 \end{frame}
 
+\iffalse
 \section{On GitHub}
 
 \begin{frame}[fragile]
@@ -895,6 +899,7 @@ val it : term =
 \vfill
 \url{https://github.com/massimo-nocentini/reasoning-about-little-books}
 \end{frame}
+\fi
 
 \section{Thanks}
 
