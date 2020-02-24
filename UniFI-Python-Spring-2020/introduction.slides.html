@@ -13385,65 +13385,6 @@ Namespaces are one honking great idea -- let&#39;s do more of those!
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="our-working-environment">our working environment<a class="anchor-link" href="#our-working-environment">&#182;</a></h1><p>There are many different possibilities to run Python programs:</p>
-<ul>
-<li>edit the program <code>my-script.py</code> and then invoke the bare bone<br>interpreter with <code>$ python my-script.py</code></li>
-<li>use an Integrated Development Environment (IDE from now on):<ul>
-<li><a href="https://www.spyder-ide.org/">https://www.spyder-ide.org/</a></li>
-<li><a href="https://www.jetbrains.com/pycharm/">https://www.jetbrains.com/pycharm/</a></li>
-<li><a href="https://vscodium.com/">https://vscodium.com/</a></li>
-</ul>
-</li>
-</ul>
-<p>Whatever you feel comfortable is okay.</p>
-<p><em>The important thing is that you play in a <strong>safe environment</strong></em>.</p>
-
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Quoting the official <a href="https://docs.python.org/3/library/venv.html">doc</a>:</p>
-<blockquote><p>Python provides support for creating lightweight “virtual environments” with their own site directories, optionally isolated from system site directories. Each virtual environment has its own Python binary (which matches the version of the binary that was used to create this environment) and can have its own independent set of installed Python packages in its site directories.</p>
-</blockquote>
-<p>Those environments allow you to freely (un)install modules and customize the interpreter, <em>without apporting those changes <strong>to the system installation</strong></em>.</p>
-
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><a href="https://docs.python.org/3/tutorial/venv.html">https://docs.python.org/3/tutorial/venv.html</a></p>
-<p><img src="images/Python-venv.png" alt=""></p>
-
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<div class="highlight"><pre><span></span>$ python3 -m venv unifi-env <span class="c1"># creates a virtual environment</span>
-</pre></div>
-<div class="highlight"><pre><span></span>$ <span class="nb">source</span> unifi-env/bin/activate <span class="c1"># enter into our safe environment</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="o">(</span>unifi-env<span class="o">)</span> $ pip install ipython jupyter matplotlib numpy scipy <span class="se">\</span>
-                sympy pandas <span class="c1"># install some packages</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="o">(</span>unifi-env<span class="o">)</span> $ python <span class="k">do</span>-I-halt-or-not.py <span class="c1"># run your cool stuff</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="o">(</span>unifi-env<span class="o">)</span> $ deactivate <span class="c1"># exit the environment</span>
-</pre></div>
-<div class="highlight"><pre><span></span>$ <span class="c1"># back to the usual shell</span>
-</pre></div>
-
-</div>
-</div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="welcome-to-the-carousel">welcome to the carousel<a class="anchor-link" href="#welcome-to-the-carousel">&#182;</a></h1><p>We have just scraped a little bit the surface of a big iceberg.</p>
 <p>Help yourself with the good documentation, otherwise go ahead on the shoulders of:</p>
 <ul>
