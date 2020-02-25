@@ -13384,7 +13384,7 @@ For example, to see the documentation of the built-in <code>len</code> function,
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[109]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
@@ -13427,7 +13427,7 @@ len(obj, /)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[110]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
@@ -13471,7 +13471,7 @@ insert(index, object, /) method of builtins.list instance
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[111]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
@@ -13638,7 +13638,7 @@ Here we'll define a small function with a docstring:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[112]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -13662,7 +13662,7 @@ Because doc strings are usually multiple lines, by convention we used Python's t
 </div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[113]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">square</span><span class="p">)</span>
@@ -13876,7 +13876,7 @@ This can be done with the <code>%run</code> magic.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[114]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span>%%bash
@@ -13923,7 +13923,7 @@ for N in range(1, 4):
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[115]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> my-script.py
@@ -13964,7 +13964,7 @@ for N in range(1, 4):
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[116]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -13980,7 +13980,7 @@ for N in range(1, 4):
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[29]:</div>
+    <div class="prompt output_prompt">Out[116]:</div>
 
 
 
@@ -14014,7 +14014,7 @@ For example, we may want to check the performance of a list comprehension:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[65]:</div>
+<div class="prompt input_prompt">In&nbsp;[117]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">timeit</span> L = [n ** 2 for n in range(1000)]
@@ -14034,7 +14034,7 @@ For example, we may want to check the performance of a list comprehension:</p>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>305 µs ± 374 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+<pre>307 µs ± 262 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 </pre>
 </div>
 </div>
@@ -14062,7 +14062,7 @@ For example, here's the equivalent construction with a <code>for</code>-loop:</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[67]:</div>
+<div class="prompt input_prompt">In&nbsp;[118]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>it
@@ -14085,7 +14085,7 @@ For example, here's the equivalent construction with a <code>for</code>-loop:</p
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>344 µs ± 463 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+<pre>346 µs ± 351 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 </pre>
 </div>
 </div>
@@ -14144,7 +14144,7 @@ Imagine you start a session that looks like this:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[119]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
@@ -14162,7 +14162,7 @@ Imagine you start a session that looks like this:</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[33]:</div>
+    <div class="prompt output_prompt">Out[119]:</div>
 
 
 
@@ -14179,7 +14179,7 @@ Imagine you start a session that looks like this:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[120]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -14195,7 +14195,7 @@ Imagine you start a session that looks like this:</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[32]:</div>
+    <div class="prompt output_prompt">Out[120]:</div>
 
 
 
@@ -14221,7 +14221,7 @@ These inputs and outputs are displayed in the shell with <code>In</code>/<code>O
 </div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="prompt input_prompt">In&nbsp;[121]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">In</span><span class="p">)[:</span><span class="mi">1000</span><span class="p">])</span>
@@ -14252,10 +14252,10 @@ These inputs and outputs are displayed in the shell with <code>In</code>/<code>O
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[124]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Out</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Out</span><span class="p">)[:</span><span class="mi">1000</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -14268,19 +14268,13 @@ These inputs and outputs are displayed in the shell with <code>In</code>/<code>O
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[36]:</div>
+    <div class="prompt"></div>
 
 
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{29: 25,
- 30: 0.9092974268256817,
- 31: -0.4161468365471424,
- 32: -0.4161468365471424,
- 33: 0.9092974268256817}</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>{29: 25, 30: 0.9092974268256817, 31: -0.4161468365471424, 32: -0.4161468365471424, 33: 0.9092974268256817, 49: False, 51: False, 61: [&#39;images&#39;, &#39;introduction.ipynb&#39;, &#39;introduction.slides.html&#39;, &#39;jupyter-notebooks.ipynb&#39;, &#39;jupyter-notebooks.slides.html&#39;, &#39;Makefile&#39;, &#39;my-script.py&#39;, &#39;notebooks.ipynb&#39;], 62: [&#39;/home/mn/Developer/working-copies/pythons/on-python/UniFiCourseSpring2020&#39;], 63: &lt;class &#39;IPython.utils.text.SList&#39;&gt;, 71: &#39;[\&#39;\&#39;, \&#39;__AUTHORS__ = {\\\&#39;am\\\&#39;: (&#34;Andrea Marino&#34;, \\n                      &#34;andrea.marino@unifi.it&#34;,),\\n&#39;, 72: &#39;[\&#39;\&#39;, \&#39;__AUTHORS__ = {\\\&#39;am\\\&#39;: (&#34;Andrea Marino&#34;, \\n                      &#34;andrea.marino@unifi.it&#34;,),\\n               \\\&#39;mn\\\&#39;: (&#34;Massimo Nocentini&#34;, \\n                      &#34;massimo.nocentini@unifi.it&#34;, \\n                      &#34;https://github.com/massimo-nocentini/&#34;,)}\\n\\n__KEYWORDS__ = [\\\&#39;Python\\\&#39;, \\\&#39;Jupyter\\\&#39;, \\\&#39;notebooks\\\&#39;, \\\&#39;keynote\\\&#39;,]\&#39;, &#34;outline = []\\noutline.append(\&#39;Hello!\&#39;)\\noutline.append(\&#39;Python\&#39;)\\noutl
+</pre>
 </div>
-
 </div>
 
 </div>
@@ -14297,7 +14291,7 @@ These inputs and outputs are displayed in the shell with <code>In</code>/<code>O
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[125]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -14343,10 +14337,10 @@ __KEYWORDS__ = [&#39;Python&#39;, &#39;Jupyter&#39;, &#39;notebooks&#39;, &#39;k
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[130]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Out</span><span class="p">[</span><span class="mi">29</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -14362,14 +14356,9 @@ __KEYWORDS__ = [&#39;Python&#39;, &#39;Jupyter&#39;, &#39;notebooks&#39;, &#39;k
     <div class="prompt"></div>
 
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-39-99ed3452e2cf&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">KeyError</span>: 2</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>25
+</pre>
 </div>
 </div>
 
@@ -14397,7 +14386,7 @@ For example, let's check the sum of <code>sin(2) ** 2</code> and <code>cos(2) **
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[131]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
@@ -14418,12 +14407,27 @@ For example, let's check the sum of <code>sin(2) ** 2</code> and <code>cos(2) **
 
 <div class="output_subarea output_text output_error">
 <pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-40-26f5e7e673c2&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">**</span> <span class="ansi-cyan-fg">2</span> <span class="ansi-blue-fg">+</span> Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">**</span> <span class="ansi-cyan-fg">2</span>
+Traceback <span class="ansi-cyan-fg">(most recent call last)</span>:
 
-<span class="ansi-red-fg">KeyError</span>: 2</pre>
+<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-131-26f5e7e673c2&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">1</span><span class="ansi-cyan-fg">, in </span><span class="ansi-magenta-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">    Out[2] ** 2 + Out[3] ** 2</span>
+
+<span class="ansi-red-fg">KeyError</span><span class="ansi-red-fg">:</span> 2
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&gt; <span class="ansi-green-fg">&lt;ipython-input-131-26f5e7e673c2&gt;</span>(1)<span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1 </span>Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">**</span> <span class="ansi-cyan-fg">2</span> <span class="ansi-blue-fg">+</span> Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">**</span> <span class="ansi-cyan-fg">2</span>
+
+ipdb&gt; quit
+</pre>
 </div>
 </div>
 
@@ -14450,7 +14454,7 @@ In this case, using these previous results probably is not necessary, but it can
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[132]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
@@ -14470,7 +14474,7 @@ In this case, using these previous results probably is not necessary, but it can
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>0.9092974268256817
+<pre>{29: 25, 30: 0.9092974268256817, 31: -0.4161468365471424, 32: -0.4161468365471424, 33: 0.9092974268256817, 49: False, 51: False, 61: [&#39;images&#39;, &#39;introduction.ipynb&#39;, &#39;introduction.slides.html&#39;, &#39;jupyter-notebooks.ipynb&#39;, &#39;jupyter-notebooks.slides.html&#39;, &#39;Makefile&#39;, &#39;my-script.py&#39;, &#39;notebooks.ipynb&#39;], 62: [&#39;/home/mn/Developer/working-copies/pythons/on-python/UniFiCourseSpring2020&#39;], 63: &lt;class &#39;IPython.utils.text.SList&#39;&gt;, 71: &#39;[\&#39;\&#39;, \&#39;__AUTHORS__ = {\\\&#39;am\\\&#39;: (&#34;Andrea Marino&#34;, \\n                      &#34;andrea.marino@unifi.it&#34;,),\\n&#39;, 72: &#39;[\&#39;\&#39;, \&#39;__AUTHORS__ = {\\\&#39;am\\\&#39;: (&#34;Andrea Marino&#34;, \\n                      &#34;andrea.marino@unifi.it&#34;,),\\n               \\\&#39;mn\\\&#39;: (&#34;Massimo Nocentini&#34;, \\n                      &#34;massimo.nocentini@unifi.it&#34;, \\n                      &#34;https://github.com/massimo-nocentini/&#34;,)}\\n\\n__KEYWORDS__ = [\\\&#39;Python\\\&#39;, \\\&#39;Jupyter\\\&#39;, \\\&#39;notebooks\\\&#39;, \\\&#39;keynote\\\&#39;,]\&#39;, &#34;outline = []\\noutline.append(\&#39;Hello!\&#39;)\\noutline.append(\&#39;Python\&#39;)\\noutl
 </pre>
 </div>
 </div>
@@ -14489,7 +14493,7 @@ In this case, using these previous results probably is not necessary, but it can
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[133]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">__</span><span class="p">)</span>
@@ -14512,7 +14516,7 @@ In this case, using these previous results probably is not necessary, but it can
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>-0.4161468365471424
--0.4161468365471424
+0.9092974268256817
 </pre>
 </div>
 </div>
@@ -14539,7 +14543,7 @@ In this case, using these previous results probably is not necessary, but it can
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[134]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">_2</span>
@@ -14560,12 +14564,27 @@ In this case, using these previous results probably is not necessary, but it can
 
 <div class="output_subarea output_text output_error">
 <pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-45-32d637638f50&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> _2
+Traceback <span class="ansi-cyan-fg">(most recent call last)</span>:
 
-<span class="ansi-red-fg">KeyError</span>: 2</pre>
+<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-134-32d637638f50&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">1</span><span class="ansi-cyan-fg">, in </span><span class="ansi-magenta-fg">&lt;module&gt;</span>
+<span class="ansi-red-fg">    Out[2], _2</span>
+
+<span class="ansi-red-fg">KeyError</span><span class="ansi-red-fg">:</span> 2
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&gt; <span class="ansi-green-fg">&lt;ipython-input-134-32d637638f50&gt;</span>(1)<span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1 </span>Out<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> _2
+
+ipdb&gt; quit
+</pre>
 </div>
 </div>
 
@@ -14585,7 +14604,7 @@ The easiest way to suppress the output of a command is to add a semicolon to the
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[135]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
@@ -14606,7 +14625,7 @@ The easiest way to suppress the output of a command is to add a semicolon to the
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[136]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="mi">14</span> <span class="ow">in</span> <span class="n">Out</span>
@@ -14622,7 +14641,7 @@ The easiest way to suppress the output of a command is to add a semicolon to the
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[51]:</div>
+    <div class="prompt output_prompt">Out[136]:</div>
 
 
 
@@ -14648,10 +14667,10 @@ Here is how you can print the first four inputs:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[138]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> <span class="o">%</span><span class="k">history</span> -n 1-4
+<div class=" highlight hl-ipython3"><pre><span></span> <span class="o">%</span><span class="k">history</span> -n 1-3
 </pre></div>
 
     </div>
@@ -14686,14 +14705,6 @@ outline.append(&#39;Set the env up&#39;)
 outline.append(&#39;Notebooks&#39;)
 outline.append(&#39;Course agenda&#39;)
    3: help(len)
-   4:
-__AUTHORS__ = {&#39;am&#39;: (&#34;Andrea Marino&#34;, 
-                      &#34;andrea.marino@unifi.it&#34;,),
-               &#39;mn&#39;: (&#34;Massimo Nocentini&#34;, 
-                      &#34;massimo.nocentini@unifi.it&#34;, 
-                      &#34;https://github.com/massimo-nocentini/&#34;,)}
-
-__KEYWORDS__ = [&#39;Python&#39;, &#39;Jupyter&#39;, &#39;notebooks&#39;, &#39;keynote&#39;,]
 </pre>
 </div>
 </div>
@@ -14796,7 +14807,7 @@ For example, the <code>ls</code>, <code>pwd</code>, and <code>echo</code> comman
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[139]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>ls
@@ -14816,9 +14827,10 @@ For example, the <code>ls</code>, <code>pwd</code>, and <code>echo</code> comman
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>images			  jupyter-notebooks.ipynb	 my-script.py
-introduction.ipynb	  jupyter-notebooks.slides.html  notebooks.ipynb
-introduction.slides.html  Makefile
+<pre>images			  jupyter-notebooks.slides.html  notebooks.ipynb
+introduction.ipynb	  Makefile			 __pycache__
+introduction.slides.html  mprun_demo.py			 requirements.txt
+jupyter-notebooks.ipynb   my-script.py
 </pre>
 </div>
 </div>
@@ -14829,7 +14841,7 @@ introduction.slides.html  Makefile
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[140]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pwd
@@ -14860,7 +14872,7 @@ introduction.slides.html  Makefile
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="prompt input_prompt">In&nbsp;[141]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span><span class="nb">echo</span> <span class="s2">&quot;printing from the shell&quot;</span>
@@ -14900,7 +14912,7 @@ For example, you can save the output of any shell command to a Python list using
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
+<div class="prompt input_prompt">In&nbsp;[142]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">contents</span> <span class="o">=</span> <span class="o">!</span>ls
@@ -14917,7 +14929,7 @@ For example, you can save the output of any shell command to a Python list using
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[61]:</div>
+    <div class="prompt output_prompt">Out[142]:</div>
 
 
 
@@ -14929,8 +14941,11 @@ For example, you can save the output of any shell command to a Python list using
  &#39;jupyter-notebooks.ipynb&#39;,
  &#39;jupyter-notebooks.slides.html&#39;,
  &#39;Makefile&#39;,
+ &#39;mprun_demo.py&#39;,
  &#39;my-script.py&#39;,
- &#39;notebooks.ipynb&#39;]</pre>
+ &#39;notebooks.ipynb&#39;,
+ &#39;__pycache__&#39;,
+ &#39;requirements.txt&#39;]</pre>
 </div>
 
 </div>
@@ -14941,7 +14956,7 @@ For example, you can save the output of any shell command to a Python list using
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="prompt input_prompt">In&nbsp;[143]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">directory</span> <span class="o">=</span> <span class="o">!</span>pwd
@@ -14958,7 +14973,7 @@ For example, you can save the output of any shell command to a Python list using
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[62]:</div>
+    <div class="prompt output_prompt">Out[143]:</div>
 
 
 
@@ -14983,7 +14998,7 @@ For example, you can save the output of any shell command to a Python list using
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="prompt input_prompt">In&nbsp;[144]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
@@ -14999,7 +15014,7 @@ For example, you can save the output of any shell command to a Python list using
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[63]:</div>
+    <div class="prompt output_prompt">Out[144]:</div>
 
 
 
@@ -15034,7 +15049,7 @@ For more information on these, you can use IPython's built-in help features.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="prompt input_prompt">In&nbsp;[145]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;hello from Python&quot;</span>
@@ -15094,7 +15109,7 @@ Consider the following code:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[77]:</div>
+<div class="prompt input_prompt">In&nbsp;[146]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">func1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
@@ -15113,7 +15128,7 @@ Consider the following code:</p>
 </div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
+<div class="prompt input_prompt">In&nbsp;[147]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">func2</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -15134,24 +15149,37 @@ Consider the following code:</p>
 
 <div class="output_subarea output_text output_error">
 <pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ZeroDivisionError</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-78-7cb498ea7ed1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>func2<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+Traceback <span class="ansi-cyan-fg">(most recent call last)</span>:
 
-<span class="ansi-green-fg">&lt;ipython-input-77-586ccabd0db3&gt;</span> in <span class="ansi-cyan-fg">func2</span><span class="ansi-blue-fg">(x)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     a <span class="ansi-blue-fg">=</span> x
-<span class="ansi-green-intense-fg ansi-bold">      6</span>     b <span class="ansi-blue-fg">=</span> x <span class="ansi-blue-fg">-</span> <span class="ansi-cyan-fg">1</span>
-<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> func1<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span>
+  File <span class="ansi-green-intense-fg ansi-bold">&#34;&lt;ipython-input-147-7cb498ea7ed1&gt;&#34;</span>, line <span class="ansi-green-intense-fg ansi-bold">1</span>, in <span class="ansi-magenta-intense-fg ansi-bold">&lt;module&gt;</span>
+    func2(1)
 
-<span class="ansi-green-fg">&lt;ipython-input-77-586ccabd0db3&gt;</span> in <span class="ansi-cyan-fg">func1</span><span class="ansi-blue-fg">(a, b)</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">def</span> func1<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> a <span class="ansi-blue-fg">/</span> b
-<span class="ansi-green-intense-fg ansi-bold">      3</span> 
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">def</span> func2<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     a <span class="ansi-blue-fg">=</span> x
+  File <span class="ansi-green-intense-fg ansi-bold">&#34;&lt;ipython-input-146-586ccabd0db3&gt;&#34;</span>, line <span class="ansi-green-intense-fg ansi-bold">7</span>, in <span class="ansi-magenta-intense-fg ansi-bold">func2</span>
+    return func1(a, b)
 
-<span class="ansi-red-fg">ZeroDivisionError</span>: division by zero</pre>
+<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-146-586ccabd0db3&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">2</span><span class="ansi-cyan-fg">, in </span><span class="ansi-magenta-fg">func1</span>
+<span class="ansi-red-fg">    return a / b</span>
+
+<span class="ansi-red-fg">ZeroDivisionError</span><span class="ansi-red-fg">:</span> division by zero
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&gt; <span class="ansi-green-fg">&lt;ipython-input-146-586ccabd0db3&gt;</span>(2)<span class="ansi-cyan-fg">func1</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">      1 </span><span class="ansi-green-fg">def</span> func1<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 2 </span><span class="ansi-red-fg">    </span><span class="ansi-green-fg">return</span> a <span class="ansi-blue-fg">/</span> b
+<span class="ansi-green-fg">      3 </span>
+<span class="ansi-green-fg">      4 </span><span class="ansi-green-fg">def</span> func2<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">      5 </span><span class="ansi-red-fg">    </span>a <span class="ansi-blue-fg">=</span> x
+
+ipdb&gt; quit
+</pre>
 </div>
 </div>
 
@@ -15630,19 +15658,668 @@ ipdb&gt; quit
 
 </div>
 </div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Profiling-and-Timing-Code">Profiling and Timing Code<a class="anchor-link" href="#Profiling-and-Timing-Code">&#182;</a></h1><p>In the process of developing code and creating data processing pipelines, there are often trade-offs you can make between various implementations.
+Early in developing your algorithm, it can be counterproductive to worry about such things. As Donald Knuth famously quipped, "We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil."</p>
+<p>But once you have your code working, it can be useful to dig into its efficiency a bit.
+Sometimes it's useful to check the execution time of a given command or set of commands; other times it's useful to dig into a multiline process and determine where the bottleneck lies in some complicated series of operations.
+IPython provides access to a wide array of functionality for this kind of timing and profiling of code.
+Here we'll discuss the following IPython magic commands:</p>
+<ul>
+<li><code>%time</code>: Time the execution of a single statement</li>
+<li><code>%timeit</code>: Time repeated execution of a single statement for more accuracy</li>
+<li><code>%prun</code>: Run code with the profiler</li>
+<li><code>%lprun</code>: Run code with the line-by-line profiler</li>
+<li><code>%memit</code>: Measure the memory use of a single statement</li>
+<li><code>%mprun</code>: Run code with the line-by-line memory profiler</li>
+</ul>
+<p>The last four commands are not bundled with IPython–you'll need to get the <code>line_profiler</code> and <code>memory_profiler</code> extensions, which we will discuss in the following sections.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Timing-Code-Snippets:-%timeit-and-%time">Timing Code Snippets: <code>%timeit</code> and <code>%time</code><a class="anchor-link" href="#Timing-Code-Snippets:-%timeit-and-%time">&#182;</a></h2><p>We saw the <code>%timeit</code> line-magic and <code>%%timeit</code> cell-magic in the introduction to magic functions in <a href="01.03-Magic-Commands.ipynb">IPython Magic Commands</a>; it can be used to time the repeated execution of snippets of code:</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[87]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">timeit</span> sum(range(100))
 </pre></div>
 
     </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1.3 µs ± 7.05 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that because this operation is so fast, <code>%timeit</code> automatically does a large number of repetitions.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For slower commands, <code>%timeit</code> will automatically adjust and perform fewer repetitions:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[88]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>it
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">j</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>368 ms ± 3.52 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Sometimes repeating an operation is not the best option.
+For example, if we have a list that we'd like to sort, we might be misled by a repeated operation.
+Sorting a pre-sorted list is much faster than sorting an unsorted list, so the repetition will skew the result:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[90]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">)]</span>
+<span class="o">%</span><span class="k">timeit</span> L.sort()
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>693 µs ± 39.3 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For this, the <code>%time</code> magic function may be a better choice. It also is a good choice for longer-running commands, when short, system-related delays are unlikely to affect the result.
+Let's time the sorting of an unsorted and a presorted list:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[91]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sorting an unsorted list:&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">time</span> L.sort()
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>sorting an unsorted list:
+CPU times: user 24 ms, sys: 0 ns, total: 24 ms
+Wall time: 23.7 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[92]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sorting an already sorted list:&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">time</span> L.sort()
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>sorting an already sorted list:
+CPU times: user 1.19 ms, sys: 19 µs, total: 1.21 ms
+Wall time: 1.22 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notice how much faster the presorted list is to sort, but notice also how much longer the timing takes with <code>%time</code> versus <code>%timeit</code>, even for the presorted list!
+This is a result of the fact that <code>%timeit</code> does some clever things under the hood to prevent system calls from interfering with the timing.
+For example, it prevents cleanup of unused Python objects (known as <em>garbage collection</em>) which might otherwise affect the timing.
+For this reason, <code>%timeit</code> results are usually noticeably faster than <code>%time</code> results.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For <code>%time</code> as with <code>%timeit</code>, using the double-percent-sign cell magic syntax allows timing of multiline scripts:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[93]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">j</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 465 ms, sys: 0 ns, total: 465 ms
+Wall time: 464 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For more information on <code>%time</code> and <code>%timeit</code>, as well as their available options, use the IPython help functionality (i.e., type <code>%time?</code> at the IPython prompt).</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Profiling-Full-Scripts:-%prun">Profiling Full Scripts: <code>%prun</code><a class="anchor-link" href="#Profiling-Full-Scripts:-%prun">&#182;</a></h2><p>A program is made of many single statements, and sometimes timing these statements in context is more important than timing them on their own.
+Python contains a built-in code profiler (which you can read about in the Python documentation), but IPython offers a much more convenient way to use this profiler, in the form of the magic function <code>%prun</code>.</p>
+<p>By way of example, we'll define a simple function that does some calculations:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[95]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sum_of_lists</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">^</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we can call <code>%prun</code> with a function call to see the profiled results:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[102]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">prun</span> sum_of_lists(1000000)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre> </pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>14 function calls in 0.705 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        5    0.614    0.123    0.614    0.123 &lt;ipython-input-95-f105717832a2&gt;:4(&lt;listcomp&gt;)
+        5    0.043    0.009    0.043    0.009 {built-in method builtins.sum}
+        1    0.036    0.036    0.693    0.693 &lt;ipython-input-95-f105717832a2&gt;:1(sum_of_lists)
+        1    0.012    0.012    0.705    0.705 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.705    0.705 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}</code></pre>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The result is a table that indicates, in order of total time on each function call, where the execution is spending the most time. In this case, the bulk of execution time is in the list comprehension inside <code>sum_of_lists</code>.
+From here, we could start thinking about what changes we might make to improve the performance in the algorithm.</p>
+<p>For more information on <code>%prun</code>, as well as its available options, use the IPython help functionality (i.e., type <code>%prun?</code> at the IPython prompt).</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Line-By-Line-Profiling-with-%lprun">Line-By-Line Profiling with <code>%lprun</code><a class="anchor-link" href="#Line-By-Line-Profiling-with-%lprun">&#182;</a></h2><p>The function-by-function profiling of <code>%prun</code> is useful, but sometimes it's more convenient to have a line-by-line profile report.
+This is not built into Python or IPython, but there is a <code>line_profiler</code> package available for installation that can do this.
+Start by using Python's packaging tool, <code>pip</code>, to install the <code>line_profiler</code> package:</p>
+
+<pre><code>$ pip install line_profiler</code></pre>
+<p>Next, you can use IPython to load the <code>line_profiler</code> IPython extension, offered as part of this package:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[148]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> line_profiler
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now the <code>%lprun</code> command will do a line-by-line profiling of any function–in this case, we need to tell it explicitly which functions we're interested in profiling:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[149]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">lprun</span> -f sum_of_lists sum_of_lists(5000)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>Timer unit: 1e-06 s
+
+Total time: 0.006239 s
+File: /home/mn/Developer/working-copies/pythons/on-python/UniFiCourseSpring2020/mprun_demo.py
+Function: sum_of_lists at line 1
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     1                                           def sum_of_lists(N):
+     2         1          2.0      2.0      0.0      total = 0
+     3         6          6.0      1.0      0.1      for i in range(5):
+     4         5       5869.0   1173.8     94.1          L = [j ^ (j &gt;&gt; i) for j in range(N)]
+     5         5        218.0     43.6      3.5          total += sum(L)
+     6         5        144.0     28.8      2.3          del L # remove reference to L
+     7         1          0.0      0.0      0.0      return total</code></pre>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The result is a table that indicates, in order of total time on each function call, where the execution is spending the most time. In this case, the bulk of execution time is in the list comprehension inside <code>sum_of_lists</code>.
+From here, we could start thinking about what changes we might make to improve the performance in the algorithm.</p>
+<p>For more information on <code>%prun</code>, as well as its available options, use the IPython help functionality (i.e., type <code>%prun?</code> at the IPython prompt).</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Profiling-Memory-Use:-%memit-and-%mprun">Profiling Memory Use: <code>%memit</code> and <code>%mprun</code><a class="anchor-link" href="#Profiling-Memory-Use:-%memit-and-%mprun">&#182;</a></h2><p>Another aspect of profiling is the amount of memory an operation uses.
+This can be evaluated with another IPython extension, the <code>memory_profiler</code>.
+As with the <code>line_profiler</code>, we start by <code>pip</code>-installing the extension:</p>
+
+<pre><code>$ pip install memory_profiler</code></pre>
+<p>Then we can use IPython to load the extension:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[150]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> memory_profiler
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The memory profiler extension contains two useful magic functions: the <code>%memit</code> magic (which offers a memory-measuring equivalent of <code>%timeit</code>) and the <code>%mprun</code> function (which offers a memory-measuring equivalent of <code>%lprun</code>).
+The <code>%memit</code> function can be used rather simply:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[151]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">memit</span> sum_of_lists(1000000)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>peak memory: 106.86 MiB, increment: 28.78 MiB
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We see that this function uses about 100 MB of memory.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For a line-by-line description of memory use, we can use the <code>%mprun</code> magic.
+Unfortunately, this magic works only for functions defined in separate modules rather than the notebook itself, so we'll start by using the <code>%%file</code> magic to create a simple module called <code>mprun_demo.py</code>, which contains our <code>sum_of_lists</code> function, with one addition that will make our memory profiling results more clear:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[152]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%file</span> mprun_demo.py
+<span class="k">def</span> <span class="nf">sum_of_lists</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">^</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">L</span> <span class="c1"># remove reference to L</span>
+    <span class="k">return</span> <span class="n">total</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Overwriting mprun_demo.py
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can now import the new version of this function and run the memory line profiler:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[153]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">mprun_demo</span> <span class="kn">import</span> <span class="n">sum_of_lists</span>
+<span class="o">%</span><span class="k">mprun</span> -f sum_of_lists sum_of_lists(1000000)
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>*** KeyboardInterrupt exception caught in code being profiled.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>Filename: /home/mn/Developer/working-copies/pythons/on-python/UniFiCourseSpring2020/mprun_demo.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     1     85.2 MiB     85.2 MiB   def sum_of_lists(N):
+     2     85.2 MiB      0.0 MiB       total = 0
+     3     85.2 MiB      0.0 MiB       for i in range(5):
+     4    112.2 MiB      0.2 MiB           L = [j ^ (j &gt;&gt; i) for j in range(N)]
+     5    112.2 MiB      0.0 MiB           total += sum(L)
+     6     85.2 MiB      0.0 MiB           del L # remove reference to L
+     7                                 return total</code></pre>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here the <code>Increment</code> column tells us how much each line affects the total memory budget: observe that when we create and delete the list <code>L</code>, we are adding about 25 MB of memory usage.
+This is on top of the background memory usage from the Python interpreter itself.</p>
+<p>For more information on <code>%memit</code> and <code>%mprun</code>, as well as their available options, use the IPython help functionality (i.e., type <code>%memit?</code> at the IPython prompt).</p>
+
+</div>
+</div>
 </div></section></section>
 </div>
 </div>
