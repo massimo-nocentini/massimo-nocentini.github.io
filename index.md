@@ -7,15 +7,16 @@
 
 ## Education
 
-- PhD degree in Mathematics, Computer Science and Statistics, thesis title *An algebraic and combinatorial study of some infinite sequences of numbers supported by symbolic and logic computation*, advised by <a href="http://local.disia.unifi.it/merlini/">prof. Donatella Merlini</a> and affiliated to the Dipartimento di Statistica, Informatica e Applicazioni ([DiSIA](https://www.disia.unifi.it/)), University of Florence, from 2015 to 2019.
-
-<ul>
-        <li>Master Laurea degree in Computer Science, voting 110/110 cum laude, thesis title *Patterns in Riordan arrays*,
-            supervised by prof. Donatella Merlini, University of Florence, 2015.</li>
-        <li>Laurea degree in Computer Science, voting 110/110, thesis title *Analysis of metabolic networks based on connection properties*, 
-            supervised by <a href="https://www.pilucrescenzi.it/">prof. Pierluigi Crescenzi</a>, University of Florence, 2012.</li>
-        <li>Maturity exam on Computer Science, voting 100/100, Meucci Technical Institute, ABACUS project, Florence, 2005.</li>
-	</ul>
+- PhD degree in Mathematics, Computer Science and Statistics, thesis ([pdf](https://github.com/massimo-nocentini/PhD-thesis/releases/download/final-version/PhD-thesis.pdf)) title
+  <center>*An algebraic and combinatorial study of some infinite sequences of numbers<br>
+  supported by symbolic and logic computation*</center>
+  advised by [prof. Donatella Merlini](http://local.disia.unifi.it/merlini/) and affiliated to the 
+  Dipartimento di Statistica, Informatica e Applicazioni ([DiSIA](https://www.disia.unifi.it/)), University of Florence, from 2015 to 2019.
+- Master Laurea degree in Computer Science, voting 110/110 cum laude, thesis title *Patterns in Riordan arrays*, 
+  supervised by prof. Donatella Merlini, University of Florence, 2015.
+- Laurea degree in Computer Science, voting 110/110, thesis title *Analysis of metabolic networks based on connection properties*, 
+  supervised by <a href="https://www.pilucrescenzi.it/">prof. Pierluigi Crescenzi</a>, University of Florence, 2012.
+- Maturity exam on Computer Science, voting 100/100, Meucci Technical Institute, ABACUS project, Florence, 2005.
 
 
 <h2><a name="papers">Papers</a></h2>
