@@ -7,9 +7,8 @@
 
 ## Education
 
-- PhD degree in Mathematics, Computer Science and Statistics, thesis ([pdf](https://github.com/massimo-nocentini/PhD-thesis/releases/download/final-version/PhD-thesis.pdf)) title
-  <center>*An algebraic and combinatorial study of some infinite sequences of numbers<br>
-  supported by symbolic and logic computation*</center>
+- PhD degree in Mathematics, Computer Science and Statistics, thesis title *An algebraic and combinatorial study of some infinite sequences of numbers 
+  supported by symbolic and logic computation* ([pdf](https://github.com/massimo-nocentini/PhD-thesis/releases/download/final-version/PhD-thesis.pdf)), 
   advised by [prof. Donatella Merlini](http://local.disia.unifi.it/merlini/) and affiliated to the 
   Dipartimento di Statistica, Informatica e Applicazioni ([DiSIA](https://www.disia.unifi.it/)), University of Florence, from 2015 to 2019.
 - Master Laurea degree in Computer Science, voting 110/110 cum laude, thesis title *Patterns in Riordan arrays*, 
