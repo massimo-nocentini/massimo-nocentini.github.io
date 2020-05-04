@@ -1,11 +1,10 @@
 
-# Me
+# Contact
 
-__Massimo Nocentini__
+_Massimo Nocentini_<br>
 <a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a><br>
-*May 2, 2020.*
 
-<p>This site is a collection of Massimo Nocentini's papers, notes, memos and source code.</p>
+This site is a collection of Massimo Nocentini's papers, notes, memos and source code upto *May 2, 2020*.
 
 ## Education
 
@@ -39,9 +38,12 @@ __Massimo Nocentini__
 - During Spring 2020, he (co)teaches the course <a href="https://www.unifi.it/p-ins2-2019-544175-1.html">Algorithms and Programming for Massive Data</a> at the University of Florence (slides: <a href="https://massimo-nocentini.github.io/UniFI-Python-Spring-2020/introduction.slides.html#/">Introduction</a>, <a href="https://massimo-nocentini.github.io/UniFI-Python-Spring-2020/jupyter-notebooks.slides.html#/">Jupyter notebooks</a>, <a href="https://massimo-nocentini.github.io/UniFI-Python-Spring-2020/numpy.slides.html#/">NumPy</a>, <a href="https://massimo-nocentini.github.io/UniFI-Python-Spring-2020/pandas.slides.html#/">Pandas</a>, <a href="https://massimo-nocentini.github.io/UniFI-Python-Spring-2020/matplotlib.slides.html#/">Matplotlib</a> and <a href="https://massimo-nocentini.github.io/UniFI-Python-Spring-2020/networkx.slides.html#/">NetworkX</a>). <br>A note about copyright: all the content has been taken from <a href="https://github.com/jakevdp/PythonDataScienceHandbook">Jake Vanderplas</a>, therefore I have no merits for it; I just put notebooks into slides for my own educational needs.
 - From April 2019 to March 2020 he received a contract to collaborate with <a href="https://www.disia.unifi.it/p-doc2-2016-200052-V-3f2b342b352728-0.html">prof. Daniele Vignoli</a> in a scholarship titled *Rilevamento dell'incertezza economica attraverso stampa e social media*. This research requires that machine learning techniques should be employed to perform Natural Language Processing on a selection of articles appeared on Italian newspapers; he trained word embeddings based upon the Wikipedia snapshot at 1st of July 2019 and have started the training of a model for the NLP Python package <a href="https://spacy.io/">Spacy</a> concerning the Italian language.
 - He did two classes about <a href="https://www.sympy.org/en/index.html">SymPy</a> to introduce symbolic manipulations on top of the Python language, within a course on *Analysis of Algorithms* taught by Donatella Merlini at the University of Florence; in addition, he translated lab sessions code from Maple to Python collected in notebooks available online (<a href="https://github.com/massimo-nocentini/pacc/tree/master/paa-course">link</a>).
+- He collaborated with [prof. Enrico Vicario](https://stlab.dinfo.unifi.it/vicario/) under a scholarship titled *Architetture e metodi per la cooperazione applicativa*; the collaboration took two years where he worked on a simulator for gas and water networks.
 
 ## Work outside academia
     
+After his PhD dissertation he have opened a VAT and currently he collaborate with <a href="http://neu.bauing-schmidt.de/">Schmidt</a> company using Smalltalk technologies.
+
 During his studies he worked in software houses localized in Florence, Italy; formerly at   	
 <a href="https://www.commitsoftware.it/">Commit</a> and lately at
 <a href="http://www.negens.com/site/home.html">Negens</a>, developing mainly client-server
@@ -63,16 +65,11 @@ about eight years, part-time relationships in parallel with his studies; in shor
   automation using Linux boxes and the RaspberryPi, interfacing with C
   code while scripting in Python; heavy use of shell and network protocols
   for messages exchange.
-- he collaborated with prof. Enrico Vicario under a scholarship titled
-  *Architetture e metodi per la cooperazione applicativa*; the collaboration
-  took two years where he worked on a simulator for gas and water networks.
 
-After my PhD dissertation I have opened a VAT and currently I collaborate with 
-<a href="http://neu.bauing-schmidt.de/">Schmidt</a> company using Smalltalk technologies.
 
 ## Github repositories
 
-- <a href="https://github.com/massimo-nocentini/srfi-41st">*srfi-41st*</a>
+- <a href="https://github.com/massimo-nocentini/srfi-41st">*srfi-41st*</a><br>
   A port of <a href="https://srfi.schemers.org/srfi-41/srfi-41.html">https://srfi.schemers.org/srfi-41/srfi-41.html</a> for Smalltalk.
 
 ## Acknowledgments
