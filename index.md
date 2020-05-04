@@ -1,10 +1,13 @@
 
-# Contact
 
-_Massimo Nocentini_<br>
-<a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a><br>
 
-This site is a collection of Massimo Nocentini's papers, notes, memos and source code upto *May 2, 2020*.
+This site is a collection of _Massimo Nocentini_'s papers, notes, memos and source code up to *May 2, 2020*.
+
+## Contacts
+
+- <a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a><br>
+- <a href="mailto:Massimo Nocentini <massimo.nocentini@unifi.it>">massimo.nocentini@unifi.it</a><br>
+- https://github.com/massimo-nocentini/
 
 ## Education
 
