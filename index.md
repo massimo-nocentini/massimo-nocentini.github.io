@@ -5,8 +5,8 @@ This site is a collection of _Massimo Nocentini_'s papers, notes, memos and sour
 
 ## Contacts
 
-- <a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a><br>
-- <a href="mailto:Massimo Nocentini <massimo.nocentini@unifi.it>">massimo.nocentini@unifi.it</a><br>
+- <a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a>
+- <a href="mailto:Massimo Nocentini <massimo.nocentini@unifi.it>">massimo.nocentini@unifi.it</a>
 - https://github.com/massimo-nocentini/
 
 ## Education
