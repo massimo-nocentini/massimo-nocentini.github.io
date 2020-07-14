@@ -1,7 +1,7 @@
 
 
 
-This site is a collection of _Massimo Nocentini_'s papers, notes, memos and source code up to *July 9, 2020*.
+This site is a collection of _Massimo Nocentini_'s papers, notes, memos and source code up to *July 14, 2020*.
 
 ## Contacts
 
@@ -22,7 +22,7 @@ This site is a collection of _Massimo Nocentini_'s papers, notes, memos and sour
 - Maturity exam on Computer Science, voting 100/100, Meucci Technical Institute, ABACUS project, Florence, 2005.
 
 ## Papers
-- Marco Maggesi, Massimo Nocentini. *Kanren Light: A Dynamically Semi-Certified Interactive Logic Programming System*, in <a href="https://arxiv.org/abs/2007.04691">Accepted for communication to miniKanren 2020 - miniKanren and Relational Programming Workshop</a>.
+- Marco Maggesi, Massimo Nocentini. *Kanren Light: A Dynamically Semi-Certified Interactive Logic Programming System* (<a href="https://arxiv.org/abs/2007.04691">arXiv.org</a>), accepted for communication to <a href="https://icfp20.sigplan.org/home/minikanren-2020#event-overview">miniKanren 2020 - miniKanren and Relational Programming Workshop</a>.
 - Donatella Merlini, Massimo Nocentini. *Functions and Jordan canonical forms of Riordan matrices*, in <a href="https://doi.org/10.1016/j.laa.2018.12.011">Linear Algebra and its Applications, Volume 565, 15 March 2019, Pages 177-207</a>.
 - Massimo Nocentini, Donatella Merlini. *Crawling, (pretty) printing and graphing the OEIS*, working paper at DiSIA (<a href="http://local.disia.unifi.it/wp_disia/2018/wp_disia_2018_06.pdf}">pdf</a>).
 - Donatella Merlini, Massimo Nocentini. *Algebraic generating functions for languages avoiding Riordan patterns*, in <a href="https://www.emis.de/journals/JIS/VOL21/Merlini/merlini5.html">Journal of Integer Sequences, Volume 21, Article 18.1.3, 2018</a>.
