@@ -12,7 +12,7 @@ This site is a collection of _Massimo Nocentini_'s papers, notes, memos and sour
 
 ## Education
 
-- deeplearning.ai's *Deep Learning Specialization* completed on July 27, 2020 ([certificate](https://coursera.org/share/5cf1b2682cfa4c3b972540081f9ed6e5)).
+- <a href="https://www.deeplearning.ai/deep-learning-specialization/">deeplearning.ai</a>'s *Deep Learning Specialization* completed on July 27, 2020 ([certificate](https://coursera.org/share/5cf1b2682cfa4c3b972540081f9ed6e5)).
 - PhD degree in Mathematics, Computer Science and Statistics, thesis title *An algebraic and combinatorial study of some infinite sequences of numbers 
   supported by symbolic and logic computation* ([pdf](https://github.com/massimo-nocentini/PhD-thesis/releases/download/final-version/PhD-thesis.pdf)), 
   advised by [prof. Donatella Merlini](http://local.disia.unifi.it/merlini/) and affiliated to the 
