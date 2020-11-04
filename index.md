@@ -9,7 +9,7 @@ This site is a collection of _Massimo Nocentini_'s papers, notes, memos and sour
 - <a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a> (personal)
 - <a href="mailto:Massimo Nocentini <massimo.nocentini@unifi.it>">massimo.nocentini@unifi.it</a> (institutional)
 - <a href="https://github.com/massimo-nocentini/">https://github.com/massimo-nocentini/</a> (code)
-- <a href="id_rsa.pub">(public RSA key</a>
+- <a href="https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub">(public RSA key)</a>
 
 ## Education
 
