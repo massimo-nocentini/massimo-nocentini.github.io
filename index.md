@@ -9,6 +9,8 @@ This site is a collection of _Massimo Nocentini_'s papers, notes, memos and sour
 - <a href="mailto:Massimo Nocentini <massimo.nocentini@gmail.com>">massimo.nocentini@gmail.com</a> (personal)
 - <a href="mailto:Massimo Nocentini <massimo.nocentini@unifi.it>">massimo.nocentini@unifi.it</a> (institutional)
 - <a href="https://github.com/massimo-nocentini/">https://github.com/massimo-nocentini/</a> (code)
+- Public RSA key:<br>
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDllJt/2NxU3IsBjsF77MUOkd/tctwzSmu5eUwnxmYfJL0JF7RhhgxH3pBvVRG1Qp5n5DIaxJP/HZFtt2mnTvm+BXXDKT5UQXNf7bgWz3VVBW4R/h7+ibPDQFKu1MXr2n2V20NDoAKUa/GddY0Yxg0sllfInwY+Mjngd7oljfprbypjRujAvl74UG0vqJXF1/QdDRpcfvN58zDo4yDehuBNB9JC0cw8JEWWy2pMEY90iKkpDvqDXNOqRpO9OXPN50KdfcCgBCnoDv/eynTpPIBk7ZMUxNPJfjZWjctstiBkIqD3AYetA/fHfIMtWoWahcv5K/RO9+9wp0a3RqqBXzoB massimo.nocentini@gmail.com
 
 ## Education
 
