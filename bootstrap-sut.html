@@ -1,0 +1,364 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script>hljs.highlightAll();</script>
+<title>bootstrap-sut</title></head>
+<body class="w3-content" style="max-width:61.8%">
+<h1><code>bootstrap-sut</code> test suite</h1>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">((ran 9) (failed 0))
+</code></pre></div></div>
+<p>This test suite drove the implementation of the unittest framework itself.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(module
+  unittest
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken condition)
+    (chicken pretty-print)
+    (chicken port)
+    (chicken string)
+    srfi-1
+    srfi-19
+    sxml-transforms)
+  (define highlight-version &quot;11.11.1&quot;)
+  (define (sxml-tree title . body)
+    `((html (@ (xmlns &quot;http://www.w3.org/1999/xhtml&quot;)
+               (xml:lang &quot;en&quot;)
+               (lang &quot;en&quot;))
+            (head (meta (@ (name &quot;viewport&quot;)
+                           (content &quot;width=device-width,initial-scale=1&quot;)))
+                  (link (@ (rel &quot;stylesheet&quot;)
+                           (href &quot;https://www.w3schools.com/w3css/4/w3.css&quot;)
+                           (type &quot;text/css&quot;)))
+                  (link (@ (rel &quot;stylesheet&quot;)
+                           (href &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
+                                 ,highlight-version
+                                 &quot;/styles/default.min.css&quot;)
+                           (type &quot;text/css&quot;)))
+                  (style &quot;code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }&quot;
+                         &quot;html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }&quot;)
+                  (script
+                    (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
+                            ,highlight-version
+                            &quot;/highlight.min.js&quot;)))
+                  ,@(map (lambda (lang)
+                           `(script
+                              (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
+                                      ,highlight-version
+                                      &quot;/languages/&quot;
+                                      ,lang
+                                      &quot;.min.js&quot;))))
+                         '(scheme python))
+                  (script &quot;hljs.highlightAll();&quot;)
+                  (title ,title))
+            (body (@ (class &quot;w3-content&quot;) (style &quot;max-width:61.8%&quot;))
+                  ,@body
+                  (hr)
+                  (footer
+                    (@ (class &quot;w3-container w3-center&quot;))
+                    (small (a (@ (rel &quot;license&quot;)
+                                 (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                              (img (@ (alt &quot;Creative Commons License&quot;)
+                                      (style &quot;border-width:0&quot;)
+                                      (src &quot;https://mirrors.creativecommons.org/presskit/icons/cc.svg&quot;))))
+                           (a (@ (rel &quot;license&quot;)
+                                 (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                              (img (@ (alt &quot;Creative Commons License&quot;)
+                                      (style &quot;border-width:0&quot;)
+                                      (src &quot;https://mirrors.creativecommons.org/presskit/icons/by.svg&quot;))))
+                           (a (@ (rel &quot;license&quot;)
+                                 (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                              (img (@ (alt &quot;Creative Commons License&quot;)
+                                      (style &quot;border-width:0&quot;)
+                                      (src &quot;https://mirrors.creativecommons.org/presskit/icons/sa.svg&quot;))))
+                           (br)
+                           (p &quot;This work is licensed under a &quot;
+                              (a (@ (rel &quot;license&quot;)
+                                    (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                                 &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;)
+                              (br)
+                              (small ,(date-&gt;string (current-date))))))))))
+  (define sxml-handler-container
+    (lambda (tag body) `(div (@ (class &quot;w3-container&quot;)) ,@body)))
+  (define sxml-handler-code/lang
+    (lambda (tag body)
+      (let ((lang (car body)) (code (cdr body)))
+        `(div (@ (class &quot;w3-card w3-round&quot;))
+              (header
+                (@ (class &quot;w3-container w3-border w3-round w3-light-gray w3-right&quot;))
+                ,lang
+                &quot; code&quot;)
+              (div (@ (class &quot;w3-container&quot;))
+                   (pre (code (@ (class &quot;w3-code w3-border w3-round language-&quot;
+                                        ,lang))
+                              ,code)))))))
+  (define sxml-handler-code/scheme
+    (lambda (tag body)
+      (let* ((expr (if (eq? (length body) 1) (car body) (cons 'begin body))))
+        (sxml-handler-code/lang
+          'code/lang
+          (list 'scheme
+                (call-with-output-string
+                  (lambda (p) (pretty-print expr p))))))))
+  (define sxml-handler-code/scheme-file
+    (lambda (tag body)
+      (sxml-handler-code/scheme
+        'code/scheme
+        (list (with-input-from-file (car body) (lambda () (read)))))))
+  (define sxml-handler-cite/a
+    (lambda (tag body) `(cite (a (@ (href ,(car body))) ,@(cdr body)))))
+  (define (SXML-&gt;file! tree filename)
+    (with-output-to-file
+      (conc filename &quot;.html&quot;)
+      (lambda ()
+        (display &quot;&lt;!doctype html&gt;&quot;)
+        (SXML-&gt;HTML
+          (pre-post-order*
+            tree
+            `((container unquote sxml-handler-container)
+              (code/lang unquote sxml-handler-code/lang)
+              (code/scheme unquote sxml-handler-code/scheme)
+              (code/scheme-file unquote sxml-handler-code/scheme-file)
+              (cite/a unquote sxml-handler-cite/a)
+              ,@alist-conv-rules*))))))
+  (define-record unittest/testcase name log)
+  (define (unittest/wasrun name) (make-unittest/testcase name '()))
+  (define (unittest/testcase-logcons! testcase msg)
+    (unittest/testcase-log-set!
+      testcase
+      (cons msg (unittest/testcase-log testcase))))
+  (define (unittest/testcase-run testcase result sut)
+    (let* ((methods (cdr sut))
+           (setup (alist-ref 'setup methods))
+           (teardown (alist-ref 'teardown methods))
+           (testcase-name (unittest/testcase-name testcase)))
+      (unittest/result-started! result)
+      (let-values
+        ((args (if setup ((car setup) testcase) (values)))
+         ((f code) (apply values (alist-ref testcase-name methods))))
+        (let* ((witness (gensym))
+               (v (condition-case
+                    (apply f testcase args)
+                    (c (exn unittest-assert-equal)
+                       (begin
+                         (unittest/result-failed!
+                           result
+                           (cons testcase-name
+                                 (get-condition-property
+                                   c
+                                   'unittest-assert-equal
+                                   'comparison)))
+                         witness))
+                    (c (exn)
+                       (begin
+                         (unittest/result-failed!
+                           result
+                           (list testcase-name
+                                 (call-with-output-string
+                                   (lambda (port) (print-error-message c port)))))
+                         witness))
+                    (c ()
+                       (begin
+                         (unittest/result-failed!
+                           result
+                           (list testcase-name c))
+                         witness)))))
+          (when teardown (apply (car teardown) testcase args))
+          `((h2 (code ,testcase-name)
+                &quot;: &quot;
+                ,(if (eq? v witness)
+                   '(span (@ (class &quot;w3-text-red&quot;)) fail)
+                   '(span (@ (class &quot;w3-text-green&quot;)) pass)))
+            ,@(if (pair? v) v '())
+            (code/scheme ,code))))))
+  (define-syntax
+    define-suite
+    (syntax-rules
+      ()
+      ((_ sutname ((casename formal ...) body ...) ...)
+       (define sutname
+         `(sutname
+            (casename
+              ,(lambda (formal ...) body ...)
+              ,'(define (casename formal ...) body ...))
+            ...)))))
+  (define-syntax
+    lettest
+    (syntax-rules
+      ()
+      ((_ ((test nameexp) ...) body ...)
+       (let ((test (unittest/wasrun nameexp)) ...) body ...))))
+  (define-record unittest/result ran failed)
+  (define (unittest/result-summary result)
+    `((ran ,(unittest/result-ran result))
+      (failed
+        ,(length (unittest/result-failed result))
+        ,@(unittest/result-failed result))))
+  (define (unittest/result-started! result)
+    (unittest/result-ran-set! result (add1 (unittest/result-ran result))))
+  (define (unittest/result-failed! result exn)
+    (unittest/result-failed-set!
+      result
+      (cons exn (unittest/result-failed result))))
+  (define (⊦ pred? a b)
+    (unless (pred? a b) (signal (unittest/condition-expected-actual a b))))
+  (define (⊦= a b) (⊦ equal? a b))
+  (define (⊦≠ a b) (⊦ (complement equal?) a b))
+  (define (⊨ a) (⊦= #t a))
+  (define (⊭ a) (⊦= #f a))
+  (define-syntax
+    letsuite
+    (syntax-rules
+      ()
+      ((_ ((name '(method ...)) ...) body ...)
+       (letrec ((name (lettest ((method 'method) ...) (list method ...))) ...)
+         body
+         ...))))
+  (define (unittest/testsuite-run suite r sut)
+    (map (lambda (testcase) (unittest/testcase-run testcase r sut)) suite))
+  (define (unittest/✓ sut)
+    (let* ((r (make-unittest/result 0 '()))
+           (sut-name (car sut))
+           (sut-methods (cdr sut))
+           (F (lambda (x)
+                (let ((name (car x)))
+                  (and (not (eq? name 'setup))
+                       (not (eq? name 'teardown))
+                       (not (eq? name 'doc))))))
+           (methods (filter F sut-methods))
+           (s (map (lambda (pair) (lettest ((t (car pair))) t)) methods)))
+      (let ((docs (unittest/testsuite-run s r sut))
+            (res (unittest/result-summary r))
+            (sxml (alist-ref 'doc sut-methods)))
+        (SXML-&gt;file!
+          (sxml-tree
+            sut-name
+            `((h1 (code ,sut-name) &quot; test suite&quot;)
+              (code/scheme ,res)
+              ,@(if sxml ((car sxml) r) '())
+              (hr)
+              ,@docs))
+          sut-name)
+        (pretty-print res)
+        r)))
+  (define (unittest/condition-expected-actual a b)
+    (condition
+      `(exn message &quot;assert-equal failed&quot;)
+      `(unittest-assert-equal comparison ((expected ,a) (got ,b)))))
+  (define-syntax
+    ⊦⧳
+    (syntax-rules
+      ()
+      ((_ ((exn ...) ...) body ...)
+       (condition-case (begin body ...) ((exn ...) (void)) ...)))))
+</code></pre></div></div>
+<hr />
+<h2><code>test-running</code>: <span class="w3-text-green">pass</span></h2>
+<p>hello</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-running tc t r)
+  (⊦= '() (unittest/testcase-log t))
+  (unittest/testcase-run t r wasrun-sut)
+  (⊦= '(teardown test-method setup) (unittest/testcase-log t))
+  `((p &quot;hello&quot;)))
+</code></pre></div></div>
+<h2><code>test-result</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-result tc t r)
+  (unittest/testcase-run t r wasrun-sut)
+  (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
+</code></pre></div></div>
+<h2><code>test-failed</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-failed tc _ r)
+  (lettest
+    ((t 'test-broken))
+    (unittest/testcase-run t r wasrun-sut)
+    (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
+          (unittest/result-summary r))))
+</code></pre></div></div>
+<h2><code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-unbound-variable tc _ r)
+  (lettest
+    ((t 'test-unbound-variable))
+    (unittest/testcase-run t r wasrun-sut)
+    (⊦= '((ran 1)
+            (failed
+              1
+              (test-unbound-variable
+                &quot;\nError: unbound variable: unbound-v\n&quot;)))
+          (unittest/result-summary r))))
+</code></pre></div></div>
+<h2><code>test-failed-result</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-failed-result tc _ r)
+  (unittest/result-started! r)
+  (unittest/result-failed! r 'no-reason)
+  (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
+</code></pre></div></div>
+<h2><code>test-suite</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-suite tc _ r)
+  (letsuite
+    ((suite '(test-running test-failed)))
+    (unittest/testsuite-run suite r bootstrap-sut)
+    (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
+</code></pre></div></div>
+<h2><code>test-⊨</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
+</code></pre></div></div>
+<h2><code>test-⊭</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
+</code></pre></div></div>
+<h2><code>test-should-signal</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-should-signal tc _ _)
+  (⊦⧳ ((exn)) (signal (condition '(exn message &quot;useless&quot;))))
+  (⊦⧳ ((exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
+  (⊦⧳ ((exn) (exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
+  (condition-case
+    (⊦⧳ ((exn)) (signal (condition '(exn-a message &quot;useless&quot;))))
+    ((exn-a) (void)))
+  (condition-case (⊦⧳ ((exn)) (signal 99)) (() (void)))
+  (⊦⧳ () 99))
+</code></pre></div></div>
+<hr />
+<footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<br />
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+<br /><small>Thu Mar 20 11:28:19+0100 2025</small></p></small></footer></body></html>
