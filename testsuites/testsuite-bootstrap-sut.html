@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
 <style>code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
@@ -35,14 +35,14 @@
     srfi-19
     sxml-transforms)
   (define highlight-version &quot;11.11.1&quot;)
-  (define (sxml-tree title . body)
+  (define (sxml-tree title body)
     `((html (@ (xmlns &quot;http://www.w3.org/1999/xhtml&quot;)
                (xml:lang &quot;en&quot;)
                (lang &quot;en&quot;))
             (head (meta (@ (name &quot;viewport&quot;)
                            (content &quot;width=device-width,initial-scale=1&quot;)))
                   (link (@ (rel &quot;stylesheet&quot;)
-                           (href &quot;https://www.w3schools.com/w3css/4/w3.css&quot;)
+                           (href &quot;https://www.w3schools.com/w3css/5/w3.css&quot;)
                            (type &quot;text/css&quot;)))
                   (link (@ (rel &quot;stylesheet&quot;)
                            (href &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
@@ -119,9 +119,13 @@
       (sxml-handler-code/scheme
         'code/scheme
         (list (with-input-from-file (car body) (lambda () (read)))))))
+  (define sxml-handler-di
+    (lambda (tag body)
+      (let ((dt (car body)) (dd (cdr body)))
+        `(div (@ (class &quot;w3-row&quot;)) (dt (@ (class &quot;w3-bold&quot;)) ,dt) (dd ,@dd)))))
   (define sxml-handler-cite/a
     (lambda (tag body) `(cite (a (@ (href ,(car body))) ,@(cdr body)))))
-  (define (SXML-&gt;file! tree filename)
+  (define (SXML-&gt;HTML-&gt;file! tree filename)
     (with-output-to-file
       (conc filename &quot;.html&quot;)
       (lambda ()
@@ -129,12 +133,14 @@
         (SXML-&gt;HTML
           (pre-post-order*
             tree
-            `((container unquote sxml-handler-container)
-              (code/lang unquote sxml-handler-code/lang)
-              (code/scheme unquote sxml-handler-code/scheme)
-              (code/scheme-file unquote sxml-handler-code/scheme-file)
-              (cite/a unquote sxml-handler-cite/a)
-              ,@alist-conv-rules*))))))
+            (append
+              `((container unquote sxml-handler-container)
+                (code/lang unquote sxml-handler-code/lang)
+                (code/scheme unquote sxml-handler-code/scheme)
+                (code/scheme-file unquote sxml-handler-code/scheme-file)
+                (cite/a unquote sxml-handler-cite/a)
+                (di unquote sxml-handler-di))
+              alist-conv-rules*))))))
   (define-record unittest/testcase name log)
   (define (unittest/wasrun name) (make-unittest/testcase name '()))
   (define (unittest/testcase-logcons! testcase msg)
@@ -244,7 +250,7 @@
       (let ((docs (unittest/testsuite-run s r sut))
             (res (unittest/result-summary r))
             (sxml (alist-ref 'doc sut-methods)))
-        (SXML-&gt;file!
+        (SXML-&gt;HTML-&gt;file!
           (sxml-tree
             sut-name
             `((h1 (code ,sut-name) &quot; test suite&quot;)
@@ -252,7 +258,7 @@
               ,@(if sxml ((car sxml) r) '())
               (hr)
               ,@docs))
-          sut-name)
+          (symbol-append 'testsuite- sut-name))
         (pretty-print res)
         r)))
   (define (unittest/condition-expected-actual a b)
@@ -361,4 +367,4 @@
 <footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <br />
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Thu Mar 20 11:28:19+0100 2025</small></p></small></footer></body></html>
+<br /><small>Fri Mar 21 13:13:32+0100 2025</small></p></small></footer></body></html>

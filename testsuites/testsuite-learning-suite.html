@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script>hljs.highlightAll();</script>
+<title>learning-suite</title></head>
+<body class="w3-content" style="max-width:61.8%">
+<h1><code>learning-suite</code> test suite</h1>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">((ran 3) (failed 0))
+</code></pre></div></div>
+<hr />
+<h2><code>test-alist-ref</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-alist-ref _)
+  (let ((alst '((a 3) (b 2))))
+    (⊦= '(3) (alist-ref 'a alst))
+    (⊦= '(2) (alist-ref 'b alst))
+    (⊦= #f (alist-ref 'c alst))))
+</code></pre></div></div>
+<h2><code>test/len</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test/len _)
+  (let ((my-strlen
+          (foreign-lambda*
+            int
+            ((scheme-object cons))
+            &quot;C_return(C_header_size(cons));&quot;)))
+    (⊦= 2 (my-strlen (cons 1 '())))
+    (⊦= 2 (my-strlen (cons 1 (cons 2 (cons 3 '())))))
+    (⊦= 11 (my-strlen &quot;hello world&quot;))))
+</code></pre></div></div>
+<h2><code>test-null-eq?</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-null-eq? _) (⊨ (eq? '() '())))
+</code></pre></div></div>
+<hr />
+<footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<br />
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+<br /><small>Fri Mar 21 13:13:32+0100 2025</small></p></small></footer></body></html>

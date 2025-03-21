@@ -2,12 +2,15 @@
 (import unittest)
 
 (define tree (sxml-tree "Me" 
-                        `(div (@ (class "w3-sidebar w3-light-grey w3-bar-block") 
-                                 (style= "width:25%"))
-                              (a (@ (href "bootstrap-sut.html") 
-				    (class "w3-bar-item w3-button")) "Bootstrap"))
-			`(div (@ (style "margin-left:25%"))
-			      (p "some"))))
+                        `((h1 "Personal projects")
+                          (h2 "Scheme lang")
+                          (dl (@ (class "w3-container"))
+			      (di (cite/a "testsuites/testsuite-learning-suite.html" "Learning tests") 
+				  (p "My own learning tests to understand the Scheme language, via the chicken interpreter."))
+			      (di (cite/a "testsuites/testsuite-bootstrap-sut.html" "Unittest framework") 
+				  (p "some comment"))
+			      (di (cite/a "testsuites/testsuite-auxtest.html" "Auxiliary definitions") 
+				  (p "some comment"))))))
 
-(SXML->file! tree "index")
+(SXML->HTML->file! tree "index")
 
