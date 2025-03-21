@@ -1,0 +1,110 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script>hljs.highlightAll();</script>
+<title>hanseitest</title></head>
+<body class="w3-content" style="max-width:61.8%">
+<h1><code>hanseitest</code> test suite</h1>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">((ran 5)
+ (failed
+   2
+   (test/procc/flip-xor-model
+     (expected (((V #t) 0.500000051200001) ((V #f) 0.4999999488)))
+     (got (((V #t) 0.500000051200001) ((V #f) 0.4999999488))))
+   (test/procc/grass-model
+     (expected (((V #f) 0.322) ((V #t) 0.2838)))
+     (got (((V #f) 0.322) ((V #t) 0.2838))))))
+</code></pre></div></div>
+<hr />
+<h2><code>test/procc/simple-model</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test/procc/simple-model _)
+  (⊦= '(((V (#t #t)) 0.36) ((V (#t #f)) 0.24) ((V (#f #t)) 0.24))
+        (probcc-inference-exact
+          (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
+            (probcc-when (or x y) (list x y))))))
+</code></pre></div></div>
+<h2><code>test/procc/grass-model</code>: <span class="w3-text-red">fail</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test/procc/grass-model _)
+  (define grass-model
+    (probcc-model
+      (let* ((rain (probcc-coin 0.3))
+             (sprinkler (probcc-coin 0.5))
+             (grass-is-wet
+               (or (and (probcc-coin 0.9) rain)
+                   (and (probcc-coin 0.8) sprinkler)
+                   (probcc-coin 0.1))))
+        (probcc-when grass-is-wet rain))))
+  (⊦= (list (probcc-value 0.322 #f) (probcc-value 0.2838 #t))
+        (probcc-explore +inf.0 grass-model)))
+</code></pre></div></div>
+<h2><code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test/procc/flip-xor-model _)
+  (define flipxor-model
+    (probcc-model
+      (let loop ((p 0.6) (n 10))
+        (cond ((equal? 1 n) (probcc-coin p))
+              (else (not (equal? (probcc-coin (- 1 p)) (loop p (sub1 n)))))))))
+  (let1 (res (probcc-explore +inf.0 flipxor-model))
+        (⊦= '(((V #t) 0.500000051200001) ((V #f) 0.4999999488)) res)
+        (⊦= 1024 (probcc-leaves flipxor-model))))
+</code></pre></div></div>
+<h2><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test/procc/flip-xor-model/middle _)
+  (define (flipxor-model c p)
+    (probcc-model
+      (letrec ((loop (λ (n)
+                         (cond ((equal? 1 n) (probcc-coin p))
+                               (else
+                                (not (equal?
+                                       (probcc-coin (- 1 p))
+                                       (probcc-reflect
+                                         (probcc-inference-exact (loop (sub1 n)))))))))))
+        (loop c))))
+  (let* ((tree (flipxor-model 10 0.6)) (res (probcc-explore +inf.0 tree)))
+    (⊦= '(((V #t) 0.5000000512) ((V #f) 0.4999999488)) res)
+    (⊦= 4 (probcc-leaves tree))))
+</code></pre></div></div>
+<h2><code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></h2>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<div class="w3-container">
+<pre><code class="w3-code w3-border w3-round language-scheme">(define (test/procc/flip-xor-model/bucket _)
+  (define (flipxor-model c p)
+    (probcc-model
+      (letrec ((loop (λ-probcc-bucket
+                       (n)
+                       (cond ((equal? 1 n) (probcc-coin p))
+                             (else
+                              (not (equal? (probcc-coin (- 1 p)) (loop (sub1 n)))))))))
+        (loop c))))
+  (let* ((tree (flipxor-model 10 0.6)) (res (probcc-explore +inf.0 tree)))
+    (⊦= '(((V #t) 0.5000000512) ((V #f) 0.4999999488)) res)
+    (⊦= 2 (probcc-leaves tree))))
+</code></pre></div></div>
+<hr />
+<footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<br />
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+<br /><small>Fri Mar 21 14:52:31+0100 2025</small></p></small></footer></body></html>
