@@ -15,13 +15,13 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">((ran 9) (failed 0))
+<pre><code class="w3-code w3-round language-scheme">((ran 9) (failed 0))
 </code></pre></div></div>
 <p>This test suite drove the implementation of the unittest framework itself.</p>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(module
+<pre><code class="w3-code w3-round language-scheme">(module
   unittest
   *
   (import
@@ -103,8 +103,7 @@
                 ,lang
                 &quot; code&quot;)
               (div (@ (class &quot;w3-container&quot;))
-                   (pre (code (@ (class &quot;w3-code w3-border w3-round language-&quot;
-                                        ,lang))
+                   (pre (code (@ (class &quot;w3-code w3-round language-&quot; ,lang))
                               ,code)))))))
   (define sxml-handler-code/scheme
     (lambda (tag body)
@@ -198,8 +197,9 @@
             ,@(if (pair? v) v '())
             (code/scheme ,code)
             ,@(if (not (equal? outstr no-outsrt))
-                `((pre (@ (class &quot;w3-container&quot;))
-                       (code (@ (class &quot;w3-code&quot;)) ,outstr)))
+                `((div (@ (class &quot;w3-container&quot;))
+                       (p &quot;Captured stdout:&quot;)
+                       (pre (code (@ (class &quot;w3-code w3-round&quot;)) ,outstr))))
                 '()))))))
   (define-syntax
     define-suite
@@ -288,7 +288,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-running tc t r)
+<pre><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
   (⊦= '() (unittest/testcase-log t))
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '(teardown test-method setup) (unittest/testcase-log t))
@@ -298,7 +298,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-result tc t r)
+<pre><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
 </code></pre></div></div>
@@ -306,7 +306,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-failed tc _ r)
+<pre><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
   (lettest
     ((t 'test-broken))
     (unittest/testcase-run t r wasrun-sut)
@@ -317,7 +317,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-unbound-variable tc _ r)
+<pre><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
     ((t 'test-unbound-variable))
     (unittest/testcase-run t r wasrun-sut)
@@ -332,7 +332,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-failed-result tc _ r)
+<pre><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
   (unittest/result-started! r)
   (unittest/result-failed! r 'no-reason)
   (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
@@ -341,7 +341,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-suite tc _ r)
+<pre><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
   (letsuite
     ((suite '(test-running test-failed)))
     (unittest/testsuite-run suite r bootstrap-sut)
@@ -351,19 +351,19 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
+<pre><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
 </code></pre></div></div>
 <h2><code>test-⊭</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
+<pre><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
 </code></pre></div></div>
 <h2><code>test-should-signal</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <div class="w3-container">
-<pre><code class="w3-code w3-border w3-round language-scheme">(define (test-should-signal tc _ _)
+<pre><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
   (⊦⧳ ((exn)) (signal (condition '(exn message &quot;useless&quot;))))
   (⊦⧳ ((exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
   (⊦⧳ ((exn) (exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
@@ -377,4 +377,4 @@
 <footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <br />
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Sat Mar 22 09:39:48+0100 2025</small></p></small></footer></body></html>
+<br /><small>Sat Mar 22 11:38:16+0100 2025</small></p></small></footer></body></html>
