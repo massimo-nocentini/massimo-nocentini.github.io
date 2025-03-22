@@ -125,22 +125,21 @@
         `(div (@ (class &quot;w3-row&quot;)) (dt (@ (class &quot;w3-bold&quot;)) ,dt) (dd ,@dd)))))
   (define sxml-handler-cite/a
     (lambda (tag body) `(cite (a (@ (href ,(car body))) ,@(cdr body)))))
+  (define conversion-rules*
+    (append
+      `((container unquote sxml-handler-container)
+        (code/lang unquote sxml-handler-code/lang)
+        (code/scheme unquote sxml-handler-code/scheme)
+        (code/scheme-file unquote sxml-handler-code/scheme-file)
+        (cite/a unquote sxml-handler-cite/a)
+        (di unquote sxml-handler-di))
+      alist-conv-rules*))
   (define (SXML-&gt;HTML-&gt;file! tree filename)
     (with-output-to-file
       (conc filename &quot;.html&quot;)
       (lambda ()
         (display &quot;&lt;!doctype html&gt;&quot;)
-        (SXML-&gt;HTML
-          (pre-post-order*
-            tree
-            (append
-              `((container unquote sxml-handler-container)
-                (code/lang unquote sxml-handler-code/lang)
-                (code/scheme unquote sxml-handler-code/scheme)
-                (code/scheme-file unquote sxml-handler-code/scheme-file)
-                (cite/a unquote sxml-handler-cite/a)
-                (di unquote sxml-handler-di))
-              alist-conv-rules*))))))
+        (SXML-&gt;HTML (pre-post-order* tree conversion-rules*)))))
   (define-record unittest/testcase name log)
   (define (unittest/wasrun name) (make-unittest/testcase name '()))
   (define (unittest/testcase-logcons! testcase msg)
@@ -157,32 +156,39 @@
         ((args (if setup ((car setup) testcase) (values)))
          ((f code) (apply values (alist-ref testcase-name methods))))
         (let* ((witness (gensym))
-               (v (condition-case
-                    (apply f testcase args)
-                    (c (exn unittest-assert-equal)
-                       (begin
-                         (unittest/result-failed!
-                           result
-                           (cons testcase-name
-                                 (get-condition-property
-                                   c
-                                   'unittest-assert-equal
-                                   'comparison)))
-                         witness))
-                    (c (exn)
-                       (begin
-                         (unittest/result-failed!
-                           result
-                           (list testcase-name
-                                 (call-with-output-string
-                                   (lambda (port) (print-error-message c port)))))
-                         witness))
-                    (c ()
-                       (begin
-                         (unittest/result-failed!
-                           result
-                           (list testcase-name c))
-                         witness)))))
+               (no-outsrt &quot;&quot;)
+               (pair (condition-case
+                       (let* ((res (void))
+                              (outstr
+                                (with-output-to-string
+                                  (lambda () (set! res (apply f testcase args))))))
+                         (cons res outstr))
+                       (c (exn unittest-assert-equal)
+                          (begin
+                            (unittest/result-failed!
+                              result
+                              (cons testcase-name
+                                    (get-condition-property
+                                      c
+                                      'unittest-assert-equal
+                                      'comparison)))
+                            (cons witness no-outsrt)))
+                       (c (exn)
+                          (begin
+                            (unittest/result-failed!
+                              result
+                              (list testcase-name
+                                    (call-with-output-string
+                                      (lambda (port) (print-error-message c port)))))
+                            (cons witness no-outsrt)))
+                       (c ()
+                          (begin
+                            (unittest/result-failed!
+                              result
+                              (list testcase-name c))
+                            (cons witness no-outsrt)))))
+               (v (car pair))
+               (outstr (cdr pair)))
           (when teardown (apply (car teardown) testcase args))
           `((h2 (code ,testcase-name)
                 &quot;: &quot;
@@ -190,7 +196,11 @@
                    '(span (@ (class &quot;w3-text-red&quot;)) fail)
                    '(span (@ (class &quot;w3-text-green&quot;)) pass)))
             ,@(if (pair? v) v '())
-            (code/scheme ,code))))))
+            (code/scheme ,code)
+            ,@(if (not (equal? outstr no-outsrt))
+                `((pre (@ (class &quot;w3-container&quot;))
+                       (code (@ (class &quot;w3-code&quot;)) ,outstr)))
+                '()))))))
   (define-syntax
     define-suite
     (syntax-rules
@@ -367,4 +377,4 @@
 <footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <br />
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Fri Mar 21 13:13:32+0100 2025</small></p></small></footer></body></html>
+<br /><small>Sat Mar 22 09:39:48+0100 2025</small></p></small></footer></body></html>

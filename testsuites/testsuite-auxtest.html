@@ -2729,6 +2729,10 @@
 <pre><code class="w3-code w3-border w3-round language-scheme">(define (test/letnondeterministic/choose-null? _)
   (⊦= '() (letnondeterministic (? ¿ ⊦ • !) (? '()))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))
+</code></pre></div>
 <h2><code>test/letnondeterministic/choose</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2736,6 +2740,15 @@
 <pre><code class="w3-code w3-border w3-round language-scheme">(define (test/letnondeterministic/choose _)
   (⊦= '(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? '(1 2 3)))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 7)
+ (accepted 3)
+ (ratio 0.428571428571429)
+ (distribution
+   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/choose§</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2746,6 +2759,15 @@
           (? ¿ ⊦ • !)
           (? (cons§ 1 (cons§ 2 (cons§ 3 '())))))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 7)
+ (accepted 3)
+ (ratio 0.428571428571429)
+ (distribution
+   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/choose-rec</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2765,6 +2787,18 @@
   (⊦= '(1 4 3 1 5 3)
         (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(? '(4 5)) 3)))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 17)
+ (accepted 6)
+ (ratio 0.352941176470588)
+ (distribution
+   ((1 0.333333333333333)
+    (3 0.333333333333333)
+    (5 0.166666666666667)
+    (4 0.166666666666667))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/choose+nested+¿</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2773,6 +2807,18 @@
   (⊦= '(1 4 3 1 5 3)
         (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(¿ '(4 5)) 3)))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 17)
+ (accepted 6)
+ (ratio 0.352941176470588)
+ (distribution
+   ((3 0.333333333333333)
+    (1 0.333333333333333)
+    (5 0.166666666666667)
+    (4 0.166666666666667))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/choose+double</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2781,6 +2827,18 @@
   (⊦= '(5 6 6 7 7 8)
         (letnondeterministic (? ¿ ⊦ • !) (+ (? '(1 2 3)) (? '(4 5))))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 19)
+ (accepted 6)
+ (ratio 0.315789473684211)
+ (distribution
+   ((7 0.333333333333333)
+    (6 0.333333333333333)
+    (8 0.166666666666667)
+    (5 0.166666666666667))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/choose+fair+fibs</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2825,6 +2883,14 @@
           (? ¿ ⊦ • !)
           (? (interleave§ '((a 1) (a 2) (a 3)) '((b 1) (b 2)))))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 11)
+ (accepted 5)
+ (ratio 0.454545454545455)
+ (distribution (((b 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((a 2) 0.2))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/odd</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2835,6 +2901,14 @@
           (? ¿ ⊦ • !)
           (let1 (v (? '(1 2 3))) (⊦ (odd? v)) v))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 7)
+ (accepted 2)
+ (ratio 0.285714285714286)
+ (distribution ((1 0.5) (3 0.5))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/parlor</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2863,6 +2937,29 @@
             (let ((nums (two-numbers))) (⊦ (eq? (apply + nums) sum)) nums))
           (parlor 7))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 311)
+ (accepted 15)
+ (ratio 0.0482315112540193)
+ (distribution
+   (((1 1 5) 0.0666666666666667)
+    ((1 2 4) 0.0666666666666667)
+    ((1 3 3) 0.0666666666666667)
+    ((1 4 2) 0.0666666666666667)
+    ((1 5 1) 0.0666666666666667)
+    ((2 1 4) 0.0666666666666667)
+    ((2 2 3) 0.0666666666666667)
+    ((2 3 2) 0.0666666666666667)
+    ((2 4 1) 0.0666666666666667)
+    ((3 1 3) 0.0666666666666667)
+    ((3 2 2) 0.0666666666666667)
+    ((3 3 1) 0.0666666666666667)
+    ((4 1 2) 0.0666666666666667)
+    ((4 2 1) 0.0666666666666667)
+    ((5 1 1) 0.0666666666666667))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/parlor+sorted</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2879,6 +2976,14 @@
               nums))
           (parlor 7))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 311)
+ (accepted 4)
+ (ratio 0.0128617363344051)
+ (distribution (((1 1 5) 0.25) ((1 2 4) 0.25) ((1 3 3) 0.25) ((2 2 3) 0.25))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/coin</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2911,6 +3016,29 @@
             (⊦ (coin? triple))
             (reverse attempts)))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 43)
+ (accepted 3)
+ (ratio 0.0697674418604651)
+ (distribution
+   ((((la 1 1) (la 1 2)) 0.333333333333333)
+    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
+    (((la 1 1)
+      (la 1 2)
+      (la 2 1)
+      (la 2 2)
+      (ny 1 1)
+      (ny 1 2)
+      (ny 2 1)
+      (ny 2 2)
+      (bos 1 1)
+      (bos 1 2)
+      (bos 2 1)
+      (bos 2 2))
+     0.333333333333333))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/coin+cut</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2935,6 +3063,18 @@
             (! flag)
             (reverse attempts)))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 23)
+ (accepted 3)
+ (ratio 0.130434782608696)
+ (distribution
+   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))
+     0.333333333333333)
+    (((la 1 1) (la 1 2)) 0.333333333333333)
+    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/graph+cycles/bfs</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -2955,6 +3095,17 @@
                     (cons n (path n node2 (cons node1 seen))))))
           (let* ((source 'a) (p (path source 'a '()))) (cons source p)))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 17)
+ (accepted 3)
+ (ratio 0.176470588235294)
+ (distribution
+   (((a b c a) 0.333333333333333)
+    ((a b c e a) 0.333333333333333)
+    ((a b d e a) 0.333333333333333))))
+</code></pre></div>
 <h2><code>test/letnondeterministic/temporal-graphs</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -3125,6 +3276,144 @@
             (list (list source destination)
                   (map (λ (triple) (list (car triple) (cadr triple))) p))))))
 </code></pre></div></div>
+<div class="w3-container">
+<p>Captured stdout:</p>
+<pre><code class="w3-code w3-round">((left 0)
+ (tried 4013)
+ (accepted 130)
+ (ratio 0.0323947171692001)
+ (distribution
+   ((((a b) ((a 1) (b 2))) 0.00769230769230769)
+    (((a b) ((a 1) (b 3))) 0.00769230769230769)
+    (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)
+    (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)
+    (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)
+    (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)
+    (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)
+    (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)
+    (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)
+    (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)
+    (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)
+    (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)
+    (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)
+    (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)
+    (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)
+    (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)
+    (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)
+    (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)
+    (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)
+    (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)
+    (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)
+    (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)
+    (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)
+    (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)
+    (((b c) ((b 1) (c 2))) 0.00769230769230769)
+    (((b c) ((b 1) (c 5))) 0.00769230769230769)
+    (((b d) ((b 1) (d 2))) 0.00769230769230769)
+    (((b d) ((b 1) (d 3))) 0.00769230769230769)
+    (((b d) ((b 1) (d 4))) 0.00769230769230769)
+    (((b d) ((b 1) (d 5))) 0.00769230769230769)
+    (((b d) ((b 1) (d 6))) 0.00769230769230769)
+    (((b d) ((b 1) (d 7))) 0.00769230769230769)
+    (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)
+    (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)
+    (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)
+    (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)
+    (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)
+    (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)
+    (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)
+    (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)
+    (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)
+    (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)
+    (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)
+    (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)
+    (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)
+    (((c a) ((c 1) (a 2))) 0.00769230769230769)
+    (((c a) ((c 1) (a 3))) 0.00769230769230769)
+    (((c a) ((c 1) (a 4))) 0.00769230769230769)
+    (((c a) ((c 1) (a 5))) 0.00769230769230769)
+    (((c a) ((c 1) (a 6))) 0.00769230769230769)
+    (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)
+    (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)
+    (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)
+    (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)
+    (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)
+    (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)
+    (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)
+    (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)
+    (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)
+    (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)
+    (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)
+    (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)
+    (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)
+    (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)
+    (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)
+    (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)
+    (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)
+    (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)
+    (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)
+    (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)
+    (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)
+    (((c e) ((c 1) (e 2))) 0.00769230769230769)
+    (((c e) ((c 1) (e 3))) 0.00769230769230769)
+    (((c e) ((c 1) (e 4))) 0.00769230769230769)
+    (((c e) ((c 1) (e 5))) 0.00769230769230769)
+    (((c e) ((c 1) (e 6))) 0.00769230769230769)
+    (((c e) ((c 1) (e 7))) 0.00769230769230769)
+    (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)
+    (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)
+    (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)
+    (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)
+    (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)
+    (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)
+    (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)
+    (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)
+    (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)
+    (((d e) ((d 1) (e 3))) 0.00769230769230769)
+    (((d e) ((d 1) (e 4))) 0.00769230769230769)
+    (((d e) ((d 1) (e 5))) 0.00769230769230769)
+    (((e a) ((e 1) (a 2))) 0.00769230769230769)
+    (((e a) ((e 1) (a 3))) 0.00769230769230769)
+    (((e a) ((e 1) (a 4))) 0.00769230769230769)
+    (((e a) ((e 1) (a 5))) 0.00769230769230769)
+    (((e a) ((e 1) (a 6))) 0.00769230769230769)
+    (((e a) ((e 1) (a 7))) 0.00769230769230769)
+    (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)
+    (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)
+    (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)
+    (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)
+    (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)
+    (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))
+</code></pre></div>
 <h2><code>test/stream/nats</code>: <span class="w3-text-green">pass</span></h2>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -3212,4 +3501,4 @@
 <footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <br />
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Fri Mar 21 13:18:51+0100 2025</small></p></small></footer></body></html>
+<br /><small>Sat Mar 22 09:54:20+0100 2025</small></p></small></footer></body></html>
