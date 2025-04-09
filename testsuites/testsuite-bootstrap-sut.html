@@ -11,17 +11,27 @@
 <script>hljs.highlightAll();</script>
 <title>bootstrap-sut</title></head>
 <body class="w3-content" style="max-width:61.8%">
+<div class="w3-header">
+<p><b>Table of contents:</b></p>
+<ol>
+<li><a href="#section307"><code>test-running</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section308"><code>test-result</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section309"><code>test-failed</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section310"><code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section311"><code>test-failed-result</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section312"><code>test-suite</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section313"><code>test-⊨</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section314"><code>test-⊭</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section315"><code>test-should-signal</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <h1><code>bootstrap-sut</code> test suite</h1>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">((ran 9) (failed 0))
-</code></pre></div></div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 9) (failed 0))
+</code></pre></div>
 <p>This test suite drove the implementation of the unittest framework itself.</p>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(module
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
   unittest
   *
   (import
@@ -66,6 +76,7 @@
                   (script &quot;hljs.highlightAll();&quot;)
                   (title ,title))
             (body (@ (class &quot;w3-content&quot;) (style &quot;max-width:61.8%&quot;))
+                  (structure/toc)
                   ,@body
                   (hr)
                   (footer
@@ -92,53 +103,114 @@
                                  &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;)
                               (br)
                               (small ,(date-&gt;string (current-date))))))))))
-  (define sxml-handler-container
-    (lambda (tag body) `(div (@ (class &quot;w3-container&quot;)) ,@body)))
-  (define sxml-handler-code/lang
-    (lambda (tag body)
-      (let ((lang (car body)) (code (cdr body)))
-        `(div (@ (class &quot;w3-card w3-round&quot;))
-              (header
-                (@ (class &quot;w3-container w3-border w3-round w3-light-gray w3-right&quot;))
-                ,lang
-                &quot; code&quot;)
-              (div (@ (class &quot;w3-container&quot;))
-                   (pre (code (@ (class &quot;w3-code w3-round language-&quot; ,lang))
-                              ,code)))))))
-  (define sxml-handler-code/scheme
-    (lambda (tag body)
-      (let* ((expr (if (eq? (length body) 1) (car body) (cons 'begin body))))
-        (sxml-handler-code/lang
-          'code/lang
-          (list 'scheme
-                (call-with-output-string
-                  (lambda (p) (pretty-print expr p))))))))
-  (define sxml-handler-code/scheme-file
-    (lambda (tag body)
-      (sxml-handler-code/scheme
-        'code/scheme
-        (list (with-input-from-file (car body) (lambda () (read)))))))
-  (define sxml-handler-di
-    (lambda (tag body)
-      (let ((dt (car body)) (dd (cdr body)))
-        `(div (@ (class &quot;w3-row&quot;)) (dt (@ (class &quot;w3-bold&quot;)) ,dt) (dd ,@dd)))))
-  (define sxml-handler-cite/a
-    (lambda (tag body) `(cite (a (@ (href ,(car body))) ,@(cdr body)))))
-  (define conversion-rules*
-    (append
-      `((container unquote sxml-handler-container)
-        (code/lang unquote sxml-handler-code/lang)
-        (code/scheme unquote sxml-handler-code/scheme)
-        (code/scheme-file unquote sxml-handler-code/scheme-file)
-        (cite/a unquote sxml-handler-cite/a)
-        (di unquote sxml-handler-di))
-      alist-conv-rules*))
   (define (SXML-&gt;HTML-&gt;file! tree filename)
     (with-output-to-file
       (conc filename &quot;.html&quot;)
       (lambda ()
-        (display &quot;&lt;!doctype html&gt;&quot;)
-        (SXML-&gt;HTML (pre-post-order* tree conversion-rules*)))))
+        (letrec ((sections '())
+                 (sxml-handler-container
+                   (lambda (tag body)
+                     `(div (@ (class &quot;w3-container&quot;)) ,@body)))
+                 (sxml-handler-code/pre
+                   (lambda (tag body)
+                     `(pre (code (@ (class &quot;w3-code w3-round&quot;)) ,@body))))
+                 (sxml-handler-code/lang
+                   (lambda (tag body)
+                     (let ((lang (car body)) (code (cdr body)))
+                       `(div (@ (class &quot;w3-card w3-round&quot;))
+                             (header
+                               (@ (class &quot;w3-container w3-border w3-round w3-light-gray w3-right&quot;))
+                               ,lang
+                               &quot; code&quot;)
+                             (pre (@ (class &quot;w3-container&quot;))
+                                  (code (@ (class &quot;w3-code w3-round language-&quot; ,lang))
+                                        ,code))))))
+                 (sxml-handler-code/scheme
+                   (lambda (tag body)
+                     (let* ((expr (if (eq? (length body) 1)
+                                    (car body)
+                                    (cons 'begin body))))
+                       (sxml-handler-code/lang
+                         'code/lang
+                         (list 'scheme
+                               (call-with-output-string
+                                 (lambda (p) (pretty-print expr p))))))))
+                 (sxml-handler-code/scheme-file
+                   (lambda (tag body)
+                     (sxml-handler-code/scheme
+                       'code/scheme
+                       (list (with-input-from-file
+                               (car body)
+                               (lambda () (read)))))))
+                 (sxml-handler-di
+                   (lambda (tag body)
+                     (let ((dt (car body)) (dd (cdr body)))
+                       `(div (@ (class &quot;w3-row&quot;))
+                             (dt (@ (class &quot;w3-bold&quot;)) ,dt)
+                             (dd ,@dd)))))
+                 (sxml-handler-structure/section
+                   (lambda (tag body)
+                     (let* ((witness (gensym 'section))
+                            (i (if (null? sections) 0 (caar sections)))
+                            (nexti (add1 i)))
+                       (set! sections
+                         (cons (list nexti witness body) sections))
+                       `(section
+                          (@ (id ,witness))
+                          (header (h1 ,nexti &quot;. &quot; ,@body))))))
+                 (sxml-handler-structure/toc
+                   (lambda (tag body)
+                     `(div (@ (class &quot;w3-header&quot;))
+                           (p (b &quot;Table of contents:&quot;))
+                           (ol ,@(map (lambda (each)
+                                        `(li (a (@ (href &quot;#&quot; ,(cadr each))) ,@(caddr each))))
+                                      (reverse sections))))))
+                 (sxml-handler-cite/a
+                   (lambda (tag body)
+                     `(cite (a (@ (href ,(car body))) ,@(cdr body)))))
+                 (sxml-handler-math/display
+                   (lambda (tag body) `(math (@ (display &quot;block&quot;)) ,@body)))
+                 (sxml-handler-math/frac
+                   (lambda (tag body)
+                     `(mfrac ,(sxml-handler-math/m 'm (list (car body)))
+                             ,(sxml-handler-math/m 'm (list (cadr body))))))
+                 (sxml-handler-math/m
+                   (lambda (tag body)
+                     (let ((v (car body)))
+                       (cond ((rational? v)
+                              (sxml-handler-math/frac
+                                'frac
+                                (list (numerator v) (denominator v))))
+                             ((number? v) `(mn ,v))
+                             ((symbol? v) `(mi ,v))
+                             ((pair? v)
+                              `(mrow ,@(map (lambda (w) (sxml-handler-math/m 'm (list w)))
+                                            v)))
+                             (else `(mtext ,v)))))))
+          (display &quot;&lt;!doctype html&gt;&quot;)
+          (SRV:send-reply
+            (pre-post-order*
+              (pre-post-order*
+                (pre-post-order*
+                  tree
+                  (append
+                    `((container unquote sxml-handler-container)
+                      (code/lang unquote sxml-handler-code/lang)
+                      (code/pre unquote sxml-handler-code/pre)
+                      (code/scheme unquote sxml-handler-code/scheme)
+                      (code/scheme-file unquote sxml-handler-code/scheme-file)
+                      (cite/a unquote sxml-handler-cite/a)
+                      (structure/section
+                        unquote
+                        sxml-handler-structure/section)
+                      (displaymath unquote sxml-handler-math/display)
+                      (m unquote sxml-handler-math/m)
+                      (frac unquote sxml-handler-math/frac)
+                      (di unquote sxml-handler-di))
+                    alist-conv-rules*))
+                (cons `(structure/toc unquote sxml-handler-structure/toc)
+                      alist-conv-rules*))
+              universal-conversion-rules*))))))
   (define-record unittest/testcase name log)
   (define (unittest/wasrun name) (make-unittest/testcase name '()))
   (define (unittest/testcase-logcons! testcase msg)
@@ -187,19 +259,19 @@
                               (list testcase-name c))
                             (cons witness no-outsrt)))))
                (v (car pair))
-               (outstr (cdr pair)))
+               (outstr (cdr pair))
+               (hasdoc (and (pair? v) (eq? (car v) 'doc))))
           (when teardown (apply (car teardown) testcase args))
-          `((h2 (code ,testcase-name)
-                &quot;: &quot;
-                ,(if (eq? v witness)
-                   '(span (@ (class &quot;w3-text-red&quot;)) fail)
-                   '(span (@ (class &quot;w3-text-green&quot;)) pass)))
-            ,@(if (pair? v) v '())
-            (code/scheme ,code)
+          `((structure/section
+              (code ,testcase-name)
+              &quot;: &quot;
+              ,(if (eq? v witness)
+                 '(span (@ (class &quot;w3-text-red&quot;)) fail)
+                 '(span (@ (class &quot;w3-text-green&quot;)) pass)))
+            ,@(if hasdoc (cdr v) '())
+            (code/scheme ,(if hasdoc (butlast code) code))
             ,@(if (not (equal? outstr no-outsrt))
-                `((div (@ (class &quot;w3-container&quot;))
-                       (p &quot;Captured stdout:&quot;)
-                       (pre (code (@ (class &quot;w3-code w3-round&quot;)) ,outstr))))
+                `((p &quot;Captured stdout:&quot;) (code/pre ,outstr))
                 '()))))))
   (define-syntax
     define-suite
@@ -281,43 +353,46 @@
       ()
       ((_ ((exn ...) ...) body ...)
        (condition-case (begin body ...) ((exn ...) (void)) ...)))))
-</code></pre></div></div>
+</code></pre></div>
 <hr />
-<h2><code>test-running</code>: <span class="w3-text-green">pass</span></h2>
+<section id="section307">
+<header>
+<h1>1. <code>test-running</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>hello</p>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
   (⊦= '() (unittest/testcase-log t))
   (unittest/testcase-run t r wasrun-sut)
-  (⊦= '(teardown test-method setup) (unittest/testcase-log t))
-  `((p &quot;hello&quot;)))
-</code></pre></div></div>
-<h2><code>test-result</code>: <span class="w3-text-green">pass</span></h2>
+  (⊦= '(teardown test-method setup) (unittest/testcase-log t)))
+</code></pre></div>
+<section id="section308">
+<header>
+<h1>2. <code>test-result</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
-</code></pre></div></div>
-<h2><code>test-failed</code>: <span class="w3-text-green">pass</span></h2>
+</code></pre></div>
+<section id="section309">
+<header>
+<h1>3. <code>test-failed</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
   (lettest
     ((t 'test-broken))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
           (unittest/result-summary r))))
-</code></pre></div></div>
-<h2><code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></h2>
+</code></pre></div>
+<section id="section310">
+<header>
+<h1>4. <code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
     ((t 'test-unbound-variable))
     (unittest/testcase-run t r wasrun-sut)
@@ -327,43 +402,48 @@
               (test-unbound-variable
                 &quot;\nError: unbound variable: unbound-v\n&quot;)))
           (unittest/result-summary r))))
-</code></pre></div></div>
-<h2><code>test-failed-result</code>: <span class="w3-text-green">pass</span></h2>
+</code></pre></div>
+<section id="section311">
+<header>
+<h1>5. <code>test-failed-result</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
   (unittest/result-started! r)
   (unittest/result-failed! r 'no-reason)
   (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
-</code></pre></div></div>
-<h2><code>test-suite</code>: <span class="w3-text-green">pass</span></h2>
+</code></pre></div>
+<section id="section312">
+<header>
+<h1>6. <code>test-suite</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
   (letsuite
     ((suite '(test-running test-failed)))
     (unittest/testsuite-run suite r bootstrap-sut)
     (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
-</code></pre></div></div>
-<h2><code>test-⊨</code>: <span class="w3-text-green">pass</span></h2>
+</code></pre></div>
+<section id="section313">
+<header>
+<h1>7. <code>test-⊨</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
-</code></pre></div></div>
-<h2><code>test-⊭</code>: <span class="w3-text-green">pass</span></h2>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
+</code></pre></div>
+<section id="section314">
+<header>
+<h1>8. <code>test-⊭</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
-</code></pre></div></div>
-<h2><code>test-should-signal</code>: <span class="w3-text-green">pass</span></h2>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
+</code></pre></div>
+<section id="section315">
+<header>
+<h1>9. <code>test-should-signal</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<div class="w3-container">
-<pre><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
   (⊦⧳ ((exn)) (signal (condition '(exn message &quot;useless&quot;))))
   (⊦⧳ ((exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
   (⊦⧳ ((exn) (exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
@@ -372,9 +452,9 @@
     ((exn-a) (void)))
   (condition-case (⊦⧳ ((exn)) (signal 99)) (() (void)))
   (⊦⧳ () 99))
-</code></pre></div></div>
+</code></pre></div>
 <hr />
 <footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <br />
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Sat Mar 22 11:38:16+0100 2025</small></p></small></footer></body></html>
+<br /><small>Wed Apr 09 11:19:54+0200 2025</small></p></small></footer></body></html>
