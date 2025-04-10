@@ -4,15 +4,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }</style>
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: w3-monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: w3-serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
 <script>hljs.highlightAll();</script>
 <title>auxtest</title></head>
 <body class="w3-content" style="max-width:61.8%">
-<div class="w3-header">
-<p><b>Table of contents:</b></p>
+<header class="w3-container w3-center">
+<h1><b>auxtest</b></h1>
+<br />
+<p></p>
+<br /><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<br />
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+<br /><small>Thu Apr 10 10:41:09+0200 2025</small></p></small></header>
+<div class="w3-container">
+<header><b>Table of contents</b></header>
 <ol>
 <li><a href="#section1697"><code>test/let1</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section1698"><code>test/letcar&cdr</code>: <span class="w3-text-green">pass</span></a></li>
@@ -2803,7 +2811,7 @@
  (accepted 3)
  (ratio 0.428571428571429)
  (distribution
-   ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))
+   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))
 </code></pre>
 <section id="section1715">
 <header>
@@ -2851,8 +2859,8 @@
  (accepted 6)
  (ratio 0.352941176470588)
  (distribution
-   ((1 0.333333333333333)
-    (3 0.333333333333333)
+   ((3 0.333333333333333)
+    (1 0.333333333333333)
     (4 0.166666666666667)
     (5 0.166666666666667))))
 </code></pre>
@@ -2893,8 +2901,8 @@
  (distribution
    ((7 0.333333333333333)
     (6 0.333333333333333)
-    (5 0.166666666666667)
-    (8 0.166666666666667))))
+    (8 0.166666666666667)
+    (5 0.166666666666667))))
 </code></pre>
 <section id="section1720">
 <header>
@@ -2947,7 +2955,7 @@
  (tried 11)
  (accepted 5)
  (ratio 0.454545454545455)
- (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((a 2) 0.2) ((b 1) 0.2))))
+ (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))
 </code></pre>
 <section id="section1722">
 <header>
@@ -3002,21 +3010,21 @@
  (accepted 15)
  (ratio 0.0482315112540193)
  (distribution
-   (((1 1 5) 0.0666666666666667)
-    ((1 5 1) 0.0666666666666667)
-    ((5 1 1) 0.0666666666666667)
-    ((1 2 4) 0.0666666666666667)
+   (((1 2 4) 0.0666666666666667)
     ((1 4 2) 0.0666666666666667)
     ((2 1 4) 0.0666666666666667)
-    ((2 4 1) 0.0666666666666667)
-    ((4 1 2) 0.0666666666666667)
-    ((4 2 1) 0.0666666666666667)
-    ((1 3 3) 0.0666666666666667)
-    ((3 1 3) 0.0666666666666667)
-    ((3 3 1) 0.0666666666666667)
     ((2 2 3) 0.0666666666666667)
     ((2 3 2) 0.0666666666666667)
-    ((3 2 2) 0.0666666666666667))))
+    ((2 4 1) 0.0666666666666667)
+    ((3 2 2) 0.0666666666666667)
+    ((4 1 2) 0.0666666666666667)
+    ((4 2 1) 0.0666666666666667)
+    ((1 1 5) 0.0666666666666667)
+    ((1 3 3) 0.0666666666666667)
+    ((1 5 1) 0.0666666666666667)
+    ((3 1 3) 0.0666666666666667)
+    ((3 3 1) 0.0666666666666667)
+    ((5 1 1) 0.0666666666666667))))
 </code></pre>
 <section id="section1724">
 <header>
@@ -3081,8 +3089,7 @@
  (accepted 3)
  (ratio 0.0697674418604651)
  (distribution
-   ((((la 1 1) (la 1 2)) 0.333333333333333)
-    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
+   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
     (((la 1 1)
       (la 1 2)
       (la 2 1)
@@ -3095,7 +3102,8 @@
       (bos 1 2)
       (bos 2 1)
       (bos 2 2))
-     0.333333333333333))))
+     0.333333333333333)
+    (((la 1 1) (la 1 2)) 0.333333333333333))))
 </code></pre>
 <section id="section1726">
 <header>
@@ -3128,9 +3136,9 @@
  (accepted 3)
  (ratio 0.130434782608696)
  (distribution
-   ((((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333)
-    (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))
+   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))
      0.333333333333333)
+    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333)
     (((la 1 1) (la 1 2)) 0.333333333333333))))
 </code></pre>
 <section id="section1727">
@@ -3160,9 +3168,9 @@
  (accepted 3)
  (ratio 0.176470588235294)
  (distribution
-   (((a b c a) 0.333333333333333)
-    ((a b c e a) 0.333333333333333)
-    ((a b d e a) 0.333333333333333))))
+   (((a b d e a) 0.333333333333333)
+    ((a b c a) 0.333333333333333)
+    ((a b c e a) 0.333333333333333))))
 </code></pre>
 <section id="section1728">
 <header>
@@ -3565,7 +3573,7 @@
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
 </code></pre></div>
 <hr />
-<footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
-<br />
-<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Wed Apr 09 11:27:23+0200 2025</small></p></small></footer></body></html>
+<div class="w3-container">
+<header><b>References</b></header>
+<ul></ul></div>
+<hr /></body></html>

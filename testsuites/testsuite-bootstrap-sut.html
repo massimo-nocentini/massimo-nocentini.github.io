@@ -4,15 +4,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }</style>
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: w3-monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: w3-serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
 <script>hljs.highlightAll();</script>
 <title>bootstrap-sut</title></head>
 <body class="w3-content" style="max-width:61.8%">
-<div class="w3-header">
-<p><b>Table of contents:</b></p>
+<header class="w3-container w3-center">
+<h1><b>bootstrap-sut</b></h1>
+<br />
+<p></p>
+<br /><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<br />
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+<br /><small>Thu Apr 10 10:40:10+0200 2025</small></p></small></header>
+<div class="w3-container">
+<header><b>Table of contents</b></header>
 <ol>
 <li><a href="#section307"><code>test-running</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section308"><code>test-result</code>: <span class="w3-text-green">pass</span></a></li>
@@ -46,68 +54,77 @@
     sxml-transforms)
   (define highlight-version &quot;11.11.1&quot;)
   (define (sxml-tree title body)
-    `((html (@ (xmlns &quot;http://www.w3.org/1999/xhtml&quot;)
-               (xml:lang &quot;en&quot;)
-               (lang &quot;en&quot;))
-            (head (meta (@ (name &quot;viewport&quot;)
-                           (content &quot;width=device-width,initial-scale=1&quot;)))
-                  (link (@ (rel &quot;stylesheet&quot;)
-                           (href &quot;https://www.w3schools.com/w3css/5/w3.css&quot;)
-                           (type &quot;text/css&quot;)))
-                  (link (@ (rel &quot;stylesheet&quot;)
-                           (href &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
-                                 ,highlight-version
-                                 &quot;/styles/default.min.css&quot;)
-                           (type &quot;text/css&quot;)))
-                  (style &quot;code, pre, tt, kbd, samp, .w3-code { font-family: Monaco, 'Ubuntu Mono', monospace; }&quot;
-                         &quot;html, body, h1, h2, h3, h4, h5, h6 { font-family: 'Lucida Sans', 'Ubuntu Sans', sans-serif; }&quot;)
-                  (script
-                    (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
-                            ,highlight-version
-                            &quot;/highlight.min.js&quot;)))
-                  ,@(map (lambda (lang)
-                           `(script
-                              (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
-                                      ,highlight-version
-                                      &quot;/languages/&quot;
-                                      ,lang
-                                      &quot;.min.js&quot;))))
-                         '(scheme python))
-                  (script &quot;hljs.highlightAll();&quot;)
-                  (title ,title))
-            (body (@ (class &quot;w3-content&quot;) (style &quot;max-width:61.8%&quot;))
-                  (structure/toc)
-                  ,@body
-                  (hr)
-                  (footer
-                    (@ (class &quot;w3-container w3-center&quot;))
-                    (small (a (@ (rel &quot;license&quot;)
-                                 (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
-                              (img (@ (alt &quot;Creative Commons License&quot;)
-                                      (style &quot;border-width:0&quot;)
-                                      (src &quot;https://mirrors.creativecommons.org/presskit/icons/cc.svg&quot;))))
-                           (a (@ (rel &quot;license&quot;)
-                                 (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
-                              (img (@ (alt &quot;Creative Commons License&quot;)
-                                      (style &quot;border-width:0&quot;)
-                                      (src &quot;https://mirrors.creativecommons.org/presskit/icons/by.svg&quot;))))
-                           (a (@ (rel &quot;license&quot;)
-                                 (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
-                              (img (@ (alt &quot;Creative Commons License&quot;)
-                                      (style &quot;border-width:0&quot;)
-                                      (src &quot;https://mirrors.creativecommons.org/presskit/icons/sa.svg&quot;))))
-                           (br)
-                           (p &quot;This work is licensed under a &quot;
-                              (a (@ (rel &quot;license&quot;)
-                                    (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
-                                 &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;)
-                              (br)
-                              (small ,(date-&gt;string (current-date))))))))))
+    (let ((maintitle (if (pair? title) (car title) title))
+          (abstract (if (pair? title) (cdr title) '())))
+      `((html (@ (xmlns &quot;http://www.w3.org/1999/xhtml&quot;)
+                 (xml:lang &quot;en&quot;)
+                 (lang &quot;en&quot;))
+              (head (meta (@ (name &quot;viewport&quot;)
+                             (content &quot;width=device-width,initial-scale=1&quot;)))
+                    (link (@ (rel &quot;stylesheet&quot;)
+                             (href &quot;https://www.w3schools.com/w3css/5/w3.css&quot;)
+                             (type &quot;text/css&quot;)))
+                    (link (@ (rel &quot;stylesheet&quot;)
+                             (href &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
+                                   ,highlight-version
+                                   &quot;/styles/default.min.css&quot;)
+                             (type &quot;text/css&quot;)))
+                    (style &quot;code, pre, tt, kbd, samp, .w3-code { font-family: w3-monospace; }&quot;
+                           &quot;html, body, h1, h2, h3, h4, h5, h6 { font-family: w3-serif; }&quot;)
+                    (script
+                      (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
+                              ,highlight-version
+                              &quot;/highlight.min.js&quot;)))
+                    ,@(map (lambda (lang)
+                             `(script
+                                (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
+                                        ,highlight-version
+                                        &quot;/languages/&quot;
+                                        ,lang
+                                        &quot;.min.js&quot;))))
+                           '(scheme python))
+                    (script &quot;hljs.highlightAll();&quot;)
+                    (title ,maintitle))
+              (body (@ (class &quot;w3-content&quot;) (style &quot;max-width:61.8%&quot;))
+                    (header
+                      (@ (class &quot;w3-container w3-center&quot;))
+                      (h1 (b ,maintitle))
+                      (br)
+                      (p ,@abstract)
+                      (br)
+                      (small (a (@ (rel &quot;license&quot;)
+                                   (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                                (img (@ (alt &quot;Creative Commons License&quot;)
+                                        (style &quot;border-width:0&quot;)
+                                        (src &quot;https://mirrors.creativecommons.org/presskit/icons/cc.svg&quot;))))
+                             (a (@ (rel &quot;license&quot;)
+                                   (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                                (img (@ (alt &quot;Creative Commons License&quot;)
+                                        (style &quot;border-width:0&quot;)
+                                        (src &quot;https://mirrors.creativecommons.org/presskit/icons/by.svg&quot;))))
+                             (a (@ (rel &quot;license&quot;)
+                                   (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                                (img (@ (alt &quot;Creative Commons License&quot;)
+                                        (style &quot;border-width:0&quot;)
+                                        (src &quot;https://mirrors.creativecommons.org/presskit/icons/sa.svg&quot;))))
+                             (br)
+                             (p &quot;This work is licensed under a &quot;
+                                (a (@ (rel &quot;license&quot;)
+                                      (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
+                                   &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;)
+                                (br)
+                                (small ,(date-&gt;string (current-date))))))
+                    (structure/toc)
+                    ,@body
+                    (hr)
+                    (structure/citations)
+                    (hr))))))
   (define (SXML-&gt;HTML-&gt;file! tree filename)
     (with-output-to-file
       (conc filename &quot;.html&quot;)
       (lambda ()
         (letrec ((sections '())
+                 (citations '())
                  (sxml-handler-container
                    (lambda (tag body)
                      `(div (@ (class &quot;w3-container&quot;)) ,@body)))
@@ -160,20 +177,49 @@
                           (header (h1 ,nexti &quot;. &quot; ,@body))))))
                  (sxml-handler-structure/toc
                    (lambda (tag body)
-                     `(div (@ (class &quot;w3-header&quot;))
-                           (p (b &quot;Table of contents:&quot;))
+                     `(div (@ (class &quot;w3-container&quot;))
+                           (header (b &quot;Table of contents&quot;))
                            (ol ,@(map (lambda (each)
                                         `(li (a (@ (href &quot;#&quot; ,(cadr each))) ,@(caddr each))))
                                       (reverse sections))))))
+                 (sxml-handler-structure/citations
+                   (lambda (tag body)
+                     `(div (@ (class &quot;w3-container&quot;))
+                           (header (b &quot;References&quot;))
+                           (ul ,@(map (lambda (tuple)
+                                        (let ((href (third tuple)) (rest (fourth tuple)))
+                                          `(li (@ (id ,(second tuple)))
+                                               &quot;[&quot;
+                                               ,(first tuple)
+                                               &quot;] &quot;
+                                               (a (@ (href ,href))
+                                                  ,@(if (null? rest) (list href) rest)))))
+                                      (reverse citations))))))
                  (sxml-handler-cite/a
                    (lambda (tag body)
-                     `(cite (a (@ (href ,(car body))) ,@(cdr body)))))
+                     (let* ((i (if (null? citations) 0 (caar citations)))
+                            (nexti (add1 i))
+                            (witness (gensym 'cite))
+                            (href (car body))
+                            (rest (cdr body)))
+                       (set! citations
+                         (cons (list nexti witness href rest) citations))
+                       `(cite &quot;[&quot; (a (@ (href &quot;#&quot; ,witness)) ,nexti) &quot;]&quot;))))
+                 (sxml-handler-cite/quote
+                   (lambda (tag body)
+                     (let ((author (car body)) (quotation (cdr body)))
+                       `(blockquote
+                          (@ (class &quot;w3-panel w3-leftbar w3-round&quot;)
+                             (style &quot;max-width:61.8%&quot;))
+                          (span (@ (style &quot;font-size:261%;opacity:0.2&quot;))
+                                (&amp; &quot;#10077&quot;))
+                          (br)
+                          (i ,@quotation)
+                          (footer (p (@ (class &quot;w3-right-align&quot;)) ,author))))))
                  (sxml-handler-math/display
                    (lambda (tag body) `(math (@ (display &quot;block&quot;)) ,@body)))
                  (sxml-handler-math/frac
-                   (lambda (tag body)
-                     `(mfrac ,(sxml-handler-math/m 'm (list (car body)))
-                             ,(sxml-handler-math/m 'm (list (cadr body))))))
+                   (lambda (tag body) `(mfrac ,(car body) ,(cadr body))))
                  (sxml-handler-math/m
                    (lambda (tag body)
                      (let ((v (car body)))
@@ -200,6 +246,7 @@
                       (code/scheme unquote sxml-handler-code/scheme)
                       (code/scheme-file unquote sxml-handler-code/scheme-file)
                       (cite/a unquote sxml-handler-cite/a)
+                      (cite/quote unquote sxml-handler-cite/quote)
                       (structure/section
                         unquote
                         sxml-handler-structure/section)
@@ -208,8 +255,12 @@
                       (frac unquote sxml-handler-math/frac)
                       (di unquote sxml-handler-di))
                     alist-conv-rules*))
-                (cons `(structure/toc unquote sxml-handler-structure/toc)
-                      alist-conv-rules*))
+                (append
+                  `((structure/toc unquote sxml-handler-structure/toc)
+                    (structure/citations
+                      unquote
+                      sxml-handler-structure/citations))
+                  alist-conv-rules*))
               universal-conversion-rules*))))))
   (define-record unittest/testcase name log)
   (define (unittest/wasrun name) (make-unittest/testcase name '()))
@@ -454,7 +505,7 @@
   (⊦⧳ () 99))
 </code></pre></div>
 <hr />
-<footer class="w3-container w3-center"><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
-<br />
-<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Wed Apr 09 11:19:54+0200 2025</small></p></small></footer></body></html>
+<div class="w3-container">
+<header><b>References</b></header>
+<ul></ul></div>
+<hr /></body></html>
