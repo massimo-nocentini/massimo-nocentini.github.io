@@ -17,7 +17,14 @@
                             (li "Public RSA key "
 				(cite/a "https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub")))
 
-                          (structure/section "Scheme lang")
+                          (structure/section "On Smalltalk")
+			  (dl
+			    (di "Booklet on data structures"
+				(p "I have a working in progress booklet "
+				   (cite/a "booklet-dsst/index.html" "Booklet on data structures, in Pharo Smalltalk.")
+				   " about data structures implemented in Smalltalk, using the Pharo dialect.")))
+
+                          (structure/section "On Scheme")
                           (p "From the R6RS Ballot, reported in " (cite/a "https://wiki.call-cc.org/elevator-pitch") ":")
                           (cite/quote "Jeffrey Mark Siskind, author of Stalin and current (unofficial) maintainer of Scheme->C"
                                       (i "Scheme occupies a unique niche. A research niche and an educational
@@ -41,7 +48,7 @@
 					  processing, stochastic computation, quantum computation, automatic
 					  differentiation, genetic programming, types, automated reasoning,
 					  ... just to name a few."))
-                          (dl (@ (class "w3-container"))
+                          (dl 
                               (di "Learning tests"
                                   (p "My own learning tests " (cite/a "testsuites/testsuite-learning-suite.html") 
 				     " to understand the Scheme language, via the chicken interpreter."))

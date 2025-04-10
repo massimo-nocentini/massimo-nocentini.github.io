@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code { font-family: w3-monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: w3-serif; }</style>
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
@@ -19,12 +19,13 @@
 <br /><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <br />
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Thu Apr 10 10:38:56+0200 2025</small></p></small></header>
+<br /><small>Thu Apr 10 12:39:44+0200 2025</small></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
 <li><a href="#section40">Contacts</a></li>
-<li><a href="#section45">Scheme lang</a></li></ol></div>
+<li><a href="#section45">On Smalltalk</a></li>
+<li><a href="#section47">On Scheme</a></li></ol></div>
 <section id="section40">
 <header>
 <h1>1. Contacts</h1></header></section>
@@ -36,8 +37,16 @@
 <li>Public RSA key <cite>[<a href="#cite44">5</a>]</cite></li></ul>
 <section id="section45">
 <header>
-<h1>2. Scheme lang</h1></header></section>
-<p>From the R6RS Ballot, reported in <cite>[<a href="#cite46">6</a>]</cite>:</p>
+<h1>2. On Smalltalk</h1></header></section>
+<dl>
+<div class="w3-row">
+<dt class="w3-bold">Booklet on data structures</dt>
+<dd>
+<p>I have a working in progress booklet <cite>[<a href="#cite46">6</a>]</cite> about data structures implemented in Smalltalk, using the Pharo dialect.</p></dd></div></dl>
+<section id="section47">
+<header>
+<h1>3. On Scheme</h1></header></section>
+<p>From the R6RS Ballot, reported in <cite>[<a href="#cite48">7</a>]</cite>:</p>
 <blockquote class="w3-panel w3-leftbar w3-round" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i><i>Scheme occupies a unique niche. A research niche and an educational
 					 niche. It is not a language. Not R6RS, not R5RS, not R4Rs. It is an
@@ -62,23 +71,23 @@
 					  ... just to name a few.</i></i>
 <footer>
 <p class="w3-right-align">Jeffrey Mark Siskind, author of Stalin and current (unofficial) maintainer of Scheme-&gt;C</p></footer></blockquote>
-<dl class="w3-container">
+<dl>
 <div class="w3-row">
 <dt class="w3-bold">Learning tests</dt>
 <dd>
-<p>My own learning tests <cite>[<a href="#cite47">7</a>]</cite> to understand the Scheme language, via the chicken interpreter.</p></dd></div>
+<p>My own learning tests <cite>[<a href="#cite49">8</a>]</cite> to understand the Scheme language, via the chicken interpreter.</p></dd></div>
 <div class="w3-row">
 <dt class="w3-bold">Unittest framework</dt>
 <dd>
-<p>Bootstrapping a unit test framework, test-driven itself! <cite>[<a href="#cite48">8</a>]</cite></p></dd></div>
+<p>Bootstrapping a unit test framework, test-driven itself! <cite>[<a href="#cite50">9</a>]</cite></p></dd></div>
 <div class="w3-row">
 <dt class="w3-bold">Auxiliary definitions</dt>
 <dd>
-<p>More to say...continuations...<cite>[<a href="#cite49">9</a>]</cite></p></dd></div>
+<p>More to say...continuations...<cite>[<a href="#cite51">10</a>]</cite></p></dd></div>
 <div class="w3-row">
 <dt class="w3-bold">The Hansei probabilistic language</dt>
 <dd>
-<p>We present in <cite>[<a href="#cite50">10</a>]</cite> a test suite to understand the system defined in the reference page <cite>[<a href="#cite51">11</a>]</cite>. Quoting author's words:</p>
+<p>We present in <cite>[<a href="#cite52">11</a>]</cite> a test suite to understand the system defined in the reference page <cite>[<a href="#cite53">12</a>]</cite>. Quoting author's words:</p>
 <blockquote class="w3-panel w3-leftbar w3-round" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i><i>HANSEI is the the embedded domain-specific language for probabilistic 
 						  programming: for writing potentially infinite discrete-distribution models 
@@ -94,10 +103,11 @@
 <li id="cite42">[3] <a href="mailto:Massimo Nocentini &lt;massimo.nocentini@unifi.it&gt;"><code>massimo.nocentini@unifi.it</code></a></li>
 <li id="cite43">[4] <a href="https://github.com/massimo-nocentini/"><code>https://github.com/massimo-nocentini</code></a></li>
 <li id="cite44">[5] <a href="https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub">https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub</a></li>
-<li id="cite46">[6] <a href="https://wiki.call-cc.org/elevator-pitch">https://wiki.call-cc.org/elevator-pitch</a></li>
-<li id="cite47">[7] <a href="testsuites/testsuite-learning-suite.html">testsuites/testsuite-learning-suite.html</a></li>
-<li id="cite48">[8] <a href="testsuites/testsuite-bootstrap-sut.html">testsuites/testsuite-bootstrap-sut.html</a></li>
-<li id="cite49">[9] <a href="testsuites/testsuite-auxtest.html">testsuites/testsuite-auxtest.html</a></li>
-<li id="cite50">[10] <a href="testsuites/testsuite-hanseitest.html">testsuites/testsuite-hanseitest.html</a></li>
-<li id="cite51">[11] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">https://okmij.org/ftp/kakuritu/Hansei.html</a></li></ul></div>
+<li id="cite46">[6] <a href="booklet-dsst/index.html">Booklet on data structures, in Pharo Smalltalk.</a></li>
+<li id="cite48">[7] <a href="https://wiki.call-cc.org/elevator-pitch">https://wiki.call-cc.org/elevator-pitch</a></li>
+<li id="cite49">[8] <a href="testsuites/testsuite-learning-suite.html">testsuites/testsuite-learning-suite.html</a></li>
+<li id="cite50">[9] <a href="testsuites/testsuite-bootstrap-sut.html">testsuites/testsuite-bootstrap-sut.html</a></li>
+<li id="cite51">[10] <a href="testsuites/testsuite-auxtest.html">testsuites/testsuite-auxtest.html</a></li>
+<li id="cite52">[11] <a href="testsuites/testsuite-hanseitest.html">testsuites/testsuite-hanseitest.html</a></li>
+<li id="cite53">[12] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">https://okmij.org/ftp/kakuritu/Hansei.html</a></li></ul></div>
 <hr /></body></html>
