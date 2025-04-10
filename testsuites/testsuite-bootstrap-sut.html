@@ -13,12 +13,9 @@
 <body class="w3-content" style="max-width:61.8%">
 <header class="w3-container w3-center">
 <h1><b>bootstrap-sut</b></h1>
-<br />
-<p></p>
-<br /><small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
-<br />
-<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-<br /><small>Thu Apr 10 10:55:16+0200 2025</small></p></small></header>
+<p></p><small><small>
+<p>Thu Apr 10 13:25:13+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
@@ -54,8 +51,7 @@
     sxml-transforms)
   (define highlight-version &quot;11.11.1&quot;)
   (define (sxml-tree title body)
-    (let ((fontnames '())
-          (maintitle (if (pair? title) (car title) title))
+    (let ((maintitle (if (pair? title) (car title) title))
           (abstract (if (pair? title) (cdr title) '())))
       `((html (@ (xmlns &quot;http://www.w3.org/1999/xhtml&quot;)
                  (xml:lang &quot;en&quot;)
@@ -70,11 +66,6 @@
                                    ,highlight-version
                                    &quot;/styles/default.min.css&quot;)
                              (type &quot;text/css&quot;)))
-                    ,@(map (lambda (fontname)
-                             `(link (@ (rel &quot;stylesheet&quot;)
-                                       (href &quot;https://fonts.googleapis.com/css?family=&quot;
-                                             ,fontname))))
-                           fontnames)
                     (style &quot;code, pre, tt, kbd, samp, .w3-code { font-family: monospace; }&quot;
                            &quot;html, body, h1, h2, h3, h4, h5, h6 { font-family: serif; }&quot;)
                     (script
@@ -95,10 +86,9 @@
                     (header
                       (@ (class &quot;w3-container w3-center&quot;))
                       (h1 (b ,maintitle))
-                      (br)
                       (p ,@abstract)
-                      (br)
-                      (small (a (@ (rel &quot;license&quot;)
+                      (small (small (p ,(date-&gt;string (current-date))))
+                             (a (@ (rel &quot;license&quot;)
                                    (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
                                 (img (@ (alt &quot;Creative Commons License&quot;)
                                         (style &quot;border-width:0&quot;)
@@ -113,13 +103,10 @@
                                 (img (@ (alt &quot;Creative Commons License&quot;)
                                         (style &quot;border-width:0&quot;)
                                         (src &quot;https://mirrors.creativecommons.org/presskit/icons/sa.svg&quot;))))
-                             (br)
                              (p &quot;This work is licensed under a &quot;
                                 (a (@ (rel &quot;license&quot;)
                                       (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
-                                   &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;)
-                                (br)
-                                (small ,(date-&gt;string (current-date))))))
+                                   &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;))))
                     (structure/toc)
                     ,@body
                     (hr)
