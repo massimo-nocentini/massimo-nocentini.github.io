@@ -57,6 +57,7 @@
 				  (p "Bootstrapping a unit test framework, test-driven itself! " 
 				     (cite/a "testsuites/testsuite-bootstrap-sut.html")))
                               (di "Auxiliary definitions" 
+				  (p "Call with current continuation " (cite/a "testsuites/testsuite-letcc-suite.html" (code/inline letcc) " macro"))
                                   (p "More to say...continuations..." (cite/a "testsuites/testsuite-auxtest.html")))
                               (di "The Hansei probabilistic language" 
 				  (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html") 
