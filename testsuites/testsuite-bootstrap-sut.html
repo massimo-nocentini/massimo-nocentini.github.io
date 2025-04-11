@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code { font-family: monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: serif; }</style>
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: Ubuntu Mono, Monaco, monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Ubuntu, Lucida Sans, serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
@@ -14,7 +14,7 @@
 <header class="w3-container w3-center">
 <h1><b>bootstrap-sut</b></h1>
 <p></p><small><small>
-<p>Thu Apr 10 13:25:13+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Apr 11 16:08:02+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -28,11 +28,12 @@
 <li><a href="#section313"><code>test-⊨</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section314"><code>test-⊭</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section315"><code>test-should-signal</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
-<h1><code>bootstrap-sut</code> test suite</h1>
+<hr />
+<p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 9) (failed 0))
-</code></pre></div>
+</code></pre></div></p>
 <p>This test suite drove the implementation of the unittest framework itself.</p>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -46,6 +47,7 @@
     (chicken pretty-print)
     (chicken port)
     (chicken string)
+    (chicken syntax)
     srfi-1
     srfi-19
     sxml-transforms)
@@ -66,8 +68,8 @@
                                    ,highlight-version
                                    &quot;/styles/default.min.css&quot;)
                              (type &quot;text/css&quot;)))
-                    (style &quot;code, pre, tt, kbd, samp, .w3-code { font-family: monospace; }&quot;
-                           &quot;html, body, h1, h2, h3, h4, h5, h6 { font-family: serif; }&quot;)
+                    (style &quot;code, pre, tt, kbd, samp, .w3-code { font-family: Ubuntu Mono, Monaco, monospace; }&quot;
+                           &quot;html, body, h1, h2, h3, h4, h5, h6 { font-family: Ubuntu, Lucida Sans, serif; }&quot;)
                     (script
                       (@ (src &quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/&quot;
                               ,highlight-version
@@ -108,10 +110,9 @@
                                       (href &quot;http://creativecommons.org/licenses/by-sa/4.0/&quot;))
                                    &quot;Creative Commons Attribution-ShareAlike 4.0 International License&quot;))))
                     (structure/toc)
-                    ,@body
                     (hr)
-                    (structure/citations)
-                    (hr))))))
+                    ,@body
+                    (structure/citations))))))
   (define (SXML-&gt;HTML-&gt;file! tree filename)
     (with-output-to-file
       (conc filename &quot;.html&quot;)
@@ -124,6 +125,9 @@
                  (sxml-handler-code/pre
                    (lambda (tag body)
                      `(pre (code (@ (class &quot;w3-code w3-round&quot;)) ,@body))))
+                 (sxml-handler-code/inline
+                   (lambda (tag body)
+                     `(code (@ (class &quot;w3-codespan&quot;)) ,@body)))
                  (sxml-handler-code/lang
                    (lambda (tag body)
                      (let ((lang (car body)) (code (cdr body)))
@@ -135,6 +139,12 @@
                              (pre (@ (class &quot;w3-container&quot;))
                                   (code (@ (class &quot;w3-code w3-round language-&quot; ,lang))
                                         ,code))))))
+                 (sxml-handler-code/scheme/expand
+                   (lambda (tag body)
+                     (sxml-handler-code/scheme
+                       'code/scheme
+                       (map (lambda (expr) (strip-syntax (expand expr)))
+                            body))))
                  (sxml-handler-code/scheme
                    (lambda (tag body)
                      (let* ((expr (if (eq? (length body) 1)
@@ -177,17 +187,21 @@
                                       (reverse sections))))))
                  (sxml-handler-structure/citations
                    (lambda (tag body)
-                     `(div (@ (class &quot;w3-container&quot;))
-                           (header (b &quot;References&quot;))
-                           (ul ,@(map (lambda (tuple)
-                                        (let ((href (third tuple)) (rest (fourth tuple)))
-                                          `(li (@ (id ,(second tuple)))
-                                               &quot;[&quot;
-                                               ,(first tuple)
-                                               &quot;] &quot;
-                                               (a (@ (href ,href))
-                                                  ,@(if (null? rest) (list href) rest)))))
-                                      (reverse citations))))))
+                     (if (null? citations)
+                       '()
+                       `((hr)
+                         (div (@ (class &quot;w3-container&quot;))
+                              (header (b &quot;References&quot;))
+                              ,@(map (lambda (tuple)
+                                       (let ((href (third tuple)) (rest (fourth tuple)))
+                                         `((span (@ (id ,(second tuple)))
+                                                 &quot;[&quot;
+                                                 ,(first tuple)
+                                                 &quot;] &quot;
+                                                 (a (@ (href ,href))
+                                                    ,@(if (null? rest) (list href) rest)))
+                                           (br))))
+                                     (reverse citations)))))))
                  (sxml-handler-cite/a
                    (lambda (tag body)
                      (let* ((i (if (null? citations) 0 (caar citations)))
@@ -234,9 +248,13 @@
                   tree
                   (append
                     `((container unquote sxml-handler-container)
+                      (code/inline unquote sxml-handler-code/inline)
                       (code/lang unquote sxml-handler-code/lang)
                       (code/pre unquote sxml-handler-code/pre)
                       (code/scheme unquote sxml-handler-code/scheme)
+                      (code/scheme/expand
+                        unquote
+                        sxml-handler-code/scheme/expand)
                       (code/scheme-file unquote sxml-handler-code/scheme-file)
                       (cite/a unquote sxml-handler-cite/a)
                       (cite/quote unquote sxml-handler-cite/quote)
@@ -379,10 +397,8 @@
         (SXML-&gt;HTML-&gt;file!
           (sxml-tree
             sut-name
-            `((h1 (code ,sut-name) &quot; test suite&quot;)
-              (code/scheme ,res)
+            `((p (b &quot;Tests summary&quot;) (code/scheme ,res))
               ,@(if sxml ((car sxml) r) '())
-              (hr)
               ,@docs))
           (symbol-append 'testsuite- sut-name))
         (pretty-print res)
@@ -398,7 +414,6 @@
       ((_ ((exn ...) ...) body ...)
        (condition-case (begin body ...) ((exn ...) (void)) ...)))))
 </code></pre></div>
-<hr />
 <section id="section307">
 <header>
 <h1>1. <code>test-running</code>: <span class="w3-text-green">pass</span></h1></header></section>
@@ -496,9 +511,4 @@
     ((exn-a) (void)))
   (condition-case (⊦⧳ ((exn)) (signal 99)) (() (void)))
   (⊦⧳ () 99))
-</code></pre></div>
-<hr />
-<div class="w3-container">
-<header><b>References</b></header>
-<ul></ul></div>
-<hr /></body></html>
+</code></pre></div></body></html>

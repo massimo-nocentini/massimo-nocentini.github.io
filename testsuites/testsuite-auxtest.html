@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code { font-family: monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: serif; }</style>
+<style>code, pre, tt, kbd, samp, .w3-code { font-family: Ubuntu Mono, Monaco, monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Ubuntu, Lucida Sans, serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
@@ -14,7 +14,7 @@
 <header class="w3-container w3-center">
 <h1><b>auxtest</b></h1>
 <p></p><small><small>
-<p>Thu Apr 10 13:26:37+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Apr 11 16:05:40+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -57,12 +57,12 @@
 <li><a href="#section1732"><code>test/stream/primes</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section1733"><code>test/stream/ones+τ</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section1734"><code>test/procc/λ-memo</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
-<h1><code>auxtest</code> test suite</h1>
+<hr />
+<p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 38) (failed 0))
-</code></pre></div>
-<hr />
+</code></pre></div></p>
 <section id="section1697">
 <header>
 <h1>1. <code>test/let1</code>: <span class="w3-text-green">pass</span></h1></header></section>
@@ -2808,7 +2808,7 @@
  (accepted 3)
  (ratio 0.428571428571429)
  (distribution
-   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))
+   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))
 </code></pre>
 <section id="section1715">
 <header>
@@ -2827,7 +2827,7 @@
  (accepted 3)
  (ratio 0.428571428571429)
  (distribution
-   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))
+   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))
 </code></pre>
 <section id="section1716">
 <header>
@@ -2858,8 +2858,8 @@
  (distribution
    ((3 0.333333333333333)
     (1 0.333333333333333)
-    (4 0.166666666666667)
-    (5 0.166666666666667))))
+    (5 0.166666666666667)
+    (4 0.166666666666667))))
 </code></pre>
 <section id="section1718">
 <header>
@@ -2878,8 +2878,8 @@
  (distribution
    ((1 0.333333333333333)
     (3 0.333333333333333)
-    (4 0.166666666666667)
-    (5 0.166666666666667))))
+    (5 0.166666666666667)
+    (4 0.166666666666667))))
 </code></pre>
 <section id="section1719">
 <header>
@@ -2896,10 +2896,10 @@
  (accepted 6)
  (ratio 0.315789473684211)
  (distribution
-   ((6 0.333333333333333)
-    (7 0.333333333333333)
-    (8 0.166666666666667)
-    (5 0.166666666666667))))
+   ((7 0.333333333333333)
+    (6 0.333333333333333)
+    (5 0.166666666666667)
+    (8 0.166666666666667))))
 </code></pre>
 <section id="section1720">
 <header>
@@ -2952,7 +2952,7 @@
  (tried 11)
  (accepted 5)
  (ratio 0.454545454545455)
- (distribution (((b 1) 0.2) ((a 2) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2))))
+ (distribution (((a 1) 0.2) ((a 3) 0.2) ((b 2) 0.2) ((b 1) 0.2) ((a 2) 0.2))))
 </code></pre>
 <section id="section1722">
 <header>
@@ -3007,21 +3007,21 @@
  (accepted 15)
  (ratio 0.0482315112540193)
  (distribution
-   (((1 2 4) 0.0666666666666667)
+   (((1 1 5) 0.0666666666666667)
+    ((1 5 1) 0.0666666666666667)
+    ((5 1 1) 0.0666666666666667)
+    ((1 2 4) 0.0666666666666667)
     ((1 4 2) 0.0666666666666667)
     ((2 1 4) 0.0666666666666667)
-    ((2 2 3) 0.0666666666666667)
-    ((2 3 2) 0.0666666666666667)
     ((2 4 1) 0.0666666666666667)
-    ((3 2 2) 0.0666666666666667)
     ((4 1 2) 0.0666666666666667)
     ((4 2 1) 0.0666666666666667)
-    ((1 1 5) 0.0666666666666667)
     ((1 3 3) 0.0666666666666667)
-    ((1 5 1) 0.0666666666666667)
     ((3 1 3) 0.0666666666666667)
     ((3 3 1) 0.0666666666666667)
-    ((5 1 1) 0.0666666666666667))))
+    ((2 2 3) 0.0666666666666667)
+    ((2 3 2) 0.0666666666666667)
+    ((3 2 2) 0.0666666666666667))))
 </code></pre>
 <section id="section1724">
 <header>
@@ -3045,7 +3045,7 @@
  (tried 311)
  (accepted 4)
  (ratio 0.0128617363344051)
- (distribution (((1 1 5) 0.25) ((1 2 4) 0.25) ((1 3 3) 0.25) ((2 2 3) 0.25))))
+ (distribution (((1 1 5) 0.25) ((1 3 3) 0.25) ((1 2 4) 0.25) ((2 2 3) 0.25))))
 </code></pre>
 <section id="section1725">
 <header>
@@ -3086,8 +3086,7 @@
  (accepted 3)
  (ratio 0.0697674418604651)
  (distribution
-   ((((la 1 1) (la 1 2)) 0.333333333333333)
-    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
+   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
     (((la 1 1)
       (la 1 2)
       (la 2 1)
@@ -3100,7 +3099,8 @@
       (bos 1 2)
       (bos 2 1)
       (bos 2 2))
-     0.333333333333333))))
+     0.333333333333333)
+    (((la 1 1) (la 1 2)) 0.333333333333333))))
 </code></pre>
 <section id="section1726">
 <header>
@@ -3568,8 +3568,4 @@
              (let1 (mrow (mi sub1) (mi n))
                    (+ (fib-memo m) (fib-memo (sub1 m))))))))
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
-</code></pre></div>
-<hr />
-<div class="w3-container">
-<header><b>References</b></header>
-<ul></ul></div></body></html>
+</code></pre></div></body></html>
