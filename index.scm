@@ -21,8 +21,9 @@
 			  (dl
 			    (di "Booklet on data structures"
 				(p "I have a working in progress booklet "
-				   (cite/a "booklet-dsst/index.html" "Booklet on data structures, in Pharo Smalltalk.")
-				   " about data structures implemented in Smalltalk, using the Pharo dialect.")))
+				   (cite/a "https://massimo-nocentini.github.io/Booklet-DSst/" 
+					   "Booklet on data structures, in Pharo Smalltalk.")
+				   " about data structures, using the Pharo dialect.")))
 
                           (structure/section "On Scheme")
                           (p "From the R6RS Ballot, reported in " (cite/a "https://wiki.call-cc.org/elevator-pitch") ":")
