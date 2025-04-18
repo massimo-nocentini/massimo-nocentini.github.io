@@ -14,7 +14,7 @@
 <header class="w3-container w3-center">
 <h1><b>delimcc-suite</b></h1>
 <p></p><small><small>
-<p>Fri Apr 18 23:25:22+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Apr 18 23:29:18+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -23,15 +23,12 @@
 <li><a href="#section648"><code>test/letcc/delimcc+asai+tutorial</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section649"><code>test/letcc/delimcc+yield</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section650"><code>test/letcc/delimcc+yield§</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section651"><code>test/letcc/delimcc+monad</code>: <span class="w3-text-red">fail</span></a></li></ol></div>
+<li><a href="#section651"><code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5)
- (failed
-   1
-   (test/letcc/delimcc+monad (expected (31 51)) (got ((1 10 3) (1 10 1 4))))))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
 </code></pre></div></p>
 <section id="section647">
 <header>
@@ -116,7 +113,7 @@
 </code></pre></div>
 <section id="section651">
 <header>
-<h1>5. <code>test/letcc/delimcc+monad</code>: <span class="w3-text-red">fail</span></h1></header></section>
+<h1>5. <code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcc/delimcc+monad _)
@@ -133,7 +130,8 @@
   (⊦= '(1 2 3) (reify (amb 1 2 3)))
   (⊦= '((1 3 4) (1 3 5) (2 3 4) (2 3 5))
         (reify (list (amb 1 2) 3 (amb 4 5))))
-  (⊦= '(31 51) (reify (cons 1 (letcc k (cons 10 (amb '(3) (k '(4))))))))
+  (⊦= '((1 10 3) (1 10 1 4))
+        (reify (cons 1 (letcc k (cons 10 (amb '(3) (k '(4))))))))
   (define (www)
     (define (f x) (append x (list (amb 6 4 2 8) (amb 2 4 5 4 1))))
     (reify (f (f (amb '(0) '(2) '(3) '(4) '(5) '(32))))))
