@@ -14,37 +14,49 @@
 <header class="w3-container w3-center">
 <h1><b>delimcc-suite</b></h1>
 <p></p><small><small>
-<p>Fri Apr 18 23:29:18+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Sat Apr 19 00:17:41+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section647"><code>test/letcc/delimcc</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section648"><code>test/letcc/delimcc+asai+tutorial</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section649"><code>test/letcc/delimcc+yield</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section650"><code>test/letcc/delimcc+yield§</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section651"><code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section704"><code>test/letcc/delimcc</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section705"><code>test/letcc/delimcc+asai+tutorial</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section706"><code>test/letcc/delimcc+yield</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section707"><code>test/letcc/delimcc+yield§</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section708"><code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
 </code></pre></div></p>
-<section id="section647">
+<p>Tests according to the tutorial at <cite>[<a href="#cite703">1</a>]</cite> by Kenichi Asai and Oleg Kiselyov.</p>
+<section id="section704">
 <header>
 <h1>1. <code>test/letcc/delimcc</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcc/delimcc _)
+  (⊦= '(1 2 2 10) (cons 1 (resetcc (cons 2 (letshiftcc k (k (k '(10))))))))
   (⊦= 41 (+ 1 (resetcc (* 2 (letshiftcc k (k (k 10)))))))
   (⊦= 15 (+ 10 (resetcc (+ 2 3))))
   (⊦= 13 (+ 10 (resetcc (+ 2 (letshiftcc k 3)))))
+  (⊦= '(10 3) (cons 10 (resetcc (cons 2 (letshiftcc k '(3))))))
   (⊦= 15 (+ 10 (resetcc (+ 2 (letshiftcc k (k 3))))))
+  (⊦= '(10 2 3) (cons 10 (resetcc (cons 2 (letshiftcc k (k '(3)))))))
   (⊦= 115 (+ 10 (resetcc (+ 2 (letshiftcc k (+ 100 (k 3)))))))
+  (⊦= '(10 100 2 3)
+        (cons 10 (resetcc (cons 2 (letshiftcc k (cons 100 (k '(3))))))))
   (⊦= 117 (+ 10 (resetcc (+ 2 (letshiftcc k (+ 100 (k (k 3))))))))
-  (⊦= 117 (resetcc (+ 10 (resetcc (+ 2 (letshiftcc k (+ 100 (k (k 3))))))))))
+  (⊦= '(10 100 2 2 3)
+        (cons 10 (resetcc (cons 2 (letshiftcc k (cons 100 (k (k '(3)))))))))
+  (⊦= 117 (resetcc (+ 10 (resetcc (+ 2 (letshiftcc k (+ 100 (k (k 3)))))))))
+  (⊦= '(10 100 2 2 3)
+        (resetcc
+          (cons 10
+                (resetcc (cons 2 (letshiftcc k (cons 100 (k (k '(3)))))))))))
 </code></pre></div>
-<section id="section648">
+<section id="section705">
 <header>
 <h1>2. <code>test/letcc/delimcc+asai+tutorial</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -93,7 +105,7 @@
                         (push! `((p ,p) (q ,q)) sols))))
               sols)))
 </code></pre></div>
-<section id="section649">
+<section id="section706">
 <header>
 <h1>3. <code>test/letcc/delimcc+yield</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -102,7 +114,7 @@
   (⊦= '(1) (resetcc+null (yield 1)))
   (⊦= '(1 2) (resetcc+null (yield 1) (yield 2))))
 </code></pre></div>
-<section id="section650">
+<section id="section707">
 <header>
 <h1>4. <code>test/letcc/delimcc+yield§</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -111,7 +123,7 @@
   (⊦= '(1) (§-&gt;list (resetcc+null (yield§ 1))))
   (⊦= '(1 2) (§-&gt;list (resetcc+null (yield§ 1) (yield§ 2)))))
 </code></pre></div>
-<section id="section651">
+<section id="section708">
 <header>
 <h1>5. <code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -2540,4 +2552,8 @@
     (define (f x) (+ x (amb 6 4 2 8) (amb 2 4 5 4 1)))
     (reify (f (f (f (amb 0 2 3 4 5 32))))))
   (⊦= 48000 (length (wwww))))
-</code></pre></div></body></html>
+</code></pre></div>
+<hr />
+<div class="w3-container">
+<header><b>References</b></header><span id="cite703">[1] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf">Introduction to Programming with Shift and Reset</a></span>
+<br /></div></body></html>

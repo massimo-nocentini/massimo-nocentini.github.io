@@ -14,7 +14,7 @@
 <header class="w3-container w3-center">
 <h1><b>letnondeterministic-suite</b></h1>
 <p></p><small><small>
-<p>Fri Apr 18 23:29:15+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Sat Apr 19 00:17:39+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -66,7 +66,7 @@
  (accepted 3)
  (ratio 0.428571428571429)
  (distribution
-   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))
+   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))
 </code></pre>
 <section id="section550">
 <header>
@@ -85,7 +85,7 @@
  (accepted 3)
  (ratio 0.428571428571429)
  (distribution
-   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))
+   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))
 </code></pre>
 <section id="section551">
 <header>
@@ -114,8 +114,8 @@
  (accepted 6)
  (ratio 0.352941176470588)
  (distribution
-   ((3 0.333333333333333)
-    (1 0.333333333333333)
+   ((1 0.333333333333333)
+    (3 0.333333333333333)
     (5 0.166666666666667)
     (4 0.166666666666667))))
 </code></pre>
@@ -210,7 +210,7 @@
  (tried 11)
  (accepted 5)
  (ratio 0.454545454545455)
- (distribution (((b 1) 0.2) ((a 2) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2))))
+ (distribution (((a 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((b 1) 0.2) ((a 2) 0.2))))
 </code></pre>
 <section id="section557">
 <header>
@@ -266,20 +266,20 @@
  (ratio 0.0482315112540193)
  (distribution
    (((1 1 5) 0.0666666666666667)
-    ((1 2 4) 0.0666666666666667)
     ((1 3 3) 0.0666666666666667)
-    ((1 4 2) 0.0666666666666667)
     ((1 5 1) 0.0666666666666667)
+    ((3 1 3) 0.0666666666666667)
+    ((3 3 1) 0.0666666666666667)
+    ((5 1 1) 0.0666666666666667)
+    ((1 2 4) 0.0666666666666667)
+    ((1 4 2) 0.0666666666666667)
     ((2 1 4) 0.0666666666666667)
     ((2 2 3) 0.0666666666666667)
     ((2 3 2) 0.0666666666666667)
     ((2 4 1) 0.0666666666666667)
-    ((3 1 3) 0.0666666666666667)
     ((3 2 2) 0.0666666666666667)
-    ((3 3 1) 0.0666666666666667)
     ((4 1 2) 0.0666666666666667)
-    ((4 2 1) 0.0666666666666667)
-    ((5 1 1) 0.0666666666666667))))
+    ((4 2 1) 0.0666666666666667))))
 </code></pre>
 <section id="section559">
 <header>
@@ -303,7 +303,7 @@
  (tried 311)
  (accepted 4)
  (ratio 0.0128617363344051)
- (distribution (((1 1 5) 0.25) ((1 2 4) 0.25) ((1 3 3) 0.25) ((2 2 3) 0.25))))
+ (distribution (((1 3 3) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 2 4) 0.25))))
 </code></pre>
 <section id="section560">
 <header>
@@ -344,7 +344,8 @@
  (accepted 3)
  (ratio 0.0697674418604651)
  (distribution
-   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
+   ((((la 1 1) (la 1 2)) 0.333333333333333)
+    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)
     (((la 1 1)
       (la 1 2)
       (la 2 1)
@@ -357,8 +358,7 @@
       (bos 1 2)
       (bos 2 1)
       (bos 2 2))
-     0.333333333333333)
-    (((la 1 1) (la 1 2)) 0.333333333333333))))
+     0.333333333333333))))
 </code></pre>
 <section id="section561">
 <header>
@@ -391,10 +391,10 @@
  (accepted 3)
  (ratio 0.130434782608696)
  (distribution
-   ((((la 1 1) (la 1 2)) 0.333333333333333)
+   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))
+     0.333333333333333)
     (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333)
-    (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))
-     0.333333333333333))))
+    (((la 1 1) (la 1 2)) 0.333333333333333))))
 </code></pre>
 <section id="section562">
 <header>
