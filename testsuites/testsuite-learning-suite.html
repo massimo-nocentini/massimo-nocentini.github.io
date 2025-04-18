@@ -14,21 +14,22 @@
 <header class="w3-container w3-center">
 <h1><b>learning-suite</b></h1>
 <p></p><small><small>
-<p>Fri Apr 11 16:08:02+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Apr 18 22:27:45+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section3"><code>test-alist-ref</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section4"><code>test/len</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section5"><code>test-null-eq?</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section5"><code>test-alist-ref</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section6"><code>test/len</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section7"><code>test/c-apply</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section8"><code>test-null-eq?</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 3) (failed 0))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 4) (failed 0))
 </code></pre></div></p>
-<section id="section3">
+<section id="section5">
 <header>
 <h1>1. <code>test-alist-ref</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -39,7 +40,7 @@
     (⊦= '(2) (alist-ref 'b alst))
     (⊦= #f (alist-ref 'c alst))))
 </code></pre></div>
-<section id="section4">
+<section id="section6">
 <header>
 <h1>2. <code>test/len</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -54,9 +55,23 @@
     (⊦= 2 (my-strlen (cons 1 (cons 2 (cons 3 '())))))
     (⊦= 11 (my-strlen &quot;hello world&quot;))))
 </code></pre></div>
-<section id="section5">
+<section id="section7">
 <header>
-<h1>3. <code>test-null-eq?</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>3. <code>test/c-apply</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/c-apply _)
+  (let ((witness (gensym))
+        (my-strlen
+          (foreign-safe-lambda*
+            scheme-object
+            ((scheme-object f))
+            &quot;\t\t\t\t\t  C_word res;\n\t\t\t\t\t  int s = CHICKEN_apply(f, C_SCHEME_END_OF_LIST, &amp;res);\n\t\t\t\t\t  printf(\&quot;code: %d\\n\&quot;, s);\n\t\t\t\t\t  C_return (res);&quot;)))
+    (⊦= witness (car (my-strlen (lambda () (list witness 4)))))))
+</code></pre></div>
+<section id="section8">
+<header>
+<h1>4. <code>test-null-eq?</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-null-eq? _) (⊨ (eq? '() '())))
