@@ -4,7 +4,7 @@
 (define tree (sxml-tree '("Massimo Nocentini" 
                         (p "This site is a collection of " (em "Massimo Nocentini") 
                            "'s papers, notes, memos and source code, in the spirit of "
-                           (cite/a "https://www.stepanovpapers.com/") "."))
+                           (cite/a "https://www.stepanovpapers.com/" "Alexander A. Stepanov's home page") "."))
                         `((structure/section "Contacts")
                           (ul
                             (li (em "+39 320 1162059 (mobile)"))
@@ -15,7 +15,8 @@
                             (li "Github page "
 				(cite/a "https://github.com/massimo-nocentini/" (code "https://github.com/massimo-nocentini")))
                             (li "Public RSA key "
-				(cite/a "https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub")))
+				(cite/a "https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub"
+					"Public RSA key")))
 
                           (structure/section "On Smalltalk")
 			  (dl
@@ -51,20 +52,27 @@
 					  ... just to name a few."))
                           (dl 
                               (di "Learning tests"
-                                  (p "My own learning tests " (cite/a "testsuites/testsuite-learning-suite.html") 
+                                  (p "My own learning tests " 
+				     (cite/a "testsuites/testsuite-learning-suite.html" "My own Scheme learning tests") 
 				     " to understand the Scheme language, via the chicken interpreter."))
                               (di "Unittest framework"
 				  (p "Bootstrapping a unit test framework, test-driven itself! " 
-				     (cite/a "testsuites/testsuite-bootstrap-sut.html")))
+				     (cite/a "testsuites/testsuite-bootstrap-sut.html" "Tests on my unittest framework for Scheme")))
                               (di "Auxiliary definitions" 
-                                  (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html")
-				  ", call with current continuation " (cite/a "testsuites/testsuite-letcc-suite.html" (code/inline letcc) " macro")
-				  ", non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html")
-				  " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html")))
+                                  (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions")
+				  ", call with current continuation " 
+				  (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "Undelimited continuations"))
+				  ", non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html"
+									  "Tests on " (i "Non determinism"))
+				  " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html"
+									  "Tests on " (i "delimited continuations"))
+				  "."))
                               (di "The Hansei probabilistic language" 
 				  (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html") 
 				     " a test suite to understand the system defined in the reference page " 
-				     (cite/a "https://okmij.org/ftp/kakuritu/Hansei.html") ". Quoting author's words:")
+				     (cite/a "https://okmij.org/ftp/kakuritu/Hansei.html" 
+					     "Hansei dsl for probabilistic programming") 
+				     ". Quoting author's words:")
                                   (cite/quote "Oleg Kiselyov"
                                               (i "HANSEI is the the embedded domain-specific language for probabilistic 
 						  programming: for writing potentially infinite discrete-distribution models 
