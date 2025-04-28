@@ -14,7 +14,7 @@
 <header class="w3-container w3-center">
 <h1><b>delimcc-suite</b></h1>
 <p></p><small><small>
-<p>Thu Apr 24 16:11:43+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Mon Apr 28 08:47:31+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -61,7 +61,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
-</code></pre></div>
+</code></pre></div>is explained by author's word:
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>
 <ol>
@@ -165,9 +165,10 @@
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield/extract _)
   (⊦= '((a 1) (a 2))
-        (map/yielded
-          (λ (v) (list 'a v))
-          (resetcc+null (yield/extract 1) (yield/extract 2))))
+        (§-&gt;list
+          (map§/yielded
+            (λ (v) (list 'a v))
+            (resetcc+null (yield/extract 1) (yield/extract 2)))))
   (⊦= 3
         (foldr/yielded
           +
@@ -199,7 +200,7 @@
         (delimcc-foldr
           100
           ((each prod) (* each prod))
-          (walk delimcc-cons '((() 1 ()) 2 (() 3 ()))))))
+          (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
 </code></pre></div>
 <section id="section828">
 <header>
@@ -2684,7 +2685,7 @@
 <hr />
 <div class="w3-container">
 <header><b>References</b></header><span id="cite806">[1] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf">Introduction to Programming with Shift and Reset</a></span>
-<br /><span id="cite807">[2] <a href="http://pllab.is.ocha.ac.jp/~asai/">Kenichi Asai</a></span>
+<br /><span id="cite807">[2] <a href="http://pllab.is.ocha.ac.jp/~asai/">Professor Kenichi Asai's home page</a></span>
 <br /><span id="cite808">[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span>
 <br /><span id="cite809">[4] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/">CW 2011 Tutorial: home page</a></span>
 <br /><span id="cite810">[5] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf">CW 2011 Tutorial: slides</a></span>
