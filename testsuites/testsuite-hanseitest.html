@@ -14,36 +14,55 @@
 <header class="w3-container w3-center">
 <h1><b>hanseitest</b></h1>
 <p></p><small><small>
-<p>Mon Apr 28 18:10:58+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Tue Apr 29 08:35:44+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section213">Introduction</a></li>
-<li><a href="#section218">Implementation</a></li>
-<li><a href="#section219"><code>test/procc/simple-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section220"><code>test/procc/grass-model</code>: <span class="w3-text-red">fail</span></a></li>
-<li><a href="#section221"><code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></a></li>
-<li><a href="#section222"><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section223"><code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section259">Introduction</a></li>
+<li><a href="#section264">Implementation</a></li>
+<li><a href="#section265"><code>test/procc/coin-model</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section266"><code>test/procc/coin-model/when</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section267"><code>test/procc/grass-model</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section268"><code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section269"><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section270"><code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 6)
  (failed
-   2
+   4
    (test/procc/flip-xor-model
      (expected (((V #t) 0.500000051200001) ((V #f) 0.4999999488)))
      (got (((V #t) 0.500000051200001) ((V #f) 0.4999999488))))
    (test/procc/grass-model
      (expected (((V #f) 0.322) ((V #t) 0.2838)))
-     (got (((V #f) 0.322) ((V #t) 0.2838))))))
+     (got (((V #f) 0.322) ((V #t) 0.2838))))
+   (test/procc/coin-model/when
+     (expected
+       (((V (#t #t)) 0.428571428571429)
+        ((V (#t #f)) 0.285714285714286)
+        ((V (#f #t)) 0.285714285714286)))
+     (got (((V (#t #t)) 0.428571428571429)
+           ((V (#t #f)) 0.285714285714286)
+           ((V (#f #t)) 0.285714285714286))))
+   (test/procc/coin-model
+     (expected
+       (((V (#t #t)) 0.36)
+        ((V (#t #f)) 0.24)
+        ((V (#f #t)) 0.24)
+        ((V (#f #f)) 0.16)))
+     (got (((V (#t #t)) 0.36)
+           ((V (#t #f)) 0.24)
+           ((V (#f #t)) 0.24)
+           ((V (#f #f)) 0.16))))))
 </code></pre></div></p>
-<section id="section213">
+<section id="section259">
 <header>
 <h1>1. Introduction</h1></header></section>
-<p>Quoting from <cite>[<a href="#cite214">1</a>]</cite>:
+<p>Quoting from <cite>[<a href="#cite260">1</a>]</cite>:
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>Broadly speaking, probabilistic programming languages are to express
 		  computations with degrees of uncertainty, which comes from the
@@ -76,8 +95,8 @@
 		  wet, we want to find out the chance it was raining on that day. </i>
 <footer>
 <p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
-<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite215">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite216">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite217">4</a>]</cite>.</p>
-<section id="section218">
+<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite261">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite262">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite263">4</a>]</cite>.</p>
+<section id="section264">
 <header>
 <h1>2. Implementation</h1></header></section>
 <div class="w3-card w3-round">
@@ -99,24 +118,21 @@
     (syntax-rules () ((_ p body ...) `((C ,(τ body ...)) ,p))))
   (define (probcc-value p v) `((V ,v) ,p))
   (define-syntax
-    letprobccpair
+    let1/probccpair
     (syntax-rules
       ()
-      ((_ (((flag payload) p) probpair) body ...)
-       (let* ((slot (car probpair))
-              (p (cadr probpair))
-              (flag (car slot))
-              (payload (cadr slot)))
+      ((_ ((slot p) probpairexpr) body ...)
+       (let* ((probpair probpairexpr)
+              (slot (car probpair))
+              (p (cadr probpair)))
          body
-         ...))
-      ((_ ((slot p) probpair) body ...)
-       (let* ((slot (car probpair)) (p (cadr probpair))) body ...))))
+         ...))))
   (define-syntax
-    cond-probccslot
+    cond/probccslot
     (syntax-rules
       (V C)
-      ((_ slot ((V v) vbody ...) ((C t) cbody ...))
-       (let ((flag (car slot)) (payload (cadr slot)))
+      ((_ slotexpr ((V v) vbody ...) ((C t) cbody ...))
+       (let* ((slot slotexpr) (flag (car slot)) (payload (cadr slot)))
          (cond ((equal? flag 'V) (let1 (v payload) vbody ...))
                ((equal? flag 'C) (let1 (t payload) cbody ...))
                (else (error `(not a probability slot ,slot))))))))
@@ -125,10 +141,10 @@
              (loop (λ (p depth down choices susp)
                        (cond ((null? choices) susp)
                              (else
-                              (letprobccpair
+                              (let1/probccpair
                                 ((slot pt) (car choices))
-                                (let* ((p*pt (* p pt)) (rest (cdr choices)))
-                                  (cond-probccslot
+                                (let ((p*pt (* p pt)) (rest (cdr choices)))
+                                  (cond/probccslot
                                     slot
                                     ((V v)
                                      (hash-table-update!/default
@@ -167,20 +183,19 @@
   (define ((probcc-reflect/k choices) k)
     (letrec ((make-choices (λ (pv) (map f pv)))
              (f (λ (probpair)
-                    (letprobccpair
+                    (let1/probccpair
                       ((slot p) probpair)
-                      (cond-probccslot
+                      (cond/probccslot
                         slot
                         ((V v) (probcc-τ p (k v)))
                         ((C t) (probcc-τ p (make-choices (t)))))))))
       (make-choices choices)))
   (define probcc-reflect (o callshiftcc probcc-reflect/k))
+  (define (probcc-impossible) (probcc-distribution '()))
   (define (probcc-unit v) (list (probcc-value 1 v)))
-  (define (probcc-reify0 m) (resetcc (probcc-unit (m))))
   (define (probcc-bernoulli t f p)
     (probcc-distribution `((,t ,p) (,f ,(- 1 p)))))
   (define (probcc-coin p) (probcc-bernoulli #t #f p))
-  (define (probcc-impossible) (probcc-distribution '()))
   (define-syntax
     probcc-when
     (syntax-rules
@@ -188,12 +203,13 @@
       ((_ test body ...) (cond (test body ...) (else (probcc-impossible))))))
   (define-syntax
     probcc-model
-    (syntax-rules () ((_ body ...) (probcc-reify0 (τ body ...)))))
+    (syntax-rules () ((_ body ...) (resetcc (probcc-unit (begin body ...))))))
   (define-syntax
     probcc-inference-exact
     (syntax-rules
       ()
-      ((_ body ...) (probcc-explore +inf.0 (probcc-model body ...)))))
+      ((_ body ...)
+       (probcc-normalize (probcc-explore +inf.0 (probcc-model body ...))))))
   (define-syntax
     λ-probcc-bucket
     (syntax-rules
@@ -206,29 +222,45 @@
   (define (probcc-leaves choices)
     (letrec ((L (λ (choices count)
                     (let1 (F (λ (probpair acc)
-                                 (letprobccpair
+                                 (let1/probccpair
                                    ((slot p) probpair)
-                                   (cond-probccslot
+                                   (cond/probccslot
                                      slot
                                      ((V v) (add1 acc))
                                      ((C t) (L (t) acc))))))
                           (foldr F count choices)))))
       (L choices 0))))
 </code></pre></div>
-<section id="section219">
+<section id="section265">
 <header>
-<h1>3. <code>test/procc/simple-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>3. <code>test/procc/coin-model</code>: <span class="w3-text-red">fail</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/simple-model _)
-  (⊦= '(((V (#t #t)) 0.36) ((V (#t #f)) 0.24) ((V (#f #t)) 0.24))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/coin-model _)
+  (⊦= '(((V (#t #t)) 0.36)
+          ((V (#t #f)) 0.24)
+          ((V (#f #t)) 0.24)
+          ((V (#f #f)) 0.16))
+        (probcc-inference-exact
+          (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
+            (list x y)))))
+</code></pre></div>
+<section id="section266">
+<header>
+<h1>4. <code>test/procc/coin-model/when</code>: <span class="w3-text-red">fail</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/coin-model/when _)
+  (⊦= '(((V (#t #t)) 0.428571428571429)
+          ((V (#t #f)) 0.285714285714286)
+          ((V (#f #t)) 0.285714285714286))
         (probcc-inference-exact
           (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
             (probcc-when (or x y) (list x y))))))
 </code></pre></div>
-<section id="section220">
+<section id="section267">
 <header>
-<h1>4. <code>test/procc/grass-model</code>: <span class="w3-text-red">fail</span></h1></header></section>
+<h1>5. <code>test/procc/grass-model</code>: <span class="w3-text-red">fail</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/grass-model _)
@@ -244,9 +276,9 @@
   (⊦= (list (probcc-value 0.322 #f) (probcc-value 0.2838 #t))
         (probcc-explore +inf.0 grass-model)))
 </code></pre></div>
-<section id="section221">
+<section id="section268">
 <header>
-<h1>5. <code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></h1></header></section>
+<h1>6. <code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/flip-xor-model _)
@@ -259,9 +291,9 @@
         (⊦= '(((V #t) 0.500000051200001) ((V #f) 0.4999999488)) res)
         (⊦= 1024 (probcc-leaves flipxor-model))))
 </code></pre></div>
-<section id="section222">
+<section id="section269">
 <header>
-<h1>6. <code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>7. <code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/flip-xor-model/middle _)
@@ -279,9 +311,9 @@
     (⊦= '(((V #t) 0.5000000512) ((V #f) 0.4999999488)) res)
     (⊦= 4 (probcc-leaves tree))))
 </code></pre></div>
-<section id="section223">
+<section id="section270">
 <header>
-<h1>7. <code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>8. <code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/flip-xor-model/bucket _)
@@ -299,10 +331,10 @@
 </code></pre></div>
 <hr />
 <div class="w3-container">
-<header><b>References</b></header><span id="cite214">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
-<br /><span id="cite215">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
-<br /><span id="cite216">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
+<header><b>References</b></header><span id="cite260">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
+<br /><span id="cite261">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
+<br /><span id="cite262">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
 		       domain-specific languages, ed. Walid Taha. LNCS 5658,
 		       Springer, 2009, pp. 360-384.</a></span>
-<br /><span id="cite217">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
+<br /><span id="cite263">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
 <br /></div></body></html>
