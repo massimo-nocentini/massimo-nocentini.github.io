@@ -17,7 +17,7 @@
 <header class="w3-container w3-center">
 <h1><b>hanseitest</b></h1>
 <p></p><small><small>
-<p>Thu May 08 11:39:16+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Thu May 08 20:47:46+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -32,7 +32,7 @@
 <li><a href="#section297"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section298"><code>test/procc/flip</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section299"><code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></a></li>
-<li><a href="#section300"><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section300"><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section301"><code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
@@ -40,10 +40,7 @@
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 10)
  (failed
-   2
-   (test/procc/flip-xor-model/middle
-     (expected (((V #t) 0.5) ((V #f) 0.5)))
-     (got (((V #f) 0.5) ((V #t) 0.5))))
+   1
    (test/procc/flip-xor-model
      (expected (((V #t) 0.5) ((V #f) 0.5)))
      (got (((V #f) 0.5) ((V #t) 0.5))))))
@@ -70,9 +67,8 @@
 		monad that represents a stochastic computation as a lazy search
 		tree. That is, our implementation uses the type constructor <code class="w3-codespan">pV</code> defined below.  
 <div class="w3-card w3-round">
-<header class="w3-container w3-border w3-round w3-light-gray w3-right"> code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-">type 'a vc = V of 'a | C of (unit -&gt; 'a pV)
-and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weighted list of branches. The empty
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">ocaml code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-ocaml">type 'a vc = V of 'a | C of (unit -&gt; 'a pV) and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weighted list of branches. The empty
 		list denotes failure, and a singleton list <code class="w3-codespan">[(p, V v)]</code> denotes a deterministic successful outcome<code class="w3-codespan">v</code>with the
 		probability mass <code class="w3-codespan">p</code>. A branch of the form <code class="w3-codespan">V v</code> is a leaf node
 		that describes a possible successful outcome, whereas a branch
@@ -167,14 +163,15 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
                slot
                ((V v) (probcc-value pt v))
                ((C t)
-                (probcc-next-value
-                  (append
-                    (cdr choices)
-                    (map (λ (pair)
-                             (let1/probccpair
-                               ((slot p) pair)
-                               `(,slot ,(* p pt))))
-                         (t))))))))))
+                (let1 (times (op/times))
+                      (probcc-next-value
+                        (append
+                          (cdr choices)
+                          (letmap
+                            ((pair (t)))
+                            (let1/probccpair
+                              ((slot p) pair)
+                              `(,slot ,(times p pt)))))))))))))
   (define (probcc-normalize choices)
     (let* ((divide (op/divide))
            (plus (op/plus))
@@ -184,8 +181,9 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
   (define (probcc-distribution distribution)
     (letcc/shift
       k
-      (map (λ (pair) (letcar&amp;cdr (((v p) pair)) (probcc-τ (car p) (k v))))
-           distribution)))
+      (letmap
+        ((pair distribution))
+        (letcar&amp;cdr (((v p) pair)) (probcc-τ (car p) (k v))))))
   (define (probcc-reflect choices)
     (letcc/shift
       k
@@ -433,7 +431,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
 </code></pre></div>
 <section id="section300">
 <header>
-<h1>11. <code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-red">fail</span></h1></header></section>
+<h1>11. <code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/flip-xor-model/middle _)
@@ -447,7 +445,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
                                            (probcc-reify/exact (loop (sub1 n))))))))))))
       (loop c)))
   (let* ((tree (flipxor-model 10 0.5)) (res (probcc-reify/exact tree)))
-    (⊦= '(((V #t) 0.5) ((V #f) 0.5)) res)
+    (⊦= '(((V #f) 0.5) ((V #t) 0.5)) res)
     (⊦= 4 (probcc-leaves (probcc-reify/0 tree)))))
 </code></pre></div>
 <section id="section301">

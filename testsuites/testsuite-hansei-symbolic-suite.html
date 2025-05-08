@@ -17,26 +17,430 @@
 <header class="w3-container w3-center">
 <h1><b>hansei-symbolic-suite</b></h1>
 <p></p><small><small>
-<p>Thu May 08 11:39:17+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Thu May 08 20:47:49+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section227">Symbolic</a></li>
-<li><a href="#section228"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section229"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section316">Symbolic</a></li>
+<li><a href="#section317"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section318"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section319"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section320"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section321"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 2) (failed 0))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
 </code></pre></div></p>
-<section id="section227">
+<section id="section316">
 <header>
 <h1>1. Symbolic</h1></header></section>
-<section id="section228">
+<section id="section317">
 <header>
-<h1>2. <code>test/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>2. <code>test/coin-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>Joint distribution of tossing two coins, where head has probability 
+<math>
+<mi>p</mi></math> to appear:</p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <semantics>
+  <mrow>
+   <mo>(</mo>
+   <mtext>&#8288;</mtext>
+   <mtable rowspacing='1ex'
+       columnalign='center'>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>p</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>p</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <msup>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mi>p</mi>
+          <mo>-</mo>
+          <mn>1</mn>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+        <mn>2</mn>
+       </msup>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <msup>
+        <mi>p</mi>
+        <mn>2</mn>
+       </msup>
+      </mrow>
+     </mtd>
+    </mtr>
+   </mtable>
+   <mtext>&#8288;</mtext>
+   <mo>)</mo>
+  </mrow>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;2&quot;]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, SuperscriptBox[&quot;p&quot;, &quot;2&quot;]]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+ </semantics>
+</math></div>
+<p>observe that both proportional and normalized probabilities <b>are the same</b> because there is no observation that rules out some branches, therefore the normalization constant equals 
+<math>1</math>.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/coin-model _)
+  (define-τ
+    model
+    (let* ((p 'p) (x (probcc-coin p)) (y (probcc-coin p))) `((x ,x) (y ,y))))
+  (define result (probcc-reify/exact model))
+  (⊦= '(((V ((x #t) (y #f))) (Times -1 (Plus -1 p) p))
+          ((V ((x #f) (y #t))) (Times -1 (Plus -1 p) p))
+          ((V ((x #f) (y #f))) (Power (Plus -1 p) 2))
+          ((V ((x #t) (y #t))) (Power p 2)))
+        result)
+  (⊦= result (probcc-normalize result)))
+</code></pre></div>
+<section id="section318">
+<header>
+<h1>3. <code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared. Now the probabilities are <i>proportional</i> according to the following rules: </p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <semantics>
+  <mrow>
+   <mo>(</mo>
+   <mtext>&#8288;</mtext>
+   <mtable rowspacing='1ex'
+       columnalign='center'>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>p</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>p</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <msup>
+        <mi>p</mi>
+        <mn>2</mn>
+       </msup>
+      </mrow>
+     </mtd>
+    </mtr>
+   </mtable>
+   <mtext>&#8288;</mtext>
+   <mo>)</mo>
+  </mrow>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, SuperscriptBox[&quot;p&quot;, &quot;2&quot;]]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+ </semantics>
+</math></div>
+<p> and they can be normalized, </p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <semantics>
+  <mrow>
+   <mo>(</mo>
+   <mtext>&#8288;</mtext>
+   <mtable rowspacing='1ex'
+       columnalign='center'>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mfrac>
+        <mrow>
+         <mi>p</mi>
+         <mo>-</mo>
+         <mn>1</mn>
+        </mrow>
+        <mrow>
+         <mi>p</mi>
+         <mo>-</mo>
+         <mn>2</mn>
+        </mrow>
+       </mfrac>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mfrac>
+        <mrow>
+         <mi>p</mi>
+         <mo>-</mo>
+         <mn>1</mn>
+        </mrow>
+        <mrow>
+         <mi>p</mi>
+         <mo>-</mo>
+         <mn>2</mn>
+        </mrow>
+       </mfrac>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>Prob</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mfrac>
+         <mi>p</mi>
+         <mrow>
+          <mi>p</mi>
+          <mo>-</mo>
+          <mn>2</mn>
+         </mrow>
+        </mfrac>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+   </mtable>
+   <mtext>&#8288;</mtext>
+   <mo>)</mo>
+  </mrow>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, FractionBox[RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;2&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, FractionBox[RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;2&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;Prob&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, FractionBox[&quot;p&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;2&quot;]]]]]]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+ </semantics>
+</math></div>
+<p> to obtain a valid probability distribution, provided that the assumed observation occurred.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/coin-model/observed _)
+  (define result
+    (probcc-reify/exact
+      (τ (let* ((p 'p) (x (probcc-coin p)) (y (probcc-coin p)))
+            (probcc-when (or x y) `((x ,x) (y ,y)))))))
+  (define normalized (probcc-normalize result))
+  (⊦= '(((V ((x #t) (y #f))) (Times -1 (Plus -1 p) p))
+          ((V ((x #f) (y #t))) (Times -1 (Plus -1 p) p))
+          ((V ((x #t) (y #t))) (Power p 2)))
+        result))
+</code></pre></div>
+<section id="section319">
+<header>
+<h1>4. <code>test/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>The conditional probability that <i>rained</i> given that a <i>wet grass</i> has been observed is </p>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
     display='block'>
@@ -251,9 +655,9 @@
   (⊦= '(((V (rain #t)) 0.2838) ((V (rain #f)) 0.322))
         (letmap ((p result)) `(,(car p) ,(W `(ReplaceAll ,(cadr p) ,rules))))))
 </code></pre></div>
-<section id="section229">
+<section id="section320">
 <header>
-<h1>3. <code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>5. <code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>If we remove the <i>observation</i>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
@@ -740,7 +1144,12 @@
  </semantics>
 </math></div>
 <p>where 
-<math/inline>p(rain, sprinkler, grass-is-wet)</math/inline> is the <i>non-normalized</i> probability density function.</p>
+<math>
+<mrow>
+<mi>p</mi>
+<mi>rain</mi>
+<mi>sprinkler</mi>
+<mi>grass-is-wet</mi></mrow></math> is the <i>non-normalized</i> probability density function.</p>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/grass-model/joint _)
@@ -774,4 +1183,264 @@
           ((V ((rain #f) (sprinkler #f) (grass-is-wet #t)))
            (Times e (Plus -1 r) (Plus -1 s))))
         result))
+</code></pre></div>
+<section id="section321">
+<header>
+<h1>6. <code>test/geometric</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <semantics>
+  <mrow>
+   <mo>(</mo>
+   <mtext>&#8288;</mtext>
+   <mtable rowspacing='1ex'
+       columnalign='center'>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mn>3</mn>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mrow>
+         <mo>-</mo>
+         <msup>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mn>3</mn>
+         </msup>
+        </mrow>
+        <mo>&#8290;</mo>
+        <mi>p</mi>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mi>a1190</mi>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mrow>
+         <mo>-</mo>
+         <msup>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mn>5</mn>
+         </msup>
+        </mrow>
+        <mo>&#8290;</mo>
+        <mi>p</mi>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mn>2</mn>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <msup>
+         <mrow>
+          <mo>(</mo>
+          <mrow>
+           <mi>p</mi>
+           <mo>-</mo>
+           <mn>1</mn>
+          </mrow>
+          <mo>)</mo>
+         </mrow>
+         <mn>2</mn>
+        </msup>
+        <mo>&#8290;</mo>
+        <mi>p</mi>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mn>4</mn>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <msup>
+         <mrow>
+          <mo>(</mo>
+          <mrow>
+           <mi>p</mi>
+           <mo>-</mo>
+           <mn>1</mn>
+          </mrow>
+          <mo>)</mo>
+         </mrow>
+         <mn>4</mn>
+        </msup>
+        <mo>&#8290;</mo>
+        <mi>p</mi>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mi>a1190</mi>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <msup>
+         <mrow>
+          <mo>(</mo>
+          <mrow>
+           <mi>p</mi>
+           <mo>-</mo>
+           <mn>1</mn>
+          </mrow>
+          <mo>)</mo>
+         </mrow>
+         <mn>7</mn>
+        </msup>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mi>a1190</mi>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <msup>
+         <mrow>
+          <mo>(</mo>
+          <mrow>
+           <mi>p</mi>
+           <mo>-</mo>
+           <mn>1</mn>
+          </mrow>
+          <mo>)</mo>
+         </mrow>
+         <mn>6</mn>
+        </msup>
+        <mo>&#8290;</mo>
+        <mi>p</mi>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>p</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>p</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mn>0</mn>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mi>p</mi>
+      </mrow>
+     </mtd>
+    </mtr>
+   </mtable>
+   <mtext>&#8288;</mtext>
+   <mo>)</mo>
+  </mrow>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;3&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;3&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1190&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;5&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;2&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;2&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;4&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;4&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1190&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;7&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1190&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;6&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;1&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;0&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, &quot;p&quot;]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+ </semantics>
+</math></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/geometric _)
+  (define result ((probcc-reify (τ (probcc-geometric 'p))) 5))
+  (define t6 (cadr (car (sixth result))))
+  (define t7 (cadr (car (seventh result))))
+  (define t8 (cadr (car (eighth result)))))
 </code></pre></div></body></html>
