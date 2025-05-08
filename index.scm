@@ -61,22 +61,29 @@
                               (di "Auxiliary definitions" 
                                   (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions")
 				  ", call with current continuation " 
-				  (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "Undelimited continuations"))
+				  (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "undelimited continuations"))
 				  ", non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html"
 									  "Tests on " (i "Non determinism"))
 				  " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html"
 									  "Tests on " (i "delimited continuations"))
 				  "."))
                               (di "The Hansei probabilistic language" 
-				  (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html") 
+				  (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html" "Tests on the " (i "Hansei") " dsl") 
 				     " a test suite to understand the system defined in the reference page " 
 				     (cite/a "https://okmij.org/ftp/kakuritu/Hansei.html" 
 					     "Hansei dsl for probabilistic programming") 
 				     ". Quoting author's words:")
                                   (cite/quote "Oleg Kiselyov"
-                                              (i "HANSEI is the the embedded domain-specific language for probabilistic 
+					      (i "HANSEI is the the embedded domain-specific language for probabilistic 
 						  programming: for writing potentially infinite discrete-distribution models 
-						  and performing exact inference, importance sampling and inference of inference.")))))))
+						  and performing exact inference, importance sampling and inference of inference."))
+				  (p "We also have a " (i "symbolic") " variant in " 
+				     (cite/a "testsuites/testsuite-hansei-symbolic-suite.html" "Tests on the " (i "Hansei") " dsl, symbolic")))
+                              (di "Wolfram engine bindings"
+                                  (p "We have a layer " 
+				     (cite/a "testsuites/testsuite-wolfram-suite.html" "Wolfram engine bindings") 
+				     " to exchange data and evaluate " (i "symbolic expressions") " with the Wolfram engine "
+				     (cite/a "https://www.wolfram.com/engine/index.php.en" "Wolfram Engine")))))))
 
 
 #;(displaymath (frac (frac (m (x + 1)) (m 2)) (m 3)))
