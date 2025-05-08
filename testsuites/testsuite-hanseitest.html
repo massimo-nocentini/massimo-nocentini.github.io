@@ -3,49 +3,55 @@
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Georgia" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code, .w3-codespan { font-family: Roboto Mono, Ubuntu Mono, Monaco, monospace; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Georgia, Times New Roman, Lucida Sans, serif; }</style>
+<style>code, pre, tt, kbd, samp, .w3-code, .w3-codespan { font-family: Monaco, Lucida Console, Roboto Mono, Ubuntu Mono, monospace; }math { font-family: Euler Math; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Georgia, Lucida Sans, Times New Roman, serif; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script>hljs.highlightAll();</script>
 <title>hanseitest</title></head>
 <body class="w3-content" style="max-width:61.8%">
 <header class="w3-container w3-center">
 <h1><b>hanseitest</b></h1>
 <p></p><small><small>
-<p>Sat May 03 09:50:25+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Thu May 08 11:39:16+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section275">Introduction</a></li>
-<li><a href="#section280">Implementation</a></li>
-<li><a href="#section281"><code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section282"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section283"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section284"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section285"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section286"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section287"><code>test/procc/flip</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section288"><code>test/procc/flip-xor-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section289"><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-red">fail</span></a></li>
-<li><a href="#section290"><code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section286">Introduction</a></li>
+<li><a href="#section291">Implementation</a></li>
+<li><a href="#section292"><code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section293"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section294"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section295"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section296"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section297"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section298"><code>test/procc/flip</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section299"><code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section300"><code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-red">fail</span></a></li>
+<li><a href="#section301"><code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 10)
  (failed
-   1
+   2
    (test/procc/flip-xor-model/middle
+     (expected (((V #t) 0.5) ((V #f) 0.5)))
+     (got (((V #f) 0.5) ((V #t) 0.5))))
+   (test/procc/flip-xor-model
      (expected (((V #t) 0.5) ((V #f) 0.5)))
      (got (((V #f) 0.5) ((V #t) 0.5))))))
 </code></pre></div></p>
-<section id="section275">
+<section id="section286">
 <header>
 <h1>1. Introduction</h1></header></section>
-<p>Quoting from <cite>[<a href="#cite276">1</a>]</cite>:
+<p>Quoting from <cite>[<a href="#cite287">1</a>]</cite>:
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>Broadly speaking, probabilistic programming languages are to express
 		  computations with degrees of uncertainty, which comes from the
@@ -56,8 +62,8 @@
 		  variables -- and relationships among them.</i>
 <footer>
 <p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
-<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite277">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite278">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite279">4</a>]</cite>.</p>
-<section id="section280">
+<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite288">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite289">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite290">4</a>]</cite>.</p>
+<section id="section291">
 <header>
 <h1>2. Implementation</h1></header></section>
 <p>The first implementation of our language uses the probability
@@ -86,6 +92,11 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
     (chicken sort)
     srfi-69
     aux)
+  (define op/times (make-parameter *))
+  (define op/plus (make-parameter +))
+  (define op/subtract (make-parameter -))
+  (define op/divide (make-parameter (λ (m n) (exact-&gt;inexact (/ m n)))))
+  (define op/greater (make-parameter &gt;))
   (define-syntax
     probcc-τ
     (syntax-rules () ((_ p body ...) `((C ,(τ body ...)) ,p))))
@@ -110,40 +121,43 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
                ((equal? flag 'C) (let1 (t payload) cbody ...))
                (else (error `(not a probability slot ,slot))))))))
   (define (probcc-explore maxdepth choices)
-    (letrec ((ans (make-hash-table))
-             (loop (λ (p depth down choices susp)
+    (letrec ((times (op/times))
+             (plus (op/plus))
+             (loop (λ (p depth down choices ans susp)
                        (cond ((null? choices) susp)
                              (else
                               (let1/probccpair
                                 ((slot pt) (car choices))
-                                (let ((p*pt (* p pt)) (rest (cdr choices)))
+                                (let* ((p*pt (times p pt))
+                                       (A (λ (w) (plus w p*pt)))
+                                       (rest (cdr choices)))
                                   (cond/probccslot
                                     slot
                                     ((V v)
-                                     (hash-table-update!/default
-                                       ans
-                                       v
-                                       (λ (w) (+ w p*pt))
-                                       0)
-                                     (loop p depth down rest susp))
+                                     (hash-table-update!/default ans v A 0)
+                                     (loop p depth down rest ans susp))
                                     ((C t)
                                      (cond (down
                                             (loop p
                                                   depth
                                                   down
                                                   rest
+                                                  ans
                                                   (loop p*pt
                                                         (add1 depth)
                                                         (&lt; depth maxdepth)
                                                         (t)
+                                                        ans
                                                         susp)))
                                            (else
                                             (let1 (s (cons (probcc-τ p*pt (t)) susp))
-                                                  (loop p depth down rest s)))))))))))))
-      (let* ((susp (loop 1 0 #t choices '()))
+                                                  (loop p depth down rest ans s)))))))))))))
+      (let* ((ans (make-hash-table))
+             (susp (loop 1 0 #t choices ans '()))
              (f (λ (v p l) (cons (probcc-value p v) l)))
-             (folded (hash-table-fold ans f susp)))
-        (sort folded (λ (a b) (&gt; (cadr a) (cadr b)))))))
+             (folded (hash-table-fold ans f susp))
+             (greater (op/greater)))
+        (sort folded (λ (a b) (greater (cadr a) (cadr b)))))))
   (define (probcc-next-value choices)
     (cond ((null? choices) '())
           (else
@@ -162,9 +176,10 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
                                `(,slot ,(* p pt))))
                          (t))))))))))
   (define (probcc-normalize choices)
-    (let* ((tot (foldr (λ (each t) (+ t (cadr each))) 0 choices))
-           (N (λ (each)
-                  (list (car each) (exact-&gt;inexact (/ (cadr each) tot))))))
+    (let* ((divide (op/divide))
+           (plus (op/plus))
+           (tot (foldr (λ (each t) (plus t (cadr each))) 0 choices))
+           (N (λ (each) (list (car each) (divide (cadr each) tot)))))
       (map N choices)))
   (define (probcc-distribution distribution)
     (letcc/shift
@@ -186,25 +201,28 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
   (define (probcc-impossible) (probcc-distribution '()))
   (define (probcc-unit v) (list (probcc-value 1 v)))
   (define (probcc-bernoulli t f p)
-    (probcc-distribution `((,t ,p) (,f ,(- 1 p)))))
+    (probcc-distribution `((,t ,p) (,f ,((op/subtract) 1 p)))))
   (define (probcc-coin p) (probcc-bernoulli #t #f p))
   (define (probcc-uniform n)
     (cond ((equal? n 1) 0)
           ((&gt; n 1)
            (letrec ((p (/ 1 n))
+                    (plus (op/plus))
+                    (subtract (op/subtract))
                     (loop (λ (pacc acc i)
                               (if (zero? i)
                                 (probcc-distribution
-                                  (cons `(,i ,(- 1 pacc)) acc))
-                                (loop (+ pacc p) (cons `(,i ,p) acc) (sub1 i))))))
+                                  (cons `(,i ,(subtract 1 pacc)) acc))
+                                (loop (plus pacc p) (cons `(,i ,p) acc) (sub1 i))))))
              (loop 0 '() (sub1 n))))
           (else (error `(non-positive count ,n)))))
   (define (probcc-uniform/range low high)
     (+ low (probcc-uniform (add1 (- high low)))))
   (define (probcc-geometric p)
-    (letrec ((loop (λ (n)
+    (letrec ((subtract (op/subtract))
+             (loop (λ (n)
                        (list (probcc-τ p (list (probcc-value 1 n)))
-                             (probcc-τ (- 1 p) (loop (add1 n)))))))
+                             (probcc-τ (subtract 1 p) (loop (add1 n)))))))
       (probcc-reflect (loop 0))))
   (define-syntax
     probcc-when
@@ -236,7 +254,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
                           (foldr F count choices)))))
       (L choices 0))))
 </code></pre></div>
-<section id="section281">
+<section id="section292">
 <header>
 <h1>3. <code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Joint distribution of tossing two <i>biased</i> coins, where head has probability <code class="w3-codespan">0.6</code> to appear.</p>
@@ -252,7 +270,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
             (τ (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
                   `((x ,x) (y ,y))))))))
 </code></pre></div>
-<section id="section282">
+<section id="section293">
 <header>
 <h1>4. <code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared.</p>
@@ -267,7 +285,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
             (τ (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
                   (probcc-when (or x y) (list x y))))))))
 </code></pre></div>
-<section id="section283">
+<section id="section294">
 <header>
 <h1>5. <code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
@@ -318,7 +336,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
   (⊦= (list (probcc-value 0.322 '(rain #f)) (probcc-value 0.2838 '(rain #t)))
         result))
 </code></pre></div>
-<section id="section284">
+<section id="section295">
 <header>
 <h1>6. <code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>If we remove the assumption that <i>has been observed a wet grass</i>, then we have the joint probability distribution of <i>all</i> variables:</p>
@@ -346,7 +364,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
         result)
   (⊦= (probcc-normalize result) result))
 </code></pre></div>
-<section id="section285">
+<section id="section296">
 <header>
 <h1>7. <code>test/uniform/range</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -363,7 +381,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
         (sort (probcc-reify/exact (τ (probcc-uniform/range 1 8)))
               (λ (a b) (&lt; (cadr (car a)) (cadr (car b)))))))
 </code></pre></div>
-<section id="section286">
+<section id="section297">
 <header>
 <h1>8. <code>test/geometric</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -383,7 +401,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
           ((C ,t8) 1.70859375e-06))
         result))
 </code></pre></div>
-<section id="section287">
+<section id="section298">
 <header>
 <h1>9. <code>test/procc/flip</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -398,9 +416,9 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
         (⊦= '(((V #f) 0.9990234375) ((V #t) 0.0009765625)) res)
         (⊦= 11 (probcc-leaves (probcc-reify/0 model)))))
 </code></pre></div>
-<section id="section288">
+<section id="section299">
 <header>
-<h1>10. <code>test/procc/flip-xor-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>10. <code>test/procc/flip-xor-model</code>: <span class="w3-text-red">fail</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/flip-xor-model _)
@@ -413,7 +431,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
         (⊦= '(((V #t) 0.5) ((V #f) 0.5)) res)
         (⊦= 1024 (probcc-leaves (probcc-reify/0 flipxor-model)))))
 </code></pre></div>
-<section id="section289">
+<section id="section300">
 <header>
 <h1>11. <code>test/procc/flip-xor-model/middle</code>: <span class="w3-text-red">fail</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -432,7 +450,7 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
     (⊦= '(((V #t) 0.5) ((V #f) 0.5)) res)
     (⊦= 4 (probcc-leaves (probcc-reify/0 tree)))))
 </code></pre></div>
-<section id="section290">
+<section id="section301">
 <header>
 <h1>12. <code>test/procc/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -451,10 +469,10 @@ and 'a pV = (prob * 'a vc) list</code></pre></div>Each node in a tree is a weigh
 </code></pre></div>
 <hr />
 <div class="w3-container">
-<header><b>References</b></header><span id="cite276">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
-<br /><span id="cite277">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
-<br /><span id="cite278">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
+<header><b>References</b></header><span id="cite287">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
+<br /><span id="cite288">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
+<br /><span id="cite289">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
 		       domain-specific languages, ed. Walid Taha. LNCS 5658,
 		       Springer, 2009, pp. 360-384.</a></span>
-<br /><span id="cite279">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
+<br /><span id="cite290">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
 <br /></div></body></html>

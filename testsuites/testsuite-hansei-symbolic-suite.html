@@ -1,0 +1,777 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Georgia" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<style>code, pre, tt, kbd, samp, .w3-code, .w3-codespan { font-family: Monaco, Lucida Console, Roboto Mono, Ubuntu Mono, monospace; }math { font-family: Euler Math; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Georgia, Lucida Sans, Times New Roman, serif; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script>hljs.highlightAll();</script>
+<title>hansei-symbolic-suite</title></head>
+<body class="w3-content" style="max-width:61.8%">
+<header class="w3-container w3-center">
+<h1><b>hansei-symbolic-suite</b></h1>
+<p></p><small><small>
+<p>Thu May 08 11:39:17+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
+<div class="w3-container">
+<header><b>Table of contents</b></header>
+<ol>
+<li><a href="#section227">Symbolic</a></li>
+<li><a href="#section228"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section229"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<hr />
+<p><b>Tests summary</b>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 2) (failed 0))
+</code></pre></div></p>
+<section id="section227">
+<header>
+<h1>1. Symbolic</h1></header></section>
+<section id="section228">
+<header>
+<h1>2. <code>test/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>The conditional probability that <i>rained</i> given that a <i>wet grass</i> has been observed is </p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <mfrac>
+  <mrow>
+   <mi>r</mi>
+   <mo>&#8290;</mo>
+   <mrow>
+    <mo>(</mo>
+    <mrow>
+     <mrow>
+      <mi>e</mi>
+      <mo>&#8290;</mo>
+      <mrow>
+       <mo>(</mo>
+       <mrow>
+        <mi>w</mi>
+        <mo>-</mo>
+        <mn>1</mn>
+       </mrow>
+       <mo>)</mo>
+      </mrow>
+      <mo>&#8290;</mo>
+      <mrow>
+       <mo>(</mo>
+       <mrow>
+        <mrow>
+         <mi>s</mi>
+         <mo>&#8290;</mo>
+         <mi>v</mi>
+        </mrow>
+        <mo>-</mo>
+        <mn>1</mn>
+       </mrow>
+       <mo>)</mo>
+      </mrow>
+     </mrow>
+     <mo>+</mo>
+     <mrow>
+      <mi>s</mi>
+      <mo>&#8290;</mo>
+      <mrow>
+       <mo>(</mo>
+       <mrow>
+        <mi>v</mi>
+        <mo>-</mo>
+        <mrow>
+         <mi>v</mi>
+         <mo>&#8290;</mo>
+         <mi>w</mi>
+        </mrow>
+       </mrow>
+       <mo>)</mo>
+      </mrow>
+     </mrow>
+     <mo>+</mo>
+     <mi>w</mi>
+    </mrow>
+    <mo>)</mo>
+   </mrow>
+  </mrow>
+  <mrow>
+   <mrow>
+    <mi>e</mi>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mrow>
+       <mi>r</mi>
+       <mo>&#8290;</mo>
+       <mi>w</mi>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mrow>
+       <mi>s</mi>
+       <mo>&#8290;</mo>
+       <mi>v</mi>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+   </mrow>
+   <mo>+</mo>
+   <mrow>
+    <mi>s</mi>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mi>v</mi>
+      <mo>-</mo>
+      <mrow>
+       <mi>r</mi>
+       <mo>&#8290;</mo>
+       <mi>v</mi>
+       <mo>&#8290;</mo>
+       <mi>w</mi>
+      </mrow>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+   </mrow>
+   <mo>+</mo>
+   <mrow>
+    <mi>r</mi>
+    <mo>&#8290;</mo>
+    <mi>w</mi>
+   </mrow>
+  </mrow>
+ </mfrac>
+</math></div>
+<p>fully symbolic. On the other hand, the rules</p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <semantics>
+  <mrow>
+   <mo>(</mo>
+   <mtext>&#8288;</mtext>
+   <mtable rowspacing='1ex'
+       columnalign='center'>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mi>r</mi>
+       <mo>&#8594;</mo>
+       <mn>0.3</mn>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mi>s</mi>
+       <mo>&#8594;</mo>
+       <mn>0.5</mn>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mi>w</mi>
+       <mo>&#8594;</mo>
+       <mn>0.9</mn>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mi>v</mi>
+       <mo>&#8594;</mo>
+       <mn>0.8</mn>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mi>e</mi>
+       <mo>&#8594;</mo>
+       <mn>0.1</mn>
+      </mrow>
+     </mtd>
+    </mtr>
+   </mtable>
+   <mtext>&#8288;</mtext>
+   <mo>)</mo>
+  </mrow>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[&quot;r&quot;, &quot;\[Rule]&quot;, &quot;0.3`&quot;]]], List[RowBox[List[&quot;s&quot;, &quot;\[Rule]&quot;, &quot;0.5`&quot;]]], List[RowBox[List[&quot;w&quot;, &quot;\[Rule]&quot;, &quot;0.9`&quot;]]], List[RowBox[List[&quot;v&quot;, &quot;\[Rule]&quot;, &quot;0.8`&quot;]]], List[RowBox[List[&quot;e&quot;, &quot;\[Rule]&quot;, &quot;0.1`&quot;]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+ </semantics>
+</math></div>
+<p>allow us to get numerical values according to the expected results already shown.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/grass-model _)
+  (define-τ
+    grass-model
+    (let* ((rain (probcc-coin 'r))
+           (sprinkler (probcc-coin 's))
+           (grass-is-wet
+             (or (and (probcc-coin 'w) rain)
+                 (and (probcc-coin 'v) sprinkler)
+                 (probcc-coin 'e))))
+      (probcc-when grass-is-wet `(rain ,rain))))
+  (define result (probcc-reify/exact grass-model))
+  (define normalized (probcc-normalize result))
+  (define p/rain (second (first normalized)))
+  (define p/not-rain (second (second normalized)))
+  (define rules
+    '(List (Rule r 0.3) (Rule s 0.5) (Rule w 0.9) (Rule v 0.8) (Rule e 0.1)))
+  (⊦= '(((V (rain #t))
+           (Times r
+                  (Plus (Times e (Plus -1 (Times s v)) (Plus -1 w))
+                        w
+                        (Times s (Plus v (Times -1 v w))))))
+          ((V (rain #f))
+           (Times (Plus -1 r)
+                  (Plus (Times -1 s v) (Times e (Plus -1 (Times s v)))))))
+        result)
+  (⊦= '(((V (rain #t)) 0.2838) ((V (rain #f)) 0.322))
+        (letmap ((p result)) `(,(car p) ,(W `(ReplaceAll ,(cadr p) ,rules))))))
+</code></pre></div>
+<section id="section229">
+<header>
+<h1>3. <code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>If we remove the <i>observation</i>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(probcc-when grass-is-wet `(rain ,rain))
+</code></pre></div>from the previous test, then we can show the <i>joint distribution</i></p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <semantics>
+  <mrow>
+   <mo>(</mo>
+   <mtext>&#8288;</mtext>
+   <mtable rowspacing='1ex'
+       columnalign='center'>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mi>r</mi>
+        <mo>&#8290;</mo>
+        <mi>s</mi>
+        <mo>&#8290;</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mi>e</mi>
+           <mo>&#8290;</mo>
+           <mrow>
+            <mo>(</mo>
+            <mrow>
+             <mi>v</mi>
+             <mo>-</mo>
+             <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+           </mrow>
+           <mo>&#8290;</mo>
+           <mrow>
+            <mo>(</mo>
+            <mrow>
+             <mi>w</mi>
+             <mo>-</mo>
+             <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+           </mrow>
+          </mrow>
+          <mo>+</mo>
+          <mrow>
+           <mi>v</mi>
+           <mo>&#8290;</mo>
+           <mrow>
+            <mo>(</mo>
+            <mrow>
+             <mo>-</mo>
+             <mi>w</mi>
+            </mrow>
+            <mo>)</mo>
+           </mrow>
+          </mrow>
+          <mo>+</mo>
+          <mi>v</mi>
+          <mo>+</mo>
+          <mi>w</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mi>r</mi>
+        <mo>&#8290;</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mi>s</mi>
+          <mo>-</mo>
+          <mn>1</mn>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+        <mo>&#8290;</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mi>e</mi>
+           <mo>&#8290;</mo>
+           <mrow>
+            <mo>(</mo>
+            <mrow>
+             <mi>w</mi>
+             <mo>-</mo>
+             <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+           </mrow>
+          </mrow>
+          <mo>-</mo>
+          <mi>w</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mi>r</mi>
+          <mo>-</mo>
+          <mn>1</mn>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+        <mo>&#8290;</mo>
+        <mi>s</mi>
+        <mo>&#8290;</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mi>e</mi>
+           <mo>&#8290;</mo>
+           <mrow>
+            <mo>(</mo>
+            <mrow>
+             <mi>v</mi>
+             <mo>-</mo>
+             <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+           </mrow>
+          </mrow>
+          <mo>-</mo>
+          <mi>v</mi>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>e</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>r</mi>
+          <mo>&#8290;</mo>
+          <mi>s</mi>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>v</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>w</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>e</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>r</mi>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>s</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>w</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>e</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>r</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mi>s</mi>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>v</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mo>-</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>e</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>r</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+          <mo>&#8290;</mo>
+          <mrow>
+           <mo>(</mo>
+           <mrow>
+            <mi>s</mi>
+            <mo>-</mo>
+            <mn>1</mn>
+           </mrow>
+           <mo>)</mo>
+          </mrow>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+    <mtr>
+     <mtd>
+      <mrow>
+       <mrow>
+        <mi>p</mi>
+        <mo>&#8289;</mo>
+        <mo>(</mo>
+        <mrow>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>False</mi>
+         <mo>,</mo>
+         <mi>True</mi>
+        </mrow>
+        <mo>)</mo>
+       </mrow>
+       <mo>&#8594;</mo>
+       <mrow>
+        <mi>e</mi>
+        <mo>&#8290;</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mi>r</mi>
+          <mo>-</mo>
+          <mn>1</mn>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+        <mo>&#8290;</mo>
+        <mrow>
+         <mo>(</mo>
+         <mrow>
+          <mi>s</mi>
+          <mo>-</mo>
+          <mn>1</mn>
+         </mrow>
+         <mo>)</mo>
+        </mrow>
+       </mrow>
+      </mrow>
+     </mtd>
+    </mtr>
+   </mtable>
+   <mtext>&#8288;</mtext>
+   <mo>)</mo>
+  </mrow>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;True&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;r&quot;, &quot; &quot;, &quot;s&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;e&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;v&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;w&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;+&quot;, RowBox[List[&quot;v&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;-&quot;, &quot;w&quot;]], &quot;)&quot;]]]], &quot;+&quot;, &quot;v&quot;, &quot;+&quot;, &quot;w&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;False&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;r&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;s&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;e&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;w&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;-&quot;, &quot;w&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;True&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;r&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;s&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;e&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;v&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;-&quot;, &quot;v&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;True&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;e&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;r&quot;, &quot; &quot;, &quot;s&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;v&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;w&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;True&quot;, &quot;,&quot;, &quot;False&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;e&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;r&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;s&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;w&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;True&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;e&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;r&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;s&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;v&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;False&quot;, &quot;,&quot;, &quot;False&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;e&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;r&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;s&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;False&quot;, &quot;,&quot;, &quot;False&quot;, &quot;,&quot;, &quot;True&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;e&quot;, &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;r&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, RowBox[List[&quot;(&quot;, RowBox[List[&quot;s&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]]]]]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+ </semantics>
+</math></div>
+<p>where 
+<math/inline>p(rain, sprinkler, grass-is-wet)</math/inline> is the <i>non-normalized</i> probability density function.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/grass-model/joint _)
+  (define-τ
+    grass-model
+    (let* ((rain (probcc-coin 'r))
+           (sprinkler (probcc-coin 's))
+           (grass-is-wet
+             (or (and (probcc-coin 'w) rain)
+                 (and (probcc-coin 'v) sprinkler)
+                 (probcc-coin 'e))))
+      `((rain ,rain) (sprinkler ,sprinkler) (grass-is-wet ,grass-is-wet))))
+  (define result (probcc-reify/exact grass-model))
+  (define normalized (probcc-normalize result))
+  (⊦= '(((V ((rain #t) (sprinkler #t) (grass-is-wet #t)))
+           (Times r
+                  s
+                  (Plus v (Times e (Plus -1 v) (Plus -1 w)) w (Times -1 v w))))
+          ((V ((rain #t) (sprinkler #f) (grass-is-wet #t)))
+           (Times r (Plus -1 s) (Plus (Times e (Plus -1 w)) (Times -1 w))))
+          ((V ((rain #f) (sprinkler #t) (grass-is-wet #t)))
+           (Times (Plus -1 r) s (Plus (Times e (Plus -1 v)) (Times -1 v))))
+          ((V ((rain #t) (sprinkler #t) (grass-is-wet #f)))
+           (Times -1 (Plus -1 e) r s (Plus -1 v) (Plus -1 w)))
+          ((V ((rain #t) (sprinkler #f) (grass-is-wet #f)))
+           (Times -1 (Plus -1 e) r (Plus -1 s) (Plus -1 w)))
+          ((V ((rain #f) (sprinkler #t) (grass-is-wet #f)))
+           (Times -1 (Plus -1 e) (Plus -1 r) s (Plus -1 v)))
+          ((V ((rain #f) (sprinkler #f) (grass-is-wet #f)))
+           (Times -1 (Plus -1 e) (Plus -1 r) (Plus -1 s)))
+          ((V ((rain #f) (sprinkler #f) (grass-is-wet #t)))
+           (Times e (Plus -1 r) (Plus -1 s))))
+        result))
+</code></pre></div></body></html>
