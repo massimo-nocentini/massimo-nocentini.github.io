@@ -17,7 +17,7 @@
 <header class="w3-container w3-center">
 <h1><b>hanseitest</b></h1>
 <p></p><small><small>
-<p>Thu May 08 20:47:46+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Wed May 14 08:30:45+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -161,7 +161,7 @@
              ((slot pt) (car choices))
              (cond/probccslot
                slot
-               ((V v) (probcc-value pt v))
+               ((V v) choices)
                ((C t)
                 (let1 (times (op/times))
                       (probcc-next-value
@@ -216,12 +216,12 @@
           (else (error `(non-positive count ,n)))))
   (define (probcc-uniform/range low high)
     (+ low (probcc-uniform (add1 (- high low)))))
-  (define (probcc-geometric p)
+  (define (probcc-geometric p s f)
     (letrec ((subtract (op/subtract))
              (loop (λ (n)
-                       (list (probcc-τ p (list (probcc-value 1 n)))
-                             (probcc-τ (subtract 1 p) (loop (add1 n)))))))
-      (probcc-reflect (loop 0))))
+                       (list (probcc-τ p (list (probcc-value 1 (cons s n))))
+                             (probcc-τ (subtract 1 p) (loop (cons f n)))))))
+      (probcc-reflect (loop '()))))
   (define-syntax
     probcc-when
     (syntax-rules
@@ -385,15 +385,15 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/geometric _)
-  (define result ((probcc-reify (τ (probcc-geometric 0.85))) 5))
+  (define result ((probcc-reify (τ (probcc-geometric 0.85 's 'f))) 5))
   (define t6 (cadr (car (sixth result))))
   (define t7 (cadr (car (seventh result))))
   (define t8 (cadr (car (eighth result))))
-  (⊦= `(((V 0) 0.85)
-          ((V 1) 0.1275)
-          ((V 2) 0.019125)
-          ((V 3) 0.00286875)
-          ((V 4) 0.0004303125)
+  (⊦= `(((V (s)) 0.85)
+          ((V (s f)) 0.1275)
+          ((V (s f f)) 0.019125)
+          ((V (s f f f)) 0.00286875)
+          ((V (s f f f f)) 0.0004303125)
           ((C ,t6) 6.4546875e-05)
           ((C ,t7) 9.68203125000001e-06)
           ((C ,t8) 1.70859375e-06))
