@@ -17,31 +17,30 @@
 <header class="w3-container w3-center">
 <h1><b>hansei-symbolic-suite</b></h1>
 <p></p><small><small>
-<p>Wed May 14 08:33:24+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri May 16 07:44:02+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section454">Symbolic</a></li>
-<li><a href="#section455"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section456"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section457"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section458"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section459"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section460"><code>test/flip</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section461"><code>test/flip-xor-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section462"><code>test/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section463"><code>test/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section438">Symbolic</a></li>
+<li><a href="#section439"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section440"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section441"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section442"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section443"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section444"><code>test/flip</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section445"><code>test/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section446"><code>test/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 9) (failed 0))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 8) (failed 0))
 </code></pre></div></p>
-<section id="section454">
+<section id="section438">
 <header>
 <h1>1. Symbolic</h1></header></section>
-<section id="section455">
+<section id="section439">
 <header>
 <h1>2. <code>test/coin-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Joint distribution of tossing two coins, where head has probability 
@@ -195,10 +194,10 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/coin-model _)
-  (define-τ
-    model
-    (let* ((p 'p) (x (probcc-coin p)) (y (probcc-coin p))) `((x ,x) (y ,y))))
-  (define result (probcc-reify/exact model))
+  (define result
+    (probcc-reify/exact
+      (let* ((p 'p) (x (probcc-coin p)) (y (probcc-coin p)))
+        `((x ,x) (y ,y)))))
   (⊦= '(((V ((x #t) (y #f))) (Times -1 (Plus -1 p) p))
           ((V ((x #f) (y #t))) (Times -1 (Plus -1 p) p))
           ((V ((x #f) (y #f))) (Power (Plus -1 p) 2))
@@ -206,7 +205,11 @@
         result)
   (⊦= result (probcc-normalize result)))
 </code></pre></div>
-<section id="section456">
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(6291456 1481824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section440">
 <header>
 <h1>3. <code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared. Now the probabilities are <i>proportional</i> according to the following rules: </p>
@@ -434,15 +437,19 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/coin-model/observed _)
   (define result
     (probcc-reify/exact
-      (τ (let* ((p 'p) (x (probcc-coin p)) (y (probcc-coin p)))
-            (probcc-when (or x y) `((x ,x) (y ,y)))))))
+      (let* ((p 'p) (x (probcc-coin p)) (y (probcc-coin p)))
+        (probcc-when (or x y) `((x ,x) (y ,y))))))
   (define normalized (probcc-normalize result))
   (⊦= '(((V ((x #t) (y #f))) (Times -1 (Plus -1 p) p))
           ((V ((x #f) (y #t))) (Times -1 (Plus -1 p) p))
           ((V ((x #t) (y #t))) (Power p 2)))
         result))
 </code></pre></div>
-<section id="section457">
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.015) (memory #(6291456 1465704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section441">
 <header>
 <h1>4. <code>test/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>The conditional probability that <i>rained</i> given that a <i>wet grass</i> has been observed is </p>
@@ -632,16 +639,15 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/grass-model _)
-  (define-τ
-    grass-model
-    (let* ((rain (probcc-coin 'r))
-           (sprinkler (probcc-coin 's))
-           (grass-is-wet
-             (or (and (probcc-coin 'w) rain)
-                 (and (probcc-coin 'v) sprinkler)
-                 (probcc-coin 'e))))
-      (probcc-when grass-is-wet `(rain ,rain))))
-  (define result (probcc-reify/exact grass-model))
+  (define result
+    (probcc-reify/exact
+      (let* ((rain (probcc-coin 'r))
+             (sprinkler (probcc-coin 's))
+             (grass-is-wet
+               (or (and (probcc-coin 'w) rain)
+                   (and (probcc-coin 'v) sprinkler)
+                   (probcc-coin 'e))))
+        (probcc-when grass-is-wet `(rain ,rain)))))
   (define normalized (probcc-normalize result))
   (define p/rain (second (first normalized)))
   (define p/not-rain (second (second normalized)))
@@ -659,7 +665,11 @@
   (⊦= '(((V (rain #t)) 0.2838) ((V (rain #f)) 0.322))
         (letmap ((p result)) `(,(car p) ,(W `(ReplaceAll ,(cadr p) ,rules))))))
 </code></pre></div>
-<section id="section458">
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.028) (memory #(6291456 1413936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section442">
 <header>
 <h1>5. <code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>If we remove the <i>observation</i>
@@ -1157,16 +1167,15 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/grass-model/joint _)
-  (define-τ
-    grass-model
-    (let* ((rain (probcc-coin 'r))
-           (sprinkler (probcc-coin 's))
-           (grass-is-wet
-             (or (and (probcc-coin 'w) rain)
-                 (and (probcc-coin 'v) sprinkler)
-                 (probcc-coin 'e))))
-      `((rain ,rain) (sprinkler ,sprinkler) (grass-is-wet ,grass-is-wet))))
-  (define result (probcc-reify/exact grass-model))
+  (define result
+    (probcc-reify/exact
+      (let* ((rain (probcc-coin 'r))
+             (sprinkler (probcc-coin 's))
+             (grass-is-wet
+               (or (and (probcc-coin 'w) rain)
+                   (and (probcc-coin 'v) sprinkler)
+                   (probcc-coin 'e))))
+        `((rain ,rain) (sprinkler ,sprinkler) (grass-is-wet ,grass-is-wet)))))
   (define normalized (probcc-normalize result))
   (⊦= '(((V ((rain #t) (sprinkler #t) (grass-is-wet #t)))
            (Times r
@@ -1188,7 +1197,11 @@
            (Times e (Plus -1 r) (Plus -1 s))))
         result))
 </code></pre></div>
-<section id="section459">
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.043) (memory #(6291456 1825848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section443">
 <header>
 <h1>6. <code>test/geometric</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
@@ -1251,7 +1264,7 @@
         <mi>p</mi>
         <mo>&#8289;</mo>
         <mo>(</mo>
-        <mi>a1196</mi>
+        <mi>a1230</mi>
         <mo>)</mo>
        </mrow>
        <mo>&#8594;</mo>
@@ -1368,7 +1381,7 @@
         <mi>p</mi>
         <mo>&#8289;</mo>
         <mo>(</mo>
-        <mi>a1196</mi>
+        <mi>a1230</mi>
         <mo>)</mo>
        </mrow>
        <mo>&#8594;</mo>
@@ -1397,7 +1410,7 @@
         <mi>p</mi>
         <mo>&#8289;</mo>
         <mo>(</mo>
-        <mi>a1196</mi>
+        <mi>a1230</mi>
         <mo>)</mo>
        </mrow>
        <mo>&#8594;</mo>
@@ -1485,18 +1498,22 @@
    <mtext>&#8288;</mtext>
    <mo>)</mo>
   </mrow>
-  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;3&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1196&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;5&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;2&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;4&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1196&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;7&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1196&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;6&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, &quot;s&quot;, &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, &quot;p&quot;]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;3&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1230&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;5&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;2&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;4&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1230&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;7&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1230&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;6&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, &quot;s&quot;, &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, &quot;p&quot;]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
  </semantics>
 </math></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/geometric _)
-  (define result ((probcc-reify (τ (probcc-geometric 'p 's 'f))) 5))
+  (define result ((probcc-reify 5) (τ (probcc-geometric 'p 's 'f))))
   (define t6 (cadr (car (sixth result))))
   (define t7 (cadr (car (seventh result))))
   (define t8 (cadr (car (eighth result)))))
 </code></pre></div>
-<section id="section460">
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.022) (memory #(6291456 1603080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section444">
 <header>
 <h1>7. <code>test/flip</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
@@ -1518,243 +1535,18 @@
     (let loop ((p 'p) (n 10))
       (cond ((equal? 1 n) (probcc-coin p))
             (else (and (probcc-coin p) (loop p (sub1 n)))))))
-  (define result (probcc-reify/exact model))
+  (define result (probcc-reify/exact (model)))
   (⊦= '(((V #f) (Plus 1 (Times -1 (Power p 10)))) ((V #t) (Power p 10)))
         result)
   (⊦= 11 (probcc-leaves (probcc-reify/0 model))))
 </code></pre></div>
-<section id="section461">
-<header>
-<h1>8. <code>test/flip-xor-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
-<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
-    display='block'>
- <mrow>
-  <mrow>
-   <mn>512</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>10</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>2560</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>9</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>5760</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>8</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>7680</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>7</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>6720</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>6</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>4032</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>5</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>1680</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>4</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>480</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>3</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>90</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>2</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>10</mn>
-   <mo>&#8290;</mo>
-   <mi>p</mi>
-  </mrow>
-  <mo>+</mo>
-  <mn>1</mn>
- </mrow>
-</math></div>
-<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
-    display='block'>
- <mrow>
-  <mrow>
-   <mo>-</mo>
-   <mrow>
-    <mrow>
-     <mn>512</mn>
-    </mrow>
-    <mo>&#8290;</mo>
-    <msup>
-     <mi>p</mi>
-     <mn>10</mn>
-    </msup>
-   </mrow>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>2560</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>9</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>5760</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>8</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>7680</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>7</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>6720</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>6</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>4032</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>5</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>1680</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>4</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>480</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>3</mn>
-   </msup>
-  </mrow>
-  <mo>-</mo>
-  <mrow>
-   <mn>90</mn>
-   <mo>&#8290;</mo>
-   <msup>
-    <mi>p</mi>
-    <mn>2</mn>
-   </msup>
-  </mrow>
-  <mo>+</mo>
-  <mrow>
-   <mn>10</mn>
-   <mo>&#8290;</mo>
-   <mi>p</mi>
-  </mrow>
- </mrow>
-</math></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/flip-xor-model _)
-  (define-τ
-    flipxor-model
-    (let loop ((p 'p) (n 10))
-      (cond ((equal? 1 n) (probcc-coin p))
-            (else (not (equal? (probcc-coin p) (loop p (sub1 n))))))))
-  (define res (probcc-reify/exact flipxor-model))
-  (⊦= '(((V #f)
-           (Plus (Power (Plus -1 p) 10)
-                 (Times (Power p 2)
-                        (Plus 45
-                              (Times -360 p)
-                              (Times 1470 (Power p 2))
-                              (Times -3780 (Power p 3))
-                              (Times 6510 (Power p 4))
-                              (Times -7560 (Power p 5))
-                              (Times 5715 (Power p 6))
-                              (Times -2550 (Power p 7))
-                              (Times 511 (Power p 8))))))
-          ((V #t)
-           (Times 2
-                  p
-                  (Plus 5
-                        (Times -45 p)
-                        (Times 240 (Power p 2))
-                        (Times -840 (Power p 3))
-                        (Times 2016 (Power p 4))
-                        (Times -3360 (Power p 5))
-                        (Times 3840 (Power p 6))
-                        (Times -2880 (Power p 7))
-                        (Times 1280 (Power p 8))
-                        (Times -256 (Power p 9))))))
-        res)
-  (⊦= 1024 (probcc-leaves (probcc-reify/0 flipxor-model))))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 1370768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section462">
+<section id="section445">
 <header>
-<h1>9. <code>test/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>8. <code>test/flip-xor-model/middle</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
     display='block'>
  <mrow>
@@ -1947,17 +1739,16 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/flip-xor-model/middle _)
-  (define (flipxor-model c p)
+  (define (flipxor-model p)
     (letrec ((loop (λ (n)
-                       (τ (cond ((equal? 1 n) (probcc-coin p))
-                                 (else
-                                  (not (equal?
-                                         (probcc-coin p)
-                                         (probcc-reflect
-                                           (probcc-reify/exact (loop (sub1 n))))))))))))
-      (loop c)))
-  (define tree (flipxor-model 10 'p))
-  (define res (probcc-reify/exact tree))
+                       (cond ((equal? 1 n) (probcc-coin p))
+                             (else
+                              (not (equal?
+                                     (probcc-coin p)
+                                     (probcc-reflect
+                                       (probcc-reify/exact (loop (sub1 n)))))))))))
+      loop))
+  (define res (probcc-reify/exact ((flipxor-model 'p) 10)))
   (⊦= '(((V #f)
            (Plus 1
                  (Times -10 p)
@@ -1983,12 +1774,15 @@
                         (Times -2880 (Power p 7))
                         (Times 1280 (Power p 8))
                         (Times -256 (Power p 9))))))
-        res)
-  (⊦= 4 (probcc-leaves (probcc-reify/0 tree))))
+        res))
 </code></pre></div>
-<section id="section463">
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 3.116) (memory #(6291456 1438920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section446">
 <header>
-<h1>10. <code>test/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>9. <code>test/flip-xor-model/bucket</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
     display='block'>
  <mrow>
@@ -2181,17 +1975,16 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/flip-xor-model/bucket _)
-  (define (flipxor-model c p)
-    (τ (letrec ((loop (λ-probcc-bucket
-                         (n)
-                         (cond ((equal? 1 n) (probcc-coin p))
-                               (else
-                                (not (equal?
-                                       (probcc-coin ((op/subtract) 1 p))
-                                       (loop (sub1 n)))))))))
-          (loop c))))
-  (define tree (flipxor-model 10 'p))
-  (define res (probcc-reify/exact tree))
+  (define (flipxor-model p)
+    (letrec ((loop (λ-probcc-bucket
+                     (n)
+                     (cond ((equal? 1 n) (probcc-coin p))
+                           (else
+                            (not (equal?
+                                   (probcc-coin ((op/subtract) 1 p))
+                                   (loop (sub1 n)))))))))
+      loop))
+  (define res (probcc-reify/exact ((flipxor-model 'p) 10)))
   (⊦= '(((V #t)
            (Plus 1
                  (Times -10 p)
@@ -2217,6 +2010,9 @@
                         (Times -2880 (Power p 7))
                         (Times 1280 (Power p 8))
                         (Times -256 (Power p 9))))))
-        res)
-  (⊦= 2 (probcc-leaves (probcc-reify/0 tree))))
+        res))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.065) (memory #(6291456 1449872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>
