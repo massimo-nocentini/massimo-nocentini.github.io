@@ -5,7 +5,7 @@
                         (p "This site is a collection of " (em "Massimo Nocentini") 
                            "'s papers, notes, memos and source code, in the spirit of "
                            (cite/a "https://www.stepanovpapers.com/" "Alexander A. Stepanov's home page") "."))
-                        `((structure/section "Contacts")
+                        `((p "You can reach me via the following contacts:"
                           (ul
                             (li (em "+39 320 1162059 (mobile)"))
                             (li "Personal mail " 
@@ -17,16 +17,49 @@
                             (li "Public RSA key "
 				(cite/a "https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub"
 					"Public RSA key")))
+			  "After that, we can now proceed with some stuff I worked/working on.")
 
-                          (structure/section "On Smalltalk")
-			  (dl
-			    (di "Booklet on data structures"
-				(p "I have a working in progress booklet "
-				   (cite/a "https://massimo-nocentini.github.io/Booklet-DSst/" 
-					   "Booklet on data structures, in Pharo Smalltalk.")
-				   " about data structures, using the Pharo dialect.")))
+                          (structure/section "A booklet on Data Structures and, in general, on Smalltalk")
+			  (p "I have a working in progress booklet "
+			     (cite/a "https://massimo-nocentini.github.io/Booklet-DSst/" 
+				     "Booklet on data structures, in Pharo Smalltalk.")
+			     " about data structures, using the Pharo dialect.")
 
-                          (structure/section "On Scheme")
+			  (structure/section "Symbolic programming: Wolfram engine bindings")
+			  (p "We have a layer targeting the Scheme language " 
+			     (cite/a "testsuites/testsuite-wolfram-suite.html" "Wolfram engine bindings") 
+			     " to exchange data and evaluate " (i "symbolic expressions") " with the Wolfram engine "
+			     (cite/a "https://www.wolfram.com/engine/index.php.en" "Wolfram Engine"))
+
+                          (structure/section "Probabilistic Programming: the Hansei language")
+			  (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html" "Tests on the " (i "Hansei") " dsl") 
+			     " a test suite to understand the system defined in the reference page " 
+			     (cite/a "https://okmij.org/ftp/kakuritu/Hansei.html" 
+				     "Hansei dsl for probabilistic programming") 
+			     ". Quoting author's words:")
+			  (cite/quote "Oleg Kiselyov"
+				      (i "HANSEI is the the embedded domain-specific language for probabilistic 
+					 programming: for writing potentially infinite discrete-distribution models 
+					 and performing exact inference, importance sampling and inference of inference."))
+					 (p "We also have a " (i "symbolic") " variant of the famous " (i "wet grass model") " in " 
+					    (cite/a "testsuites/testsuite-hansei-symbolic-suite.html" 
+						    "Tests on the " (i "Hansei") " dsl, symbolic")
+					    " and more in depth tests about the " (i "variable elimination optimization")
+					    " in " (cite/a "testsuites/testsuite-hansei-ve-suite.html" "Variable elimination in Hansei: a symbolic point of view")
+					    ".")
+
+			 (structure/section "Bootstrapping unit testing frameworks, test driving themselves!")
+				  (p "Bootstrapping a unit test framework, test-driven itself in Scheme " 
+				     (cite/a "testsuites/testsuite-bootstrap-sut.html" "Bootstrapping a unittest framework in Scheme")
+				     ", in Lua " (cite/a "https://github.com/massimo-nocentini/unittest.lua" "Bootstrapping a unittest framework in Lua")
+				     " and in Python " (cite/a "https://github.com/massimo-nocentini/advanced-programming-techniques-course" 
+							       "Bootstrapping a unittest framework in Python") 
+				     "; this quote shows the message:" (cite/quote "Kent Beck" "...it's a kind of self-brain surgery"))
+                                  (p "My own learning tests for Scheme " 
+				     (cite/a "testsuites/testsuite-learning-suite.html" "My own Scheme learning tests") 
+				     " to understand the Scheme language, via the chicken interpreter.")
+
+                          (structure/section "On Scheme: continuations, the magnificents!")
                           (p "From the R6RS Ballot, reported in " (cite/a "https://wiki.call-cc.org/elevator-pitch") ":")
                           (cite/quote "Jeffrey Mark Siskind, author of Stalin and current (unofficial) maintainer of Scheme->C"
                                       (i "Scheme occupies a unique niche. A research niche and an educational
@@ -51,13 +84,7 @@
 					  differentiation, genetic programming, types, automated reasoning,
 					  ... just to name a few."))
                           (dl 
-                              (di "Learning tests"
-                                  (p "My own learning tests " 
-				     (cite/a "testsuites/testsuite-learning-suite.html" "My own Scheme learning tests") 
-				     " to understand the Scheme language, via the chicken interpreter."))
-                              (di "Unittest framework"
-				  (p "Bootstrapping a unit test framework, test-driven itself! " 
-				     (cite/a "testsuites/testsuite-bootstrap-sut.html" "Tests on my unittest framework for Scheme")))
+                              
                               (di "Auxiliary definitions" 
                                   (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions")
 				  ", call with current continuation " 
@@ -67,23 +94,7 @@
 				  " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html"
 									  "Tests on " (i "delimited continuations"))
 				  "."))
-                              (di "The Hansei probabilistic language" 
-				  (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html" "Tests on the " (i "Hansei") " dsl") 
-				     " a test suite to understand the system defined in the reference page " 
-				     (cite/a "https://okmij.org/ftp/kakuritu/Hansei.html" 
-					     "Hansei dsl for probabilistic programming") 
-				     ". Quoting author's words:")
-                                  (cite/quote "Oleg Kiselyov"
-					      (i "HANSEI is the the embedded domain-specific language for probabilistic 
-						  programming: for writing potentially infinite discrete-distribution models 
-						  and performing exact inference, importance sampling and inference of inference."))
-				  (p "We also have a " (i "symbolic") " variant in " 
-				     (cite/a "testsuites/testsuite-hansei-symbolic-suite.html" "Tests on the " (i "Hansei") " dsl, symbolic")))
-                              (di "Wolfram engine bindings"
-                                  (p "We have a layer " 
-				     (cite/a "testsuites/testsuite-wolfram-suite.html" "Wolfram engine bindings") 
-				     " to exchange data and evaluate " (i "symbolic expressions") " with the Wolfram engine "
-				     (cite/a "https://www.wolfram.com/engine/index.php.en" "Wolfram Engine")))))))
+                              ))))
 
 
 #;(displaymath (frac (frac (m (x + 1)) (m 2)) (m 3)))

@@ -17,29 +17,36 @@
 <header class="w3-container w3-center">
 <h1><b>hansei-ve-suite</b></h1>
 <p></p><small><small>
-<p>Mon May 19 16:53:33+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Tue May 20 10:56:40+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section233">Variable elimination optimization</a></li>
-<li><a href="#section234"><code>test/exponential</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section235"><code>test/var-elimination</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section236"><code>test/bucket</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section292">Variable elimination optimization</a></li>
+<li><a href="#section296"><code>test/exponential</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section297"><code>test/var-elimination</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section298"><code>test/bucket</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section299"><code>test/bucket/generic</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 3) (failed 0))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 4) (failed 0))
 </code></pre></div></p>
-<section id="section233">
+<section id="section292">
 <header>
 <h1>1. Variable elimination optimization</h1></header></section>
+<p>In this document we report some tests about the following technique,</p>
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The optimization of reification followed by (partial) flattening and reflection
+			 gives rise to the inference technique known as <b>variable elimination</b><cite>[<a href="#cite293">1</a>]</cite>. Its benefit is demonstrated by the following example, computing the XOR of n coin tosses.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote>
 <p>This trick transform a stochastic function <code class="w3-codespan">a -&gt; b</code> to a generally faster function:</p>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">ocaml code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-ocaml">let variable_elim f arg = reflect (exact_reify (fun () -&gt; f arg))</code></pre></div>
-<p>The probability of <i>tail</i> is:</p>
+<p>According to the idea shown in <cite>[<a href="#cite294">2</a>]</cite>, using symbolic manipulation, we show that the probability of XOR of 10 coin tosses  to be <i>tail</i> is</p>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
     display='block'>
  <mrow>
@@ -133,7 +140,10 @@
   <mn>1</mn>
  </mrow>
 </math></div>
-<section id="section234">
+<p>provided that <i>head</i> has probability 
+<math>
+<mi>p</mi></math> to appear in each toss. Moreover, the coefficients are the 10th row of a known sequence <cite>[<a href="#cite295">3</a>]</cite>.</p>
+<section id="section296">
 <header>
 <h1>2. <code>test/exponential</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -150,9 +160,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.795) (memory #(6291456 1134048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.606) (memory #(6291456 1203288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section235">
+<section id="section297">
 <header>
 <h1>3. <code>test/var-elimination</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -170,9 +180,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.064) (memory #(6291456 1143032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.059) (memory #(6291456 1200640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section236">
+<section id="section298">
 <header>
 <h1>4. <code>test/bucket</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -191,5 +201,237 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.08) (memory #(6291456 1135656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div></body></html>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.068) (memory #(6291456 1200720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section299">
+<header>
+<h1>5. <code>test/bucket/generic</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>This test generalizes the previous one in the sense that each coin has a <i>different</i> probability for <i>head</i>; in particular, the exact inference for the XOR of 5 such coins yields
+	    that <i>tail</i> has probability:</p>
+<div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
+    display='block'>
+ <mrow>
+  <mrow>
+   <mo>-</mo>
+   <mrow>
+    <mi>a</mi>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mrow>
+       <mn>2</mn>
+       <mo>&#8290;</mo>
+       <mi>b</mi>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mrow>
+       <mn>2</mn>
+       <mo>&#8290;</mo>
+       <mi>c</mi>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mrow>
+       <mn>2</mn>
+       <mo>&#8290;</mo>
+       <mi>d</mi>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+    <mo>&#8290;</mo>
+    <mrow>
+     <mo>(</mo>
+     <mrow>
+      <mrow>
+       <mn>2</mn>
+       <mo>&#8290;</mo>
+       <mi>e</mi>
+      </mrow>
+      <mo>-</mo>
+      <mn>1</mn>
+     </mrow>
+     <mo>)</mo>
+    </mrow>
+   </mrow>
+  </mrow>
+  <mo>+</mo>
+  <mrow>
+   <mi>b</mi>
+   <mo>&#8290;</mo>
+   <mrow>
+    <mo>(</mo>
+    <mrow>
+     <mrow>
+      <mn>2</mn>
+      <mo>&#8290;</mo>
+      <mi>c</mi>
+     </mrow>
+     <mo>-</mo>
+     <mn>1</mn>
+    </mrow>
+    <mo>)</mo>
+   </mrow>
+   <mo>&#8290;</mo>
+   <mrow>
+    <mo>(</mo>
+    <mrow>
+     <mrow>
+      <mn>2</mn>
+      <mo>&#8290;</mo>
+      <mi>d</mi>
+     </mrow>
+     <mo>-</mo>
+     <mn>1</mn>
+    </mrow>
+    <mo>)</mo>
+   </mrow>
+   <mo>&#8290;</mo>
+   <mrow>
+    <mo>(</mo>
+    <mrow>
+     <mrow>
+      <mn>2</mn>
+      <mo>&#8290;</mo>
+      <mi>e</mi>
+     </mrow>
+     <mo>-</mo>
+     <mn>1</mn>
+    </mrow>
+    <mo>)</mo>
+   </mrow>
+  </mrow>
+  <mo>-</mo>
+  <mrow>
+   <mn>4</mn>
+   <mo>&#8290;</mo>
+   <mi>c</mi>
+   <mo>&#8290;</mo>
+   <mi>d</mi>
+   <mo>&#8290;</mo>
+   <mi>e</mi>
+  </mrow>
+  <mo>+</mo>
+  <mrow>
+   <mn>2</mn>
+   <mo>&#8290;</mo>
+   <mi>c</mi>
+   <mo>&#8290;</mo>
+   <mi>d</mi>
+  </mrow>
+  <mo>+</mo>
+  <mrow>
+   <mn>2</mn>
+   <mo>&#8290;</mo>
+   <mi>c</mi>
+   <mo>&#8290;</mo>
+   <mi>e</mi>
+  </mrow>
+  <mo>-</mo>
+  <mi>c</mi>
+  <mo>+</mo>
+  <mrow>
+   <mn>2</mn>
+   <mo>&#8290;</mo>
+   <mi>d</mi>
+   <mo>&#8290;</mo>
+   <mi>e</mi>
+  </mrow>
+  <mo>-</mo>
+  <mi>d</mi>
+  <mo>-</mo>
+  <mi>e</mi>
+  <mo>+</mo>
+  <mn>1</mn>
+ </mrow>
+</math></div>
+<p>provided that coin's heads have probabilities 
+<math>
+<mi>a</mi></math>, 
+<math>
+<mi>b</mi></math>, 
+<math>
+<mi>c</mi></math>, 
+<math>
+<mi>d</mi></math> and 
+<math>
+<mi>e</mi></math>, respectively.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bucket/generic _)
+  (define flipxor-model
+    (letrec ((loop (λ-probcc-bucket
+                     (n)
+                     (cond ((null? (cdr n)) (probcc-coin (car n)))
+                           (else
+                            (let1 (r (loop (cdr n)))
+                                  (not (equal? (probcc-coin (car n)) r))))))))
+      loop))
+  (define res (probcc-reify/exact (flipxor-model '(a b c d e))))
+  (⊦= '(((V #f)
+           (Plus 1
+                 (Times -1 c)
+                 (Times -1 d)
+                 (Times 2 c d)
+                 (Times -1 e)
+                 (Times 2 c e)
+                 (Times 2 d e)
+                 (Times -4 c d e)
+                 (Times b
+                        (Plus -1 (Times 2 c))
+                        (Plus -1 (Times 2 d))
+                        (Plus -1 (Times 2 e)))
+                 (Times -1
+                        a
+                        (Plus -1 (Times 2 b))
+                        (Plus -1 (Times 2 c))
+                        (Plus -1 (Times 2 d))
+                        (Plus -1 (Times 2 e)))))
+          ((V #t)
+           (Plus c
+                 d
+                 (Times -2 c d)
+                 e
+                 (Times -2 c e)
+                 (Times -2 d e)
+                 (Times 4 c d e)
+                 (Times -1
+                        b
+                        (Plus -1 (Times 2 c))
+                        (Plus -1 (Times 2 d))
+                        (Plus -1 (Times 2 e)))
+                 (Times a
+                        (Plus -1 (Times 2 b))
+                        (Plus -1 (Times 2 c))
+                        (Plus -1 (Times 2 d))
+                        (Plus -1 (Times 2 e))))))
+        res))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.04) (memory #(6291456 1337360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<hr />
+<div class="w3-container">
+<header><b>References</b></header><span id="cite293">[1] <a href="https://www.sciencedirect.com/science/article/pii/S0004370299000594">Dechter, Rina. Bucket elimination: A unifying framework for probabilistic inference.</a></span>
+<br /><span id="cite294">[2] <a href="testsuite-hansei-symbolic-suite.html">Symbolic manipulation in Hansei: a new view on the <i>wet grass model</i>.</a></span>
+<br /><span id="cite295">[3] <a href="https://oeis.org/A082137">A082137: Square array of transforms of binomial coefficients, read by antidiagonals.</a></span>
+<br /></div></body></html>
