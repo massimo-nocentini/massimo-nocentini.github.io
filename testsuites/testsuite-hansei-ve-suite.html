@@ -17,7 +17,7 @@
 <header class="w3-container w3-center">
 <h1><b>hansei-ve-suite</b></h1>
 <p></p><small><small>
-<p>Tue May 20 10:56:40+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Aug 01 06:57:32Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -39,7 +39,7 @@
 <p>In this document we report some tests about the following technique,</p>
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>The optimization of reification followed by (partial) flattening and reflection
-			 gives rise to the inference technique known as <b>variable elimination</b><cite>[<a href="#cite293">1</a>]</cite>. Its benefit is demonstrated by the following example, computing the XOR of n coin tosses.</i>
+			 gives rise to the inference technique known as <b>variable elimination</b> <cite>[<a href="#cite293">1</a>]</cite>. Its benefit is demonstrated by the following example, computing the XOR of n coin tosses.</i>
 <footer>
 <p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote>
 <p>This trick transform a stochastic function <code class="w3-codespan">a -&gt; b</code> to a generally faster function:</p>
@@ -160,7 +160,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.606) (memory #(6291456 1203288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.522) (memory #(6291456 1212504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section297">
 <header>
@@ -169,18 +169,19 @@
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/var-elimination _)
   (define (flipxor-model p)
-    (letrec ((loop (λ (n)
-                       (cond ((equal? 1 n) (probcc-coin p))
-                             (else
-                              (let1 (r ((probcc-variable-elimination loop) (sub1 n)))
-                                    (not (equal? (probcc-coin p) r))))))))
+    (letrec ((loop (probcc-variable-elimination
+                     (λ (n)
+                         (cond ((equal? 1 n) (probcc-coin p))
+                               (else
+                                (let1 (r (loop (sub1 n)))
+                                      (not (equal? (probcc-coin p) r)))))))))
       loop))
   (define res (probcc-reify/exact ((flipxor-model 'p) 10)))
   (⊦= expanded-expected res))
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.059) (memory #(6291456 1200640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.03) (memory #(6291456 1208720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section298">
 <header>
@@ -201,7 +202,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.068) (memory #(6291456 1200720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.053) (memory #(6291456 1209488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section299">
 <header>
@@ -427,7 +428,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.04) (memory #(6291456 1337360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(6291456 1223000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">
