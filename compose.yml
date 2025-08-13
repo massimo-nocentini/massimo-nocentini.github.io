@@ -2,7 +2,7 @@ services:
   wolfram-engine:
     image: massimonocentini/wolframengine:14.2.1-wstpkernel
     restart: always
-    container_name: wolfram-engine-githubio
+    # container_name: wolfram-engine-githubio
     environment:
       - WOLFRAM_PORT=8080
     ports:
@@ -12,7 +12,7 @@ services:
 
   chicken-scheme-basic:
     image: massimonocentini/chicken-scheme:5.4.0-clang-myeggs
-    container_name: chicken-scheme-basic-githubio
+    # container_name: chicken-scheme-basic-githubio
     depends_on:
       - wolfram-engine
     environment:
@@ -31,7 +31,7 @@ services:
 
   chicken-scheme-hansei-wolfram:
     image: massimonocentini/chicken-scheme:5.4.0-clang-myeggs
-    container_name: chicken-scheme-hansei-wolfram-githubio
+    # container_name: chicken-scheme-hansei-wolfram-githubio
     depends_on:
       - wolfram-engine
     environment:

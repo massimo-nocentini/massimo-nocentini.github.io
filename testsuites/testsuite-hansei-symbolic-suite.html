@@ -17,27 +17,27 @@
 <header class="w3-container w3-center">
 <h1><b>hansei-symbolic-suite</b></h1>
 <p></p><small><small>
-<p>Fri Aug 01 06:56:39Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Wed Aug 13 14:57:42Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section320">Symbolic</a></li>
-<li><a href="#section321"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section322"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section323"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section324"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section325"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section332">Symbolic</a></li>
+<li><a href="#section333"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section334"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section335"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section336"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section337"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
 </code></pre></div></p>
-<section id="section320">
+<section id="section332">
 <header>
 <h1>1. Symbolic</h1></header></section>
-<section id="section321">
+<section id="section333">
 <header>
 <h1>2. <code>test/coin-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Joint distribution of tossing two coins, where head has probability 
@@ -204,9 +204,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1246648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1254768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section322">
+<section id="section334">
 <header>
 <h1>3. <code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared. Now the probabilities are <i>proportional</i> according to the following rules: </p>
@@ -444,9 +444,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1253216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1262600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section323">
+<section id="section335">
 <header>
 <h1>4. <code>test/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>The conditional probability that <i>rained</i> given that a <i>wet grass</i> has been observed is </p>
@@ -664,9 +664,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(6291456 1263464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(6291456 1266416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section324">
+<section id="section336">
 <header>
 <h1>5. <code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>If we remove the <i>observation</i>
@@ -1196,9 +1196,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(6291456 1279240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(6291456 1287592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section325">
+<section id="section337">
 <header>
 <h1>6. <code>test/geometric</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
@@ -1508,5 +1508,5 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1287920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1296680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>
