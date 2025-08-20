@@ -1,5 +1,5 @@
 
-build:
+index:
 	csi -s index.scm
 	cd path && csi -s ecce-homo.scm
 
@@ -8,3 +8,5 @@ format:
 
 docker:
 	docker compose up
+
+all: index docker

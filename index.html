@@ -18,7 +18,7 @@
 <h1><b>Massimo Nocentini</b></h1>
 <p>
 <p>This site is a collection of <em>Massimo Nocentini</em>'s papers, notes, memos and source code, in the spirit of <cite>[<a href="#cite39">1</a>]</cite>.</p></p><small><small>
-<p>Wed Aug 13 16:47:44+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Wed Aug 20 12:08:56+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -28,7 +28,8 @@
 <li><a href="#section49">Probabilistic Programming: the Hansei language</a></li>
 <li><a href="#section54">Bootstrapping unit testing frameworks, test driving themselves!</a></li>
 <li><a href="#section59">On Scheme: continuations, the magnificents!</a></li>
-<li><a href="#section65">Thank you, Pieter Hintjens!</a></li></ol></div>
+<li><a href="#section65">Timsort: a stable, adaptive, merge sort</a></li>
+<li><a href="#section67">Thank you, Pieter Hintjens!</a></li></ol></div>
 <hr />
 <p>You can reach me via the following contacts:
 <ul>
@@ -93,15 +94,16 @@
 					  ... just to name a few.</i></i>
 <footer>
 <p class="w3-right-align">Jeffrey Mark Siskind, author of Stalin and current (unofficial) maintainer of Scheme-&gt;C</p></footer></blockquote>
-<dl>
-<div class="w3-row">
-<dt class="w3-bold">Auxiliary definitions</dt>
-<dd>
-<p>Basic helpers <cite>[<a href="#cite61">18</a>]</cite>, call with current continuation <cite>[<a href="#cite62">19</a>]</cite>, non deteministic with cuts <cite>[<a href="#cite63">20</a>]</cite> and delimited continuations <cite>[<a href="#cite64">21</a>]</cite>.</p></dd></div></dl>
+<p>Basic helpers <cite>[<a href="#cite61">18</a>]</cite>, call with current continuation <cite>[<a href="#cite62">19</a>]</cite>, non deteministic with cuts <cite>[<a href="#cite63">20</a>]</cite> and delimited continuations <cite>[<a href="#cite64">21</a>]</cite>.</p>
 <section id="section65">
 <header>
-<h1>6. Thank you, Pieter Hintjens!</h1></header></section>
-<p>Great thanks to Pieter Hintjens, who passed away in 2016, for his work on distributed systems. Several blogs <cite>[<a href="#cite66">22</a>]</cite><cite>[<a href="#cite67">23</a>]</cite> and books <cite>[<a href="#cite68">24</a>]</cite> collect great ideas and are sources of inspiration.</p>
+<h1>6. Timsort: a stable, adaptive, merge sort</h1></header></section>
+<p>We have a working in progress implementation of the Timsort algorithm,
+                              a stable, adaptive, merge sort algorithm, in Scheme <cite>[<a href="#cite66">22</a>]</cite></p>
+<section id="section67">
+<header>
+<h1>7. Thank you, Pieter Hintjens!</h1></header></section>
+<p>Great thanks to Pieter Hintjens, who passed away in 2016, for his work on distributed systems. Several blogs <cite>[<a href="#cite68">23</a>]</cite><cite>[<a href="#cite69">24</a>]</cite> and books <cite>[<a href="#cite70">25</a>]</cite> collect great ideas and are sources of inspiration.</p>
 <hr />
 <div class="w3-container">
 <header><b>References</b></header><span id="cite39">[1] <a href="https://www.stepanovpapers.com/">Alexander A. Stepanov's home page</a></span>
@@ -125,7 +127,8 @@
 <br /><span id="cite62">[19] <a href="testsuites/testsuite-letcc-suite.html">Tests on <i>undelimited continuations</i></a></span>
 <br /><span id="cite63">[20] <a href="testsuites/testsuite-letnondeterministic-suite.html">Tests on <i>Non determinism</i></a></span>
 <br /><span id="cite64">[21] <a href="testsuites/testsuite-delimcc-suite.html">Tests on <i>delimited continuations</i></a></span>
-<br /><span id="cite66">[22] <a href="http://hintjens.com/blog:1">Elegant Little Pieces, by Pieter Hintjens</a></span>
-<br /><span id="cite67">[23] <a href="http://hintjens.com/blog:74">The Power of Living Systems, by Pieter Hintjens</a></span>
-<br /><span id="cite68">[24] <a href="http://hintjens.com/books">Books by Pieter Hintjens</a></span>
+<br /><span id="cite66">[22] <a href="testsuites/testsuite-timsort-suite.html">Tests on Timsort algorithm</a></span>
+<br /><span id="cite68">[23] <a href="http://hintjens.com/blog:1">Elegant Little Pieces, by Pieter Hintjens</a></span>
+<br /><span id="cite69">[24] <a href="http://hintjens.com/blog:74">The Power of Living Systems, by Pieter Hintjens</a></span>
+<br /><span id="cite70">[25] <a href="http://hintjens.com/books">Books by Pieter Hintjens</a></span>
 <br /></div></body></html>

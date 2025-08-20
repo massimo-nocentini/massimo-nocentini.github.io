@@ -83,18 +83,19 @@
 					  processing, stochastic computation, quantum computation, automatic
 					  differentiation, genetic programming, types, automated reasoning,
 					  ... just to name a few."))
-                          (dl
+                          (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions")
+                             ", call with current continuation " 
+                             (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "undelimited continuations"))
+                             ", non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html"
+                                                                     "Tests on " (i "Non determinism"))
+                             " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html"
+                                                                     "Tests on " (i "delimited continuations"))
+                             ".")
 
-                            (di "Auxiliary definitions" 
-                                (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions")
-                                   ", call with current continuation " 
-                                   (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "undelimited continuations"))
-                                   ", non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html"
-                                                                           "Tests on " (i "Non determinism"))
-                                   " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html"
-                                                                           "Tests on " (i "delimited continuations"))
-                                   "."))
-                            )
+                          (structure/section "Timsort: a stable, adaptive, merge sort")
+                          (p "We have a working in progress implementation of the Timsort algorithm,
+                              a stable, adaptive, merge sort algorithm, in Scheme " 
+                             (cite/a "testsuites/testsuite-timsort-suite.html" "Tests on Timsort algorithm"))
 
                           (structure/section "Thank you, Pieter Hintjens!")
                           (p "Great thanks to Pieter Hintjens, who passed away in 2016, for his work on distributed systems."
@@ -109,6 +110,7 @@
 
 
 (SXML->HTML->file! tree "index")
+
 
 
 

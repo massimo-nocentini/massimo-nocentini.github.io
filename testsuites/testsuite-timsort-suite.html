@@ -17,7 +17,7 @@
 <header class="w3-container w3-center">
 <h1><b>timsort-suite</b></h1>
 <p></p><small><small>
-<p>Wed Aug 13 14:57:45Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Wed Aug 20 10:07:03Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
@@ -31,13 +31,12 @@
 <li><a href="#section100"><code>test/already-sorted</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section101"><code>test/already-sorted/sort</code>: <span class="w3-text-green">pass</span></a></li>
 <li><a href="#section102"><code>test/already-sorted/primitive</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section103"><code>test/primitive</code>: <span class="w3-text-red">fail</span></a></li></ol></div>
+<li><a href="#section103"><code>test/primitive</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 9)
- (failed 1 (test/primitive (expected (hello world)) (got (world hello)))))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 9) (failed 0))
 </code></pre></div></p>
 <section id="section82">
 <header>
@@ -67,7 +66,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 24949608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 24949576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section96">
 <header>
@@ -78,7 +77,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.473) (memory #(100663296 48947544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.343) (memory #(100663296 48947576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section97">
 <header>
@@ -89,7 +88,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.463) (memory #(201326592 48948272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.326) (memory #(201326592 48948240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section98">
 <header>
@@ -100,7 +99,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.394) (memory #(201326592 72948944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.322) (memory #(201326592 72948944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section99">
 <header>
@@ -111,7 +110,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.344) (memory #(201326592 72949608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.245) (memory #(201326592 72949624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section100">
 <header>
@@ -122,7 +121,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.352) (memory #(201326592 48950344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.278) (memory #(201326592 48950280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section101">
 <header>
@@ -133,7 +132,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.298) (memory #(201326592 48950944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.218) (memory #(201326592 48950976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section102">
 <header>
@@ -144,11 +143,11 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.117) (memory #(201326592 48951648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.081) (memory #(201326592 48951664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <section id="section103">
 <header>
-<h1>10. <code>test/primitive</code>: <span class="w3-text-red">fail</span></h1></header></section>
+<h1>10. <code>test/primitive</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/primitive _)
@@ -157,7 +156,7 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 48952504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 48952296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">
