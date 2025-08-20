@@ -2,7 +2,6 @@ services:
   wolfram-engine:
     image: massimonocentini/wolframengine:wstpkernel
     restart: always
-    # container_name: wolfram-engine-githubio
     environment:
       - WOLFRAM_PORT=8080
     ports:
@@ -12,7 +11,6 @@ services:
 
   chicken-scheme-basic:
     image: massimonocentini/chicken-scheme:5.4.0-myeggs
-    # container_name: chicken-scheme-basic-githubio
     depends_on:
       - wolfram-engine
     environment:
@@ -31,7 +29,6 @@ services:
 
   chicken-scheme-hansei-wolfram:
     image: massimonocentini/chicken-scheme:5.4.0-myeggs
-    # container_name: chicken-scheme-hansei-wolfram-githubio
     depends_on:
       - wolfram-engine
     environment:
@@ -43,3 +40,12 @@ services:
                  "
     volumes:
       - ./testsuites:/home/wolframengine/testsuites
+
+  chicken-scheme-githubio:
+    image: massimonocentini/chicken-scheme:5.4.0-myeggs
+    depends_on:
+      - wolfram-engine
+    command: |
+      /bin/bash -c "cd mn-githubio/ && make index"
+    volumes:
+      - ./:/home/mn-githubio/
