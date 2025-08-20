@@ -1,6 +1,6 @@
 services:
   wolfram-engine:
-    image: massimonocentini/wolframengine:14.2.1-wstpkernel
+    image: massimonocentini/wolframengine:wstpkernel
     restart: always
     # container_name: wolfram-engine-githubio
     environment:
@@ -11,7 +11,7 @@ services:
       - ~/.WolframEngine/Licensing:/home/wolframengine/.WolframEngine/Licensing
 
   chicken-scheme-basic:
-    image: massimonocentini/chicken-scheme:5.4.0-clang-myeggs
+    image: massimonocentini/chicken-scheme:5.4.0-myeggs
     # container_name: chicken-scheme-basic-githubio
     depends_on:
       - wolfram-engine
@@ -30,7 +30,7 @@ services:
 
 
   chicken-scheme-hansei-wolfram:
-    image: massimonocentini/chicken-scheme:5.4.0-clang-myeggs
+    image: massimonocentini/chicken-scheme:5.4.0-myeggs
     # container_name: chicken-scheme-hansei-wolfram-githubio
     depends_on:
       - wolfram-engine
