@@ -14,18 +14,18 @@ services:
     depends_on:
       - wolfram-engine
     environment:
-      - CHICKEN_WOLFRAM_HOST="wolfram-engine"
-      - CHICKEN_WOLFRAM_PORT="8080"
+      - CHICKEN_WOLFRAM_HOST=wolfram-engine
+      - CHICKEN_WOLFRAM_PORT=8080
     command: |
       /bin/bash -c "sleep 10s &&
                   cd unittest.scm/src && make test -B && cp test/*.html /home/wolframengine/testsuites && cd ../../ &&
                   cd aux.scm/src && make test -B && cp test/*.html /home/wolframengine/testsuites && cd ../../ &&
+                  cd fds.scm/src && make test -B && cp test/*.html /home/wolframengine/testsuites && cd ../../ &&
                   cd wolfram.scm/src/test && csi -s test.scm && cp *.html /home/wolframengine/testsuites && cd ../../../ &&
                   cd hansei.scm/src/test && csi -s test.scm && csi -s variable-elimination.scm && cp *.html /home/wolframengine/testsuites
                  "
     volumes:
       - ./testsuites:/home/wolframengine/testsuites
-
 
   chicken-scheme-hansei-wolfram:
     image: massimonocentini/chicken-scheme:5.4.0-myeggs
