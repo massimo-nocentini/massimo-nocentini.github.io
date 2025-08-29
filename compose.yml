@@ -29,31 +29,7 @@ services:
       - CHICKEN_WOLFRAM_HOST=wolfram-engine
       - CHICKEN_WOLFRAM_PORT=8080
     command: |
-      /bin/bash -c "sleep 10s && cd wolfram.scm/src/test && csi -s test.scm && cp *.html /home/testsuites && echo 'Done'"
-    volumes:
-      - ./testsuites:/home/testsuites
-
-  chicken-scheme-wolfram-hansei-base:
-    image: massimonocentini/chicken-scheme:5.4.0-myeggs
-    depends_on:
-      - wolfram-engine
-    environment:
-      - CHICKEN_WOLFRAM_HOST=wolfram-engine
-      - CHICKEN_WOLFRAM_PORT=8080
-    command: |
-      /bin/bash -c "sleep 10s && cd wolfram.scm/src/test && csi -s hansei-base.scm && cp *.html /home/testsuites && echo 'Done'"
-    volumes:
-      - ./testsuites:/home/testsuites
-
-  chicken-scheme-wolfram-hansei-ve:
-    image: massimonocentini/chicken-scheme:5.4.0-myeggs
-    depends_on:
-      - wolfram-engine
-    environment:
-      - CHICKEN_WOLFRAM_HOST=wolfram-engine
-      - CHICKEN_WOLFRAM_PORT=8080
-    command: |
-      /bin/bash -c "sleep 10s && cd wolfram.scm/src/test && csi -s hansei-variable-elimination.scm && cp *.html /home/testsuites && echo 'Done'"
+      /bin/bash -c "sleep 10s && cd wolfram.scm/src/test && csi -s test.scm && csi -s hansei-base.scm && csi -s hansei-variable-elimination.scm && cp *.html /home/testsuites && echo 'Done'"
     volumes:
       - ./testsuites:/home/testsuites
 
