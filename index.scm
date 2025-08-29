@@ -1,5 +1,5 @@
 
-(import sxml)
+(import (aux sxml))
 
 (define tree (sxml-tree '("Massimo Nocentini" 
                         (p "This site is a collection of " (em "Massimo Nocentini") 

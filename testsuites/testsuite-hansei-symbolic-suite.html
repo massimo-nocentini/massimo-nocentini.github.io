@@ -17,27 +17,27 @@
 <header class="w3-container w3-center">
 <h1><b>hansei-symbolic-suite</b></h1>
 <p></p><small><small>
-<p>Wed Aug 27 14:37:50Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Aug 29 12:03:52Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section332">Symbolic</a></li>
-<li><a href="#section333"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section334"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section335"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section336"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section337"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section345">Symbolic</a></li>
+<li><a href="#section346"><code>test/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section347"><code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section348"><code>test/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section349"><code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section350"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
 </code></pre></div></p>
-<section id="section332">
+<section id="section345">
 <header>
 <h1>1. Symbolic</h1></header></section>
-<section id="section333">
+<section id="section346">
 <header>
 <h1>2. <code>test/coin-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Joint distribution of tossing two coins, where head has probability 
@@ -204,9 +204,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1245712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1253576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section334">
+<section id="section347">
 <header>
 <h1>3. <code>test/coin-model/observed</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared. Now the probabilities are <i>proportional</i> according to the following rules: </p>
@@ -444,9 +444,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1256112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1263976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section335">
+<section id="section348">
 <header>
 <h1>4. <code>test/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>The conditional probability that <i>rained</i> given that a <i>wet grass</i> has been observed is </p>
@@ -664,9 +664,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1263896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(6291456 1268960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section336">
+<section id="section349">
 <header>
 <h1>5. <code>test/grass-model/joint</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>If we remove the <i>observation</i>
@@ -1196,9 +1196,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(6291456 1284904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(6291456 1292592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section337">
+<section id="section350">
 <header>
 <h1>6. <code>test/geometric</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-container"><math xmlns='http://www.w3.org/1998/Math/MathML'
@@ -1261,7 +1261,7 @@
         <mi>p</mi>
         <mo>&#8289;</mo>
         <mo>(</mo>
-        <mi>a1373</mi>
+        <mi>a1390</mi>
         <mo>)</mo>
        </mrow>
        <mo>&#8594;</mo>
@@ -1378,7 +1378,7 @@
         <mi>p</mi>
         <mo>&#8289;</mo>
         <mo>(</mo>
-        <mi>a1373</mi>
+        <mi>a1390</mi>
         <mo>)</mo>
        </mrow>
        <mo>&#8594;</mo>
@@ -1407,7 +1407,7 @@
         <mi>p</mi>
         <mo>&#8289;</mo>
         <mo>(</mo>
-        <mi>a1373</mi>
+        <mi>a1390</mi>
         <mo>)</mo>
        </mrow>
        <mo>&#8594;</mo>
@@ -1495,7 +1495,7 @@
    <mtext>&#8288;</mtext>
    <mo>)</mo>
   </mrow>
-  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;3&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1373&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;5&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;4&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;2&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1373&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;7&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1373&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;6&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, &quot;s&quot;, &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, &quot;p&quot;]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
+  <annotation encoding='Mathematica'>TagBox[RowBox[List[&quot;(&quot;, &quot;\[NoBreak]&quot;, TagBox[GridBox[List[List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;3&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1390&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;5&quot;]]], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;4&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;2&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1390&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;7&quot;]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, &quot;a1390&quot;, &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[SuperscriptBox[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot;6&quot;], &quot; &quot;, &quot;p&quot;]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, RowBox[List[&quot;s&quot;, &quot;,&quot;, &quot;f&quot;]], &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, RowBox[List[&quot;-&quot;, RowBox[List[&quot;(&quot;, RowBox[List[RowBox[List[&quot;(&quot;, RowBox[List[&quot;p&quot;, &quot;-&quot;, &quot;1&quot;]], &quot;)&quot;]], &quot; &quot;, &quot;p&quot;]], &quot;)&quot;]]]]]]], List[RowBox[List[RowBox[List[&quot;p&quot;, &quot;(&quot;, RowBox[List[&quot;{&quot;, &quot;s&quot;, &quot;}&quot;]], &quot;)&quot;]], &quot;\[Rule]&quot;, &quot;p&quot;]]]], Rule[RowSpacings, 1], Rule[ColumnAlignments, Center], Rule[ColumnAlignments, Left]], Column], &quot;\[NoBreak]&quot;, &quot;)&quot;]], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]</annotation>
  </semantics>
 </math></div>
 <div class="w3-card w3-round">
@@ -1508,5 +1508,5 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1286112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1293352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

@@ -17,29 +17,29 @@
 <header class="w3-container w3-center">
 <h1><b>hanseitest</b></h1>
 <p></p><small><small>
-<p>Wed Aug 27 14:37:57Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Fri Aug 29 13:19:27Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section185">Introduction</a></li>
-<li><a href="#section190">Implementation</a></li>
-<li><a href="#section191"><code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section192"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section193"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section194"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section195"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section196"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section198">Introduction</a></li>
+<li><a href="#section203">Implementation</a></li>
+<li><a href="#section204"><code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section205"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section206"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section207"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section208"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section209"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 6) (failed 0))
 </code></pre></div></p>
-<section id="section185">
+<section id="section198">
 <header>
 <h1>1. Introduction</h1></header></section>
-<p>Quoting from <cite>[<a href="#cite186">1</a>]</cite>:
+<p>Quoting from <cite>[<a href="#cite199">1</a>]</cite>:
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>Broadly speaking, probabilistic programming languages are to express
 		  computations with degrees of uncertainty, which comes from the
@@ -50,8 +50,8 @@
 		  variables -- and relationships among them.</i>
 <footer>
 <p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
-<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite187">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite188">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite189">4</a>]</cite>.</p>
-<section id="section190">
+<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite200">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite201">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite202">4</a>]</cite>.</p>
+<section id="section203">
 <header>
 <h1>2. Implementation</h1></header></section>
 <p>The first implementation of our language uses the probability
@@ -68,7 +68,7 @@
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
-  hansei
+  (aux hansei)
   *
   (import
     scheme
@@ -78,7 +78,8 @@
     (chicken fixnum)
     (chicken sort)
     srfi-69
-    aux)
+    (aux base)
+    (aux continuation))
   (define op/times (make-parameter *))
   (define op/plus (make-parameter +))
   (define op/subtract (make-parameter -))
@@ -263,7 +264,7 @@
                         ((slot pi) inner)
                         (list slot ((op/times) p pi))))))))))))
 </code></pre></div>
-<section id="section191">
+<section id="section204">
 <header>
 <h1>3. <code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Joint distribution of tossing two <i>biased</i> coins, where head has probability <code class="w3-codespan">0.6</code> to appear.</p>
@@ -281,9 +282,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1066984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8514368 1065872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section192">
+<section id="section205">
 <header>
 <h1>4. <code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared.</p>
@@ -300,9 +301,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1066216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8514368 1066912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section193">
+<section id="section206">
 <header>
 <h1>5. <code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
@@ -354,9 +355,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1068040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8514368 1068568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section194">
+<section id="section207">
 <header>
 <h1>6. <code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <p>If we remove the assumption that <i>has been observed a wet grass</i>, then we have the joint probability distribution of <i>all</i> variables:</p>
@@ -385,9 +386,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1071568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8514368 1077960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section195">
+<section id="section208">
 <header>
 <h1>7. <code>test/uniform/range</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -406,9 +407,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1069152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8514368 1079192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section196">
+<section id="section209">
 <header>
 <h1>8. <code>test/geometric</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -430,14 +431,14 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1073424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8514368 1083352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">
-<header><b>References</b></header><span id="cite186">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
-<br /><span id="cite187">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
-<br /><span id="cite188">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
+<header><b>References</b></header><span id="cite199">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
+<br /><span id="cite200">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
+<br /><span id="cite201">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
 		       domain-specific languages, ed. Walid Taha. LNCS 5658,
 		       Springer, 2009, pp. 360-384.</a></span>
-<br /><span id="cite189">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
+<br /><span id="cite202">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
 <br /></div></body></html>

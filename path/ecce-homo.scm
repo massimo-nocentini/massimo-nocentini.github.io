@@ -1,5 +1,5 @@
 
-(import sxml)
+(import (aux sxml))
 
 (define tree (sxml-tree '("Ecce Homo!" "don Fabio Rosini")
                         `((p "Trascritto della catechesi registrata "
