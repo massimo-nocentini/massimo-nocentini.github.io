@@ -19,11 +19,26 @@
                                            "Public RSA key")))
                              "After that, we can now proceed with some stuff I worked/working on.")
 
-                          (structure/section "A booklet on Data Structures and, in general, on Smalltalk")
-                          (p "I have a working in progress booklet "
-                             (cite/a "https://massimo-nocentini.github.io/Booklet-DSst/" 
-                                     "Booklet on data structures, in Pharo Smalltalk.")
-                             " about data structures, using the Pharo dialect.")
+                          (structure/section "On Data Structures")
+
+                          (dl
+                            (di "A booklet using the Pharo dialect of Smalltalk"
+                                (p "I have a working in progress booklet "
+                                   (cite/a "https://massimo-nocentini.github.io/Booklet-DSst/" 
+                                           "Booklet on data structures, in Smalltalk using Pharo")
+                                   " about data structures, using the Pharo dialect."))
+                            (di "Functional data structures in Scheme"
+                                (p "We have several tests on data structures, in particular:")
+                                (ul
+                                  (li "Streams "
+                                      (cite/a "testsuites/testsuite-stream-suite.html" 
+                                              "Tests on a functional " (i "stream") " implementation in Scheme"))
+                                  (li "Queues "
+                                      (cite/a "testsuites/testsuite-queue-suite.html" 
+                                              "Tests on a functional " (i "queue") " implementation in Scheme"))
+                                  (li "Skew Binary Random Access Lists " 
+                                      (cite/a "testsuites/testsuite-sbral-suite.html" 
+                                              "Tests on a functional " (i "SBRAL") " implementation in Scheme")))))
 
                           (structure/section "Symbolic programming: Wolfram engine bindings")
                           (p "We have a layer targeting the Scheme language " 
@@ -110,6 +125,15 @@
 
 
 (SXML->HTML->file! tree "index")
+
+
+
+
+
+
+
+
+
 
 
 
