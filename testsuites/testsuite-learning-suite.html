@@ -17,22 +17,23 @@
 <header class="w3-container w3-center">
 <h1><b>learning-suite</b></h1>
 <p></p><small><small>
-<p>Fri Aug 29 13:43:42Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>Mon Sep 15 08:19:07Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
 <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
 <div class="w3-container">
 <header><b>Table of contents</b></header>
 <ol>
-<li><a href="#section5"><code>test-alist-ref</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section6"><code>test/len</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section7"><code>test/c-apply</code>: <span class="w3-text-green">pass</span></a></li>
-<li><a href="#section8"><code>test-null-eq?</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<li><a href="#section6"><code>test-alist-ref</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section7"><code>test/len</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section8"><code>test/unquote</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section10"><code>test/c-apply</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section11"><code>test-null-eq?</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
 <hr />
 <p><b>Tests summary</b>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 4) (failed 0))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
 </code></pre></div></p>
-<section id="section5">
+<section id="section6">
 <header>
 <h1>1. <code>test-alist-ref</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -45,9 +46,9 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1186416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1190200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section6">
+<section id="section7">
 <header>
 <h1>2. <code>test/len</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
@@ -64,11 +65,23 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1187048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1190832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section7">
+<section id="section8">
 <header>
-<h1>3. <code>test/c-apply</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>3. <code>test/unquote</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>Very interesting test about quasiquotation <cite>[<a href="#cite9">1</a>]</cite> : it shows how <code class="w3-codespan">unquote</code> can be used in a quasiquotation pattern in the <code class="w3-codespan">cdr</code> slot.</p>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/unquote _) (let1 (a '(3)) (⊦= (cons 1 a) `(1 unquote a))))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1191920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section10">
+<header>
+<h1>4. <code>test/c-apply</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/c-apply _)
@@ -82,16 +95,20 @@
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1187680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1192552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section8">
+<section id="section11">
 <header>
-<h1>4. <code>test-null-eq?</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>5. <code>test-null-eq?</code>: <span class="w3-text-green">pass</span></h1></header></section>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-null-eq? _) (⊨ (eq? '() '())))
 </code></pre></div>
 <div class="w3-card w3-round">
 <header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1188312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div></body></html>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1193184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<hr />
+<div class="w3-container">
+<header><b>References</b></header><span id="cite9">[1] <a href="https://wiki.call-cc.org/man/5/Module%20scheme#quasiquotation">Quasiquotation, Chicken Scheme manual.</a></span>
+<br /></div></body></html>

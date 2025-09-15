@@ -5,7 +5,9 @@
                         (p "This site is a collection of " (em "Massimo Nocentini") 
                            "'s papers, notes, memos and source code, in the spirit of "
                            (cite/a "https://www.stepanovpapers.com/" "Alexander A. Stepanov's home page") "."))
-                        `((p "You can reach me via the following contacts:"
+                        `(
+                          (structure/section "About me")
+                          (p "You can reach me via the following contacts:"
                              (ul
                                (li (em "+39 320 1162059 (mobile)"))
                                (li "Personal mail " 
@@ -20,7 +22,6 @@
                              "After that, we can now proceed with some stuff I worked/working on.")
 
                           (structure/section "On Data Structures")
-
                           (dl
                             (di "A booklet using the Pharo dialect of Smalltalk"
                                 (p "I have a working in progress booklet "
@@ -44,7 +45,11 @@
                           (p "We have a layer targeting the Scheme language " 
                              (cite/a "testsuites/testsuite-wolfram-suite.html" "Wolfram engine bindings") 
                              " to exchange data and evaluate " (i "symbolic expressions") " with the Wolfram engine "
-                             (cite/a "https://www.wolfram.com/engine/index.php.en" "Wolfram Engine"))
+                             (cite/a "https://www.wolfram.com/engine/index.php.en" "Wolfram Engine") " .")
+
+                          (structure/section "Logic programming: " (code/inline "kanren") "-like languages")
+                          (p "We have an implementation targeting the Scheme language " 
+                             (cite/a "testsuites/testsuite-microkanren-suite.html" "Microkanren tests") " .")
 
                           (structure/section "Probabilistic Programming: the Hansei language")
                           (p "We present in " (cite/a "testsuites/testsuite-hanseitest.html" "Tests on the " (i "Hansei") " dsl") 
@@ -74,7 +79,7 @@
                              (cite/a "testsuites/testsuite-learning-suite.html" "My own Scheme learning tests") 
                              " to understand the Scheme language, via the chicken interpreter.")
 
-                          (structure/section "On Scheme: continuations, the magnificents!")
+                          (structure/section "Continuations, the magnificents!")
                           (p "From the R6RS Ballot, reported in " (cite/a "https://wiki.call-cc.org/elevator-pitch") ":")
                           (cite/quote "Jeffrey Mark Siskind, author of Stalin and current (unofficial) maintainer of Scheme->C"
                                       (i "Scheme occupies a unique niche. A research niche and an educational
@@ -98,14 +103,13 @@
 					  processing, stochastic computation, quantum computation, automatic
 					  differentiation, genetic programming, types, automated reasoning,
 					  ... just to name a few."))
-                          (p "Basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions")
-                             ", call with current continuation " 
-                             (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "undelimited continuations"))
-                             ", non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html"
-                                                                     "Tests on " (i "Non determinism"))
-                             " and delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html"
-                                                                     "Tests on " (i "delimited continuations"))
-                             ".")
+
+			  (p "We have some tests about: "
+			     (ul 
+			       (li "basic helpers " (cite/a "testsuites/testsuite-auxtest.html" "Tests on helper definitions"))
+			       (li "call with current continuation " (cite/a "testsuites/testsuite-letcc-suite.html" "Tests on " (i "undelimited continuations")))
+			       (li "non deteministic with cuts " (cite/a "testsuites/testsuite-letnondeterministic-suite.html" "Tests on " (i "Non determinism")))
+			       (li "delimited continuations " (cite/a "testsuites/testsuite-delimcc-suite.html" "Tests on " (i "delimited continuations")))))
 
                           (structure/section "Timsort: a stable, adaptive, merge sort")
                           (p "We have a working in progress implementation of the Timsort algorithm,
@@ -125,6 +129,8 @@
 
 
 (SXML->HTML->file! tree "index")
+
+
 
 
 

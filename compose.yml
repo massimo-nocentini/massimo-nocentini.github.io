@@ -15,7 +15,6 @@ services:
     command: |
       /bin/bash -c "
                   cd aux.scm/src && make test -B && cp test/*.html /home/testsuites && cd ../../ &&
-                  cd fds.scm/src && make test -B && cp test/*.html /home/testsuites && cd ../../ &&
                   echo 'Done'
                  "
     volumes:

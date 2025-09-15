@@ -1,0 +1,151 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&amp;family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&amp;display=swap" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<style>code, pre, tt, kbd, samp, .w3-code, .w3-codespan { font-family: Monaco, Lucida Console, Roboto Mono, Ubuntu Mono, monospace; }math { font-family: Euler Math; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Merriweather, Lucida Sans, Times New Roman, serif; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script>hljs.highlightAll();</script>
+<title>microkanren-suite</title></head>
+<body class="w3-content" style="max-width:61.8%">
+<header class="w3-container w3-center">
+<h1><b>microkanren-suite</b></h1>
+<p></p><small><small>
+<p>Mon Sep 15 08:19:07Z 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
+<div class="w3-container">
+<header><b>Table of contents</b></header>
+<ol>
+<li><a href="#section360"><code>test/find</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section361"><code>test/=°</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section362"><code>test/sharing</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section363"><code>test/peano°</code>: <span class="w3-text-green">pass</span></a></li>
+<li><a href="#section364"><code>test/append°</code>: <span class="w3-text-green">pass</span></a></li></ol></div>
+<hr />
+<p><b>Tests summary</b>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((ran 5) (failed 0))
+</code></pre></div></p>
+<section id="section360">
+<header>
+<h1>1. <code>test/find</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/find _)
+  (let* ((v1 (µkanren-var 0))
+         (v2 (µkanren-var 1))
+         (s0 µkanren-state-empty)
+         (s1 (list (cons/sbral 'a (µkanren-state-substitution s0)) 1))
+         (s2 (list (cons/sbral v1 (µkanren-state-substitution s1)) 2)))
+    (⊦= 5 (µkanren-state-find 5 s2))
+    (⊦= 'a (µkanren-state-find v1 s2))
+    (⊦= 'a (µkanren-state-find v2 s2))))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8450048 1155368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section361">
+<header>
+<h1>2. <code>test/=°</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '((λ () `())) (§-&gt;list (°-&gt;§ () (=° 'z 'z)))))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8450048 1156328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section362">
+<header>
+<h1>3. <code>test/sharing</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sharing _)
+  (⊦= '((λ (_0 _1) `((,_0 z) z (,_0 ,_1))))
+        (§-&gt;list
+          (°-&gt;§
+            (n q x)
+            (=° q 'z)
+            (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8450048 1152512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section363">
+<header>
+<h1>4. <code>test/peano°</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/peano° _)
+  (define-relation
+    (peano° n)
+    (or° (=° n 'z) (fresh° (r) (=° n `(s ,r)) (peano° r))))
+  (define-relation
+    (church° n)
+    (fresh° (b) (=° n `(λ (s) (λ (z) ,b))) (peano° b)))
+  (⊦= '((λ () `(z))
+          (λ () `((s z)))
+          (λ () `((s (s z))))
+          (λ () `((s (s (s z)))))
+          (λ () `((s (s (s (s z))))))
+          (λ () `((s (s (s (s (s z)))))))
+          (λ () `((s (s (s (s (s (s z))))))))
+          (λ () `((s (s (s (s (s (s (s z)))))))))
+          (λ () `((s (s (s (s (s (s (s (s z))))))))))
+          (λ () `((s (s (s (s (s (s (s (s (s z))))))))))))
+        (§-&gt;list (take§ 10 (°-&gt;§ (n) (peano° n)))))
+  (⊦= '((λ () `((λ (s) (λ (z) z))))
+          (λ () `((λ (s) (λ (z) (s z)))))
+          (λ () `((λ (s) (λ (z) (s (s z))))))
+          (λ () `((λ (s) (λ (z) (s (s (s z)))))))
+          (λ () `((λ (s) (λ (z) (s (s (s (s z))))))))
+          (λ () `((λ (s) (λ (z) (s (s (s (s (s z)))))))))
+          (λ () `((λ (s) (λ (z) (s (s (s (s (s (s z))))))))))
+          (λ () `((λ (s) (λ (z) (s (s (s (s (s (s (s z)))))))))))
+          (λ () `((λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))))
+          (λ () `((λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))))
+        (§-&gt;list (take§ 10 (°-&gt;§ (n) (church° n))))))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8450048 1166288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section364">
+<header>
+<h1>5. <code>test/append°</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/append° _)
+  (define-relation
+    (append° r s rs)
+    (cond°
+      ((null° r) (=° s rs))
+      ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
+  (⊦= '((λ (_0) `(,_0))
+          (λ (_0 _1) `((,_0 unquote _1)))
+          (λ (_0 _1 _2) `((,_0 ,_1 unquote _2)))
+          (λ (_0 _1 _2 _3) `((,_0 ,_1 ,_2 unquote _3)))
+          (λ (_0 _1 _2 _3 _4) `((,_0 ,_1 ,_2 ,_3 unquote _4)))
+          (λ (_0 _1 _2 _3 _4 _5) `((,_0 ,_1 ,_2 ,_3 ,_4 unquote _5)))
+          (λ (_0 _1 _2 _3 _4 _5 _6) `((,_0 ,_1 ,_2 ,_3 ,_4 ,_5 unquote _6)))
+          (λ (_0 _1 _2 _3 _4 _5 _6 _7)
+              `((,_0 ,_1 ,_2 ,_3 ,_4 ,_5 ,_6 unquote _7)))
+          (λ (_0 _1 _2 _3 _4 _5 _6 _7 _8)
+              `((,_0 ,_1 ,_2 ,_3 ,_4 ,_5 ,_6 ,_7 unquote _8)))
+          (λ (_0 _1 _2 _3 _4 _5 _6 _7 _8 _9)
+              `((,_0 ,_1 ,_2 ,_3 ,_4 ,_5 ,_6 ,_7 ,_8 unquote _9))))
+        (§-&gt;list (take§ 10 (°-&gt;§ (l) (fresh° (a d) (append° a d l)))))))
+</code></pre></div>
+<div class="w3-card w3-round">
+<header class="w3-container w3-border w3-round w3-light-gray w3-right">scheme code</header>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(8450048 1173312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>
