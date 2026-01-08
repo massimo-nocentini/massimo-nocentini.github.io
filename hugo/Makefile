@@ -4,4 +4,5 @@ serve:
 
 build:
 	hugo -D --minify --gc
-	mv public/* ../
+	rsync -a public/ ../
+	rm -rf public
