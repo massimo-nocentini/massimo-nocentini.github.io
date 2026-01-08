@@ -1,164 +1,90 @@
-<!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" type="text/css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&amp;family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&amp;display=swap" type="text/css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
-<style>code, pre, tt, kbd, samp, .w3-code, .w3-codespan { font-family: Monaco, Lucida Console, Roboto Mono, Ubuntu Mono, monospace; }math { font-family: Euler Math; }html, body, h1, h2, h3, h4, h5, h6 { font-family: Merriweather, Lucida Sans, Times New Roman, serif; }</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
-<script>hljs.highlightAll();</script>
-<title>Massimo Nocentini</title></head>
-<body class="w3-content" style="max-width:61.8%">
-<header class="w3-container w3-center">
-<h1><b>Massimo Nocentini</b></h1>
-<p>
-<p>This site is a collection of <em>Massimo Nocentini</em>'s papers, notes, memos and source code, in the spirit of <cite>[<a href="#cite26">1</a>]</cite>.</p></p><small><small>
-<p>Mon Sep 15 10:41:10+0200 2025</p></small><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/by.svg" /></a><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" /></a>
-<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a></p></small></header>
-<div class="w3-container">
-<header><b>Table of contents</b></header>
-<ol>
-<li><a href="#section27">About me</a></li>
-<li><a href="#section32">On Data Structures</a></li>
-<li><a href="#section37">Symbolic programming: Wolfram engine bindings</a></li>
-<li><a href="#section40">Logic programming: <code class="w3-codespan">kanren</code>-like languages</a></li>
-<li><a href="#section42">Probabilistic Programming: the Hansei language</a></li>
-<li><a href="#section47">Bootstrapping unit testing frameworks, test driving themselves!</a></li>
-<li><a href="#section52">Continuations, the magnificents!</a></li>
-<li><a href="#section58">Timsort: a stable, adaptive, merge sort</a></li>
-<li><a href="#section60">Thank you, Pieter Hintjens!</a></li></ol></div>
-<hr />
-<section id="section27">
-<header>
-<h1>1. About me</h1></header></section>
-<p>You can reach me via the following contacts:
-<ul>
-<li><em>+39 320 1162059 (mobile)</em></li>
-<li>Personal mail <cite>[<a href="#cite28">2</a>]</cite></li>
-<li>University of Florence mail <cite>[<a href="#cite29">3</a>]</cite></li>
-<li>Github page <cite>[<a href="#cite30">4</a>]</cite></li>
-<li>Public RSA key <cite>[<a href="#cite31">5</a>]</cite></li></ul>After that, we can now proceed with some stuff I worked/working on.</p>
-<section id="section32">
-<header>
-<h1>2. On Data Structures</h1></header></section>
-<dl>
-<div class="w3-row">
-<dt class="w3-bold">A booklet using the Pharo dialect of Smalltalk</dt>
-<dd>
-<p>I have a working in progress booklet <cite>[<a href="#cite33">6</a>]</cite> about data structures, using the Pharo dialect.</p></dd></div>
-<div class="w3-row">
-<dt class="w3-bold">Functional data structures in Scheme</dt>
-<dd>
-<p>We have several tests on data structures, in particular:</p>
-<ul>
-<li>Streams <cite>[<a href="#cite34">7</a>]</cite></li>
-<li>Queues <cite>[<a href="#cite35">8</a>]</cite></li>
-<li>Skew Binary Random Access Lists <cite>[<a href="#cite36">9</a>]</cite></li></ul></dd></div></dl>
-<section id="section37">
-<header>
-<h1>3. Symbolic programming: Wolfram engine bindings</h1></header></section>
-<p>We have a layer targeting the Scheme language <cite>[<a href="#cite38">10</a>]</cite> to exchange data and evaluate <i>symbolic expressions</i> with the Wolfram engine <cite>[<a href="#cite39">11</a>]</cite> .</p>
-<section id="section40">
-<header>
-<h1>4. Logic programming: <code class="w3-codespan">kanren</code>-like languages</h1></header></section>
-<p>We have an implementation targeting the Scheme language <cite>[<a href="#cite41">12</a>]</cite> .</p>
-<section id="section42">
-<header>
-<h1>5. Probabilistic Programming: the Hansei language</h1></header></section>
-<p>We present in <cite>[<a href="#cite43">13</a>]</cite> a test suite to understand the system defined in the reference page <cite>[<a href="#cite44">14</a>]</cite>. Quoting author's words:</p>
-<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
-<br /><i><i>HANSEI is the the embedded domain-specific language for probabilistic 
-					 programming: for writing potentially infinite discrete-distribution models 
-					 and performing exact inference, importance sampling and inference of inference.</i></i>
-<footer>
-<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote>
-<p>We also have a <i>symbolic</i> variant of the famous <i>wet grass model</i> in <cite>[<a href="#cite45">15</a>]</cite> and more in depth tests about the <i>variable elimination optimization</i> in <cite>[<a href="#cite46">16</a>]</cite>.</p>
-<section id="section47">
-<header>
-<h1>6. Bootstrapping unit testing frameworks, test driving themselves!</h1></header></section>
-<p>Bootstrapping a unit test framework, test-driven itself in Scheme <cite>[<a href="#cite48">17</a>]</cite>, in Lua <cite>[<a href="#cite49">18</a>]</cite> and in Python <cite>[<a href="#cite50">19</a>]</cite>; this quote shows the message:
-<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
-<br /><i>...it's a kind of self-brain surgery</i>
-<footer>
-<p class="w3-right-align">Kent Beck</p></footer></blockquote></p>
-<p>My own learning tests for Scheme <cite>[<a href="#cite51">20</a>]</cite> to understand the Scheme language, via the chicken interpreter.</p>
-<section id="section52">
-<header>
-<h1>7. Continuations, the magnificents!</h1></header></section>
-<p>From the R6RS Ballot, reported in <cite>[<a href="#cite53">21</a>]</cite>:</p>
-<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
-<br /><i><i>Scheme occupies a unique niche. A research niche and an educational
-					 niche. It is not a language. Not R6RS, not R5RS, not R4Rs. It is an
-					 idea. Or a collection of ideas. It is a framework. It is a way of
-					 thinking. It is a mindset. All of this is embodied in an ever growing
-					 family of languages or dialects, not a single language. It is a
-					 virus. It is the ultimate programming-language virus. 
-					  The cat is already out of the bag and there is no way to get it back
-					  in. Once someone gets the mindset, they can implement their own
-					  implementation, which is often a slightly different dialect. This has
-					  happened hundreds if not thousands of times over. (Probably hundreds
-				          of thousands or more if one counts all the people doing homework for
-					  Scheme courses.) 
-					  This happens for Scheme in a way that it doesn't for any other
-					  language. Scheme has also served as a testbed for innovated language
-					  ideas more than any other language, either by fueling such innovation
-					  or by adopting such innovation. I'm talking about the most major
-					  innovations of all of computer science. Things like: scoping,
-					  nondeterminism, parallelism, lazy evaluation, unification, constraint
-					  processing, stochastic computation, quantum computation, automatic
-					  differentiation, genetic programming, types, automated reasoning,
-					  ... just to name a few.</i></i>
-<footer>
-<p class="w3-right-align">Jeffrey Mark Siskind, author of Stalin and current (unofficial) maintainer of Scheme-&gt;C</p></footer></blockquote>
-<p>We have some tests about: 
-<ul>
-<li>basic helpers <cite>[<a href="#cite54">22</a>]</cite></li>
-<li>call with current continuation <cite>[<a href="#cite55">23</a>]</cite></li>
-<li>non deteministic with cuts <cite>[<a href="#cite56">24</a>]</cite></li>
-<li>delimited continuations <cite>[<a href="#cite57">25</a>]</cite></li></ul></p>
-<section id="section58">
-<header>
-<h1>8. Timsort: a stable, adaptive, merge sort</h1></header></section>
-<p>We have a working in progress implementation of the Timsort algorithm,
-                              a stable, adaptive, merge sort algorithm, in Scheme <cite>[<a href="#cite59">26</a>]</cite></p>
-<section id="section60">
-<header>
-<h1>9. Thank you, Pieter Hintjens!</h1></header></section>
-<p>Great thanks to Pieter Hintjens, who passed away in 2016, for his work on distributed systems. Several blogs <cite>[<a href="#cite61">27</a>]</cite><cite>[<a href="#cite62">28</a>]</cite> and books <cite>[<a href="#cite63">29</a>]</cite> collect great ideas and are sources of inspiration.</p>
-<hr />
-<div class="w3-container">
-<header><b>References</b></header><span id="cite26">[1] <a href="https://www.stepanovpapers.com/">Alexander A. Stepanov's home page</a></span>
-<br /><span id="cite28">[2] <a href="mailto:Massimo Nocentini &lt;massimo.nocentini@gmail.com&gt;"><code>massimo.nocentini@gmail.com</code></a></span>
-<br /><span id="cite29">[3] <a href="mailto:Massimo Nocentini &lt;massimo.nocentini@unifi.it&gt;"><code>massimo.nocentini@unifi.it</code></a></span>
-<br /><span id="cite30">[4] <a href="https://github.com/massimo-nocentini/"><code>https://github.com/massimo-nocentini</code></a></span>
-<br /><span id="cite31">[5] <a href="https://raw.githubusercontent.com/massimo-nocentini/massimo-nocentini.github.io/master/id_rsa.pub">Public RSA key</a></span>
-<br /><span id="cite33">[6] <a href="https://massimo-nocentini.github.io/Booklet-DSst/">Booklet on data structures, in Smalltalk using Pharo</a></span>
-<br /><span id="cite34">[7] <a href="testsuites/testsuite-stream-suite.html">Tests on a functional <i>stream</i> implementation in Scheme</a></span>
-<br /><span id="cite35">[8] <a href="testsuites/testsuite-queue-suite.html">Tests on a functional <i>queue</i> implementation in Scheme</a></span>
-<br /><span id="cite36">[9] <a href="testsuites/testsuite-sbral-suite.html">Tests on a functional <i>SBRAL</i> implementation in Scheme</a></span>
-<br /><span id="cite38">[10] <a href="testsuites/testsuite-wolfram-suite.html">Wolfram engine bindings</a></span>
-<br /><span id="cite39">[11] <a href="https://www.wolfram.com/engine/index.php.en">Wolfram Engine</a></span>
-<br /><span id="cite41">[12] <a href="testsuites/testsuite-microkanren-suite.html">Microkanren tests</a></span>
-<br /><span id="cite43">[13] <a href="testsuites/testsuite-hanseitest.html">Tests on the <i>Hansei</i> dsl</a></span>
-<br /><span id="cite44">[14] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Hansei dsl for probabilistic programming</a></span>
-<br /><span id="cite45">[15] <a href="testsuites/testsuite-hansei-symbolic-suite.html">Tests on the <i>Hansei</i> dsl, symbolic</a></span>
-<br /><span id="cite46">[16] <a href="testsuites/testsuite-hansei-ve-suite.html">Variable elimination in Hansei: a symbolic point of view</a></span>
-<br /><span id="cite48">[17] <a href="testsuites/testsuite-bootstrap-sut.html">Bootstrapping a unittest framework in Scheme</a></span>
-<br /><span id="cite49">[18] <a href="https://github.com/massimo-nocentini/unittest.lua">Bootstrapping a unittest framework in Lua</a></span>
-<br /><span id="cite50">[19] <a href="https://github.com/massimo-nocentini/advanced-programming-techniques-course">Bootstrapping a unittest framework in Python</a></span>
-<br /><span id="cite51">[20] <a href="testsuites/testsuite-learning-suite.html">My own Scheme learning tests</a></span>
-<br /><span id="cite53">[21] <a href="https://wiki.call-cc.org/elevator-pitch">https://wiki.call-cc.org/elevator-pitch</a></span>
-<br /><span id="cite54">[22] <a href="testsuites/testsuite-auxtest.html">Tests on helper definitions</a></span>
-<br /><span id="cite55">[23] <a href="testsuites/testsuite-letcc-suite.html">Tests on <i>undelimited continuations</i></a></span>
-<br /><span id="cite56">[24] <a href="testsuites/testsuite-letnondeterministic-suite.html">Tests on <i>Non determinism</i></a></span>
-<br /><span id="cite57">[25] <a href="testsuites/testsuite-delimcc-suite.html">Tests on <i>delimited continuations</i></a></span>
-<br /><span id="cite59">[26] <a href="testsuites/testsuite-timsort-suite.html">Tests on Timsort algorithm</a></span>
-<br /><span id="cite61">[27] <a href="http://hintjens.com/blog:1">Elegant Little Pieces, by Pieter Hintjens</a></span>
-<br /><span id="cite62">[28] <a href="http://hintjens.com/blog:74">The Power of Living Systems, by Pieter Hintjens</a></span>
-<br /><span id="cite63">[29] <a href="http://hintjens.com/books">Books by Pieter Hintjens</a></span>
-<br /></div></body></html>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Beautiful Hugo Theme</title><meta name=description content="Front Page Content
+beautifulhugo supports content on your front page. Edit /content/_index.md to change what appears here. Delete /content/_index.md if you don&rsquo;t want any content here."><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="Front Page Content
+beautifulhugo supports content on your front page. Edit /content/_index.md to change what appears here. Delete /content/_index.md if you don&rsquo;t want any content here."><meta property="og:image" content="https://massimo-nocentini.github.io/img/avatar-icon.png"><meta property="og:url" content="https://massimo-nocentini.github.io/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="Front Page Content
+beautifulhugo supports content on your front page. Edit /content/_index.md to change what appears here. Delete /content/_index.md if you don&rsquo;t want any content here."><meta name=twitter:image content="https://massimo-nocentini.github.io/img/avatar-icon.png"><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/img/favicon.ico rel=icon type=image/x-icon><meta name=generator content="Hugo 0.154.3"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/highlight.min.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=Blog href=/>Blog</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Samples</a><div class=navlinks-children><a href=/post/2017-03-07-bigimg-sample>Big Image Sample</a>
+<a href=/post/2017-03-05-math-sample>Math Sample</a>
+<a href=/post/2016-03-08-code-sample>Code Sample</a></div></li><li><a title=About href=/page/about/>About</a></li><li><a title=Tags href=/tags>Tags</a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="Massimo Nocentini" href=https://massimo-nocentini.github.io/><img class=avatar-img src=https://massimo-nocentini.github.io/img/avatar-icon.png alt="Massimo Nocentini"></a></div></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><div class=page-heading><h1>Beautiful Hugo Theme</h1><hr class=small><span class=page-subheading>Build a beautiful and simple website in minutes</span></div></div></div></div></div></header><div role=main class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><div class=well><h2 id=front-page-content>Front Page Content</h2><p><code>beautifulhugo</code> supports content on your front page. Edit <code>/content/_index.md</code> to change what appears here. Delete <code>/content/_index.md</code> if you don&rsquo;t want any content here.</p></div><div class=posts-list><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2025-01-08-veglia-natale/><h2 class=post-title>Veglia di Natale</h2><h3 class=post-subtitle>Omelia di fra Massimo Travascio OFM</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 8, 2026
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;7&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1348&nbsp;words</span></p><div class=post-entry><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading=eager referrerpolicy=strict-origin-when-cross-origin src="https://www.youtube.com/embed/82ODUS_XywI?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 title="YouTube video"></iframe></div><hr><p>Cari fratelli e sorelle, provate a immaginare il cielo di Betlemme. Provate a immaginare il cielo di Betlemme allora come oggi. Duemila anni fa le stelle brillavano immobili sopra una terra che era povera, una terra anche inquieta. E oggi quelle stesse stelle vegliano ancora fedeli, mentre noi sappiamo che la storia porta il segno delle sue ferite. Il tempo passa, ma il cielo resta e con il cielo resta anche il silenzio.</p><a href=https://massimo-nocentini.github.io/post/2025-01-08-veglia-natale/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/ofm/>ofm</a>&nbsp;
+<a href=https://massimo-nocentini.github.io/tags/porziuncola/>porziuncola</a>&nbsp;</div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2017-03-20-photoswipe-gallery-sample/><h2 class=post-title>Photoswipe Gallery Sample</h2><h3 class=post-subtitle>Making a Gallery</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 20, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;215&nbsp;words</span></p><div class=post-entry><p>Beautiful Hugo adds a few custom shortcodes created by <a href=https://www.liwen.id.au/heg/>Li-Wen Yip</a> and <a href=https://github.com/GjjvdBurg/HugoPhotoSwipe>Gert-Jan van den Berg</a> for making galleries with <a href=https://photoswipe.com>PhotoSwipe</a> .</p><div class="gallery caption-position-bottom caption-effect-fade hover-effect-zoom hover-transition" itemscope itemtype=http://schema.org/ImageGallery><link rel=stylesheet href=https://massimo-nocentini.github.io/css/hugo-easy-gallery.css><div class=box><figure itemprop=associatedMedia itemscope itemtype=http://schema.org/ImageObject><div class=img style=background-image:url(https://massimo-nocentini.github.io//img/hexagon-thumb.jpg)><img itemprop=thumbnail src=/img/hexagon-thumb.jpg alt=/img/hexagon-thumb.jpg></div><a href=/img/hexagon.jpg itemprop=contentUrl></a></figure></div><div class=box><figure itemprop=associatedMedia itemscope itemtype=http://schema.org/ImageObject><div class=img style=background-image:url(https://massimo-nocentini.github.io//img/sphere-thumb.jpg)><img itemprop=thumbnail src=/img/sphere-thumb.jpg alt=Sphere></div><a href=/img/sphere.jpg itemprop=contentUrl></a><figcaption><p>Sphere</p></figcaption></figure></div><div class=box><figure itemprop=associatedMedia itemscope itemtype=http://schema.org/ImageObject><div class=img style=background-image:url(https://massimo-nocentini.github.io//img/triangle-thumb.jpg)><img itemprop=thumbnail src=/img/triangle-thumb.jpg alt="This is a long comment about a triangle"></div><a href=/img/triangle.jpg itemprop=contentUrl></a><figcaption><p>Triangle</p></figcaption></figure></div></div><a href=https://massimo-nocentini.github.io/post/2017-03-20-photoswipe-gallery-sample/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/example/>example</a>&nbsp;
+<a href=https://massimo-nocentini.github.io/tags/photoswipe/>photoswipe</a>&nbsp;</div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2017-03-07-bigimg-sample/><h2 class=post-title>Big Image Sample</h2><h3 class=post-subtitle>Using Multiple Images</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 7, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;191&nbsp;words</span></p><div class=post-entry><p>The image banners at the top of the page are refered to as &ldquo;bigimg&rdquo; in this theme. They are optional, and one more more can be specified. If more than one is specified, the images rotate every 10 seconds. In the front matter, bigimgs are specified using an array of hashes.</p><a href=https://massimo-nocentini.github.io/post/2017-03-07-bigimg-sample/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/example/>example</a>&nbsp;
+<a href=https://massimo-nocentini.github.io/tags/bigimg/>bigimg</a>&nbsp;</div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2017-03-05-math-sample/><h2 class=post-title>Math Sample</h2><h3 class=post-subtitle>Using KaTeX</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 5, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;121&nbsp;words</span></p><div class=post-entry><p>KaTeX can be used to generate complex math formulas server-side.</p><p>$$
+\phi = \frac{(1+\sqrt{5})}{2} = 1.6180339887\cdots
+$$</p><p>Additional details can be found on <a href=https://github.com/KaTeX/KaTeX>GitHub</a> or on the <a href=https://katex.org/>project homepage</a>.</p><a href=https://massimo-nocentini.github.io/post/2017-03-05-math-sample/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/example/>example</a>&nbsp;
+<a href=https://massimo-nocentini.github.io/tags/math/>math</a>&nbsp;</div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2016-03-08-code-sample/><h2 class=post-title>Code Sample</h2><h3 class=post-subtitle>Using Hugo or Pygments</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 8, 2016
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;183&nbsp;words</span></p><div class=post-entry><p>The following are two code samples using syntax highlighting.</p><a href=https://massimo-nocentini.github.io/post/2016-03-08-code-sample/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/example/>example</a>&nbsp;
+<a href=https://massimo-nocentini.github.io/tags/code/>code</a>&nbsp;</div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2015-02-26-flake-it-till-you-make-it/><h2 class=post-title>Flake it till you make it</h2><h3 class=post-subtitle>Excerpt from Soulshaping by Jeff Brown</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 26, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;443&nbsp;words</span></p><div class=post-entry><p>Under what circumstances should we step off a path? When is it essential that we finish what we start? If I bought a bag of peanuts and had an allergic reaction, no one would fault me if I threw it out. If I ended a relationship with a woman who hit me, no one would say that I had a commitment problem. But if I walk away from a seemingly secure route because my soul has other ideas, I am a flake?</p><a href=https://massimo-nocentini.github.io/post/2015-02-26-flake-it-till-you-make-it/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2015-02-20-test-markdown/><h2 class=post-title>Test markdown</h2><h3 class=post-subtitle>Each post also has a subtitle</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 20, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;95&nbsp;words</span></p><div class=post-entry><p>You can write regular <a href=https://markdowntutorial.com/>markdown</a> here and <a href=https://gohugo.io>Hugo</a> will automatically convert it to a nice webpage. I strongly encourage you to <a href=https://markdowntutorial.com/>take 5 minutes to learn how to write in markdown</a> - it&rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.</p><p><strong>Here is some bold text</strong></p><h2 id=here-is-a-secondary-heading>Here is a secondary heading</h2><p>Here&rsquo;s a useless table:</p><table><thead><tr><th style=text-align:left>Number</th><th style=text-align:left>Next number</th><th style=text-align:left>Previous number</th></tr></thead><tbody><tr><td style=text-align:left>Five</td><td style=text-align:left>Six</td><td style=text-align:left>Four</td></tr><tr><td style=text-align:left>Ten</td><td style=text-align:left>Eleven</td><td style=text-align:left>Nine</td></tr><tr><td style=text-align:left>Seven</td><td style=text-align:left>Eight</td><td style=text-align:left>Six</td></tr><tr><td style=text-align:left>Two</td><td style=text-align:left>Three</td><td style=text-align:left>One</td></tr></tbody></table><p>How about a yummy crepe?</p><a href=https://massimo-nocentini.github.io/post/2015-02-20-test-markdown/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/example/>example</a>&nbsp;
+<a href=https://massimo-nocentini.github.io/tags/markdown/>markdown</a>&nbsp;</div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2015-02-13-hamlet-monologue/><h2 class=post-title>To be</h2><h3 class=post-subtitle>... or not to be?</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 13, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;275&nbsp;words</span></p><div class=post-entry><p>To be, or not to be&ndash;that is the question:
+Whether &rsquo;tis nobler in the mind to suffer
+The slings and arrows of outrageous fortune
+Or to take arms against a sea of troubles
+And by opposing end them. To die, to sleep&ndash;
+No more&ndash;and by a sleep to say we end
+The heartache, and the thousand natural shocks
+That flesh is heir to. &lsquo;Tis a consummation
+Devoutly to be wished. To die, to sleep&ndash;
+To sleep&ndash;perchance to dream: ay, there&rsquo;s the rub,
+For in that sleep of death what dreams may come
+When we have shuffled off this mortal coil,
+Must give us pause. There&rsquo;s the respect
+That makes calamity of so long life.
+For who would bear the whips and scorns of time,
+Th&rsquo; oppressor&rsquo;s wrong, the proud man&rsquo;s contumely
+The pangs of despised love, the law&rsquo;s delay,
+The insolence of office, and the spurns
+That patient merit of th&rsquo; unworthy takes,
+When he himself might his quietus make
+With a bare bodkin? Who would fardels bear,
+To grunt and sweat under a weary life,
+But that the dread of something after death,
+The undiscovered country, from whose bourn
+No traveller returns, puzzles the will,
+And makes us rather bear those ills we have
+Than fly to others that we know not of?
+Thus conscience does make cowards of us all,
+And thus the native hue of resolution
+Is sicklied o&rsquo;er with the pale cast of thought,
+And enterprise of great pitch and moment
+With this regard their currents turn awry
+And lose the name of action. &ndash; Soft you now,
+The fair Ophelia! &ndash; Nymph, in thy orisons
+Be all my sins remembered.</p></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2015-01-27-dear-diary/><h2 class=post-title>Dear diary</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 27, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;78&nbsp;words</span></p><div class=post-entry><p>What is it with that Mary girl? Dragging me to school every day. As if I had a choice. What you don&rsquo;t hear in those nursery rhymes is that she starves me if I don&rsquo;t go to school with her; it&rsquo;s the only way I can stay alive! I&rsquo;m thinking about being adopted by Little Bo Peep, sure I may get lost, but anything is better than being with Mary and those little brats at school (shudder, shudder).</p></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/post/2015-01-19-soccer/><h2 class=post-title>Soccer</h2><h3 class=post-subtitle>Best sport ever!</h3></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 19, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;216&nbsp;words</span></p><div class=post-entry><p>From Wikipedia:</p><p>Association football, more commonly known as football or soccer,[2] is a sport played between two teams of eleven players with a spherical ball. It is played by 250 million players in over 200 countries, making it the world&rsquo;s most popular sport.[3][4][5][6] The game is played on a rectangular field with a goal at each end. The object of the game is to score by getting the ball into the opposing goal.</p><a href=https://massimo-nocentini.github.io/post/2015-01-19-soccer/ class=post-read-more>[Read More]</a></div></article></div><ul class="pager main-pager"><li class=next><a href=https://massimo-nocentini.github.io/page/2/>Older Posts &rarr;</a></li></ul></div></div></div><div class=page-meta></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:youremail@domain.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-paypal fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://telegram.me/username title=Telegram><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-telegram fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://discord.gg/invite%20code%20%28https://discord.gg/XXXXXXX%29 title=Discord><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-discord fa-stack-1x fa-inverse"></i></span></a></li><li><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=yourwebsite.com>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;&copy;
+2026
+&nbsp;&bull;&nbsp;
+<a href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.154.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js integrity=sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js integrity=sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-3.7.0.slim.min.js integrity=sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js integrity=sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/main.js></script><script src=https://massimo-nocentini.github.io/js/highlight.min.js></script><script>hljs.initHighlightingOnLoad()</script><script>$(document).ready(function(){$("pre.chroma").css("padding","0")})</script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js integrity=sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js integrity=sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/load-photoswipe.js></script></body></html>
