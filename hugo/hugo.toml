@@ -20,9 +20,9 @@ pygmentsCodefencesGuessSyntax = true
 
 [Params]
   homeTitle = "A small measure of peace" # Set a different text for the header on the home page
-  subtitle = "This site is a collection of _Massimo Nocentini_'s papers, notes, memos and source code."
+  subtitle = "This site is a collection of Massimo Nocentini's papers, notes, memos and source code."
   mainSections = ["post","posts"]
-  logo = "img/avatar-icon.png" # Expecting square dimensions
+  logo = "samurai.jpg" # Expecting square dimensions
   favicon = "img/favicon.ico"
   dateFormat = "January 2, 2006"
   commit = true
