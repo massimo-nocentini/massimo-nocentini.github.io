@@ -1,11 +1,9 @@
 +++
 date = '2026-01-08T16:00:21+01:00'
-draft = true
 title = 'Veglia di Natale'
 subtitle = 'Omelia di fra Massimo Travascio OFM'
-tags = ["ofm", "porziuncola"]
+tags = ["ofm", "porziuncola", "travascio"]
 +++
-
 
 {{< youtube 82ODUS_XywI >}}
 
