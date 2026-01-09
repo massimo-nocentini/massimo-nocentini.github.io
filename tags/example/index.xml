@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Example on Massimo Nocentini</title><link>https://massimo-nocentini.github.io/tags/example/</link><description>Recent content in Example on Massimo Nocentini</description><generator>Hugo</generator><language>en</language><managingEditor>massimo.nocentini@gmail.com (Massimo Nocentini)</managingEditor><webMaster>massimo.nocentini@gmail.com (Massimo Nocentini)</webMaster><lastBuildDate>Mon, 20 Mar 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://massimo-nocentini.github.io/tags/example/index.xml" rel="self" type="application/rss+xml"/><item><title>Photoswipe Gallery Sample</title><link>https://massimo-nocentini.github.io/post/2017-03-20-photoswipe-gallery-sample/</link><pubDate>Mon, 20 Mar 2017 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2017-03-20-photoswipe-gallery-sample/</guid><description>&lt;p&gt;Beautiful Hugo adds a few custom shortcodes created by &lt;a href="https://www.liwen.id.au/heg/"&gt;Li-Wen Yip&lt;/a&gt; and &lt;a href="https://github.com/GjjvdBurg/HugoPhotoSwipe"&gt;Gert-Jan van den Berg&lt;/a&gt; for making galleries with &lt;a href="https://photoswipe.com"&gt;PhotoSwipe&lt;/a&gt; .&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Example on Massimo Nocentini</title><link>http://localhost:1313/tags/example/</link><description>Recent content in Example on Massimo Nocentini</description><generator>Hugo</generator><language>en</language><managingEditor>massimo.nocentini@gmail.com (Massimo Nocentini)</managingEditor><webMaster>massimo.nocentini@gmail.com (Massimo Nocentini)</webMaster><lastBuildDate>Mon, 20 Mar 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/example/index.xml" rel="self" type="application/rss+xml"/><item><title>Photoswipe Gallery Sample</title><link>http://localhost:1313/old/2017-03-20-photoswipe-gallery-sample/</link><pubDate>Mon, 20 Mar 2017 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>http://localhost:1313/old/2017-03-20-photoswipe-gallery-sample/</guid><description>&lt;p&gt;Beautiful Hugo adds a few custom shortcodes created by &lt;a href="https://www.liwen.id.au/heg/"&gt;Li-Wen Yip&lt;/a&gt; and &lt;a href="https://github.com/GjjvdBurg/HugoPhotoSwipe"&gt;Gert-Jan van den Berg&lt;/a&gt; for making galleries with &lt;a href="https://photoswipe.com"&gt;PhotoSwipe&lt;/a&gt; .&lt;/p&gt;
 
 
 
@@ -8,10 +8,10 @@
  
  &lt;div class="box" &gt;
  &lt;figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"&gt;
- &lt;div class="img" style="background-image: url('https://massimo-nocentini.github.io//img/hexagon-thumb.jpg');"&gt;
- &lt;img itemprop="thumbnail" src="https://massimo-nocentini.github.io/img/hexagon-thumb.jpg" alt="/img/hexagon-thumb.jpg"/&gt;
+ &lt;div class="img" style="background-image: url('http://localhost:1313//img/hexagon-thumb.jpg');"&gt;
+ &lt;img itemprop="thumbnail" src="http://localhost:1313/img/hexagon-thumb.jpg" alt="/img/hexagon-thumb.jpg"/&gt;
  &lt;/div&gt;
- &lt;a href="https://massimo-nocentini.github.io/img/hexagon.jpg" itemprop="contentUrl"&gt;&lt;/a&gt;
+ &lt;a href="http://localhost:1313/img/hexagon.jpg" itemprop="contentUrl"&gt;&lt;/a&gt;
  &lt;/figure&gt;
  &lt;/div&gt;
 
@@ -19,10 +19,10 @@
  
  &lt;div class="box" &gt;
  &lt;figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"&gt;
- &lt;div class="img" style="background-image: url('https://massimo-nocentini.github.io//img/sphere-thumb.jpg');"&gt;
- &lt;img itemprop="thumbnail" src="https://massimo-nocentini.github.io/img/sphere-thumb.jpg" alt="Sphere"/&gt;
+ &lt;div class="img" style="background-image: url('http://localhost:1313//img/sphere-thumb.jpg');"&gt;
+ &lt;img itemprop="thumbnail" src="http://localhost:1313/img/sphere-thumb.jpg" alt="Sphere"/&gt;
  &lt;/div&gt;
- &lt;a href="https://massimo-nocentini.github.io/img/sphere.jpg" itemprop="contentUrl"&gt;&lt;/a&gt;
+ &lt;a href="http://localhost:1313/img/sphere.jpg" itemprop="contentUrl"&gt;&lt;/a&gt;
  &lt;figcaption&gt;
  &lt;p&gt;Sphere&lt;/p&gt;
  &lt;/figcaption&gt;
@@ -33,10 +33,10 @@
  
  &lt;div class="box" &gt;
  &lt;figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject"&gt;
- &lt;div class="img" style="background-image: url('https://massimo-nocentini.github.io//img/triangle-thumb.jpg');"&gt;
- &lt;img itemprop="thumbnail" src="https://massimo-nocentini.github.io/img/triangle-thumb.jpg" alt="This is a long comment about a triangle"/&gt;
+ &lt;div class="img" style="background-image: url('http://localhost:1313//img/triangle-thumb.jpg');"&gt;
+ &lt;img itemprop="thumbnail" src="http://localhost:1313/img/triangle-thumb.jpg" alt="This is a long comment about a triangle"/&gt;
  &lt;/div&gt;
- &lt;a href="https://massimo-nocentini.github.io/img/triangle.jpg" itemprop="contentUrl"&gt;&lt;/a&gt;
+ &lt;a href="http://localhost:1313/img/triangle.jpg" itemprop="contentUrl"&gt;&lt;/a&gt;
  &lt;figcaption&gt;
  &lt;p&gt;Triangle&lt;/p&gt;
  &lt;/figcaption&gt;
@@ -44,11 +44,11 @@
  &lt;/div&gt;
 
 
-&lt;/div&gt;</description></item><item><title>Big Image Sample</title><link>https://massimo-nocentini.github.io/post/2017-03-07-bigimg-sample/</link><pubDate>Tue, 07 Mar 2017 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2017-03-07-bigimg-sample/</guid><description>&lt;p&gt;The image banners at the top of the page are refered to as &amp;ldquo;bigimg&amp;rdquo; in this theme. They are optional, and one more more can be specified. If more than one is specified, the images rotate every 10 seconds. In the front matter, bigimgs are specified using an array of hashes.&lt;/p&gt;</description></item><item><title>Math Sample</title><link>https://massimo-nocentini.github.io/post/2017-03-05-math-sample/</link><pubDate>Sun, 05 Mar 2017 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2017-03-05-math-sample/</guid><description>&lt;p&gt;KaTeX can be used to generate complex math formulas server-side.&lt;/p&gt;
+&lt;/div&gt;</description></item><item><title>Big Image Sample</title><link>http://localhost:1313/old/2017-03-07-bigimg-sample/</link><pubDate>Tue, 07 Mar 2017 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>http://localhost:1313/old/2017-03-07-bigimg-sample/</guid><description>&lt;p&gt;The image banners at the top of the page are refered to as &amp;ldquo;bigimg&amp;rdquo; in this theme. They are optional, and one more more can be specified. If more than one is specified, the images rotate every 10 seconds. In the front matter, bigimgs are specified using an array of hashes.&lt;/p&gt;</description></item><item><title>Math Sample</title><link>http://localhost:1313/old/2017-03-05-math-sample/</link><pubDate>Sun, 05 Mar 2017 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>http://localhost:1313/old/2017-03-05-math-sample/</guid><description>&lt;p&gt;KaTeX can be used to generate complex math formulas server-side.&lt;/p&gt;
 &lt;p&gt;$$
 \phi = \frac{(1+\sqrt{5})}{2} = 1.6180339887\cdots
 $$&lt;/p&gt;
-&lt;p&gt;Additional details can be found on &lt;a href="https://github.com/KaTeX/KaTeX"&gt;GitHub&lt;/a&gt; or on the &lt;a href="https://katex.org/"&gt;project homepage&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Code Sample</title><link>https://massimo-nocentini.github.io/post/2016-03-08-code-sample/</link><pubDate>Tue, 08 Mar 2016 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2016-03-08-code-sample/</guid><description>&lt;p&gt;The following are two code samples using syntax highlighting.&lt;/p&gt;</description></item><item><title>Test markdown</title><link>https://massimo-nocentini.github.io/post/2015-02-20-test-markdown/</link><pubDate>Fri, 20 Feb 2015 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2015-02-20-test-markdown/</guid><description>&lt;p&gt;You can write regular &lt;a href="https://markdowntutorial.com/"&gt;markdown&lt;/a&gt; here and &lt;a href="https://gohugo.io"&gt;Hugo&lt;/a&gt; will automatically convert it to a nice webpage. I strongly encourage you to &lt;a href="https://markdowntutorial.com/"&gt;take 5 minutes to learn how to write in markdown&lt;/a&gt; - it&amp;rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.&lt;/p&gt;
+&lt;p&gt;Additional details can be found on &lt;a href="https://github.com/KaTeX/KaTeX"&gt;GitHub&lt;/a&gt; or on the &lt;a href="https://katex.org/"&gt;project homepage&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Code Sample</title><link>http://localhost:1313/old/2016-03-08-code-sample/</link><pubDate>Tue, 08 Mar 2016 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>http://localhost:1313/old/2016-03-08-code-sample/</guid><description>&lt;p&gt;The following are two code samples using syntax highlighting.&lt;/p&gt;</description></item><item><title>Test markdown</title><link>http://localhost:1313/old/2015-02-20-test-markdown/</link><pubDate>Fri, 20 Feb 2015 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>http://localhost:1313/old/2015-02-20-test-markdown/</guid><description>&lt;p&gt;You can write regular &lt;a href="https://markdowntutorial.com/"&gt;markdown&lt;/a&gt; here and &lt;a href="https://gohugo.io"&gt;Hugo&lt;/a&gt; will automatically convert it to a nice webpage. I strongly encourage you to &lt;a href="https://markdowntutorial.com/"&gt;take 5 minutes to learn how to write in markdown&lt;/a&gt; - it&amp;rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Here is some bold text&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id="here-is-a-secondary-heading"&gt;Here is a secondary heading&lt;/h2&gt;
 &lt;p&gt;Here&amp;rsquo;s a useless table:&lt;/p&gt;
