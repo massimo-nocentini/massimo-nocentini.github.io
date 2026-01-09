@@ -2,7 +2,7 @@
 date = '2026-01-09T09:33:23+01:00'
 title = 'Santa Messa di Natale'
 subtitle = 'Omelia di M.R.P. Francesco Piloni OFM'
-tags = ["ofm", "porziuncola", "piloni"]
+tags = ["ofm", "porziuncola", "piloni", "natale"]
 +++
 
 {{< youtube _hJr5yd8BHA >}}

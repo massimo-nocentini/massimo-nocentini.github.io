@@ -2,7 +2,7 @@
 date = '2026-01-09T14:00:21+01:00'
 title = 'Nuovi strani amici'
 subtitle = 'Una novella di Dino Buzzati'
-tags = ["nembrini", "buzzati", "nuovi strani amici", "paradiso", "inferno"]
+tags = ["nembrini", "buzzati", "nuovo", "strano", "amico", "paradiso", "inferno"]
 +++
 
 Una lettura consigliata da Franco Nembrini, perchè è una 
