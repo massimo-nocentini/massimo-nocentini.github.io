@@ -9,27 +9,7 @@ Ma il punto è: certo che ci si deve esprimere bene, ma bisogna avere soprattutt
 &lt;/blockquote&gt;
 &lt;p&gt;ripresa da &lt;a href="https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/"&gt;5 passi nella storia&lt;/a&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;Come fu morto, Stefano Martella, direttore di una società di assicurazioni – il quale aveva soggiornato, peccato, lavorato e vinto la sua partita sulla superficie della terra per quasi cinquant’anni – si trovò in una meravigliosa città, fatta di edifici suntuosi, strade ampie e regolarissime, giardini, ricchi negozi, ricche automobili, cinema e teatri, gente ben nutrita ed elegante, limpido sole, tutto bellissimo a vedersi.&lt;/p&gt;</description></item><item><title>Lua 5.5.0 is out!</title><link>https://massimo-nocentini.github.io/post/2025-01-09-lua-5-5-0-is-out/</link><pubDate>Fri, 09 Jan 2026 10:29:22 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2025-01-09-lua-5-5-0-is-out/</guid><description>&lt;p&gt;&lt;a href="https://www.lua.org/manual/5.5/readme.html"&gt;Lua 5.5.0&lt;/a&gt; is out! According to the official announcement,
-the following main changes are introduced:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;declarations for global variables&lt;/li&gt;
-&lt;li&gt;named vararg tables&lt;/li&gt;
-&lt;li&gt;for-loop variables are read only&lt;/li&gt;
-&lt;li&gt;floats are printed in decimal with enough digits to be read back correctly.&lt;/li&gt;
-&lt;li&gt;more levels for constructors&lt;/li&gt;
-&lt;li&gt;table.create&lt;/li&gt;
-&lt;li&gt;utf8.offset returns also final position of character&lt;/li&gt;
-&lt;li&gt;external strings (that use memory not managed by Lua)&lt;/li&gt;
-&lt;li&gt;new functions luaL_openselectedlibs and luaL_makeseed&lt;/li&gt;
-&lt;li&gt;major garbage collections done incrementally&lt;/li&gt;
-&lt;li&gt;more compact arrays (large arrays use about 60% less memory)&lt;/li&gt;
-&lt;li&gt;lua.c loads &amp;lsquo;readline&amp;rsquo; dynamically&lt;/li&gt;
-&lt;li&gt;static (fixed) binaries (when loading a binary chunk in memory, Lua can reuse its original memory in some of the internal structures)&lt;/li&gt;
-&lt;li&gt;dump and undump reuse all strings&lt;/li&gt;
-&lt;li&gt;auxiliary buffer reuses buffer when it creates final string&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="docker"&gt;Docker&lt;/h2&gt;
-&lt;p&gt;As companion artifact, we provide the corresponding &lt;a href="https://github.com/massimo-nocentini/lua.docker/pkgs/container/lua.docker/630200505?tag=5.5.0"&gt;Docker container&lt;/a&gt;, that can be pulled with:&lt;/p&gt;</description></item><item><title>Santa Messa di Natale</title><link>https://massimo-nocentini.github.io/post/2025-01-09-santa-messa-natale-piloni/</link><pubDate>Fri, 09 Jan 2026 09:33:23 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2025-01-09-santa-messa-natale-piloni/</guid><description>&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;"&gt;
+&lt;p&gt;Come fu morto, Stefano Martella, direttore di una società di assicurazioni – il quale aveva soggiornato, peccato, lavorato e vinto la sua partita sulla superficie della terra per quasi cinquant’anni – si trovò in una meravigliosa città, fatta di edifici suntuosi, strade ampie e regolarissime, giardini, ricchi negozi, ricche automobili, cinema e teatri, gente ben nutrita ed elegante, limpido sole, tutto bellissimo a vedersi.&lt;/p&gt;</description></item><item><title>Santa Messa di Natale</title><link>https://massimo-nocentini.github.io/post/2025-01-09-santa-messa-natale-piloni/</link><pubDate>Fri, 09 Jan 2026 09:33:23 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2025-01-09-santa-messa-natale-piloni/</guid><description>&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;"&gt;
  &lt;iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/_hJr5yd8BHA?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"&gt;&lt;/iframe&gt;
  &lt;/div&gt;
 
