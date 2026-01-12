@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Container on Massimo Nocentini</title><link>http://localhost:1313/tags/container/</link><description>Recent content in Container on Massimo Nocentini</description><generator>Hugo</generator><language>en</language><managingEditor>massimo.nocentini@gmail.com (Massimo Nocentini)</managingEditor><webMaster>massimo.nocentini@gmail.com (Massimo Nocentini)</webMaster><lastBuildDate>Fri, 09 Jan 2026 10:29:22 +0100</lastBuildDate><atom:link href="http://localhost:1313/tags/container/index.xml" rel="self" type="application/rss+xml"/><item><title>Lua 5.5.0 is out!</title><link>http://localhost:1313/post/2025-01-09-lua-5-5-0-is-out/</link><pubDate>Fri, 09 Jan 2026 10:29:22 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>http://localhost:1313/post/2025-01-09-lua-5-5-0-is-out/</guid><description>&lt;p&gt;&lt;a href="https://www.lua.org/manual/5.5/readme.html"&gt;Lua 5.5.0&lt;/a&gt; is out! According to the official announcement,
+the following main changes are introduced:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;declarations for global variables&lt;/li&gt;
+&lt;li&gt;named vararg tables&lt;/li&gt;
+&lt;li&gt;for-loop variables are read only&lt;/li&gt;
+&lt;li&gt;floats are printed in decimal with enough digits to be read back correctly.&lt;/li&gt;
+&lt;li&gt;more levels for constructors&lt;/li&gt;
+&lt;li&gt;table.create&lt;/li&gt;
+&lt;li&gt;utf8.offset returns also final position of character&lt;/li&gt;
+&lt;li&gt;external strings (that use memory not managed by Lua)&lt;/li&gt;
+&lt;li&gt;new functions luaL_openselectedlibs and luaL_makeseed&lt;/li&gt;
+&lt;li&gt;major garbage collections done incrementally&lt;/li&gt;
+&lt;li&gt;more compact arrays (large arrays use about 60% less memory)&lt;/li&gt;
+&lt;li&gt;lua.c loads &amp;lsquo;readline&amp;rsquo; dynamically&lt;/li&gt;
+&lt;li&gt;static (fixed) binaries (when loading a binary chunk in memory, Lua can reuse its original memory in some of the internal structures)&lt;/li&gt;
+&lt;li&gt;dump and undump reuse all strings&lt;/li&gt;
+&lt;li&gt;auxiliary buffer reuses buffer when it creates final string&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="docker"&gt;Docker&lt;/h2&gt;
+&lt;p&gt;As companion artifact, we provide the corresponding &lt;a href="https://github.com/massimo-nocentini/lua.docker/pkgs/container/lua.docker/630200505?tag=5.5.0"&gt;Docker container&lt;/a&gt;, that can be pulled with:&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Containers on Massimo Nocentini</title><link>https://massimo-nocentini.github.io/tags/containers/</link><description>Recent content in Containers on Massimo Nocentini</description><generator>Hugo</generator><language>en</language><managingEditor>massimo.nocentini@gmail.com (Massimo Nocentini)</managingEditor><webMaster>massimo.nocentini@gmail.com (Massimo Nocentini)</webMaster><lastBuildDate>Mon, 12 Jan 2026 16:12:22 +0100</lastBuildDate><atom:link href="https://massimo-nocentini.github.io/tags/containers/index.xml" rel="self" type="application/rss+xml"/><item><title>Rust bindings for igraph</title><link>https://massimo-nocentini.github.io/post/2026-01-12-igraph-rust-bindings/</link><pubDate>Mon, 12 Jan 2026 16:12:22 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-12-igraph-rust-bindings/</guid><description>&lt;p&gt;We provide a new Rust crate &lt;a href="https://github.com/massimo-nocentini/igraph-rs"&gt;igraph-rs&lt;/a&gt; that
+supply bindings over the C library &lt;a href="https://github.com/igraph/igraph"&gt;igraph&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As companion artifact, we provide the corresponding &lt;a href="https://github.com/massimo-nocentini/igraph-rs/pkgs/container/igraph-rs/619892997?tag=master"&gt;Docker container&lt;/a&gt;, that can be pulled with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker pull ghcr.io/massimo-nocentini/igraph-rs:master
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description></item><item><title>Lua 5.5.0 is out!</title><link>https://massimo-nocentini.github.io/post/2026-01-09-lua-5-5-0-is-out/</link><pubDate>Fri, 09 Jan 2026 10:29:22 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-09-lua-5-5-0-is-out/</guid><description>&lt;p&gt;&lt;a href="https://www.lua.org/manual/5.5/readme.html"&gt;Lua 5.5.0&lt;/a&gt; is out! According to the official announcement,
+the following main changes are introduced:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;declarations for global variables&lt;/li&gt;
+&lt;li&gt;named vararg tables&lt;/li&gt;
+&lt;li&gt;for-loop variables are read only&lt;/li&gt;
+&lt;li&gt;floats are printed in decimal with enough digits to be read back correctly.&lt;/li&gt;
+&lt;li&gt;more levels for constructors&lt;/li&gt;
+&lt;li&gt;table.create&lt;/li&gt;
+&lt;li&gt;utf8.offset returns also final position of character&lt;/li&gt;
+&lt;li&gt;external strings (that use memory not managed by Lua)&lt;/li&gt;
+&lt;li&gt;new functions luaL_openselectedlibs and luaL_makeseed&lt;/li&gt;
+&lt;li&gt;major garbage collections done incrementally&lt;/li&gt;
+&lt;li&gt;more compact arrays (large arrays use about 60% less memory)&lt;/li&gt;
+&lt;li&gt;lua.c loads &amp;lsquo;readline&amp;rsquo; dynamically&lt;/li&gt;
+&lt;li&gt;static (fixed) binaries (when loading a binary chunk in memory, Lua can reuse its original memory in some of the internal structures)&lt;/li&gt;
+&lt;li&gt;dump and undump reuse all strings&lt;/li&gt;
+&lt;li&gt;auxiliary buffer reuses buffer when it creates final string&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="containers"&gt;Containers&lt;/h2&gt;
+&lt;p&gt;As companion artifact, we provide the corresponding &lt;a href="https://github.com/massimo-nocentini/lua.docker/pkgs/container/lua.docker/630200505?tag=5.5.0"&gt;Docker container&lt;/a&gt;, that can be pulled with:&lt;/p&gt;</description></item></channel></rss>
