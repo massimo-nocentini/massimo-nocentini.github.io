@@ -1,13 +1,13 @@
 +++
 date = '2026-01-23T12:24:30+01:00'
 title = 'L’avventura di Pinocchio: primo capitolo'
-subtitle = 'Ogni cammino umano è cammino a Dio, che lo si riconosca con un nome chiaro o no'
-tags = ['nembrini', 'pinocchio', 'ciliegia', 'geppetto']
+subtitle = 'Ogni cammino umano è cammino a Dio, che lo si riconosca con un nome chiaro o no.'
+tags = ['nembrini', 'pinocchio', 'ciliegia', 'geppetto', 'biffi']
 author = 'Franco Nembrini'
 +++
 
-Una parte del commento di Franco Nembrini al primo capitolo di Pinocchio, andato in onda su [tv2000](https://www.youtube.com/watch?v=ZsQODQRf1oM),
-da dopo la pubblicità in poi.
+*Una parte del commento di Franco Nembrini al primo capitolo di Pinocchio, andato in onda su [tv2000](https://www.youtube.com/watch?v=ZsQODQRf1oM),
+da dopo la pubblicità in poi. Basato sul manoscritto [Contro Maestro Ciliegia. Commento teologico a «Le avventure di Pinocchio»](https://www.amazon.it/Ciliegia-Commento-teologico-avventure-Pinocchio%C2%BB/dp/8816306947/ref=sr_1_1?crid=14Y4C18MWANRB&dib=eyJ2IjoiMSJ9.F1TxfTGfdMB4jPMwYQfHsoT-L2LZ-rQlieNRHJc8m0QKMSCwV1cUq4vnMfrpQroU80zA9PY9bJaZjVL5zkVDquAP6F8yfJGh-XGjBQPyg7g.r3U0ZWeZuFcha9O4Fa9Wwa9O8Ewo7j2GGWujqlWOnxI&dib_tag=se&keywords=contro+mastro+ciliegia+biffi&qid=1769171508&sprefix=contro+mastro+%2Caps%2C281&sr=8-1) del cardinale Giacomo Biffi.*
 
 ---
 
