@@ -1,4 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C on Massimo Nocentini</title><link>https://massimo-nocentini.github.io/tags/c/</link><description>Recent content in C on Massimo Nocentini</description><generator>Hugo</generator><language>en</language><managingEditor>massimo.nocentini@gmail.com (Massimo Nocentini)</managingEditor><webMaster>massimo.nocentini@gmail.com (Massimo Nocentini)</webMaster><lastBuildDate>Mon, 12 Jan 2026 16:12:22 +0100</lastBuildDate><atom:link href="https://massimo-nocentini.github.io/tags/c/index.xml" rel="self" type="application/rss+xml"/><item><title>Rust bindings for igraph</title><link>https://massimo-nocentini.github.io/post/2026-01-12-igraph-rust-bindings/</link><pubDate>Mon, 12 Jan 2026 16:12:22 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-12-igraph-rust-bindings/</guid><description>&lt;p&gt;We provide a new Rust crate &lt;a href="https://github.com/massimo-nocentini/igraph-rs"&gt;igraph-rs&lt;/a&gt;, with
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C on Massimo Nocentini</title><link>https://massimo-nocentini.github.io/tags/c/</link><description>Recent content in C on Massimo Nocentini</description><generator>Hugo</generator><language>en</language><managingEditor>massimo.nocentini@gmail.com (Massimo Nocentini)</managingEditor><webMaster>massimo.nocentini@gmail.com (Massimo Nocentini)</webMaster><lastBuildDate>Fri, 23 Jan 2026 15:43:03 +0100</lastBuildDate><atom:link href="https://massimo-nocentini.github.io/tags/c/index.xml" rel="self" type="application/rss+xml"/><item><title>Rust bindings for Postgres</title><link>https://massimo-nocentini.github.io/post/2026-01-23-libpq-rs/</link><pubDate>Fri, 23 Jan 2026 15:43:03 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-23-libpq-rs/</guid><description>&lt;p&gt;We provide a new set of bindings over &lt;a href="https://www.postgresql.org/docs/current/libpq.html"&gt;Postgresql
+&lt;code&gt;libpq&lt;/code&gt;&lt;/a&gt; C library, that
+focuses to be Rusty but stick to the original library as much as possible.&lt;/p&gt;
+&lt;p&gt;The main features that we want to support are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;tracing&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;collecting &lt;em&gt;notice&lt;/em&gt; messages&lt;/li&gt;
+&lt;li&gt;query &lt;em&gt;execution&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;pretty-printing&lt;/em&gt; results&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The main repo is on &lt;a href="https://github.com/massimo-nocentini/libpq-rs"&gt;Github&lt;/a&gt;,
+which hosts the corresponding &lt;a href="https://massimo-nocentini.github.io/libpq-rs/libpq/index.html"&gt;crate
+doc&lt;/a&gt; too.&lt;/p&gt;
+&lt;h2 id="example-catching-postgresql-notices"&gt;Example: catching PostgreSQL notices&lt;/h2&gt;
+&lt;p&gt;A concise unit test that connects via environment variables, installs a notice
+processor to collect server notices, executes a DO block that emits two notices
+and a SELECT, prints the result to a file, and asserts on the response and
+collected notices:&lt;/p&gt;</description></item><item><title>Rust bindings for igraph</title><link>https://massimo-nocentini.github.io/post/2026-01-12-igraph-rust-bindings/</link><pubDate>Mon, 12 Jan 2026 16:12:22 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-12-igraph-rust-bindings/</guid><description>&lt;p&gt;We provide a new Rust crate &lt;a href="https://github.com/massimo-nocentini/igraph-rs"&gt;igraph-rs&lt;/a&gt;, with
 the relative &lt;a href="https://massimo-nocentini.github.io/igraph-rs/igraph/"&gt;documentation&lt;/a&gt;, that
 supply bindings over the C library &lt;a href="https://github.com/igraph/igraph"&gt;igraph&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;As companion artifact, we provide the corresponding &lt;a href="https://github.com/massimo-nocentini/igraph-rs/pkgs/container/igraph-rs/619892997?tag=master"&gt;Docker container&lt;/a&gt;, that can be pulled with:&lt;/p&gt;
