@@ -1,6 +1,6 @@
 +++
 date = '2026-01-23T12:24:30+01:00'
-title = 'L’avventura di Pinocchio'
+title = 'L’avventura di Pinocchio: 1° capitolo'
 subtitle = 'Geppetto e Mastro Ciliegia'
 tags = ['nembrini', 'pinocchio', 'ciliegia', 'geppetto', 'biffi']
 author = 'Franco Nembrini'
