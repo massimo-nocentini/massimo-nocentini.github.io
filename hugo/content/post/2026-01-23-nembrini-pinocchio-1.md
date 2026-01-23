@@ -1,6 +1,6 @@
 +++
 date = '2026-01-23T12:24:30+01:00'
-title = 'L’avventura di Pinocchio: primo capitolo'
+title = 'L’avventura di Pinocchio'
 subtitle = 'Geppetto e Mastro Ciliegia'
 tags = ['nembrini', 'pinocchio', 'ciliegia', 'geppetto', 'biffi']
 author = 'Franco Nembrini'
@@ -73,7 +73,8 @@ La prima domanda è:
 
 - perché si muore?
 - perché tutto questo dolore?
-- cos’è questa attrattiva misteriosa che mi trascina verso quella ragazzina, tanto da farmi vivere una dedizione totale? O con te o la vita non è niente...
+- cos’è questa attrattiva misteriosa che mi trascina verso quella ragazzina,
+  tanto da farmi vivere una dedizione totale? O con te o la vita non è niente...
 - come si fa ad amare davvero?
 - come si fa a perdonare?
 - che utilità ha il tempo?
