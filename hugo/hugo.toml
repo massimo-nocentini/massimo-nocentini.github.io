@@ -5,7 +5,7 @@ title = "Massimo Nocentini"
 theme = "beautifulhugo"
 # Or when using theme as hugo module
 # theme = "github.com/halogenica/beautifulhugo"
-pygmentsStyle = "trac"
+pygmentsStyle = "monokai"
 pygmentsUseClasses = true
 pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
@@ -30,7 +30,7 @@ pygmentsCodefencesGuessSyntax = true
   comments = false
   readingTime = true
   wordCount = true
-  useHLJS = true
+#  useHLJS = true
   socialShare = false
   delayDisqus = true
   showRelatedPosts = true
