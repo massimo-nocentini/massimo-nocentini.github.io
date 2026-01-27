@@ -7,7 +7,8 @@ focuses to be Rusty but stick to the original library as much as possible.&lt;/p
 &lt;li&gt;collecting &lt;em&gt;notice&lt;/em&gt; messages,&lt;/li&gt;
 &lt;li&gt;query &lt;em&gt;execution&lt;/em&gt;,&lt;/li&gt;
 &lt;li&gt;&lt;em&gt;pretty-printing&lt;/em&gt; results,&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;notify and listen&lt;/em&gt; facilities.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;notify and listen&lt;/em&gt; facilities,&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;error messages&lt;/em&gt; in both connections and query results.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The main repo is on &lt;a href="https://github.com/massimo-nocentini/libpq-rs"&gt;Github&lt;/a&gt;,
 which hosts the corresponding &lt;a href="https://massimo-nocentini.github.io/libpq-rs/libpq/index.html"&gt;crate
