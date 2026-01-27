@@ -3,19 +3,18 @@
 focuses to be Rusty but stick to the original library as much as possible.&lt;/p&gt;
 &lt;p&gt;The main features that we want to support are:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;em&gt;tracing&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;collecting &lt;em&gt;notice&lt;/em&gt; messages&lt;/li&gt;
-&lt;li&gt;query &lt;em&gt;execution&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;pretty-printing&lt;/em&gt; results&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;tracing&lt;/em&gt; statements,&lt;/li&gt;
+&lt;li&gt;collecting &lt;em&gt;notice&lt;/em&gt; messages,&lt;/li&gt;
+&lt;li&gt;query &lt;em&gt;execution&lt;/em&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;pretty-printing&lt;/em&gt; results,&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;notify and listen&lt;/em&gt; facilities.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The main repo is on &lt;a href="https://github.com/massimo-nocentini/libpq-rs"&gt;Github&lt;/a&gt;,
 which hosts the corresponding &lt;a href="https://massimo-nocentini.github.io/libpq-rs/libpq/index.html"&gt;crate
 doc&lt;/a&gt; too.&lt;/p&gt;
-&lt;h2 id="example-catching-postgresql-notices"&gt;Example: catching PostgreSQL notices&lt;/h2&gt;
-&lt;p&gt;A concise unit test that connects via environment variables, installs a notice
-processor to collect server notices, executes a DO block that emits two notices
-and a SELECT, prints the result to a file, and asserts on the response and
-collected notices:&lt;/p&gt;</description></item><item><title>L’avventura di Pinocchio: 1° capitolo</title><link>https://massimo-nocentini.github.io/post/2026-01-23-nembrini-pinocchio-1/</link><pubDate>Fri, 23 Jan 2026 12:24:30 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-23-nembrini-pinocchio-1/</guid><description>&lt;p&gt;&lt;em&gt;Una parte del commento di Franco Nembrini al primo capitolo di Pinocchio,
+&lt;h2 id="test-catch_notices"&gt;Test: &lt;code&gt;catch_notices&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;Verifies that &lt;strong&gt;server NOTICE messages are captured&lt;/strong&gt; via &lt;code&gt;PgConn::set_notice_processor&lt;/code&gt;,
+and that query results can be printed and round-tripped back into a string representation.&lt;/p&gt;</description></item><item><title>L’avventura di Pinocchio: 1° capitolo</title><link>https://massimo-nocentini.github.io/post/2026-01-23-nembrini-pinocchio-1/</link><pubDate>Fri, 23 Jan 2026 12:24:30 +0100</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/post/2026-01-23-nembrini-pinocchio-1/</guid><description>&lt;p&gt;&lt;em&gt;Una parte del commento di Franco Nembrini al primo capitolo di Pinocchio,
 andato in onda su tv2000 &lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, da dopo la pubblicità in poi.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Basato sul manoscritto del cardinale Giacomo Biffi &lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;hr&gt;
