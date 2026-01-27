@@ -30,7 +30,7 @@ due partenze delle avventure di Pinocchio, dell’*avventura di Pinocchio*.
 E il mistero in realtà si svela abbastanza in fretta, perché la storia comincia
 con il famoso:
 
-> **«C’era una volta…»**
+> *«C’era una volta…»*
 
 Pensate anche solo a questa cosa strana: Collodi corregge l’inizio universale,
 universalmente accettato, di tutte le storie.
@@ -103,10 +103,8 @@ ogni affermazione.
 >riscaldare le stanze. Non so come andasse, ma il fatto gli è che un bel giorno
 >questo pezzo di legno capitò nella bottega di un vecchio falegname, il quale
 >aveva nome Mastro Antonio — lo chiamavano maestro Ciliegia.»
-
-Appena maestro Ciliegia ebbe visto quel pezzo di legno, si rallegrò tutto; e,
-dandosi una fregatina di mani per la contentezza, borbottò a mezza voce:
-
+>Appena maestro Ciliegia ebbe visto quel pezzo di legno, si rallegrò tutto; e,
+>dandosi una fregatina di mani per la contentezza, borbottò a mezza voce:
 > «Questo legno è capitato a tempo.»
 
 È la seconda volta che troviamo il verbo *capitare*.
@@ -154,9 +152,7 @@ bruciare e fare un po’ di riscaldamento.  Nella migliore delle ipotesi, la fin
 più nobile che può fare è diventare una gamba da tavolino.
 
 Un oggetto. Un pezzo. Una cosa.  Io mi disegno quello che ho in testa, poi
-prendo la realtà e ci cavo quello che ho deciso io.
-
-Detto fatto.
+prendo la realtà e ci cavo quello che ho deciso io. Detto fatto:
 
 > Prese subito l’ascia arrotata per cominciare a levargli la scorza.  Ma quando
 > fu lì per lasciare andare la prima asciata, rimase col braccio sospeso in
@@ -260,14 +256,13 @@ irreligioso.
 
 Così come l’appello all’uomo religioso è:
 
-> **«Non abbiate paura.»**
+> *«Non abbiate paura.»*
 
 *Sono io*. Non abbiate paura.  Quante volte Gesù nel Vangelo dice ai suoi amici
 questo.
 
-Con la bocca spalancata, appena riebbe l’uso della parola, cominciò a dire,
-tremando e balbettando dallo spavento:
-
+> Con la bocca spalancata, appena riebbe l’uso della parola, cominciò a dire,
+> tremando e balbettando dallo spavento:
 > «Ma di dove sarà uscita questa vocina che ha detto *"ahi"*? Eppure qui non
 > c’è anima viva!»
 

@@ -1,6 +1,7 @@
 +++
 date = '2026-01-09T14:00:21+01:00'
 title = 'Nuovi strani amici'
+author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
 tags = ["nembrini", "buzzati", "nuovo", "strano", "amico", "paradiso", "inferno"]
 +++
