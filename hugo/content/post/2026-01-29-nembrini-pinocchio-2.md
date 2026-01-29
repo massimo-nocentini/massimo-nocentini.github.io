@@ -2,7 +2,7 @@
 date = '2026-01-29T10:20:30+01:00'
 title = 'L’avventura di Pinocchio: dare il nome'
 subtitle = 'Noi tutti abbiamo un Padre che ci ha fatto, desiderandoci sin dall’inizio come compagni e amici per l’eternità'
-tags = ['nembrini', 'pinocchio', 'ciliegia', 'geppetto', 'biffi']
+tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi']
 author = 'Franco Nembrini'
 summary = ' '
 +++
@@ -22,7 +22,7 @@ che pensa di fare l’uomo a sua immagine e somiglianza: cioè, all’interno de
 realtà, qualcuno che gli possa — vengono i brividi a dirlo — qualcuno che gli
 possa essere compagno.
 
-Compagno.  Amico.  Compagno per sempre.
+*Compagno.  Amico.  Compagno per sempre.*
 
 E Collodi lo dice con quella formula che forse conoscete tutti:
 
