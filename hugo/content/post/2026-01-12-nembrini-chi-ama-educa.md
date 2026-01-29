@@ -3,6 +3,8 @@ date = '2026-01-12T09:35:10+01:00'
 draft = true
 title = 'Di padre in figlio'
 subtitle = 'Conversazioni sul rischio di educare'
+author = 'Franco Nembrini'
+summary = ' '
 +++
 
 Una conferenza di _Franco Nembrini_ ripresa da [youtube](https://www.youtube.com/watch?v=KM_qIHSHV1k).

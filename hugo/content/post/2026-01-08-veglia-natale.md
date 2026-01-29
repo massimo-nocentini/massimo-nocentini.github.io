@@ -4,6 +4,7 @@ title = 'Veglia di Natale'
 author = 'fra Massimo Travascio'
 subtitle = 'Omelia di fra Massimo Travascio OFM'
 tags = ["ofm", "porziuncola", "travascio", "natale"]
+summary = ' '
 +++
 
 {{< youtube 82ODUS_XywI >}}

@@ -2,6 +2,7 @@
 date = '2026-01-28T09:56:03+01:00'
 title = 'SAT Solvers'
 tags = ['sat', 'solvers', 'knuth', 'mit', 'acm']
+summary = ' '
 +++
 
 ## The Silent (R)evolution of SAT

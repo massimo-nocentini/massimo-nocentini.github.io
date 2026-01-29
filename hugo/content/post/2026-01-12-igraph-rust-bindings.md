@@ -3,6 +3,7 @@ date = '2026-01-12T16:12:22+01:00'
 title = 'Rust bindings for igraph'
 subtitle = 'and the companion container'
 tags = ["rust", "bindings", "containers", "graph", "c"]
+summary = ' '
 +++
 
 We provide a new Rust crate [igraph-rs](https://github.com/massimo-nocentini/igraph-rs), with 

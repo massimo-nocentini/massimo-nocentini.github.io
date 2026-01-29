@@ -4,6 +4,7 @@ title = 'Santa Messa di Natale'
 author = 'fra Francesco Piloni'
 subtitle = 'Omelia di M.R.P. Francesco Piloni OFM'
 tags = ["ofm", "porziuncola", "piloni", "natale"]
+summary = ' '
 +++
 
 {{< youtube _hJr5yd8BHA >}}

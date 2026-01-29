@@ -4,6 +4,7 @@ title = 'Nuovi strani amici'
 author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
 tags = ["nembrini", "buzzati", "nuovo", "strano", "amico", "paradiso", "inferno"]
+summary = ' '
 +++
 
 Una lettura consigliata da Franco Nembrini, perchè è una 

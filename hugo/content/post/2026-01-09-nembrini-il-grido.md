@@ -3,11 +3,15 @@ date = '2026-01-09T15:46:29+01:00'
 title = 'Il Grido'
 subtitle = 'Una lettera che spiega la ferita delle nuove generazioni, la terribile responsabilità degli adulti, e che cosa c’entra Dante con gli uni e con gli altri.'
 author = 'Giuseppe'
-tags = ["nembrini", "dante", "malattia", "natale"]
+tags = ["nembrini", "dante", "malattia"]
+summary = ' '
 +++
 
+*Ripresa da [franconembrini.it](https://www.franconembrini.it/il-grido/)*
 
-*Ciao Franco,*
+---
+
+Ciao Franco,
 
 Dopotutto voi avevate il dialetto… La mia mamma mi sgridava in dialetto e le cose più vere di sé le dice in dialetto.
 Voi vivevate in dialetto e vi siete adattati all’italiano. Io mi esprimo in Italiano, dico le cose in Italiano, ma non vivo in Italiano, almeno non tanto bene come voi in dialetto.
@@ -100,6 +104,3 @@ PS. Ai catechisti strampalati, ai professoroni e ai sapienti buonisti di questo 
 
 Natale 2017
 
----
-
-Ripresa da [franconembrini.it](https://www.franconembrini.it/il-grido/).
