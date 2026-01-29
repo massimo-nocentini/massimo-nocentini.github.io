@@ -7,8 +7,8 @@ author = 'Franco Nembrini'
 summary = ' '
 +++
 
-*Una parte del commento di Franco Nembrini al primo capitolo di Pinocchio,
-andato in onda su tv2000 [^1], da dopo la pubblicità in poi.*
+*Una parte del commento di Franco Nembrini al primo e secondo capitolo di Pinocchio,
+andato in onda il 20 Dicembre 2016 [^1]. Riporto da dopo la pubblicità in poi.*
 
 *Basato sul manoscritto  del cardinale Giacomo Biffi [^2].*
 
