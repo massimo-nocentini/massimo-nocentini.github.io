@@ -292,7 +292,7 @@ Iudaeorum* — Gesù il Nazareno, re dei Giudei.  Lui che non lo sapeva, pensa e
 ripensa.  Sapete come l’ha interpretata?  Pensando al fatto che Dio era morto
 per noi, eccetera eccetera, dice:
 
-«Ah sì, certo… vorrà dire: *Io non ritorno indietro*.»
+«Ah sì, certo… vorrà dire: *Io Non Ritorno Indietro*.»
 
 È bellissima.  È bellissima.  Cioè: c’ha azzeccato.  C’ha azzeccato alla grande.
 
