@@ -14,12 +14,13 @@ for the sake of clarity, its abstract follows:
 
 > Today's powerful, robust SAT solvers have become primary tools for solving hard computational problems.
 
-[^1]: *Johannes K. Fichte, Daniel Le Berre, Markus Hecher, and Stefan Szeider*. The Silent (R)evolution of SAT. Commun. ACM 66, 6 (June 2023), 64–72 
+[^1]: Johannes K. Fichte, Daniel Le Berre, Markus Hecher, and Stefan Szeider. *The Silent (R)evolution of SAT*. Commun. ACM 66, 6 (June 2023), 64–72 
         ([pdf](https://dl.acm.org/doi/pdf/10.1145/3560469) in open access).
 
 ## Knuth's solvers
 
-Knuth provides many implementations in [*CWEB*](https://cs.stanford.edu/~knuth/cweb.html) format:
+Knuth hosts lots of [programs](https://cs.stanford.edu/~knuth/programs.html), in particular he 
+provides many implementations of SAT solvers, given in the [*CWEB*](https://cs.stanford.edu/~knuth/cweb.html) format:
 
 - [Algorithm 7.2.2.2A](https://cs.stanford.edu/~knuth/programs/sat0.w), a *very basic* SAT solver with the generated [c source](https://github.com/massimo-nocentini/SAT.cweb/blob/master/src/sat0.c) and [pdf](https://github.com/massimo-nocentini/SAT.cweb/blob/master/tex/sat0.pdf);
 - [Algorithm 7.2.2.2B](https://cs.stanford.edu/~knuth/programs/sat0w.w), a *teeny tiny* SAT solver with the generated  [c source](https://github.com/massimo-nocentini/SAT.cweb/blob/master/src/sat0w.c) and [pdf](https://github.com/massimo-nocentini/SAT.cweb/blob/master/tex/sat0w.pdf);
