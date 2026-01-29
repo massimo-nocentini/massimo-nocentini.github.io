@@ -5,6 +5,7 @@ title = 'Di padre in figlio'
 subtitle = 'Conversazioni sul rischio di educare'
 author = 'Franco Nembrini'
 summary = ' '
+tags = ['nembrini', 'educazione' , 'youtube']
 +++
 
 Una conferenza di _Franco Nembrini_ ripresa da [youtube](https://www.youtube.com/watch?v=KM_qIHSHV1k).
