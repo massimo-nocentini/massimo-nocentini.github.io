@@ -44,3 +44,7 @@ that can be pulled easily:
 ```bash
 docker pull ghcr.io/massimo-nocentini/sat.cweb:master
 ```
+
+which is based on the [`sgb.cweb` Stanford GraphBase image][def].
+
+[def]: https://github.com/massimo-nocentini/sgb.cweb/pkgs/container/sgb.cweb
