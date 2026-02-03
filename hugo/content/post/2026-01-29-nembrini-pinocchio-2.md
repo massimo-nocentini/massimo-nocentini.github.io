@@ -1,14 +1,14 @@
 +++
-date = '2026-01-29T10:20:30+01:00'
+date = '2016-12-27T10:20:30+01:00'
 title = 'L’avventura di Pinocchio: dare il nome'
 subtitle = 'Noi tutti abbiamo un Padre che ci ha fatto, desiderandoci sin dall’inizio come compagni e amici per l’eternità'
-tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi', 'youtube']
+tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi', 'avventura di pinocchio']
 author = 'Franco Nembrini'
 summary = ' '
 +++
 
 *Una parte del commento di Franco Nembrini al terzo capitolo di Pinocchio,
-andato in onda il 27 Dicembre, 2016 [^1]. Riporto fino alla pubblicità.*
+andato in onda il 27 Dicembre 2016 [^1]. Riporto fino alla pubblicità.*
 
 *Basato sul manoscritto  del cardinale Giacomo Biffi [^2].*
 
@@ -344,8 +344,8 @@ Qui quel che preme dire adesso è cercare di capire quali sono le conseguenze
 immediate di questa fuga da casa.  Conseguenze terribili.  Perché la
 presunzione di Pinocchio di poter fare a meno del padre già subito comporta la
 distruzione di tutto.  Comporta la distruzione, il venir meno, il frantumarsi
-dei rapporti fondamentali: il rapporto con la vita,  il rapporto con le cose,
+dei rapporti fondamentali: *il rapporto con la vita,  il rapporto con le cose,
 il rapporto con tutta la realtà,  il rapporto con gli altri uomini,  e perfino
-il rapporto con se stesso.
+il rapporto con se stesso*.
 
 

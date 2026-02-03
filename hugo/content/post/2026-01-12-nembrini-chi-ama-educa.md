@@ -1,14 +1,16 @@
 +++
-date = '2026-01-12T09:35:10+01:00'
+date = '2012-09-28T09:35:10+01:00'
 draft = true
 title = 'Di padre in figlio'
 subtitle = 'Conversazioni sul rischio di educare'
 author = 'Franco Nembrini'
 summary = ' '
-tags = ['nembrini', 'educazione' , 'youtube']
+tags = ['nembrini', 'educazione' ]
 +++
 
-Una conferenza di _Franco Nembrini_ ripresa da [youtube](https://www.youtube.com/watch?v=KM_qIHSHV1k).
+*Dalla conferenza __Chi ama educa__[^1] di _Franco Nembrini_* tenutasi a Perugia il 28 Settembre 2012.
+
+[^1]: [Chi ama educa: Di padre in figlio. Conversazioni sul rischio di educare.](https://www.youtube.com/watch?v=KM_qIHSHV1k)
 
 ---
 Perché, per esempio, su questa storia che ha toccato alla fine il ruolo del padre,
@@ -120,12 +122,12 @@ Abbastanza facile come frase.
 
 Un bambinetto, evidentemente un genio antropologico,
 scrisse così, pensate alla frase *mia mamma mi vuole bene*:
-scrisse “mia”, aggettivo ossessivo.
+scrisse “mia”, aggettivo ossessivo!
 
 Allora, nella mia ignoranza e ingenuità,
 non ero ancora sposato,
 pensai a un errore grammaticale,
-a un errore di scrittura: aveva saltato la P.
+a un errore di scrittura: aveva saltato la *P*!
 Quello lì era un genio,
 perché aveva detto quella che poi
 si sarebbe rivelata una verità terrificante.

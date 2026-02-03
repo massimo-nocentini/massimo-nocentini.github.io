@@ -1,5 +1,5 @@
 +++
-date = '2026-01-09T14:00:21+01:00'
+date = '2017-03-31T14:00:21+01:00'
 title = 'Nuovi strani amici'
 author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
@@ -7,11 +7,11 @@ tags = ["nembrini", "buzzati", "nuovo", "strano", "amico", "paradiso", "inferno"
 summary = ' '
 +++
 
-Una lettura consigliata da Franco Nembrini, perchè è una 
+*Una lettura consigliata da Franco Nembrini, perchè è una*
 
->*“Descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio.”*
+>*“descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio”,*
 
-ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/).
+*ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/)*.
 
 ---
 

@@ -1,13 +1,15 @@
 +++
-date = '2026-01-08T16:00:21+01:00'
+date = '2025-12-24T16:00:21+01:00'
 title = 'Veglia di Natale'
 author = 'fra Massimo Travascio'
 subtitle = 'Omelia di fra Massimo Travascio OFM'
-tags = ["ofm", "porziuncola", "travascio", "natale", 'youtube']
+tags = ["ofm", "porziuncola", "travascio", "natale"]
 summary = ' '
 +++
 
-{{< youtube 82ODUS_XywI >}}
+*Veglia di Natale 2025. Omelia di fra Massimo Travascio OFM.* [^1]
+
+[^1]: [Veglia di Natale 2025. Omelia di fra Massimo Travascio OFM.](https://www.youtube.com/watch?v=82ODUS_XywI)
 
 ---
 
