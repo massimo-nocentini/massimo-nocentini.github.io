@@ -1,6 +1,6 @@
 +++
 date = '2026-01-22T10:18:13+01:00'
-title = 'Chez, 48 and Chicken Schemes'
+title = 'Scheme lang: Chez, 48 and Chicken'
 subtitle = 'Some docs, refs and containers, respectively.' 
 tags = ['containers', 'scheme', "releases"]
 summary = ' '
@@ -9,9 +9,9 @@ summary = ' '
 ## On learning the Scheme language
 
 The good [Will Byrd](http://webyrd.net/) ([github](https://github.com/webyrd)), that I met in person at [ICFP 2017](https://icfp17.sigplan.org/),
-has many advices and the video [Resources for Learning Scheme](https://www.youtube.com/watch?v=iC8eSdoyu9A) is a good starting point.
+has many advices and his video[^1] is a good starting point.
 
-{{< youtube iC8eSdoyu9A >}}
+[^1]: [Resources for Learning Scheme](https://www.youtube.com/watch?v=iC8eSdoyu9A)
 
 
 ## Cisco's Chez Scheme
