@@ -2,7 +2,7 @@
 date = '2026-01-28T09:56:03+01:00'
 title = 'SAT Solvers'
 subtitle = 'Papers and implementations'
-tags = ['sat', 'solvers', 'knuth', 'mit', 'acm', 'containers', 'cweb', 'c']
+tags = ['sat', 'solvers', 'knuth', 'mit', 'acm', 'containers', 'cweb', 'c', 'papers']
 summary = ' '
 +++
 
