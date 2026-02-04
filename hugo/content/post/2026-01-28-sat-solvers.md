@@ -33,6 +33,6 @@ that can be pulled easily:
 docker pull ghcr.io/massimo-nocentini/sat.cweb:master
 ```
 
-which is based on the [`sgb.cweb` Stanford GraphBase image][def].
+which is based on the [`sgb.cweb` Stanford GraphBase image][def] and presented in this [our own page]( {{< relref "2026-01-25-sgb.md" >}} ).
 
 [def]: https://github.com/massimo-nocentini/sgb.cweb/pkgs/container/sgb.cweb
