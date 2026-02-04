@@ -1,7 +1,7 @@
 +++
 date = '2026-01-08T18:33:23+01:00'
 title = "Hyperfunctions"
-author = 'Donnacha Kidney, Nicolas Wu'
+author = ['Donnacha Kidney', 'Nicolas Wu']
 subtitle = 'Communicating Continuations'
 tags = ["acm", "continuations", "haskell", 'papers']
 summary = ' '

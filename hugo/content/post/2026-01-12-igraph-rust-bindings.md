@@ -2,7 +2,7 @@
 date = '2026-01-12T16:12:22+01:00'
 title = 'Rust bindings for igraph'
 subtitle = 'and the companion container'
-tags = ["rust", "bindings", "containers", "graph", "c"]
+tags = ["rust", "bindings", "containers", "graphs", "c"]
 summary = ' '
 +++
 
