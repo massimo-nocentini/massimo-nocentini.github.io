@@ -1,21 +1,13 @@
 +++
 date = '2026-01-28T09:56:03+01:00'
-title = 'The Silent (R)evolution of SAT'
-subtitle = "Today's powerful, robust SAT solvers have become primary tools for solving hard computational problems."
-author = ['Johannes K. Fichte', 'Daniel Le Berre', 'Markus Hecher', 'Stefan Szeider']
-tags = ['sat', 'solvers', 'knuth', 'mit', 'acm', 'containers', 'cweb', 'c', 'papers']
+title = 'SAT solvers'
+subtitle = "Literate programming, implementations and their containers."
+author = 'Donald E. Knuth'
+tags = ['knuth', 'containers', 'cweb', 'c', 'stanford', 'sat']
 summary = ' '
 +++
 
-## The paper
-
-Looking at the ACM page of the [MIT Computer Science & Artificial Intelligence Laboratory](https://dl.acm.org/do/10.1145/institution-60006320/full/),
-the first article (at the time of writing) in the *Downloads* section is 
-
-> Johannes K. Fichte, Daniel Le Berre, Markus Hecher, and Stefan Szeider.
-> [*The Silent (R)evolution of SAT*](https://dl.acm.org/doi/10.1145/3560469). Commun. ACM 66, 6 (June 2023), 64–72.
-
-## Knuth's solvers
+## Algorithms
 
 Knuth hosts lots of [programs](https://cs.stanford.edu/~knuth/programs.html), in particular he 
 provides many implementations of SAT solvers, given in the [*CWEB*](https://cs.stanford.edu/~knuth/cweb.html) format:
@@ -32,7 +24,7 @@ provides many implementations of SAT solvers, given in the [*CWEB*](https://cs.s
 - [Algorithm 7.2.2.2C](https://cs.stanford.edu/~knuth/programs/sat13.w), a *conflict-driven clause learning* SAT solver with the generated [c source](https://github.com/massimo-nocentini/SAT.cweb/blob/master/src/sat13.c) and [pdf](https://github.com/massimo-nocentini/SAT.cweb/blob/master/tex/sat13.pdf);
 - [encoder](https://cs.stanford.edu/~knuth/programs/sat-nfa.w), a *forcing encoding of regular languages into SAT via nondeterministic finite automata* with the generated [c source](https://github.com/massimo-nocentini/SAT.cweb/blob/master/src/sat-nfa.c) and [pdf](https://github.com/massimo-nocentini/SAT.cweb/blob/master/tex/sat-nfa.pdf).
 
-### Containers
+## Containers
 
 We compiled and ship the corresponding executables in the [`sat.cweb` image](https://github.com/massimo-nocentini/SAT.cweb/pkgs/container/sat.cweb)
 that can be pulled easily:
