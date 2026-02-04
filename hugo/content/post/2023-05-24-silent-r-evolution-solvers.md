@@ -3,7 +3,7 @@ date = '2023-05-24T09:56:03+01:00'
 title = 'The Silent (R)evolution of SAT'
 subtitle = "Today's powerful, robust SAT solvers have become primary tools for solving hard computational problems."
 author = ['Johannes K. Fichte', 'Daniel Le Berre', 'Markus Hecher', 'Stefan Szeider']
-tags = ['sat', 'solvers', 'knuth', 'mit', 'acm', 'containers', 'cweb', 'c', 'papers']
+tags = ['sat', 'mit', 'acm', 'papers']
 summary = ' '
 +++
 

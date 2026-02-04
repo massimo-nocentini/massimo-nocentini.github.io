@@ -1,8 +1,8 @@
 +++
 date = '2016-12-27T11:20:30+01:00'
-title = 'L’avventura di Pinocchio: se uno non è di un padre, è di un padrone'
+title = 'L’avventura di Pinocchio: l’equivoco del carabiniere'
 subtitle = 'Senza un Padre l’uomo ha solo padroni e, invece che servire la verità, serve altri interessi che non distinguono il bene  dal male'
-tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi', 'avventura di pinocchio']
+tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi', "L'avventura di Pinocchio"]
 author = 'Franco Nembrini'
 summary = ' '
 +++
@@ -41,10 +41,9 @@ normalmente nella vita associata, nella vita pubblica, nella nostra vita, cioè
 > fra mezzo alle gambe e invece fece fiasco, perché il carabiniere, senza punto
 > smuoversi, lo acciuffò pulito per il naso  e lo riconsegnò nelle proprie mani
 > di Geppetto.  Il quale, a titolo di correzione, voleva dargli subito una
-> buona tiratina d’orecchie.
+> buona tiratina d’orecchie. Ma non le trovò perché si era dimenticato di fargliele.  
 
-Ma non le trovò perché si era dimenticato di fargliele.  E va bene.  E adesso
-veniamo al cuore della questione.
+E va bene.  E adesso veniamo al cuore della questione.
 
 > Allora lo prese per la collottola e, mentre lo riconduceva indietro, gli
 > disse tentennando minacciosamente il capo: «Andiamo subito a casa. Quando
