@@ -6,4 +6,4 @@ summary = ' '
 categories = []
 +++
 
-{{< include "testssui/testsuite-learning-suite.html" >}}
+{{< include "test-suites/testsuite-learning-suite.html" >}}

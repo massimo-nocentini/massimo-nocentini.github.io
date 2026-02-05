@@ -1,0 +1,229 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Massimo Nocentini - A small measure of peace</title><meta name=description content="<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Here is a test suite for the timsort function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. It is designed to perform well on many kinds of real-world data. The implementation follows the specifications outlined in [1][2] that we extracted in [3] and we compare it against the built-in sort function [4][5]. For the sake of completeness, we report their implementation of the sort! function, which is a wrapper around the merge! function, which merges two sorted sequences. The sort! function sorts a sequence in place using a provided comparison function less?.
+
+(define (sort! seq less?)
+  (define (step n)
+    (cond ((> n 2)
+           (let* ((j (quotient n 2)) (a (step j)) (k (- n j)) (b (step k)))
+             (merge! a b less?)))
+          ((= n 2)
+           (let ((x (car seq)) (y (cadr seq)) (p seq))
+             (set! seq (cddr seq))
+             (if (less? y x) (begin (set-car! p y) (set-car! (cdr p) x)))
+             (set-cdr! (cdr p) '())
+             p))
+          ((= n 1) (let ((p seq)) (set! seq (cdr seq)) (set-cdr! p '()) p))
+          (else '())))
+  (if (vector? seq)
+    (let ((n (vector-length seq)) (vec seq))
+      (set! seq (vector->list seq))
+      (do ((p (step n) (cdr p)) (i 0 (+ i 1)))
+          ((null? p) vec)
+        (vector-set! vec i (car p))))
+    (step (length seq))))
+
+
+(define (merge! a b less?)
+  (define (loop r a b)
+    (if (less? (car b) (car a))
+      (begin
+        (set-cdr! r b)
+        (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b))))
+      (begin
+        (set-cdr! r a)
+        (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)))))
+  (cond ((null? a) b)
+        ((null? b) a)
+        ((less? (car b) (car a))
+         (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b)))
+         b)
+        (else (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)) a)))
+"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-timsort-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Here is a test suite for the timsort function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. It is designed to perform well on many kinds of real-world data. The implementation follows the specifications outlined in [1][2] that we extracted in [3] and we compare it against the built-in sort function [4][5]. For the sake of completeness, we report their implementation of the sort! function, which is a wrapper around the merge! function, which merges two sorted sequences. The sort! function sorts a sequence in place using a provided comparison function less?. (define (sort! seq less?) (define (step n) (cond ((\u0026gt; n 2) (let* ((j (quotient n 2)) (a (step j)) (k (- n j)) (b (step k))) (merge! a b less?))) ((= n 2) (let ((x (car seq)) (y (cadr seq)) (p seq)) (set! seq (cddr seq)) (if (less? y x) (begin (set-car! p y) (set-car! (cdr p) x))) (set-cdr! (cdr p) \u0027()) p)) ((= n 1) (let ((p seq)) (set! seq (cdr seq)) (set-cdr! p \u0027()) p)) (else \u0027()))) (if (vector? seq) (let ((n (vector-length seq)) (vec seq)) (set! seq (vector-\u0026gt;list seq)) (do ((p (step n) (cdr p)) (i 0 (\u002b i 1))) ((null? p) vec) (vector-set! vec i (car p)))) (step (length seq)))) (define (merge! a b less?) (define (loop r a b) (if (less? (car b) (car a)) (begin (set-cdr! r b) (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b)))) (begin (set-cdr! r a) (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b))))) (cond ((null? a) b) ((null? b) a) ((less? (car b) (car a)) (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b))) b) (else (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)) a))) ","inLanguage":"en","wordCount":604,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-timsort-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Here is a test suite for the timsort function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. It is designed to perform well on many kinds of real-world data. The implementation follows the specifications outlined in [1][2] that we extracted in [3] and we compare it against the built-in sort function [4][5]. For the sake of completeness, we report their implementation of the sort! function, which is a wrapper around the merge! function, which merges two sorted sequences. The sort! function sorts a sequence in place using a provided comparison function less?.
+
+(define (sort! seq less?)
+  (define (step n)
+    (cond ((> n 2)
+           (let* ((j (quotient n 2)) (a (step j)) (k (- n j)) (b (step k)))
+             (merge! a b less?)))
+          ((= n 2)
+           (let ((x (car seq)) (y (cadr seq)) (p seq))
+             (set! seq (cddr seq))
+             (if (less? y x) (begin (set-car! p y) (set-car! (cdr p) x)))
+             (set-cdr! (cdr p) '())
+             p))
+          ((= n 1) (let ((p seq)) (set! seq (cdr seq)) (set-cdr! p '()) p))
+          (else '())))
+  (if (vector? seq)
+    (let ((n (vector-length seq)) (vec seq))
+      (set! seq (vector->list seq))
+      (do ((p (step n) (cdr p)) (i 0 (+ i 1)))
+          ((null? p) vec)
+        (vector-set! vec i (car p))))
+    (step (length seq))))
+
+
+(define (merge! a b less?)
+  (define (loop r a b)
+    (if (less? (car b) (car a))
+      (begin
+        (set-cdr! r b)
+        (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b))))
+      (begin
+        (set-cdr! r a)
+        (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)))))
+  (cond ((null? a) b)
+        ((null? b) a)
+        ((less? (car b) (car a))
+         (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b)))
+         b)
+        (else (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)) a)))
+"><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Here is a test suite for the timsort function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. …</!doctype>"><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.155.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=Blog href=/>Blog</a></li><li><a title=Pages href=/page/>Pages</a></li><li><a title=About href=/page/about/>About</a></li><li><a title=Tags href=/tags>Tags</a></li><li><a title=cat href=/categories/>cat</a></li></ul></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>Here is a test suite for the <code class=w3-codespan>timsort</code> function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. It is designed to perform well on many kinds of real-world data. The implementation follows the specifications outlined in <cite>[<a href=#cite140>1</a>]</cite><cite>[<a href=#cite141>2</a>]</cite> that we extracted in <cite>[<a href=#cite142>3</a>]</cite> and we compare it against the built-in <code class=w3-codespan>sort</code> function <cite>[<a href=#cite143>4</a>]</cite><cite>[<a href=#cite144>5</a>]</cite>. For the sake of completeness, we report their implementation of the <code class=w3-codespan>sort!</code> function, which is a wrapper around the <code class=w3-codespan>merge!</code> function, which merges two sorted sequences. The <code class=w3-codespan>sort!</code> function sorts a sequence in place using a provided comparison function <code class=w3-codespan>less?</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (sort! seq less?)
+  (define (step n)
+    (cond ((&gt; n 2)
+           (let* ((j (quotient n 2)) (a (step j)) (k (- n j)) (b (step k)))
+             (merge! a b less?)))
+          ((= n 2)
+           (let ((x (car seq)) (y (cadr seq)) (p seq))
+             (set! seq (cddr seq))
+             (if (less? y x) (begin (set-car! p y) (set-car! (cdr p) x)))
+             (set-cdr! (cdr p) '())
+             p))
+          ((= n 1) (let ((p seq)) (set! seq (cdr seq)) (set-cdr! p '()) p))
+          (else '())))
+  (if (vector? seq)
+    (let ((n (vector-length seq)) (vec seq))
+      (set! seq (vector-&gt;list seq))
+      (do ((p (step n) (cdr p)) (i 0 (+ i 1)))
+          ((null? p) vec)
+        (vector-set! vec i (car p))))
+    (step (length seq))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (merge! a b less?)
+  (define (loop r a b)
+    (if (less? (car b) (car a))
+      (begin
+        (set-cdr! r b)
+        (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b))))
+      (begin
+        (set-cdr! r a)
+        (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)))))
+  (cond ((null? a) b)
+        ((null? b) a)
+        ((less? (car b) (car a))
+         (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b)))
+         b)
+        (else (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)) a)))
+</code></pre></div></p><section id=section145><header><h1><code>test/simple</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simple _)
+  (⊦= '(1 2 3 4 5) (timsort '(5 4 3 2 1)))
+  (⊦= '(1 2 3 4 5) (timsort '(1 2 3 4 5)))
+  (⊦= '(1 2 3 4 5) (timsort '(3 2 1 5 4)))
+  (⊦= '(1) (timsort '(1)))
+  (⊦= '() (timsort '())))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 25811976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section146><header><h1><code>test/iota</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Here we test the timsort function with a large list of integers from 0 to 1000000 elements long. The list is sorted in descending order, and we expect the result to be a list sorted in ascending order.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/iota _) (⊦= r (timsort (iota n (sub1 n) -1))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.251) (memory #(100663296 49808864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section147><header><h1><code>test/iota/sort</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/iota/sort _) (⊦= r (sort (iota n (sub1 n) -1) &lt;)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.335) (memory #(201326592 49809664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section148><header><h1><code>test/timtros/iota</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/timtros/iota _) (⊦= (iota n (sub1 n) -1) (timtros r)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.222) (memory #(201326592 73810008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section149><header><h1><code>test/tros/iota</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/tros/iota _) (⊦= (iota n (sub1 n) -1) (reverse (sort r &lt;))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.271) (memory #(201326592 73810848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section150><header><h1><code>test/already-sorted</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/already-sorted _) (⊦= r (timsort r)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.198) (memory #(201326592 49811256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section151><header><h1><code>test/already-sorted/sort</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/already-sorted/sort _) (⊦= r (sort r &lt;)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.239) (memory #(201326592 49812024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section152><header><h1><code>test/already-sorted/primitive</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/already-sorted/primitive _) (⊦= r (timsort/primitive r)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.106) (memory #(201326592 49812472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section153><header><h1><code>test/primitive</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/primitive _)
+  (⊦= (sort '(5 4 3 2 1) &lt;) (timsort/primitive '(5 4 3 2 1)))
+  (⊦= '(hello world) (timsort/primitive '(world hello))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 49813368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite140>[1] <a href=https://github.com/python/cpython/blob/main/Objects/listobject.c>CPython: listobject.c</a></span><br><span id=cite141>[2] <a href=https://github.com/python/cpython/blob/main/Objects/listsort.txt>CPython: listsort.txt</a></span><br><span id=cite142>[3] <a href=https://github.com/massimo-nocentini/timsort.c>Github: timsort.c</a></span><br><span id=cite143>[4] <a href=https://srfi.schemers.org/srfi-95/srfi-95.html>SRFI 95</a></span><br><span id=cite144>[5] <a href=https://en.wikipedia.org/wiki/Sorting_algorithm>Wikipedia: Sorting algorithm</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-paypal fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://telegram.me/username title=Telegram><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-telegram fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://discord.gg/invite%20code%20%28https://discord.gg/massimo.nocentini%29 title=Discord><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-discord fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;&copy;
+2026
+&nbsp;&bull;&nbsp;
+<a href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.155.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js integrity=sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js integrity=sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-3.7.0.slim.min.js integrity=sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js integrity=sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/main.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js integrity=sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js integrity=sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/load-photoswipe.js></script></body></html>
