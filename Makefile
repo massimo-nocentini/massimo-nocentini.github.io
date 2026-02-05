@@ -11,3 +11,6 @@ format:
 	scheme-indent -T 2 < index.scm > index.scm.tmp && mv index.scm.tmp index.scm
 
 
+testsuites:
+	rm ./hugo/content/testssui/*
+	docker run --rm --entrypoint /bin/bash -v ./hugo/content/testssui:/home/ubuntu/out ghcr.io/massimo-nocentini/aux.scm:master -c "cp test-results/* out"

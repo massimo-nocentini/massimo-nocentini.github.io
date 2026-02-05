@@ -1,0 +1,160 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script>hljs.highlightAll();</script></head>
+<body>
+<p>Here is a test suite for the <code class="w3-codespan">timsort</code> function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. It is designed to perform well on many kinds of real-world data. The implementation follows the specifications outlined in <cite>[<a href="#cite140">1</a>]</cite><cite>[<a href="#cite141">2</a>]</cite> that we extracted in <cite>[<a href="#cite142">3</a>]</cite> and we compare it against the built-in <code class="w3-codespan">sort</code> function <cite>[<a href="#cite143">4</a>]</cite><cite>[<a href="#cite144">5</a>]</cite>. For the sake of completeness, we report their implementation of the <code class="w3-codespan">sort!</code> function, which is a wrapper around the <code class="w3-codespan">merge!</code> function, which merges two sorted sequences. The <code class="w3-codespan">sort!</code> function sorts a sequence in place using a provided comparison function <code class="w3-codespan">less?</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (sort! seq less?)
+  (define (step n)
+    (cond ((&gt; n 2)
+           (let* ((j (quotient n 2)) (a (step j)) (k (- n j)) (b (step k)))
+             (merge! a b less?)))
+          ((= n 2)
+           (let ((x (car seq)) (y (cadr seq)) (p seq))
+             (set! seq (cddr seq))
+             (if (less? y x) (begin (set-car! p y) (set-car! (cdr p) x)))
+             (set-cdr! (cdr p) '())
+             p))
+          ((= n 1) (let ((p seq)) (set! seq (cdr seq)) (set-cdr! p '()) p))
+          (else '())))
+  (if (vector? seq)
+    (let ((n (vector-length seq)) (vec seq))
+      (set! seq (vector-&gt;list seq))
+      (do ((p (step n) (cdr p)) (i 0 (+ i 1)))
+          ((null? p) vec)
+        (vector-set! vec i (car p))))
+    (step (length seq))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (merge! a b less?)
+  (define (loop r a b)
+    (if (less? (car b) (car a))
+      (begin
+        (set-cdr! r b)
+        (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b))))
+      (begin
+        (set-cdr! r a)
+        (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)))))
+  (cond ((null? a) b)
+        ((null? b) a)
+        ((less? (car b) (car a))
+         (if (null? (cdr b)) (set-cdr! b a) (loop b a (cdr b)))
+         b)
+        (else (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)) a)))
+</code></pre></div></p>
+<section id="section145">
+<header>
+<h1><code>test/simple</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simple _)
+  (⊦= '(1 2 3 4 5) (timsort '(5 4 3 2 1)))
+  (⊦= '(1 2 3 4 5) (timsort '(1 2 3 4 5)))
+  (⊦= '(1 2 3 4 5) (timsort '(3 2 1 5 4)))
+  (⊦= '(1) (timsort '(1)))
+  (⊦= '() (timsort '())))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 25811976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section146">
+<header>
+<h1><code>test/iota</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<p>Here we test the timsort function with a large list of integers from 0 to 1000000 elements long. The list is sorted in descending order, and we expect the result to be a list sorted in ascending order.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/iota _) (⊦= r (timsort (iota n (sub1 n) -1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.251) (memory #(100663296 49808864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section147">
+<header>
+<h1><code>test/iota/sort</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/iota/sort _) (⊦= r (sort (iota n (sub1 n) -1) &lt;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.335) (memory #(201326592 49809664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section148">
+<header>
+<h1><code>test/timtros/iota</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timtros/iota _) (⊦= (iota n (sub1 n) -1) (timtros r)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.222) (memory #(201326592 73810008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section149">
+<header>
+<h1><code>test/tros/iota</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tros/iota _) (⊦= (iota n (sub1 n) -1) (reverse (sort r &lt;))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.271) (memory #(201326592 73810848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section150">
+<header>
+<h1><code>test/already-sorted</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted _) (⊦= r (timsort r)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.198) (memory #(201326592 49811256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section151">
+<header>
+<h1><code>test/already-sorted/sort</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted/sort _) (⊦= r (sort r &lt;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.239) (memory #(201326592 49812024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section152">
+<header>
+<h1><code>test/already-sorted/primitive</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted/primitive _) (⊦= r (timsort/primitive r)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.106) (memory #(201326592 49812472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section153">
+<header>
+<h1><code>test/primitive</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/primitive _)
+  (⊦= (sort '(5 4 3 2 1) &lt;) (timsort/primitive '(5 4 3 2 1)))
+  (⊦= '(hello world) (timsort/primitive '(world hello))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 49813368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<hr />
+<div class="w3-container">
+<header><b>References</b></header><span id="cite140">[1] <a href="https://github.com/python/cpython/blob/main/Objects/listobject.c">CPython: listobject.c</a></span>
+<br /><span id="cite141">[2] <a href="https://github.com/python/cpython/blob/main/Objects/listsort.txt">CPython: listsort.txt</a></span>
+<br /><span id="cite142">[3] <a href="https://github.com/massimo-nocentini/timsort.c">Github: timsort.c</a></span>
+<br /><span id="cite143">[4] <a href="https://srfi.schemers.org/srfi-95/srfi-95.html">SRFI 95</a></span>
+<br /><span id="cite144">[5] <a href="https://en.wikipedia.org/wiki/Sorting_algorithm">Wikipedia: Sorting algorithm</a></span>
+<br /></div></body></html>

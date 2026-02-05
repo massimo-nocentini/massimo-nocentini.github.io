@@ -1,0 +1,93 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script>hljs.highlightAll();</script></head>
+<body>
+<section id="section203">
+<header>
+<h1><code>test-letqueue</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-letqueue _)
+  (⊦= 2 (cadr '(1 2)))
+  (letqueue
+    ((q '()) (w '(a)) (e '(a b)) (r '(a b c)) (t '(a b c d)))
+    (⊦= '(0 ()) q)
+    (⊨ (fds-queue-empty? q))
+    (⊦= '(1 (a)) w)
+    (⊭ (fds-queue-empty? w))
+    (⊦= '(2 (a) b) e)
+    (⊭ (fds-queue-empty? e))
+    (⊦= '(3 (a) c b) r)
+    (⊭ (fds-queue-empty? r))
+    (⊦= '(4 (a) d c b) t)
+    (⊭ (fds-queue-empty? t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1830360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section204">
+<header>
+<h1><code>test-cons-cdr</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-cons-cdr _)
+  (letqueue
+    ((q '()))
+    (⊦= '(0 ()) q)
+    (set! q (fds-queue-cons 'a q))
+    (⊦= '(1 (a)) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'a (fds-queue-car q))
+    (set! q (fds-queue-cons 'b q))
+    (⊦= '(2 (a) b) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'a (fds-queue-car q))
+    (set! q (fds-queue-cons 'c q))
+    (⊦= '(3 (a) c b) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'a (fds-queue-car q))
+    (set! q (fds-queue-cdr q))
+    (⊦= '(2 (b c)) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'b (fds-queue-car q))
+    (set! q (fds-queue-cdr q))
+    (⊦= '(1 (c)) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'c (fds-queue-car q))
+    (set! q (fds-queue-cdr q))
+    (⊦= '(0 ()) q)
+    (⊨ (fds-queue-empty? q))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1830576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section205">
+<header>
+<h1><code>test-empty-car</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-empty-car _)
+  (letqueue
+    ((q '()))
+    (⊦⧳ ((exn)) (fds-queue-car q))
+    (⊦⧳ ((exn)) (fds-queue-cdr q))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1830272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

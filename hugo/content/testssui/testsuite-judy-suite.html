@@ -1,0 +1,130 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script>hljs.highlightAll();</script></head>
+<body>
+<section id="section192">
+<header>
+<h1><code>test/empty</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/empty _)
+  (let1 (a (judy-array-empty))
+        (⊦ = 0 (judy-array-size a))
+        (⊦ = 0 (judy-array-bytes a))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1834000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section193">
+<header>
+<h1><code>test/set!-ref</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/set!-ref _)
+  (let1 (a (judy-array-empty))
+        (judy-array-set! a 'key '(zero &quot;hello&quot;))
+        (⊦ = 1 (judy-array-size a))
+        (⊦ = 24 (judy-array-bytes a))
+        (⊦ (λ (v z) (not (eq? v z)))
+             '(zero &quot;hello&quot;)
+             (judy-array-ref a 'key))
+        (⊦ equal? '(zero &quot;hello&quot;) (judy-array-ref a 'key))
+        (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1834672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section194">
+<header>
+<h1><code>test/alist->judy-array</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/alist-&gt;judy-array _)
+  (let1 (a (alist-&gt;judy-array
+             '((0 zero) (1 one) (2 two) (10000 ten-thousand))))
+        (⊦ = 4 (judy-array-size a))
+        (⊦ = 88 (judy-array-bytes a))
+        (⊦ equal? 'zero (judy-array-ref a 0))
+        (⊦ equal? 'one (judy-array-ref a 1))
+        (⊦ equal? 'two (judy-array-ref a 2))
+        (⊦ equal? 'ten-thousand (judy-array-ref a 10000))
+        (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section195">
+<header>
+<h1><code>test/list->judy-array</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array _)
+  (let1 (a (list-&gt;judy-array
+             '(zero one two three four five six seven eight nine ten)))
+        (⊦ = 11 (judy-array-size a))
+        (⊦ = 184 (judy-array-bytes a))
+        (⊦ equal? 'zero (judy-array-ref a 0))
+        (⊦ equal? 'five (judy-array-ref a 5))
+        (⊦ equal? 'ten (judy-array-ref a 10))
+        (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section196">
+<header>
+<h1><code>test/judy-array->alist</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/judy-array-&gt;alist _)
+  (let1 (alist '((0 zero) (1 one) (2 two) (10000 ten-thousand)))
+        (let1 (a (alist-&gt;judy-array alist))
+              (⊦ equal? alist (judy-array-&gt;alist a)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1836320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section197">
+<header>
+<h1><code>test/list->judy-array/iota</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array/iota _)
+  (let* ((n 100000) (I (iota n)))
+    (let1 (a (list-&gt;judy-array I))
+          (⊦ = n (judy-array-size a))
+          (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.036) (memory #(8456480 4233784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<section id="section198">
+<header>
+<h1><code>test/judy-array-walk</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/judy-array-walk _)
+  (let* ((n 50000) (I (iota n)))
+    (let1 (a (list-&gt;judy-array I))
+          (let1 (collected '())
+                (judy-array-walk/backward a (λ (i v) (push! v collected)))
+                (⊦ equal? I collected)
+                (set! collected '())
+                (judy-array-walk/forward a (λ (i v) (push! v collected)))
+                (⊦ equal? I (reverse collected))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.03) (memory #(16912960 4234424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>
