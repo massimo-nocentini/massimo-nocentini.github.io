@@ -92,10 +92,10 @@ pygmentsCodefencesGuessSyntax = true
     url = ""
     weight = 1
 
-[[menu.main]]
-    name = "Pages"
-    url = "page/"
-    weight = 2
+#[[menu.main]]
+#    name = "Pages"
+#    url = "page/"
+#    weight = 2
 
 [[menu.main]]
     name = "About"
@@ -103,7 +103,7 @@ pygmentsCodefencesGuessSyntax = true
     weight = 3
 
 [[menu.main]]
-    name = "cat"
+    name = "Categories"
     url = "categories/"
     weight = 4
 
