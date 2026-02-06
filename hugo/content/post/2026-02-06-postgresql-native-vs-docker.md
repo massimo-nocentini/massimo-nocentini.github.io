@@ -10,12 +10,12 @@ author = ['Massimo Nocentini', 'Richard Uttner']
 
 The results in a nutshell:
 
-|Machine|Runtime|Duration|Duration per record|Slow ratio wrt Machine|
-|---|---|---|---|---|
-|M4 Max|native|137s|0.21ms|1
-|M4 Max|container|217s|0.34ms|1,619047619
-|Debian box|native|611s|0.95ms|1
-|Debian box|container|974s|1.51ms|1,5894736842
+|Machine|Runtime|Duration|Duration ratio wrt Machine|Duration per record|Duration per record ratio wrt Machine|
+|---|---|---|---|---|---|
+|M4 Max|native|137s|1|0.21ms|1
+|M4 Max|container|217s|1,5839|0.34ms|1,619
+|Debian box|native|611s|1|0.95ms|1
+|Debian box|container|974s|1,5941|1.51ms|1,5894
 
 
 # On a M4 Max
