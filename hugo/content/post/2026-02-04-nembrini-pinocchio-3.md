@@ -2,8 +2,9 @@
 date = '2016-12-28T11:20:30+01:00'
 title = 'L’avventura di Pinocchio: l’equivoco del carabiniere'
 subtitle = 'Senza un Padre l’uomo ha solo padroni e, invece che servire la verità, serve altri interessi che non distinguono il bene  dal male'
-tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi', "L'avventura di Pinocchio"]
+tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi']
 author = 'Franco Nembrini'
+categories = ["L'avventura di Pinocchio"]
 summary = ' '
 +++
 

@@ -28,7 +28,7 @@ test/let1: pass
 (define (test/let1 _) (let1 (a 1) (⊦= a 1)))
 
 
-((eta 0.0) (memory #(25165824 2375528 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2375496 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -43,7 +43,7 @@ test/letcar&cdr: pass
     (⊦= dd 3)))
 
 
-((eta 0.0) (memory #(25165824 2376584 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(25165824 2376552 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -55,7 +55,7 @@ test/λ: pass
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
 
 
-((eta 0.0) (memory #(25165824 2377336 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2377304 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -70,7 +70,7 @@ test/letmaptensor: pass
           (list (add1 x) y z))))
 
 
-((eta 0.0) (memory #(25165824 2377656 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2377624 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -94,7 +94,7 @@ test/letmap: pass
           (list (add1 x) y z))))
 
 
-((eta 0.0) (memory #(25165824 2378288 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -121,7 +121,7 @@ test/procc/λ-memo: pass
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
 
 
-((eta 0.001) (memory #(25165824 2378248 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -130,12 +130,12 @@ test/load/string: pass
 (define (test/load/string _) (⊦= &#39;(+ 3 4) (load/string "(+ 3 4)")))
 
 
-((eta 0.0) (memory #(25165824 2378952 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2378960 1048576)) (stdout "") (stderr ""))
 
 
 
 test/simdjson/version: pass
-The current version of simdjson is 4.2.1.'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-auxtest\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e test\/let1: pass (define (test\/let1 _) (let1 (a 1) (⊦= a 1))) ((eta 0.0) (memory #(25165824 2375528 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letcar\u0026cdr: pass (define (test\/letcar\u0026amp;cdr _) (letcar\u0026amp;cdr (((a d) (cons 1 \u0027())) ((aa dd) (cons 2 3))) (⊦= a 1) (⊦= d \u0027()) (⊦= aa 2) (⊦= dd 3))) ((eta 0.0) (memory #(25165824 2376584 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/λ: pass (define (test\/λ _) (⊦= 5 ((λ (x) (\u002b x 2)) 3)) (⊦= 5 ((λ (x) ((λ (y) (\u002b x y)) 2)) 3)) (⊦= 5 ((λ (x y) (\u002b x y)) 2 3))) ((eta 0.0) (memory #(25165824 2377336 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letmaptensor: pass (define (test\/letmaptensor _) (⊦= \u0027((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f))) (((3 a #f) (3 a #t)) ((3 2 #f) (3 2 #f))) (((4 a #t) (4 a #t)) ((4 3 #t) (4 3 #f)))) (letmaptensor ((x (list 1 2 3)) (y \u0060(a ,x)) (z (list (odd? x) (symbol? y)))) (list (add1 x) y z)))) ((eta 0.0) (memory #(25165824 2377656 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letmap: pass (define (test\/letmap _) (⊦= \u0027((2 a #t) (2 a #t) (2 1 #t) (2 1 #f) (3 a #f) (3 a #t) (3 2 #f) (3 2 #f) (4 a #t) (4 a #t) (4 3 #t) (4 3 #f)) (letmap ((x (list 1 2 3)) (y \u0060(a ,x)) (z (list (odd? x) (symbol? y)))) (list (add1 x) y z)))) ((eta 0.0) (memory #(25165824 2378288 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/procc\/λ-memo: pass (define (test\/procc\/λ-memo _) (define count 0) (define fib (λ (n) (add1! count) (cond ((\u0026lt; n 2) n) (else (let1 (mrow (mi sub1) (mi n)) (\u002b (fib m) (fib (sub1 m)))))))) (let1 (v (fib 10)) (⊦= 55 v) (⊦= 177 count)) (set! count 0) (define fib-memo (λ-memo (n) (add1! count) (cond ((\u0026lt; n 2) n) (else (let1 (mrow (mi sub1) (mi n)) (\u002b (fib-memo m) (fib-memo (sub1 m)))))))) (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count))) ((eta 0.001) (memory #(25165824 2378248 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/load\/string: pass (define (test\/load\/string _) (⊦= \u0027(\u002b 3 4) (load\/string \u0026quot;(\u002b 3 4)\u0026quot;))) ((eta 0.0) (memory #(25165824 2378952 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/simdjson\/version: pass The current version of simdjson is 4.2.1.\n","inLanguage":"en","wordCount":806,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-auxtest\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+The current version of simdjson is 4.2.1.'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-auxtest\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e test\/let1: pass (define (test\/let1 _) (let1 (a 1) (⊦= a 1))) ((eta 0.0) (memory #(25165824 2375496 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letcar\u0026cdr: pass (define (test\/letcar\u0026amp;cdr _) (letcar\u0026amp;cdr (((a d) (cons 1 \u0027())) ((aa dd) (cons 2 3))) (⊦= a 1) (⊦= d \u0027()) (⊦= aa 2) (⊦= dd 3))) ((eta 0.001) (memory #(25165824 2376552 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/λ: pass (define (test\/λ _) (⊦= 5 ((λ (x) (\u002b x 2)) 3)) (⊦= 5 ((λ (x) ((λ (y) (\u002b x y)) 2)) 3)) (⊦= 5 ((λ (x y) (\u002b x y)) 2 3))) ((eta 0.0) (memory #(25165824 2377304 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letmaptensor: pass (define (test\/letmaptensor _) (⊦= \u0027((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f))) (((3 a #f) (3 a #t)) ((3 2 #f) (3 2 #f))) (((4 a #t) (4 a #t)) ((4 3 #t) (4 3 #f)))) (letmaptensor ((x (list 1 2 3)) (y \u0060(a ,x)) (z (list (odd? x) (symbol? y)))) (list (add1 x) y z)))) ((eta 0.0) (memory #(25165824 2377624 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letmap: pass (define (test\/letmap _) (⊦= \u0027((2 a #t) (2 a #t) (2 1 #t) (2 1 #f) (3 a #f) (3 a #t) (3 2 #f) (3 2 #f) (4 a #t) (4 a #t) (4 3 #t) (4 3 #f)) (letmap ((x (list 1 2 3)) (y \u0060(a ,x)) (z (list (odd? x) (symbol? y)))) (list (add1 x) y z)))) ((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/procc\/λ-memo: pass (define (test\/procc\/λ-memo _) (define count 0) (define fib (λ (n) (add1! count) (cond ((\u0026lt; n 2) n) (else (let1 (mrow (mi sub1) (mi n)) (\u002b (fib m) (fib (sub1 m)))))))) (let1 (v (fib 10)) (⊦= 55 v) (⊦= 177 count)) (set! count 0) (define fib-memo (λ-memo (n) (add1! count) (cond ((\u0026lt; n 2) n) (else (let1 (mrow (mi sub1) (mi n)) (\u002b (fib-memo m) (fib-memo (sub1 m)))))))) (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count))) ((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/load\/string: pass (define (test\/load\/string _) (⊦= \u0027(\u002b 3 4) (load\/string \u0026quot;(\u002b 3 4)\u0026quot;))) ((eta 0.0) (memory #(25165824 2378960 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/simdjson\/version: pass The current version of simdjson is 4.2.1.\n","inLanguage":"en","wordCount":806,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-auxtest\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -165,7 +165,7 @@ test/let1: pass
 (define (test/let1 _) (let1 (a 1) (⊦= a 1)))
 
 
-((eta 0.0) (memory #(25165824 2375528 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2375496 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -180,7 +180,7 @@ test/letcar&cdr: pass
     (⊦= dd 3)))
 
 
-((eta 0.0) (memory #(25165824 2376584 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(25165824 2376552 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -192,7 +192,7 @@ test/λ: pass
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
 
 
-((eta 0.0) (memory #(25165824 2377336 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2377304 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -207,7 +207,7 @@ test/letmaptensor: pass
           (list (add1 x) y z))))
 
 
-((eta 0.0) (memory #(25165824 2377656 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2377624 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -231,7 +231,7 @@ test/letmap: pass
           (list (add1 x) y z))))
 
 
-((eta 0.0) (memory #(25165824 2378288 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -258,7 +258,7 @@ test/procc/λ-memo: pass
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
 
 
-((eta 0.001) (memory #(25165824 2378248 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -267,7 +267,7 @@ test/load/string: pass
 (define (test/load/string _) (⊦= &#39;(+ 3 4) (load/string "(+ 3 4)")))
 
 
-((eta 0.0) (memory #(25165824 2378952 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(25165824 2378960 1048576)) (stdout "") (stderr ""))
 
 
 
@@ -302,7 +302,7 @@ test/let1: pass
 (define (test/let1 _) (let1 (a 1) (⊦= a 1)))
 
 
-((eta 0.0) (memory #(25165824 2375528 1048576)) (stdout "") (stderr …</!doctype>'><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.155.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+((eta 0.0) (memory #(25165824 2375496 1048576)) (stdout "") (stderr …</!doctype>'><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.155.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
@@ -314,7 +314,7 @@ test/let1: pass
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
 </button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section309><header><h1><code>test/let1</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2375528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2375496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section310><header><h1><code>test/letcar&cdr</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcar&amp;cdr _)
   (letcar&amp;cdr
     (((a d) (cons 1 '())) ((aa dd) (cons 2 3)))
@@ -322,12 +322,12 @@ test/let1: pass
     (⊦= d '())
     (⊦= aa 2)
     (⊦= dd 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2376584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2376552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section311><header><h1><code>test/λ</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/λ _)
   (⊦= 5 ((λ (x) (+ x 2)) 3))
   (⊦= 5 ((λ (x) ((λ (y) (+ x y)) 2)) 3))
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section312><header><h1><code>test/letmaptensor</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmaptensor _)
   (⊦= '((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f)))
           (((3 a #f) (3 a #t)) ((3 2 #f) (3 2 #f)))
@@ -335,7 +335,7 @@ test/let1: pass
         (letmaptensor
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section313><header><h1><code>test/letmap</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmap _)
   (⊦= '((2 a #t)
           (2 a #t)
@@ -352,7 +352,7 @@ test/let1: pass
         (letmap
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section314><header><h1><code>test/procc/λ-memo</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/procc/λ-memo _)
   (define count 0)
   (define fib
@@ -372,11 +372,11 @@ test/let1: pass
              (let1 (mrow (mi sub1) (mi n))
                    (+ (fib-memo m) (fib-memo (sub1 m))))))))
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2378248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section315><header><h1><code>test/load/string</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/load/string _) (⊦= '(+ 3 4) (load/string &quot;(+ 3 4)&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section316><header><h1><code>test/simdjson/version</code>: <span class=w3-text-green>pass</span></h1></header></section><p>The current version of <code class=w3-codespan>simdjson</code> is <code class=w3-codespan>4.2.1</code>.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/version _) (⊦= &quot;4.2.1&quot; (simdjson-get-version)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2379648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2379656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section317><header><h1><code>test/simdjson/load-twitter</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Loaded a testbed json file <code class=w3-codespan>twitter.json</code><cite>[<a href=#cite318>1</a>]</cite> with the <code class=w3-codespan>simdjson</code><cite>[<a href=#cite319>2</a>]</cite><cite>[<a href=#cite320>3</a>]</cite> library. The file contains a twitter search result with 100 tweets.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter _)
   (define twitter-json (simdjson-load/ondemand &quot;twitter.json&quot;))
   (⊦= 2 (length twitter-json))
@@ -394,24 +394,24 @@ test/let1: pass
             (since_id_str &quot;0&quot;)))
         (cadr twitter-json))
   (⊦= 100 (vector-length (cadar twitter-json))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(25165824 3611784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(25165824 3611840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section321><header><h1><code>test/simdjson/load-twitter/ondemand</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Here we show the <i>on demand</i> parsing mode of <code class=w3-codespan>simdjson</code><cite>[<a href=#cite322>4</a>]</cite>, which yields equivalent Scheme objects with respect to the DOM parsing.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter/ondemand _)
   (⊦= (simdjson-load &quot;twitter.json&quot;)
         (simdjson-load/ondemand &quot;twitter.json&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(25165824 4841592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(25165824 4841584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section323><header><h1><code>test/simdjson/->string</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Test for simdjson-load, which loads and parses a JSON file into a Scheme representation.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/-&gt;string _)
   (⊦= test/simdjson/-&gt;string/expected
         (-&gt;string/json (simdjson-load &quot;twitter.json&quot;))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(12582912 4137392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.018) (memory #(12582912 4137376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section324><header><h1><code>test/simdjson/parse</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Test for simdjson-parse/ondemand, which parses a JSON string into a Scheme representation on demand.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/parse _)
   (⊦= #(((a 1) (b #(2 5)) (c #t)) ((c 3) (d 4)))
         (simdjson-parse/ondemand
           &quot;[{\&quot;a\&quot;:1,\&quot;b\&quot;:[2,5],\&quot;c\&quot;:true},{\&quot;c\&quot;:3,\&quot;d\&quot;:4}]&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4138336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 4138320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section325><header><h1><code>test/libc/fma</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Taken from <cite>[<a href=#cite326>5</a>]</cite></p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/libc/fma _)
   (⊦ fp= 0.0 (+ (* 0.1 10.0) -1.0))
   (⊦ fp= (fp*+ 0.1 10.0 -1.0) (libc-fma 0.1 10.0 -1.0)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4139688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4139672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section327><header><h1><code>test/documentation</code>: <span class=w3-text-green>pass</span></h1></header></section><p>An initial attempt to support our own documentation framework. The following tests check that documentation can be set and retrieved for functions.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/documentation _)
   (set! (documentation +) &quot;Returns the sum of its arguments.&quot;)
   (define-documented
@@ -425,7 +425,7 @@ test/let1: pass
            (comment (p &quot; some comment here&quot;))
            (comment &quot;some other comment here.&quot;)))
         (documentation a)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4141328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4141312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section328><header><h1><code>test/documentation/documentation</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Test for documentation of the documentation function itself.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/documentation/documentation _)
   (documentation!
     documentation
@@ -436,7 +436,7 @@ test/let1: pass
            (comment
              &quot;Test for documentation of the documentation function itself.&quot;)))
         (documentation documentation)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite318>[1] <a href=https://raw.githubusercontent.com/simdjson/simdjson/refs/heads/master/jsonexamples/twitter.json><code class=w3-codespan>twitter.json</code> : a twitter search result JSON file</a></span><br><span id=cite319>[2] <a href=https://github.com/simdjson/simdjson><code class=w3-codespan>simdjson</code> : parsing gigabytes of JSON per second</a></span><br><span id=cite320>[3] <a href=https://simdjson.github.io/simdjson/index.html><code class=w3-codespan>simdjson</code> : user manual and documentation</a></span><br><span id=cite322>[4] <a href=https://simdjson.github.io/simdjson/md_doc_basics.html#documents-are-iterators><code class=w3-codespan>simdjson</code> : Documents are iterators</a></span><br><span id=cite326>[5] <a href=https://en.cppreference.com/w/c/numeric/math/fma.html>fma, fmaf, fmal</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

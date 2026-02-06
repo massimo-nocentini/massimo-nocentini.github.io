@@ -13,7 +13,7 @@
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;806&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section309><header><h1><code>test/let1</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2375528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2375496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section310><header><h1><code>test/letcar&cdr</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcar&amp;cdr _)
   (letcar&amp;cdr
     (((a d) (cons 1 '())) ((aa dd) (cons 2 3)))
@@ -21,12 +21,12 @@
     (⊦= d '())
     (⊦= aa 2)
     (⊦= dd 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2376584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2376552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section311><header><h1><code>test/λ</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/λ _)
   (⊦= 5 ((λ (x) (+ x 2)) 3))
   (⊦= 5 ((λ (x) ((λ (y) (+ x y)) 2)) 3))
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section312><header><h1><code>test/letmaptensor</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmaptensor _)
   (⊦= '((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f)))
           (((3 a #f) (3 a #t)) ((3 2 #f) (3 2 #f)))
@@ -34,7 +34,7 @@
         (letmaptensor
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section313><header><h1><code>test/letmap</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmap _)
   (⊦= '((2 a #t)
           (2 a #t)
@@ -51,7 +51,7 @@
         (letmap
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section314><header><h1><code>test/procc/λ-memo</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/procc/λ-memo _)
   (define count 0)
   (define fib
@@ -71,9 +71,9 @@
              (let1 (mrow (mi sub1) (mi n))
                    (+ (fib-memo m) (fib-memo (sub1 m))))))))
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2378248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section315><header><h1><code>test/load/string</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/load/string _) (⊦= '(+ 3 4) (load/string &quot;(+ 3 4)&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section316><header><h1><code>test/simdjson/version</code>: <span class=w3-text-green>pass</span></h1></header></section><p>The current version of <code class=w3-codespan>simdjson</code> is <code class=w3-codespan>4.2.1</code>.</p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-auxtest/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;859&nbsp;words
@@ -254,7 +254,7 @@
 </code></pre></div><section id=section375><header><h1><code>test-running</code>: <span class=w3-text-green>pass</span></h1></header></section><p>hello</p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;62&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;13149&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href=#cite986>1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href=#cite987>2</a>]</cite> recorded a talk <cite>[<a href=#cite988>3</a>]</cite> that given in the workshop <cite>[<a href=#cite989>4</a>]</cite>, slides <cite>[<a href=#cite990>5</a>]</cite> are also available.</p><section id=section991><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href=#cite1014>1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href=#cite1015>2</a>]</cite> recorded a talk <cite>[<a href=#cite1016>3</a>]</cite> that given in the workshop <cite>[<a href=#cite1017>4</a>]</cite>, slides <cite>[<a href=#cite1018>5</a>]</cite> are also available.</p><section id=section1019><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
 </code></pre></div>where the expressions <code class=w3-codespan>body ...</code> execute in a delimited context; for the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(callcc (delimcc-reset (τ body ...)))
 </code></pre></div></p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;8&nbsp;min
@@ -272,7 +272,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
   (let1 (a (judy-array-empty))
         (⊦ = 0 (judy-array-size a))
         (⊦ = 0 (judy-array-bytes a))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1834000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1834000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section193><header><h1><code>test/set!-ref</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/set!-ref _)
   (let1 (a (judy-array-empty))
         (judy-array-set! a 'key '(zero &quot;hello&quot;))
@@ -283,7 +283,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
              (judy-array-ref a 'key))
         (⊦ equal? '(zero &quot;hello&quot;) (judy-array-ref a 'key))
         (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1834672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1834672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section194><header><h1><code>test/alist->judy-array</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/alist-&gt;judy-array _)
   (let1 (a (alist-&gt;judy-array
              '((0 zero) (1 one) (2 two) (10000 ten-thousand))))
@@ -294,7 +294,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
         (⊦ equal? 'two (judy-array-ref a 2))
         (⊦ equal? 'ten-thousand (judy-array-ref a 10000))
         (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1835216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section195><header><h1><code>test/list->judy-array</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array _)
   (let1 (a (list-&gt;judy-array
              '(zero one two three four five six seven eight nine ten)))
@@ -304,18 +304,18 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
         (⊦ equal? 'five (judy-array-ref a 5))
         (⊦ equal? 'ten (judy-array-ref a 10))
         (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1835888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section196><header><h1><code>test/judy-array->alist</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/judy-array-&gt;alist _)
   (let1 (alist '((0 zero) (1 one) (2 two) (10000 ten-thousand)))
         (let1 (a (alist-&gt;judy-array alist))
               (⊦ equal? alist (judy-array-&gt;alist a)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1836320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1836320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section197><header><h1><code>test/list->judy-array/iota</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array/iota _)
   (let* ((n 100000) (I (iota n)))
     (let1 (a (list-&gt;judy-array I))
           (⊦ = n (judy-array-size a))
           (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.034) (memory #(12582912 4233824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.036) (memory #(8456480 4233856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section198><header><h1><code>test/judy-array-walk</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/judy-array-walk _)
   (let* ((n 50000) (I (iota n)))
     (let1 (a (list-&gt;judy-array I))
@@ -325,17 +325,17 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
                 (set! collected '())
                 (judy-array-walk/forward a (λ (i v) (push! v collected)))
                 (⊦ equal? I (reverse collected))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.027) (memory #(12582912 4234512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.031) (memory #(16912960 4234592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;min
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;533&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section39><header><h1><code>test-alist-ref</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-alist-ref _)
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;567&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section40><header><h1><code>test-alist-ref</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-alist-ref _)
   (let ((alst '((a 3) (b 2))))
     (⊦= '(3) (alist-ref 'a alst))
     (⊦= '(2) (alist-ref 'b alst))
     (⊦= #f (alist-ref 'c alst))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1298192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><section id=section40><header><h1><code>test/len</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/len _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1299456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section41><header><h1><code>test/len</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/len _)
   (let ((my-strlen
           (foreign-lambda*
             int
@@ -344,30 +344,30 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
     (⊦= 2 (my-strlen (cons 1 '())))
     (⊦= 2 (my-strlen (cons 1 (cons 2 (cons 3 '())))))
     (⊦= 11 (my-strlen &quot;hello world&quot;))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1298800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><section id=section41><header><h1><code>test/unquote</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Very interesting test about quasiquotation <cite>[<a href=#cite42>1</a>]</cite> : it shows how <code class=w3-codespan>unquote</code> can be used in a quasiquotation pattern in the <code class=w3-codespan>cdr</code> slot.</p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1300064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><section id=section42><header><h1><code>test/unquote</code>: <span class=w3-text-green>pass</span></h1></header></section><p>Very interesting test about quasiquotation <cite>[<a href=#cite43>1</a>]</cite> : it shows how <code class=w3-codespan>unquote</code> can be used in a quasiquotation pattern in the <code class=w3-codespan>cdr</code> slot.</p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;586&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section655><header><h1>Call with current continuation: the <code class=w3-codespan>letcc</code> macro</h1></header></section><p>The fundamental macro <code class=w3-codespan>letcc</code> in the form<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc k body ...)
 </code></pre></div>binds <code class=w3-codespan>k</code> to the <i>current continuation </i><cite>[<a href=#cite656>1</a>]</cite><cite>[<a href=#cite657>2</a>]</cite><cite>[<a href=#cite658>3</a>]</cite><cite>[<a href=#cite659>4</a>]</cite> in <code class=w3-codespan>body...</code> expressions; for the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(continuation-capture
   (λ (cont) (let1 (k (λ (arg) (continuation-return cont arg))) body ...)))
 </code></pre></div>where <code class=w3-codespan>continuation-capture</code> and <code class=w3-codespan>continuation-return</code> are defined in <cite>[<a href=#cite666>5</a>]</cite> and based on <cite>[<a href=#cite667>6</a>]</cite> by Marc Feeley, respectively.</p><section id=section668><header><h1><code>test/letcc/multiarg</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcc/multiarg _) (⊦= 'a (letcc k (k 'a))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2048024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2048056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section669><header><h1><code>test/letcc*</code>: <span class=w3-text-green>pass</span></h1></header></section><p>The frame in <cite>[<a href=#cite670>7</a>]</cite> is of inspiration of the <code class=w3-codespan>letcc*</code> macro.</p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;18&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;3728&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section671><header><h1><code>test/letnondeterministic/choose-null?</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose-null? _)
   (⊦= '() (letnondeterministic (? ¿ ⊦ • !) (? '()))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004)
- (memory #(12582912 2374800 1048576))
+ (memory #(12582912 2374824 1048576))
  (stdout &quot;((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section672><header><h1><code>test/letnondeterministic/choose</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose _)
   (⊦= '(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? '(1 2 3)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002)
- (memory #(12582912 2362464 1048576))
+ (memory #(12582912 2362520 1048576))
  (stdout
-   &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section673><header><h1><code>test/letnondeterministic/choose§</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose§ _)
   (⊦= '(1 2 3)
@@ -375,9 +375,9 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
           (? ¿ ⊦ • !)
           (? (cons§ 1 (cons§ 2 (cons§ 3 '())))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2360112 1048576))
+ (memory #(12582912 2360240 1048576))
  (stdout
-   &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section674><header><h1><code>test/letnondeterministic/choose-rec</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose-rec _)
   (⊦= '(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584)
@@ -385,12 +385,12 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
           (stop§
             (λ (v) (&gt; v 3000))
             (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2355752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2355880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section675><header><h1><code>test/letnondeterministic/choose+nested</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+nested _)
   (⊦= '(1 4 3 1 5 3)
         (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(? '(4 5)) 3)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2361008 1048576))
+ (memory #(12582912 2360920 1048576))
  (stdout
    &quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n&quot;)
  (stderr &quot;&quot;))
@@ -398,7 +398,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
   (⊦= '(1 4 3 1 5 3)
         (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(¿ '(4 5)) 3)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2367296 1048576))
+ (memory #(12582912 2367208 1048576))
  (stdout
    &quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
  (stderr &quot;&quot;))
@@ -406,9 +406,9 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
   (⊦= '(5 6 6 7 7 8)
         (letnondeterministic (? ¿ ⊦ • !) (+ (? '(1 2 3)) (? '(4 5))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2373856 1048576))
+ (memory #(12582912 2373768 1048576))
  (stdout
-   &quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((6 0.333333333333333)\n    (7 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
+   &quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((7 0.333333333333333)\n    (6 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section678><header><h1><code>test/letnondeterministic/choose+fair+fibs</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+fair+fibs _)
   (⊦= '((a 0)
@@ -439,24 +439,24 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
                (map§ (lambda (v) (list 'a v)) (fibs§ 0 1))
                (map§ (lambda (v) (list 'b v)) (fibs§ 0 1))
                (map§ (lambda (v) (list 'c v)) (fibs§ 0 1)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2378008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2377344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section679><header><h1><code>test/letnondeterministic/choose+fair</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+fair _)
   (⊦= '((a 1) (b 1) (a 2) (b 2) (a 3))
         (letnondeterministic
           (? ¿ ⊦ • !)
           (? (append§/interleaved '((a 1) (a 2) (a 3)) '((b 1) (b 2)))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2384168 1048576))
+ (memory #(12582912 2383504 1048576))
  (stdout
-   &quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 1) 0.2) ((a 2) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2))))\n&quot;)
+   &quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((a 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section680><header><h1><code>test/letnondeterministic/odd</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/odd _)
   (⊦= '(1 3)
         (letnondeterministic
           (? ¿ ⊦ • !)
           (let1 (v (? '(1 2 3))) (⊦ (odd? v)) v))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2390424 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
+ (memory #(12582912 2389760 1048576))
  (stdout
    &quot;((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((1 0.5) (3 0.5))))\n&quot;)
  (stderr &quot;&quot;))
@@ -483,8 +483,8 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
           (define (parlor sum)
             (let ((nums (two-numbers))) (⊦ (eq? (apply + nums) sum)) nums))
           (parlor 7))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
- (memory #(12582912 2367592 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
+ (memory #(12582912 2368664 1048576))
  (stdout
    &quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667))))\n&quot;)
  (stderr &quot;&quot;))
@@ -499,10 +499,10 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
               (⊦ (and (eq? (apply + nums) sum) (sorted? nums &lt;)))
               nums))
           (parlor 7))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2367168 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
+ (memory #(12582912 2367016 1048576))
  (stdout
-   &quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 3 3) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 2 4) 0.25))))\n&quot;)
+   &quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 1 5) 0.25) ((1 2 4) 0.25) ((1 3 3) 0.25) ((2 2 3) 0.25))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section683><header><h1><code>test/letnondeterministic/coin</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/coin _)
   (⊦= '(((la 1 1) (la 1 2))
@@ -532,7 +532,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
             (⊦ (coin? triple))
             (reverse attempts)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2373296 1048576))
+ (memory #(12582912 2373336 1048576))
  (stdout
    &quot;((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
@@ -556,9 +556,9 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
             (! flag)
             (reverse attempts)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2377304 1048576))
+ (memory #(12582912 2377344 1048576))
  (stdout
-   &quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section685><header><h1><code>test/letnondeterministic/graph+cycles/bfs</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/graph+cycles/bfs _)
   (⊦= '((a b c a) (a b c e a) (a b d e a))
@@ -576,9 +576,9 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
                     (cons n (path n node2 (cons node1 seen))))))
           (let* ((source 'a) (p (path source 'a '()))) (cons source p)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2372792 1048576))
+ (memory #(12582912 2372840 1048576))
  (stdout
-   &quot;((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n   (((a b c a) 0.333333333333333)\n    ((a b c e a) 0.333333333333333)\n    ((a b d e a) 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n   (((a b d e a) 0.333333333333333)\n    ((a b c a) 0.333333333333333)\n    ((a b c e a) 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><section id=section686><header><h1><code>test/letnondeterministic/temporal-graphs</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/temporal-graphs _)
   (define graph-simple
@@ -746,7 +746,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
             (list (list source destination)
                   (map (λ (triple) (list (car triple) (cadr triple))) p))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003)
- (memory #(12582912 2439984 1048576))
+ (memory #(12582912 2439624 1048576))
  (stdout
    &quot;((left 0)\n (tried 4013)\n (accepted 130)\n (ratio 0.0323947171692001)\n (distribution\n   ((((a b) ((a 1) (b 2))) 0.00769230769230769)\n    (((a b) ((a 1) (b 3))) 0.00769230769230769)\n    (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\n    (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\n    (((b c) ((b 1) (c 2))) 0.00769230769230769)\n    (((b c) ((b 1) (c 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 2))) 0.00769230769230769)\n    (((b d) ((b 1) (d 3))) 0.00769230769230769)\n    (((b d) ((b 1) (d 4))) 0.00769230769230769)\n    (((b d) ((b 1) (d 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 6))) 0.00769230769230769)\n    (((b d) ((b 1) (d 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 2))) 0.00769230769230769)\n    (((c a) ((c 1) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\n    (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\n    (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 2))) 0.00769230769230769)\n    (((c e) ((c 1) (e 3))) 0.00769230769230769)\n    (((c e) ((c 1) (e 4))) 0.00769230769230769)\n    (((c e) ((c 1) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 6))) 0.00769230769230769)\n    (((c e) ((c 1) (e 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\n    (((d e) ((d 1) (e 3))) 0.00769230769230769)\n    (((d e) ((d 1) (e 4))) 0.00769230769230769)\n    (((d e) ((d 1) (e 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 2))) 0.00769230769230769)\n    (((e a) ((e 1) (a 3))) 0.00769230769230769)\n    (((e a) ((e 1) (a 4))) 0.00769230769230769)\n    (((e a) ((e 1) (a 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 6))) 0.00769230769230769)\n    (((e a) ((e 1) (a 7))) 0.00769230769230769)\n    (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\n    (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\n&quot;)
  (stderr &quot;&quot;))
@@ -766,9 +766,9 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
     (⊦= 5 (µkanren-state-find 5 s2))
     (⊦= 'a (µkanren-state-find v1 s2))
     (⊦= 'a (µkanren-state-find v2 s2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2268016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2268040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section1134><header><h1><code>test/=°</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(#t) (°-&gt;list/ground (=° 'z 'z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2264608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2264632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section1135><header><h1><code>test/sharing</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/sharing _)
   (⊦= '(((_0 z) z (_0 _1)))
         (°-&gt;list/ground
@@ -777,7 +777,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
             (n q x)
             (=° q 'z)
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2268024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2268048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section1136><header><h1><code>test/peano°</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/peano° _)
   (define-relation
     (peano° n)
@@ -806,7 +806,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
           (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
           (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
         (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2278664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2278688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section1137><header><h1><code>test/append°</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/append° _)
   (define-relation
     (append° r s rs)
@@ -825,7 +825,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
              '(_0 _1 _2 _3 _4 _5 _6 _7)
              '(_0 _1 _2 _3 _4 _5 _6 _7 _8))
        (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2272176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2272200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section1138><header><h1><code>test/project°</code>: <span class=w3-text-green>pass</span></h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/project° _)
   (⊦= '(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300)
         (°-&gt;list/ground
@@ -835,7 +835,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
               (d e s)
               (empsalary° d e s)
               (project° ((s* s)) (=° r (+ s* 500))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2267352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2267344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><section id=section1139><header><h1><code>test/groupby°/empty</code>: <span class=w3-text-green>pass</span></h1></header></section><p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href=#cite1140>1</a>]</cite>:<pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
 -----------+-------+--------+-----------------------
  develop   |    11 |   5200 | 5020.0000000000000000
@@ -899,7 +899,7 @@ variables -- and relationships among them.</i><footer><p class=w3-right-align>Ol
     ((q '()))
     (⊦⧳ ((exn)) (fds-queue-car q))
     (⊦⧳ ((exn)) (fds-queue-cdr q))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1830376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1830304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></div></article></div><ul class="pager main-pager"><li class=next><a href=https://massimo-nocentini.github.io/test-suites/page/2/>Older Posts &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

@@ -2,8 +2,9 @@
 date = '2016-12-27T10:20:30+01:00'
 title = 'L’avventura di Pinocchio: dare il nome'
 subtitle = 'Noi tutti abbiamo un Padre che ci ha fatto, desiderandoci sin dall’inizio come compagni e amici per l’eternità'
-tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi', "L'avventura di Pinocchio"]
+tags = ['nembrini', 'pinocchio', 'nome', 'geppetto', 'biffi']
 author = 'Franco Nembrini'
+categories = ["L'avventura di Pinocchio"]
 summary = ' '
 +++
 
