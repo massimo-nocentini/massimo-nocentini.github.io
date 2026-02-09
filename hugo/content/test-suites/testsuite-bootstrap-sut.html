@@ -103,12 +103,11 @@
                (errstr (third pair))
                (hasdoc (and (pair? v) (eq? (car v) 'doc))))
           (when teardown (apply (car teardown) testcase args))
-          `((structure/section
-              (code ,testcase-name)
-              &quot;: &quot;
-              ,(if (eq? v witness)
-                 '(span (@ (class &quot;w3-text-red&quot;)) fail)
-                 '(span (@ (class &quot;w3-text-green&quot;)) pass)))
+          `((h2 (code ,testcase-name)
+                &quot;: &quot;
+                ,(if (eq? v witness)
+                   '(span (@ (class &quot;w3-text-red&quot;)) fail)
+                   '(span (@ (class &quot;w3-text-green&quot;)) pass)))
             ,@(if hasdoc (cdr v) '())
             (code/scheme ,(if hasdoc (butlast code) code))
             (code/scheme
@@ -183,7 +182,11 @@
             (res (unittest/result-summary r))
             (sxml (alist-ref 'doc sut-methods)))
         (SXML-&gt;HTML-&gt;file!
-          (sxml-tree sut-name `(,@(if sxml ((car sxml) r) '()) ,@docs))
+          (sxml-tree
+            sut-name
+            `(,@(if sxml ((car sxml) r) '())
+              (structure/section &quot;Tests&quot;)
+              ,@docs))
           (symbol-append 'testsuite- sut-name))
         (pretty-print res)
         r)))
@@ -200,7 +203,8 @@
 </code></pre></div>
 <section id="section375">
 <header>
-<h1><code>test-running</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>Tests</h1></header></section>
+<h2><code>test-running</code>: <span class="w3-text-green">pass</span></h2>
 <p>hello</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
@@ -209,22 +213,18 @@
   (⊦= '(teardown test-method setup) (unittest/testcase-log t)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1796152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1796208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section376">
-<header>
-<h1><code>test-result</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-result</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1797184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1797240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section377">
-<header>
-<h1><code>test-failed</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-failed</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
   (lettest
@@ -234,11 +234,9 @@
           (unittest/result-summary r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1798056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1798112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section378">
-<header>
-<h1><code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
@@ -252,11 +250,9 @@
           (unittest/result-summary r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1798808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1798864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section379">
-<header>
-<h1><code>test-failed-result</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-failed-result</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
   (unittest/result-started! r)
@@ -264,11 +260,9 @@
   (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1799096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1799152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section380">
-<header>
-<h1><code>test-suite</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-suite</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
   (letsuite
@@ -277,29 +271,23 @@
     (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1800128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1800184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section381">
-<header>
-<h1><code>test-⊨</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-⊨</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1800800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1800856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section382">
-<header>
-<h1><code>test-⊭</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-⊭</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1801584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1801640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section383">
-<header>
-<h1><code>test-should-signal</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test-should-signal</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
   (⊦⧳ ((exn)) (signal (condition '(exn message &quot;useless&quot;))))
@@ -312,5 +300,5 @@
   (⊦⧳ () 99))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1804168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1804224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

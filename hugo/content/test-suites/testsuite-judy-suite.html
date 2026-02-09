@@ -23,7 +23,8 @@
 <body>
 <section id="section192">
 <header>
-<h1><code>test/empty</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h1>Tests</h1></header></section>
+<h2><code>test/empty</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/empty _)
   (let1 (a (judy-array-empty))
@@ -31,11 +32,9 @@
         (⊦ = 0 (judy-array-bytes a))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1834000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1834416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section193">
-<header>
-<h1><code>test/set!-ref</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test/set!-ref</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/set!-ref _)
   (let1 (a (judy-array-empty))
@@ -49,11 +48,9 @@
         (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1834672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1835088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section194">
-<header>
-<h1><code>test/alist->judy-array</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test/alist->judy-array</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/alist-&gt;judy-array _)
   (let1 (a (alist-&gt;judy-array
@@ -67,11 +64,9 @@
         (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section195">
-<header>
-<h1><code>test/list->judy-array</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test/list->judy-array</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array _)
   (let1 (a (list-&gt;judy-array
@@ -84,11 +79,9 @@
         (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1835888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1836304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section196">
-<header>
-<h1><code>test/judy-array->alist</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test/judy-array->alist</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/judy-array-&gt;alist _)
   (let1 (alist '((0 zero) (1 one) (2 two) (10000 ten-thousand)))
@@ -96,11 +89,9 @@
               (⊦ equal? alist (judy-array-&gt;alist a)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1836320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1836736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section197">
-<header>
-<h1><code>test/list->judy-array/iota</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test/list->judy-array/iota</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array/iota _)
   (let* ((n 100000) (I (iota n)))
@@ -109,11 +100,9 @@
           (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.036) (memory #(8456480 4233856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.036) (memory #(8456480 4234160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<section id="section198">
-<header>
-<h1><code>test/judy-array-walk</code>: <span class="w3-text-green">pass</span></h1></header></section>
+<h2><code>test/judy-array-walk</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/judy-array-walk _)
   (let* ((n 50000) (I (iota n)))
@@ -126,5 +115,5 @@
                 (⊦ equal? I (reverse collected))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.031) (memory #(16912960 4234592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.033) (memory #(16912960 4234896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>
