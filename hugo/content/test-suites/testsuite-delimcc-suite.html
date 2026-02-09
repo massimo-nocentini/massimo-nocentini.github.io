@@ -77,10 +77,10 @@
     (λ-shift args body ...)
     (letcc/shift k (λ args (let1 (x (begin body ...)) (k x)))))
   (define-syntax-rule (τ-shift body ...) (λ-shift () body ...))
-  (define *delimcc-stack* (list identity))
-  (define (delimcc-stack-abort v) (let1 (k (car *delimcc-stack*)) (k v)))
-  (define (delimcc-stack-push! k) (push! k *delimcc-stack*))
-  (define (delimcc-stack-pop!) (pop! *delimcc-stack*))
+  (define *delimcc-stack* identity)
+  (define (delimcc-stack-abort v) (*delimcc-stack* v))
+  (define (delimcc-stack-push! k) (set! *delimcc-stack* k))
+  (define (delimcc-stack-pop!) *delimcc-stack*)
   (define ((delimcc-reset t) k)
     (let* ((s (delimcc-stack-pop!))
            (s* (λ (r) (delimcc-stack-push! s) (k r))))
@@ -133,7 +133,7 @@
                 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3348080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3341184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/discard</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -145,7 +145,7 @@
   (⊦= 'hello (resetcc (sub1 (+ 3 (letcc/shift k 'hello))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3351984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3343512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/discard/prod</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -157,7 +157,7 @@
   (⊦= 'zero (resetcc (prod '(2 3 0 5)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3354856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3342112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/extract</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -168,7 +168,7 @@
   (⊦= 12 (g 10)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3358632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3345208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/extract/appender</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -180,7 +180,7 @@
   (⊦= '(1 2 3 4 5 6) (A '(4 5 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3362200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3345808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/yield</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -189,7 +189,7 @@
   (⊦= '(1 2) (resetcc+null (yield 1) (yield 2))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3366000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3346552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/yield/extract</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -206,7 +206,7 @@
           0)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3370824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3344832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/yield§</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -216,7 +216,7 @@
   (⊦= '(1 2) (§-&gt;list (resetcc+null (yield§ 1) (yield§ 2)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3377152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3347856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/yield§/walk</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -233,7 +233,7 @@
           (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3382880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3349120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/either</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -241,7 +241,7 @@
   (⊦= '(1 3 3) (resetcc (delimcc-either `(1 ,(add1 2) 3)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3386728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3349920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/either/tensor</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -265,7 +265,7 @@
                  'no))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3394568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3347728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/τ</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -274,7 +274,7 @@
   (⊦= '(hello world) (a)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3397888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3350704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/delimcc/tutorial/λ</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -283,7 +283,7 @@
   (⊦= '(hello 4 world) (p 4)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3401296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3353752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -2713,7 +2713,7 @@
   (⊦= 48000 (length (wwww))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.129) (memory #(50331648 45212552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.088) (memory #(12582912 3351960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">

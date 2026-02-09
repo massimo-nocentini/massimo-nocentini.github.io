@@ -17,7 +17,7 @@
     (⊦= '(3) (alist-ref 'a alst))
     (⊦= '(2) (alist-ref 'b alst))
     (⊦= #f (alist-ref 'c alst))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1299512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1299512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/len</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/len _)
   (let ((my-strlen
           (foreign-lambda*
@@ -38,7 +38,7 @@
             ((scheme-object f))
             &quot;\t\t\t\t\t  C_word res = C_callback(f, 0);\n\t\t\t\t\t  printf(\&quot;from within a safe lambda\\n\&quot;);\n\t\t\t\t\t  C_return (res);&quot;)))
     (⊦= witness (car (my-strlen (lambda () (list witness 4)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1301696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1301696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/foreign-safe-lambda*/allocate_string/inline</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foreign-safe-lambda*/allocate_string/inline _)
   (let1 (allocate_string
           (foreign-safe-lambda*
@@ -51,7 +51,7 @@
   (let1 (allocate_string
           (foreign-primitive scheme-object () &quot;C_my_allocate_string(C_k);&quot;))
         (⊦= &quot;hello world&quot; (allocate_string))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1303416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1303416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/foreign-safe-lambda/list-walk</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foreign-safe-lambda/list-walk _)
   (let1 (list-walk
           (foreign-safe-lambda
@@ -69,7 +69,7 @@
     (print &quot;This is 'callin': &quot; xyz)
     123)
   (⊦= 123 (callout 1 2 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
  (memory #(6291456 1305336 1048576))
  (stdout &quot;This is 'callin': (1 2 3)\n&quot;)
  (stderr &quot;&quot;))
@@ -79,7 +79,7 @@
 </code></pre></div><h2><code>test/string/ref</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/string/ref _) (⊦ equal? #\o (string-ref &quot;hello&quot; 4)))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1306600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/string/last</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/string/last _) (⊦ equal? #\o (string-last &quot;hello&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1307232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1307232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/string/take-right</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/string/take-right _)
   (⊦ equal? &quot;o&quot; (string-take-right &quot;hello&quot; 1)))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1307864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
@@ -91,7 +91,7 @@
   (⊦ equal? 7 (var-last 'a (+ 3 4))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1309128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite41>[1] <a href=https://wiki.call-cc.org/man/5/Module%20scheme#quasiquotation>Quasiquotation, Chicken Scheme manual.</a></span><br><span id=cite42>[2] <a href=https://wiki.call-cc.org/man/5/Module%20(chicken%20foreign)#foreign-primitive><code class=w3-codespan>foreign-primitive</code>, Chicken Scheme manual.</a></span><br><span id=cite43>[3] <a href=https://wiki.call-cc.org/man/5/C%20interface#an-example-for-simple-calls-to-foreign-code-involving-callbacks>An example for simple calls to foreign code involving callbacks, Chicken Scheme manual.</a></span><br></div></body></html><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/tests/>tests</a>&nbsp;
-<a href=https://massimo-nocentini.github.io/tags/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2026-02-06-postgresql-native-vs-docker/>Running PostgreSQL natively vs into containers</a></li><li><a href=/post/2026-02-05-scm-testsuite-microkanren-suite/>The (aux kanren micro) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-hanseitest/>The (aux hansei) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/>The (aux nondeterministic) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-delimcc-suite/>The (aux continuation delimited) module</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/ data-toggle=tooltip data-placement=top title="The (aux stream) module">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-letcc-suite/ data-toggle=tooltip data-placement=top title="The (aux continuation) module">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<a href=https://massimo-nocentini.github.io/tags/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2026-02-05-scm-testsuite-microkanren-suite/>The (aux kanren micro) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-hanseitest/>The (aux hansei) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/>The (aux nondeterministic) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-delimcc-suite/>The (aux continuation delimited) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letcc-suite/>The (aux continuation) module</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/ data-toggle=tooltip data-placement=top title="The (aux stream) module">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-letcc-suite/ data-toggle=tooltip data-placement=top title="The (aux continuation) module">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

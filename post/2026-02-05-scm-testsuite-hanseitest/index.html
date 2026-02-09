@@ -230,7 +230,7 @@ The intended meaning of a search tree of type <code class=w3-codespan>'a pV</cod
           (probcc-reify/exact
             (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
               `((x ,x) (y ,y)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1976232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1967640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/procc/coin-model/when</code>: <span class=w3-text-green>pass</span></h2><p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/procc/coin-model/when _)
   (⊦= '(((V (#t #t)) 0.428571428571429)
           ((V (#t #f)) 0.285714285714286)
@@ -239,7 +239,7 @@ The intended meaning of a search tree of type <code class=w3-codespan>'a pV</cod
           (probcc-reify/exact
             (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
               (probcc-when (or x y) (list x y)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1985552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1968680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/procc/grass-model</code>: <span class=w3-text-green>pass</span></h2><blockquote class="w3-panel w3-leftbar w3-round w3-border" style=max-width:61.8%><span style=font-size:261%;opacity:.2>&#10077;</span><br><i>The canonical example is the grass model, with three random variables
 representing the events of rain, of a switched-on sprinkler and wet
 grass. The (a priori) probabilities of the first two events are judged
@@ -276,7 +276,7 @@ provided that <i>has been observed a wet grass:</i><div><pre class=w3-container>
         (probcc-when grass-is-wet `(rain ,rain)))))
   (⊦= (list (probcc-value 0.322 '(rain #f)) (probcc-value 0.2838 '(rain #t)))
         result))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2012880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1970336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/procc/grass-model/complete</code>: <span class=w3-text-green>pass</span></h2><p>If we remove the assumption that <i>has been observed a wet grass</i>, then we have the joint probability distribution of <i>all</i> variables:</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/procc/grass-model/complete _)
   (define result
     (probcc-reify/exact
@@ -297,7 +297,7 @@ provided that <i>has been observed a wet grass:</i><div><pre class=w3-container>
           ((V ((rain #t) (sprinkler #t) (grass-is-wet #f))) 0.0027))
         result)
   (⊦= (probcc-normalize result) result))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2041824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1979448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/uniform/range</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/uniform/range _)
   (⊦= '(((V 1) 1/8)
           ((V 2) 1/8)
@@ -309,7 +309,7 @@ provided that <i>has been observed a wet grass:</i><div><pre class=w3-container>
           ((V 8) 1/8))
         (sort (probcc-reify/exact (probcc-uniform/range 1 8))
               (λ (a b) (&lt; (cadr (car a)) (cadr (car b)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2051960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1980640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/geometric</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/geometric _)
   (define result ((probcc-reify 5) (τ (probcc-geometric 0.85 's 'f))))
   (define t6 (cadr (car (sixth result))))
@@ -324,11 +324,11 @@ provided that <i>has been observed a wet grass:</i><div><pre class=w3-container>
           ((C ,t7) 9.68203125000001e-06)
           ((C ,t8) 1.70859375e-06))
         result))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2062688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1984792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite280>[1] <a href=https://okmij.org/ftp/kakuritu/kakuritu.html>Embedded domain-specific languages for probabilistic programming</a></span><br><span id=cite281>[2] <a href=https://okmij.org/ftp/kakuritu/Hansei.html>Embedded probabilistic domain-specific language HANSEI</a></span><br><span id=cite282>[3] <a href=https://okmij.org/ftp/kakuritu/dsl-paper.pdf><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
 domain-specific languages, ed. Walid Taha. LNCS 5658,
 Springer, 2009, pp. 360-384.</a></span><br><span id=cite283>[4] <a href=https://okmij.org/ftp/kakuritu/logic-programming.html>HANSEI as a Declarative Logic Programming Language</a></span><br></div></body></html><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/tests/>tests</a>&nbsp;
-<a href=https://massimo-nocentini.github.io/tags/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2026-02-06-postgresql-native-vs-docker/>Running PostgreSQL natively vs into containers</a></li><li><a href=/post/2026-02-05-scm-testsuite-microkanren-suite/>The (aux kanren micro) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/>The (aux nondeterministic) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-delimcc-suite/>The (aux continuation delimited) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letcc-suite/>The (aux continuation) module</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ data-toggle=tooltip data-placement=top title="The (aux nondeterministic) module">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-microkanren-suite/ data-toggle=tooltip data-placement=top title="The (aux kanren micro) module">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<a href=https://massimo-nocentini.github.io/tags/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2026-02-05-scm-testsuite-microkanren-suite/>The (aux kanren micro) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/>The (aux nondeterministic) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-delimcc-suite/>The (aux continuation delimited) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letcc-suite/>The (aux continuation) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-learning-suite/>Scheme tests for learning</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ data-toggle=tooltip data-placement=top title="The (aux nondeterministic) module">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-microkanren-suite/ data-toggle=tooltip data-placement=top title="The (aux kanren micro) module">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

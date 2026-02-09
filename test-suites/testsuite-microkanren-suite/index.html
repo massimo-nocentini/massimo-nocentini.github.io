@@ -41,14 +41,14 @@ test/find: pass
     (⊦= &#39;a (µkanren-state-find v2 s2))))
 
 
-((eta 0.002) (memory #(12582912 2290088 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(12582912 2290040 1048576)) (stdout "") (stderr ""))
 
 test/=°: pass
 
 (define (test/=° _) (⊦= &#39;(#t) (°->list/ground (=° &#39;z &#39;z))))
 
 
-((eta 0.002) (memory #(12582912 2290832 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(12582912 2290784 1048576)) (stdout "") (stderr ""))
 
 test/sharing: pass
 
@@ -62,7 +62,7 @@ test/sharing: pass
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 
 
-((eta 0.002) (memory #(12582912 2290264 1048576)) (stdout "") (stderr ""))
+((eta 0.003) (memory #(12582912 2290216 1048576)) (stdout "") (stderr ""))
 
 test/peano°: pass
 
@@ -96,7 +96,7 @@ test/peano°: pass
         (°->list/ground (take° 10 (fresh° (n) (church° n))))))
 
 
-((eta 0.008) (memory #(12582912 2304432 1048576)) (stdout "") (stderr ""))
+((eta 0.008) (memory #(12582912 2304384 1048576)) (stdout "") (stderr ""))
 
 test/append°: pass
 
@@ -120,7 +120,7 @@ test/append°: pass
        (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
 
 
-((eta 0.002) (memory #(12582912 2296792 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2296744 1048576)) (stdout "") (stderr ""))
 
 test/project°: pass
 
@@ -135,7 +135,7 @@ test/project°: pass
               (project° ((s* s)) (=° r (+ s* 500))))))))
 
 
-((eta 0.0) (memory #(12582912 2290816 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(12582912 2290768 1048576)) (stdout "") (stderr ""))
 
 test/groupby°/empty: pass
 The following table has been kept from the PostgreSQL documentation example on window functions [1]:
@@ -153,7 +153,7 @@ The following table has been kept from the PostgreSQL documentation example on w
  sales     |     4 |   4800 | 4866.6666666666666667
 (10 rows)with respect to the following query:
 
-SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-microkanren-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/find: pass (define (test\/find _) (let* ((v1 (make-µkanren-var 0)) (v2 (make-µkanren-var 1)) (s0 µkanren-state-empty) (s1 (make-µkanren-state (cons\/sbral \u0027a (µkanren-state-substitution s0)) 1)) (s2 (make-µkanren-state (cons\/sbral v1 (µkanren-state-substitution s1)) 2))) (⊦= 5 (µkanren-state-find 5 s2)) (⊦= \u0027a (µkanren-state-find v1 s2)) (⊦= \u0027a (µkanren-state-find v2 s2)))) ((eta 0.002) (memory #(12582912 2290088 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/=°: pass (define (test\/=° _) (⊦= \u0027(#t) (°-\u0026gt;list\/ground (=° \u0027z \u0027z)))) ((eta 0.002) (memory #(12582912 2290832 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/sharing: pass (define (test\/sharing _) (⊦= \u0027(((_0 z) z (_0 _1))) (°-\u0026gt;list\/ground (fresh° r (n q x) (=° q \u0027z) (fresh° (w r) (=° n (list w q)) (=° x (list w r))))))) ((eta 0.002) (memory #(12582912 2290264 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/peano°: pass (define (test\/peano° _) (define-relation (peano° n) (or° (=° n \u0027z) (fresh° (r) (=° n \u0060(s ,r)) (peano° r)))) (define-relation (church° n) (fresh° (b) (=° n \u0060(λ (s) (λ (z) ,b))) (peano° b))) (⊦= \u0027(z (s z) (s (s z)) (s (s (s z))) (s (s (s (s z)))) (s (s (s (s (s z))))) (s (s (s (s (s (s z)))))) (s (s (s (s (s (s (s z))))))) (s (s (s (s (s (s (s (s z)))))))) (s (s (s (s (s (s (s (s (s z)))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (peano° n))))) (⊦= \u0027((λ (s) (λ (z) z)) (λ (s) (λ (z) (s z))) (λ (s) (λ (z) (s (s z)))) (λ (s) (λ (z) (s (s (s z))))) (λ (s) (λ (z) (s (s (s (s z)))))) (λ (s) (λ (z) (s (s (s (s (s z))))))) (λ (s) (λ (z) (s (s (s (s (s (s z)))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s z))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s z)))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z)))))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (church° n)))))) ((eta 0.008) (memory #(12582912 2304432 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/append°: pass (define (test\/append° _) (define-relation (append° r s rs) (cond° ((null° r) (=° s rs)) ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs))))) (⊦ equal? (list \u0027_0 (cons \u0027_0 \u0027_1) \u0027(_0 _1) \u0027(_0 _1 _2) \u0027(_0 _1 _2 _3) \u0027(_0 _1 _2 _3 _4) \u0027(_0 _1 _2 _3 _4 _5) \u0027(_0 _1 _2 _3 _4 _5 _6) \u0027(_0 _1 _2 _3 _4 _5 _6 _7) \u0027(_0 _1 _2 _3 _4 _5 _6 _7 _8)) (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l))))) ((eta 0.002) (memory #(12582912 2296792 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/project°: pass (define (test\/project° _) (⊦= \u0027(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300) (°-\u0026gt;list\/ground (fresh° (r) (fresh° (d e s) (empsalary° d e s) (project° ((s* s)) (=° r (\u002b s* 500)))))))) ((eta 0.0) (memory #(12582912 2290816 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/groupby°\/empty: pass The following table has been kept from the PostgreSQL documentation example on window functions [1]: depname | empno | salary | avg -----------\u002b-------\u002b--------\u002b----------------------- develop | 11 | 5200 | 5020.0000000000000000 develop | 7 | 4200 | 5020.0000000000000000 develop | 9 | 4500 | 5020.0000000000000000 develop | 8 | 6000 | 5020.0000000000000000 develop | 10 | 5200 | 5020.0000000000000000 personnel | 5 | 3500 | 3700.0000000000000000 personnel | 2 | 3900 | 3700.0000000000000000 sales | 3 | 4800 | 4866.6666666666666667 sales | 1 | 5000 | 4866.6666666666666667 sales | 4 | 4800 | 4866.6666666666666667 (10 rows)with respect to the following query: SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;\n","inLanguage":"en","wordCount":1060,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-microkanren-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-microkanren-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/find: pass (define (test\/find _) (let* ((v1 (make-µkanren-var 0)) (v2 (make-µkanren-var 1)) (s0 µkanren-state-empty) (s1 (make-µkanren-state (cons\/sbral \u0027a (µkanren-state-substitution s0)) 1)) (s2 (make-µkanren-state (cons\/sbral v1 (µkanren-state-substitution s1)) 2))) (⊦= 5 (µkanren-state-find 5 s2)) (⊦= \u0027a (µkanren-state-find v1 s2)) (⊦= \u0027a (µkanren-state-find v2 s2)))) ((eta 0.002) (memory #(12582912 2290040 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/=°: pass (define (test\/=° _) (⊦= \u0027(#t) (°-\u0026gt;list\/ground (=° \u0027z \u0027z)))) ((eta 0.002) (memory #(12582912 2290784 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/sharing: pass (define (test\/sharing _) (⊦= \u0027(((_0 z) z (_0 _1))) (°-\u0026gt;list\/ground (fresh° r (n q x) (=° q \u0027z) (fresh° (w r) (=° n (list w q)) (=° x (list w r))))))) ((eta 0.003) (memory #(12582912 2290216 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/peano°: pass (define (test\/peano° _) (define-relation (peano° n) (or° (=° n \u0027z) (fresh° (r) (=° n \u0060(s ,r)) (peano° r)))) (define-relation (church° n) (fresh° (b) (=° n \u0060(λ (s) (λ (z) ,b))) (peano° b))) (⊦= \u0027(z (s z) (s (s z)) (s (s (s z))) (s (s (s (s z)))) (s (s (s (s (s z))))) (s (s (s (s (s (s z)))))) (s (s (s (s (s (s (s z))))))) (s (s (s (s (s (s (s (s z)))))))) (s (s (s (s (s (s (s (s (s z)))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (peano° n))))) (⊦= \u0027((λ (s) (λ (z) z)) (λ (s) (λ (z) (s z))) (λ (s) (λ (z) (s (s z)))) (λ (s) (λ (z) (s (s (s z))))) (λ (s) (λ (z) (s (s (s (s z)))))) (λ (s) (λ (z) (s (s (s (s (s z))))))) (λ (s) (λ (z) (s (s (s (s (s (s z)))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s z))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s z)))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z)))))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (church° n)))))) ((eta 0.008) (memory #(12582912 2304384 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/append°: pass (define (test\/append° _) (define-relation (append° r s rs) (cond° ((null° r) (=° s rs)) ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs))))) (⊦ equal? (list \u0027_0 (cons \u0027_0 \u0027_1) \u0027(_0 _1) \u0027(_0 _1 _2) \u0027(_0 _1 _2 _3) \u0027(_0 _1 _2 _3 _4) \u0027(_0 _1 _2 _3 _4 _5) \u0027(_0 _1 _2 _3 _4 _5 _6) \u0027(_0 _1 _2 _3 _4 _5 _6 _7) \u0027(_0 _1 _2 _3 _4 _5 _6 _7 _8)) (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l))))) ((eta 0.001) (memory #(12582912 2296744 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/project°: pass (define (test\/project° _) (⊦= \u0027(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300) (°-\u0026gt;list\/ground (fresh° (r) (fresh° (d e s) (empsalary° d e s) (project° ((s* s)) (=° r (\u002b s* 500)))))))) ((eta 0.0) (memory #(12582912 2290768 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/groupby°\/empty: pass The following table has been kept from the PostgreSQL documentation example on window functions [1]: depname | empno | salary | avg -----------\u002b-------\u002b--------\u002b----------------------- develop | 11 | 5200 | 5020.0000000000000000 develop | 7 | 4200 | 5020.0000000000000000 develop | 9 | 4500 | 5020.0000000000000000 develop | 8 | 6000 | 5020.0000000000000000 develop | 10 | 5200 | 5020.0000000000000000 personnel | 5 | 3500 | 3700.0000000000000000 personnel | 2 | 3900 | 3700.0000000000000000 sales | 3 | 4800 | 4866.6666666666666667 sales | 1 | 5000 | 4866.6666666666666667 sales | 4 | 4800 | 4866.6666666666666667 (10 rows)with respect to the following query: SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;\n","inLanguage":"en","wordCount":1060,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-microkanren-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -196,14 +196,14 @@ test/find: pass
     (⊦= &#39;a (µkanren-state-find v2 s2))))
 
 
-((eta 0.002) (memory #(12582912 2290088 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(12582912 2290040 1048576)) (stdout "") (stderr ""))
 
 test/=°: pass
 
 (define (test/=° _) (⊦= &#39;(#t) (°->list/ground (=° &#39;z &#39;z))))
 
 
-((eta 0.002) (memory #(12582912 2290832 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(12582912 2290784 1048576)) (stdout "") (stderr ""))
 
 test/sharing: pass
 
@@ -217,7 +217,7 @@ test/sharing: pass
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 
 
-((eta 0.002) (memory #(12582912 2290264 1048576)) (stdout "") (stderr ""))
+((eta 0.003) (memory #(12582912 2290216 1048576)) (stdout "") (stderr ""))
 
 test/peano°: pass
 
@@ -251,7 +251,7 @@ test/peano°: pass
         (°->list/ground (take° 10 (fresh° (n) (church° n))))))
 
 
-((eta 0.008) (memory #(12582912 2304432 1048576)) (stdout "") (stderr ""))
+((eta 0.008) (memory #(12582912 2304384 1048576)) (stdout "") (stderr ""))
 
 test/append°: pass
 
@@ -275,7 +275,7 @@ test/append°: pass
        (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
 
 
-((eta 0.002) (memory #(12582912 2296792 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2296744 1048576)) (stdout "") (stderr ""))
 
 test/project°: pass
 
@@ -290,7 +290,7 @@ test/project°: pass
               (project° ((s* s)) (=° r (+ s* 500))))))))
 
 
-((eta 0.0) (memory #(12582912 2290816 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(12582912 2290768 1048576)) (stdout "") (stderr ""))
 
 test/groupby°/empty: pass
 The following table has been kept from the PostgreSQL documentation example on window functions [1]:
@@ -363,9 +363,9 @@ test/find: pass
     (⊦= 5 (µkanren-state-find 5 s2))
     (⊦= 'a (µkanren-state-find v1 s2))
     (⊦= 'a (µkanren-state-find v2 s2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2290088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2290040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/=°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(#t) (°-&gt;list/ground (=° 'z 'z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2290832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2290784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/sharing</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/sharing _)
   (⊦= '(((_0 z) z (_0 _1)))
         (°-&gt;list/ground
@@ -374,7 +374,7 @@ test/find: pass
             (n q x)
             (=° q 'z)
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2290264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2290216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/peano°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/peano° _)
   (define-relation
     (peano° n)
@@ -403,7 +403,7 @@ test/find: pass
           (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
           (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
         (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2304432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2304384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/append°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/append° _)
   (define-relation
     (append° r s rs)
@@ -422,7 +422,7 @@ test/find: pass
              '(_0 _1 _2 _3 _4 _5 _6 _7)
              '(_0 _1 _2 _3 _4 _5 _6 _7 _8))
        (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2296792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2296744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/project°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/project° _)
   (⊦= '(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300)
         (°-&gt;list/ground
@@ -432,7 +432,7 @@ test/find: pass
               (d e s)
               (empsalary° d e s)
               (project° ((s* s)) (=° r (+ s* 500))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2290816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2290768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/groupby°/empty</code>: <span class=w3-text-green>pass</span></h2><p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href=#cite1147>1</a>]</cite>:<pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
 -----------+-------+--------+-----------------------
  develop   |    11 |   5200 | 5020.0000000000000000
@@ -460,7 +460,7 @@ test/find: pass
                 (empsalary° d e s)
                 =&gt;
                 (=° r s*)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2308968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2308920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/groupby°/one-column</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/groupby°/one-column _)
   (⊦= '((personnel 7400) (sales 14600) (develop 25100))
         (sort (°-&gt;list/ground
@@ -477,7 +477,7 @@ test/find: pass
                       =&gt;
                       (=° r `(,d ,s*))))))
               (λ (a b) (&lt; (cadr a) (cadr b))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2292928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2292880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/set°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/set° _)
   (⊦= '((personnel 2) (sales 3) (develop 5))
         (sort (°-&gt;list/ground
@@ -493,7 +493,7 @@ test/find: pass
                            =&gt;
                            (=° r `(,d* ,c))))))
               (λ (a b) (&lt; (cadr a) (cadr b))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2294464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2294488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/enumerate°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/enumerate° _)
   (⊦= '(((0 (sales))
            (1 (sales))
@@ -518,7 +518,7 @@ test/find: pass
                 (empsalary° d e s)
                 =&gt;
                 (=° r c)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2308056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2308040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/window°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/window° _)
   (⊦= '((develop 7 4200 5020)
           (develop 8 6000 5020)
@@ -566,7 +566,7 @@ test/find: pass
                 (empsalary° d e s)
                 =&gt;
                 (=° r `(,d ,e ,s ,s*))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2297112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2297064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/=°/structure</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure _)
   (define-record person name age)
   (define p (make-person 'alice 30))
@@ -576,7 +576,7 @@ test/find: pass
   (⊦= `((record ,(make-person '_0 30)))
         (°-&gt;list/ground
           (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2296584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2296536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/=°/structure/vector</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure/vector _)
   (define-record person name age)
   (define p (make-person 'alice 30))
@@ -584,7 +584,7 @@ test/find: pass
   (⊦= #(person alice 30) (record-&gt;vector p))
   (⊦= '((person alice 30))
         (°-&gt;list/ground (fresh° r (t n a) (=° `#(,t ,n ,a) p)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2296696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2296648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1147>[1] <a href=https://www.postgresql.org/docs/current/tutorial-window.html>PostgreSQL Window Functions</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-queue-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

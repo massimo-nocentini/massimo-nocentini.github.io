@@ -13,7 +13,7 @@
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;807&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section309><header><h1>Tests</h1></header></section><h2><code>test/let1</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2375912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2375880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letcar&cdr</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcar&amp;cdr _)
   (letcar&amp;cdr
     (((a d) (cons 1 '())) ((aa dd) (cons 2 3)))
@@ -21,12 +21,12 @@
     (⊦= d '())
     (⊦= aa 2)
     (⊦= dd 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2376968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2376936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/λ</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/λ _)
   (⊦= 5 ((λ (x) (+ x 2)) 3))
   (⊦= 5 ((λ (x) ((λ (y) (+ x y)) 2)) 3))
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letmaptensor</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmaptensor _)
   (⊦= '((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f)))
           (((3 a #f) (3 a #t)) ((3 2 #f) (3 2 #f)))
@@ -34,7 +34,7 @@
         (letmaptensor
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2378008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letmap</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmap _)
   (⊦= '((2 a #t)
           (2 a #t)
@@ -51,7 +51,7 @@
         (letmap
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/procc/λ-memo</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/procc/λ-memo _)
   (define count 0)
   (define fib
@@ -71,11 +71,11 @@
              (let1 (mrow (mi sub1) (mi n))
                    (+ (fib-memo m) (fib-memo (sub1 m))))))))
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2378592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/load/string</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/load/string _) (⊦= '(+ 3 4) (load/string &quot;(+ 3 4)&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2379296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2379360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/version</code>: <span class=w3-text-green>pass</span></h2><p>The current version of <code class=w3-codespan>simdjson</code> is <code class=w3-codespan>4.2.1</code>.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/version _) (⊦= &quot;4.2.1&quot; (simdjson-get-version)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2379992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/load-twitter</code>: <span class=w3-text-green>pass</span></h2><p>Loaded a testbed json file <code class=w3-codespan>twitter.json</code><cite>[<a href=#cite310>1</a>]</cite> with the <code class=w3-codespan>simdjson</code><cite>[<a href=#cite311>2</a>]</cite><cite>[<a href=#cite312>3</a>]</cite> library. The file contains a twitter search result with 100 tweets.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter _)
   (define twitter-json (simdjson-load/ondemand &quot;twitter.json&quot;))
   (⊦= 2 (length twitter-json))
@@ -97,20 +97,20 @@
 </code></pre></div><h2><code>test/simdjson/load-twitter/ondemand</code>: <span class=w3-text-green>pass</span></h2><p>Here we show the <i>on demand</i> parsing mode of <code class=w3-codespan>simdjson</code><cite>[<a href=#cite313>4</a>]</cite>, which yields equivalent Scheme objects with respect to the DOM parsing.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter/ondemand _)
   (⊦= (simdjson-load &quot;twitter.json&quot;)
         (simdjson-load/ondemand &quot;twitter.json&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(25165824 4841944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.013) (memory #(25165824 4841936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/->string</code>: <span class=w3-text-green>pass</span></h2><p>Test for simdjson-load, which loads and parses a JSON file into a Scheme representation.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/-&gt;string _)
   (⊦= test/simdjson/-&gt;string/expected
         (-&gt;string/json (simdjson-load &quot;twitter.json&quot;))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.019) (memory #(12582912 4137760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(12582912 4137728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/parse</code>: <span class=w3-text-green>pass</span></h2><p>Test for simdjson-parse/ondemand, which parses a JSON string into a Scheme representation on demand.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/parse _)
   (⊦= #(((a 1) (b #(2 5)) (c #t)) ((c 3) (d 4)))
         (simdjson-parse/ondemand
           &quot;[{\&quot;a\&quot;:1,\&quot;b\&quot;:[2,5],\&quot;c\&quot;:true},{\&quot;c\&quot;:3,\&quot;d\&quot;:4}]&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4138704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4138672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/libc/fma</code>: <span class=w3-text-green>pass</span></h2><p>Taken from <cite>[<a href=#cite314>5</a>]</cite></p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/libc/fma _)
   (⊦ fp= 0.0 (+ (* 0.1 10.0) -1.0))
   (⊦ fp= (fp*+ 0.1 10.0 -1.0) (libc-fma 0.1 10.0 -1.0)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4140056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4140024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/documentation</code>: <span class=w3-text-green>pass</span></h2><p>An initial attempt to support our own documentation framework. The following tests check that documentation can be set and retrieved for functions.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/documentation _)
   (set! (documentation +) &quot;Returns the sum of its arguments.&quot;)
   (define-documented
@@ -124,7 +124,7 @@
            (comment (p &quot; some comment here&quot;))
            (comment &quot;some other comment here.&quot;)))
         (documentation a)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4141696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4141664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/documentation/documentation</code>: <span class=w3-text-green>pass</span></h2><p>Test for documentation of the documentation function itself.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/documentation/documentation _)
   (documentation!
     documentation
@@ -135,9 +135,9 @@
            (comment
              &quot;Test for documentation of the documentation function itself.&quot;)))
         (documentation documentation)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite310>[1] <a href=https://raw.githubusercontent.com/simdjson/simdjson/refs/heads/master/jsonexamples/twitter.json><code class=w3-codespan>twitter.json</code> : a twitter search result JSON file</a></span><br><span id=cite311>[2] <a href=https://github.com/simdjson/simdjson><code class=w3-codespan>simdjson</code> : parsing gigabytes of JSON per second</a></span><br><span id=cite312>[3] <a href=https://simdjson.github.io/simdjson/index.html><code class=w3-codespan>simdjson</code> : user manual and documentation</a></span><br><span id=cite313>[4] <a href=https://simdjson.github.io/simdjson/md_doc_basics.html#documents-are-iterators><code class=w3-codespan>simdjson</code> : Documents are iterators</a></span><br><span id=cite314>[5] <a href=https://en.cppreference.com/w/c/numeric/math/fma.html>fma, fmaf, fmal</a></span><br></div></body></html><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/tests/>tests</a>&nbsp;
-<a href=https://massimo-nocentini.github.io/tags/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2026-02-06-postgresql-native-vs-docker/>Running PostgreSQL natively vs into containers</a></li><li><a href=/post/2026-02-05-scm-testsuite-microkanren-suite/>The (aux kanren micro) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-hanseitest/>The (aux hansei) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/>The (aux nondeterministic) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-delimcc-suite/>The (aux continuation delimited) module</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/ data-toggle=tooltip data-placement=top title="The (aux unittest) module">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/ data-toggle=tooltip data-placement=top title="The (aux stream) module">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<a href=https://massimo-nocentini.github.io/tags/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2026-02-05-scm-testsuite-microkanren-suite/>The (aux kanren micro) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-hanseitest/>The (aux hansei) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/>The (aux nondeterministic) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-delimcc-suite/>The (aux continuation delimited) module</a></li><li><a href=/post/2026-02-05-scm-testsuite-letcc-suite/>The (aux continuation) module</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/ data-toggle=tooltip data-placement=top title="The (aux unittest) module">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/ data-toggle=tooltip data-placement=top title="The (aux stream) module">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

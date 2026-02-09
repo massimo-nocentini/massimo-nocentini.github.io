@@ -2,7 +2,7 @@
 date = '2026-02-06T09:58:04+01:00'
 title = 'Running PostgreSQL natively vs into containers'
 subtitle = 'A benchmark against a stress test'
-tags = ['tests', 'postgresql']
+tags = ['postgresql']
 summary = ' '
 author = ['Massimo Nocentini', 'Richard Uttner']
 +++

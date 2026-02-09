@@ -33,7 +33,7 @@
     (⊦= #f (alist-ref 'c alst))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1299512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1299512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/len</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -70,7 +70,7 @@
     (⊦= witness (car (my-strlen (lambda () (list witness 4)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1301696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1301696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/foreign-safe-lambda*/allocate_string/inline</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -94,7 +94,7 @@
         (⊦= &quot;hello world&quot; (allocate_string))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1303416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1303416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/foreign-safe-lambda/list-walk</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -123,7 +123,7 @@
   (⊦= 123 (callout 1 2 3)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001)
  (memory #(6291456 1305336 1048576))
  (stdout &quot;This is 'callin': (1 2 3)\n&quot;)
  (stderr &quot;&quot;))
@@ -148,7 +148,7 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/string/last _) (⊦ equal? #\o (string-last &quot;hello&quot;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1307232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1307232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/string/take-right</code>: <span class="w3-text-green">pass</span></h2>
 <div>

@@ -32,7 +32,7 @@ test/stream/nats: pass
               (§->list nats))))
 
 
-((eta 0.001) (memory #(6291456 1860312 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(6291456 1860280 1048576)) (stdout "") (stderr ""))
 
 test/stream/fibs: pass
 
@@ -61,7 +61,7 @@ test/stream/fibs: pass
               (§->list fibs))))
 
 
-((eta 0.001) (memory #(6291456 1872640 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(6291456 1872608 1048576)) (stdout "") (stderr ""))
 
 test/stream/ones: pass
 
@@ -70,7 +70,7 @@ test/stream/ones: pass
         (⊦= &#39;(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§->list ones))))
 
 
-((eta 0.0) (memory #(6291456 1875784 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(6291456 1875752 1048576)) (stdout "") (stderr ""))
 
 test/stream/primes: pass
 
@@ -89,8 +89,8 @@ test/stream/ones+τ: pass
         (⊦= &#39;(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§->list ones))))
 
 
-((eta 0.0) (memory #(6291456 2033512 1048576)) (stdout "") (stderr ""))
-'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-stream-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/stream\/nats: pass (define (test\/stream\/nats _) (let1 (nats (take§ 20 (nats§ 0))) (⊦= \u0027(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19) (§-\u0026gt;list nats)))) ((eta 0.001) (memory #(6291456 1860312 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/fibs: pass (define (test\/stream\/fibs _) (let1 (fibs (take§ 20 (fibs§ 0 1))) (⊦= \u0027(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181) (§-\u0026gt;list fibs)))) ((eta 0.001) (memory #(6291456 1872640 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/ones: pass (define (test\/stream\/ones _) (let1 (ones (take§ 20 (const§ 1))) (⊦= \u0027(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-\u0026gt;list ones)))) ((eta 0.0) (memory #(6291456 1875784 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/primes: pass (define (test\/stream\/primes _) (let1 (primes (take§ 20 primes§)) (⊦= \u0027(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71) (§-\u0026gt;list primes)))) ((eta 0.008) (memory #(6291456 2030344 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/ones\u002bτ: pass (define (test\/stream\/ones\u002bτ _) (let1 (ones (take§ 20 (thunk§ 1))) (⊦= \u0027(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-\u0026gt;list ones)))) ((eta 0.0) (memory #(6291456 2033512 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":223,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-stream-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+((eta 0.001) (memory #(6291456 2033512 1048576)) (stdout "") (stderr ""))
+'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-stream-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/stream\/nats: pass (define (test\/stream\/nats _) (let1 (nats (take§ 20 (nats§ 0))) (⊦= \u0027(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19) (§-\u0026gt;list nats)))) ((eta 0.002) (memory #(6291456 1860280 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/fibs: pass (define (test\/stream\/fibs _) (let1 (fibs (take§ 20 (fibs§ 0 1))) (⊦= \u0027(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181) (§-\u0026gt;list fibs)))) ((eta 0.001) (memory #(6291456 1872608 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/ones: pass (define (test\/stream\/ones _) (let1 (ones (take§ 20 (const§ 1))) (⊦= \u0027(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-\u0026gt;list ones)))) ((eta 0.0) (memory #(6291456 1875752 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/primes: pass (define (test\/stream\/primes _) (let1 (primes (take§ 20 primes§)) (⊦= \u0027(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71) (§-\u0026gt;list primes)))) ((eta 0.008) (memory #(6291456 2030344 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/stream\/ones\u002bτ: pass (define (test\/stream\/ones\u002bτ _) (let1 (ones (take§ 20 (thunk§ 1))) (⊦= \u0027(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-\u0026gt;list ones)))) ((eta 0.001) (memory #(6291456 2033512 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":223,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-stream-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -124,7 +124,7 @@ test/stream/nats: pass
               (§->list nats))))
 
 
-((eta 0.001) (memory #(6291456 1860312 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(6291456 1860280 1048576)) (stdout "") (stderr ""))
 
 test/stream/fibs: pass
 
@@ -153,7 +153,7 @@ test/stream/fibs: pass
               (§->list fibs))))
 
 
-((eta 0.001) (memory #(6291456 1872640 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(6291456 1872608 1048576)) (stdout "") (stderr ""))
 
 test/stream/ones: pass
 
@@ -162,7 +162,7 @@ test/stream/ones: pass
         (⊦= &#39;(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§->list ones))))
 
 
-((eta 0.0) (memory #(6291456 1875784 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(6291456 1875752 1048576)) (stdout "") (stderr ""))
 
 test/stream/primes: pass
 
@@ -181,7 +181,7 @@ test/stream/ones+τ: pass
         (⊦= &#39;(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§->list ones))))
 
 
-((eta 0.0) (memory #(6291456 2033512 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(6291456 2033512 1048576)) (stdout "") (stderr ""))
 '><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
@@ -227,7 +227,7 @@ test/stream/nats: pass
   (let1 (nats (take§ 20 (nats§ 0)))
         (⊦= '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
               (§-&gt;list nats))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1860312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1860280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/stream/fibs</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/fibs _)
   (let1 (fibs (take§ 20 (fibs§ 0 1)))
         (⊦= '(0
@@ -251,11 +251,11 @@ test/stream/nats: pass
                 2584
                 4181)
               (§-&gt;list fibs))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1872640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1872608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/stream/ones</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones _)
   (let1 (ones (take§ 20 (const§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1875784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1875752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/stream/primes</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/primes _)
   (let1 (primes (take§ 20 primes§))
         (⊦= '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71)
@@ -264,7 +264,7 @@ test/stream/nats: pass
 </code></pre></div><h2><code>test/stream/ones+τ</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones+τ _)
   (let1 (ones (take§ 20 (thunk§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2033512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2033512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
