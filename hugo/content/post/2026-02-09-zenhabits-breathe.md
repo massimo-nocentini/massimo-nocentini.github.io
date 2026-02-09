@@ -10,9 +10,6 @@ author = 'Leo Babauta'
 *All the follows are Leo's words from its [post](https://zenhabits.net/breathe/).*
 
 ---
-Breathe.
-
-Breathing can transform your life.
 
 If you feel stressed out and overwhelmed, breathe. It will calm you and release the tensions.
 
