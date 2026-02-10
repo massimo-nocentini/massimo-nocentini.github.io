@@ -10,7 +10,7 @@ summary = ' '
 {{< bibtex
   author       = "Donatella Merlini and Massimo Nocentini"
   title        = "Algebraic Generating Functions for Languages Avoiding Riordan Patterns"
-  journal      = "Journal of Integer Sequences"
+  journal    = "Journal of Integer Sequences"
   volume       = "21"
   number       = "1"
   pages        = "18.1.3"

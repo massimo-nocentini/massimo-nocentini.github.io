@@ -4,7 +4,7 @@ title = "miniKanren, live and untagged"
 author = ['William E. Byrd', 'Eric Holk', 'Daniel P. Friedman']
 subtitle = 'Quine generation via relational interpreters'
 tags = [ "kanren" ]
-categories = ["acm", "scheme", 'papers', 'programming pearls']
+categories = [ "scheme", 'papers']
 summary = ' '
 +++
 

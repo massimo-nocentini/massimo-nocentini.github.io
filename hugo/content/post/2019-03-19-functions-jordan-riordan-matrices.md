@@ -2,14 +2,14 @@
 date = '2019-03-15T18:33:23+01:00'
 title = "Functions and Jordan canonical forms of Riordan matrices"
 author = ['Massimo Nocentini', 'Donatella Merlini']
-tags = [ "matrices", 'riordan', 'canonical', 'hermite' ]
-categories = ['papers', 'programming pearls']
+tags = [ "matrices", 'riordan', 'canonical', 'hermite', 'jordan' ]
+categories = ['papers']
 summary = ' '
 +++
 
 {{< bibtex
 title = "Functions and Jordan canonical forms of Riordan matrices"
-booktitle = "Linear Algebra and its Applications"
+journal = "Linear Algebra and its Applications"
 volume = "565"
 pages = "177-207"
 year = "2019"

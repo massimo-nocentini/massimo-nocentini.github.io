@@ -3,6 +3,7 @@
 {{ $title := .Get "title" }}
 {{ $url := .Get "url" }}
 {{ $booktitle := .Get "booktitle" }}
+{{ $journal := .Get "journal" }}
 {{ $publisher := .Get "publisher" }}
 {{ $address := .Get "address" }}
 {{ $volume := .Get "volume" }}
@@ -17,7 +18,7 @@
     {{ if $year }} {{ print $year "." }} {{ end }}
     {{ if $author }} <a href="{{ (.Get "url") }}"><i>{{ print $title "." }}</i></a> {{ end }}
     {{ if $series }} {{ print $series ":" }} {{ end }}
-    {{ if $booktitle }} {{ print "In " $booktitle "," }} {{ end }}
+    {{ if $booktitle }} {{ print "In " $booktitle "," }} {{ else }} {{ if $journal }} {{ print "In " $journal "," }} {{ end }} {{ end }}
     {{ if $publisher }} {{ print $publisher "," }} {{ end }}
     {{ if $address }} {{ print $address "," }} {{ end }}
     {{ if $volume }} {{ print "vol. " $volume "," }} {{ end }}
