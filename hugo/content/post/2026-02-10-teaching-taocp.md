@@ -1,9 +1,8 @@
 +++
 date = '2011-05-06T8:59:04+01:00'
 title = "Teaching the art of computer programming"
-tags = ['taocp']
+tags = ['taocp', 'papers']
 summary = ' '
-draft = true
 author = 'Frank Ruskey'
 +++
 
