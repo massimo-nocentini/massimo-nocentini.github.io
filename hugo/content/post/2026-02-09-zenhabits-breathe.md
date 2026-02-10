@@ -2,7 +2,7 @@
 date = '2026-02-09T09:59:04+01:00'
 title = "Breathe"
 subtitle = 'Breathing can transform your life.'
-tags = ['zen', 'breathe']
+tags = ['life', 'breathe']
 summary = ' '
 author = 'Leo Babauta'
 +++

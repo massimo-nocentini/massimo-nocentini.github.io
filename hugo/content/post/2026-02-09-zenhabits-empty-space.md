@@ -2,7 +2,7 @@
 date = '2026-02-09T09:58:04+01:00'
 title = "Life's missing white space"
 subtitle = 'And put white space between things'
-tags = ['zen', 'space']
+tags = ['life', 'space']
 summary = ' '
 author = 'Leo Babauta'
 +++

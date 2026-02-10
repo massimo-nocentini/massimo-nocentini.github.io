@@ -1,7 +1,7 @@
 +++
 date = '2021-09-10T09:59:04+01:00'
 title = "Manifesto Of A DOer"
-tags = ['zen', 'life']
+tags = ['manifesto', 'life']
 summary = ' '
 author = 'The DO Team'
 +++
