@@ -1,33 +1,29 @@
+{{ $author := .Get "author" }}
+{{ $year := .Get "year" }}
+{{ $title := .Get "title" }}
+{{ $url := .Get "url" }}
+{{ $booktitle := .Get "booktitle" }}
+{{ $publisher := .Get "publisher" }}
+{{ $address := .Get "address" }}
+{{ $pages := .Get "pages" }}
+{{ $abstract := .Get "abstract" }}
+{{ $series := .Get "series" }}
+
+<hr>
+
 <blockquote cite="{{ (.Get " url") }}">
-    {{ printf (or (.Get "author") "") }}
-    {{ printf (or (.Get "year") "") }}
-    <i>{{ (.Get "title") }}</i>
+    {{ if $author }} {{ print $author "," }} {{ end }}
+    {{ if $year }} {{ print $year "." }} {{ end }}
+    {{ if $author }} <a href="{{ (.Get "url") }}"><i>{{ print $title "." }}</i></a> <br> {{ end }}
+    {{ if $series }} {{ print $series ":" }} {{ end }}
+    {{ if $booktitle }} {{ print "In " $booktitle "." }} {{ end }}
+    {{ if $publisher }} {{ print $publisher "," }} {{ end }}
+    {{ if $address }} {{ print $address "," }} {{ end }}
+    {{ if $pages }} {{ print "pp. " $pages "." }} {{ end }}
 </blockquote>
 
-<!-- 
-@inproceedings{10.1145/1989622.1989624,
-author = {Ruskey, Frank},
-title = {Teaching the art of computer programming (TAOCP)},
-year = {2011},
-isbn = {9781450307925},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/1989622.1989624},
-doi = {10.1145/1989622.1989624},
-abstract = {Donald Knuth's magnum opus, The Art of Computer Programming (TAOCP), is often bought, frequently cited, sometimes browsed, occasionally read, but almost never used for teaching. The purpose of this paper is to describe the author's experience in teaching two courses, each based on different sections of TAOCP volume 4a, using the pre-fascicles and fascicles that were available at the time. The conclusion reached is that such an adventurous undertaking can be extremely rewarding, not only for the students, but also for the instructor.},
-booktitle = {Proceedings of the 16th Western Canadian Conference on Computing Education},
-pages = {2–6},
-numpages = {5},
-keywords = {the art of computer programming, graduate student classes, advanced undergraduate, Donald E. Knuth},
-location = {Prince George, British Columbia, Canada},
-series = {WCCCE '11}
-}
+{{ if $abstract }}
+    <p><strong>Abstract:</strong> <i>{{ $abstract }}</i></p>
+{{ end }}
 
-Frank Ruskey. 
-2011. 
-Teaching the art of computer programming (TAOCP). 
-In Proceedings of the 16th Western Canadian Conference on Computing Education (WCCCE '11). 
-Association for Computing Machinery, 
-New York, NY, USA, 
-2–6. 
-https://doi.org/10.1145/1989622.1989624 -->
+<hr>
