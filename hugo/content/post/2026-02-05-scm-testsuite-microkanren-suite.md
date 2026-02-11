@@ -1,5 +1,5 @@
 +++
-date = '2026-02-05T10:02:03+01:00'
+date = '2018-03-09T10:02:03+01:00'
 title = 'The Reasoned Schemer'
 subtitle = 'miniKanren, microKanren and some implementations'
 summary = ' '
