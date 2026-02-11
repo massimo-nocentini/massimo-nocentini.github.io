@@ -1,7 +1,7 @@
 +++
 date = '2021-09-10T10:59:04+01:00'
 title = "The Scrappy Manifesto"
-tags = ['manifesto', 'life']
+tags = ['manifesto', 'business']
 summary = ' '
 author = 'The DO Team'
 +++

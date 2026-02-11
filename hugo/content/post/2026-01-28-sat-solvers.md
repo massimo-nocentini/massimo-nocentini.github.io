@@ -4,7 +4,7 @@ title = 'TAOCP, Volume 4, Fascicle 6: Satisfiability'
 subtitle = "Literate programming, implementations and their containers."
 author = 'Donald E. Knuth'
 tags = ['satisfiability']
-categories = ['taocp', 'knuth', 'cweb', 'c']
+categories = ['taocp', 'knuth', 'cweb', 'c', 'books']
 summary = ' '
 +++
 

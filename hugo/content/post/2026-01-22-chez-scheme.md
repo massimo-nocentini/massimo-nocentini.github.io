@@ -2,7 +2,7 @@
 date = '2026-01-22T10:18:13+01:00'
 title = 'Scheme lang: Chez, 48 and Chicken'
 subtitle = 'Some docs, refs and containers, respectively.' 
-tags = ['containers', 'scheme', "releases"]
+categories = ['containers', 'scheme', "releases"]
 summary = ' '
 +++
 

@@ -5,7 +5,7 @@ title = 'Di padre in figlio'
 subtitle = 'Conversazioni sul rischio di educare'
 author = 'Franco Nembrini'
 summary = ' '
-tags = ['nembrini', 'educazione' ]
+categories = ['nembrini', 'educazione' ]
 +++
 
 *Dalla conferenza __Chi ama educa__[^1] di _Franco Nembrini_* tenutasi a Perugia il 28 Settembre 2012.

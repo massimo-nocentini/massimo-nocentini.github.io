@@ -4,7 +4,7 @@ title = 'The (aux unittest) module'
 subtitle = 'Bootstrapping a unittest framework'
 tags = ['tests', 'scheme']
 summary = ' '
-categories = ['scheme tests for', 'cs must read']
+categories = ['scheme']
 +++
 
 {{< include "test-suites/testsuite-bootstrap-sut.html" >}}

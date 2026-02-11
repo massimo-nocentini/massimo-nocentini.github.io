@@ -3,7 +3,8 @@ date = '2017-03-31T14:00:21+01:00'
 title = 'Nuovi strani amici'
 author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
-tags = ["nembrini", "buzzati", "nuovo", "strano", "amico", "paradiso", "inferno"]
+tags = ["paradiso", "inferno"]
+categories = ["nembrini", "buzzati", ]
 summary = ' '
 +++
 

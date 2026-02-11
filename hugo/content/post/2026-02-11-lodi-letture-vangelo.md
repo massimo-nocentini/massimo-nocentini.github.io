@@ -3,6 +3,7 @@ date = '2026-02-11T10:59:04+01:00'
 title = "Letture e Vangelo del giorno"
 subtitle = 'Con messaggio del Santo Padre Benedetto XVI per la quaresima 2010'
 summary = ' '
+categories = ['santi padri']
 author = 'BENEDICTUS PP. XVI'
 +++
 

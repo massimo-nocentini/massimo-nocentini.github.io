@@ -2,8 +2,8 @@
 date = '2016-12-20T12:24:30+01:00'
 title = 'L’avventura di Pinocchio: Geppetto e Mastro Ciliegia'
 subtitle = 'Il pezzo di legno diventa burattino'
-tags = ['nembrini', 'pinocchio', 'ciliegia', 'geppetto', 'biffi']
-categories = ["L'avventura di Pinocchio"]
+tags = [ 'ciliegia', 'geppetto']
+categories = ["L'avventura di Pinocchio",'nembrini']
 author = 'Franco Nembrini'
 summary = ' '
 +++

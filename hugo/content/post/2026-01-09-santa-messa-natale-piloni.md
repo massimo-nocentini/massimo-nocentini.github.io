@@ -3,7 +3,8 @@ date = '2025-12-25T09:33:23+01:00'
 title = 'Santa Messa di Natale'
 author = 'fra Francesco Piloni'
 subtitle = 'Omelia di M.R.P. Francesco Piloni OFM'
-tags = ["ofm", "porziuncola", "piloni", "natale"]
+tags = ["natale"]
+categories = ["ofm", "porziuncola", "piloni"]
 summary = ' '
 +++
 

@@ -3,7 +3,8 @@ date = '2026-02-08T09:33:23+01:00'
 title = "Dopo le Beatitudini: essere luce e sale"
 subtitle = "Omelia di Card Pierbattista Pizzaballa"
 author = 'Card Pierbattista Pizzaballa'
-tags = ["ofm", "porziuncola", "Pizzaballa", "beatitudini", "luce", "sale"]
+tags = [ "beatitudini", "luce", "sale"]
+categories = ["ofm", "porziuncola", "pizzaballa"]
 summary = ' '
 +++
 
