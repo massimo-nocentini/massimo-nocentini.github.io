@@ -1,13 +1,30 @@
 +++
 date = '2026-01-28T09:56:03+01:00'
-title = 'SAT solvers'
+title = 'TAOCP, Volume 4, Fascicle 6: Satisfiability'
 subtitle = "Literate programming, implementations and their containers."
 author = 'Donald E. Knuth'
-tags = ['knuth', 'containers', 'cweb', 'c', 'stanford', 'sat']
+tags = ['satisfiability']
+categories = ['taocp', 'knuth', 'cweb', 'c']
 summary = ' '
 +++
 
-## Algorithms
+# Fascicle
+
+{{< bibtex
+
+author = "Knuth, Donald E."
+title = "The Art of Computer Programming, Volume 4, Fascicle 6: Satisfiability"
+year = "2015"
+url = "https://dl.acm.org/doi/book/10.5555/2898950"
+isbn = "0134397606"
+publisher = "Addison-Wesley Professional"
+edition = "1st"
+abstract = "This multivolume work on the analysis of algorithms has long been recognized as the definitive description of classical computer science. The four volumes published to date already comprise a unique and invaluable resource in programming theory and practice. Countless readers have spoken about the profound personal influence of Knuths writings. Scientists have marveled at the beauty and elegance of his analysis, while practicing programmers have successfully applied his cookbook solutions to their day-to-day problems. All have admired Knuth for the breadth, clarity, accuracy, and good humor found in his books. To continue the fourth and later volumes of the set, and to update parts of the existing volumes, Knuth has created a series of small books called fascicles, which are published at regular intervals. Each fascicle encompasses a section or more of wholly new or revised material. Ultimately, the content of these fascicles will be rolled up into the comprehensive, final versions of each volume, and the enormous undertaking that began in 1962 will be complete. Volume 4 Fascicle 6 This fascicle, brimming with lively examples, forms the middle third of what will eventually become hardcover Volume 4B. It introduces and surveys Satisfiability, one of the most fundamental problems in all of computer science: Given a Boolean function, can its variables be set to at least one pattern of 0s and 1s that will make the function true? Satisfiability is far from an abstract exercise in understanding formal systems. Revolutionary methods for solving such problems emerged at the beginning of the twenty-first century, and theyve led to game-changing applications in industry. These so-called SAT solvers can now routinely find solutions to practical problems that involve millions of variables and were thought until very recently to be hopelessly difficult. Fascicle 6 presents full details of seven different SAT solvers, ranging from simple algorithms suitable for small problems to state-of-the-art algorithms of industrial strength. Many other significant topics also arise in the course of the discussion, such as bounded model checking, the theory of traces, Las Vegas algorithms, phase changes in random processes, the efficient encoding of problems into conjunctive normal form, and the exploitation of global and local symmetries. More than 500 exercises are provided, arranged carefully for self-instruction, together with detailed answers."
+
+
+>}}
+
+# Algorithms
 
 Knuth hosts lots of [programs](https://cs.stanford.edu/~knuth/programs.html), in particular he 
 provides many implementations of SAT solvers that we collect in the following table:
@@ -26,7 +43,7 @@ provides many implementations of SAT solvers that we collect in the following ta
 | [Algorithm 7.2.2.2C](https://cs.stanford.edu/~knuth/programs/sat13.w) | conflict-driven clause learning SAT solver | [sat13.c](https://github.com/massimo-nocentini/SAT.cweb/blob/master/src/sat13.c) | [sat13.pdf](https://github.com/massimo-nocentini/SAT.cweb/blob/master/tex/sat13.pdf) |
 | [encoder (sat-nfa)](https://cs.stanford.edu/~knuth/programs/sat-nfa.w) | forcing encoding of regular languages into SAT via NFA | [sat-nfa.c](https://github.com/massimo-nocentini/SAT.cweb/blob/master/src/sat-nfa.c) | [sat-nfa.pdf](https://github.com/massimo-nocentini/SAT.cweb/blob/master/tex/sat-nfa.pdf) |
 
-## Containers
+# Containers
 
 We compiled and ship the corresponding executables in the [`sat.cweb` image](https://github.com/massimo-nocentini/SAT.cweb/pkgs/container/sat.cweb)
 that can be pulled easily:
