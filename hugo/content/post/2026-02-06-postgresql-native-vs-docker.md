@@ -6,7 +6,6 @@ tags = ['postgresql']
 summary = ' '
 author = ['Massimo Nocentini', 'Richard Uttner']
 +++
-<!-- dbXXL=# call story.execute_story_chunks(100); -->
 
 The results in a nutshell:
 
@@ -32,6 +31,23 @@ The results in a nutshell:
 
 ## Running into a container
 
+```
+pgbench (18.1)
+starting vacuum...end.
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 1
+query mode: simple
+number of clients: 1
+number of threads: 1
+maximum number of tries: 1
+duration: 5 s
+number of transactions actually processed: 3850
+number of failed transactions: 0 (0.000%)
+latency average = 1.298 ms
+initial connection time = 5.704 ms
+tps = 770.645801 (without initial connection time)
+```
+<!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 15:00:14
 NOTICE:  Running full ANALYZE
@@ -111,9 +127,28 @@ NOTICE:  Last eventid: 642480, last executed storyindex: 642398
 NOTICE:  Finished execute_story_chunks at 2026-02-06 15:03:50 for 642398 stories, total duration: 217s (0.34ms per record)
 CALL
 ```
+-->
 
 ## Running natively
 
+```
+pgbench (18.1)
+starting vacuum...end.
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 1
+query mode: simple
+number of clients: 1
+number of threads: 1
+maximum number of tries: 1
+duration: 5 s
+number of transactions actually processed: 7858
+number of failed transactions: 0 (0.000%)
+latency average = 0.636 ms
+initial connection time = 2.290 ms
+tps = 1572.119114 (without initial connection time)
+```
+
+<!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 14:58:57
 NOTICE:  Running full ANALYZE
@@ -192,7 +227,7 @@ NOTICE:  Checking story index 642398 by: SELECT chk.check_topic_children_counts(
 NOTICE:  Last eventid: 642480, last executed storyindex: 642398
 NOTICE:  Finished execute_story_chunks at 2026-02-06 15:01:13 for 642398 stories, total duration: 137s (0.21ms per record)
 CALL
-```
+``` -->
 
 ### Installation steps
 
@@ -254,7 +289,7 @@ to let the serve accept incoming connections from your network.
 
 
 ## Running into a container
-
+<!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 08:50:49
 NOTICE:  Running full ANALYZE
@@ -333,10 +368,10 @@ NOTICE:  Checking story index 642398 by: SELECT chk.check_topic_children_counts(
 NOTICE:  Last eventid: 642480, last executed storyindex: 642398
 NOTICE:  Finished execute_story_chunks at 2026-02-06 09:07:02 for 642398 stories, total duration: 974s (1.51ms per record)
 CALL
-```
+``` -->
 
 ## Running natively
-
+<!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 11:10:16
 NOTICE:  Running full ANALYZE
@@ -415,7 +450,7 @@ NOTICE:  Checking story index 642398 by: SELECT chk.check_topic_children_counts(
 NOTICE:  Last eventid: 642480, last executed storyindex: 642398
 NOTICE:  Finished execute_story_chunks at 2026-02-06 11:20:27 for 642398 stories, total duration: 611s (0.95ms per record)
 CALL
-```
+``` -->
 
 ### Installation steps
 
