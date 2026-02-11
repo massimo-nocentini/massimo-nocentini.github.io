@@ -1,7 +1,7 @@
 +++
 date = '2026-02-11T10:59:04+01:00'
 title = "Letture e Vangelo del giorno"
-subtitle = 'Con messaggio del Santo Padre Benedetto XVI per la quaresima 2010'
+subtitle = 'Con messaggio del Santo Padre Benedetto XVI per la Quaresima 2010'
 summary = ' '
 categories = ['santi padri']
 author = 'BENEDICTUS PP. XVI'
@@ -10,8 +10,6 @@ author = 'BENEDICTUS PP. XVI'
 # Il compito della legge
 
 *Dalla lettera ai Galati di san Paolo, apostolo (Gal 3, 15 – 4, 7)*.
-
----
 
 Fratelli, ecco, vi faccio un esempio comune: un testamento legittimo, pur essendo solo un atto umano, nessuno lo dichiara nullo o vi aggiunge qualche cosa. Ora è appunto ad Abramo e alla sua discendenza che furon fatte le promesse. Non dice la Scrittura: «e ai tuoi discendenti», come se si trattasse di molti, ma «e alla tua discendenza» (Gn 12, 7), come a uno solo, cioè Cristo. Ora io dico: un testamento stabilito in precedenza da Dio stesso, non può dichiararlo nullo una legge che è venuta quattrocentotrenta anni dopo, annullando così la promessa. Se infatti l’eredità si ottenesse in base alla legge, non sarebbe più in base alla promessa; Dio invece concesse il suo favore ad Abramo mediante la promessa.
 
@@ -34,8 +32,6 @@ Per esaltare, poi, la grandezza della rivelazione futura, afferma che anche la c
 # Ciò che esce dall'uomo è quello che rende impuro l'uomo.
 
 *Dal Vangelo secondo Marco. (Mc 7, 14-23)*
-
----
 
 In quel tempo, Gesù, chiamata di nuovo la folla, diceva loro: «Ascoltatemi tutti e comprendete bene! Non c'è nulla fuori dell'uomo che, entrando in lui, possa renderlo impuro. Ma sono le cose che escono dall'uomo a renderlo impuro».
 Quando entrò in una casa, lontano dalla folla, i suoi discepoli lo interrogavano sulla parabola. E disse loro: «Così neanche voi siete capaci di comprendere? Non capite che tutto ciò che entra nell'uomo dal di fuori non può renderlo impuro, perché non gli entra nel cuore ma nel ventre e va nella fogna?». Così rendeva puri tutti gli alimenti.
