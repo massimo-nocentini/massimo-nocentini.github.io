@@ -12,11 +12,11 @@ pygmentsCodefencesGuessSyntax = true
 #pygmentsUseClassic = true
 #pygmentOptions = "linenos=inline"
 
-[Services]
-  [Services.Disqus]
-    # Shortname = "XXX"
-  [Services.googleAnalytics]
-    # id = "XXX"
+[markup]
+  [markup.tableOfContents]
+    endLevel = 3
+    ordered = false
+    startLevel = 2
 
 [Params]
   homeTitle = "A small measure of peace" # Set a different text for the header on the home page
@@ -25,6 +25,7 @@ pygmentsCodefencesGuessSyntax = true
 #  logo = "samurai.jpg" # Expecting square dimensions
   favicon = "samurai.jpg"
   dateFormat = "January 2, 2006"
+  toc = true
   commit = true
   rss = true
   comments = false
@@ -32,7 +33,7 @@ pygmentsCodefencesGuessSyntax = true
   wordCount = true
 #  useHLJS = true
   socialShare = false
-  delayDisqus = true
+  delayDisqus = false
   showRelatedPosts = true
 #  cusdisID = "XXX" # Get your App id from cusdis.com
   hideAuthor = false
