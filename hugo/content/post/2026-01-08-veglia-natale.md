@@ -8,7 +8,7 @@ categories = ["ofm", "porziuncola", "travascio"]
 summary = ' '
 +++
 
-*Veglia di Natale 2025. Omelia di fra Massimo Travascio OFM* {{< youtubeicon "82ODUS_XywI" >}}
+{{< youtubeicon "82ODUS_XywI" "Veglia di Natale 2025. Omelia di fra Massimo Travascio OFM" >}}
 
 ---
 
