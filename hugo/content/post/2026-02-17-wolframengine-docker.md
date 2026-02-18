@@ -6,7 +6,7 @@ categories = ['symbolic', 'containers', 'wolfram']
 summary = ' '
 +++
 
-# What they provide
+# What Wolfram provides
 
 Wolfram released its [engine](https://www.wolfram.com/engine-technology/) (that is available [for download](https://www.wolfram.com/engine/)). In particular, we collect the following references that have been useful to our work:
 - [WSTP (Wolfram Symbolic Transfer Protocol)](https://www.wolfram.com/wstp/): long a core enabling component of Wolfram systems, is the native protocol for transferring Wolfram Language symbolic expressions between programs.
@@ -35,7 +35,7 @@ wstpserver:
 		ghcr.io/massimo-nocentini/wolframengine.docker:${WOLFRAM_VERSION}-amd64 \
 		-c /home/wolframengine/wstpserver.conf
 ```
-that allows us to have a running process to interact via, provided that you have activated your [free licence](https://www.wolfram.com/engine/free-license/).
+that allows us to have a running process to interact via some bindings, provided that the [free licence](https://www.wolfram.com/engine/free-license/) have been activated.
 
 [^1]: {{< github "massimo-nocentini" "wolframengine.docker" >}}
 [^2]: {{< docker "https://github.com/massimo-nocentini/wolframengine.docker/pkgs/container/wolframengine.docker" "wolframengine.docker:14.3-amd64" >}}
