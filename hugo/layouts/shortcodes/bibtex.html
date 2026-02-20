@@ -17,7 +17,7 @@
 <blockquote cite="{{ (.Get " url") }}">
     {{ if $author }} {{ print $author "," }} {{ end }}
     {{ if $year }} {{ print $year "." }} {{ end }}
-    {{ if $author }} <a href="{{ (.Get "url") }}"><i>{{ print $title "." }}</i></a> {{ end }}
+    {{ if $author }} <a href="{{ (.Get "url") }}" target="_blank"><i>{{ print $title "." }}</i></a> {{ end }}
     {{ if $series }} {{ print $series ":" }} {{ end }}
     {{ if $booktitle }} {{ print "In " $booktitle "," }} {{ else }} {{ if $journal }} {{ print "In " $journal "," }} {{ end }} {{ end }}
     {{ if $edition }} {{ print $edition " edition," }} {{ end }}
