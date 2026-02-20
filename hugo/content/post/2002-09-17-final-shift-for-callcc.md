@@ -27,3 +27,5 @@ pages = "271–282"
 numpages = "12"
 keywords = "scheme, implementation, continuations"
 >}}
+
+{{< include "test-suites/testsuite-delimcc-suite.html" >}}
