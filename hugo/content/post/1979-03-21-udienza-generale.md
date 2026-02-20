@@ -1,6 +1,6 @@
 +++
 date = '1979-03-21T10:59:04+01:00'
-title = "Proclamate il digiuno!"
+title = "Il digiuno penitenziale"
 subtitle = 'Udienza Generale'
 summary = ' '
 tags = ['digiuno']

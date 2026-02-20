@@ -35,7 +35,7 @@ wstpserver:
 		ghcr.io/massimo-nocentini/wolframengine.docker:${WOLFRAM_VERSION}-amd64 \
 		-c /home/wolframengine/wstpserver.conf
 ```
-that allows us to have a running process to interact via some bindings, provided that the [free licence](https://www.wolfram.com/engine/free-license/) have been activated.
+that allows us to have a running process to interact via some bindings, provided that the [free licence](https://www.wolfram.com/engine/free-license/) has been activated.
 
 [^1]: {{< github "massimo-nocentini" "wolframengine.docker" >}}
 [^2]: {{< docker "https://github.com/massimo-nocentini/wolframengine.docker/pkgs/container/wolframengine.docker" "wolframengine.docker:14.3-amd64" >}}
