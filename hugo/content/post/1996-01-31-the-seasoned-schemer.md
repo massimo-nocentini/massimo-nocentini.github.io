@@ -7,6 +7,8 @@ categories = [ "scheme", 'books']
 summary = ' '
 +++
 
+# The book
+
 {{< bibtex
 author="Friedman, Daniel P. and Felleisen, Matthias and Bibby, Duane"
 title="The Seasoned Schemer"
@@ -19,5 +21,7 @@ abstract="The notion that \"thinking about computing is one of the most exciting
 doi="10.7551/mitpress/6109.001.0001"
 url="https://doi.org/10.7551/mitpress/6109.001.0001"
 >}}
+
+Some interesting material can be found in [prof Lance R. Williams' course page](https://www.cs.unm.edu/~williams/cs491/).
 
 {{< include "test-suites/testsuite-letcc-suite.html" >}}
