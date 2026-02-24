@@ -1,0 +1,76 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script>hljs.highlightAll();</script></head>
+<body>
+<section id="section6974">
+<header>
+<h1>Tests</h1></header></section>
+<h2><code>test/base</code>: <span class="w3-text-green">pass</span></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/base _)
+  (⊦= 'empty (match/guarded '() (() 'empty)))
+  (⊦= 'empty (match/guarded #() (() 'empty)))
+  (⊦= '() (match/guarded '() (,r r)))
+  (⊦= #() (match/guarded #() (,r r)))
+  (⊦= 'p (match/guarded '(p) ((,r) r)))
+  (⊦= #t (match/guarded #(p) ((p) #t)))
+  (⊦= 'p (match/guarded #(p) ((,r) r)))
+  (⊦= 3 (match/guarded #(3 2) ((,r 2) r)))
+  (⊦= '(3 #(2)) (match/guarded #(3 2) ((,r unquote s) (list r s))))
+  (⊦⧳ ((exn)) (match/guarded #(3 2) ((,r 2 ,t) r)))
+  (⊦= 3 (match/guarded #(3 2) ((,r ,e) r)))
+  (⊦= 3 (match/guarded (make-record-instance 'hello 3 2) ((hello ,r ,e) r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3067880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2><code>test/h</code>: <span class="w3-text-green">pass</span></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/h _)
+  (define h
+    (lambda (x y)
+      (match/guarded
+        `(,x unquote y)
+        &quot;h function, example&quot;
+        ((,a unquote b) (guard (number? a) (number? b)) (* a b))
+        ((,a ,b ,c) (guard (number? a) (number? b) (number? c)) (+ a b c)))))
+  (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3068656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2><code>test/h-wrong</code>: <span class="w3-text-green">pass</span></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/h-wrong _)
+  (define h
+    (lambda (x y)
+      (match/guarded
+        `(,x unquote y)
+        &quot;h function, example&quot;
+        ((,a unquote b) (guard (number? a) (number? b)) (* a b))
+        ((,a unquote b) (+ a b))
+        ((,a ,b ,c) (guard (number? a) (number? b) (number? c)) (+ a b c)))))
+  (⊦⧳ ((exn)) (list (h 3 4) (apply h '(1 (3 4))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3073520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

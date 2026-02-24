@@ -3,7 +3,7 @@ date = '2012-09-09T18:33:23+01:00'
 title = "miniKanren, live and untagged"
 author = ['William E. Byrd', 'Eric Holk', 'Daniel P. Friedman']
 subtitle = 'Quine generation via relational interpreters'
-tags = [ "kanren" ]
+tags = [ "kanren", 'pattern matching' ]
 categories = [ "scheme", 'papers']
 summary = ' '
 +++

@@ -31,7 +31,7 @@ test/letnondeterministic/choose-null?: pass
 
 
 ((eta 0.004)
- (memory #(12582912 2390000 1048576))
+ (memory #(12582912 2376512 1048576))
  (stdout "((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\n")
  (stderr ""))
 
@@ -42,9 +42,9 @@ test/letnondeterministic/choose: pass
 
 
 ((eta 0.003)
- (memory #(12582912 2396456 1048576))
+ (memory #(12582912 2382968 1048576))
  (stdout
-   "((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\n")
+   "((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose§: pass
@@ -57,7 +57,7 @@ test/letnondeterministic/choose§: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2391848 1048576))
+ (memory #(12582912 2383632 1048576))
  (stdout
    "((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\n")
  (stderr ""))
@@ -72,7 +72,7 @@ test/letnondeterministic/choose-rec: pass
             (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1)))))))
 
 
-((eta 0.001) (memory #(12582912 2391432 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2379280 1048576)) (stdout "") (stderr ""))
 
 test/letnondeterministic/choose+nested: pass
 
@@ -82,9 +82,9 @@ test/letnondeterministic/choose+nested: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2397544 1048576))
+ (memory #(12582912 2380616 1048576))
  (stdout
-   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n")
+   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((1 0.333333333333333)\n    (3 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose+nested+¿: pass
@@ -95,9 +95,9 @@ test/letnondeterministic/choose+nested+¿: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2403896 1048576))
+ (memory #(12582912 2386896 1048576))
  (stdout
-   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n")
+   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose+double: pass
@@ -108,9 +108,9 @@ test/letnondeterministic/choose+double: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2390472 1048576))
+ (memory #(12582912 2389816 1048576))
  (stdout
-   "((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((7 0.333333333333333)\n    (6 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n")
+   "((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((6 0.333333333333333)\n    (7 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose+fair+fibs: pass
@@ -146,7 +146,7 @@ test/letnondeterministic/choose+fair+fibs: pass
                (map§ (lambda (v) (list &#39;c v)) (fibs§ 0 1)))))))
 
 
-((eta 0.001) (memory #(12582912 2398696 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2392400 1048576)) (stdout "") (stderr ""))
 
 test/letnondeterministic/choose+fair: pass
 
@@ -158,9 +158,9 @@ test/letnondeterministic/choose+fair: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2400344 1048576))
+ (memory #(12582912 2398552 1048576))
  (stdout
-   "((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((a 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n")
+   "((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n")
  (stderr ""))
 
 test/letnondeterministic/odd: pass
@@ -173,7 +173,7 @@ test/letnondeterministic/odd: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2393840 1048576))
+ (memory #(12582912 2404800 1048576))
  (stdout
    "((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((3 0.5) (1 0.5))))\n")
  (stderr ""))
@@ -205,10 +205,10 @@ test/letnondeterministic/parlor: pass
           (parlor 7))))
 
 
-((eta 0.001)
- (memory #(12582912 2424128 1048576))
+((eta 0.0)
+ (memory #(12582912 2387504 1048576))
  (stdout
-   "((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667))))\n")
+   "((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/parlor+sorted: pass
@@ -226,10 +226,10 @@ test/letnondeterministic/parlor+sorted: pass
           (parlor 7))))
 
 
-((eta 0.0)
- (memory #(12582912 2389960 1048576))
+((eta 0.001)
+ (memory #(12582912 2386384 1048576))
  (stdout
-   "((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 2 4) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 3 3) 0.25))))\n")
+   "((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 1 5) 0.25) ((1 3 3) 0.25) ((1 2 4) 0.25) ((2 2 3) 0.25))))\n")
  (stderr ""))
 
 test/letnondeterministic/coin: pass
@@ -263,10 +263,10 @@ test/letnondeterministic/coin: pass
             (reverse attempts)))))
 
 
-((eta 0.001)
- (memory #(12582912 2398832 1048576))
+((eta 0.0)
+ (memory #(12582912 2392880 1048576))
  (stdout
-   "((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333))))\n")
+   "((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333))))\n")
  (stderr ""))
 
 test/letnondeterministic/coin+cut: pass
@@ -292,10 +292,10 @@ test/letnondeterministic/coin+cut: pass
             (reverse attempts)))))
 
 
-((eta 0.0)
- (memory #(12582912 2393632 1048576))
+((eta 0.001)
+ (memory #(12582912 2397000 1048576))
  (stdout
-   "((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n")
+   "((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n")
  (stderr ""))
 
 test/letnondeterministic/graph+cycles/bfs: pass
@@ -318,7 +318,7 @@ test/letnondeterministic/graph+cycles/bfs: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2400632 1048576))
+ (memory #(12582912 2392464 1048576))
  (stdout
    "((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n   (((a b c a) 0.333333333333333)\n    ((a b c e a) 0.333333333333333)\n    ((a b d e a) 0.333333333333333))))\n")
  (stderr ""))
@@ -492,12 +492,12 @@ test/letnondeterministic/temporal-graphs: pass
                   (map (λ (triple) (list (car triple) (cadr triple))) p))))))
 
 
-((eta 0.003)
- (memory #(12582912 2462464 1048576))
+((eta 0.004)
+ (memory #(12582912 2459528 1048576))
  (stdout
    "((left 0)\n (tried 4013)\n (accepted 130)\n (ratio 0.0323947171692001)\n (distribution\n   ((((a b) ((a 1) (b 2))) 0.00769230769230769)\n    (((a b) ((a 1) (b 3))) 0.00769230769230769)\n    (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\n    (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\n    (((b c) ((b 1) (c 2))) 0.00769230769230769)\n    (((b c) ((b 1) (c 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 2))) 0.00769230769230769)\n    (((b d) ((b 1) (d 3))) 0.00769230769230769)\n    (((b d) ((b 1) (d 4))) 0.00769230769230769)\n    (((b d) ((b 1) (d 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 6))) 0.00769230769230769)\n    (((b d) ((b 1) (d 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 2))) 0.00769230769230769)\n    (((c a) ((c 1) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\n    (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\n    (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 2))) 0.00769230769230769)\n    (((c e) ((c 1) (e 3))) 0.00769230769230769)\n    (((c e) ((c 1) (e 4))) 0.00769230769230769)\n    (((c e) ((c 1) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 6))) 0.00769230769230769)\n    (((c e) ((c 1) (e 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\n    (((d e) ((d 1) (e 3))) 0.00769230769230769)\n    (((d e) ((d 1) (e 4))) 0.00769230769230769)\n    (((d e) ((d 1) (e 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 2))) 0.00769230769230769)\n    (((e a) ((e 1) (a 3))) 0.00769230769230769)\n    (((e a) ((e 1) (a 4))) 0.00769230769230769)\n    (((e a) ((e 1) (a 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 6))) 0.00769230769230769)\n    (((e a) ((e 1) (a 7))) 0.00769230769230769)\n    (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\n    (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\n")
  (stderr ""))
-'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-letnondeterministic-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/letnondeterministic\/choose-null?: pass (define (test\/letnondeterministic\/choose-null? _) (⊦= \u0027() (letnondeterministic (? ¿ ⊦ • !) (? \u0027())))) ((eta 0.004) (memory #(12582912 2390000 1048576)) (stdout \u0026quot;((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose: pass (define (test\/letnondeterministic\/choose _) (⊦= \u0027(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? \u0027(1 2 3))))) ((eta 0.003) (memory #(12582912 2396456 1048576)) (stdout \u0026quot;((left 0)\\n (tried 7)\\n (accepted 3)\\n (ratio 0.428571428571429)\\n (distribution\\n ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose§: pass (define (test\/letnondeterministic\/choose§ _) (⊦= \u0027(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? (cons§ 1 (cons§ 2 (cons§ 3 \u0027()))))))) ((eta 0.0) (memory #(12582912 2391848 1048576)) (stdout \u0026quot;((left 0)\\n (tried 7)\\n (accepted 3)\\n (ratio 0.428571428571429)\\n (distribution\\n ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose-rec: pass (define (test\/letnondeterministic\/choose-rec _) (⊦= \u0027(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584) (§-\u0026gt;list (stop§ (λ (v) (\u0026gt; v 3000)) (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1))))))) ((eta 0.001) (memory #(12582912 2391432 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bnested: pass (define (test\/letnondeterministic\/choose\u002bnested _) (⊦= \u0027(1 4 3 1 5 3) (letnondeterministic (? ¿ ⊦ • !) (? \u0060(1 ,(? \u0027(4 5)) 3))))) ((eta 0.0) (memory #(12582912 2397544 1048576)) (stdout \u0026quot;((left 0)\\n (tried 17)\\n (accepted 6)\\n (ratio 0.352941176470588)\\n (distribution\\n ((3 0.333333333333333)\\n (1 0.333333333333333)\\n (5 0.166666666666667)\\n (4 0.166666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bnested\u002b¿: pass (define (test\/letnondeterministic\/choose\u002bnested\u002b¿ _) (⊦= \u0027(1 4 3 1 5 3) (letnondeterministic (? ¿ ⊦ • !) (? \u0060(1 ,(¿ \u0027(4 5)) 3))))) ((eta 0.0) (memory #(12582912 2403896 1048576)) (stdout \u0026quot;((left 0)\\n (tried 17)\\n (accepted 6)\\n (ratio 0.352941176470588)\\n (distribution\\n ((3 0.333333333333333)\\n (1 0.333333333333333)\\n (4 0.166666666666667)\\n (5 0.166666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bdouble: pass (define (test\/letnondeterministic\/choose\u002bdouble _) (⊦= \u0027(5 6 6 7 7 8) (letnondeterministic (? ¿ ⊦ • !) (\u002b (? \u0027(1 2 3)) (? \u0027(4 5)))))) ((eta 0.0) (memory #(12582912 2390472 1048576)) (stdout \u0026quot;((left 0)\\n (tried 19)\\n (accepted 6)\\n (ratio 0.315789473684211)\\n (distribution\\n ((7 0.333333333333333)\\n (6 0.333333333333333)\\n (8 0.166666666666667)\\n (5 0.166666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bfair\u002bfibs: pass (define (test\/letnondeterministic\/choose\u002bfair\u002bfibs _) (⊦= \u0027((a 0) (b 0) (c 0) (a 1) (b 1) (c 1) (a 1) (b 1) (c 1) (a 2) (b 2) (c 2) (a 3) (b 3) (c 3) (a 5) (b 5) (c 5) (a 8) (b 8) (c 8)) (letnondeterministic 21 (? ¿ ⊦ • !) (? (append§\/interleaved (map§ (lambda (v) (list \u0027a v)) (fibs§ 0 1)) (map§ (lambda (v) (list \u0027b v)) (fibs§ 0 1)) (map§ (lambda (v) (list \u0027c v)) (fibs§ 0 1))))))) ((eta 0.001) (memory #(12582912 2398696 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bfair: pass (define (test\/letnondeterministic\/choose\u002bfair _) (⊦= \u0027((a 1) (b 1) (a 2) (b 2) (a 3)) (letnondeterministic (? ¿ ⊦ • !) (? (append§\/interleaved \u0027((a 1) (a 2) (a 3)) \u0027((b 1) (b 2))))))) ((eta 0.0) (memory #(12582912 2400344 1048576)) (stdout \u0026quot;((left 0)\\n (tried 11)\\n (accepted 5)\\n (ratio 0.454545454545455)\\n (distribution (((a 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/odd: pass (define (test\/letnondeterministic\/odd _) (⊦= \u0027(1 3) (letnondeterministic (? ¿ ⊦ • !) (let1 (v (? \u0027(1 2 3))) (⊦ (odd? v)) v)))) ((eta 0.0) (memory #(12582912 2393840 1048576)) (stdout \u0026quot;((left 0)\\n (tried 7)\\n (accepted 2)\\n (ratio 0.285714285714286)\\n (distribution ((3 0.5) (1 0.5))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/parlor: pass (define (test\/letnondeterministic\/parlor _) (⊦= \u0027((1 1 5) (1 2 4) (1 3 3) (1 4 2) (1 5 1) (2 1 4) (2 2 3) (2 3 2) (2 4 1) (3 1 3) (3 2 2) (3 3 1) (4 1 2) (4 2 1) (5 1 1)) (letnondeterministic (? ¿ ⊦ • !) (define (two-numbers) (list (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)))) (define (parlor sum) (let ((nums (two-numbers))) (⊦ (eq? (apply \u002b nums) sum)) nums)) (parlor 7)))) ((eta 0.001) (memory #(12582912 2424128 1048576)) (stdout \u0026quot;((left 0)\\n (tried 311)\\n (accepted 15)\\n (ratio 0.0482315112540193)\\n (distribution\\n (((1 1 5) 0.0666666666666667)\\n ((1 3 3) 0.0666666666666667)\\n ((1 5 1) 0.0666666666666667)\\n ((3 1 3) 0.0666666666666667)\\n ((3 3 1) 0.0666666666666667)\\n ((5 1 1) 0.0666666666666667)\\n ((1 2 4) 0.0666666666666667)\\n ((1 4 2) 0.0666666666666667)\\n ((2 1 4) 0.0666666666666667)\\n ((2 2 3) 0.0666666666666667)\\n ((2 3 2) 0.0666666666666667)\\n ((2 4 1) 0.0666666666666667)\\n ((3 2 2) 0.0666666666666667)\\n ((4 1 2) 0.0666666666666667)\\n ((4 2 1) 0.0666666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/parlor\u002bsorted: pass (define (test\/letnondeterministic\/parlor\u002bsorted _) (⊦= \u0027((1 1 5) (1 2 4) (1 3 3) (2 2 3)) (letnondeterministic (? ¿ ⊦ • !) (define (two-numbers) (list (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)))) (define (parlor sum) (let ((nums (two-numbers))) (⊦ (and (eq? (apply \u002b nums) sum) (sorted? nums \u0026lt;))) nums)) (parlor 7)))) ((eta 0.0) (memory #(12582912 2389960 1048576)) (stdout \u0026quot;((left 0)\\n (tried 311)\\n (accepted 4)\\n (ratio 0.0128617363344051)\\n (distribution (((1 2 4) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 3 3) 0.25))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/coin: pass (define (test\/letnondeterministic\/coin _) (⊦= \u0027(((la 1 1) (la 1 2)) ((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) ((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1) (ny 1 2) (ny 2 1) (ny 2 2) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))) (letnondeterministic (? ¿ ⊦ • !) (define (coin? x) (member? x \u0027((la 1 2) (ny 1 1) (bos 2 2)))) (let* ((*paths* \u0027()) (attempts \u0027()) (city (? \u0027(la ny bos))) (store (? \u0027(1 2))) (box (? \u0027(1 2))) (triple (list city store box))) (push! triple attempts) (⊦ (coin? triple)) (reverse attempts))))) ((eta 0.001) (memory #(12582912 2398832 1048576)) (stdout \u0026quot;((left 0)\\n (tried 43)\\n (accepted 3)\\n (ratio 0.0697674418604651)\\n (distribution\\n ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\\n (((la 1 1)\\n (la 1 2)\\n (la 2 1)\\n (la 2 2)\\n (ny 1 1)\\n (ny 1 2)\\n (ny 2 1)\\n (ny 2 2)\\n (bos 1 1)\\n (bos 1 2)\\n (bos 2 1)\\n (bos 2 2))\\n 0.333333333333333)\\n (((la 1 1) (la 1 2)) 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/coin\u002bcut: pass (define (test\/letnondeterministic\/coin\u002bcut _) (⊦= \u0027(((la 1 1) (la 1 2)) ((la 1 1) (la 1 2) (ny 1 1)) ((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))) (letnondeterministic (? ¿ ⊦ • !) (define (coin? x) (member? x \u0027((la 1 2) (ny 1 1) (bos 2 2)))) (let* ((*paths* \u0027()) (attempts \u0027()) (city (? \u0027(la ny bos))) (flag (•)) (store (? \u0027(1 2))) (_ (•)) (box (? \u0027(1 2))) (triple (list city store box))) (push! triple attempts) (⊦ (coin? triple)) (! flag) (reverse attempts))))) ((eta 0.0) (memory #(12582912 2393632 1048576)) (stdout \u0026quot;((left 0)\\n (tried 23)\\n (accepted 3)\\n (ratio 0.130434782608696)\\n (distribution\\n ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\\n 0.333333333333333)\\n (((la 1 1) (la 1 2)) 0.333333333333333)\\n (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/graph\u002bcycles\/bfs: pass (define (test\/letnondeterministic\/graph\u002bcycles\/bfs _) (⊦= \u0027((a b c a) (a b c e a) (a b d e a)) (letnondeterministic (? ¿ ⊦ • !) (define (neighbors node) (letassoc (node \u0027((a (b)) (b (c d)) (c (a e)) (d (e)) (e (a)))) (else \u0027()))) (define (path node1 node2 seen) (⊦ (not (member? node1 seen))) (let1 (n (? (neighbors node1))) (if (eq? n node2) (list node2) (cons n (path n node2 (cons node1 seen)))))) (let* ((source \u0027a) (p (path source \u0027a \u0027()))) (cons source p))))) ((eta 0.0) (memory #(12582912 2400632 1048576)) (stdout \u0026quot;((left 0)\\n (tried 17)\\n (accepted 3)\\n (ratio 0.176470588235294)\\n (distribution\\n (((a b c a) 0.333333333333333)\\n ((a b c e a) 0.333333333333333)\\n ((a b d e a) 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/temporal-graphs: pass (define (test\/letnondeterministic\/temporal-graphs _) (define graph-simple \u0060((a ((b (1 2 3)))) (b ((c (2 5)) (d ,ℕ))) (c ((a (2 3 4 5 6)) (e ,ℕ))) (d ((e (3 4 5)))) (e ((a ,ℕ))))) (define (V g) (map car g)) (⊦= \u0027(((a b) ((a 1) (b 2))) ((a b) ((a 1) (b 3))) ((a c) ((a 1) (b 2) (c 5))) ((a c) ((a 1) (b 3) (c 5))) ((a d) ((a 1) (b 2) (d 3))) ((a d) ((a 1) (b 2) (d 4))) ((a d) ((a 1) (b 2) (d 5))) ((a d) ((a 1) (b 2) (d 6))) ((a d) ((a 1) (b 2) (d 7))) ((a d) ((a 1) (b 3) (d 4))) ((a d) ((a 1) (b 3) (d 5))) ((a d) ((a 1) (b 3) (d 6))) ((a d) ((a 1) (b 3) (d 7))) ((a e) ((a 1) (b 2) (c 5) (e 6))) ((a e) ((a 1) (b 2) (c 5) (e 7))) ((a e) ((a 1) (b 2) (d 3) (e 4))) ((a e) ((a 1) (b 2) (d 3) (e 5))) ((a e) ((a 1) (b 2) (d 4) (e 5))) ((a e) ((a 1) (b 3) (c 5) (e 6))) ((a e) ((a 1) (b 3) (c 5) (e 7))) ((a e) ((a 1) (b 3) (d 4) (e 5))) ((b a) ((b 1) (c 2) (a 3))) ((b a) ((b 1) (c 2) (a 4))) ((b a) ((b 1) (c 2) (a 5))) ((b a) ((b 1) (c 2) (a 6))) ((b a) ((b 1) (c 2) (e 3) (a 4))) ((b a) ((b 1) (c 2) (e 3) (a 5))) ((b a) ((b 1) (c 2) (e 3) (a 6))) ((b a) ((b 1) (c 2) (e 3) (a 7))) ((b a) ((b 1) (c 2) (e 4) (a 5))) ((b a) ((b 1) (c 2) (e 4) (a 6))) ((b a) ((b 1) (c 2) (e 4) (a 7))) ((b a) ((b 1) (c 2) (e 5) (a 6))) ((b a) ((b 1) (c 2) (e 5) (a 7))) ((b a) ((b 1) (c 2) (e 6) (a 7))) ((b a) ((b 1) (c 5) (a 6))) ((b a) ((b 1) (c 5) (e 6) (a 7))) ((b a) ((b 1) (d 2) (e 3) (a 4))) ((b a) ((b 1) (d 2) (e 3) (a 5))) ((b a) ((b 1) (d 2) (e 3) (a 6))) ((b a) ((b 1) (d 2) (e 3) (a 7))) ((b a) ((b 1) (d 2) (e 4) (a 5))) ((b a) ((b 1) (d 2) (e 4) (a 6))) ((b a) ((b 1) (d 2) (e 4) (a 7))) ((b a) ((b 1) (d 2) (e 5) (a 6))) ((b a) ((b 1) (d 2) (e 5) (a 7))) ((b a) ((b 1) (d 3) (e 4) (a 5))) ((b a) ((b 1) (d 3) (e 4) (a 6))) ((b a) ((b 1) (d 3) (e 4) (a 7))) ((b a) ((b 1) (d 3) (e 5) (a 6))) ((b a) ((b 1) (d 3) (e 5) (a 7))) ((b a) ((b 1) (d 4) (e 5) (a 6))) ((b a) ((b 1) (d 4) (e 5) (a 7))) ((b c) ((b 1) (c 2))) ((b c) ((b 1) (c 5))) ((b d) ((b 1) (d 2))) ((b d) ((b 1) (d 3))) ((b d) ((b 1) (d 4))) ((b d) ((b 1) (d 5))) ((b d) ((b 1) (d 6))) ((b d) ((b 1) (d 7))) ((b e) ((b 1) (c 2) (e 3))) ((b e) ((b 1) (c 2) (e 4))) ((b e) ((b 1) (c 2) (e 5))) ((b e) ((b 1) (c 2) (e 6))) ((b e) ((b 1) (c 2) (e 7))) ((b e) ((b 1) (c 5) (e 6))) ((b e) ((b 1) (c 5) (e 7))) ((b e) ((b 1) (d 2) (e 3))) ((b e) ((b 1) (d 2) (e 4))) ((b e) ((b 1) (d 2) (e 5))) ((b e) ((b 1) (d 3) (e 4))) ((b e) ((b 1) (d 3) (e 5))) ((b e) ((b 1) (d 4) (e 5))) ((c a) ((c 1) (a 2))) ((c a) ((c 1) (a 3))) ((c a) ((c 1) (a 4))) ((c a) ((c 1) (a 5))) ((c a) ((c 1) (a 6))) ((c a) ((c 1) (e 2) (a 3))) ((c a) ((c 1) (e 2) (a 4))) ((c a) ((c 1) (e 2) (a 5))) ((c a) ((c 1) (e 2) (a 6))) ((c a) ((c 1) (e 2) (a 7))) ((c a) ((c 1) (e 3) (a 4))) ((c a) ((c 1) (e 3) (a 5))) ((c a) ((c 1) (e 3) (a 6))) ((c a) ((c 1) (e 3) (a 7))) ((c a) ((c 1) (e 4) (a 5))) ((c a) ((c 1) (e 4) (a 6))) ((c a) ((c 1) (e 4) (a 7))) ((c a) ((c 1) (e 5) (a 6))) ((c a) ((c 1) (e 5) (a 7))) ((c a) ((c 1) (e 6) (a 7))) ((c b) ((c 1) (a 2) (b 3))) ((c d) ((c 1) (a 2) (b 3) (d 4))) ((c d) ((c 1) (a 2) (b 3) (d 5))) ((c d) ((c 1) (a 2) (b 3) (d 6))) ((c d) ((c 1) (a 2) (b 3) (d 7))) ((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) ((c e) ((c 1) (e 2))) ((c e) ((c 1) (e 3))) ((c e) ((c 1) (e 4))) ((c e) ((c 1) (e 5))) ((c e) ((c 1) (e 6))) ((c e) ((c 1) (e 7))) ((d a) ((d 1) (e 3) (a 4))) ((d a) ((d 1) (e 3) (a 5))) ((d a) ((d 1) (e 3) (a 6))) ((d a) ((d 1) (e 3) (a 7))) ((d a) ((d 1) (e 4) (a 5))) ((d a) ((d 1) (e 4) (a 6))) ((d a) ((d 1) (e 4) (a 7))) ((d a) ((d 1) (e 5) (a 6))) ((d a) ((d 1) (e 5) (a 7))) ((d e) ((d 1) (e 3))) ((d e) ((d 1) (e 4))) ((d e) ((d 1) (e 5))) ((e a) ((e 1) (a 2))) ((e a) ((e 1) (a 3))) ((e a) ((e 1) (a 4))) ((e a) ((e 1) (a 5))) ((e a) ((e 1) (a 6))) ((e a) ((e 1) (a 7))) ((e b) ((e 1) (a 2) (b 3))) ((e c) ((e 1) (a 2) (b 3) (c 5))) ((e d) ((e 1) (a 2) (b 3) (d 4))) ((e d) ((e 1) (a 2) (b 3) (d 5))) ((e d) ((e 1) (a 2) (b 3) (d 6))) ((e d) ((e 1) (a 2) (b 3) (d 7)))) (letnondeterministic -1 (? ¿ ⊦ • !) (define (path p node1 node2 seen maxlen maxt) (let* ((lastpair (car p)) (l (caddr lastpair)) (_ (⊦ (\u0026lt; l (add1 maxlen)))) (pair (? (letassoc (node1 graph-simple) (else \u0027())))) (n (car pair)) (_ (⊦ (not (member? n seen)))) (t₁ (? (cadr pair) (λ (t) (\u0026lt; t maxt)))) (t₀ (cadr lastpair)) (_ (⊦ (\u0026gt; t₁ t₀))) (newp (cons (list n t₁ (add1 l)) p))) (cond ((eq? n node2) (reverse newp)) (else (path newp n node2 (cons node1 seen) maxlen maxt))))) (let* ((vertices (V graph-simple)) (source (? vertices)) (destination (? vertices)) (p (path (list (list source 1 1)) source destination \u0027() 15 7))) (list (list source destination) (map (λ (triple) (list (car triple) (cadr triple))) p)))))) ((eta 0.003) (memory #(12582912 2462464 1048576)) (stdout \u0026quot;((left 0)\\n (tried 4013)\\n (accepted 130)\\n (ratio 0.0323947171692001)\\n (distribution\\n ((((a b) ((a 1) (b 2))) 0.00769230769230769)\\n (((a b) ((a 1) (b 3))) 0.00769230769230769)\\n (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\\n (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\\n (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\\n (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\\n (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\\n (((b c) ((b 1) (c 2))) 0.00769230769230769)\\n (((b c) ((b 1) (c 5))) 0.00769230769230769)\\n (((b d) ((b 1) (d 2))) 0.00769230769230769)\\n (((b d) ((b 1) (d 3))) 0.00769230769230769)\\n (((b d) ((b 1) (d 4))) 0.00769230769230769)\\n (((b d) ((b 1) (d 5))) 0.00769230769230769)\\n (((b d) ((b 1) (d 6))) 0.00769230769230769)\\n (((b d) ((b 1) (d 7))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\\n (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\\n (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\\n (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\\n (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\\n (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\\n (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\\n (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\\n (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\\n (((c a) ((c 1) (a 2))) 0.00769230769230769)\\n (((c a) ((c 1) (a 3))) 0.00769230769230769)\\n (((c a) ((c 1) (a 4))) 0.00769230769230769)\\n (((c a) ((c 1) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\\n (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\\n (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\\n (((c e) ((c 1) (e 2))) 0.00769230769230769)\\n (((c e) ((c 1) (e 3))) 0.00769230769230769)\\n (((c e) ((c 1) (e 4))) 0.00769230769230769)\\n (((c e) ((c 1) (e 5))) 0.00769230769230769)\\n (((c e) ((c 1) (e 6))) 0.00769230769230769)\\n (((c e) ((c 1) (e 7))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\\n (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\\n (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\\n (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\\n (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\\n (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\\n (((d e) ((d 1) (e 3))) 0.00769230769230769)\\n (((d e) ((d 1) (e 4))) 0.00769230769230769)\\n (((d e) ((d 1) (e 5))) 0.00769230769230769)\\n (((e a) ((e 1) (a 2))) 0.00769230769230769)\\n (((e a) ((e 1) (a 3))) 0.00769230769230769)\\n (((e a) ((e 1) (a 4))) 0.00769230769230769)\\n (((e a) ((e 1) (a 5))) 0.00769230769230769)\\n (((e a) ((e 1) (a 6))) 0.00769230769230769)\\n (((e a) ((e 1) (a 7))) 0.00769230769230769)\\n (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\\n (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":3729,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-letnondeterministic-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-letnondeterministic-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/letnondeterministic\/choose-null?: pass (define (test\/letnondeterministic\/choose-null? _) (⊦= \u0027() (letnondeterministic (? ¿ ⊦ • !) (? \u0027())))) ((eta 0.004) (memory #(12582912 2376512 1048576)) (stdout \u0026quot;((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose: pass (define (test\/letnondeterministic\/choose _) (⊦= \u0027(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? \u0027(1 2 3))))) ((eta 0.003) (memory #(12582912 2382968 1048576)) (stdout \u0026quot;((left 0)\\n (tried 7)\\n (accepted 3)\\n (ratio 0.428571428571429)\\n (distribution\\n ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose§: pass (define (test\/letnondeterministic\/choose§ _) (⊦= \u0027(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? (cons§ 1 (cons§ 2 (cons§ 3 \u0027()))))))) ((eta 0.0) (memory #(12582912 2383632 1048576)) (stdout \u0026quot;((left 0)\\n (tried 7)\\n (accepted 3)\\n (ratio 0.428571428571429)\\n (distribution\\n ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose-rec: pass (define (test\/letnondeterministic\/choose-rec _) (⊦= \u0027(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584) (§-\u0026gt;list (stop§ (λ (v) (\u0026gt; v 3000)) (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1))))))) ((eta 0.001) (memory #(12582912 2379280 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bnested: pass (define (test\/letnondeterministic\/choose\u002bnested _) (⊦= \u0027(1 4 3 1 5 3) (letnondeterministic (? ¿ ⊦ • !) (? \u0060(1 ,(? \u0027(4 5)) 3))))) ((eta 0.0) (memory #(12582912 2380616 1048576)) (stdout \u0026quot;((left 0)\\n (tried 17)\\n (accepted 6)\\n (ratio 0.352941176470588)\\n (distribution\\n ((1 0.333333333333333)\\n (3 0.333333333333333)\\n (4 0.166666666666667)\\n (5 0.166666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bnested\u002b¿: pass (define (test\/letnondeterministic\/choose\u002bnested\u002b¿ _) (⊦= \u0027(1 4 3 1 5 3) (letnondeterministic (? ¿ ⊦ • !) (? \u0060(1 ,(¿ \u0027(4 5)) 3))))) ((eta 0.0) (memory #(12582912 2386896 1048576)) (stdout \u0026quot;((left 0)\\n (tried 17)\\n (accepted 6)\\n (ratio 0.352941176470588)\\n (distribution\\n ((3 0.333333333333333)\\n (1 0.333333333333333)\\n (5 0.166666666666667)\\n (4 0.166666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bdouble: pass (define (test\/letnondeterministic\/choose\u002bdouble _) (⊦= \u0027(5 6 6 7 7 8) (letnondeterministic (? ¿ ⊦ • !) (\u002b (? \u0027(1 2 3)) (? \u0027(4 5)))))) ((eta 0.0) (memory #(12582912 2389816 1048576)) (stdout \u0026quot;((left 0)\\n (tried 19)\\n (accepted 6)\\n (ratio 0.315789473684211)\\n (distribution\\n ((6 0.333333333333333)\\n (7 0.333333333333333)\\n (8 0.166666666666667)\\n (5 0.166666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bfair\u002bfibs: pass (define (test\/letnondeterministic\/choose\u002bfair\u002bfibs _) (⊦= \u0027((a 0) (b 0) (c 0) (a 1) (b 1) (c 1) (a 1) (b 1) (c 1) (a 2) (b 2) (c 2) (a 3) (b 3) (c 3) (a 5) (b 5) (c 5) (a 8) (b 8) (c 8)) (letnondeterministic 21 (? ¿ ⊦ • !) (? (append§\/interleaved (map§ (lambda (v) (list \u0027a v)) (fibs§ 0 1)) (map§ (lambda (v) (list \u0027b v)) (fibs§ 0 1)) (map§ (lambda (v) (list \u0027c v)) (fibs§ 0 1))))))) ((eta 0.001) (memory #(12582912 2392400 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/choose\u002bfair: pass (define (test\/letnondeterministic\/choose\u002bfair _) (⊦= \u0027((a 1) (b 1) (a 2) (b 2) (a 3)) (letnondeterministic (? ¿ ⊦ • !) (? (append§\/interleaved \u0027((a 1) (a 2) (a 3)) \u0027((b 1) (b 2))))))) ((eta 0.0) (memory #(12582912 2398552 1048576)) (stdout \u0026quot;((left 0)\\n (tried 11)\\n (accepted 5)\\n (ratio 0.454545454545455)\\n (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/odd: pass (define (test\/letnondeterministic\/odd _) (⊦= \u0027(1 3) (letnondeterministic (? ¿ ⊦ • !) (let1 (v (? \u0027(1 2 3))) (⊦ (odd? v)) v)))) ((eta 0.0) (memory #(12582912 2404800 1048576)) (stdout \u0026quot;((left 0)\\n (tried 7)\\n (accepted 2)\\n (ratio 0.285714285714286)\\n (distribution ((3 0.5) (1 0.5))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/parlor: pass (define (test\/letnondeterministic\/parlor _) (⊦= \u0027((1 1 5) (1 2 4) (1 3 3) (1 4 2) (1 5 1) (2 1 4) (2 2 3) (2 3 2) (2 4 1) (3 1 3) (3 2 2) (3 3 1) (4 1 2) (4 2 1) (5 1 1)) (letnondeterministic (? ¿ ⊦ • !) (define (two-numbers) (list (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)))) (define (parlor sum) (let ((nums (two-numbers))) (⊦ (eq? (apply \u002b nums) sum)) nums)) (parlor 7)))) ((eta 0.0) (memory #(12582912 2387504 1048576)) (stdout \u0026quot;((left 0)\\n (tried 311)\\n (accepted 15)\\n (ratio 0.0482315112540193)\\n (distribution\\n (((1 1 5) 0.0666666666666667)\\n ((1 5 1) 0.0666666666666667)\\n ((5 1 1) 0.0666666666666667)\\n ((1 2 4) 0.0666666666666667)\\n ((1 4 2) 0.0666666666666667)\\n ((2 1 4) 0.0666666666666667)\\n ((2 4 1) 0.0666666666666667)\\n ((4 1 2) 0.0666666666666667)\\n ((4 2 1) 0.0666666666666667)\\n ((1 3 3) 0.0666666666666667)\\n ((3 1 3) 0.0666666666666667)\\n ((3 3 1) 0.0666666666666667)\\n ((2 2 3) 0.0666666666666667)\\n ((2 3 2) 0.0666666666666667)\\n ((3 2 2) 0.0666666666666667))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/parlor\u002bsorted: pass (define (test\/letnondeterministic\/parlor\u002bsorted _) (⊦= \u0027((1 1 5) (1 2 4) (1 3 3) (2 2 3)) (letnondeterministic (? ¿ ⊦ • !) (define (two-numbers) (list (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)) (? \u0027(1 2 3 4 5)))) (define (parlor sum) (let ((nums (two-numbers))) (⊦ (and (eq? (apply \u002b nums) sum) (sorted? nums \u0026lt;))) nums)) (parlor 7)))) ((eta 0.001) (memory #(12582912 2386384 1048576)) (stdout \u0026quot;((left 0)\\n (tried 311)\\n (accepted 4)\\n (ratio 0.0128617363344051)\\n (distribution (((1 1 5) 0.25) ((1 3 3) 0.25) ((1 2 4) 0.25) ((2 2 3) 0.25))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/coin: pass (define (test\/letnondeterministic\/coin _) (⊦= \u0027(((la 1 1) (la 1 2)) ((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) ((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1) (ny 1 2) (ny 2 1) (ny 2 2) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))) (letnondeterministic (? ¿ ⊦ • !) (define (coin? x) (member? x \u0027((la 1 2) (ny 1 1) (bos 2 2)))) (let* ((*paths* \u0027()) (attempts \u0027()) (city (? \u0027(la ny bos))) (store (? \u0027(1 2))) (box (? \u0027(1 2))) (triple (list city store box))) (push! triple attempts) (⊦ (coin? triple)) (reverse attempts))))) ((eta 0.0) (memory #(12582912 2392880 1048576)) (stdout \u0026quot;((left 0)\\n (tried 43)\\n (accepted 3)\\n (ratio 0.0697674418604651)\\n (distribution\\n ((((la 1 1) (la 1 2)) 0.333333333333333)\\n (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\\n (((la 1 1)\\n (la 1 2)\\n (la 2 1)\\n (la 2 2)\\n (ny 1 1)\\n (ny 1 2)\\n (ny 2 1)\\n (ny 2 2)\\n (bos 1 1)\\n (bos 1 2)\\n (bos 2 1)\\n (bos 2 2))\\n 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/coin\u002bcut: pass (define (test\/letnondeterministic\/coin\u002bcut _) (⊦= \u0027(((la 1 1) (la 1 2)) ((la 1 1) (la 1 2) (ny 1 1)) ((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))) (letnondeterministic (? ¿ ⊦ • !) (define (coin? x) (member? x \u0027((la 1 2) (ny 1 1) (bos 2 2)))) (let* ((*paths* \u0027()) (attempts \u0027()) (city (? \u0027(la ny bos))) (flag (•)) (store (? \u0027(1 2))) (_ (•)) (box (? \u0027(1 2))) (triple (list city store box))) (push! triple attempts) (⊦ (coin? triple)) (! flag) (reverse attempts))))) ((eta 0.001) (memory #(12582912 2397000 1048576)) (stdout \u0026quot;((left 0)\\n (tried 23)\\n (accepted 3)\\n (ratio 0.130434782608696)\\n (distribution\\n ((((la 1 1) (la 1 2)) 0.333333333333333)\\n (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\\n 0.333333333333333)\\n (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/graph\u002bcycles\/bfs: pass (define (test\/letnondeterministic\/graph\u002bcycles\/bfs _) (⊦= \u0027((a b c a) (a b c e a) (a b d e a)) (letnondeterministic (? ¿ ⊦ • !) (define (neighbors node) (letassoc (node \u0027((a (b)) (b (c d)) (c (a e)) (d (e)) (e (a)))) (else \u0027()))) (define (path node1 node2 seen) (⊦ (not (member? node1 seen))) (let1 (n (? (neighbors node1))) (if (eq? n node2) (list node2) (cons n (path n node2 (cons node1 seen)))))) (let* ((source \u0027a) (p (path source \u0027a \u0027()))) (cons source p))))) ((eta 0.0) (memory #(12582912 2392464 1048576)) (stdout \u0026quot;((left 0)\\n (tried 17)\\n (accepted 3)\\n (ratio 0.176470588235294)\\n (distribution\\n (((a b c a) 0.333333333333333)\\n ((a b c e a) 0.333333333333333)\\n ((a b d e a) 0.333333333333333))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/letnondeterministic\/temporal-graphs: pass (define (test\/letnondeterministic\/temporal-graphs _) (define graph-simple \u0060((a ((b (1 2 3)))) (b ((c (2 5)) (d ,ℕ))) (c ((a (2 3 4 5 6)) (e ,ℕ))) (d ((e (3 4 5)))) (e ((a ,ℕ))))) (define (V g) (map car g)) (⊦= \u0027(((a b) ((a 1) (b 2))) ((a b) ((a 1) (b 3))) ((a c) ((a 1) (b 2) (c 5))) ((a c) ((a 1) (b 3) (c 5))) ((a d) ((a 1) (b 2) (d 3))) ((a d) ((a 1) (b 2) (d 4))) ((a d) ((a 1) (b 2) (d 5))) ((a d) ((a 1) (b 2) (d 6))) ((a d) ((a 1) (b 2) (d 7))) ((a d) ((a 1) (b 3) (d 4))) ((a d) ((a 1) (b 3) (d 5))) ((a d) ((a 1) (b 3) (d 6))) ((a d) ((a 1) (b 3) (d 7))) ((a e) ((a 1) (b 2) (c 5) (e 6))) ((a e) ((a 1) (b 2) (c 5) (e 7))) ((a e) ((a 1) (b 2) (d 3) (e 4))) ((a e) ((a 1) (b 2) (d 3) (e 5))) ((a e) ((a 1) (b 2) (d 4) (e 5))) ((a e) ((a 1) (b 3) (c 5) (e 6))) ((a e) ((a 1) (b 3) (c 5) (e 7))) ((a e) ((a 1) (b 3) (d 4) (e 5))) ((b a) ((b 1) (c 2) (a 3))) ((b a) ((b 1) (c 2) (a 4))) ((b a) ((b 1) (c 2) (a 5))) ((b a) ((b 1) (c 2) (a 6))) ((b a) ((b 1) (c 2) (e 3) (a 4))) ((b a) ((b 1) (c 2) (e 3) (a 5))) ((b a) ((b 1) (c 2) (e 3) (a 6))) ((b a) ((b 1) (c 2) (e 3) (a 7))) ((b a) ((b 1) (c 2) (e 4) (a 5))) ((b a) ((b 1) (c 2) (e 4) (a 6))) ((b a) ((b 1) (c 2) (e 4) (a 7))) ((b a) ((b 1) (c 2) (e 5) (a 6))) ((b a) ((b 1) (c 2) (e 5) (a 7))) ((b a) ((b 1) (c 2) (e 6) (a 7))) ((b a) ((b 1) (c 5) (a 6))) ((b a) ((b 1) (c 5) (e 6) (a 7))) ((b a) ((b 1) (d 2) (e 3) (a 4))) ((b a) ((b 1) (d 2) (e 3) (a 5))) ((b a) ((b 1) (d 2) (e 3) (a 6))) ((b a) ((b 1) (d 2) (e 3) (a 7))) ((b a) ((b 1) (d 2) (e 4) (a 5))) ((b a) ((b 1) (d 2) (e 4) (a 6))) ((b a) ((b 1) (d 2) (e 4) (a 7))) ((b a) ((b 1) (d 2) (e 5) (a 6))) ((b a) ((b 1) (d 2) (e 5) (a 7))) ((b a) ((b 1) (d 3) (e 4) (a 5))) ((b a) ((b 1) (d 3) (e 4) (a 6))) ((b a) ((b 1) (d 3) (e 4) (a 7))) ((b a) ((b 1) (d 3) (e 5) (a 6))) ((b a) ((b 1) (d 3) (e 5) (a 7))) ((b a) ((b 1) (d 4) (e 5) (a 6))) ((b a) ((b 1) (d 4) (e 5) (a 7))) ((b c) ((b 1) (c 2))) ((b c) ((b 1) (c 5))) ((b d) ((b 1) (d 2))) ((b d) ((b 1) (d 3))) ((b d) ((b 1) (d 4))) ((b d) ((b 1) (d 5))) ((b d) ((b 1) (d 6))) ((b d) ((b 1) (d 7))) ((b e) ((b 1) (c 2) (e 3))) ((b e) ((b 1) (c 2) (e 4))) ((b e) ((b 1) (c 2) (e 5))) ((b e) ((b 1) (c 2) (e 6))) ((b e) ((b 1) (c 2) (e 7))) ((b e) ((b 1) (c 5) (e 6))) ((b e) ((b 1) (c 5) (e 7))) ((b e) ((b 1) (d 2) (e 3))) ((b e) ((b 1) (d 2) (e 4))) ((b e) ((b 1) (d 2) (e 5))) ((b e) ((b 1) (d 3) (e 4))) ((b e) ((b 1) (d 3) (e 5))) ((b e) ((b 1) (d 4) (e 5))) ((c a) ((c 1) (a 2))) ((c a) ((c 1) (a 3))) ((c a) ((c 1) (a 4))) ((c a) ((c 1) (a 5))) ((c a) ((c 1) (a 6))) ((c a) ((c 1) (e 2) (a 3))) ((c a) ((c 1) (e 2) (a 4))) ((c a) ((c 1) (e 2) (a 5))) ((c a) ((c 1) (e 2) (a 6))) ((c a) ((c 1) (e 2) (a 7))) ((c a) ((c 1) (e 3) (a 4))) ((c a) ((c 1) (e 3) (a 5))) ((c a) ((c 1) (e 3) (a 6))) ((c a) ((c 1) (e 3) (a 7))) ((c a) ((c 1) (e 4) (a 5))) ((c a) ((c 1) (e 4) (a 6))) ((c a) ((c 1) (e 4) (a 7))) ((c a) ((c 1) (e 5) (a 6))) ((c a) ((c 1) (e 5) (a 7))) ((c a) ((c 1) (e 6) (a 7))) ((c b) ((c 1) (a 2) (b 3))) ((c d) ((c 1) (a 2) (b 3) (d 4))) ((c d) ((c 1) (a 2) (b 3) (d 5))) ((c d) ((c 1) (a 2) (b 3) (d 6))) ((c d) ((c 1) (a 2) (b 3) (d 7))) ((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) ((c e) ((c 1) (e 2))) ((c e) ((c 1) (e 3))) ((c e) ((c 1) (e 4))) ((c e) ((c 1) (e 5))) ((c e) ((c 1) (e 6))) ((c e) ((c 1) (e 7))) ((d a) ((d 1) (e 3) (a 4))) ((d a) ((d 1) (e 3) (a 5))) ((d a) ((d 1) (e 3) (a 6))) ((d a) ((d 1) (e 3) (a 7))) ((d a) ((d 1) (e 4) (a 5))) ((d a) ((d 1) (e 4) (a 6))) ((d a) ((d 1) (e 4) (a 7))) ((d a) ((d 1) (e 5) (a 6))) ((d a) ((d 1) (e 5) (a 7))) ((d e) ((d 1) (e 3))) ((d e) ((d 1) (e 4))) ((d e) ((d 1) (e 5))) ((e a) ((e 1) (a 2))) ((e a) ((e 1) (a 3))) ((e a) ((e 1) (a 4))) ((e a) ((e 1) (a 5))) ((e a) ((e 1) (a 6))) ((e a) ((e 1) (a 7))) ((e b) ((e 1) (a 2) (b 3))) ((e c) ((e 1) (a 2) (b 3) (c 5))) ((e d) ((e 1) (a 2) (b 3) (d 4))) ((e d) ((e 1) (a 2) (b 3) (d 5))) ((e d) ((e 1) (a 2) (b 3) (d 6))) ((e d) ((e 1) (a 2) (b 3) (d 7)))) (letnondeterministic -1 (? ¿ ⊦ • !) (define (path p node1 node2 seen maxlen maxt) (let* ((lastpair (car p)) (l (caddr lastpair)) (_ (⊦ (\u0026lt; l (add1 maxlen)))) (pair (? (letassoc (node1 graph-simple) (else \u0027())))) (n (car pair)) (_ (⊦ (not (member? n seen)))) (t₁ (? (cadr pair) (λ (t) (\u0026lt; t maxt)))) (t₀ (cadr lastpair)) (_ (⊦ (\u0026gt; t₁ t₀))) (newp (cons (list n t₁ (add1 l)) p))) (cond ((eq? n node2) (reverse newp)) (else (path newp n node2 (cons node1 seen) maxlen maxt))))) (let* ((vertices (V graph-simple)) (source (? vertices)) (destination (? vertices)) (p (path (list (list source 1 1)) source destination \u0027() 15 7))) (list (list source destination) (map (λ (triple) (list (car triple) (cadr triple))) p)))))) ((eta 0.004) (memory #(12582912 2459528 1048576)) (stdout \u0026quot;((left 0)\\n (tried 4013)\\n (accepted 130)\\n (ratio 0.0323947171692001)\\n (distribution\\n ((((a b) ((a 1) (b 2))) 0.00769230769230769)\\n (((a b) ((a 1) (b 3))) 0.00769230769230769)\\n (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\\n (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\\n (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\\n (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\\n (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\\n (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\\n (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\\n (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\\n (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\\n (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\\n (((b c) ((b 1) (c 2))) 0.00769230769230769)\\n (((b c) ((b 1) (c 5))) 0.00769230769230769)\\n (((b d) ((b 1) (d 2))) 0.00769230769230769)\\n (((b d) ((b 1) (d 3))) 0.00769230769230769)\\n (((b d) ((b 1) (d 4))) 0.00769230769230769)\\n (((b d) ((b 1) (d 5))) 0.00769230769230769)\\n (((b d) ((b 1) (d 6))) 0.00769230769230769)\\n (((b d) ((b 1) (d 7))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\\n (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\\n (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\\n (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\\n (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\\n (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\\n (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\\n (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\\n (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\\n (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\\n (((c a) ((c 1) (a 2))) 0.00769230769230769)\\n (((c a) ((c 1) (a 3))) 0.00769230769230769)\\n (((c a) ((c 1) (a 4))) 0.00769230769230769)\\n (((c a) ((c 1) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\\n (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\\n (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\\n (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\\n (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\\n (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\\n (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\\n (((c e) ((c 1) (e 2))) 0.00769230769230769)\\n (((c e) ((c 1) (e 3))) 0.00769230769230769)\\n (((c e) ((c 1) (e 4))) 0.00769230769230769)\\n (((c e) ((c 1) (e 5))) 0.00769230769230769)\\n (((c e) ((c 1) (e 6))) 0.00769230769230769)\\n (((c e) ((c 1) (e 7))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\\n (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\\n (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\\n (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\\n (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\\n (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\\n (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\\n (((d e) ((d 1) (e 3))) 0.00769230769230769)\\n (((d e) ((d 1) (e 4))) 0.00769230769230769)\\n (((d e) ((d 1) (e 5))) 0.00769230769230769)\\n (((e a) ((e 1) (a 2))) 0.00769230769230769)\\n (((e a) ((e 1) (a 3))) 0.00769230769230769)\\n (((e a) ((e 1) (a 4))) 0.00769230769230769)\\n (((e a) ((e 1) (a 5))) 0.00769230769230769)\\n (((e a) ((e 1) (a 6))) 0.00769230769230769)\\n (((e a) ((e 1) (a 7))) 0.00769230769230769)\\n (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\\n (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\\n (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\\n\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":3729,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-letnondeterministic-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -530,7 +530,7 @@ test/letnondeterministic/choose-null?: pass
 
 
 ((eta 0.004)
- (memory #(12582912 2390000 1048576))
+ (memory #(12582912 2376512 1048576))
  (stdout "((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\n")
  (stderr ""))
 
@@ -541,9 +541,9 @@ test/letnondeterministic/choose: pass
 
 
 ((eta 0.003)
- (memory #(12582912 2396456 1048576))
+ (memory #(12582912 2382968 1048576))
  (stdout
-   "((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\n")
+   "((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose§: pass
@@ -556,7 +556,7 @@ test/letnondeterministic/choose§: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2391848 1048576))
+ (memory #(12582912 2383632 1048576))
  (stdout
    "((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\n")
  (stderr ""))
@@ -571,7 +571,7 @@ test/letnondeterministic/choose-rec: pass
             (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1)))))))
 
 
-((eta 0.001) (memory #(12582912 2391432 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2379280 1048576)) (stdout "") (stderr ""))
 
 test/letnondeterministic/choose+nested: pass
 
@@ -581,9 +581,9 @@ test/letnondeterministic/choose+nested: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2397544 1048576))
+ (memory #(12582912 2380616 1048576))
  (stdout
-   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n")
+   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((1 0.333333333333333)\n    (3 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose+nested+¿: pass
@@ -594,9 +594,9 @@ test/letnondeterministic/choose+nested+¿: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2403896 1048576))
+ (memory #(12582912 2386896 1048576))
  (stdout
-   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n")
+   "((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose+double: pass
@@ -607,9 +607,9 @@ test/letnondeterministic/choose+double: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2390472 1048576))
+ (memory #(12582912 2389816 1048576))
  (stdout
-   "((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((7 0.333333333333333)\n    (6 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n")
+   "((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((6 0.333333333333333)\n    (7 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/choose+fair+fibs: pass
@@ -645,7 +645,7 @@ test/letnondeterministic/choose+fair+fibs: pass
                (map§ (lambda (v) (list &#39;c v)) (fibs§ 0 1)))))))
 
 
-((eta 0.001) (memory #(12582912 2398696 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2392400 1048576)) (stdout "") (stderr ""))
 
 test/letnondeterministic/choose+fair: pass
 
@@ -657,9 +657,9 @@ test/letnondeterministic/choose+fair: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2400344 1048576))
+ (memory #(12582912 2398552 1048576))
  (stdout
-   "((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((a 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n")
+   "((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n")
  (stderr ""))
 
 test/letnondeterministic/odd: pass
@@ -672,7 +672,7 @@ test/letnondeterministic/odd: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2393840 1048576))
+ (memory #(12582912 2404800 1048576))
  (stdout
    "((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((3 0.5) (1 0.5))))\n")
  (stderr ""))
@@ -704,10 +704,10 @@ test/letnondeterministic/parlor: pass
           (parlor 7))))
 
 
-((eta 0.001)
- (memory #(12582912 2424128 1048576))
+((eta 0.0)
+ (memory #(12582912 2387504 1048576))
  (stdout
-   "((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667))))\n")
+   "((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667))))\n")
  (stderr ""))
 
 test/letnondeterministic/parlor+sorted: pass
@@ -725,10 +725,10 @@ test/letnondeterministic/parlor+sorted: pass
           (parlor 7))))
 
 
-((eta 0.0)
- (memory #(12582912 2389960 1048576))
+((eta 0.001)
+ (memory #(12582912 2386384 1048576))
  (stdout
-   "((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 2 4) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 3 3) 0.25))))\n")
+   "((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 1 5) 0.25) ((1 3 3) 0.25) ((1 2 4) 0.25) ((2 2 3) 0.25))))\n")
  (stderr ""))
 
 test/letnondeterministic/coin: pass
@@ -762,10 +762,10 @@ test/letnondeterministic/coin: pass
             (reverse attempts)))))
 
 
-((eta 0.001)
- (memory #(12582912 2398832 1048576))
+((eta 0.0)
+ (memory #(12582912 2392880 1048576))
  (stdout
-   "((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333))))\n")
+   "((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333))))\n")
  (stderr ""))
 
 test/letnondeterministic/coin+cut: pass
@@ -791,10 +791,10 @@ test/letnondeterministic/coin+cut: pass
             (reverse attempts)))))
 
 
-((eta 0.0)
- (memory #(12582912 2393632 1048576))
+((eta 0.001)
+ (memory #(12582912 2397000 1048576))
  (stdout
-   "((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n")
+   "((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n")
  (stderr ""))
 
 test/letnondeterministic/graph+cycles/bfs: pass
@@ -817,7 +817,7 @@ test/letnondeterministic/graph+cycles/bfs: pass
 
 
 ((eta 0.0)
- (memory #(12582912 2400632 1048576))
+ (memory #(12582912 2392464 1048576))
  (stdout
    "((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n   (((a b c a) 0.333333333333333)\n    ((a b c e a) 0.333333333333333)\n    ((a b d e a) 0.333333333333333))))\n")
  (stderr ""))
@@ -991,8 +991,8 @@ test/letnondeterministic/temporal-graphs: pass
                   (map (λ (triple) (list (car triple) (cadr triple))) p))))))
 
 
-((eta 0.003)
- (memory #(12582912 2462464 1048576))
+((eta 0.004)
+ (memory #(12582912 2459528 1048576))
  (stdout
    "((left 0)\n (tried 4013)\n (accepted 130)\n (ratio 0.0323947171692001)\n (distribution\n   ((((a b) ((a 1) (b 2))) 0.00769230769230769)\n    (((a b) ((a 1) (b 3))) 0.00769230769230769)\n    (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\n    (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\n    (((b c) ((b 1) (c 2))) 0.00769230769230769)\n    (((b c) ((b 1) (c 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 2))) 0.00769230769230769)\n    (((b d) ((b 1) (d 3))) 0.00769230769230769)\n    (((b d) ((b 1) (d 4))) 0.00769230769230769)\n    (((b d) ((b 1) (d 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 6))) 0.00769230769230769)\n    (((b d) ((b 1) (d 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 2))) 0.00769230769230769)\n    (((c a) ((c 1) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\n    (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\n    (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 2))) 0.00769230769230769)\n    (((c e) ((c 1) (e 3))) 0.00769230769230769)\n    (((c e) ((c 1) (e 4))) 0.00769230769230769)\n    (((c e) ((c 1) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 6))) 0.00769230769230769)\n    (((c e) ((c 1) (e 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\n    (((d e) ((d 1) (e 3))) 0.00769230769230769)\n    (((d e) ((d 1) (e 4))) 0.00769230769230769)\n    (((d e) ((d 1) (e 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 2))) 0.00769230769230769)\n    (((e a) ((e 1) (a 3))) 0.00769230769230769)\n    (((e a) ((e 1) (a 4))) 0.00769230769230769)\n    (((e a) ((e 1) (a 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 6))) 0.00769230769230769)\n    (((e a) ((e 1) (a 7))) 0.00769230769230769)\n    (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\n    (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\n")
  (stderr ""))
@@ -1041,15 +1041,15 @@ test/letnondeterministic/choose-null?: pass
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section684><header><h1>Tests</h1></header></section><h2><code>test/letnondeterministic/choose-null?</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose-null? _)
   (⊦= '() (letnondeterministic (? ¿ ⊦ • !) (? '()))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004)
- (memory #(12582912 2390000 1048576))
+ (memory #(12582912 2376512 1048576))
  (stdout &quot;((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose _)
   (⊦= '(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? '(1 2 3)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003)
- (memory #(12582912 2396456 1048576))
+ (memory #(12582912 2382968 1048576))
  (stdout
-   &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose§</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose§ _)
   (⊦= '(1 2 3)
@@ -1057,7 +1057,7 @@ test/letnondeterministic/choose-null?: pass
           (? ¿ ⊦ • !)
           (? (cons§ 1 (cons§ 2 (cons§ 3 '())))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2391848 1048576))
+ (memory #(12582912 2383632 1048576))
  (stdout
    &quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n   ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
@@ -1067,30 +1067,30 @@ test/letnondeterministic/choose-null?: pass
           (stop§
             (λ (v) (&gt; v 3000))
             (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2391432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2379280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose+nested</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+nested _)
   (⊦= '(1 4 3 1 5 3)
         (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(? '(4 5)) 3)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2397544 1048576))
+ (memory #(12582912 2380616 1048576))
  (stdout
-   &quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n&quot;)
+   &quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((1 0.333333333333333)\n    (3 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose+nested+¿</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+nested+¿ _)
   (⊦= '(1 4 3 1 5 3)
         (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(¿ '(4 5)) 3)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2403896 1048576))
+ (memory #(12582912 2386896 1048576))
  (stdout
-   &quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (4 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
+   &quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n   ((3 0.333333333333333)\n    (1 0.333333333333333)\n    (5 0.166666666666667)\n    (4 0.166666666666667))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose+double</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+double _)
   (⊦= '(5 6 6 7 7 8)
         (letnondeterministic (? ¿ ⊦ • !) (+ (? '(1 2 3)) (? '(4 5))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2390472 1048576))
+ (memory #(12582912 2389816 1048576))
  (stdout
-   &quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((7 0.333333333333333)\n    (6 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
+   &quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n   ((6 0.333333333333333)\n    (7 0.333333333333333)\n    (8 0.166666666666667)\n    (5 0.166666666666667))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose+fair+fibs</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+fair+fibs _)
   (⊦= '((a 0)
@@ -1121,16 +1121,16 @@ test/letnondeterministic/choose-null?: pass
                (map§ (lambda (v) (list 'a v)) (fibs§ 0 1))
                (map§ (lambda (v) (list 'b v)) (fibs§ 0 1))
                (map§ (lambda (v) (list 'c v)) (fibs§ 0 1)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2398696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2392400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/choose+fair</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/choose+fair _)
   (⊦= '((a 1) (b 1) (a 2) (b 2) (a 3))
         (letnondeterministic
           (? ¿ ⊦ • !)
           (? (append§/interleaved '((a 1) (a 2) (a 3)) '((b 1) (b 2)))))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2400344 1048576))
+ (memory #(12582912 2398552 1048576))
  (stdout
-   &quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((a 1) 0.2) ((b 2) 0.2) ((a 3) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n&quot;)
+   &quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/odd</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/odd _)
   (⊦= '(1 3)
@@ -1138,7 +1138,7 @@ test/letnondeterministic/choose-null?: pass
           (? ¿ ⊦ • !)
           (let1 (v (? '(1 2 3))) (⊦ (odd? v)) v))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2393840 1048576))
+ (memory #(12582912 2404800 1048576))
  (stdout
    &quot;((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((3 0.5) (1 0.5))))\n&quot;)
  (stderr &quot;&quot;))
@@ -1165,10 +1165,10 @@ test/letnondeterministic/choose-null?: pass
           (define (parlor sum)
             (let ((nums (two-numbers))) (⊦ (eq? (apply + nums) sum)) nums))
           (parlor 7))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
- (memory #(12582912 2424128 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
+ (memory #(12582912 2387504 1048576))
  (stdout
-   &quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667))))\n&quot;)
+   &quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n   (((1 1 5) 0.0666666666666667)\n    ((1 5 1) 0.0666666666666667)\n    ((5 1 1) 0.0666666666666667)\n    ((1 2 4) 0.0666666666666667)\n    ((1 4 2) 0.0666666666666667)\n    ((2 1 4) 0.0666666666666667)\n    ((2 4 1) 0.0666666666666667)\n    ((4 1 2) 0.0666666666666667)\n    ((4 2 1) 0.0666666666666667)\n    ((1 3 3) 0.0666666666666667)\n    ((3 1 3) 0.0666666666666667)\n    ((3 3 1) 0.0666666666666667)\n    ((2 2 3) 0.0666666666666667)\n    ((2 3 2) 0.0666666666666667)\n    ((3 2 2) 0.0666666666666667))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/parlor+sorted</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/parlor+sorted _)
   (⊦= '((1 1 5) (1 2 4) (1 3 3) (2 2 3))
@@ -1181,10 +1181,10 @@ test/letnondeterministic/choose-null?: pass
               (⊦ (and (eq? (apply + nums) sum) (sorted? nums &lt;)))
               nums))
           (parlor 7))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2389960 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
+ (memory #(12582912 2386384 1048576))
  (stdout
-   &quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 2 4) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 3 3) 0.25))))\n&quot;)
+   &quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 1 5) 0.25) ((1 3 3) 0.25) ((1 2 4) 0.25) ((2 2 3) 0.25))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/coin</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/coin _)
   (⊦= '(((la 1 1) (la 1 2))
@@ -1213,10 +1213,10 @@ test/letnondeterministic/choose-null?: pass
             (push! triple attempts)
             (⊦ (coin? triple))
             (reverse attempts)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
- (memory #(12582912 2398832 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
+ (memory #(12582912 2392880 1048576))
  (stdout
-   &quot;((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n    (((la 1 1)\n      (la 1 2)\n      (la 2 1)\n      (la 2 2)\n      (ny 1 1)\n      (ny 1 2)\n      (ny 2 1)\n      (ny 2 2)\n      (bos 1 1)\n      (bos 1 2)\n      (bos 2 1)\n      (bos 2 2))\n     0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/coin+cut</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/coin+cut _)
   (⊦= '(((la 1 1) (la 1 2))
@@ -1237,10 +1237,10 @@ test/letnondeterministic/choose-null?: pass
             (⊦ (coin? triple))
             (! flag)
             (reverse attempts)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2393632 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
+ (memory #(12582912 2397000 1048576))
  (stdout
-   &quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n&quot;)
+   &quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n   ((((la 1 1) (la 1 2)) 0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n     0.333333333333333)\n    (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letnondeterministic/graph+cycles/bfs</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letnondeterministic/graph+cycles/bfs _)
   (⊦= '((a b c a) (a b c e a) (a b d e a))
@@ -1258,7 +1258,7 @@ test/letnondeterministic/choose-null?: pass
                     (cons n (path n node2 (cons node1 seen))))))
           (let* ((source 'a) (p (path source 'a '()))) (cons source p)))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(12582912 2400632 1048576))
+ (memory #(12582912 2392464 1048576))
  (stdout
    &quot;((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n   (((a b c a) 0.333333333333333)\n    ((a b c e a) 0.333333333333333)\n    ((a b d e a) 0.333333333333333))))\n&quot;)
  (stderr &quot;&quot;))
@@ -1427,8 +1427,8 @@ test/letnondeterministic/choose-null?: pass
                           7)))
             (list (list source destination)
                   (map (λ (triple) (list (car triple) (cadr triple))) p))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003)
- (memory #(12582912 2462464 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004)
+ (memory #(12582912 2459528 1048576))
  (stdout
    &quot;((left 0)\n (tried 4013)\n (accepted 130)\n (ratio 0.0323947171692001)\n (distribution\n   ((((a b) ((a 1) (b 2))) 0.00769230769230769)\n    (((a b) ((a 1) (b 3))) 0.00769230769230769)\n    (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\n    (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\n    (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\n    (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\n    (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\n    (((b c) ((b 1) (c 2))) 0.00769230769230769)\n    (((b c) ((b 1) (c 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 2))) 0.00769230769230769)\n    (((b d) ((b 1) (d 3))) 0.00769230769230769)\n    (((b d) ((b 1) (d 4))) 0.00769230769230769)\n    (((b d) ((b 1) (d 5))) 0.00769230769230769)\n    (((b d) ((b 1) (d 6))) 0.00769230769230769)\n    (((b d) ((b 1) (d 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\n    (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\n    (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\n    (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 2))) 0.00769230769230769)\n    (((c a) ((c 1) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\n    (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\n    (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\n    (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\n    (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 2))) 0.00769230769230769)\n    (((c e) ((c 1) (e 3))) 0.00769230769230769)\n    (((c e) ((c 1) (e 4))) 0.00769230769230769)\n    (((c e) ((c 1) (e 5))) 0.00769230769230769)\n    (((c e) ((c 1) (e 6))) 0.00769230769230769)\n    (((c e) ((c 1) (e 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\n    (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\n    (((d e) ((d 1) (e 3))) 0.00769230769230769)\n    (((d e) ((d 1) (e 4))) 0.00769230769230769)\n    (((d e) ((d 1) (e 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 2))) 0.00769230769230769)\n    (((e a) ((e 1) (a 3))) 0.00769230769230769)\n    (((e a) ((e 1) (a 4))) 0.00769230769230769)\n    (((e a) ((e 1) (a 5))) 0.00769230769230769)\n    (((e a) ((e 1) (a 6))) 0.00769230769230769)\n    (((e a) ((e 1) (a 7))) 0.00769230769230769)\n    (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\n    (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n    (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\n&quot;)
  (stderr &quot;&quot;))
