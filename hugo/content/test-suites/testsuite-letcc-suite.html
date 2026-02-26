@@ -68,7 +68,7 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcc/multiarg _) (⊦= 'a (letcc k (k 'a))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2037208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2037264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/letcc*</code>: <span class="w3-text-green">pass</span></h2>
 <p>The frame in <cite>[<a href="#cite660">7</a>]</cite> is of inspiration of the <code class="w3-codespan">letcc*</code> macro.</p>
@@ -95,7 +95,7 @@
         (letcc* ⤶ ((v (cons 3 (⤶ '(2))))) (cons 1 (⤶ (cons 4 v))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2039320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2039376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/trycc</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -105,7 +105,7 @@
   (⊦= '(3) (trycc (✗ (+ 1 (✗)) (+ 2 (✗))) (else (cons 3 '())))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2040360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2040416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/letcc/dfs</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -206,7 +206,7 @@
           (dft2 ((dft-comb t2) t1)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2052304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2052344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">

@@ -24,9 +24,9 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
   (⊦= 1 a)
   (⊦= 2 b)
   (⊦= 3 c))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2378160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2378192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/let1</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letcar&cdr</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcar&amp;cdr _)
   (letcar&amp;cdr
     (((a d) (cons 1 '())) ((aa dd) (cons 2 3)))
@@ -34,12 +34,12 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
     (⊦= d '())
     (⊦= aa 2)
     (⊦= dd 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/λ</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/λ _)
   (⊦= 5 ((λ (x) (+ x 2)) 3))
   (⊦= 5 ((λ (x) ((λ (y) (+ x y)) 2)) 3))
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letmaptensor</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmaptensor _)
   (⊦= '((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f)))
           (((3 a #f) (3 a #t)) ((3 2 #f) (3 2 #f)))
@@ -47,7 +47,7 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
         (letmaptensor
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2380904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/letmap</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letmap _)
   (⊦= '((2 a #t)
           (2 a #t)
@@ -64,7 +64,7 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
         (letmap
           ((x (list 1 2 3)) (y `(a ,x)) (z (list (odd? x) (symbol? y))))
           (list (add1 x) y z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2376328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/procc/λ-memo</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/procc/λ-memo _)
   (define count 0)
   (define fib
@@ -84,11 +84,11 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
              (let1 (mrow (mi sub1) (mi n))
                    (+ (fib-memo m) (fib-memo (sub1 m))))))))
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2382672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2381128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/load/string</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/load/string _) (⊦= '(+ 3 4) (load/string &quot;(+ 3 4)&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2383328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2381784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/version</code>: <span class=w3-text-green>pass</span></h2><p>The current version of <code class=w3-codespan>simdjson</code> is <code class=w3-codespan>4.2.1</code>.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/version _) (⊦= &quot;4.2.1&quot; (simdjson-get-version)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2384024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2382480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/load-twitter</code>: <span class=w3-text-green>pass</span></h2><p>Loaded a testbed json file <code class=w3-codespan>twitter.json</code><cite>[<a href=#cite318>1</a>]</cite> with the <code class=w3-codespan>simdjson</code><cite>[<a href=#cite319>2</a>]</cite><cite>[<a href=#cite320>3</a>]</cite> library. The file contains a twitter search result with 100 tweets.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter _)
   (define twitter-json (simdjson-load/ondemand &quot;twitter.json&quot;))
   (⊦= 2 (length twitter-json))
@@ -106,24 +106,24 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
             (since_id_str &quot;0&quot;)))
         (cadr twitter-json))
   (⊦= 100 (vector-length (cadar twitter-json))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(25165824 3615472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(25165824 3615464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/load-twitter/ondemand</code>: <span class=w3-text-green>pass</span></h2><p>Here we show the <i>on demand</i> parsing mode of <code class=w3-codespan>simdjson</code><cite>[<a href=#cite321>4</a>]</cite>, which yields equivalent Scheme objects with respect to the DOM parsing.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter/ondemand _)
   (⊦= (simdjson-load &quot;twitter.json&quot;)
         (simdjson-load/ondemand &quot;twitter.json&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(12582912 4844824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.013) (memory #(12582912 4844872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/->string</code>: <span class=w3-text-green>pass</span></h2><p>Test for simdjson-load, which loads and parses a JSON file into a Scheme representation.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/-&gt;string _)
   (⊦= test/simdjson/-&gt;string/expected
         (-&gt;string/json (simdjson-load &quot;twitter.json&quot;))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.019) (memory #(12582912 4141416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.018) (memory #(12582912 4141424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/simdjson/parse</code>: <span class=w3-text-green>pass</span></h2><p>Test for simdjson-parse/ondemand, which parses a JSON string into a Scheme representation on demand.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/simdjson/parse _)
   (⊦= #(((a 1) (b #(2 5)) (c #t)) ((c 3) (d 4)))
         (simdjson-parse/ondemand
           &quot;[{\&quot;a\&quot;:1,\&quot;b\&quot;:[2,5],\&quot;c\&quot;:true},{\&quot;c\&quot;:3,\&quot;d\&quot;:4}]&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/libc/fma</code>: <span class=w3-text-green>pass</span></h2><p>Taken from <cite>[<a href=#cite322>5</a>]</cite></p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/libc/fma _)
   (⊦ fp= 0.0 (+ (* 0.1 10.0) -1.0))
   (⊦ fp= (fp*+ 0.1 10.0 -1.0) (libc-fma 0.1 10.0 -1.0)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4143712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4143720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/documentation</code>: <span class=w3-text-green>pass</span></h2><p>An initial attempt to support our own documentation framework. The following tests check that documentation can be set and retrieved for functions.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/documentation _)
   (set! (documentation +) &quot;Returns the sum of its arguments.&quot;)
   (define-documented
@@ -137,7 +137,7 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
            (comment (p &quot; some comment here&quot;))
            (comment &quot;some other comment here.&quot;)))
         (documentation a)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4145352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4145360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/documentation/documentation</code>: <span class=w3-text-green>pass</span></h2><p>Test for documentation of the documentation function itself.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/documentation/documentation _)
   (documentation!
     documentation
@@ -148,7 +148,7 @@ The MIT Press,</blockquote><hr><!doctype html><html xmlns=http://www.w3.org/1999
            (comment
              &quot;Test for documentation of the documentation function itself.&quot;)))
         (documentation documentation)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4146320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4146328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite318>[1] <a href=https://raw.githubusercontent.com/simdjson/simdjson/refs/heads/master/jsonexamples/twitter.json><code class=w3-codespan>twitter.json</code> : a twitter search result JSON file</a></span><br><span id=cite319>[2] <a href=https://github.com/simdjson/simdjson><code class=w3-codespan>simdjson</code> : parsing gigabytes of JSON per second</a></span><br><span id=cite320>[3] <a href=https://simdjson.github.io/simdjson/index.html><code class=w3-codespan>simdjson</code> : user manual and documentation</a></span><br><span id=cite321>[4] <a href=https://simdjson.github.io/simdjson/md_doc_basics.html#documents-are-iterators><code class=w3-codespan>simdjson</code> : Documents are iterators</a></span><br><span id=cite322>[5] <a href=https://en.cppreference.com/w/c/numeric/math/fma.html>fma, fmaf, fmal</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/1994-02-01-filinski-representing-monads/ data-toggle=tooltip data-placement=top title="Representing monads">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/1996-01-31-the-seasoned-schemer/ data-toggle=tooltip data-placement=top title="The Seasoned Schemer">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

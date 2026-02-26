@@ -82,58 +82,58 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/iota _) (⊦= r (timsort (iota n (sub1 n) -1))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.267) (memory #(100663296 49808664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.257) (memory #(100663296 49808664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/iota/sort</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/iota/sort _) (⊦= r (sort (iota n (sub1 n) -1) &lt;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.342) (memory #(201326592 49809464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.327) (memory #(201326592 49809448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/timtros/iota</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timtros/iota _) (⊦= (iota n (sub1 n) -1) (timtros r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.231) (memory #(201326592 73809760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.227) (memory #(201326592 73809744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/tros/iota</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tros/iota _) (⊦= (iota n (sub1 n) -1) (reverse (sort r &lt;))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.275) (memory #(201326592 73810600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.275) (memory #(201326592 73810616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/already-sorted</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted _) (⊦= r (timsort r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.207) (memory #(201326592 49811008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.202) (memory #(201326592 49810992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/already-sorted/sort</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted/sort _) (⊦= r (sort r &lt;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.246) (memory #(201326592 49811776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.244) (memory #(201326592 49811744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/already-sorted/primitive</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted/primitive _) (⊦= r (timsort/primitive r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.112) (memory #(201326592 49812224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.108) (memory #(201326592 49812288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/primitive</code>: <span class="w3-text-red">fail</span></h2>
+<h2><code>test/primitive</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/primitive _)
   (⊦= (sort '(5 4 3 2 1) &lt;) (timsort/primitive '(5 4 3 2 1)))
   (⊦= '(hello world) (timsort/primitive '(world hello))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 49813344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 49813184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">

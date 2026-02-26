@@ -7,7 +7,8 @@ tags = ['pattern matching']
 categories = ['scheme']
 +++
 
-This post describes and defines the `match/guarded` pattern matcher, which is a generalization of 
-[Oleg Kiselyov’s `pmatch`](https://okmij.org/ftp/Scheme/macros.html#match-case-simple).
+This post defines and tests the `match/non-overlapping` pattern matcher, which is a generalization of 
+[Oleg Kiselyov’s `pmatch`](https://okmij.org/ftp/Scheme/macros.html#match-case-simple) one and used in
+[the paper]({{% relref "post/2026-02-04-minikanren-live-and-untagged.md" %}}) about *miniKanren*.
 
 {{< include "test-suites/testsuite-dmatch-suite.html" >}}
