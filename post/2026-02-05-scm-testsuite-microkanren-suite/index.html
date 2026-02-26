@@ -31,7 +31,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
     (⊦= 5 (µkanren-state-find 5 s2))
     (⊦= 'a (µkanren-state-find v1 s2))
     (⊦= 'a (µkanren-state-find v2 s2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2287560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2287560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/=°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(#t) (°-&gt;list/ground (=° 'z 'z))))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2288304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/sharing</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/sharing _)
@@ -90,7 +90,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
              '(_0 _1 _2 _3 _4 _5 _6 _7)
              '(_0 _1 _2 _3 _4 _5 _6 _7 _8))
        (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2291464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2291496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/project°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/project° _)
   (⊦= '(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300)
         (°-&gt;list/ground
@@ -100,7 +100,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
               (d e s)
               (empsalary° d e s)
               (project° ((s* s)) (=° r (+ s* 500))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2286696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2286664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/groupby°/empty</code>: <span class=w3-text-green>pass</span></h2><p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href=#cite1147>1</a>]</cite>:<pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
 -----------+-------+--------+-----------------------
  develop   |    11 |   5200 | 5020.0000000000000000
@@ -128,7 +128,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
                 (empsalary° d e s)
                 =&gt;
                 (=° r s*)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2306168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2306224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/groupby°/one-column</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/groupby°/one-column _)
   (⊦= '((personnel 7400) (sales 14600) (develop 25100))
         (sort (°-&gt;list/ground
@@ -145,7 +145,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
                       =&gt;
                       (=° r `(,d ,s*))))))
               (λ (a b) (&lt; (cadr a) (cadr b))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2289832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2289760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/set°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/set° _)
   (⊦= '((personnel 2) (sales 3) (develop 5))
         (sort (°-&gt;list/ground
@@ -161,7 +161,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
                            =&gt;
                            (=° r `(,d* ,c))))))
               (λ (a b) (&lt; (cadr a) (cadr b))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2289896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2289936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/enumerate°</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/enumerate° _)
   (⊦= '(((0 (sales))
            (1 (sales))
@@ -234,7 +234,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
                 (empsalary° d e s)
                 =&gt;
                 (=° r `(,d ,e ,s ,s*))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2292648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2292616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/=°/structure</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure _)
   (define-record person name age)
   (define p (make-person 'alice 30))
@@ -244,7 +244,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
   (⊦= `((record ,(make-person '_0 30)))
         (°-&gt;list/ground
           (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2292152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2292184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test/=°/structure/vector</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure/vector _)
   (define-record person name age)
   (define p (make-person 'alice 30))
@@ -252,7 +252,7 @@ The MIT Press,</blockquote><p><strong>Abstract:</strong> <i>A new edition of a b
   (⊦= #(person alice 30) (record-&gt;vector p))
   (⊦= '((person alice 30))
         (°-&gt;list/ground (fresh° r (t n a) (=° `#(,t ,n ,a) p)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2292624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2292656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1147>[1] <a href=https://www.postgresql.org/docs/current/tutorial-window.html>PostgreSQL Window Functions</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2018-01-21-algebraic-gf-avoiding-patterns/ data-toggle=tooltip data-placement=top title="Algebraic Generating Functions for Languages Avoiding Riordan Patterns">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-01-09-nembrini-il-grido/ data-toggle=tooltip data-placement=top title="Il Grido">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

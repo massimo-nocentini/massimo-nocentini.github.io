@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section5869">
+<section id="section21572">
 <header>
 <h1>Implementation</h1></header></section>
 <div>
@@ -50,17 +50,17 @@
     (syntax-rules
       (⇒)
       ((dmatch-aux v) '())
-      ((dmatch-aux v (pat (g ⇒ e ...)) cls ...)
+      ((dmatch-aux v (pat g ⇒ e ...) cls ...)
        (let1 (fk (dmatch-aux v cls ...))
              (dmatch-ppat
                v
                pat
                (if g
-                 (cons (make-dmatch-pkg '(pat (g ⇒ e ...)) (τ e ...)) fk)
+                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) fk)
                  fk)
                fk)))
       ((dmatch-aux v (pat e ...) cls ...)
-       (dmatch-aux v (pat (#t ⇒ e ...)) cls ...))))
+       (dmatch-aux v (pat #t ⇒ e ...) cls ...))))
   (define-syntax
     dmatch-ppat
     (syntax-rules
@@ -108,7 +108,7 @@
                         (value ,v)
                         (ambiguities ,(map dmatch-pkg-clause pkgs))))))))))
 </code></pre></div>
-<section id="section5870">
+<section id="section21573">
 <header>
 <h1>Tests</h1></header></section>
 <h2><code>test/base-non-overlapping</code>: <span class="w3-text-green">pass</span></h2>
@@ -133,7 +133,7 @@
           ((hello ,r ,e) r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2937240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 6081472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/h-non-overlapping</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -141,12 +141,12 @@
   (define (h x y)
     (match/non-overlapping
       (cons x y)
-      ((,a unquote b) ((and (number? a) (number? b)) ⇒ (* a b)))
-      ((,a ,b ,c) ((and (number? a) (number? b) (number? c)) ⇒ (+ a b c)))))
+      ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b))
+      ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (+ a b c))))
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2938184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 6082560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/h-overlapping</code>: <span class="w3-text-green">pass</span></h2>
 <div>
@@ -154,11 +154,58 @@
   (define (w x y)
     (match/non-overlapping
       (cons x y)
-      ((,a unquote b) ((and (number? a) (number? b)) ⇒ (* a b)))
+      ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b))
       ((,a unquote b) (+ a b))
-      ((,a ,b ,c) ((and (number? a) (number? b) (number? c)) ⇒ (+ a b c)))))
+      ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (+ a b c))))
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2942552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6086976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2><code>test/meta-circular-interpreter</code>: <span class="w3-text-green">pass</span></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/meta-circular-interpreter _)
+  (define (lookup x env)
+    (cond ((assq x env) =&gt; cdr) (else (error &quot;Can't find &quot; x))))
+  (define (int code env)
+    (match/non-overlapping
+      code
+      (',x x)
+      ((let (,x ,e) ,body)
+       (symbol? x)
+       ⇒
+       (let ((xv (int e env))) (int body (cons (cons x xv) env))))
+      ((τ ,body) (τ (int body env)))
+      ((λ ,argl ,body)
+       (symbol? argl)
+       ⇒
+       (λ arglv (int body (cons (cons argl arglv) env))))
+      ((λ (,x) ,body)
+       (symbol? x)
+       ⇒
+       (λ (xv) (int body (cons (cons x xv) env))))
+      ((,op unquote args)
+       (not (or (eq? op 'quote) (eq? op 'let) (eq? op 'τ) (eq? op 'λ)))
+       ⇒
+       (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args)))
+         (apply opv argvs)))
+      (,x (symbol? x) ⇒ (lookup x env))
+      (,x (or (number? x) (string? x)) ⇒ x)))
+  (define env0
+    (map (λ (x) (cons x (eval x (interaction-environment))))
+         '(+ - display identity)))
+  (define-syntax-rule (dint body) (int 'body env0))
+  (⊦ equal? 1 (dint 1))
+  (⊦ equal? 'x (dint 'x))
+  (⊦ void? (dint (display 'x)))
+  (⊦ equal? 'x (dint (identity 'x)))
+  (⊦⧳ ((exn)) (dint (display x)))
+  (⊦ equal? 6 (dint (let (x (+ 1 2 3)) x)))
+  (⊦ equal? 1 (let1 (t (dint (τ 1))) (t)))
+  (⊦ equal? 1 ((dint (λ (x) x)) 1))
+  (⊦ equal? '(1 2 3) ((dint (λ x x)) 1 2 3))
+  (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6085416 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

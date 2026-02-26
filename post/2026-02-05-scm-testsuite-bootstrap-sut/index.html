@@ -142,8 +142,10 @@
                          (and (? (car a) (car b)) (? (cdr a) (cdr b))))
                         (else (equal=? a b))))))
       ?))
-  (define (⊦ pred? a b)
-    (unless (pred? a b) (signal (unittest/condition-expected-actual a b))))
+  (define (⊦ pred? . args)
+    (unless
+      (apply pred? args)
+      (signal (apply unittest/condition-expected-actual args))))
   (define (⊦= a b) (⊦ (equal-approx? 1e-06) a b))
   (define (⊦≠ a b) (⊦ (complement equal?) a b))
   (define (⊨ a) (⊦= #t a))
@@ -206,7 +208,7 @@
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
           (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1798112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1798112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test-unbound-variable</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
     ((t 'test-unbound-variable))

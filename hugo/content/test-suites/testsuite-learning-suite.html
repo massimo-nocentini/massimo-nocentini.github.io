@@ -48,7 +48,7 @@
     (⊦= 11 (my-strlen &quot;hello world&quot;))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1304376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1304376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test/unquote</code>: <span class="w3-text-green">pass</span></h2>
 <p>Very interesting test about quasiquotation <cite>[<a href="#cite44">1</a>]</cite> : it shows how <code class="w3-codespan">unquote</code> can be used in a quasiquotation pattern in the <code class="w3-codespan">cdr</code> slot.</p>
@@ -163,7 +163,7 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-null-eq? _) (⊨ (eq? '() '())))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1312752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1312752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2><code>test-last-syntax</code>: <span class="w3-text-green">pass</span></h2>
 <div>

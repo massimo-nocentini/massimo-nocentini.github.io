@@ -58,7 +58,7 @@ test-cons: pass
         (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 
 
-((eta 0.001) (memory #(6291456 1838048 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(6291456 1838080 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-ref: pass
 
@@ -73,7 +73,7 @@ test-ref: pass
         (⊦= 'g (sbral-ref q 6))))
 
 
-((eta 0.0) (memory #(6291456 1839152 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1839184 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-list->sbral: pass
 
@@ -109,7 +109,7 @@ test-list->sbral: pass
           (list->sbral ll))))
 
 
-((eta 0.0) (memory #(6291456 1843616 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1843592 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-length: pass
 
@@ -118,7 +118,7 @@ test-length: pass
     (⊦= (length l) (length/sbral q))))
 
 
-((eta 0.0) (memory #(6291456 1844864 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1844840 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-update: pass
 
@@ -128,7 +128,7 @@ test-update: pass
         (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 
 
-((eta 0.0) (memory #(6291456 1845992 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1845968 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-identity: pass
 
@@ -136,8 +136,8 @@ test-identity: pass
   (let1 (l '(a b c d e f g)) (⊦= l (sbral->list (list->sbral l)))))
 
 
-((eta 0.0) (memory #(6291456 1846288 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-sbral-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test-cons: pass (define (test-cons _) (let1 (q empty\/sbral) (set! q (cons\/sbral \u0027a q)) (⊦= \u0027((1 a)) q) (⊦= \u0027a (car\/sbral q)) (⊦= \u0027() (cdr\/sbral q)) (set! q (cons\/sbral \u0027b q)) (⊦= \u0027((1 b) (1 a)) q) (⊦= \u0027b (car\/sbral q)) (⊦= \u0027((1 a)) (cdr\/sbral q)) (set! q (cons\/sbral \u0027c q)) (⊦= \u0027((3 c (b) (a))) q) (⊦= \u0027c (car\/sbral q)) (⊦= \u0027((1 b) (1 a)) (cdr\/sbral q)) (set! q (cons\/sbral \u0027d q)) (⊦= \u0027((1 d) (3 c (b) (a))) q) (⊦= \u0027d (car\/sbral q)) (⊦= \u0027((3 c (b) (a))) (cdr\/sbral q)) (set! q (cons\/sbral \u0027e q)) (⊦= \u0027((1 e) (1 d) (3 c (b) (a))) q) (⊦= \u0027e (car\/sbral q)) (⊦= \u0027((1 d) (3 c (b) (a))) (cdr\/sbral q)) (set! q (cons\/sbral \u0027f q)) (⊦= \u0027((3 f (e) (d)) (3 c (b) (a))) q) (⊦= \u0027f (car\/sbral q)) (⊦= \u0027((1 e) (1 d) (3 c (b) (a))) (cdr\/sbral q)) (set! q (cons\/sbral \u0027g q)) (⊦= \u0027((7 g (f (e) (d)) (c (b) (a)))) q) (⊦= \u0027g (car\/sbral q)) (⊦= \u0027((3 f (e) (d)) (3 c (b) (a))) (cdr\/sbral q)))) ((eta 0.001) (memory #(6291456 1838048 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-ref: pass (define (test-ref _) (let1 (q (list-\u0026gt;sbral \u0027(a b c d e f g))) (⊦= \u0027a (sbral-ref q 0)) (⊦= \u0027b (sbral-ref q 1)) (⊦= \u0027c (sbral-ref q 2)) (⊦= \u0027d (sbral-ref q 3)) (⊦= \u0027e (sbral-ref q 4)) (⊦= \u0027f (sbral-ref q 5)) (⊦= \u0027g (sbral-ref q 6)))) ((eta 0.0) (memory #(6291456 1839152 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-list-\u003esbral: pass (define (test-list-\u0026gt;sbral _) (let* ((l \u0027(a b c d e f g)) (ll (iota 100))) (⊦= \u0027((7 a (b (c) (d)) (e (f) (g)))) (list-\u0026gt;sbral l)) (⊦= \u0027((3 0 (1) (2)) (3 3 (4) (5)) (31 6 (7 (8 (9 (10) (11)) (12 (13) (14))) (15 (16 (17) (18)) (19 (20) (21)))) (22 (23 (24 (25) (26)) (27 (28) (29))) (30 (31 (32) (33)) (34 (35) (36))))) (63 37 (38 (39 (40 (41 (42) (43)) (44 (45) (46))) (47 (48 (49) (50)) (51 (52) (53)))) (54 (55 (56 (57) (58)) (59 (60) (61))) (62 (63 (64) (65)) (66 (67) (68))))) (69 (70 (71 (72 (73) (74)) (75 (76) (77))) (78 (79 (80) (81)) (82 (83) (84)))) (85 (86 (87 (88) (89)) (90 (91) (92))) (93 (94 (95) (96)) (97 (98) (99))))))) (list-\u0026gt;sbral ll)))) ((eta 0.0) (memory #(6291456 1843616 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-length: pass (define (test-length _) (let* ((l \u0027(a b c d e f g)) (q (list-\u0026gt;sbral l))) (⊦= (length l) (length\/sbral q)))) ((eta 0.0) (memory #(6291456 1844864 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-update: pass (define (test-update _) (let1 (q (list-\u0026gt;sbral \u0027(a b c d e f g))) (⊦= \u0027((7 a (b (c) (d)) (e (f) (g)))) q) (⊦= \u0027((7 a (b (c) (d)) (hello (f) (g)))) (update\/sbral 4 \u0027hello q)))) ((eta 0.0) (memory #(6291456 1845992 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-identity: pass (define (test-identity _) (let1 (l \u0027(a b c d e f g)) (⊦= l (sbral-\u0026gt;list (list-\u0026gt;sbral l))))) ((eta 0.0) (memory #(6291456 1846288 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":506,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-sbral-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+((eta 0.0) (memory #(6291456 1846264 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-sbral-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test-cons: pass (define (test-cons _) (let1 (q empty\/sbral) (set! q (cons\/sbral \u0027a q)) (⊦= \u0027((1 a)) q) (⊦= \u0027a (car\/sbral q)) (⊦= \u0027() (cdr\/sbral q)) (set! q (cons\/sbral \u0027b q)) (⊦= \u0027((1 b) (1 a)) q) (⊦= \u0027b (car\/sbral q)) (⊦= \u0027((1 a)) (cdr\/sbral q)) (set! q (cons\/sbral \u0027c q)) (⊦= \u0027((3 c (b) (a))) q) (⊦= \u0027c (car\/sbral q)) (⊦= \u0027((1 b) (1 a)) (cdr\/sbral q)) (set! q (cons\/sbral \u0027d q)) (⊦= \u0027((1 d) (3 c (b) (a))) q) (⊦= \u0027d (car\/sbral q)) (⊦= \u0027((3 c (b) (a))) (cdr\/sbral q)) (set! q (cons\/sbral \u0027e q)) (⊦= \u0027((1 e) (1 d) (3 c (b) (a))) q) (⊦= \u0027e (car\/sbral q)) (⊦= \u0027((1 d) (3 c (b) (a))) (cdr\/sbral q)) (set! q (cons\/sbral \u0027f q)) (⊦= \u0027((3 f (e) (d)) (3 c (b) (a))) q) (⊦= \u0027f (car\/sbral q)) (⊦= \u0027((1 e) (1 d) (3 c (b) (a))) (cdr\/sbral q)) (set! q (cons\/sbral \u0027g q)) (⊦= \u0027((7 g (f (e) (d)) (c (b) (a)))) q) (⊦= \u0027g (car\/sbral q)) (⊦= \u0027((3 f (e) (d)) (3 c (b) (a))) (cdr\/sbral q)))) ((eta 0.001) (memory #(6291456 1838080 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-ref: pass (define (test-ref _) (let1 (q (list-\u0026gt;sbral \u0027(a b c d e f g))) (⊦= \u0027a (sbral-ref q 0)) (⊦= \u0027b (sbral-ref q 1)) (⊦= \u0027c (sbral-ref q 2)) (⊦= \u0027d (sbral-ref q 3)) (⊦= \u0027e (sbral-ref q 4)) (⊦= \u0027f (sbral-ref q 5)) (⊦= \u0027g (sbral-ref q 6)))) ((eta 0.0) (memory #(6291456 1839184 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-list-\u003esbral: pass (define (test-list-\u0026gt;sbral _) (let* ((l \u0027(a b c d e f g)) (ll (iota 100))) (⊦= \u0027((7 a (b (c) (d)) (e (f) (g)))) (list-\u0026gt;sbral l)) (⊦= \u0027((3 0 (1) (2)) (3 3 (4) (5)) (31 6 (7 (8 (9 (10) (11)) (12 (13) (14))) (15 (16 (17) (18)) (19 (20) (21)))) (22 (23 (24 (25) (26)) (27 (28) (29))) (30 (31 (32) (33)) (34 (35) (36))))) (63 37 (38 (39 (40 (41 (42) (43)) (44 (45) (46))) (47 (48 (49) (50)) (51 (52) (53)))) (54 (55 (56 (57) (58)) (59 (60) (61))) (62 (63 (64) (65)) (66 (67) (68))))) (69 (70 (71 (72 (73) (74)) (75 (76) (77))) (78 (79 (80) (81)) (82 (83) (84)))) (85 (86 (87 (88) (89)) (90 (91) (92))) (93 (94 (95) (96)) (97 (98) (99))))))) (list-\u0026gt;sbral ll)))) ((eta 0.0) (memory #(6291456 1843592 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-length: pass (define (test-length _) (let* ((l \u0027(a b c d e f g)) (q (list-\u0026gt;sbral l))) (⊦= (length l) (length\/sbral q)))) ((eta 0.0) (memory #(6291456 1844840 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-update: pass (define (test-update _) (let1 (q (list-\u0026gt;sbral \u0027(a b c d e f g))) (⊦= \u0027((7 a (b (c) (d)) (e (f) (g)))) q) (⊦= \u0027((7 a (b (c) (d)) (hello (f) (g)))) (update\/sbral 4 \u0027hello q)))) ((eta 0.0) (memory #(6291456 1845968 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-identity: pass (define (test-identity _) (let1 (l \u0027(a b c d e f g)) (⊦= l (sbral-\u0026gt;list (list-\u0026gt;sbral l))))) ((eta 0.0) (memory #(6291456 1846264 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":506,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-sbral-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
 
 
 
@@ -197,7 +197,7 @@ test-cons: pass
         (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 
 
-((eta 0.001) (memory #(6291456 1838048 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(6291456 1838080 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-ref: pass
 
@@ -212,7 +212,7 @@ test-ref: pass
         (⊦= 'g (sbral-ref q 6))))
 
 
-((eta 0.0) (memory #(6291456 1839152 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1839184 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-list->sbral: pass
 
@@ -248,7 +248,7 @@ test-list->sbral: pass
           (list->sbral ll))))
 
 
-((eta 0.0) (memory #(6291456 1843616 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1843592 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-length: pass
 
@@ -257,7 +257,7 @@ test-length: pass
     (⊦= (length l) (length/sbral q))))
 
 
-((eta 0.0) (memory #(6291456 1844864 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1844840 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-update: pass
 
@@ -267,7 +267,7 @@ test-update: pass
         (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 
 
-((eta 0.0) (memory #(6291456 1845992 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1845968 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-identity: pass
 
@@ -275,7 +275,7 @@ test-identity: pass
   (let1 (l '(a b c d e f g)) (⊦= l (sbral->list (list->sbral l)))))
 
 
-((eta 0.0) (memory #(6291456 1846288 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1846264 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 "><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
@@ -351,7 +351,7 @@ test-cons: pass
         (⊦= '((7 g (f (e) (d)) (c (b) (a)))) q)
         (⊦= 'g (car/sbral q))
         (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1838048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1838080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test-ref</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-ref _)
   (let1 (q (list-&gt;sbral '(a b c d e f g)))
         (⊦= 'a (sbral-ref q 0))
@@ -361,7 +361,7 @@ test-cons: pass
         (⊦= 'e (sbral-ref q 4))
         (⊦= 'f (sbral-ref q 5))
         (⊦= 'g (sbral-ref q 6))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1839152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1839184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test-list->sbral</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-list-&gt;sbral _)
   (let* ((l '(a b c d e f g)) (ll (iota 100)))
     (⊦= '((7 a (b (c) (d)) (e (f) (g)))) (list-&gt;sbral l))
@@ -392,19 +392,19 @@ test-cons: pass
                (86 (87 (88) (89)) (90 (91) (92)))
                (93 (94 (95) (96)) (97 (98) (99)))))))
           (list-&gt;sbral ll))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1843616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1843592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test-length</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-length _)
   (let* ((l '(a b c d e f g)) (q (list-&gt;sbral l)))
     (⊦= (length l) (length/sbral q))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1844864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1844840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test-update</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-update _)
   (let1 (q (list-&gt;sbral '(a b c d e f g)))
         (⊦= '((7 a (b (c) (d)) (e (f) (g)))) q)
         (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1845992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1845968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2><code>test-identity</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-identity _)
   (let1 (l '(a b c d e f g)) (⊦= l (sbral-&gt;list (list-&gt;sbral l)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1846288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1846264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-queue-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
