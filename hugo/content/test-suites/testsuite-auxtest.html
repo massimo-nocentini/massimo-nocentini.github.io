@@ -24,7 +24,7 @@
 <section id="section317">
 <header>
 <h1>Tests</h1></header></section>
-<h2><code>test/define-many</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/define-many"><code>test/define-many</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/define-many _)
   (define-many (a b c) (1 2 3))
@@ -33,16 +33,16 @@
   (⊦= 3 c))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/let1</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/let1"><code>test/let1</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2378936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2379144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/letcar&cdr</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/letcar&cdr"><code>test/letcar&cdr</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcar&amp;cdr _)
   (letcar&amp;cdr
@@ -53,9 +53,9 @@
     (⊦= dd 3)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/λ</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/λ"><code>test/λ</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/λ _)
   (⊦= 5 ((λ (x) (+ x 2)) 3))
@@ -63,9 +63,9 @@
   (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2380616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2381064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/letmaptensor</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/letmaptensor"><code>test/letmaptensor</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letmaptensor _)
   (⊦= '((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f)))
@@ -76,9 +76,9 @@
           (list (add1 x) y z))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2380936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2381504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/letmap</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/letmap"><code>test/letmap</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letmap _)
   (⊦= '((2 a #t)
@@ -98,9 +98,9 @@
           (list (add1 x) y z))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2376368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2377048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/procc/λ-memo</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/procc/λ-memo"><code>test/procc/λ-memo</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/λ-memo _)
   (define count 0)
@@ -123,24 +123,24 @@
   (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2381168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2381968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/load/string</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/load/string"><code>test/load/string</code>: <span class="w3-text-green">pass</span></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/load/string _) (⊦= '(+ 3 4) (load/string &quot;(+ 3 4)&quot;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2381824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2382744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/simdjson/version</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/simdjson/version"><code>test/simdjson/version</code>: <span class="w3-text-green">pass</span></h2>
 <p>The current version of <code class="w3-codespan">simdjson</code> is <code class="w3-codespan">4.2.1</code>.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simdjson/version _) (⊦= &quot;4.2.1&quot; (simdjson-get-version)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2382520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2383560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/simdjson/load-twitter</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/simdjson/load-twitter"><code>test/simdjson/load-twitter</code>: <span class="w3-text-green">pass</span></h2>
 <p>Loaded a testbed json file <code class="w3-codespan">twitter.json</code><cite>[<a href="#cite318">1</a>]</cite> with the <code class="w3-codespan">simdjson</code><cite>[<a href="#cite319">2</a>]</cite><cite>[<a href="#cite320">3</a>]</cite> library. The file contains a twitter search result with 100 tweets. </p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter _)
@@ -162,9 +162,9 @@
   (⊦= 100 (vector-length (cadar twitter-json))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(25165824 3615504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(25165824 3616608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/simdjson/load-twitter/ondemand</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/simdjson/load-twitter/ondemand"><code>test/simdjson/load-twitter/ondemand</code>: <span class="w3-text-green">pass</span></h2>
 <p>Here we show the <i>on demand</i> parsing mode of <code class="w3-codespan">simdjson</code><cite>[<a href="#cite321">4</a>]</cite>, which yields equivalent Scheme objects with respect to the DOM parsing.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simdjson/load-twitter/ondemand _)
@@ -172,9 +172,9 @@
         (simdjson-load/ondemand &quot;twitter.json&quot;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(12582912 4844864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(12582912 4846152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/simdjson/->string</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/simdjson/->string"><code>test/simdjson/->string</code>: <span class="w3-text-green">pass</span></h2>
 <p>Test for simdjson-load, which loads and parses a JSON file into a Scheme representation.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simdjson/-&gt;string _)
@@ -182,9 +182,9 @@
         (-&gt;string/json (simdjson-load &quot;twitter.json&quot;))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.018) (memory #(12582912 4141472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.018) (memory #(12582912 4142864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/simdjson/parse</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/simdjson/parse"><code>test/simdjson/parse</code>: <span class="w3-text-green">pass</span></h2>
 <p>Test for simdjson-parse/ondemand, which parses a JSON string into a Scheme representation on demand.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simdjson/parse _)
@@ -193,9 +193,9 @@
           &quot;[{\&quot;a\&quot;:1,\&quot;b\&quot;:[2,5],\&quot;c\&quot;:true},{\&quot;c\&quot;:3,\&quot;d\&quot;:4}]&quot;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4142416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4143928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/libc/fma</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/libc/fma"><code>test/libc/fma</code>: <span class="w3-text-green">pass</span></h2>
 <p>Taken from <cite>[<a href="#cite322">5</a>]</cite></p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/libc/fma _)
@@ -203,9 +203,9 @@
   (⊦ fp= (fp*+ 0.1 10.0 -1.0) (libc-fma 0.1 10.0 -1.0)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4143768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4145400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/documentation</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/documentation"><code>test/documentation</code>: <span class="w3-text-green">pass</span></h2>
 <p>An initial attempt to support our own documentation framework. The following tests check that documentation can be set and retrieved for functions.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/documentation _)
@@ -223,9 +223,9 @@
         (documentation a)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4145408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4147160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2><code>test/documentation/documentation</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/documentation/documentation"><code>test/documentation/documentation</code>: <span class="w3-text-green">pass</span></h2>
 <p>Test for documentation of the documentation function itself.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/documentation/documentation _)
@@ -240,7 +240,7 @@
         (documentation documentation)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4146376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4148248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">

@@ -51,14 +51,14 @@ Implementation
       (⇒)
       ((dmatch-aux v) '())
       ((dmatch-aux v (pat g ⇒ e ...) cls ...)
-       (let1 (fk (dmatch-aux v cls ...))
+       (let1 (fk (τ (dmatch-aux v cls ...)))
              (dmatch-ppat
                v
                pat
                (if g
-                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) fk)
-                 fk)
-               fk)))
+                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) (fk))
+                 (fk))
+               (fk))))
       ((dmatch-aux v (pat e ...) cls ...)
        (dmatch-aux v (pat #t ⇒ e ...) cls ...))))
   (define-syntax
@@ -133,7 +133,7 @@ test/base-non-overlapping: pass
           ((hello ,r ,e) r))))
 
 
-((eta 0.003) (memory #(12582912 6081472 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.004) (memory #(12582912 6259224 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/h-non-overlapping: pass
 
@@ -146,7 +146,7 @@ test/h-non-overlapping: pass
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 
 
-((eta 0.0) (memory #(12582912 6082560 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(12582912 6249120 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/h-overlapping: pass
 
@@ -160,7 +160,7 @@ test/h-overlapping: pass
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 
 
-((eta 0.001) (memory #(12582912 6086976 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(12582912 6254136 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/meta-circular-interpreter: pass
 
@@ -207,8 +207,8 @@ test/meta-circular-interpreter: pass
   (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
 
 
-((eta 0.001) (memory #(12582912 6085416 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
-"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-dmatch-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Implementation (module (aux match) * (import scheme (chicken base) (chicken string) (chicken memory representation) (aux base)) (define-syntax-rule (match\/non-overlapping v (e ...) ...) (dmatch-run-a-thunk \u0027v v (dmatch-remexp v (e ...) ...))) (define-record dmatch-pkg clause thunk) (define-syntax dmatch-remexp (syntax-rules () ((dmatch-remexp (rator rand ...) cls ...) (let1 (v (rator rand ...)) (dmatch-aux v cls ...))) ((dmatch-remexp v cls ...) (dmatch-aux v cls ...)))) (define-syntax dmatch-aux (syntax-rules (⇒) ((dmatch-aux v) \u0027()) ((dmatch-aux v (pat g ⇒ e ...) cls ...) (let1 (fk (dmatch-aux v cls ...)) (dmatch-ppat v pat (if g (cons (make-dmatch-pkg \u0027(pat g ⇒ e ...) (τ e ...)) fk) fk) fk))) ((dmatch-aux v (pat e ...) cls ...) (dmatch-aux v (pat #t ⇒ e ...) cls ...)))) (define-syntax dmatch-ppat (syntax-rules (unquote) ((dmatch-ppat vv () kt kf) (let1 (v vv) (if (or (null? v) (and (vector? v) (zero? (vector-length v)))) kt kf))) ((dmatch-ppat vv ,v kt kf) (let1 (v vv) kt)) ((dmatch-ppat vv (x . y) kt kf) (let1 (v vv) (cond ((pair? v) (dmatch-ppat (car v) x (dmatch-ppat (cdr v) y kt kf) kf)) ((and (vector? v) (\u0026gt; (vector-length v) 0)) (dmatch-ppat (vector-ref v 0) x (dmatch-ppat (subvector v 1) y kt kf) kf)) ((record-instance? v) (let1 (r (record-\u0026gt;vector v)) (dmatch-ppat (vector-ref r 0) x (dmatch-ppat (subvector r 1) y kt kf) kf))) (else kf)))) ((dmatch-ppat v lit kt kf) (if (equal? v \u0027lit) kt kf)))) (define (dmatch-run-a-thunk v-expr v pkgs) (cond ((null? pkgs) (error (string-append \u0026quot;match\/non-overlapping\\n\\n\u0026quot; (-\u0026gt;string\/pretty-print \u0060((reason \u0026quot;no match found\u0026quot;) (expr ,v-expr) (value ,v)))))) ((null? (cdr pkgs)) (let1 (t (dmatch-pkg-thunk (car pkgs))) (t))) (else (error (string-append \u0026quot;match\/non-overlapping\\n\\n\u0026quot; (-\u0026gt;string\/pretty-print \u0060((reason \u0026quot;overlapping match\u0026quot;) (expr ,v-expr) (value ,v) (ambiguities ,(map dmatch-pkg-clause pkgs)))))))))) Tests test\/base-non-overlapping: pass (define (test\/base-non-overlapping _) (⊦= \u0027empty (match\/non-overlapping \u0027() (() \u0027empty))) (⊦= \u0027empty (match\/non-overlapping #() (() \u0027empty))) (⊦= \u0027() (match\/non-overlapping \u0027() (,r r))) (⊦= #() (match\/non-overlapping #() (,r r))) (⊦= \u0027p (match\/non-overlapping \u0027(p) ((,r) r))) (⊦= #t (match\/non-overlapping #(p) ((p) #t))) (⊦= \u0027p (match\/non-overlapping #(p) ((,r) r))) (⊦= 3 (match\/non-overlapping #(3 2) ((,r 2) r))) (⊦= \u0027(3 #(2)) (match\/non-overlapping #(3 2) ((,r unquote s) (list r s)))) (⊦= \u0027(3 2 #()) (match\/non-overlapping #(3 2) ((,r ,s unquote t) (list r s t)))) (⊦⧳ ((exn)) (match\/non-overlapping #(3 2) ((,r 2 ,t) r))) (⊦= 3 (match\/non-overlapping #(3 2) ((,r ,e) r))) (⊦= 3 (match\/non-overlapping (make-record-instance \u0027hello 3 2) ((hello ,r ,e) r)))) ((eta 0.003) (memory #(12582912 6081472 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/h-non-overlapping: pass (define (test\/h-non-overlapping _) (define (h x y) (match\/non-overlapping (cons x y) ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b)) ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (\u002b a b c)))) (⊦= \u0027(12 8) (list (h 3 4) (apply h \u0027(1 (3 4)))))) ((eta 0.0) (memory #(12582912 6082560 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/h-overlapping: pass (define (test\/h-overlapping _) (define (w x y) (match\/non-overlapping (cons x y) ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b)) ((,a unquote b) (\u002b a b)) ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (\u002b a b c)))) (⊦⧳ ((exn)) (list (w 3 4) (apply w \u0027(1 (3 4)))))) ((eta 0.001) (memory #(12582912 6086976 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/meta-circular-interpreter: pass (define (test\/meta-circular-interpreter _) (define (lookup x env) (cond ((assq x env) =\u0026gt; cdr) (else (error \u0026quot;Can\u0027t find \u0026quot; x)))) (define (int code env) (match\/non-overlapping code (\u0027,x x) ((let (,x ,e) ,body) (symbol? x) ⇒ (let ((xv (int e env))) (int body (cons (cons x xv) env)))) ((τ ,body) (τ (int body env))) ((λ ,argl ,body) (symbol? argl) ⇒ (λ arglv (int body (cons (cons argl arglv) env)))) ((λ (,x) ,body) (symbol? x) ⇒ (λ (xv) (int body (cons (cons x xv) env)))) ((,op unquote args) (not (or (eq? op \u0027quote) (eq? op \u0027let) (eq? op \u0027τ) (eq? op \u0027λ))) ⇒ (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args))) (apply opv argvs))) (,x (symbol? x) ⇒ (lookup x env)) (,x (or (number? x) (string? x)) ⇒ x))) (define env0 (map (λ (x) (cons x (eval x (interaction-environment)))) \u0027(\u002b - display identity))) (define-syntax-rule (dint body) (int \u0027body env0)) (⊦ equal? 1 (dint 1)) (⊦ equal? \u0027x (dint \u0027x)) (⊦ void? (dint (display \u0027x))) (⊦ equal? \u0027x (dint (identity \u0027x))) (⊦⧳ ((exn)) (dint (display x))) (⊦ equal? 6 (dint (let (x (\u002b 1 2 3)) x))) (⊦ equal? 1 (let1 (t (dint (τ 1))) (t))) (⊦ equal? 1 ((dint (λ (x) x)) 1)) (⊦ equal? \u0027(1 2 3) ((dint (λ x x)) 1 2 3)) (⊦ equal? 5 (((dint (λ (x) (λ (y) (\u002b x y)))) 2) 3))) ((eta 0.001) (memory #(12582912 6085416 1048576)) (stdout \u0026quot;x\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":765,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-dmatch-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+((eta 0.001) (memory #(12582912 6253376 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
+"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-dmatch-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Implementation (module (aux match) * (import scheme (chicken base) (chicken string) (chicken memory representation) (aux base)) (define-syntax-rule (match\/non-overlapping v (e ...) ...) (dmatch-run-a-thunk \u0027v v (dmatch-remexp v (e ...) ...))) (define-record dmatch-pkg clause thunk) (define-syntax dmatch-remexp (syntax-rules () ((dmatch-remexp (rator rand ...) cls ...) (let1 (v (rator rand ...)) (dmatch-aux v cls ...))) ((dmatch-remexp v cls ...) (dmatch-aux v cls ...)))) (define-syntax dmatch-aux (syntax-rules (⇒) ((dmatch-aux v) \u0027()) ((dmatch-aux v (pat g ⇒ e ...) cls ...) (let1 (fk (τ (dmatch-aux v cls ...))) (dmatch-ppat v pat (if g (cons (make-dmatch-pkg \u0027(pat g ⇒ e ...) (τ e ...)) (fk)) (fk)) (fk)))) ((dmatch-aux v (pat e ...) cls ...) (dmatch-aux v (pat #t ⇒ e ...) cls ...)))) (define-syntax dmatch-ppat (syntax-rules (unquote) ((dmatch-ppat vv () kt kf) (let1 (v vv) (if (or (null? v) (and (vector? v) (zero? (vector-length v)))) kt kf))) ((dmatch-ppat vv ,v kt kf) (let1 (v vv) kt)) ((dmatch-ppat vv (x . y) kt kf) (let1 (v vv) (cond ((pair? v) (dmatch-ppat (car v) x (dmatch-ppat (cdr v) y kt kf) kf)) ((and (vector? v) (\u0026gt; (vector-length v) 0)) (dmatch-ppat (vector-ref v 0) x (dmatch-ppat (subvector v 1) y kt kf) kf)) ((record-instance? v) (let1 (r (record-\u0026gt;vector v)) (dmatch-ppat (vector-ref r 0) x (dmatch-ppat (subvector r 1) y kt kf) kf))) (else kf)))) ((dmatch-ppat v lit kt kf) (if (equal? v \u0027lit) kt kf)))) (define (dmatch-run-a-thunk v-expr v pkgs) (cond ((null? pkgs) (error (string-append \u0026quot;match\/non-overlapping\\n\\n\u0026quot; (-\u0026gt;string\/pretty-print \u0060((reason \u0026quot;no match found\u0026quot;) (expr ,v-expr) (value ,v)))))) ((null? (cdr pkgs)) (let1 (t (dmatch-pkg-thunk (car pkgs))) (t))) (else (error (string-append \u0026quot;match\/non-overlapping\\n\\n\u0026quot; (-\u0026gt;string\/pretty-print \u0060((reason \u0026quot;overlapping match\u0026quot;) (expr ,v-expr) (value ,v) (ambiguities ,(map dmatch-pkg-clause pkgs)))))))))) Tests test\/base-non-overlapping: pass (define (test\/base-non-overlapping _) (⊦= \u0027empty (match\/non-overlapping \u0027() (() \u0027empty))) (⊦= \u0027empty (match\/non-overlapping #() (() \u0027empty))) (⊦= \u0027() (match\/non-overlapping \u0027() (,r r))) (⊦= #() (match\/non-overlapping #() (,r r))) (⊦= \u0027p (match\/non-overlapping \u0027(p) ((,r) r))) (⊦= #t (match\/non-overlapping #(p) ((p) #t))) (⊦= \u0027p (match\/non-overlapping #(p) ((,r) r))) (⊦= 3 (match\/non-overlapping #(3 2) ((,r 2) r))) (⊦= \u0027(3 #(2)) (match\/non-overlapping #(3 2) ((,r unquote s) (list r s)))) (⊦= \u0027(3 2 #()) (match\/non-overlapping #(3 2) ((,r ,s unquote t) (list r s t)))) (⊦⧳ ((exn)) (match\/non-overlapping #(3 2) ((,r 2 ,t) r))) (⊦= 3 (match\/non-overlapping #(3 2) ((,r ,e) r))) (⊦= 3 (match\/non-overlapping (make-record-instance \u0027hello 3 2) ((hello ,r ,e) r)))) ((eta 0.004) (memory #(12582912 6259224 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/h-non-overlapping: pass (define (test\/h-non-overlapping _) (define (h x y) (match\/non-overlapping (cons x y) ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b)) ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (\u002b a b c)))) (⊦= \u0027(12 8) (list (h 3 4) (apply h \u0027(1 (3 4)))))) ((eta 0.0) (memory #(12582912 6249120 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/h-overlapping: pass (define (test\/h-overlapping _) (define (w x y) (match\/non-overlapping (cons x y) ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b)) ((,a unquote b) (\u002b a b)) ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (\u002b a b c)))) (⊦⧳ ((exn)) (list (w 3 4) (apply w \u0027(1 (3 4)))))) ((eta 0.001) (memory #(12582912 6254136 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/meta-circular-interpreter: pass (define (test\/meta-circular-interpreter _) (define (lookup x env) (cond ((assq x env) =\u0026gt; cdr) (else (error \u0026quot;Can\u0027t find \u0026quot; x)))) (define (int code env) (match\/non-overlapping code (\u0027,x x) ((let (,x ,e) ,body) (symbol? x) ⇒ (let ((xv (int e env))) (int body (cons (cons x xv) env)))) ((τ ,body) (τ (int body env))) ((λ ,argl ,body) (symbol? argl) ⇒ (λ arglv (int body (cons (cons argl arglv) env)))) ((λ (,x) ,body) (symbol? x) ⇒ (λ (xv) (int body (cons (cons x xv) env)))) ((,op unquote args) (not (or (eq? op \u0027quote) (eq? op \u0027let) (eq? op \u0027τ) (eq? op \u0027λ))) ⇒ (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args))) (apply opv argvs))) (,x (symbol? x) ⇒ (lookup x env)) (,x (or (number? x) (string? x)) ⇒ x))) (define env0 (map (λ (x) (cons x (eval x (interaction-environment)))) \u0027(\u002b - display identity))) (define-syntax-rule (dint body) (int \u0027body env0)) (⊦ equal? 1 (dint 1)) (⊦ equal? \u0027x (dint \u0027x)) (⊦ void? (dint (display \u0027x))) (⊦ equal? \u0027x (dint (identity \u0027x))) (⊦⧳ ((exn)) (dint (display x))) (⊦ equal? 6 (dint (let (x (\u002b 1 2 3)) x))) (⊦ equal? 1 (let1 (t (dint (τ 1))) (t))) (⊦ equal? 1 ((dint (λ (x) x)) 1)) (⊦ equal? \u0027(1 2 3) ((dint (λ x x)) 1 2 3)) (⊦ equal? 5 (((dint (λ (x) (λ (y) (\u002b x y)))) 2) 3))) ((eta 0.001) (memory #(12582912 6253376 1048576)) (stdout \u0026quot;x\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":766,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-dmatch-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
 
 
 
@@ -261,14 +261,14 @@ Implementation
       (⇒)
       ((dmatch-aux v) '())
       ((dmatch-aux v (pat g ⇒ e ...) cls ...)
-       (let1 (fk (dmatch-aux v cls ...))
+       (let1 (fk (τ (dmatch-aux v cls ...)))
              (dmatch-ppat
                v
                pat
                (if g
-                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) fk)
-                 fk)
-               fk)))
+                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) (fk))
+                 (fk))
+               (fk))))
       ((dmatch-aux v (pat e ...) cls ...)
        (dmatch-aux v (pat #t ⇒ e ...) cls ...))))
   (define-syntax
@@ -343,7 +343,7 @@ test/base-non-overlapping: pass
           ((hello ,r ,e) r))))
 
 
-((eta 0.003) (memory #(12582912 6081472 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.004) (memory #(12582912 6259224 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/h-non-overlapping: pass
 
@@ -356,7 +356,7 @@ test/h-non-overlapping: pass
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 
 
-((eta 0.0) (memory #(12582912 6082560 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(12582912 6249120 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/h-overlapping: pass
 
@@ -370,7 +370,7 @@ test/h-overlapping: pass
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 
 
-((eta 0.001) (memory #(12582912 6086976 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(12582912 6254136 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/meta-circular-interpreter: pass
 
@@ -417,7 +417,7 @@ test/meta-circular-interpreter: pass
   (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
 
 
-((eta 0.001) (memory #(12582912 6085416 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(12582912 6253376 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
 "><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
@@ -466,7 +466,7 @@ Implementation
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
 </button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section21572><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section21624><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
   (aux match)
   *
   (import
@@ -492,14 +492,14 @@ Implementation
       (⇒)
       ((dmatch-aux v) '())
       ((dmatch-aux v (pat g ⇒ e ...) cls ...)
-       (let1 (fk (dmatch-aux v cls ...))
+       (let1 (fk (τ (dmatch-aux v cls ...)))
              (dmatch-ppat
                v
                pat
                (if g
-                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) fk)
-                 fk)
-               fk)))
+                 (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) (fk))
+                 (fk))
+               (fk))))
       ((dmatch-aux v (pat e ...) cls ...)
        (dmatch-aux v (pat #t ⇒ e ...) cls ...))))
   (define-syntax
@@ -548,7 +548,7 @@ Implementation
                         (expr ,v-expr)
                         (value ,v)
                         (ambiguities ,(map dmatch-pkg-clause pkgs))))))))))
-</code></pre></div><section id=section21573><header><h1>Tests</h1></header></section><h2><code>test/base-non-overlapping</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/base-non-overlapping _)
+</code></pre></div><section id=section21625><header><h1>Tests</h1></header></section><h2 id=test/base-non-overlapping><code>test/base-non-overlapping</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/base-non-overlapping _)
   (⊦= 'empty (match/non-overlapping '() (() 'empty)))
   (⊦= 'empty (match/non-overlapping #() (() 'empty)))
   (⊦= '() (match/non-overlapping '() (,r r)))
@@ -566,16 +566,16 @@ Implementation
         (match/non-overlapping
           (make-record-instance 'hello 3 2)
           ((hello ,r ,e) r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 6081472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/h-non-overlapping</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-non-overlapping _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 6259224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/h-non-overlapping><code>test/h-non-overlapping</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-non-overlapping _)
   (define (h x y)
     (match/non-overlapping
       (cons x y)
       ((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b))
       ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (+ a b c))))
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 6082560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/h-overlapping</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-overlapping _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 6249120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/h-overlapping><code>test/h-overlapping</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-overlapping _)
   (define (w x y)
     (match/non-overlapping
       (cons x y)
@@ -583,8 +583,8 @@ Implementation
       ((,a unquote b) (+ a b))
       ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (+ a b c))))
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6086976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/meta-circular-interpreter</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/meta-circular-interpreter _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6254136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/meta-circular-interpreter><code>test/meta-circular-interpreter</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/meta-circular-interpreter _)
   (define (lookup x env)
     (cond ((assq x env) =&gt; cdr) (else (error &quot;Can't find &quot; x))))
   (define (int code env)
@@ -625,7 +625,7 @@ Implementation
   (⊦ equal? 1 ((dint (λ (x) x)) 1))
   (⊦ equal? '(1 2 3) ((dint (λ x x)) 1 2 3))
   (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6085416 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6253376 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

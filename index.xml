@@ -62,7 +62,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section317"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/define-many&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/define-many"&gt;&lt;code&gt;test/define-many&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/define-many _)
  (define-many (a b c) (1 2 3))
@@ -71,16 +71,16 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= 3 c))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2378192 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2378280 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/let1&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/let1"&gt;&lt;code&gt;test/let1&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2378936 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2379144 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letcar&amp;cdr&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letcar&amp;cdr"&gt;&lt;code&gt;test/letcar&amp;cdr&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letcar&amp;amp;cdr _)
  (letcar&amp;amp;cdr
@@ -91,9 +91,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= dd 3)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2380032 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2380360 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/λ&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/λ"&gt;&lt;code&gt;test/λ&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/λ _)
  (⊦= 5 ((λ (x) (+ x 2)) 3))
@@ -101,9 +101,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2380616 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2381064 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letmaptensor&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letmaptensor"&gt;&lt;code&gt;test/letmaptensor&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letmaptensor _)
  (⊦= '((((2 a #t) (2 a #t)) ((2 1 #t) (2 1 #f)))
@@ -114,9 +114,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (list (add1 x) y z))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2380936 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2381504 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letmap&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letmap"&gt;&lt;code&gt;test/letmap&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letmap _)
  (⊦= '((2 a #t)
@@ -136,9 +136,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (list (add1 x) y z))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2376368 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2377048 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/procc/λ-memo&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/procc/λ-memo"&gt;&lt;code&gt;test/procc/λ-memo&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/procc/λ-memo _)
  (define count 0)
@@ -161,16 +161,16 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2381168 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2381968 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/load/string&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/load/string"&gt;&lt;code&gt;test/load/string&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/load/string _) (⊦= '(+ 3 4) (load/string &amp;quot;(+ 3 4)&amp;quot;)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2381824 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2382744 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/simdjson/version&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/simdjson/version"&gt;&lt;code&gt;test/simdjson/version&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;The current version of &lt;code class="w3-codespan"&gt;simdjson&lt;/code&gt; is &lt;code class="w3-codespan"&gt;4.2.1&lt;/code&gt;.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -276,7 +276,8 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (errstr (third pair))
  (hasdoc (and (pair? v) (eq? (car v) 'doc))))
  (when teardown (apply (car teardown) testcase args))
- `((h2 (code ,testcase-name)
+ `((h2 (@ (id ,testcase-name))
+ (code ,testcase-name)
  &amp;quot;: &amp;quot;
  ,(if (eq? v witness)
  '(span (@ (class &amp;quot;w3-text-red&amp;quot;)) fail)
@@ -379,7 +380,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section375"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test-running&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-running"&gt;&lt;code&gt;test-running&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;hello&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -436,7 +437,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.highlightAll();&lt;/script&gt;&lt;/head&gt;
 &lt;body&gt;
-&lt;section id="section21572"&gt;
+&lt;section id="section21624"&gt;
 &lt;header&gt;
 &lt;h1&gt;Implementation&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
 &lt;div&gt;
@@ -466,14 +467,14 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⇒)
  ((dmatch-aux v) '())
  ((dmatch-aux v (pat g ⇒ e ...) cls ...)
- (let1 (fk (dmatch-aux v cls ...))
+ (let1 (fk (τ (dmatch-aux v cls ...)))
  (dmatch-ppat
  v
  pat
  (if g
- (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) fk)
- fk)
- fk)))
+ (cons (make-dmatch-pkg '(pat g ⇒ e ...) (τ e ...)) (fk))
+ (fk))
+ (fk))))
  ((dmatch-aux v (pat e ...) cls ...)
  (dmatch-aux v (pat #t ⇒ e ...) cls ...))))
  (define-syntax
@@ -523,10 +524,10 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (value ,v)
  (ambiguities ,(map dmatch-pkg-clause pkgs))))))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;section id="section21573"&gt;
+&lt;section id="section21625"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/base-non-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/base-non-overlapping"&gt;&lt;code&gt;test/base-non-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/base-non-overlapping _)
  (⊦= 'empty (match/non-overlapping '() (() 'empty)))
@@ -548,9 +549,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  ((hello ,r ,e) r))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(12582912 6081472 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(12582912 6259224 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/h-non-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/h-non-overlapping"&gt;&lt;code&gt;test/h-non-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/h-non-overlapping _)
  (define (h x y)
@@ -561,9 +562,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(12582912 6082560 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(12582912 6249120 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/h-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/h-overlapping"&gt;&lt;code&gt;test/h-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/h-overlapping _)
  (define (w x y)
@@ -575,9 +576,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 6086976 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 6254136 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/meta-circular-interpreter&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/meta-circular-interpreter"&gt;&lt;code&gt;test/meta-circular-interpreter&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/meta-circular-interpreter _)
  (define (lookup x env)
@@ -622,7 +623,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 6085416 1048576)) (stdout &amp;quot;x&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 6253376 1048576)) (stdout &amp;quot;x&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -685,7 +686,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section192"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/empty&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/empty"&gt;&lt;code&gt;test/empty&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/empty _)
  (let1 (a (judy-array-empty))
@@ -693,9 +694,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ = 0 (judy-array-bytes a))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(9546320 1830120 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1830240 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/set!-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/set!-ref"&gt;&lt;code&gt;test/set!-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/set!-ref _)
  (let1 (a (judy-array-empty))
@@ -709,9 +710,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(9546320 1830792 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1831032 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/alist-&gt;judy-array&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/alist-&gt;judy-array"&gt;&lt;code&gt;test/alist-&gt;judy-array&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/alist-&amp;gt;judy-array _)
  (let1 (a (alist-&amp;gt;judy-array
@@ -725,9 +726,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(9546320 1831336 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8456480 1831696 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/list-&gt;judy-array&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/list-&gt;judy-array"&gt;&lt;code&gt;test/list-&gt;judy-array&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/list-&amp;gt;judy-array _)
  (let1 (a (list-&amp;gt;judy-array
@@ -740,9 +741,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(9546320 1832008 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8456480 1832488 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/judy-array-&gt;alist&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/judy-array-&gt;alist"&gt;&lt;code&gt;test/judy-array-&gt;alist&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/judy-array-&amp;gt;alist _)
  (let1 (alist '((0 zero) (1 one) (2 two) (10000 ten-thousand)))
@@ -750,9 +751,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ equal? alist (judy-array-&amp;gt;alist a)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(9546320 1832440 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8456480 1833040 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/list-&gt;judy-array/iota&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/list-&gt;judy-array/iota"&gt;&lt;code&gt;test/list-&gt;judy-array/iota&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/list-&amp;gt;judy-array/iota _)
  (let* ((n 100000) (I (iota n)))
@@ -761,9 +762,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.037) (memory #(9546320 4231800 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.036) (memory #(8456480 4232568 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/judy-array-walk&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/judy-array-walk"&gt;&lt;code&gt;test/judy-array-walk&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/judy-array-walk _)
  (let* ((n 50000) (I (iota n)))
@@ -776,7 +777,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦ equal? I (reverse collected))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.027) (memory #(9546320 4232592 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.032) (memory #(16912960 4233272 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -803,7 +804,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section43"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test-alist-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-alist-ref"&gt;&lt;code&gt;test-alist-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-alist-ref _)
  (let ((alst '((a 3) (b 2))))
@@ -812,9 +813,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= #f (alist-ref 'c alst))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1303768 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1303920 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/len&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/len"&gt;&lt;code&gt;test/len&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/len _)
  (let ((my-strlen
@@ -827,9 +828,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= 11 (my-strlen &amp;quot;hello world&amp;quot;))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1304376 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1304648 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/unquote&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/unquote"&gt;&lt;code&gt;test/unquote&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;Very interesting test about quasiquotation &lt;cite&gt;[&lt;a href="#cite44"&gt;1&lt;/a&gt;]&lt;/cite&gt; : it shows how &lt;code class="w3-codespan"&gt;unquote&lt;/code&gt; can be used in a quasiquotation pattern in the &lt;code class="w3-codespan"&gt;cdr&lt;/code&gt; slot.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -895,14 +896,14 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section659"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/letcc/multiarg&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letcc/multiarg"&gt;&lt;code&gt;test/letcc/multiarg&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letcc/multiarg _) (⊦= 'a (letcc k (k 'a))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 2037264 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 2037384 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letcc*&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letcc*"&gt;&lt;code&gt;test/letcc*&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;The frame in &lt;cite&gt;[&lt;a href="#cite660"&gt;7&lt;/a&gt;]&lt;/cite&gt; is of inspiration of the &lt;code class="w3-codespan"&gt;letcc*&lt;/code&gt; macro.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -929,30 +930,30 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section684"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose-null?&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose-null?"&gt;&lt;code&gt;test/letnondeterministic/choose-null?&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose-null? _)
  (⊦= '() (letnondeterministic (? ¿ ⊦ • !) (? '()))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003)
- (memory #(12582912 2376448 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004)
+ (memory #(12582912 2376632 1048576))
  (stdout &amp;quot;((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose"&gt;&lt;code&gt;test/letnondeterministic/choose&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose _)
  (⊦= '(1 2 3) (letnondeterministic (? ¿ ⊦ • !) (? '(1 2 3)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003)
- (memory #(12582912 2382904 1048576))
+ (memory #(12582912 2383208 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((1 0.333333333333333) (2 0.333333333333333) (3 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose§&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose§"&gt;&lt;code&gt;test/letnondeterministic/choose§&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose§ _)
  (⊦= '(1 2 3)
@@ -962,12 +963,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2383568 1048576))
+ (memory #(12582912 2383992 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((2 0.333333333333333) (3 0.333333333333333) (1 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose-rec&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose-rec"&gt;&lt;code&gt;test/letnondeterministic/choose-rec&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose-rec _)
  (⊦= '(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584)
@@ -977,9 +978,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1)))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2379216 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2379760 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose+nested&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose+nested"&gt;&lt;code&gt;test/letnondeterministic/choose+nested&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose+nested _)
  (⊦= '(1 4 3 1 5 3)
@@ -987,12 +988,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2380808 1048576))
+ (memory #(12582912 2381472 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((1 0.333333333333333)\n (3 0.333333333333333)\n (5 0.166666666666667)\n (4 0.166666666666667))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((1 0.333333333333333)\n (3 0.333333333333333)\n (4 0.166666666666667)\n (5 0.166666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose+nested+¿&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose+nested+¿"&gt;&lt;code&gt;test/letnondeterministic/choose+nested+¿&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose+nested+¿ _)
  (⊦= '(1 4 3 1 5 3)
@@ -1000,12 +1001,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2387088 1048576))
+ (memory #(12582912 2387872 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((1 0.333333333333333)\n (3 0.333333333333333)\n (4 0.166666666666667)\n (5 0.166666666666667))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((3 0.333333333333333)\n (1 0.333333333333333)\n (4 0.166666666666667)\n (5 0.166666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose+double&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose+double"&gt;&lt;code&gt;test/letnondeterministic/choose+double&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose+double _)
  (⊦= '(5 6 6 7 7 8)
@@ -1013,12 +1014,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2390008 1048576))
+ (memory #(12582912 2390912 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n ((6 0.333333333333333)\n (7 0.333333333333333)\n (5 0.166666666666667)\n (8 0.166666666666667))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n ((6 0.333333333333333)\n (7 0.333333333333333)\n (8 0.166666666666667)\n (5 0.166666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose+fair+fibs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose+fair+fibs"&gt;&lt;code&gt;test/letnondeterministic/choose+fair+fibs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose+fair+fibs _)
  (⊦= '((a 0)
@@ -1051,9 +1052,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (map§ (lambda (v) (list 'c v)) (fibs§ 0 1)))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2392400 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(12582912 2393312 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/choose+fair&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/choose+fair"&gt;&lt;code&gt;test/letnondeterministic/choose+fair&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/choose+fair _)
  (⊦= '((a 1) (b 1) (a 2) (b 2) (a 3))
@@ -1063,12 +1064,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2398552 1048576))
+ (memory #(12582912 2399584 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 1) 0.2) ((a 2) 0.2) ((a 1) 0.2) ((a 3) 0.2) ((b 2) 0.2))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/odd&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/odd"&gt;&lt;code&gt;test/letnondeterministic/odd&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/odd _)
  (⊦= '(1 3)
@@ -1078,12 +1079,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2404800 1048576))
+ (memory #(12582912 2405952 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((1 0.5) (3 0.5))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((3 0.5) (1 0.5))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/parlor&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/parlor"&gt;&lt;code&gt;test/letnondeterministic/parlor&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/parlor _)
  (⊦= '((1 1 5)
@@ -1110,13 +1111,13 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (parlor 7))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
- (memory #(12582912 2388832 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
+ (memory #(12582912 2388984 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n (((1 1 5) 0.0666666666666667)\n ((1 3 3) 0.0666666666666667)\n ((1 5 1) 0.0666666666666667)\n ((3 1 3) 0.0666666666666667)\n ((3 3 1) 0.0666666666666667)\n ((5 1 1) 0.0666666666666667)\n ((1 2 4) 0.0666666666666667)\n ((1 4 2) 0.0666666666666667)\n ((2 1 4) 0.0666666666666667)\n ((2 2 3) 0.0666666666666667)\n ((2 3 2) 0.0666666666666667)\n ((2 4 1) 0.0666666666666667)\n ((3 2 2) 0.0666666666666667)\n ((4 1 2) 0.0666666666666667)\n ((4 2 1) 0.0666666666666667))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n (((1 1 5) 0.0666666666666667)\n ((1 2 4) 0.0666666666666667)\n ((1 3 3) 0.0666666666666667)\n ((1 4 2) 0.0666666666666667)\n ((1 5 1) 0.0666666666666667)\n ((2 1 4) 0.0666666666666667)\n ((2 2 3) 0.0666666666666667)\n ((2 3 2) 0.0666666666666667)\n ((2 4 1) 0.0666666666666667)\n ((3 1 3) 0.0666666666666667)\n ((3 2 2) 0.0666666666666667)\n ((3 3 1) 0.0666666666666667)\n ((4 1 2) 0.0666666666666667)\n ((4 2 1) 0.0666666666666667)\n ((5 1 1) 0.0666666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/parlor+sorted&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/parlor+sorted"&gt;&lt;code&gt;test/letnondeterministic/parlor+sorted&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/parlor+sorted _)
  (⊦= '((1 1 5) (1 2 4) (1 3 3) (2 2 3))
@@ -1132,12 +1133,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2386456 1048576))
+ (memory #(12582912 2387832 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 1 5) 0.25) ((1 2 4) 0.25) ((1 3 3) 0.25) ((2 2 3) 0.25))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/coin&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/coin"&gt;&lt;code&gt;test/letnondeterministic/coin&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/coin _)
  (⊦= '(((la 1 1) (la 1 2))
@@ -1168,13 +1169,13 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (reverse attempts)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
- (memory #(12582912 2392776 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
+ (memory #(12582912 2394336 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n ((((la 1 1) (la 1 2)) 0.333333333333333)\n (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n (((la 1 1)\n (la 1 2)\n (la 2 1)\n (la 2 2)\n (ny 1 1)\n (ny 1 2)\n (ny 2 1)\n (ny 2 2)\n (bos 1 1)\n (bos 1 2)\n (bos 2 1)\n (bos 2 2))\n 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/coin+cut&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/coin+cut"&gt;&lt;code&gt;test/letnondeterministic/coin+cut&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/coin+cut _)
  (⊦= '(((la 1 1) (la 1 2))
@@ -1197,13 +1198,13 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (reverse attempts)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2396896 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
+ (memory #(12582912 2398576 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n ((((la 1 1) (la 1 2)) 0.333333333333333)\n (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n 0.333333333333333)\n (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n ((((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333)\n (((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n 0.333333333333333)\n (((la 1 1) (la 1 2)) 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/graph+cycles/bfs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/graph+cycles/bfs"&gt;&lt;code&gt;test/letnondeterministic/graph+cycles/bfs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/graph+cycles/bfs _)
  (⊦= '((a b c a) (a b c e a) (a b d e a))
@@ -1223,12 +1224,12 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2391072 1048576))
+ (memory #(12582912 2392632 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n (((a b d e a) 0.333333333333333)\n ((a b c a) 0.333333333333333)\n ((a b c e a) 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n (((a b c a) 0.333333333333333)\n ((a b c e a) 0.333333333333333)\n ((a b d e a) 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/letnondeterministic/temporal-graphs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/letnondeterministic/temporal-graphs"&gt;&lt;code&gt;test/letnondeterministic/temporal-graphs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letnondeterministic/temporal-graphs _)
  (define graph-simple
@@ -1398,7 +1399,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003)
- (memory #(12582912 2458512 1048576))
+ (memory #(12582912 2461760 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 4013)\n (accepted 130)\n (ratio 0.0323947171692001)\n (distribution\n ((((a b) ((a 1) (b 2))) 0.00769230769230769)\n (((a b) ((a 1) (b 3))) 0.00769230769230769)\n (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\n (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\n (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\n (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\n (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\n (((b c) ((b 1) (c 2))) 0.00769230769230769)\n (((b c) ((b 1) (c 5))) 0.00769230769230769)\n (((b d) ((b 1) (d 2))) 0.00769230769230769)\n (((b d) ((b 1) (d 3))) 0.00769230769230769)\n (((b d) ((b 1) (d 4))) 0.00769230769230769)\n (((b d) ((b 1) (d 5))) 0.00769230769230769)\n (((b d) ((b 1) (d 6))) 0.00769230769230769)\n (((b d) ((b 1) (d 7))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\n (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\n (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\n (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\n (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\n (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\n (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\n (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\n (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\n (((c a) ((c 1) (a 2))) 0.00769230769230769)\n (((c a) ((c 1) (a 3))) 0.00769230769230769)\n (((c a) ((c 1) (a 4))) 0.00769230769230769)\n (((c a) ((c 1) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\n (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\n (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\n (((c e) ((c 1) (e 2))) 0.00769230769230769)\n (((c e) ((c 1) (e 3))) 0.00769230769230769)\n (((c e) ((c 1) (e 4))) 0.00769230769230769)\n (((c e) ((c 1) (e 5))) 0.00769230769230769)\n (((c e) ((c 1) (e 6))) 0.00769230769230769)\n (((c e) ((c 1) (e 7))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\n (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\n (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\n (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\n (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\n (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\n (((d e) ((d 1) (e 3))) 0.00769230769230769)\n (((d e) ((d 1) (e 4))) 0.00769230769230769)\n (((d e) ((d 1) (e 5))) 0.00769230769230769)\n (((e a) ((e 1) (a 2))) 0.00769230769230769)\n (((e a) ((e 1) (a 3))) 0.00769230769230769)\n (((e a) ((e 1) (a 4))) 0.00769230769230769)\n (((e a) ((e 1) (a 5))) 0.00769230769230769)\n (((e a) ((e 1) (a 6))) 0.00769230769230769)\n (((e a) ((e 1) (a 7))) 0.00769230769230769)\n (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\n (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
@@ -1428,7 +1429,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section1146"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/find&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/find"&gt;&lt;code&gt;test/find&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/find _)
  (let* ((v1 (make-µkanren-var 0))
@@ -1445,16 +1446,16 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= 'a (µkanren-state-find v2 s2))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2287560 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2287704 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/=°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/=°"&gt;&lt;code&gt;test/=°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/=° _) (⊦= '(#t) (°-&amp;gt;list/ground (=° 'z 'z))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2288304 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2288568 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/sharing&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/sharing"&gt;&lt;code&gt;test/sharing&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/sharing _)
  (⊦= '(((_0 z) z (_0 _1)))
@@ -1466,9 +1467,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(12582912 2288144 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(12582912 2288528 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/peano°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/peano°"&gt;&lt;code&gt;test/peano°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/peano° _)
  (define-relation
@@ -1500,9 +1501,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (°-&amp;gt;list/ground (take° 10 (fresh° (n) (church° n))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.008) (memory #(12582912 2299312 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.008) (memory #(12582912 2299816 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/append°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/append°"&gt;&lt;code&gt;test/append°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/append° _)
  (define-relation
@@ -1524,9 +1525,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2291496 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2292088 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/project°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/project°"&gt;&lt;code&gt;test/project°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/project° _)
  (⊦= '(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300)
@@ -1539,9 +1540,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (project° ((s* s)) (=° r (+ s* 500))))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2286664 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2287408 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/groupby°/empty&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/groupby°/empty"&gt;&lt;code&gt;test/groupby°/empty&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;The following table has been kept from the PostgreSQL documentation example on &lt;i&gt;window functions &lt;/i&gt;&lt;cite&gt;[&lt;a href="#cite1147"&gt;1&lt;/a&gt;]&lt;/cite&gt;:
 &lt;pre&gt;&lt;code class="w3-code w3-round"&gt; depname | empno | salary | avg
 -----------+-------+--------+-----------------------
@@ -1583,7 +1584,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section203"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test-letqueue&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-letqueue"&gt;&lt;code&gt;test-letqueue&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-letqueue _)
  (⊦= 2 (cadr '(1 2)))
@@ -1601,9 +1602,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊭ (fds-queue-empty? t))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1828736 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1828824 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-cons-cdr&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-cons-cdr"&gt;&lt;code&gt;test-cons-cdr&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-cons-cdr _)
  (letqueue
@@ -1634,9 +1635,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊨ (fds-queue-empty? q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1828952 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1829160 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-empty-car&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-empty-car"&gt;&lt;code&gt;test-empty-car&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-empty-car _)
  (letqueue
@@ -1645,7 +1646,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦⧳ ((exn)) (fds-queue-cdr q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1835200 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1835528 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -1672,7 +1673,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section149"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test-cons&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-cons"&gt;&lt;code&gt;test-cons&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-cons _)
  (let1 (q empty/sbral)
@@ -1706,9 +1707,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1838080 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1838168 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-ref"&gt;&lt;code&gt;test-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-ref _)
  (let1 (q (list-&amp;gt;sbral '(a b c d e f g)))
@@ -1721,9 +1722,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= 'g (sbral-ref q 6))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1839184 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1839392 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-list-&gt;sbral&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-list-&gt;sbral"&gt;&lt;code&gt;test-list-&gt;sbral&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-list-&amp;gt;sbral _)
  (let* ((l '(a b c d e f g)) (ll (iota 100)))
@@ -1757,18 +1758,18 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (list-&amp;gt;sbral ll))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1843592 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1844016 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-length&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-length"&gt;&lt;code&gt;test-length&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-length _)
  (let* ((l '(a b c d e f g)) (q (list-&amp;gt;sbral l)))
  (⊦= (length l) (length/sbral q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1844840 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1845384 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-update&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-update"&gt;&lt;code&gt;test-update&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-update _)
  (let1 (q (list-&amp;gt;sbral '(a b c d e f g)))
@@ -1776,15 +1777,15 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1845968 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1846632 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test-identity&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test-identity"&gt;&lt;code&gt;test-identity&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test-identity _)
  (let1 (l '(a b c d e f g)) (⊦= l (sbral-&amp;gt;list (list-&amp;gt;sbral l)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1846264 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1847048 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -1811,7 +1812,7 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
 &lt;section id="section188"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2&gt;&lt;code&gt;test/stream/nats&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/stream/nats"&gt;&lt;code&gt;test/stream/nats&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/stream/nats _)
  (let1 (nats (take§ 20 (nats§ 0)))
@@ -1819,9 +1820,9 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (§-&amp;gt;list nats))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1858496 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1858640 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/stream/fibs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/stream/fibs"&gt;&lt;code&gt;test/stream/fibs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/stream/fibs _)
  (let1 (fibs (take§ 20 (fibs§ 0 1)))
@@ -1848,18 +1849,18 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (§-&amp;gt;list fibs))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1870896 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1871160 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/stream/ones&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/stream/ones"&gt;&lt;code&gt;test/stream/ones&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/stream/ones _)
  (let1 (ones (take§ 20 (const§ 1)))
  (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&amp;gt;list ones))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1874064 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1874448 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/stream/primes&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/stream/primes"&gt;&lt;code&gt;test/stream/primes&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/stream/primes _)
  (let1 (primes (take§ 20 primes§))
@@ -1867,16 +1868,16 @@ All content is taken from &lt;a href="https://github.com/jakevdp/PythonDataScien
  (§-&amp;gt;list primes))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.009) (memory #(6291456 2040864 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.007) (memory #(6291456 2041368 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;&lt;code&gt;test/stream/ones+τ&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id="test/stream/ones+τ"&gt;&lt;code&gt;test/stream/ones+τ&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/stream/ones+τ _)
  (let1 (ones (take§ 20 (thunk§ 1)))
  (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&amp;gt;list ones))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 2044032 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 2044656 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;

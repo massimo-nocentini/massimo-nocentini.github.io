@@ -32,7 +32,7 @@ test/empty: pass
         (⊦ = 0 (judy-array-bytes a))))
 
 
-((eta 0.001) (memory #(9546320 1830120 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(8456480 1830240 1048576)) (stdout "") (stderr ""))
 
 test/set!-ref: pass
 
@@ -48,7 +48,7 @@ test/set!-ref: pass
         (⊦ equal? &#39;missing (judy-array-ref/default a 0 (λ_ &#39;missing)))))
 
 
-((eta 0.001) (memory #(9546320 1830792 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(8456480 1831032 1048576)) (stdout "") (stderr ""))
 
 test/alist->judy-array: pass
 
@@ -64,7 +64,7 @@ test/alist->judy-array: pass
         (⊦ equal? &#39;missing (judy-array-ref/default a 3 (λ_ &#39;missing)))))
 
 
-((eta 0.0) (memory #(9546320 1831336 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(8456480 1831696 1048576)) (stdout "") (stderr ""))
 
 test/list->judy-array: pass
 
@@ -79,7 +79,7 @@ test/list->judy-array: pass
         (⊦ equal? &#39;missing (judy-array-ref/default a 11 (λ_ &#39;missing)))))
 
 
-((eta 0.0) (memory #(9546320 1832008 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(8456480 1832488 1048576)) (stdout "") (stderr ""))
 
 test/judy-array->alist: pass
 
@@ -89,7 +89,7 @@ test/judy-array->alist: pass
               (⊦ equal? alist (judy-array->alist a)))))
 
 
-((eta 0.0) (memory #(9546320 1832440 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(8456480 1833040 1048576)) (stdout "") (stderr ""))
 
 test/list->judy-array/iota: pass
 
@@ -100,7 +100,7 @@ test/list->judy-array/iota: pass
           (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
 
 
-((eta 0.037) (memory #(9546320 4231800 1048576)) (stdout "") (stderr ""))
+((eta 0.036) (memory #(8456480 4232568 1048576)) (stdout "") (stderr ""))
 
 test/judy-array-walk: pass
 
@@ -115,8 +115,8 @@ test/judy-array-walk: pass
                 (⊦ equal? I (reverse collected))))))
 
 
-((eta 0.027) (memory #(9546320 4232592 1048576)) (stdout "") (stderr ""))
-'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-judy-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/empty: pass (define (test\/empty _) (let1 (a (judy-array-empty)) (⊦ = 0 (judy-array-size a)) (⊦ = 0 (judy-array-bytes a)))) ((eta 0.001) (memory #(9546320 1830120 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/set!-ref: pass (define (test\/set!-ref _) (let1 (a (judy-array-empty)) (judy-array-set! a \u0027key \u0027(zero \u0026quot;hello\u0026quot;)) (⊦ = 1 (judy-array-size a)) (⊦ = 24 (judy-array-bytes a)) (⊦ (λ (v z) (not (eq? v z))) \u0027(zero \u0026quot;hello\u0026quot;) (judy-array-ref a \u0027key)) (⊦ equal? \u0027(zero \u0026quot;hello\u0026quot;) (judy-array-ref a \u0027key)) (⊦ equal? \u0027missing (judy-array-ref\/default a 0 (λ_ \u0027missing))))) ((eta 0.001) (memory #(9546320 1830792 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/alist-\u003ejudy-array: pass (define (test\/alist-\u0026gt;judy-array _) (let1 (a (alist-\u0026gt;judy-array \u0027((0 zero) (1 one) (2 two) (10000 ten-thousand)))) (⊦ = 4 (judy-array-size a)) (⊦ = 88 (judy-array-bytes a)) (⊦ equal? \u0027zero (judy-array-ref a 0)) (⊦ equal? \u0027one (judy-array-ref a 1)) (⊦ equal? \u0027two (judy-array-ref a 2)) (⊦ equal? \u0027ten-thousand (judy-array-ref a 10000)) (⊦ equal? \u0027missing (judy-array-ref\/default a 3 (λ_ \u0027missing))))) ((eta 0.0) (memory #(9546320 1831336 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/list-\u003ejudy-array: pass (define (test\/list-\u0026gt;judy-array _) (let1 (a (list-\u0026gt;judy-array \u0027(zero one two three four five six seven eight nine ten))) (⊦ = 11 (judy-array-size a)) (⊦ = 184 (judy-array-bytes a)) (⊦ equal? \u0027zero (judy-array-ref a 0)) (⊦ equal? \u0027five (judy-array-ref a 5)) (⊦ equal? \u0027ten (judy-array-ref a 10)) (⊦ equal? \u0027missing (judy-array-ref\/default a 11 (λ_ \u0027missing))))) ((eta 0.0) (memory #(9546320 1832008 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/judy-array-\u003ealist: pass (define (test\/judy-array-\u0026gt;alist _) (let1 (alist \u0027((0 zero) (1 one) (2 two) (10000 ten-thousand))) (let1 (a (alist-\u0026gt;judy-array alist)) (⊦ equal? alist (judy-array-\u0026gt;alist a))))) ((eta 0.0) (memory #(9546320 1832440 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/list-\u003ejudy-array\/iota: pass (define (test\/list-\u0026gt;judy-array\/iota _) (let* ((n 100000) (I (iota n))) (let1 (a (list-\u0026gt;judy-array I)) (⊦ = n (judy-array-size a)) (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I)))) ((eta 0.037) (memory #(9546320 4231800 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/judy-array-walk: pass (define (test\/judy-array-walk _) (let* ((n 50000) (I (iota n))) (let1 (a (list-\u0026gt;judy-array I)) (let1 (collected \u0027()) (judy-array-walk\/backward a (λ (i v) (push! v collected))) (⊦ equal? I collected) (set! collected \u0027()) (judy-array-walk\/forward a (λ (i v) (push! v collected))) (⊦ equal? I (reverse collected)))))) ((eta 0.027) (memory #(9546320 4232592 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":355,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-judy-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+((eta 0.032) (memory #(16912960 4233272 1048576)) (stdout "") (stderr ""))
+'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-judy-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/empty: pass (define (test\/empty _) (let1 (a (judy-array-empty)) (⊦ = 0 (judy-array-size a)) (⊦ = 0 (judy-array-bytes a)))) ((eta 0.001) (memory #(8456480 1830240 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/set!-ref: pass (define (test\/set!-ref _) (let1 (a (judy-array-empty)) (judy-array-set! a \u0027key \u0027(zero \u0026quot;hello\u0026quot;)) (⊦ = 1 (judy-array-size a)) (⊦ = 24 (judy-array-bytes a)) (⊦ (λ (v z) (not (eq? v z))) \u0027(zero \u0026quot;hello\u0026quot;) (judy-array-ref a \u0027key)) (⊦ equal? \u0027(zero \u0026quot;hello\u0026quot;) (judy-array-ref a \u0027key)) (⊦ equal? \u0027missing (judy-array-ref\/default a 0 (λ_ \u0027missing))))) ((eta 0.001) (memory #(8456480 1831032 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/alist-\u003ejudy-array: pass (define (test\/alist-\u0026gt;judy-array _) (let1 (a (alist-\u0026gt;judy-array \u0027((0 zero) (1 one) (2 two) (10000 ten-thousand)))) (⊦ = 4 (judy-array-size a)) (⊦ = 88 (judy-array-bytes a)) (⊦ equal? \u0027zero (judy-array-ref a 0)) (⊦ equal? \u0027one (judy-array-ref a 1)) (⊦ equal? \u0027two (judy-array-ref a 2)) (⊦ equal? \u0027ten-thousand (judy-array-ref a 10000)) (⊦ equal? \u0027missing (judy-array-ref\/default a 3 (λ_ \u0027missing))))) ((eta 0.0) (memory #(8456480 1831696 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/list-\u003ejudy-array: pass (define (test\/list-\u0026gt;judy-array _) (let1 (a (list-\u0026gt;judy-array \u0027(zero one two three four five six seven eight nine ten))) (⊦ = 11 (judy-array-size a)) (⊦ = 184 (judy-array-bytes a)) (⊦ equal? \u0027zero (judy-array-ref a 0)) (⊦ equal? \u0027five (judy-array-ref a 5)) (⊦ equal? \u0027ten (judy-array-ref a 10)) (⊦ equal? \u0027missing (judy-array-ref\/default a 11 (λ_ \u0027missing))))) ((eta 0.0) (memory #(8456480 1832488 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/judy-array-\u003ealist: pass (define (test\/judy-array-\u0026gt;alist _) (let1 (alist \u0027((0 zero) (1 one) (2 two) (10000 ten-thousand))) (let1 (a (alist-\u0026gt;judy-array alist)) (⊦ equal? alist (judy-array-\u0026gt;alist a))))) ((eta 0.0) (memory #(8456480 1833040 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/list-\u003ejudy-array\/iota: pass (define (test\/list-\u0026gt;judy-array\/iota _) (let* ((n 100000) (I (iota n))) (let1 (a (list-\u0026gt;judy-array I)) (⊦ = n (judy-array-size a)) (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I)))) ((eta 0.036) (memory #(8456480 4232568 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/judy-array-walk: pass (define (test\/judy-array-walk _) (let* ((n 50000) (I (iota n))) (let1 (a (list-\u0026gt;judy-array I)) (let1 (collected \u0027()) (judy-array-walk\/backward a (λ (i v) (push! v collected))) (⊦ equal? I collected) (set! collected \u0027()) (judy-array-walk\/forward a (λ (i v) (push! v collected))) (⊦ equal? I (reverse collected)))))) ((eta 0.032) (memory #(16912960 4233272 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":355,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-judy-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -150,7 +150,7 @@ test/empty: pass
         (⊦ = 0 (judy-array-bytes a))))
 
 
-((eta 0.001) (memory #(9546320 1830120 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(8456480 1830240 1048576)) (stdout "") (stderr ""))
 
 test/set!-ref: pass
 
@@ -166,7 +166,7 @@ test/set!-ref: pass
         (⊦ equal? &#39;missing (judy-array-ref/default a 0 (λ_ &#39;missing)))))
 
 
-((eta 0.001) (memory #(9546320 1830792 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(8456480 1831032 1048576)) (stdout "") (stderr ""))
 
 test/alist->judy-array: pass
 
@@ -182,7 +182,7 @@ test/alist->judy-array: pass
         (⊦ equal? &#39;missing (judy-array-ref/default a 3 (λ_ &#39;missing)))))
 
 
-((eta 0.0) (memory #(9546320 1831336 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(8456480 1831696 1048576)) (stdout "") (stderr ""))
 
 test/list->judy-array: pass
 
@@ -197,7 +197,7 @@ test/list->judy-array: pass
         (⊦ equal? &#39;missing (judy-array-ref/default a 11 (λ_ &#39;missing)))))
 
 
-((eta 0.0) (memory #(9546320 1832008 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(8456480 1832488 1048576)) (stdout "") (stderr ""))
 
 test/judy-array->alist: pass
 
@@ -207,7 +207,7 @@ test/judy-array->alist: pass
               (⊦ equal? alist (judy-array->alist a)))))
 
 
-((eta 0.0) (memory #(9546320 1832440 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(8456480 1833040 1048576)) (stdout "") (stderr ""))
 
 test/list->judy-array/iota: pass
 
@@ -218,7 +218,7 @@ test/list->judy-array/iota: pass
           (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
 
 
-((eta 0.037) (memory #(9546320 4231800 1048576)) (stdout "") (stderr ""))
+((eta 0.036) (memory #(8456480 4232568 1048576)) (stdout "") (stderr ""))
 
 test/judy-array-walk: pass
 
@@ -233,7 +233,7 @@ test/judy-array-walk: pass
                 (⊦ equal? I (reverse collected))))))
 
 
-((eta 0.027) (memory #(9546320 4232592 1048576)) (stdout "") (stderr ""))
+((eta 0.032) (memory #(16912960 4233272 1048576)) (stdout "") (stderr ""))
 '><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-judy-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
@@ -278,12 +278,12 @@ test/empty: pass
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
 </button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section192><header><h1>Tests</h1></header></section><h2><code>test/empty</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/empty _)
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section192><header><h1>Tests</h1></header></section><h2 id=test/empty><code>test/empty</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/empty _)
   (let1 (a (judy-array-empty))
         (⊦ = 0 (judy-array-size a))
         (⊦ = 0 (judy-array-bytes a))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(9546320 1830120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/set!-ref</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/set!-ref _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1830240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/set!-ref><code>test/set!-ref</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/set!-ref _)
   (let1 (a (judy-array-empty))
         (judy-array-set! a 'key '(zero &quot;hello&quot;))
         (⊦ = 1 (judy-array-size a))
@@ -293,8 +293,8 @@ test/empty: pass
              (judy-array-ref a 'key))
         (⊦ equal? '(zero &quot;hello&quot;) (judy-array-ref a 'key))
         (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(9546320 1830792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/alist->judy-array</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/alist-&gt;judy-array _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1831032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/alist->judy-array"><code>test/alist->judy-array</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/alist-&gt;judy-array _)
   (let1 (a (alist-&gt;judy-array
              '((0 zero) (1 one) (2 two) (10000 ten-thousand))))
         (⊦ = 4 (judy-array-size a))
@@ -304,8 +304,8 @@ test/empty: pass
         (⊦ equal? 'two (judy-array-ref a 2))
         (⊦ equal? 'ten-thousand (judy-array-ref a 10000))
         (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(9546320 1831336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/list->judy-array</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1831696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/list->judy-array"><code>test/list->judy-array</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array _)
   (let1 (a (list-&gt;judy-array
              '(zero one two three four five six seven eight nine ten)))
         (⊦ = 11 (judy-array-size a))
@@ -314,19 +314,19 @@ test/empty: pass
         (⊦ equal? 'five (judy-array-ref a 5))
         (⊦ equal? 'ten (judy-array-ref a 10))
         (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(9546320 1832008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/judy-array->alist</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/judy-array-&gt;alist _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1832488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/judy-array->alist"><code>test/judy-array->alist</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/judy-array-&gt;alist _)
   (let1 (alist '((0 zero) (1 one) (2 two) (10000 ten-thousand)))
         (let1 (a (alist-&gt;judy-array alist))
               (⊦ equal? alist (judy-array-&gt;alist a)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(9546320 1832440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/list->judy-array/iota</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array/iota _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1833040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/list->judy-array/iota"><code>test/list->judy-array/iota</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;judy-array/iota _)
   (let* ((n 100000) (I (iota n)))
     (let1 (a (list-&gt;judy-array I))
           (⊦ = n (judy-array-size a))
           (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.037) (memory #(9546320 4231800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2><code>test/judy-array-walk</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/judy-array-walk _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.036) (memory #(8456480 4232568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/judy-array-walk><code>test/judy-array-walk</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/judy-array-walk _)
   (let* ((n 50000) (I (iota n)))
     (let1 (a (list-&gt;judy-array I))
           (let1 (collected '())
@@ -335,7 +335,7 @@ test/empty: pass
                 (set! collected '())
                 (judy-array-walk/forward a (λ (i v) (push! v collected)))
                 (⊦ equal? I (reverse collected))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.027) (memory #(9546320 4232592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.032) (memory #(16912960 4233272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
