@@ -103,19 +103,21 @@ This test suite drove the implementation of the unittest framework itself.
                (errstr (third pair))
                (hasdoc (and (pair? v) (eq? (car v) 'doc))))
           (when teardown (apply (car teardown) testcase args))
-          `((h2 (@ (id ,testcase-name))
-                (code ,testcase-name)
-                &#34;: &#34;
-                ,(if (eq? v witness)
-                   '(span (@ (class &#34;w3-text-red&#34;)) fail)
-                   '(span (@ (class &#34;w3-text-green&#34;)) pass)))
-            ,@(if hasdoc (cdr v) '())
-            (code/scheme ,(if hasdoc (butlast code) code))
-            (code/scheme
-              ((eta ,(exact->inexact (/ eta-time 1000)))
-               (memory ,(memory-statistics))
-               (stdout ,outstr)
-               (stderr ,errstr))))))))
+          (let ((header-id (symbol->string testcase-name)))
+            `((h2 (@ (id ,header-id))
+                  (a (@ (href ,(string-append &#34;#&#34; header-id)))
+                     (code ,testcase-name)
+                     &#34;: &#34;
+                     ,(if (eq? v witness)
+                        '(span (@ (class &#34;w3-text-red&#34;)) fail)
+                        '(span (@ (class &#34;w3-text-green&#34;)) pass))))
+              ,@(if hasdoc (cdr v) '())
+              (code/scheme ,(if hasdoc (butlast code) code))
+              (code/scheme
+                ((eta ,(exact->inexact (/ eta-time 1000)))
+                 (memory ,(memory-statistics))
+                 (stdout ,outstr)
+                 (stderr ,errstr)))))))))
   (define-syntax
     define-suite
     (syntax-rules
@@ -208,7 +210,7 @@ This test suite drove the implementation of the unittest framework itself.
 
 Tests
 test-running: pass
-hello"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-bootstrap-sut\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e This test suite drove the implementation of the unittest framework itself.\n(module (aux unittest) * (import scheme (chicken base) (chicken condition) (chicken pretty-print) (chicken port) (chicken string) (chicken syntax) (chicken flonum) (chicken time) (chicken gc) srfi-1 srfi-19 (aux sxml)) (define-record unittest\/testcase name log) (define (unittest\/wasrun name) (make-unittest\/testcase name \u0027())) (define (unittest\/testcase-logcons! testcase msg) (unittest\/testcase-log-set! testcase (cons msg (unittest\/testcase-log testcase)))) (define (unittest\/testcase-run testcase result sut) (let* ((methods (cdr sut)) (setup (alist-ref \u0027setup methods)) (teardown (alist-ref \u0027teardown methods)) (testcase-name (unittest\/testcase-name testcase))) (unittest\/result-started! result) (let-values ((args (if setup ((car setup) testcase) (values))) ((f code) (apply values (alist-ref testcase-name methods)))) (let* ((witness (gensym)) (no-outsrt \u0026quot;\u0026quot;) (eta-time 0) (pair (condition-case (let* ((res (void)) (outstr no-outsrt) (errstr (with-error-output-to-string (lambda () (set! outstr (with-output-to-string (lambda () (let-values (((u s) (cpu-time))) (set! res (apply f testcase args)) (let-values (((uu ss) (cpu-time))) (set! eta-time (- (\u002b uu ss) (\u002b u s)))))))))))) (list res outstr errstr)) (c (exn unittest-assert-equal) (begin (unittest\/result-failed! result (cons testcase-name (get-condition-property c \u0027unittest-assert-equal \u0027comparison))) (list witness no-outsrt no-outsrt))) (c (exn) (begin (unittest\/result-failed! result (list testcase-name (call-with-output-string (lambda (port) (print-error-message c port))))) (list witness no-outsrt no-outsrt))) (c () (begin (unittest\/result-failed! result (list testcase-name c)) (list witness no-outsrt no-outsrt))))) (v (first pair)) (outstr (second pair)) (errstr (third pair)) (hasdoc (and (pair? v) (eq? (car v) \u0027doc)))) (when teardown (apply (car teardown) testcase args)) \u0060((h2 (@ (id ,testcase-name)) (code ,testcase-name) \u0026quot;: \u0026quot; ,(if (eq? v witness) \u0027(span (@ (class \u0026quot;w3-text-red\u0026quot;)) fail) \u0027(span (@ (class \u0026quot;w3-text-green\u0026quot;)) pass))) ,@(if hasdoc (cdr v) \u0027()) (code\/scheme ,(if hasdoc (butlast code) code)) (code\/scheme ((eta ,(exact-\u0026gt;inexact (\/ eta-time 1000))) (memory ,(memory-statistics)) (stdout ,outstr) (stderr ,errstr)))))))) (define-syntax define-suite (syntax-rules () ((_ sutname ((casename formal ...) body ...) ...) (define sutname \u0060(sutname (casename ,(lambda (formal ...) body ...) ,\u0027(define (casename formal ...) body ...)) ...))))) (define-syntax lettest (syntax-rules () ((_ ((test nameexp) ...) body ...) (let ((test (unittest\/wasrun nameexp)) ...) body ...)))) (define-record unittest\/result ran failed) (define (unittest\/result-summary result) \u0060((ran ,(unittest\/result-ran result)) (failed ,(length (unittest\/result-failed result)) ,@(unittest\/result-failed result)))) (define (unittest\/result-started! result) (unittest\/result-ran-set! result (add1 (unittest\/result-ran result)))) (define (unittest\/result-failed! result exn) (unittest\/result-failed-set! result (cons exn (unittest\/result-failed result)))) (define (equal-approx? p) (letrec ((? (lambda (a b) (cond ((and (real? a) (real? b)) (\u0026lt; (abs (- a b)) p)) ((and (pair? a) (pair? b)) (and (? (car a) (car b)) (? (cdr a) (cdr b)))) (else (equal=? a b)))))) ?)) (define (⊦ pred? . args) (unless (apply pred? args) (signal (apply unittest\/condition-expected-actual args)))) (define (⊦= a b) (⊦ (equal-approx? 1e-06) a b)) (define (⊦≠ a b) (⊦ (complement equal?) a b)) (define (⊨ a) (⊦= #t a)) (define (⊭ a) (⊦= #f a)) (define-syntax letsuite (syntax-rules () ((_ ((name \u0027(method ...)) ...) body ...) (letrec ((name (lettest ((method \u0027method) ...) (list method ...))) ...) body ...)))) (define (unittest\/testsuite-run suite r sut) (map (lambda (testcase) (unittest\/testcase-run testcase r sut)) suite)) (define (unittest\/✓ sut) (let* ((r (make-unittest\/result 0 \u0027())) (sut-name (car sut)) (sut-methods (cdr sut)) (F (lambda (x) (let ((name (car x))) (and (not (eq? name \u0027setup)) (not (eq? name \u0027teardown)) (not (eq? name \u0027doc)))))) (methods (filter F sut-methods)) (s (map (lambda (pair) (lettest ((t (car pair))) t)) methods))) (let ((docs (unittest\/testsuite-run s r sut)) (res (unittest\/result-summary r)) (sxml (alist-ref \u0027doc sut-methods))) (SXML-\u0026gt;HTML-\u0026gt;file! (sxml-tree sut-name \u0060(,@(if sxml ((car sxml) r) \u0027()) (structure\/section \u0026quot;Tests\u0026quot;) ,@docs)) (symbol-append \u0027testsuite- sut-name)) (pretty-print res) r))) (define (unittest\/condition-expected-actual a b) (condition \u0060(exn message \u0026quot;assert-equal failed\u0026quot;) \u0060(unittest-assert-equal comparison ((expected ,a) (got ,b))))) (define-syntax ⊦⧳ (syntax-rules () ((_ ((exn ...) ...) body ...) (condition-case (begin body ...) ((exn ...) (void)) ...))))) Tests test-running: pass hello\n","inLanguage":"en","wordCount":865,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-bootstrap-sut\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+hello"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-bootstrap-sut\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e This test suite drove the implementation of the unittest framework itself.\n(module (aux unittest) * (import scheme (chicken base) (chicken condition) (chicken pretty-print) (chicken port) (chicken string) (chicken syntax) (chicken flonum) (chicken time) (chicken gc) srfi-1 srfi-19 (aux sxml)) (define-record unittest\/testcase name log) (define (unittest\/wasrun name) (make-unittest\/testcase name \u0027())) (define (unittest\/testcase-logcons! testcase msg) (unittest\/testcase-log-set! testcase (cons msg (unittest\/testcase-log testcase)))) (define (unittest\/testcase-run testcase result sut) (let* ((methods (cdr sut)) (setup (alist-ref \u0027setup methods)) (teardown (alist-ref \u0027teardown methods)) (testcase-name (unittest\/testcase-name testcase))) (unittest\/result-started! result) (let-values ((args (if setup ((car setup) testcase) (values))) ((f code) (apply values (alist-ref testcase-name methods)))) (let* ((witness (gensym)) (no-outsrt \u0026quot;\u0026quot;) (eta-time 0) (pair (condition-case (let* ((res (void)) (outstr no-outsrt) (errstr (with-error-output-to-string (lambda () (set! outstr (with-output-to-string (lambda () (let-values (((u s) (cpu-time))) (set! res (apply f testcase args)) (let-values (((uu ss) (cpu-time))) (set! eta-time (- (\u002b uu ss) (\u002b u s)))))))))))) (list res outstr errstr)) (c (exn unittest-assert-equal) (begin (unittest\/result-failed! result (cons testcase-name (get-condition-property c \u0027unittest-assert-equal \u0027comparison))) (list witness no-outsrt no-outsrt))) (c (exn) (begin (unittest\/result-failed! result (list testcase-name (call-with-output-string (lambda (port) (print-error-message c port))))) (list witness no-outsrt no-outsrt))) (c () (begin (unittest\/result-failed! result (list testcase-name c)) (list witness no-outsrt no-outsrt))))) (v (first pair)) (outstr (second pair)) (errstr (third pair)) (hasdoc (and (pair? v) (eq? (car v) \u0027doc)))) (when teardown (apply (car teardown) testcase args)) (let ((header-id (symbol-\u0026gt;string testcase-name))) \u0060((h2 (@ (id ,header-id)) (a (@ (href ,(string-append \u0026quot;#\u0026quot; header-id))) (code ,testcase-name) \u0026quot;: \u0026quot; ,(if (eq? v witness) \u0027(span (@ (class \u0026quot;w3-text-red\u0026quot;)) fail) \u0027(span (@ (class \u0026quot;w3-text-green\u0026quot;)) pass)))) ,@(if hasdoc (cdr v) \u0027()) (code\/scheme ,(if hasdoc (butlast code) code)) (code\/scheme ((eta ,(exact-\u0026gt;inexact (\/ eta-time 1000))) (memory ,(memory-statistics)) (stdout ,outstr) (stderr ,errstr))))))))) (define-syntax define-suite (syntax-rules () ((_ sutname ((casename formal ...) body ...) ...) (define sutname \u0060(sutname (casename ,(lambda (formal ...) body ...) ,\u0027(define (casename formal ...) body ...)) ...))))) (define-syntax lettest (syntax-rules () ((_ ((test nameexp) ...) body ...) (let ((test (unittest\/wasrun nameexp)) ...) body ...)))) (define-record unittest\/result ran failed) (define (unittest\/result-summary result) \u0060((ran ,(unittest\/result-ran result)) (failed ,(length (unittest\/result-failed result)) ,@(unittest\/result-failed result)))) (define (unittest\/result-started! result) (unittest\/result-ran-set! result (add1 (unittest\/result-ran result)))) (define (unittest\/result-failed! result exn) (unittest\/result-failed-set! result (cons exn (unittest\/result-failed result)))) (define (equal-approx? p) (letrec ((? (lambda (a b) (cond ((and (real? a) (real? b)) (\u0026lt; (abs (- a b)) p)) ((and (pair? a) (pair? b)) (and (? (car a) (car b)) (? (cdr a) (cdr b)))) (else (equal=? a b)))))) ?)) (define (⊦ pred? . args) (unless (apply pred? args) (signal (apply unittest\/condition-expected-actual args)))) (define (⊦= a b) (⊦ (equal-approx? 1e-06) a b)) (define (⊦≠ a b) (⊦ (complement equal?) a b)) (define (⊨ a) (⊦= #t a)) (define (⊭ a) (⊦= #f a)) (define-syntax letsuite (syntax-rules () ((_ ((name \u0027(method ...)) ...) body ...) (letrec ((name (lettest ((method \u0027method) ...) (list method ...))) ...) body ...)))) (define (unittest\/testsuite-run suite r sut) (map (lambda (testcase) (unittest\/testcase-run testcase r sut)) suite)) (define (unittest\/✓ sut) (let* ((r (make-unittest\/result 0 \u0027())) (sut-name (car sut)) (sut-methods (cdr sut)) (F (lambda (x) (let ((name (car x))) (and (not (eq? name \u0027setup)) (not (eq? name \u0027teardown)) (not (eq? name \u0027doc)))))) (methods (filter F sut-methods)) (s (map (lambda (pair) (lettest ((t (car pair))) t)) methods))) (let ((docs (unittest\/testsuite-run s r sut)) (res (unittest\/result-summary r)) (sxml (alist-ref \u0027doc sut-methods))) (SXML-\u0026gt;HTML-\u0026gt;file! (sxml-tree sut-name \u0060(,@(if sxml ((car sxml) r) \u0027()) (structure\/section \u0026quot;Tests\u0026quot;) ,@docs)) (symbol-append \u0027testsuite- sut-name)) (pretty-print res) r))) (define (unittest\/condition-expected-actual a b) (condition \u0060(exn message \u0026quot;assert-equal failed\u0026quot;) \u0060(unittest-assert-equal comparison ((expected ,a) (got ,b))))) (define-syntax ⊦⧳ (syntax-rules () ((_ ((exn ...) ...) body ...) (condition-case (begin body ...) ((exn ...) (void)) ...))))) Tests test-running: pass hello\n","inLanguage":"en","wordCount":875,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-bootstrap-sut\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
 
 
 
@@ -313,19 +315,21 @@ This test suite drove the implementation of the unittest framework itself.
                (errstr (third pair))
                (hasdoc (and (pair? v) (eq? (car v) 'doc))))
           (when teardown (apply (car teardown) testcase args))
-          `((h2 (@ (id ,testcase-name))
-                (code ,testcase-name)
-                &#34;: &#34;
-                ,(if (eq? v witness)
-                   '(span (@ (class &#34;w3-text-red&#34;)) fail)
-                   '(span (@ (class &#34;w3-text-green&#34;)) pass)))
-            ,@(if hasdoc (cdr v) '())
-            (code/scheme ,(if hasdoc (butlast code) code))
-            (code/scheme
-              ((eta ,(exact->inexact (/ eta-time 1000)))
-               (memory ,(memory-statistics))
-               (stdout ,outstr)
-               (stderr ,errstr))))))))
+          (let ((header-id (symbol->string testcase-name)))
+            `((h2 (@ (id ,header-id))
+                  (a (@ (href ,(string-append &#34;#&#34; header-id)))
+                     (code ,testcase-name)
+                     &#34;: &#34;
+                     ,(if (eq? v witness)
+                        '(span (@ (class &#34;w3-text-red&#34;)) fail)
+                        '(span (@ (class &#34;w3-text-green&#34;)) pass))))
+              ,@(if hasdoc (cdr v) '())
+              (code/scheme ,(if hasdoc (butlast code) code))
+              (code/scheme
+                ((eta ,(exact->inexact (/ eta-time 1000)))
+                 (memory ,(memory-statistics))
+                 (stdout ,outstr)
+                 (stderr ,errstr)))))))))
   (define-syntax
     define-suite
     (syntax-rules
@@ -542,19 +546,21 @@ This test suite drove the implementation of the unittest framework itself.
                (errstr (third pair))
                (hasdoc (and (pair? v) (eq? (car v) 'doc))))
           (when teardown (apply (car teardown) testcase args))
-          `((h2 (@ (id ,testcase-name))
-                (code ,testcase-name)
-                &quot;: &quot;
-                ,(if (eq? v witness)
-                   '(span (@ (class &quot;w3-text-red&quot;)) fail)
-                   '(span (@ (class &quot;w3-text-green&quot;)) pass)))
-            ,@(if hasdoc (cdr v) '())
-            (code/scheme ,(if hasdoc (butlast code) code))
-            (code/scheme
-              ((eta ,(exact-&gt;inexact (/ eta-time 1000)))
-               (memory ,(memory-statistics))
-               (stdout ,outstr)
-               (stderr ,errstr))))))))
+          (let ((header-id (symbol-&gt;string testcase-name)))
+            `((h2 (@ (id ,header-id))
+                  (a (@ (href ,(string-append &quot;#&quot; header-id)))
+                     (code ,testcase-name)
+                     &quot;: &quot;
+                     ,(if (eq? v witness)
+                        '(span (@ (class &quot;w3-text-red&quot;)) fail)
+                        '(span (@ (class &quot;w3-text-green&quot;)) pass))))
+              ,@(if hasdoc (cdr v) '())
+              (code/scheme ,(if hasdoc (butlast code) code))
+              (code/scheme
+                ((eta ,(exact-&gt;inexact (/ eta-time 1000)))
+                 (memory ,(memory-statistics))
+                 (stdout ,outstr)
+                 (stderr ,errstr)))))))))
   (define-syntax
     define-suite
     (syntax-rules
@@ -642,23 +648,23 @@ This test suite drove the implementation of the unittest framework itself.
       ()
       ((_ ((exn ...) ...) body ...)
        (condition-case (begin body ...) ((exn ...) (void)) ...)))))
-</code></pre></div><section id=section375><header><h1>Tests</h1></header></section><h2 id=test-running><code>test-running</code>: <span class=w3-text-green>pass</span></h2><p>hello</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
+</code></pre></div><section id=section375><header><h1>Tests</h1></header></section><h2 id=test-running><a href=#test-running><code>test-running</code>: <span class=w3-text-green>pass</span></a></h2><p>hello</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
   (⊦= '() (unittest/testcase-log t))
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '(teardown test-method setup) (unittest/testcase-log t)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1796328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-result><code>test-result</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1796544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-result><a href=#test-result><code>test-result</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1797480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-failed><code>test-failed</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1797912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-failed><a href=#test-failed><code>test-failed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
   (lettest
     ((t 'test-broken))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
           (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1798472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-unbound-variable><code>test-unbound-variable</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1799120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-unbound-variable><a href=#test-unbound-variable><code>test-unbound-variable</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
     ((t 'test-unbound-variable))
     (unittest/testcase-run t r wasrun-sut)
@@ -668,23 +674,23 @@ This test suite drove the implementation of the unittest framework itself.
               (test-unbound-variable
                 &quot;\nError: unbound variable: unbound-v\n&quot;)))
           (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1799344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-failed-result><code>test-failed-result</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1800224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-failed-result><a href=#test-failed-result><code>test-failed-result</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
   (unittest/result-started! r)
   (unittest/result-failed! r 'no-reason)
   (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1799752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-suite><code>test-suite</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1800864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-suite><a href=#test-suite><code>test-suite</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
   (letsuite
     ((suite '(test-running test-failed)))
     (unittest/testsuite-run suite r bootstrap-sut)
     (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1800904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-⊨><code>test-⊨</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1801696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-⊭><code>test-⊭</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1802600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-should-signal><code>test-should-signal</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1802232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-⊨><a href=#test-⊨><code>test-⊨</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1803232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-⊭><a href=#test-⊭><code>test-⊭</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1804344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-should-signal><a href=#test-should-signal><code>test-should-signal</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
   (⊦⧳ ((exn)) (signal (condition '(exn message &quot;useless&quot;))))
   (⊦⧳ ((exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
   (⊦⧳ ((exn) (exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
@@ -693,7 +699,7 @@ This test suite drove the implementation of the unittest framework itself.
     ((exn-a) (void)))
   (condition-case (⊦⧳ ((exn)) (signal 99)) (() (void)))
   (⊦⧳ () 99))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1805304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1807280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-auxtest/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

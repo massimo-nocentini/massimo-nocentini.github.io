@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script>hljs.highlightAll();</script></head>
+<body>
+<section id="section34651">
+<header>
+<h1>Tests</h1></header></section>
+<h2 id="test-λ-calculus-interpreter"><a href="#test-λ-calculus-interpreter"><code>test-λ-calculus-interpreter</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
+  (define (lookup x env)
+    (match/non-overlapping
+      env
+      (() (error 'lookup &quot;unbound variable&quot; x))
+      (((,y unquote v) unquote rest) (eq? y x) ⇒ v)
+      (((,y unquote v) unquote rest) (not (eq? y x)) ⇒ (lookup x rest))))
+  (define (not-in-env? x env)
+    (match/non-overlapping
+      env
+      (() #t)
+      (((,,x unquote v) unquote rest) #f)
+      (((,,,x unquote v) unquote rest) (not-in-env? x rest))))
+  (define rator?
+    (let1 (op-names '(lambda quote list))
+          (λ (x env)
+              (not (and (symbol? x) (memq x op-names) (not-in-env? x env))))))
+  (define (eval-exp exp env)
+    (match/non-overlapping
+      exp
+      ((,rator ,rand)
+       (rator? rator env)
+       ⇒
+       (let ((proc (eval-exp rator env)) (arg (eval-exp rand env)))
+         (match/non-overlapping
+           proc
+           ((closure ,x ,body ,env2)
+            (eval-exp body `((,x unquote arg) unquote env2))))))
+      ((λ (,x) ,body)
+       (and (symbol? x) (not-in-env? 'λ env))
+       ⇒
+       `(closure ,x ,body ,env))
+      (',v (not-in-env? 'quote env) ⇒ v)
+      ((list unquote a∗)
+       (not-in-env? 'list env)
+       ⇒
+       (map (λ (e) (eval-exp e env)) a∗))
+      (,x (symbol? x) ⇒ (lookup x env))))
+  (define env0 (interaction-environment/symbols '()))
+  (define-syntax-rule (eval/env0 body) (eval-exp 'body env0))
+  (⊦ equal?
+       `(closure z z ())
+       (eval/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a))))
+  (⊦ equal?
+       `(closure y x ((x closure z z ())))
+       (eval/env0 ((λ (x) (λ (y) x)) (λ (z) z))))
+  (⊦ equal? `(closure y y ()) (eval/env0 ((λ (x) x) (λ (y) y))))
+  (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 8421640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

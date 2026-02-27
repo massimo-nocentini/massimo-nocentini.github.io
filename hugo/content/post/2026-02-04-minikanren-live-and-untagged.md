@@ -25,3 +25,5 @@ keywords="tagging, scheme, relational programming, quines, miniKanren, logic pro
 location="Copenhagen, Denmark"
 series="Scheme '12"
 >}}
+
+{{< include "test-suites/testsuite-untagged-suite.html" >}}

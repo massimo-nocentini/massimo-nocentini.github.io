@@ -24,7 +24,7 @@
 <section id="section149">
 <header>
 <h1>Tests</h1></header></section>
-<h2 id="test-cons"><code>test-cons</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test-cons"><a href="#test-cons"><code>test-cons</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-cons _)
   (let1 (q empty/sbral)
@@ -58,9 +58,9 @@
         (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1838168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1838712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test-ref"><code>test-ref</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test-ref"><a href="#test-ref"><code>test-ref</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-ref _)
   (let1 (q (list-&gt;sbral '(a b c d e f g)))
@@ -73,9 +73,9 @@
         (⊦= 'g (sbral-ref q 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1839392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1840144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test-list->sbral"><code>test-list->sbral</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test-list-&gt;sbral"><a href="#test-list-&gt;sbral"><code>test-list->sbral</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-list-&gt;sbral _)
   (let* ((l '(a b c d e f g)) (ll (iota 100)))
@@ -109,18 +109,18 @@
           (list-&gt;sbral ll))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1844016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1843728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test-length"><code>test-length</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test-length"><a href="#test-length"><code>test-length</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-length _)
   (let* ((l '(a b c d e f g)) (q (list-&gt;sbral l)))
     (⊦= (length l) (length/sbral q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1845384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1845312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test-update"><code>test-update</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test-update"><a href="#test-update"><code>test-update</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-update _)
   (let1 (q (list-&gt;sbral '(a b c d e f g)))
@@ -128,13 +128,13 @@
         (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1846632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1846776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test-identity"><code>test-identity</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test-identity"><a href="#test-identity"><code>test-identity</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-identity _)
   (let1 (l '(a b c d e f g)) (⊦= l (sbral-&gt;list (list-&gt;sbral l)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1847048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1847408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

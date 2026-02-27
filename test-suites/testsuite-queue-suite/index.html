@@ -42,7 +42,7 @@ test-letqueue: pass
     (⊭ (fds-queue-empty? t))))
 
 
-((eta 0.0) (memory #(6291456 1828824 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(6291456 1829144 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-cons-cdr: pass
 
@@ -75,7 +75,7 @@ test-cons-cdr: pass
     (⊨ (fds-queue-empty? q))))
 
 
-((eta 0.0) (memory #(6291456 1829160 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1829696 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-empty-car: pass
 
@@ -86,8 +86,8 @@ test-empty-car: pass
     (⊦⧳ ((exn)) (fds-queue-cdr q))))
 
 
-((eta 0.001) (memory #(6291456 1835528 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-queue-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test-letqueue: pass (define (test-letqueue _) (⊦= 2 (cadr \u0027(1 2))) (letqueue ((q \u0027()) (w \u0027(a)) (e \u0027(a b)) (r \u0027(a b c)) (t \u0027(a b c d))) (⊦= \u0027(0 ()) q) (⊨ (fds-queue-empty? q)) (⊦= \u0027(1 (a)) w) (⊭ (fds-queue-empty? w)) (⊦= \u0027(2 (a) b) e) (⊭ (fds-queue-empty? e)) (⊦= \u0027(3 (a) c b) r) (⊭ (fds-queue-empty? r)) (⊦= \u0027(4 (a) d c b) t) (⊭ (fds-queue-empty? t)))) ((eta 0.0) (memory #(6291456 1828824 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-cons-cdr: pass (define (test-cons-cdr _) (letqueue ((q \u0027())) (⊦= \u0027(0 ()) q) (set! q (fds-queue-cons \u0027a q)) (⊦= \u0027(1 (a)) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027a (fds-queue-car q)) (set! q (fds-queue-cons \u0027b q)) (⊦= \u0027(2 (a) b) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027a (fds-queue-car q)) (set! q (fds-queue-cons \u0027c q)) (⊦= \u0027(3 (a) c b) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027a (fds-queue-car q)) (set! q (fds-queue-cdr q)) (⊦= \u0027(2 (b c)) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027b (fds-queue-car q)) (set! q (fds-queue-cdr q)) (⊦= \u0027(1 (c)) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027c (fds-queue-car q)) (set! q (fds-queue-cdr q)) (⊦= \u0027(0 ()) q) (⊨ (fds-queue-empty? q)))) ((eta 0.0) (memory #(6291456 1829160 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-empty-car: pass (define (test-empty-car _) (letqueue ((q \u0027())) (⊦⧳ ((exn)) (fds-queue-car q)) (⊦⧳ ((exn)) (fds-queue-cdr q)))) ((eta 0.001) (memory #(6291456 1835528 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":222,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-queue-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+((eta 0.0) (memory #(6291456 1836280 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/massimo-nocentini.github.io\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-queue-suite\/","name":""}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Massimo Nocentini"},"headline":"","description":"\u003c!doctype html\u003e Tests test-letqueue: pass (define (test-letqueue _) (⊦= 2 (cadr \u0027(1 2))) (letqueue ((q \u0027()) (w \u0027(a)) (e \u0027(a b)) (r \u0027(a b c)) (t \u0027(a b c d))) (⊦= \u0027(0 ()) q) (⊨ (fds-queue-empty? q)) (⊦= \u0027(1 (a)) w) (⊭ (fds-queue-empty? w)) (⊦= \u0027(2 (a) b) e) (⊭ (fds-queue-empty? e)) (⊦= \u0027(3 (a) c b) r) (⊭ (fds-queue-empty? r)) (⊦= \u0027(4 (a) d c b) t) (⊭ (fds-queue-empty? t)))) ((eta 0.001) (memory #(6291456 1829144 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-cons-cdr: pass (define (test-cons-cdr _) (letqueue ((q \u0027())) (⊦= \u0027(0 ()) q) (set! q (fds-queue-cons \u0027a q)) (⊦= \u0027(1 (a)) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027a (fds-queue-car q)) (set! q (fds-queue-cons \u0027b q)) (⊦= \u0027(2 (a) b) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027a (fds-queue-car q)) (set! q (fds-queue-cons \u0027c q)) (⊦= \u0027(3 (a) c b) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027a (fds-queue-car q)) (set! q (fds-queue-cdr q)) (⊦= \u0027(2 (b c)) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027b (fds-queue-car q)) (set! q (fds-queue-cdr q)) (⊦= \u0027(1 (c)) q) (⊭ (fds-queue-empty? q)) (⊦= \u0027c (fds-queue-car q)) (set! q (fds-queue-cdr q)) (⊦= \u0027(0 ()) q) (⊨ (fds-queue-empty? q)))) ((eta 0.0) (memory #(6291456 1829696 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test-empty-car: pass (define (test-empty-car _) (letqueue ((q \u0027())) (⊦⧳ ((exn)) (fds-queue-car q)) (⊦⧳ ((exn)) (fds-queue-cdr q)))) ((eta 0.0) (memory #(6291456 1836280 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":222,"datePublished":"0001-01-01T00:00:00\u002b00:00","dateModified":"0001-01-01T00:00:00\u002b00:00","image":"https:\/\/massimo-nocentini.github.io\/","keywords":[""],"mainEntityOfPage":"https:\/\/massimo-nocentini.github.io\/test-suites\/testsuite-queue-suite\/","publisher":{"@type":"Organization","name":"https:\/\/massimo-nocentini.github.io\/","logo":{"@type":"ImageObject","url":"https:\/\/massimo-nocentini.github.io\/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
 
 
 
@@ -131,7 +131,7 @@ test-letqueue: pass
     (⊭ (fds-queue-empty? t))))
 
 
-((eta 0.0) (memory #(6291456 1828824 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(6291456 1829144 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-cons-cdr: pass
 
@@ -164,7 +164,7 @@ test-cons-cdr: pass
     (⊨ (fds-queue-empty? q))))
 
 
-((eta 0.0) (memory #(6291456 1829160 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1829696 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test-empty-car: pass
 
@@ -175,7 +175,7 @@ test-empty-car: pass
     (⊦⧳ ((exn)) (fds-queue-cdr q))))
 
 
-((eta 0.001) (memory #(6291456 1835528 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(6291456 1836280 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 "><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-queue-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
@@ -220,7 +220,7 @@ test-letqueue: pass
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
 </button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section203><header><h1>Tests</h1></header></section><h2 id=test-letqueue><code>test-letqueue</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-letqueue _)
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section203><header><h1>Tests</h1></header></section><h2 id=test-letqueue><a href=#test-letqueue><code>test-letqueue</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-letqueue _)
   (⊦= 2 (cadr '(1 2)))
   (letqueue
     ((q '()) (w '(a)) (e '(a b)) (r '(a b c)) (t '(a b c d)))
@@ -234,8 +234,8 @@ test-letqueue: pass
     (⊭ (fds-queue-empty? r))
     (⊦= '(4 (a) d c b) t)
     (⊭ (fds-queue-empty? t))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1828824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-cons-cdr><code>test-cons-cdr</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-cons-cdr _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1829144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-cons-cdr><a href=#test-cons-cdr><code>test-cons-cdr</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-cons-cdr _)
   (letqueue
     ((q '()))
     (⊦= '(0 ()) q)
@@ -262,13 +262,13 @@ test-letqueue: pass
     (set! q (fds-queue-cdr q))
     (⊦= '(0 ()) q)
     (⊨ (fds-queue-empty? q))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1829160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test-empty-car><code>test-empty-car</code>: <span class=w3-text-green>pass</span></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-empty-car _)
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1829696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-empty-car><a href=#test-empty-car><code>test-empty-car</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-empty-car _)
   (letqueue
     ((q '()))
     (⊦⧳ ((exn)) (fds-queue-car q))
     (⊦⧳ ((exn)) (fds-queue-cdr q))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1835528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1836280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

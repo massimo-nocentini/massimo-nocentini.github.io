@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section21624">
+<section id="section21622">
 <header>
 <h1>Implementation</h1></header></section>
 <div>
@@ -70,6 +70,11 @@
              (if (or (null? v) (and (vector? v) (zero? (vector-length v))))
                kt
                kf)))
+      ((dmatch-ppat vv ,,,v kt kf) (if (equal? v vv) kf kt))
+      ((dmatch-ppat vv ,,v kt kf)
+       (let ((vv* vv) (v* v))
+         (cond ((procedure? v*) (if (v* vv*) kt kf))
+               (else (if (equal? v* vv*) kt kf)))))
       ((dmatch-ppat vv ,v kt kf) (let1 (v vv) kt))
       ((dmatch-ppat vv (x . y) kt kf)
        (let1 (v vv)
@@ -108,10 +113,10 @@
                         (value ,v)
                         (ambiguities ,(map dmatch-pkg-clause pkgs))))))))))
 </code></pre></div>
-<section id="section21625">
+<section id="section21623">
 <header>
 <h1>Tests</h1></header></section>
-<h2 id="test/base-non-overlapping"><code>test/base-non-overlapping</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/base-non-overlapping"><a href="#test/base-non-overlapping"><code>test/base-non-overlapping</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/base-non-overlapping _)
   (⊦= 'empty (match/non-overlapping '() (() 'empty)))
@@ -133,9 +138,9 @@
           ((hello ,r ,e) r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 6259224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 6256896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test/h-non-overlapping"><code>test/h-non-overlapping</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/h-non-overlapping"><a href="#test/h-non-overlapping"><code>test/h-non-overlapping</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/h-non-overlapping _)
   (define (h x y)
@@ -146,9 +151,9 @@
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 6249120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 6257944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test/h-overlapping"><code>test/h-overlapping</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/h-overlapping"><a href="#test/h-overlapping"><code>test/h-overlapping</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/h-overlapping _)
   (define (w x y)
@@ -160,9 +165,9 @@
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6254136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6262952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test/meta-circular-interpreter"><code>test/meta-circular-interpreter</code>: <span class="w3-text-green">pass</span></h2>
+<h2 id="test/meta-circular-interpreter"><a href="#test/meta-circular-interpreter"><code>test/meta-circular-interpreter</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/meta-circular-interpreter _)
   (define (lookup x env)
@@ -191,9 +196,7 @@
          (apply opv argvs)))
       (,x (symbol? x) ⇒ (lookup x env))
       (,x (or (number? x) (string? x)) ⇒ x)))
-  (define env0
-    (map (λ (x) (cons x (eval x (interaction-environment))))
-         '(+ - display identity)))
+  (define env0 (interaction-environment/symbols '(+ - display identity)))
   (define-syntax-rule (dint body) (int 'body env0))
   (⊦ equal? 1 (dint 1))
   (⊦ equal? 'x (dint 'x))
@@ -207,5 +210,5 @@
   (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6253376 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6251648 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>
