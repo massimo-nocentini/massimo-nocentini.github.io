@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section1146">
+<section id="section1159">
 <header>
 <h1>Tests</h1></header></section>
 <h2 id="test/find"><a href="#test/find"><code>test/find</code>: <span class="w3-text-green">pass</span></a></h2>
@@ -31,24 +31,30 @@
          (v2 (make-µkanren-var 1))
          (s0 µkanren-state-empty)
          (s1 (make-µkanren-state
-               (cons/sbral 'a (µkanren-state-substitution s0))
-               1))
+               1
+               (cons/sbral 'a (µkanren-state-S s0))
+               empty/sbral
+               empty/sbral
+               empty/sbral))
          (s2 (make-µkanren-state
-               (cons/sbral v1 (µkanren-state-substitution s1))
-               2)))
+               2
+               (cons/sbral v1 (µkanren-state-S s1))
+               empty/sbral
+               empty/sbral
+               empty/sbral)))
     (⊦= 5 (µkanren-state-find 5 s2))
     (⊦= 'a (µkanren-state-find v1 s2))
     (⊦= 'a (µkanren-state-find v2 s2))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2288536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3177848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/=°"><a href="#test/=°"><code>test/=°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(#t) (°-&gt;list/ground (=° 'z 'z))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2285456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3178920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/sharing"><a href="#test/sharing"><code>test/sharing</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -62,7 +68,7 @@
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2289272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 3178616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/peano°"><a href="#test/peano°"><code>test/peano°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -96,7 +102,7 @@
         (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2303000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 3187728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/append°"><a href="#test/append°"><code>test/append°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -120,7 +126,7 @@
        (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2294960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3184304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/project°"><a href="#test/project°"><code>test/project°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -135,10 +141,10 @@
               (project° ((s* s)) (=° r (+ s* 500))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2289216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3178928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/groupby°/empty"><a href="#test/groupby°/empty"><code>test/groupby°/empty</code>: <span class="w3-text-green">pass</span></a></h2>
-<p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href="#cite1147">1</a>]</cite>:
+<p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href="#cite1160">1</a>]</cite>:
 <pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
 -----------+-------+--------+-----------------------
  develop   |    11 |   5200 | 5020.0000000000000000
@@ -172,7 +178,7 @@
                 (=° r s*)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2306440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3195200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/groupby°/one-column"><a href="#test/groupby°/one-column"><code>test/groupby°/one-column</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -194,7 +200,7 @@
               (λ (a b) (&lt; (cadr a) (cadr b))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2292224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3182400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/set°"><a href="#test/set°"><code>test/set°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -215,7 +221,7 @@
               (λ (a b) (&lt; (cadr a) (cadr b))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2294400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3182616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/enumerate°"><a href="#test/enumerate°"><code>test/enumerate°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -245,7 +251,7 @@
                 (=° r c)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2308296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3197144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/window°"><a href="#test/window°"><code>test/window°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -298,7 +304,7 @@
                 (=° r `(,d ,e ,s ,s*))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2296088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3185464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/=°/structure"><a href="#test/=°/structure"><code>test/=°/structure</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -313,7 +319,7 @@
           (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2297824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3186896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/=°/structure/vector"><a href="#test/=°/structure/vector"><code>test/=°/structure/vector</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -326,9 +332,9 @@
         (°-&gt;list/ground (fresh° r (t n a) (=° `#(,t ,n ,a) p)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2298016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3187336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">
-<header><b>References</b></header><span id="cite1147">[1] <a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL Window Functions</a></span>
+<header><b>References</b></header><span id="cite1160">[1] <a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL Window Functions</a></span>
 <br /></div></body></html>

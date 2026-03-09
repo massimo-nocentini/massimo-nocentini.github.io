@@ -83,11 +83,11 @@ This matcher is described and used in <a href=/post/2026-02-04-minikanren-live-a
              (if (or (null? v) (and (vector? v) (zero? (vector-length v))))
                kt
                kf)))
-      ((dmatch-ppat vv ,,,v kt kf) (if (equal? v vv) kf kt))
+      ((dmatch-ppat vv ,,,v kt kf) (if (eq? v vv) kf kt))
       ((dmatch-ppat vv ,,v kt kf)
        (let ((vv* vv) (v* v))
          (cond ((procedure? v*) (if (v* vv*) kt kf))
-               (else (if (equal? v* vv*) kt kf)))))
+               (else (if (eq? v* vv*) kt kf)))))
       ((dmatch-ppat vv ,v kt kf) (let1 (v vv) kt))
       ((dmatch-ppat vv (x . y) kt kf)
        (let1 (v vv)
@@ -143,7 +143,7 @@ This matcher is described and used in <a href=/post/2026-02-04-minikanren-live-a
         (match/non-overlapping
           (make-record-instance 'hello 3 2)
           ((hello ,r ,e) r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 6256896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 6256896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/h-non-overlapping><a href=#test/h-non-overlapping><code>test/h-non-overlapping</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-non-overlapping _)
   (define (h x y)
     (match/non-overlapping

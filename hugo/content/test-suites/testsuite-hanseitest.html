@@ -188,9 +188,11 @@
                                   (cons `(,i ,(subtract 1 pacc)) acc))
                                 (loop (plus pacc p) (cons `(,i ,p) acc) (sub1 i))))))
              (loop 0 '() (sub1 n))))
-          (else (error `(non-positive count ,n)))))
+          (else (probcc-impossible))))
   (define (probcc-uniform/range low high)
     (+ low (probcc-uniform (add1 (- high low)))))
+  (define (probcc-uniform/either lst)
+    (list-ref lst (probcc-uniform (length lst))))
   (define (probcc-geometric p s f)
     (letrec ((subtract (op/subtract))
              (loop (λ (n)
@@ -264,7 +266,7 @@
               `((x ,x) (y ,y)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1965168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1965712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/procc/coin-model/when"><a href="#test/procc/coin-model/when"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared.</p>
@@ -279,7 +281,7 @@
               (probcc-when (or x y) (list x y)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1966576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1967120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/procc/grass-model"><a href="#test/procc/grass-model"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></h2>
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
@@ -328,7 +330,7 @@
         result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1968584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1969128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/procc/grass-model/complete"><a href="#test/procc/grass-model/complete"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>If we remove the assumption that <i>has been observed a wet grass</i>, then we have the joint probability distribution of <i>all</i> variables:</p>
@@ -355,7 +357,7 @@
   (⊦= (probcc-normalize result) result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1973936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1974224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/uniform/range"><a href="#test/uniform/range"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -372,7 +374,7 @@
               (λ (a b) (&lt; (cadr (car a)) (cadr (car b)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1975560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1975808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/geometric"><a href="#test/geometric"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -392,7 +394,7 @@
         result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1980048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1980296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">

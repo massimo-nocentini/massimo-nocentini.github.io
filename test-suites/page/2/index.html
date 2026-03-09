@@ -157,7 +157,7 @@
   (let1 (nats (take§ 20 (nats§ 0)))
         (⊦= '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
               (§-&gt;list nats))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1869864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1870176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/fibs><a href=#test/stream/fibs><code>test/stream/fibs</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/fibs _)
   (let1 (fibs (take§ 20 (fibs§ 0 1)))
         (⊦= '(0
@@ -181,20 +181,20 @@
                 2584
                 4181)
               (§-&gt;list fibs))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1882608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1882920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/ones><a href=#test/stream/ones><code>test/stream/ones</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones _)
   (let1 (ones (take§ 20 (const§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1886120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1886432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/primes><a href=#test/stream/primes><code>test/stream/primes</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/primes _)
   (let1 (primes (take§ 20 primes§))
         (⊦= '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71)
               (§-&gt;list primes))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(6291456 2037464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(6291456 2037440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/ones+τ><a href=#test/stream/ones+τ><code>test/stream/ones+τ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones+τ _)
   (let1 (ones (take§ 20 (thunk§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2040984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2040960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;min
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;605&nbsp;words
@@ -235,14 +235,14 @@
         (else (if (null? (cdr a)) (set-cdr! a b) (loop a (cdr a) b)) a)))
 </code></pre></div></p><a href=https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/ class=post-read-more>[Read More]</a></div></article><article class=post-preview><a href=https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/><h2 class=post-title></h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 1
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;min
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;244&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section34651><header><h1>Tests</h1></header></section><h2 id=test-λ-calculus-interpreter><a href=#test-λ-calculus-interpreter><code>test-λ-calculus-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;232&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Massimo Nocentini</span></p><div class=post-entry><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section34834><header><h1>Tests</h1></header></section><h2 id=test-λ-calculus-interpreter><a href=#test-λ-calculus-interpreter><code>test-λ-calculus-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
   (define (lookup x env)
     (match/non-overlapping
       env
       (() (error 'lookup &quot;unbound variable&quot; x))
-      (((,y unquote v) unquote rest) (eq? y x) ⇒ v)
-      (((,y unquote v) unquote rest) (not (eq? y x)) ⇒ (lookup x rest))))
+      (((,,x unquote v) unquote rest) v)
+      (((,,,x unquote v) unquote rest) (lookup x rest))))
   (define (not-in-env? x env)
     (match/non-overlapping
       env
@@ -274,8 +274,9 @@
        ⇒
        (map (λ (e) (eval-exp e env)) a∗))
       (,x (symbol? x) ⇒ (lookup x env))))
-  (define env0 (interaction-environment/symbols '()))
-  (define-syntax-rule (eval/env0 body) (eval-exp 'body env0))
+  (define-syntax-rule
+    (eval/env0 body)
+    (eval-exp 'body (interaction-environment/symbols '())))
   (⊦ equal?
        `(closure z z ())
        (eval/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a))))
@@ -284,7 +285,7 @@
        (eval/env0 ((λ (x) (λ (y) x)) (λ (z) z))))
   (⊦ equal? `(closure y y ()) (eval/env0 ((λ (x) x) (λ (y) y))))
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 8421640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(25165824 8454952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></div></article></div><ul class="pager main-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/page/1/>&larr; Newer Posts</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

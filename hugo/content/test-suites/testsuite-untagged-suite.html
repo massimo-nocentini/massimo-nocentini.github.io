@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section34651">
+<section id="section34834">
 <header>
 <h1>Tests</h1></header></section>
 <h2 id="test-λ-calculus-interpreter"><a href="#test-λ-calculus-interpreter"><code>test-λ-calculus-interpreter</code>: <span class="w3-text-green">pass</span></a></h2>
@@ -31,8 +31,8 @@
     (match/non-overlapping
       env
       (() (error 'lookup &quot;unbound variable&quot; x))
-      (((,y unquote v) unquote rest) (eq? y x) ⇒ v)
-      (((,y unquote v) unquote rest) (not (eq? y x)) ⇒ (lookup x rest))))
+      (((,,x unquote v) unquote rest) v)
+      (((,,,x unquote v) unquote rest) (lookup x rest))))
   (define (not-in-env? x env)
     (match/non-overlapping
       env
@@ -64,8 +64,9 @@
        ⇒
        (map (λ (e) (eval-exp e env)) a∗))
       (,x (symbol? x) ⇒ (lookup x env))))
-  (define env0 (interaction-environment/symbols '()))
-  (define-syntax-rule (eval/env0 body) (eval-exp 'body env0))
+  (define-syntax-rule
+    (eval/env0 body)
+    (eval-exp 'body (interaction-environment/symbols '())))
   (⊦ equal?
        `(closure z z ())
        (eval/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a))))
@@ -76,5 +77,5 @@
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 8421640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(25165824 8454952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

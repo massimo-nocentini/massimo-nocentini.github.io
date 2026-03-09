@@ -130,7 +130,7 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/load/string _) (⊦= '(+ 3 4) (load/string &quot;(+ 3 4)&quot;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2384856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2384856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/simdjson/version"><a href="#test/simdjson/version"><code>test/simdjson/version</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>The current version of <code class="w3-codespan">simdjson</code> is <code class="w3-codespan">4.2.1</code>.</p>
@@ -138,7 +138,7 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/simdjson/version _) (⊦= &quot;4.2.1&quot; (simdjson-get-version)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 2386024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 2386024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/simdjson/load-twitter"><a href="#test/simdjson/load-twitter"><code>test/simdjson/load-twitter</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Loaded a testbed json file <code class="w3-codespan">twitter.json</code><cite>[<a href="#cite318">1</a>]</cite> with the <code class="w3-codespan">simdjson</code><cite>[<a href="#cite319">2</a>]</cite><cite>[<a href="#cite320">3</a>]</cite> library. The file contains a twitter search result with 100 tweets. </p>
@@ -172,7 +172,7 @@
         (simdjson-load/ondemand &quot;twitter.json&quot;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(12582912 4848984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.013) (memory #(12582912 4848984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/simdjson/-&gt;string"><a href="#test/simdjson/-&gt;string"><code>test/simdjson/->string</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Test for simdjson-load, which loads and parses a JSON file into a Scheme representation.</p>
@@ -182,7 +182,7 @@
         (-&gt;string/json (simdjson-load &quot;twitter.json&quot;))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.019) (memory #(12582912 4145672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.018) (memory #(12582912 4145672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/simdjson/parse"><a href="#test/simdjson/parse"><code>test/simdjson/parse</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Test for simdjson-parse/ondemand, which parses a JSON string into a Scheme representation on demand.</p>
