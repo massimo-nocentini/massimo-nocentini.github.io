@@ -3,8 +3,8 @@ date = '1992-08-01T14:00:21+01:00'
 title = 'Il Colombre'
 author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
-tags = ["paradiso", "inferno"]
-categories = ["nembrini", "buzzati", ]
+tags = ["squalo", "mare", "perla", "paura", "fuga"]
+categories = ["nembrini", "buzzati", "quaresima"]
 summary = ' '
 +++
 
