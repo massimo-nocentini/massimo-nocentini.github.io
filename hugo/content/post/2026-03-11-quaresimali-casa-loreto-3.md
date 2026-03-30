@@ -4,6 +4,18 @@ title = 'Santa Casa di Loreto: 3º quaresimale'
 subtitle = 'Riconoscere la verità che ti apre gli occhi.'
 author = 'sour Maria Gloria Riva'
 categories = ["Quaresimali 2026 in Santa Casa Loreto"]
+tags = [
+    "bellezza",
+    "risurrezione",
+    "Gesù Cristo",
+    "Lazzaro",
+    "Quaresima",
+    "fede",
+    "morte",
+    "misericordia",
+    "comunità",
+    "conversione",
+]
 summary = ' '
 +++
 

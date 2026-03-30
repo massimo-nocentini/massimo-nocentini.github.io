@@ -4,6 +4,18 @@ title = 'Santa Casa di Loreto: 4º quaresimale'
 subtitle = "Oltre l'apparenza, la bellezza che risorge."
 author = 'don Alessandro Bonetti'
 categories = ["Quaresimali 2026 in Santa Casa Loreto"]
+tags = [
+    "bellezza",
+    "risurrezione",
+    "Gesù Cristo",
+    "Lazzaro",
+    "Quaresima",
+    "fede",
+    "morte",
+    "misericordia",
+    "comunità",
+    "conversione",
+]
 summary = ' '
 +++
 
@@ -154,7 +166,7 @@ Bentrovati in questo cammino che ci ha visti progressivamente entrare in questa
 parola così molto forte e molto usata di questo tempo, la *bellezza*.  La
 bellezza ha sempre esercitato sull'uomo un fascino misterioso.  Non è soltanto
 qualcosa che piace agli occhi, è qualcosa che tocca il cuore, che muove dentro
-una nostalgia di pienezza.  E nel romanzo *L'idiota* Fedor Dostochi mette sulle
+una nostalgia di pienezza.  E nel romanzo *L'idiota* Fyodor Dostoevsky mette sulle
 labbra del principe Mishkin una frase diventata molto celebre, una delle sue
 intuizioni più profonde afferma:
 
@@ -344,7 +356,7 @@ perde la propria anima.  Il motivo vero per cui esiste, esiste la Chiesa,
 esistiamo noi qui, è aprire le tombe e riportare alla vita coloro che sono
 nella valle della morte.
 
-Ma torniamo allora alla frase di Dostojesky. La bellezza salverà il mondo.
+Ma torniamo allora alla frase di Fyodor Dostoevsky. La bellezza salverà il mondo.
 Solo ora, alla luce di questo Vangelo, possiamo comprendere più profondamente.
 La bellezza che salva il mondo non è quella che elimina la morte, è quella che
 fa risorgere la vita dentro la morte.  E noi siamo depositari di questa
