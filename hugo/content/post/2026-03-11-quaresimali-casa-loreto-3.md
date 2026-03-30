@@ -1,7 +1,7 @@
 +++
 date = '2026-03-11T16:00:21+01:00'
 title = 'Santa Casa di Loreto: 3º quaresimale'
-subtitle = 'Bellezza. Riconoscere la verità che ti apre gli occhi.'
+subtitle = 'Riconoscere la verità che ti apre gli occhi.'
 author = 'sour Maria Gloria Riva'
 categories = ["Quaresimali 2026 in Santa Casa Loreto"]
 summary = ' '
