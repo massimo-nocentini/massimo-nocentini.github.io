@@ -3,9 +3,20 @@ date = '1992-08-01T14:00:21+01:00'
 title = 'Il Colombre'
 author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
-tags = ["squalo", "mare", "perla", "paura", "fuga"]
+tags = [
+    "colombre",
+    "mare",
+    "Stefano Roi",
+    "paura",
+    "destino",
+    "fuga",
+    "ossessione",
+    "perla",
+    "abisso",
+    "morte",
+]
 categories = ["nembrini", "buzzati", "quaresima"]
-summary = ' '
+summary = 'Stefano Roi fugge per tutta la vita dal colombre, credendolo un presagio di morte, per scoprire troppo tardi che inseguiva il dono più prezioso del mare.'
 +++
 
 Quando Stefano Roí compí i dodici anni, chiese in regalo a suo padre, capitano di mare

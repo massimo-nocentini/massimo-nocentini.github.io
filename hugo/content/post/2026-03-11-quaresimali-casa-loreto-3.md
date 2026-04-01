@@ -6,23 +6,22 @@ author = 'sour Maria Gloria Riva'
 categories = ["Quaresimali 2026 in Santa Casa Loreto"]
 tags = [
     "bellezza",
-    "risurrezione",
+    "verità",
     "Gesù Cristo",
-    "Lazzaro",
-    "Quaresima",
+    "cieco nato",
+    "luce",
     "fede",
-    "morte",
-    "misericordia",
-    "comunità",
-    "conversione",
+    "Siloe",
+    "Emmaus",
+    "Eucaristia",
+    "adorazione",
 ]
-summary = ' '
+summary = 'Dal cieco nato ai discepoli di Emmaus, una catechesi sulla verità che apre gli occhi: Cristo guarisce la cecità del cuore attraverso Scrittura, sacramenti, Eucaristia e adorazione.'
 +++
 
 {{< youtubeicon "34fUkpGmrds" "3º quaresimale alla Santa Casa di Loreto, catechesi di sour Maria Gloria Riva." >}}
 
 ---
-
 
 
 # Dal Vangelo secondo Giovanni

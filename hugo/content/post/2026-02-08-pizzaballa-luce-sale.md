@@ -3,14 +3,24 @@ date = '2026-02-08T09:33:23+01:00'
 title = "Dopo le Beatitudini: essere luce e sale"
 subtitle = "Omelia di Card Pierbattista Pizzaballa"
 author = 'Card Pierbattista Pizzaballa'
-tags = [ "beatitudini", "luce", "sale"]
 categories = ["ofm", "porziuncola", "pizzaballa"]
-summary = ' '
+tags = [
+    "beatitudini",
+    "luce",
+    "sale",
+    "Cristo",
+    "Chiesa",
+    "comunità",
+    "Terra Santa",
+    "Regno di Dio",
+    "sapore",
+    "testimonianza",
+]
+summary = 'Un’omelia sul Vangelo del sale e della luce: il cristiano non è chiamato a imporsi, ma a dare sapore al mondo e uno sguardo nuovo sulla vita, lasciandosi nutrire da Cristo, unica fonte di luce.'
 +++
 
-*Omelia di SEm Card Pierbattista Pizzaballa.* [^1]
 
-[^1]: [Omelia di SEm Card Pierbattista Pizzaballa](https://www.youtube.com/watch?v=o5fmoXne5jY)
+{{< youtubeicon "o5fmoXne5jY" "Omelia di SEm Card Pierbattista Pizzaballa." >}}
 
 ---
 

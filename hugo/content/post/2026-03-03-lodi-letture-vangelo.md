@@ -1,10 +1,22 @@
 +++
 date = '2026-03-03T10:59:04+01:00'
-title = "Vangelo del giorno"
+title = "Vangelo del 3 Marzo 2026"
 subtitle = 'Con un commento di San Basilio di Seleucia'
-summary = ' '
+summary = 'Gesù annuncia la Passione salendo a Gerusalemme e insegna che la vera grandezza è nel servizio; San Basilio di Seleucia legge nella richiesta della madre dei figli di Zebedeo una fede che intravede il Regno oltre la croce.'
 categories = ['santi padri']
 author = 'San Basilio di Seleucia'
+tags = [
+    "Gerusalemme",
+    "Passione",
+    "croce",
+    "risurrezione",
+    "Regno di Dio",
+    "servizio",
+    "fede",
+    "discepoli",
+    "Vangelo di Matteo",
+    "Basilio di Seleucia",
+]
 +++
 # Lo condanneranno a morte
 
@@ -12,58 +24,54 @@ author = 'San Basilio di Seleucia'
 
 In quel tempo, mentre saliva a Gerusalemme, Gesù prese in disparte i dodici discepoli e, lungo il cammino, disse loro:
 
-*«Ecco, noi saliamo a Gerusalemme e il Figlio dell'uomo sarà consegnato ai capi dei sacerdoti e agli scribi; lo condanneranno a morte e lo consegneranno ai pagani perché venga deriso e flagellato e crocifisso, e il terzo giorno risorgerà».*
+> «Ecco, noi saliamo a Gerusalemme e il Figlio dell'uomo sarà consegnato ai capi dei sacerdoti e agli scribi; lo condanneranno a morte e lo consegneranno ai pagani perché venga deriso e flagellato e crocifisso, e il terzo giorno risorgerà».
 
 Allora gli si avvicinò la madre dei figli di Zebedèo con i suoi figli e si prostrò per chiedergli qualcosa.
 
 Egli le disse:
 
-*«Che cosa vuoi?».*
+> «Che cosa vuoi?».
 
 Gli rispose:
 
-*«Di' che questi miei due figli siedano uno alla tua destra e uno alla tua sinistra nel tuo regno».*
+> «Di' che questi miei due figli siedano uno alla tua destra e uno alla tua sinistra nel tuo regno».
 
 Rispose Gesù:
 
-*«Voi non sapete quello che chiedete. Potete bere il calice che io sto per bere?».*
+> «Voi non sapete quello che chiedete. Potete bere il calice che io sto per bere?».
 
 Gli dicono:
 
-*«Lo possiamo».*
+> «Lo possiamo».
 
 Ed egli disse loro:
 
-*«Il mio calice, lo berrete; però sedere alla mia destra e alla mia sinistra non sta a me concederlo: è per coloro per i quali il Padre mio lo ha preparato».*
+> «Il mio calice, lo berrete; però sedere alla mia destra e alla mia sinistra non sta a me concederlo: è per coloro per i quali il Padre mio lo ha preparato».
 
 Gli altri dieci, avendo sentito, si sdegnarono con i due fratelli.
 
 Ma Gesù li chiamò a sé e disse:
 
-*«Voi sapete che i governanti delle nazioni dòminano su di esse e i capi le opprimono. Tra voi non sarà così; ma chi vuole diventare grande tra voi sarà vostro servitore e chi vuole essere il primo tra voi sarà vostro schiavo. Come il Figlio dell'uomo, che non è venuto per farsi servire, ma per servire e dare la propria vita in riscatto per molti».*
+> «Voi sapete che i governanti delle nazioni dòminano su di esse e i capi le opprimono. Tra voi non sarà così; ma chi vuole diventare grande tra voi sarà vostro servitore e chi vuole essere il primo tra voi sarà vostro schiavo. Come il Figlio dell'uomo, che non è venuto per farsi servire, ma per servire e dare la propria vita in riscatto per molti».
 
-*Parola del Signore*
 
 # Ha fatto del Regno l'oggetto della sua supplica
 
 *Di San Basilio di Seleucia, vescovo (V sec.) — PG 85, 282 ss.*
 
 Vuoi vedere la fede di questa donna? Ebbene considera il momento in cui fa la sua richiesta.
-
 La croce è pronta, la Passione imminente, la folla dei nemici già pronta al suo posto. Il Maestro ha parlato della sua morte, i discepoli sono preoccupati: prima della Passione tremano alla sua evocazione. Quello che hanno udito li lascia stupefatti; sono presi da turbamento.
-
 Proprio in questo momento, questa madre, staccatasi dal gruppo dei discepoli, domanda addirittura il Regno e richiede un trono per i suoi figli.
 
-*Cosa dici, donna? Senti parlare di croce e tu chiedi un trono? Si tratta della Passione, e tu desideri il Regno?*
+> Cosa dici, donna? Senti parlare di croce e tu chiedi un trono? Si tratta della Passione, e tu desideri il Regno?
 
 Lasci dunque i discepoli al loro timore e alla loro preoccupazione del pericolo. Ma da dove ti è mai venuto di chiedere tale dignità? Fra tutto quello che è stato appena detto, cosa ti ha condotta a pensare al Regno?
 
-*«Vedo la Passione, eppure prevedo anche la Risurrezione. Vedo la croce piantata e contemplo il cielo aperto. Guardo i chiodi, ma vedo anche il trono. Ho sentito il Signore in persona dire: “Siederete anche voi su dodici troni” (Mt 19,28). Vedo l’avvenire con gli occhi della fede».*
+> «Vedo la Passione, eppure prevedo anche la Risurrezione. Vedo la croce piantata e contemplo il cielo aperto. Guardo i chiodi, ma vedo anche il trono. Ho sentito il Signore in persona dire: “Siederete anche voi su dodici troni” (Mt 19,28). Vedo l’avvenire con gli occhi della fede».
 
 Secondo me, questa donna è andata fino a precedere le parole del ladrone. Sulla croce, il ladrone pronunciò la preghiera:
 
-*«Ricordati di me quando entrerai nel tuo Regno»* (Lc 23,42).
+> «Ricordati di me quando entrerai nel tuo Regno» (Lc 23,42).
 
 Prima della croce, lei ha preso il Regno come oggetto della sua supplica.
-
 Che desiderio inserito nella visione dell’avvenire! Ciò che era nascosto dal tempo, la fede lo vedeva.

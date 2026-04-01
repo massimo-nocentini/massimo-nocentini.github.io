@@ -7,16 +7,17 @@ categories = ["Quaresimali 2026 in Santa Casa Loreto"]
 tags = [
     "bellezza",
     "risurrezione",
-    "Gesù Cristo",
     "Lazzaro",
+    "Gesù Cristo",
     "Quaresima",
     "fede",
     "morte",
-    "misericordia",
     "comunità",
     "conversione",
+    "apparenza",
 ]
-summary = ' '
+summary = 'Una catechesi su Lazzaro e sulla bellezza che risorge: Cristo entra nel dolore, chiama ciascuno fuori dalle proprie tombe interiori e affida alla comunità il compito di accompagnare verso la vita nuova.'
+
 +++
 
 {{< youtubeicon "wU1LPaE95XU" "4º quaresimale alla Santa Casa di Loreto, catechesi di don Alessandro Bonetti." >}}
