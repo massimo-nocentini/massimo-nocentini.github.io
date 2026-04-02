@@ -4,7 +4,20 @@ title = "Per Dio la morte è davvero un sonno"
 author = 'San Pietro Crisologo'
 subtitle = 'Omelia al Vangelo Mc 5,21–43'
 categories = ["vangelo", "marco"]
-summary = ' '
+tags = [
+    "morte",
+    "risurrezione",
+    "fede",
+    "Giairo",
+    "guarigione",
+    "donna emorroissa",
+    "speranza",
+    "Talità kum",
+    "Gesù Cristo",
+    "Pietro Crisologo",
+]
+summary = 'Nel Vangelo di Marco Gesù guarisce l’emorroissa e risveglia la figlia di Giairo; San Pietro Crisologo legge questo segno come annuncio di speranza: per Dio la morte è un sonno e la fede apre alla risurrezione.'
+
 +++
 
 ## Dal Vangelo secondo Marco *(Mc 5,21–43)*
