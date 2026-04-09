@@ -11,7 +11,7 @@ tags = [
     "responsabilità",
     "dialetto",
     "Dante",
-    "nevrosi",
+    "malattia",
     "ferita",
     "Cristo",
     "educazione",

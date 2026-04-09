@@ -11,7 +11,7 @@ tags = [
     "tenerezza",
     "figlio",
     "luce",
-    "onnipotenza",
+    "amore",
     "speranza",
     "Porziuncola",
 ]
