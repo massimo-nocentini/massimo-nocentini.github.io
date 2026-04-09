@@ -6,7 +6,7 @@ subtitle = 'Una novella di Dino Buzzati'
 tags = [
     "colombre",
     "mare",
-    "Stefano Roi",
+    "pesce",
     "paura",
     "destino",
     "fuga",

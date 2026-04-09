@@ -6,14 +6,14 @@ author = 'papa Benedetto XVI'
 tags = [
     "verità",
     "Pilato",
-    "processo a Gesù",
-    "regalità di Cristo",
-    "regno di Dio",
+    "processo",
+    "regalità",
+    "Regno",
     "potere",
     "giustizia",
     "croce",
     "redenzione",
-    "Benedetto XVI",
+    "Ratzinger",
 ]
 summary = 'Benedetto XVI legge il dialogo tra Gesù e Pilato come il confronto decisivo tra verità e potere: il regno di Cristo non si impone con la forza, ma testimonia una verità che sola può fondare giustizia, libertà e redenzione.'
 

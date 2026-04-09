@@ -7,13 +7,13 @@ categories = ["Quaresimali 2026 alla Santa Casa Loreto", "sour Maria Gloria Riva
 tags = [
     "risurrezione",
     "Pasqua",
-    "Maria Maddalena",
+    "Maddalena",
     "Pietro",
     "Giovanni",
     "fede",
     "perdono",
-    "luce e tenebra",
-    "sepolcro vuoto",
+    "tenebra",
+    "sepolcro",
     "contemplazione",
 ]
 

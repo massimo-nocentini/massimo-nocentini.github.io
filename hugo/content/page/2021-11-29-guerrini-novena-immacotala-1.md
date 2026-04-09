@@ -5,7 +5,7 @@ author = 'fra Paolo Guerrini'
 subtitle = 'Ogni istante è gravido di futuro'
 categories = ["ofm", "porziuncola", "guerrini", "novena immacolata 2021"]
 tags = [
-    "Ave Maria",
+    "AveMaria",
     "Maria",
     "Annunciazione",
     "quotidianità",

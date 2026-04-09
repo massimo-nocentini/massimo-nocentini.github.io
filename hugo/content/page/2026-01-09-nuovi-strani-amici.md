@@ -4,13 +4,13 @@ title = 'Nuovi strani amici'
 author = 'Dino Buzzati'
 subtitle = 'Una novella di Dino Buzzati'
 tags = [
-    "paradiso apparente",
+    "apparenza",
     "inferno",
     "desiderio",
     "morte",
     "eternità",
     "noia",
-    "felicità apparente",
+    "illusione",
     "aldilà",
     "disperazione",
     "Buzzati",

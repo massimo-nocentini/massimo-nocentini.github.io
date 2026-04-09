@@ -8,7 +8,7 @@ tags = [
     "bellezza",
     "risurrezione",
     "Lazzaro",
-    "Gesù Cristo",
+    "Cristo",
     "Quaresima",
     "fede",
     "morte",

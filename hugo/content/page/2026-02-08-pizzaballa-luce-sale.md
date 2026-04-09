@@ -11,8 +11,8 @@ tags = [
     "Cristo",
     "Chiesa",
     "comunità",
-    "Terra Santa",
-    "Regno di Dio",
+    "Terrasanta",
+    "Regno",
     "sapore",
     "testimonianza",
 ]

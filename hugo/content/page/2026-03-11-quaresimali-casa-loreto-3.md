@@ -7,8 +7,8 @@ categories = ["Quaresimali 2026 alla Santa Casa Loreto", "sour Maria Gloria Riva
 tags = [
     "bellezza",
     "verità",
-    "Gesù Cristo",
-    "cieco nato",
+    "Cristo",
+    "cecità",
     "luce",
     "fede",
     "Siloe",

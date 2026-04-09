@@ -13,7 +13,7 @@ tags = [
     "elemosina",
     "consumismo",
     "mortificazione",
-    "valori spirituali",
+    "spiritualita",
 ]
 categories = ['Giovanni Paolo II']
 author = 'Giovanni Paolo II'
