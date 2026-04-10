@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section192">
+<section id="section179">
 <header>
 <h1>Tests</h1></header></section>
 <h2 id="test/empty"><a href="#test/empty"><code>test/empty</code>: <span class="w3-text-green">pass</span></a></h2>
@@ -32,7 +32,7 @@
         (⊦ = 0 (judy-array-bytes a))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1830760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1821560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/set!-ref"><a href="#test/set!-ref"><code>test/set!-ref</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -48,7 +48,7 @@
         (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1831768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1822568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/alist-&gt;judy-array"><a href="#test/alist-&gt;judy-array"><code>test/alist->judy-array</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -64,7 +64,7 @@
         (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1832664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1823464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/list-&gt;judy-array"><a href="#test/list-&gt;judy-array"><code>test/list->judy-array</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -79,7 +79,7 @@
         (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1833688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8456480 1824488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/judy-array-&gt;alist"><a href="#test/judy-array-&gt;alist"><code>test/judy-array->alist</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -89,7 +89,7 @@
               (⊦ equal? alist (judy-array-&gt;alist a)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1834472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8456480 1818704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/list-&gt;judy-array/iota"><a href="#test/list-&gt;judy-array/iota"><code>test/list->judy-array/iota</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -100,7 +100,7 @@
           (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.037) (memory #(8456480 4234192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.038) (memory #(8456480 4219928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/judy-array-walk"><a href="#test/judy-array-walk"><code>test/judy-array-walk</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -115,5 +115,5 @@
                 (⊦ equal? I (reverse collected))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.032) (memory #(16912960 4235216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.032) (memory #(16912960 4221232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

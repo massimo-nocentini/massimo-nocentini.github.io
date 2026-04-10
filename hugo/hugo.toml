@@ -103,15 +103,15 @@ pygmentsCodefencesGuessSyntax = true
 #    url = "page/"
 #    weight = 2
 
-[[menu.main]]
-    name = "Tags"
-    url = "tags"
-    weight = 3
+#[[menu.main]]
+#    name = "Tags"
+#    url = "tags"
+#    weight = 3
 
-[[menu.main]]
-    name = "Categories"
-    url = "categories/"
-    weight = 4
+#[[menu.main]]
+#    name = "Categories"
+#    url = "categories/"
+#    weight = 4
 
 [[menu.main]]
     identifier = "externals"

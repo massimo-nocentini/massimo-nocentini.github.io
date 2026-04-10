@@ -33,7 +33,7 @@ test-alist-ref: pass
     (⊦= #f (alist-ref &#39;c alst))))
 
 
-((eta 0.0) (memory #(6291456 1304184 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(6291456 1311704 1048576)) (stdout "") (stderr ""))
 
 test/len: pass
 
@@ -48,10 +48,10 @@ test/len: pass
     (⊦= 11 (my-strlen "hello world"))))
 
 
-((eta 0.0) (memory #(6291456 1305120 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(6291456 1312640 1048576)) (stdout "") (stderr ""))
 
 test/unquote: pass
-Very interesting test about quasiquotation [1] : it shows how unquote can be used in a quasiquotation pattern in the cdr slot.'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Tests test-alist-ref: pass (define (test-alist-ref _) (let ((alst \u0027((a 3) (b 2)))) (⊦= \u0027(3) (alist-ref \u0027a alst)) (⊦= \u0027(2) (alist-ref \u0027b alst)) (⊦= #f (alist-ref \u0027c alst)))) ((eta 0.0) (memory #(6291456 1304184 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/len: pass (define (test\/len _) (let ((my-strlen (foreign-lambda* int ((scheme-object cons)) \u0026quot;C_return(C_header_size(cons));\u0026quot;))) (⊦= 2 (my-strlen (cons 1 \u0027()))) (⊦= 2 (my-strlen (cons 1 (cons 2 (cons 3 \u0027()))))) (⊦= 11 (my-strlen \u0026quot;hello world\u0026quot;)))) ((eta 0.0) (memory #(6291456 1305120 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/unquote: pass Very interesting test about quasiquotation [1] : it shows how unquote can be used in a quasiquotation pattern in the cdr slot.\n","inLanguage":"en","wordCount":690,"dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+Very interesting test about quasiquotation [1] : it shows how unquote can be used in a quasiquotation pattern in the cdr slot.'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Tests test-alist-ref: pass (define (test-alist-ref _) (let ((alst \u0027((a 3) (b 2)))) (⊦= \u0027(3) (alist-ref \u0027a alst)) (⊦= \u0027(2) (alist-ref \u0027b alst)) (⊦= #f (alist-ref \u0027c alst)))) ((eta 0.001) (memory #(6291456 1311704 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/len: pass (define (test\/len _) (let ((my-strlen (foreign-lambda* int ((scheme-object cons)) \u0026quot;C_return(C_header_size(cons));\u0026quot;))) (⊦= 2 (my-strlen (cons 1 \u0027()))) (⊦= 2 (my-strlen (cons 1 (cons 2 (cons 3 \u0027()))))) (⊦= 11 (my-strlen \u0026quot;hello world\u0026quot;)))) ((eta 0.0) (memory #(6291456 1312640 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/unquote: pass Very interesting test about quasiquotation [1] : it shows how unquote can be used in a quasiquotation pattern in the cdr slot.\n","inLanguage":"en","wordCount":697,"dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -86,7 +86,7 @@ test-alist-ref: pass
     (⊦= #f (alist-ref &#39;c alst))))
 
 
-((eta 0.0) (memory #(6291456 1304184 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(6291456 1311704 1048576)) (stdout "") (stderr ""))
 
 test/len: pass
 
@@ -101,7 +101,7 @@ test/len: pass
     (⊦= 11 (my-strlen "hello world"))))
 
 
-((eta 0.0) (memory #(6291456 1305120 1048576)) (stdout "") (stderr ""))
+((eta 0.0) (memory #(6291456 1312640 1048576)) (stdout "") (stderr ""))
 
 test/unquote: pass
 Very interesting test about quasiquotation [1] : it shows how unquote can be used in a quasiquotation pattern in the cdr slot.'><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
@@ -141,7 +141,7 @@ test-alist-ref: pass
 <span class=icon-bar></span>
 <span class=icon-bar></span>
 </button>
-<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li><a title=Tags href=/tags>Tags</a></li><li><a title=Categories href=/categories/>Categories</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
+<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
 <a href=/libpq-rs/libpq/index.html>Crate libpq-rs</a>
 <a href=/igraph-rs/igraph/>Crate igraph-rs</a></div></li></ul></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
@@ -153,7 +153,7 @@ test-alist-ref: pass
     (⊦= '(3) (alist-ref 'a alst))
     (⊦= '(2) (alist-ref 'b alst))
     (⊦= #f (alist-ref 'c alst))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1304184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1311704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/len><a href=#test/len><code>test/len</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/len _)
   (let ((my-strlen
           (foreign-lambda*
@@ -163,9 +163,9 @@ test-alist-ref: pass
     (⊦= 2 (my-strlen (cons 1 '())))
     (⊦= 2 (my-strlen (cons 1 (cons 2 (cons 3 '())))))
     (⊦= 11 (my-strlen &quot;hello world&quot;))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1305120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1312640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/unquote><a href=#test/unquote><code>test/unquote</code>: <span class=w3-text-green>pass</span></a></h2><p>Very interesting test about quasiquotation <cite>[<a href=#cite44>1</a>]</cite> : it shows how <code class=w3-codespan>unquote</code> can be used in a quasiquotation pattern in the <code class=w3-codespan>cdr</code> slot.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/unquote _) (let1 (a '(3)) (⊦= (cons 1 a) `(1 unquote a))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1306400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1313920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/c_callback><a href=#test/c_callback><code>test/c_callback</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/c_callback _)
   (let ((witness (gensym))
         (my-strlen
@@ -174,7 +174,7 @@ test-alist-ref: pass
             ((scheme-object f))
             &quot;\t\t\t\t\t  C_word res = C_callback(f, 0);\n\t\t\t\t\t  printf(\&quot;from within a safe lambda\\n\&quot;);\n\t\t\t\t\t  C_return (res);&quot;)))
     (⊦= witness (car (my-strlen (lambda () (list witness 4)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1307368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1314888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/foreign-safe-lambda*/allocate_string/inline><a href=#test/foreign-safe-lambda*/allocate_string/inline><code>test/foreign-safe-lambda*/allocate_string/inline</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foreign-safe-lambda*/allocate_string/inline _)
   (let1 (allocate_string
           (foreign-safe-lambda*
@@ -182,12 +182,12 @@ test-alist-ref: pass
             ()
             &quot;                            char* str = \&quot;hello world\&quot;;\n                            C_word length = strlen(str);\n                            C_word* ptr = C_alloc (C_SIZEOF_STRING (length));\n                            C_word res = C_string (&amp;ptr, length, str);\n                            C_return (res);&quot;))
         (⊦= &quot;hello world&quot; (allocate_string))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1308408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1315928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/foreign-primitive/allocate-string><a href=#test/foreign-primitive/allocate-string><code>test/foreign-primitive/allocate-string</code>: <span class=w3-text-green>pass</span></a></h2><p>An example of <code class=w3-codespan>foreign-primitive</code> <cite>[<a href=#cite45>2</a>]</cite> that allocates a string in C and returns it to Scheme. The C code is inlined in the Scheme source code.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foreign-primitive/allocate-string _)
   (let1 (allocate_string
           (foreign-primitive scheme-object () &quot;C_my_allocate_string(C_k);&quot;))
         (⊦= &quot;hello world&quot; (allocate_string))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1309880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1317400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/foreign-safe-lambda/list-walk><a href=#test/foreign-safe-lambda/list-walk><code>test/foreign-safe-lambda/list-walk</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foreign-safe-lambda/list-walk _)
   (let1 (list-walk
           (foreign-safe-lambda
@@ -196,7 +196,7 @@ test-alist-ref: pass
             scheme-object
             scheme-object))
         (⊦= '(1 2 3) (list-walk '(1 2 3) identity))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1310896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1318416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/foreign/callout-callin><a href=#test/foreign/callout-callin><code>test/foreign/callout-callin</code>: <span class=w3-text-green>pass</span></a></h2><p>This test shows how to call out to C code that in turn calls back into Scheme code. The C code is in the file <code class=w3-codespan>bar.c</code>, and the function called from Scheme is <code class=w3-codespan>callout</code>. The function that is called back from C into Scheme is <code class=w3-codespan>callin</code>. Taken from the Chicken Scheme manual <cite>[<a href=#cite46>3</a>]</cite>.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foreign/callout-callin _)
   (define callout (foreign-safe-lambda int &quot;callout&quot; int int int))
   (define-external
@@ -206,41 +206,44 @@ test-alist-ref: pass
     123)
   (⊦= 123 (callout 1 2 3)))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
- (memory #(6291456 1312552 1048576))
+ (memory #(6291456 1320072 1048576))
  (stdout &quot;This is 'callin': (1 2 3)\n&quot;)
  (stderr &quot;&quot;))
-</code></pre></div><h2 id=test/matchable/?><a href=#test/matchable/?><code>test/matchable/?</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/matchable/? _)
-  (⊦= '(a) (match '(1 a) (((? odd?) a) (list a)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1313528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/string/ref><a href=#test/string/ref><code>test/string/ref</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/string/ref _) (⊦ equal? #\o (string-ref &quot;hello&quot; 4)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1314496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1321040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/string/last><a href=#test/string/last><code>test/string/last</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/string/last _) (⊦ equal? #\o (string-last &quot;hello&quot;)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1315472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1322016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/string/take-right><a href=#test/string/take-right><code>test/string/take-right</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/string/take-right _)
   (⊦ equal? &quot;o&quot; (string-take-right &quot;hello&quot; 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1316456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1323000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-null-eq?><a href=#test-null-eq?><code>test-null-eq?</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-null-eq? _) (⊨ (eq? '() '())))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1317424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1323968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-last-syntax><a href=#test-last-syntax><code>test-last-syntax</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-last-syntax _)
   (define-syntax-rule (var-last body ... last) last)
   (⊦ equal? 'a (var-last 'a))
   (⊦ equal? 7 (var-last 'a (+ 3 4))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1318400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1324944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-syntax-with-_><a href=#test-syntax-with-_><code>test-syntax-with-_</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-syntax-with-_ _)
+  (define-syntax
+    with-underscore
+    (syntax-rules () ((_ body ...) (list '_ body ...))))
+  (⊦ equal? '(_ a) (with-underscore 'a)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1325928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-syntax-with-literal><a href=#test-syntax-with-literal><code>test-syntax-with-literal</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-syntax-with-literal _)
   (define where +)
   (define-syntax-rule (literal where) (my-macro a where b) '(a b where))
   (⊦ equal? '(c d where) (my-macro c where d)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1319392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1326920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-syntax-with-literal-and-ellipses><a href=#test-syntax-with-literal-and-ellipses><code>test-syntax-with-literal-and-ellipses</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-syntax-with-literal-and-ellipses _)
   (define-syntax-rule (literal :) (my-macro a ... : b ...) '((a ...) (b ...)))
   (⊦ equal? '((a b c) (d e)) (my-macro a b c : d e)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1320408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1327936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-vec-syntax><a href=#test-vec-syntax><code>test-vec-syntax</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-vec-syntax _)
   (define-syntax-rule
-    (v-aux (v #(x z ...)) body ...)
+    (v-aux (v #(x z ... y)) body ...)
     (let1 (v (list z ...)) body ...))
-  (⊦ equal? '(0 2 3) (v-aux (v #(1 2 3)) (cons 0 v))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1321376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+  (⊦ equal? '(0 2) (v-aux (v #(1 2 3)) (cons 0 v))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1328904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite44>[1] <a href=https://wiki.call-cc.org/man/5/Module%20scheme#quasiquotation>Quasiquotation, Chicken Scheme manual.</a></span><br><span id=cite45>[2] <a href=https://wiki.call-cc.org/man/5/Module%20(chicken%20foreign)#foreign-primitive><code class=w3-codespan>foreign-primitive</code>, Chicken Scheme manual.</a></span><br><span id=cite46>[3] <a href=https://wiki.call-cc.org/man/5/C%20interface#an-example-for-simple-calls-to-foreign-code-involving-callbacks>An example for simple calls to foreign code involving callbacks, Chicken Scheme manual.</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-judy-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

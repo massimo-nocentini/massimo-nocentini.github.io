@@ -15,7 +15,7 @@ tags = [
     "abisso",
     "morte",
 ]
-categories = ["nembrini", "buzzati", "quaresima"]
+categories = ["nembrini", "buzzati"]
 summary = 'Stefano Roi fugge per tutta la vita dal colombre, credendolo un presagio di morte, per scoprire troppo tardi che inseguiva il dono più prezioso del mare.'
 +++
 

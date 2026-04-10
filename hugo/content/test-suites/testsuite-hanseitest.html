@@ -21,10 +21,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section279">
+<section id="section280">
 <header>
 <h1>Introduction</h1></header></section>
-<p>Quoting from <cite>[<a href="#cite280">1</a>]</cite>:
+<p>Quoting from <cite>[<a href="#cite281">1</a>]</cite>:
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>Broadly speaking, probabilistic programming languages are to express
 		  computations with degrees of uncertainty, which comes from the
@@ -35,8 +35,8 @@
 		  variables -- and relationships among them.</i>
 <footer>
 <p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
-<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite281">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite282">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite283">4</a>]</cite>.</p>
-<section id="section284">
+<p>Here we focus on the dsl <i>Hansei</i> <cite>[<a href="#cite282">2</a>]</cite> and the corresponding published paper <cite>[<a href="#cite283">3</a>]</cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite>[<a href="#cite284">4</a>]</cite>.</p>
+<section id="section285">
 <header>
 <h1>Implementation</h1></header></section>
 <p>The first implementation of our language uses the probability
@@ -69,108 +69,61 @@
   (define op/subtract (make-parameter -))
   (define op/divide (make-parameter (λ (m n) (exact-&gt;inexact (/ m n)))))
   (define op/greater (make-parameter &gt;))
-  (define-syntax
-    probcc-τ
-    (syntax-rules () ((_ p body ...) `((C ,(τ body ...)) ,p))))
-  (define (probcc-value p v) `((V ,v) ,p))
-  (define-syntax
-    let1/probccpair
-    (syntax-rules
-      ()
-      ((_ ((slot p) probpairexpr) body ...)
-       (let* ((probpair probpairexpr)
-              (slot (car probpair))
-              (p (cadr probpair)))
-         body
-         ...))))
-  (define-syntax
-    cond/probccslot
-    (syntax-rules
-      (V C)
-      ((_ slotexpr ((V v) vbody ...) ((C t) cbody ...))
-       (let* ((slot slotexpr) (flag (car slot)) (payload (cadr slot)))
-         (cond ((equal? flag 'V) (let1 (v payload) vbody ...))
-               ((equal? flag 'C) (let1 (t payload) cbody ...))
-               (else (error `(not a probability slot ,slot))))))))
+  (define-syntax-rule (probcc-τ p body ...) `((C ,(τ body ...)) ,p))
+  (define-syntax-rule (probcc-value p body ...) `((V ,(begin body ...)) ,p))
   (define (probcc-explore maxdepth choices)
     (letrec ((times (op/times))
              (plus (op/plus))
              (loop (λ (p depth down choices ans susp)
-                       (cond ((null? choices) susp)
-                             (else
-                              (let1/probccpair
-                                ((slot pt) (car choices))
-                                (let* ((p*pt (times p pt))
-                                       (A (λ (w) (plus w p*pt)))
-                                       (rest (cdr choices)))
-                                  (cond/probccslot
-                                    slot
-                                    ((V v)
-                                     (hash-table-update!/default ans v A 0)
-                                     (loop p depth down rest ans susp))
-                                    ((C t)
-                                     (cond (down
-                                            (loop p
-                                                  depth
-                                                  down
-                                                  rest
+                       (match/first
+                         choices
+                         (() susp)
+                         (((,slot ,pt) unquote rest)
+                          (let* ((p*pt (times p pt)) (A (λ (w) (plus w p*pt))))
+                            (match/first
+                              slot
+                              ((V ,v)
+                               (hash-table-update!/default ans v A 0)
+                               (loop p depth down rest ans susp))
+                              ((C ,t)
+                               (cond (down
+                                      (loop p
+                                            depth
+                                            down
+                                            rest
+                                            ans
+                                            (loop p*pt
+                                                  (add1 depth)
+                                                  (&lt; depth maxdepth)
+                                                  (t)
                                                   ans
-                                                  (loop p*pt
-                                                        (add1 depth)
-                                                        (&lt; depth maxdepth)
-                                                        (t)
-                                                        ans
-                                                        susp)))
-                                           (else
-                                            (let1 (s (cons (probcc-τ p*pt (t)) susp))
-                                                  (loop p depth down rest ans s)))))))))))))
+                                                  susp)))
+                                     (else
+                                      (let1 (s (cons (probcc-τ p*pt (t)) susp))
+                                            (loop p depth down rest ans s))))))))))))
       (let* ((ans (make-hash-table))
              (susp (loop 1 0 #t choices ans '()))
              (f (λ (v p l) (cons (probcc-value p v) l)))
              (folded (hash-table-fold ans f susp))
              (greater (op/greater)))
         (sort folded (λ (a b) (greater (cadr a) (cadr b)))))))
-  (define (probcc-next-value choices)
-    (cond ((null? choices) '())
-          (else
-           (let1/probccpair
-             ((slot pt) (car choices))
-             (cond/probccslot
-               slot
-               ((V v) choices)
-               ((C t)
-                (let1 (times (op/times))
-                      (probcc-next-value
-                        (append
-                          (cdr choices)
-                          (letmap
-                            ((pair (t)))
-                            (let1/probccpair
-                              ((slot p) pair)
-                              `(,slot ,(times p pt)))))))))))))
   (define (probcc-normalize choices)
     (let* ((divide (op/divide))
            (plus (op/plus))
            (tot (foldr (λ (each t) (plus t (cadr each))) 0 choices))
            (N (λ (each) (list (car each) (divide (cadr each) tot)))))
       (map N choices)))
-  (define (probcc-distribution distribution)
+  (define (probcc-distribution pairs)
     (letcc/shift
       k
-      (letmap
-        ((pair distribution))
-        (letcar&amp;cdr (((v p) pair)) (probcc-τ (car p) (k v))))))
+      (map (λ1-match/non-overlapping ((,v ,p) (probcc-τ p (k v)))) pairs)))
   (define (probcc-reflect choices)
     (letcc/shift
       k
-      (letrec ((make-choices (λ (pv) (map f pv)))
-               (f (λ (probpair)
-                      (let1/probccpair
-                        ((slot p) probpair)
-                        (cond/probccslot
-                          slot
-                          ((V v) (probcc-τ p (k v)))
-                          ((C t) (probcc-τ p (make-choices (t)))))))))
+      (letrec ((make-choices (λ (pv) (map F pv)))
+               (F (λ1-match/non-overlapping
+                    (((V ,v) ,p) (probcc-τ p (k v)))
+                    (((C ,t) ,p) (probcc-τ p (make-choices (t)))))))
         (make-choices choices))))
   (define (probcc-impossible) (probcc-distribution '()))
   (define (probcc-unit v) (list (probcc-value 1 v)))
@@ -190,66 +143,52 @@
              (loop 0 '() (sub1 n))))
           (else (probcc-impossible))))
   (define (probcc-uniform/range low high)
-    (+ low (probcc-uniform (add1 (- high low)))))
+    (+ low (probcc-uniform (- high low))))
   (define (probcc-uniform/either lst)
     (list-ref lst (probcc-uniform (length lst))))
   (define (probcc-geometric p s f)
     (letrec ((subtract (op/subtract))
              (loop (λ (n)
-                       (list (probcc-τ p (list (probcc-value 1 (cons s n))))
+                       (list (probcc-τ p (probcc-unit (cons s n)))
                              (probcc-τ (subtract 1 p) (loop (cons f n)))))))
       (probcc-reflect (loop '()))))
-  (define-syntax
-    probcc-when
-    (syntax-rules
-      ()
-      ((_ test body ...) (cond (test body ...) (else (probcc-impossible))))))
+  (define-syntax-rule
+    (probcc-when test body ...)
+    (cond (test body ...) (else (probcc-impossible))))
   (define (probcc-reify/0 model) (resetcc (probcc-unit (model))))
   (define ((probcc-reify depth) model)
     (probcc-explore depth (probcc-reify/0 model)))
   (define probcc-reify/exact/a (probcc-reify +inf.0))
-  (define-syntax
-    probcc-reify/exact
-    (syntax-rules () ((_ body ...) (probcc-reify/exact/a (τ body ...)))))
+  (define-syntax-rule
+    (probcc-reify/exact body ...)
+    (probcc-reify/exact/a (τ body ...)))
   (define (probcc-variable-elimination f)
     (λ args (probcc-reflect (probcc-reify/exact (apply f args)))))
-  (define-syntax
-    λ-probcc-bucket
-    (syntax-rules
-      ()
-      ((_ args body ...)
-       (letrec ((f (λ args body ...))
-                (bucket (λ-memo bargs (probcc-reify/exact (apply f bargs)))))
-         (o probcc-reflect bucket)))))
+  (define-syntax-rule
+    (λ-probcc-bucket args body ...)
+    (letrec ((F (λ args body ...))
+             (B (λ-memo bargs (probcc-reify/exact (apply F bargs)))))
+      (o probcc-reflect B)))
   (define (probcc-leaves choices)
-    (letrec ((L (λ (choices count)
-                    (let1 (F (λ (probpair acc)
-                                 (let1/probccpair
-                                   ((slot p) probpair)
-                                   (cond/probccslot
-                                     slot
-                                     ((V v) (add1 acc))
-                                     ((C t) (L (t) acc))))))
-                          (foldr F count choices)))))
-      (L choices 0)))
+    (let L ((choices* choices) (count 0))
+      (let1 (F (λ (probpair acc)
+                   (match/first
+                     probpair
+                     (((V ,v) ,p) (add1 acc))
+                     (((C ,t) ,p) (L (t) acc)))))
+            (foldr F count choices*))))
   (define (probcc-dfs choices)
-    (letmap
-      ((probpair choices))
-      (let1/probccpair
-        ((slot p) probpair)
-        (cond/probccslot
-          slot
-          ((V v) (list probpair))
-          ((C t)
-           (apply append
-                  (probcc-dfs
-                    (letmap
-                      ((inner (t)))
-                      (let1/probccpair
-                        ((slot pi) inner)
-                        (list slot ((op/times) p pi))))))))))))
+    (let1 (M (λ1-match/first
+               (((C ,t) ,p)
+                (apply append
+                       (probcc-dfs
+                         (map (λ1-match/first
+                                ((,slot ,pi) `(,slot ,((op/times) p pi))))
+                              (t)))))
+               (,probpair (list probpair))))
+          (map M choices))))
 </code></pre></div>
-<section id="section285">
+<section id="section286">
 <header>
 <h1>Tests</h1></header></section>
 <h2 id="test/procc/coin-model"><a href="#test/procc/coin-model"><code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></a></h2>
@@ -266,7 +205,7 @@
               `((x ,x) (y ,y)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1965712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1960968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/procc/coin-model/when"><a href="#test/procc/coin-model/when"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared.</p>
@@ -281,7 +220,7 @@
               (probcc-when (or x y) (list x y)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1967120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1962376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/procc/grass-model"><a href="#test/procc/grass-model"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></h2>
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
@@ -330,7 +269,7 @@
         result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1969128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1964272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/procc/grass-model/complete"><a href="#test/procc/grass-model/complete"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>If we remove the assumption that <i>has been observed a wet grass</i>, then we have the joint probability distribution of <i>all</i> variables:</p>
@@ -357,24 +296,23 @@
   (⊦= (probcc-normalize result) result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1974224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1970672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/uniform/range"><a href="#test/uniform/range"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uniform/range _)
-  (⊦= '(((V 1) 1/8)
-          ((V 2) 1/8)
-          ((V 3) 1/8)
-          ((V 4) 1/8)
-          ((V 5) 1/8)
-          ((V 6) 1/8)
-          ((V 7) 1/8)
-          ((V 8) 1/8))
+  (⊦= '(((V 1) 1/7)
+          ((V 2) 1/7)
+          ((V 3) 1/7)
+          ((V 4) 1/7)
+          ((V 5) 1/7)
+          ((V 6) 1/7)
+          ((V 7) 1/7))
         (sort (probcc-reify/exact (probcc-uniform/range 1 8))
               (λ (a b) (&lt; (cadr (car a)) (cadr (car b)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1975808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1972240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/geometric"><a href="#test/geometric"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -394,14 +332,14 @@
         result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1980296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1976704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">
-<header><b>References</b></header><span id="cite280">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
-<br /><span id="cite281">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
-<br /><span id="cite282">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
+<header><b>References</b></header><span id="cite281">[1] <a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></span>
+<br /><span id="cite282">[2] <a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></span>
+<br /><span id="cite283">[3] <a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
 		       domain-specific languages, ed. Walid Taha. LNCS 5658,
 		       Springer, 2009, pp. 360-384.</a></span>
-<br /><span id="cite283">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
+<br /><span id="cite284">[4] <a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></span>
 <br /></div></body></html>

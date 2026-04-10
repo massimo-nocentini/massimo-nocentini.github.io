@@ -27,39 +27,41 @@ Tests
 test/find: pass
 
 (define (test/find _)
-  (let* ((v1 (make-µkanren-var 0))
-         (v2 (make-µkanren-var 1))
-         (s0 µkanren-state-empty)
-         (s1 (make-µkanren-state
+  (let* ((v1 (make-μkanren-var 0))
+         (v2 (make-μkanren-var 1))
+         (s0 μkanren-state-empty)
+         (s1 (make-μkanren-state
                1
-               (cons/sbral &#39;a (µkanren-state-S s0))
+               (cons/sbral &#39;a (μkanren-state-S s0))
                empty/sbral
                empty/sbral
-               empty/sbral))
-         (s2 (make-µkanren-state
+               empty/sbral
+               &#39;()))
+         (s2 (make-μkanren-state
                2
-               (cons/sbral v1 (µkanren-state-S s1))
+               (cons/sbral v1 (μkanren-state-S s1))
                empty/sbral
                empty/sbral
-               empty/sbral)))
-    (⊦= 5 (µkanren-state-find 5 s2))
-    (⊦= &#39;a (µkanren-state-find v1 s2))
-    (⊦= &#39;a (µkanren-state-find v2 s2))))
+               empty/sbral
+               &#39;())))
+    (⊦= 5 (μkanren-state-find 5 s2))
+    (⊦= &#39;a (μkanren-state-find v1 s2))
+    (⊦= &#39;a (μkanren-state-find v2 s2))))
 
 
-((eta 0.002) (memory #(12582912 3177848 1048576)) (stdout "") (stderr ""))
+((eta 0.003) (memory #(12582912 2351024 1048576)) (stdout "") (stderr ""))
 
 test/=°: pass
 
-(define (test/=° _) (⊦= &#39;(#t) (°->list/ground (=° &#39;z &#39;z))))
+(define (test/=° _) (⊦= &#39;(α) (°->list/ground (=° &#39;z &#39;z))))
 
 
-((eta 0.002) (memory #(12582912 3178920 1048576)) (stdout "") (stderr ""))
+((eta 0.004) (memory #(12582912 2352120 1048576)) (stdout "") (stderr ""))
 
 test/sharing: pass
 
 (define (test/sharing _)
-  (⊦= &#39;(((_0 z) z (_0 _1)))
+  (⊦= &#39;(((α z) z (α β)))
         (°->list/ground
           (fresh°
             r
@@ -68,7 +70,7 @@ test/sharing: pass
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 
 
-((eta 0.004) (memory #(12582912 3178616 1048576)) (stdout "") (stderr ""))
+((eta 0.003) (memory #(12582912 2352208 1048576)) (stdout "") (stderr ""))
 
 test/peano°: pass
 
@@ -102,7 +104,7 @@ test/peano°: pass
         (°->list/ground (take° 10 (fresh° (n) (church° n))))))
 
 
-((eta 0.008) (memory #(12582912 3187728 1048576)) (stdout "") (stderr ""))
+((eta 0.011) (memory #(12582912 2363656 1048576)) (stdout "") (stderr ""))
 
 test/append°: pass
 
@@ -113,20 +115,37 @@ test/append°: pass
       ((null° r) (=° s rs))
       ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
   (⊦ equal?
-       (list &#39;_0
-             (cons &#39;_0 &#39;_1)
-             &#39;(_0 _1)
-             &#39;(_0 _1 _2)
-             &#39;(_0 _1 _2 _3)
-             &#39;(_0 _1 _2 _3 _4)
-             &#39;(_0 _1 _2 _3 _4 _5)
-             &#39;(_0 _1 _2 _3 _4 _5 _6)
-             &#39;(_0 _1 _2 _3 _4 _5 _6 _7)
-             &#39;(_0 _1 _2 _3 _4 _5 _6 _7 _8))
-       (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
+       &#39;((λ (α) α)
+         (λ (α β) (cons α β))
+         (λ (α β γ) (cons α (cons β γ)))
+         (λ (α β γ δ) (cons α (cons β (cons γ δ))))
+         (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
+         (λ (α β γ δ ε ζ)
+             (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
+         (λ (α β γ δ ε ζ η)
+             (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
+         (λ (α β γ δ ε ζ η θ)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ (cons ε (cons ζ (cons η θ))))))))
+         (λ (α β γ δ ε ζ η θ ι)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ
+                                     (cons ε (cons ζ (cons η (cons θ ι)))))))))
+         (λ (α β γ δ ε ζ η θ ι κ)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ
+                                     (cons ε
+                                           (cons ζ (cons η (cons θ (cons ι κ)))))))))))
+       (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
 
 
-((eta 0.002) (memory #(12582912 3184304 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(12582912 2359944 1048576)) (stdout "") (stderr ""))
 
 test/project°: pass
 
@@ -141,7 +160,7 @@ test/project°: pass
               (project° ((s* s)) (=° r (+ s* 500))))))))
 
 
-((eta 0.0) (memory #(12582912 3178928 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2353016 1048576)) (stdout "") (stderr ""))
 
 test/groupby°/empty: pass
 The following table has been kept from the PostgreSQL documentation example on window functions [1]:
@@ -159,7 +178,7 @@ The following table has been kept from the PostgreSQL documentation example on w
  sales     |     4 |   4800 | 4866.6666666666666667
 (10 rows)with respect to the following query:
 
-SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/find: pass (define (test\/find _) (let* ((v1 (make-µkanren-var 0)) (v2 (make-µkanren-var 1)) (s0 µkanren-state-empty) (s1 (make-µkanren-state 1 (cons\/sbral \u0027a (µkanren-state-S s0)) empty\/sbral empty\/sbral empty\/sbral)) (s2 (make-µkanren-state 2 (cons\/sbral v1 (µkanren-state-S s1)) empty\/sbral empty\/sbral empty\/sbral))) (⊦= 5 (µkanren-state-find 5 s2)) (⊦= \u0027a (µkanren-state-find v1 s2)) (⊦= \u0027a (µkanren-state-find v2 s2)))) ((eta 0.002) (memory #(12582912 3177848 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/=°: pass (define (test\/=° _) (⊦= \u0027(#t) (°-\u0026gt;list\/ground (=° \u0027z \u0027z)))) ((eta 0.002) (memory #(12582912 3178920 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/sharing: pass (define (test\/sharing _) (⊦= \u0027(((_0 z) z (_0 _1))) (°-\u0026gt;list\/ground (fresh° r (n q x) (=° q \u0027z) (fresh° (w r) (=° n (list w q)) (=° x (list w r))))))) ((eta 0.004) (memory #(12582912 3178616 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/peano°: pass (define (test\/peano° _) (define-relation (peano° n) (or° (=° n \u0027z) (fresh° (r) (=° n \u0060(s ,r)) (peano° r)))) (define-relation (church° n) (fresh° (b) (=° n \u0060(λ (s) (λ (z) ,b))) (peano° b))) (⊦= \u0027(z (s z) (s (s z)) (s (s (s z))) (s (s (s (s z)))) (s (s (s (s (s z))))) (s (s (s (s (s (s z)))))) (s (s (s (s (s (s (s z))))))) (s (s (s (s (s (s (s (s z)))))))) (s (s (s (s (s (s (s (s (s z)))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (peano° n))))) (⊦= \u0027((λ (s) (λ (z) z)) (λ (s) (λ (z) (s z))) (λ (s) (λ (z) (s (s z)))) (λ (s) (λ (z) (s (s (s z))))) (λ (s) (λ (z) (s (s (s (s z)))))) (λ (s) (λ (z) (s (s (s (s (s z))))))) (λ (s) (λ (z) (s (s (s (s (s (s z)))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s z))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s z)))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z)))))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (church° n)))))) ((eta 0.008) (memory #(12582912 3187728 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/append°: pass (define (test\/append° _) (define-relation (append° r s rs) (cond° ((null° r) (=° s rs)) ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs))))) (⊦ equal? (list \u0027_0 (cons \u0027_0 \u0027_1) \u0027(_0 _1) \u0027(_0 _1 _2) \u0027(_0 _1 _2 _3) \u0027(_0 _1 _2 _3 _4) \u0027(_0 _1 _2 _3 _4 _5) \u0027(_0 _1 _2 _3 _4 _5 _6) \u0027(_0 _1 _2 _3 _4 _5 _6 _7) \u0027(_0 _1 _2 _3 _4 _5 _6 _7 _8)) (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l))))) ((eta 0.002) (memory #(12582912 3184304 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/project°: pass (define (test\/project° _) (⊦= \u0027(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300) (°-\u0026gt;list\/ground (fresh° (r) (fresh° (d e s) (empsalary° d e s) (project° ((s* s)) (=° r (\u002b s* 500)))))))) ((eta 0.0) (memory #(12582912 3178928 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/groupby°\/empty: pass The following table has been kept from the PostgreSQL documentation example on window functions [1]: depname | empno | salary | avg -----------\u002b-------\u002b--------\u002b----------------------- develop | 11 | 5200 | 5020.0000000000000000 develop | 7 | 4200 | 5020.0000000000000000 develop | 9 | 4500 | 5020.0000000000000000 develop | 8 | 6000 | 5020.0000000000000000 develop | 10 | 5200 | 5020.0000000000000000 personnel | 5 | 3500 | 3700.0000000000000000 personnel | 2 | 3900 | 3700.0000000000000000 sales | 3 | 4800 | 4866.6666666666666667 sales | 1 | 5000 | 4866.6666666666666667 sales | 4 | 4800 | 4866.6666666666666667 (10 rows)with respect to the following query: SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;\n","inLanguage":"en","wordCount":1066,"timeRequired":"PT6M","dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
+SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;'><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Tests test\/find: pass (define (test\/find _) (let* ((v1 (make-μkanren-var 0)) (v2 (make-μkanren-var 1)) (s0 μkanren-state-empty) (s1 (make-μkanren-state 1 (cons\/sbral \u0027a (μkanren-state-S s0)) empty\/sbral empty\/sbral empty\/sbral \u0027())) (s2 (make-μkanren-state 2 (cons\/sbral v1 (μkanren-state-S s1)) empty\/sbral empty\/sbral empty\/sbral \u0027()))) (⊦= 5 (μkanren-state-find 5 s2)) (⊦= \u0027a (μkanren-state-find v1 s2)) (⊦= \u0027a (μkanren-state-find v2 s2)))) ((eta 0.003) (memory #(12582912 2351024 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/=°: pass (define (test\/=° _) (⊦= \u0027(α) (°-\u0026gt;list\/ground (=° \u0027z \u0027z)))) ((eta 0.004) (memory #(12582912 2352120 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/sharing: pass (define (test\/sharing _) (⊦= \u0027(((α z) z (α β))) (°-\u0026gt;list\/ground (fresh° r (n q x) (=° q \u0027z) (fresh° (w r) (=° n (list w q)) (=° x (list w r))))))) ((eta 0.003) (memory #(12582912 2352208 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/peano°: pass (define (test\/peano° _) (define-relation (peano° n) (or° (=° n \u0027z) (fresh° (r) (=° n \u0060(s ,r)) (peano° r)))) (define-relation (church° n) (fresh° (b) (=° n \u0060(λ (s) (λ (z) ,b))) (peano° b))) (⊦= \u0027(z (s z) (s (s z)) (s (s (s z))) (s (s (s (s z)))) (s (s (s (s (s z))))) (s (s (s (s (s (s z)))))) (s (s (s (s (s (s (s z))))))) (s (s (s (s (s (s (s (s z)))))))) (s (s (s (s (s (s (s (s (s z)))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (peano° n))))) (⊦= \u0027((λ (s) (λ (z) z)) (λ (s) (λ (z) (s z))) (λ (s) (λ (z) (s (s z)))) (λ (s) (λ (z) (s (s (s z))))) (λ (s) (λ (z) (s (s (s (s z)))))) (λ (s) (λ (z) (s (s (s (s (s z))))))) (λ (s) (λ (z) (s (s (s (s (s (s z)))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s z))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s z)))))))))) (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z)))))))))))) (°-\u0026gt;list\/ground (take° 10 (fresh° (n) (church° n)))))) ((eta 0.011) (memory #(12582912 2363656 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/append°: pass (define (test\/append° _) (define-relation (append° r s rs) (cond° ((null° r) (=° s rs)) ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs))))) (⊦ equal? \u0027((λ (α) α) (λ (α β) (cons α β)) (λ (α β γ) (cons α (cons β γ))) (λ (α β γ δ) (cons α (cons β (cons γ δ)))) (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε))))) (λ (α β γ δ ε ζ) (cons α (cons β (cons γ (cons δ (cons ε ζ)))))) (λ (α β γ δ ε ζ η) (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η))))))) (λ (α β γ δ ε ζ η θ) (cons α (cons β (cons γ (cons δ (cons ε (cons ζ (cons η θ)))))))) (λ (α β γ δ ε ζ η θ ι) (cons α (cons β (cons γ (cons δ (cons ε (cons ζ (cons η (cons θ ι))))))))) (λ (α β γ δ ε ζ η θ ι κ) (cons α (cons β (cons γ (cons δ (cons ε (cons ζ (cons η (cons θ (cons ι κ))))))))))) (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l))))) ((eta 0.002) (memory #(12582912 2359944 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/project°: pass (define (test\/project° _) (⊦= \u0027(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300) (°-\u0026gt;list\/ground (fresh° (r) (fresh° (d e s) (empsalary° d e s) (project° ((s* s)) (=° r (\u002b s* 500)))))))) ((eta 0.001) (memory #(12582912 2353016 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/groupby°\/empty: pass The following table has been kept from the PostgreSQL documentation example on window functions [1]: depname | empno | salary | avg -----------\u002b-------\u002b--------\u002b----------------------- develop | 11 | 5200 | 5020.0000000000000000 develop | 7 | 4200 | 5020.0000000000000000 develop | 9 | 4500 | 5020.0000000000000000 develop | 8 | 6000 | 5020.0000000000000000 develop | 10 | 5200 | 5020.0000000000000000 personnel | 5 | 3500 | 3700.0000000000000000 personnel | 2 | 3900 | 3700.0000000000000000 sales | 3 | 4800 | 4866.6666666666666667 sales | 1 | 5000 | 4866.6666666666666667 sales | 4 | 4800 | 4866.6666666666666667 (10 rows)with respect to the following query: SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;\n","inLanguage":"en","wordCount":1309,"timeRequired":"PT7M","dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-microkanren-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content='<!doctype html>
 
 
 
@@ -188,39 +207,41 @@ Tests
 test/find: pass
 
 (define (test/find _)
-  (let* ((v1 (make-µkanren-var 0))
-         (v2 (make-µkanren-var 1))
-         (s0 µkanren-state-empty)
-         (s1 (make-µkanren-state
+  (let* ((v1 (make-μkanren-var 0))
+         (v2 (make-μkanren-var 1))
+         (s0 μkanren-state-empty)
+         (s1 (make-μkanren-state
                1
-               (cons/sbral &#39;a (µkanren-state-S s0))
+               (cons/sbral &#39;a (μkanren-state-S s0))
                empty/sbral
                empty/sbral
-               empty/sbral))
-         (s2 (make-µkanren-state
+               empty/sbral
+               &#39;()))
+         (s2 (make-μkanren-state
                2
-               (cons/sbral v1 (µkanren-state-S s1))
+               (cons/sbral v1 (μkanren-state-S s1))
                empty/sbral
                empty/sbral
-               empty/sbral)))
-    (⊦= 5 (µkanren-state-find 5 s2))
-    (⊦= &#39;a (µkanren-state-find v1 s2))
-    (⊦= &#39;a (µkanren-state-find v2 s2))))
+               empty/sbral
+               &#39;())))
+    (⊦= 5 (μkanren-state-find 5 s2))
+    (⊦= &#39;a (μkanren-state-find v1 s2))
+    (⊦= &#39;a (μkanren-state-find v2 s2))))
 
 
-((eta 0.002) (memory #(12582912 3177848 1048576)) (stdout "") (stderr ""))
+((eta 0.003) (memory #(12582912 2351024 1048576)) (stdout "") (stderr ""))
 
 test/=°: pass
 
-(define (test/=° _) (⊦= &#39;(#t) (°->list/ground (=° &#39;z &#39;z))))
+(define (test/=° _) (⊦= &#39;(α) (°->list/ground (=° &#39;z &#39;z))))
 
 
-((eta 0.002) (memory #(12582912 3178920 1048576)) (stdout "") (stderr ""))
+((eta 0.004) (memory #(12582912 2352120 1048576)) (stdout "") (stderr ""))
 
 test/sharing: pass
 
 (define (test/sharing _)
-  (⊦= &#39;(((_0 z) z (_0 _1)))
+  (⊦= &#39;(((α z) z (α β)))
         (°->list/ground
           (fresh°
             r
@@ -229,7 +250,7 @@ test/sharing: pass
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 
 
-((eta 0.004) (memory #(12582912 3178616 1048576)) (stdout "") (stderr ""))
+((eta 0.003) (memory #(12582912 2352208 1048576)) (stdout "") (stderr ""))
 
 test/peano°: pass
 
@@ -263,7 +284,7 @@ test/peano°: pass
         (°->list/ground (take° 10 (fresh° (n) (church° n))))))
 
 
-((eta 0.008) (memory #(12582912 3187728 1048576)) (stdout "") (stderr ""))
+((eta 0.011) (memory #(12582912 2363656 1048576)) (stdout "") (stderr ""))
 
 test/append°: pass
 
@@ -274,20 +295,37 @@ test/append°: pass
       ((null° r) (=° s rs))
       ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
   (⊦ equal?
-       (list &#39;_0
-             (cons &#39;_0 &#39;_1)
-             &#39;(_0 _1)
-             &#39;(_0 _1 _2)
-             &#39;(_0 _1 _2 _3)
-             &#39;(_0 _1 _2 _3 _4)
-             &#39;(_0 _1 _2 _3 _4 _5)
-             &#39;(_0 _1 _2 _3 _4 _5 _6)
-             &#39;(_0 _1 _2 _3 _4 _5 _6 _7)
-             &#39;(_0 _1 _2 _3 _4 _5 _6 _7 _8))
-       (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
+       &#39;((λ (α) α)
+         (λ (α β) (cons α β))
+         (λ (α β γ) (cons α (cons β γ)))
+         (λ (α β γ δ) (cons α (cons β (cons γ δ))))
+         (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
+         (λ (α β γ δ ε ζ)
+             (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
+         (λ (α β γ δ ε ζ η)
+             (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
+         (λ (α β γ δ ε ζ η θ)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ (cons ε (cons ζ (cons η θ))))))))
+         (λ (α β γ δ ε ζ η θ ι)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ
+                                     (cons ε (cons ζ (cons η (cons θ ι)))))))))
+         (λ (α β γ δ ε ζ η θ ι κ)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ
+                                     (cons ε
+                                           (cons ζ (cons η (cons θ (cons ι κ)))))))))))
+       (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
 
 
-((eta 0.002) (memory #(12582912 3184304 1048576)) (stdout "") (stderr ""))
+((eta 0.002) (memory #(12582912 2359944 1048576)) (stdout "") (stderr ""))
 
 test/project°: pass
 
@@ -302,7 +340,7 @@ test/project°: pass
               (project° ((s* s)) (=° r (+ s* 500))))))))
 
 
-((eta 0.0) (memory #(12582912 3178928 1048576)) (stdout "") (stderr ""))
+((eta 0.001) (memory #(12582912 2353016 1048576)) (stdout "") (stderr ""))
 
 test/groupby°/empty: pass
 The following table has been kept from the PostgreSQL documentation example on window functions [1]:
@@ -349,52 +387,54 @@ Tests
 test/find: pass
 
 (define (test/find _)
-  (let* ((v1 (make-µkanren-var 0))
-         (v2 (make-µkanren-var 1))
-         (s0 µkanren-state-empty) …</!doctype>"><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.160.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+  (let* ((v1 (make-μkanren-var 0))
+         (v2 (make-μkanren-var 1))
+         (s0 μkanren-state-empty) …</!doctype>"><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.160.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
 </button>
-<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li><a title=Tags href=/tags>Tags</a></li><li><a title=Categories href=/categories/>Categories</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
+<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
 <a href=/libpq-rs/libpq/index.html>Crate libpq-rs</a>
 <a href=/igraph-rs/igraph/>Crate igraph-rs</a></div></li></ul></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
 </button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section1159><header><h1>Tests</h1></header></section><h2 id=test/find><a href=#test/find><code>test/find</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/find _)
-  (let* ((v1 (make-µkanren-var 0))
-         (v2 (make-µkanren-var 1))
-         (s0 µkanren-state-empty)
-         (s1 (make-µkanren-state
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section1195><header><h1>Tests</h1></header></section><h2 id=test/find><a href=#test/find><code>test/find</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/find _)
+  (let* ((v1 (make-μkanren-var 0))
+         (v2 (make-μkanren-var 1))
+         (s0 μkanren-state-empty)
+         (s1 (make-μkanren-state
                1
-               (cons/sbral 'a (µkanren-state-S s0))
+               (cons/sbral 'a (μkanren-state-S s0))
                empty/sbral
                empty/sbral
-               empty/sbral))
-         (s2 (make-µkanren-state
+               empty/sbral
+               '()))
+         (s2 (make-μkanren-state
                2
-               (cons/sbral v1 (µkanren-state-S s1))
+               (cons/sbral v1 (μkanren-state-S s1))
                empty/sbral
                empty/sbral
-               empty/sbral)))
-    (⊦= 5 (µkanren-state-find 5 s2))
-    (⊦= 'a (µkanren-state-find v1 s2))
-    (⊦= 'a (µkanren-state-find v2 s2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3177848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id="test/=°"><a href="#test/=°"><code>test/=°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(#t) (°-&gt;list/ground (=° 'z 'z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3178920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+               empty/sbral
+               '())))
+    (⊦= 5 (μkanren-state-find 5 s2))
+    (⊦= 'a (μkanren-state-find v1 s2))
+    (⊦= 'a (μkanren-state-find v2 s2))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2351024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/=°"><a href="#test/=°"><code>test/=°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(α) (°-&gt;list/ground (=° 'z 'z))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2352120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/sharing><a href=#test/sharing><code>test/sharing</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/sharing _)
-  (⊦= '(((_0 z) z (_0 _1)))
+  (⊦= '(((α z) z (α β)))
         (°-&gt;list/ground
           (fresh°
             r
             (n q x)
             (=° q 'z)
             (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 3178616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2352208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/peano°><a href=#test/peano°><code>test/peano°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/peano° _)
   (define-relation
     (peano° n)
@@ -423,7 +463,7 @@ test/find: pass
           (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
           (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
         (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 3187728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 2363656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/append°><a href=#test/append°><code>test/append°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/append° _)
   (define-relation
     (append° r s rs)
@@ -431,18 +471,35 @@ test/find: pass
       ((null° r) (=° s rs))
       ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
   (⊦ equal?
-       (list '_0
-             (cons '_0 '_1)
-             '(_0 _1)
-             '(_0 _1 _2)
-             '(_0 _1 _2 _3)
-             '(_0 _1 _2 _3 _4)
-             '(_0 _1 _2 _3 _4 _5)
-             '(_0 _1 _2 _3 _4 _5 _6)
-             '(_0 _1 _2 _3 _4 _5 _6 _7)
-             '(_0 _1 _2 _3 _4 _5 _6 _7 _8))
-       (µkanren-run (l 10 #t) (fresh° (a d) (append° a d l)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3184304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+       '((λ (α) α)
+         (λ (α β) (cons α β))
+         (λ (α β γ) (cons α (cons β γ)))
+         (λ (α β γ δ) (cons α (cons β (cons γ δ))))
+         (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
+         (λ (α β γ δ ε ζ)
+             (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
+         (λ (α β γ δ ε ζ η)
+             (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
+         (λ (α β γ δ ε ζ η θ)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ (cons ε (cons ζ (cons η θ))))))))
+         (λ (α β γ δ ε ζ η θ ι)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ
+                                     (cons ε (cons ζ (cons η (cons θ ι)))))))))
+         (λ (α β γ δ ε ζ η θ ι κ)
+             (cons α
+                   (cons β
+                         (cons γ
+                               (cons δ
+                                     (cons ε
+                                           (cons ζ (cons η (cons θ (cons ι κ)))))))))))
+       (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2359944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/project°><a href=#test/project°><code>test/project°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/project° _)
   (⊦= '(4700 6500 5000 5700 5700 4400 4000 5500 5300 5300)
         (°-&gt;list/ground
@@ -452,8 +509,8 @@ test/find: pass
               (d e s)
               (empsalary° d e s)
               (project° ((s* s)) (=° r (+ s* 500))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3178928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test/groupby°/empty><a href=#test/groupby°/empty><code>test/groupby°/empty</code>: <span class=w3-text-green>pass</span></a></h2><p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href=#cite1160>1</a>]</cite>:<pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2353016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/groupby°/empty><a href=#test/groupby°/empty><code>test/groupby°/empty</code>: <span class=w3-text-green>pass</span></a></h2><p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href=#cite1196>1</a>]</cite>:<pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
 -----------+-------+--------+-----------------------
  develop   |    11 |   5200 | 5020.0000000000000000
  develop   |     7 |   4200 | 5020.0000000000000000
@@ -480,7 +537,7 @@ test/find: pass
                 (empsalary° d e s)
                 =&gt;
                 (=° r s*)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3195200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2368968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/groupby°/one-column><a href=#test/groupby°/one-column><code>test/groupby°/one-column</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/groupby°/one-column _)
   (⊦= '((personnel 7400) (sales 14600) (develop 25100))
         (sort (°-&gt;list/ground
@@ -497,7 +554,7 @@ test/find: pass
                       =&gt;
                       (=° r `(,d ,s*))))))
               (λ (a b) (&lt; (cadr a) (cadr b))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3182400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2356064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/set°><a href=#test/set°><code>test/set°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/set° _)
   (⊦= '((personnel 2) (sales 3) (develop 5))
         (sort (°-&gt;list/ground
@@ -513,7 +570,7 @@ test/find: pass
                            =&gt;
                            (=° r `(,d* ,c))))))
               (λ (a b) (&lt; (cadr a) (cadr b))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3182616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2356632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/enumerate°><a href=#test/enumerate°><code>test/enumerate°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/enumerate° _)
   (⊦= '(((0 (sales))
            (1 (sales))
@@ -538,7 +595,7 @@ test/find: pass
                 (empsalary° d e s)
                 =&gt;
                 (=° r c)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3197144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2371504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/window°><a href=#test/window°><code>test/window°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/window° _)
   (⊦= '((develop 7 4200 5020)
           (develop 8 6000 5020)
@@ -586,17 +643,17 @@ test/find: pass
                 (empsalary° d e s)
                 =&gt;
                 (=° r `(,d ,e ,s ,s*))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3185464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2360296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id="test/=°/structure"><a href="#test/=°/structure"><code>test/=°/structure</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure _)
   (define-record person name age)
   (define p (make-person 'alice 30))
   (⊦= #t (record-instance? p))
   (⊦= `((record ,p))
         (°-&gt;list/ground (fresh° (r) (=° r (list 'record p)))))
-  (⊦= `((record ,(make-person '_0 30)))
+  (⊦= `((record ,(make-person 'α 30)))
         (°-&gt;list/ground
           (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3186896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2360888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id="test/=°/structure/vector"><a href="#test/=°/structure/vector"><code>test/=°/structure/vector</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure/vector _)
   (define-record person name age)
   (define p (make-person 'alice 30))
@@ -604,8 +661,28 @@ test/find: pass
   (⊦= #(person alice 30) (record-&gt;vector p))
   (⊦= '((person alice 30))
         (°-&gt;list/ground (fresh° r (t n a) (=° `#(,t ,n ,a) p)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3187336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1160>[1] <a href=https://www.postgresql.org/docs/current/tutorial-window.html>PostgreSQL Window Functions</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-queue-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2360848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/symbol°><a href=#test/symbol°><code>test/symbol°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/symbol° _)
+  (⊦= '((λ (α) (assert (every (μ v (symbol? v)) (list α))) α))
+        (°-&gt;list #f (fresh° (s) (symbol° s))))
+  (°-&gt;list #f (fresh° (s r) (symbol° r)))
+  (°-&gt;list #f (fresh° (s) (≠° s 1)))
+  (°-&gt;list #f (fresh° (s) (≠° s 1) (=° s 1)))
+  (°-&gt;list #f (fresh° (s) (≠° s '(a b))))
+  (°-&gt;list #f (fresh° (q p r) (≠° (list p r) '(1 2)) (=° q (list p r))))
+  (°-&gt;list
+    #f
+    (fresh° (q p r) (≠° (list p r) '(1 2)) (=° p 1) (=° q (list p r))))
+  (°-&gt;list
+    #f
+    (fresh°
+      (q p r)
+      (≠° (list p r) '(1 2))
+      (=° p 1)
+      (=° r 2)
+      (=° q (list p r)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2362360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1196>[1] <a href=https://www.postgresql.org/docs/current/tutorial-window.html>PostgreSQL Window Functions</a></span><br></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-queue-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

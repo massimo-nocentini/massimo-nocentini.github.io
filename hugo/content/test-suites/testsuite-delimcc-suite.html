@@ -21,8 +21,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<p>In this page we describe two fundamental macros, <code class="w3-codespan">resetcc</code> and <code class="w3-codespan">letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href="#cite1030">1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href="#cite1031">2</a>]</cite> recorded a talk <cite>[<a href="#cite1032">3</a>]</cite> that given in the workshop <cite>[<a href="#cite1033">4</a>]</cite>, slides <cite>[<a href="#cite1034">5</a>]</cite> are also available.</p>
-<section id="section1035">
+<p>In this page we describe two fundamental macros, <code class="w3-codespan">resetcc</code> and <code class="w3-codespan">letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href="#cite1027">1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href="#cite1028">2</a>]</cite> recorded a talk <cite>[<a href="#cite1029">3</a>]</cite> that given in the workshop <cite>[<a href="#cite1030">4</a>]</cite>, slides <cite>[<a href="#cite1031">5</a>]</cite> are also available.</p>
+<section id="section1032">
 <header>
 <h1>The <code class="w3-codespan">resetcc</code> macro</h1></header></section>
 <p>Continuations are delimited by the <code class="w3-codespan">resetcc</code> syntax as in the following generic expression
@@ -32,7 +32,7 @@
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(callcc (delimcc-reset (τ body ...)))
 </code></pre></div></p>
-<section id="section1039">
+<section id="section1036">
 <header>
 <h1>The <code class="w3-codespan">letcc/shift</code> macro</h1></header></section>
 <p>The expression 
@@ -50,7 +50,7 @@
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(callcc (delimcc-shift (λ (k) body ...)))
 </code></pre></div></p>
-<section id="section1043">
+<section id="section1040">
 <header>
 <h1>Implementation</h1></header></section>
 <div>
@@ -104,7 +104,7 @@
                  (else (f (car r) (L (let1 (k (cdr r)) (k (void))))))))
          (L (resetcc body ... witness)))))))
 </code></pre></div>
-<section id="section1044">
+<section id="section1041">
 <header>
 <h1>Tests</h1></header></section>
 <h2 id="test/delimcc/basic"><a href="#test/delimcc/basic"><code>test/delimcc/basic</code>: <span class="w3-text-green">pass</span></a></h2>
@@ -133,7 +133,7 @@
                 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2999648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2991992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/discard"><a href="#test/delimcc/tutorial/discard"><code>test/delimcc/tutorial/discard</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -145,7 +145,7 @@
   (⊦= 'hello (resetcc (sub1 (+ 3 (letcc/shift k 'hello))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3002344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2994688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/discard/prod"><a href="#test/delimcc/tutorial/discard/prod"><code>test/delimcc/tutorial/discard/prod</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -157,7 +157,7 @@
   (⊦= 'zero (resetcc (prod '(2 3 0 5)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3001328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2993672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/extract"><a href="#test/delimcc/tutorial/extract"><code>test/delimcc/tutorial/extract</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -168,7 +168,7 @@
   (⊦= 12 (g 10)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3004792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2997136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/extract/appender"><a href="#test/delimcc/tutorial/extract/appender"><code>test/delimcc/tutorial/extract/appender</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -180,7 +180,7 @@
   (⊦= '(1 2 3 4 5 6) (A '(4 5 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3005776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2998120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/yield"><a href="#test/delimcc/yield"><code>test/delimcc/yield</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -189,7 +189,7 @@
   (⊦= '(1 2) (resetcc+null (yield 1) (yield 2))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3006872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2999216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/yield/extract"><a href="#test/delimcc/yield/extract"><code>test/delimcc/yield/extract</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -206,7 +206,7 @@
           0)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3005520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2997864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/yield§"><a href="#test/delimcc/yield§"><code>test/delimcc/yield§</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -216,7 +216,7 @@
   (⊦= '(1 2) (§-&gt;list (resetcc+null (yield§ 1) (yield§ 2)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3008896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3001240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/yield§/walk"><a href="#test/delimcc/tutorial/yield§/walk"><code>test/delimcc/tutorial/yield§/walk</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -233,7 +233,7 @@
           (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3010544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3002888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/either"><a href="#test/delimcc/tutorial/either"><code>test/delimcc/tutorial/either</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -241,7 +241,7 @@
   (⊦= '(1 3 3) (resetcc (delimcc-either `(1 ,(add1 2) 3)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3011712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3004056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/either/tensor"><a href="#test/delimcc/tutorial/either/tensor"><code>test/delimcc/tutorial/either/tensor</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -265,7 +265,7 @@
                  'no))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3009904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2997304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/τ"><a href="#test/delimcc/tutorial/τ"><code>test/delimcc/tutorial/τ</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -274,7 +274,7 @@
   (⊦= '(hello world) (a)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3013240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3000688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/delimcc/tutorial/λ"><a href="#test/delimcc/tutorial/λ"><code>test/delimcc/tutorial/λ</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -283,7 +283,7 @@
   (⊦= '(hello 4 world) (p 4)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3016648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3004160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/letcc/delimcc+monad"><a href="#test/letcc/delimcc+monad"><code>test/letcc/delimcc+monad</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -314,13 +314,13 @@
   (⊦= 48000 (length (wwww))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.087) (memory #(12582912 3010512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.091) (memory #(12582912 3001600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <hr />
 <div class="w3-container">
-<header><b>References</b></header><span id="cite1030">[1] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf">Introduction to Programming with Shift and Reset</a></span>
-<br /><span id="cite1031">[2] <a href="http://pllab.is.ocha.ac.jp/~asai/">Professor Kenichi Asai's home page</a></span>
-<br /><span id="cite1032">[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span>
-<br /><span id="cite1033">[4] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/">CW 2011 Tutorial: home page</a></span>
-<br /><span id="cite1034">[5] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf">CW 2011 Tutorial: slides</a></span>
+<header><b>References</b></header><span id="cite1027">[1] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf">Introduction to Programming with Shift and Reset</a></span>
+<br /><span id="cite1028">[2] <a href="http://pllab.is.ocha.ac.jp/~asai/">Professor Kenichi Asai's home page</a></span>
+<br /><span id="cite1029">[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span>
+<br /><span id="cite1030">[4] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/">CW 2011 Tutorial: home page</a></span>
+<br /><span id="cite1031">[5] <a href="http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf">CW 2011 Tutorial: slides</a></span>
 <br /></div></body></html>

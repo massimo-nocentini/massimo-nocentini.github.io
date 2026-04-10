@@ -4,7 +4,7 @@ title = 'Sulle spalle dei giganti: Primo incontro'
 subtitle = 'La crisi dell’uomo moderno: un’ipotesi da verificare'
 author = 'Franco Nembrini'
 summary = ' '
-categories = ['nembrini', 'educazione', 'sulle spalle dei giganti']
+categories = ['nembrini', 'sulle spalle dei giganti']
 draft = true
 +++
 

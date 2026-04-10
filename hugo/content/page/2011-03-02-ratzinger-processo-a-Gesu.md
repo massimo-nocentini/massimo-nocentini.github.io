@@ -3,6 +3,7 @@ date = '2011-03-02T16:00:21+01:00'
 title = 'La Verità davanti a Pilato'
 subtitle = 'Dal secondo tomo di "Gesù di Nazaret". Dal terzo punto del settimo capitolo intitolato "Il processo a Gesù"'
 author = 'papa Benedetto XVI'
+categories = ["Benedetto XVI"]
 tags = [
     "verità",
     "Pilato",

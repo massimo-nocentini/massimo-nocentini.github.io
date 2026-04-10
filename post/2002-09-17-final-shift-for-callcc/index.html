@@ -4,7 +4,7 @@
 <span class=icon-bar></span>
 <span class=icon-bar></span>
 </button>
-<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li><a title=Tags href=/tags>Tags</a></li><li><a title=Categories href=/categories/>Categories</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
+<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
 <a href=/libpq-rs/libpq/index.html>Crate libpq-rs</a>
 <a href=/igraph-rs/igraph/>Crate igraph-rs</a></div></li></ul></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
@@ -22,11 +22,11 @@ In SIGPLAN Not.,
 Association for Computing Machinery,
 New York, NY, USA,
 vol. 37,
-pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications.</i></p><hr><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href=#cite1030>1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href=#cite1031>2</a>]</cite> recorded a talk <cite>[<a href=#cite1032>3</a>]</cite> that given in the workshop <cite>[<a href=#cite1033>4</a>]</cite>, slides <cite>[<a href=#cite1034>5</a>]</cite> are also available.</p><section id=section1035><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
+pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications.</i></p><hr><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href=#cite1027>1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href=#cite1028>2</a>]</cite> recorded a talk <cite>[<a href=#cite1029>3</a>]</cite> that given in the workshop <cite>[<a href=#cite1030>4</a>]</cite>, slides <cite>[<a href=#cite1031>5</a>]</cite> are also available.</p><section id=section1032><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
 </code></pre></div>where the expressions <code class=w3-codespan>body ...</code> execute in a delimited context; for the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(callcc (delimcc-reset (τ body ...)))
-</code></pre></div></p><section id=section1039><header><h1>The <code class=w3-codespan>letcc/shift</code> macro</h1></header></section><p>The expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
+</code></pre></div></p><section id=section1036><header><h1>The <code class=w3-codespan>letcc/shift</code> macro</h1></header></section><p>The expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
 </code></pre></div>is explained by author's word:<blockquote class="w3-panel w3-leftbar w3-round w3-border" style=max-width:61.8%><span style=font-size:261%;opacity:.2>&#10077;</span><br><i><ol><li>clears the current continuation</li><li>binds the cleared continuation to <code class=w3-codespan>k</code></li><li>and executes <code class=w3-codespan>body ...</code></li></ol></i><footer><p class=w3-right-align>Kenichi Asai</p></footer></blockquote>For the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(callcc (delimcc-shift (λ (k) body ...)))
-</code></pre></div></p><section id=section1043><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+</code></pre></div></p><section id=section1040><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
   (aux continuation delimited)
   *
   (import scheme (chicken base) (aux base) (aux continuation))
@@ -75,7 +75,7 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
            (cond ((eq? r witness) b)
                  (else (f (car r) (L (let1 (k (cdr r)) (k (void))))))))
          (L (resetcc body ... witness)))))))
-</code></pre></div><section id=section1044><header><h1>Tests</h1></header></section><h2 id=test/delimcc/basic><a href=#test/delimcc/basic><code>test/delimcc/basic</code>: <span class=w3-text-green>pass</span></a></h2><p>This test case introduces basic expressions to get introduced to delimited continuations.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/basic _)
+</code></pre></div><section id=section1041><header><h1>Tests</h1></header></section><h2 id=test/delimcc/basic><a href=#test/delimcc/basic><code>test/delimcc/basic</code>: <span class=w3-text-green>pass</span></a></h2><p>This test case introduces basic expressions to get introduced to delimited continuations.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/basic _)
   (⊦= 10 (letcc/shift k 10))
   (⊦= '(1 2 10) (cons 1 (cons 2 (letcc/shift k (k (k '(10)))))))
   (⊦= '(1 2 2 10) (cons 1 (resetcc (cons 2 (letcc/shift k (k (k '(10))))))))
@@ -96,38 +96,38 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
         (resetcc
           (cons 10
                 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2999648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2991992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/discard><a href=#test/delimcc/tutorial/discard><code>test/delimcc/tutorial/discard</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/discard _)
   (⊦= 10 (resetcc (sub1 (+ 3 (letcc/shift k (* 5 2))))))
   (⊦= '(10) (resetcc (cdr (cons 3 (letcc/shift k (list (* 5 2)))))))
   (⊦= 9 (sub1 (resetcc (+ 3 (letcc/shift k (* 5 2))))))
   (⊦= '() (cdr (resetcc (cons 3 (letcc/shift k (list (* 5 2)))))))
   (⊦= 'hello (resetcc (sub1 (+ 3 (letcc/shift k 'hello))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3002344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2994688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/discard/prod><a href=#test/delimcc/tutorial/discard/prod><code>test/delimcc/tutorial/discard/prod</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/discard/prod _)
   (define (prod lst)
     (cond ((null? lst) 1)
           ((zero? (car lst)) (delimcc-discard 'zero))
           (else (* (car lst) (prod (cdr lst))))))
   (⊦= 'zero (resetcc (prod '(2 3 0 5)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3001328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2993672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/extract><a href=#test/delimcc/tutorial/extract><code>test/delimcc/tutorial/extract</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/extract _)
   (define-resetcc f (sub1 (+ 3 (letcc/shift k k))))
   (⊦= (sub1 (+ 3 10)) (f 10))
   (define-resetcc g (sub1 (+ 3 (delimcc-extract))))
   (⊦= 12 (g 10)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3004792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2997136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/extract/appender><a href=#test/delimcc/tutorial/extract/appender><code>test/delimcc/tutorial/extract/appender</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/extract/appender _)
   (define (appender lst)
     (cond ((null? lst) (delimcc-extract))
           (else (cons (car lst) (appender (cdr lst))))))
   (define-resetcc A (appender '(1 2 3)))
   (⊦= '(1 2 3 4 5 6) (A '(4 5 6))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3005776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2998120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield><a href=#test/delimcc/yield><code>test/delimcc/yield</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield _)
   (⊦= '(1) (resetcc+null (yield 1)))
   (⊦= '(1 2) (resetcc+null (yield 1) (yield 2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3006872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2999216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield/extract><a href=#test/delimcc/yield/extract><code>test/delimcc/yield/extract</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield/extract _)
   (⊦= '((a 1) (a 2))
         (§-&gt;list
@@ -139,12 +139,12 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
           +
           (resetcc+null (yield/extract 1) (yield/extract 2))
           0)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3005520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2997864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield§><a href=#test/delimcc/yield§><code>test/delimcc/yield§</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield§ _)
   (⊦= '(1) (§-&gt;list (resetcc+null (yield§ 1))))
   (⊦= '(1) (§-&gt;list (take§ 1 (resetcc+null (yield§ 1) (yield§ 2)))))
   (⊦= '(1 2) (§-&gt;list (resetcc+null (yield§ 1) (yield§ 2)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3008896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3001240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/yield§/walk><a href=#test/delimcc/tutorial/yield§/walk><code>test/delimcc/tutorial/yield§/walk</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/yield§/walk _)
   (define (walk f tree)
     (cond ((null? tree) (void))
@@ -156,10 +156,10 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
           100
           ((each prod) (* each prod))
           (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3010544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3002888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/either><a href=#test/delimcc/tutorial/either><code>test/delimcc/tutorial/either</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/either _)
   (⊦= '(1 3 3) (resetcc (delimcc-either `(1 ,(add1 2) 3)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3011712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3004056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/either/tensor><a href=#test/delimcc/tutorial/either/tensor><code>test/delimcc/tutorial/either/tensor</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/either/tensor _)
   (⊦= '(((p #t) (q #f)))
         (let1 (sols '())
@@ -178,15 +178,15 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
               ,(if (and (or p q) (or p (not q)) (or (not p) (not q)))
                  'yes
                  'no))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3009904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2997304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/τ><a href=#test/delimcc/tutorial/τ><code>test/delimcc/tutorial/τ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/τ _)
   (define-resetcc a (append (τ-shift '(hello)) '(world)))
   (⊦= '(hello world) (a)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3013240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3000688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/λ><a href=#test/delimcc/tutorial/λ><code>test/delimcc/tutorial/λ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/λ _)
   (define-resetcc p (append '(hello) (λ-shift (x) (list x)) '(world)))
   (⊦= '(hello 4 world) (p 4)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3016648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3004160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/letcc/delimcc+monad><a href=#test/letcc/delimcc+monad><code>test/letcc/delimcc+monad</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcc/delimcc+monad _)
   (define (reflect meaning) (letcc/shift k (extend k meaning)))
   (define (reify* t) (resetcc (eta (t))))
@@ -212,8 +212,8 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
     (define (f x) (+ x (amb 6 4 2 8) (amb 2 4 5 4 1)))
     (reify (f (f (f (amb 0 2 3 4 5 32))))))
   (⊦= 48000 (length (wwww))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.087) (memory #(12582912 3010512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1030>[1] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf>Introduction to Programming with Shift and Reset</a></span><br><span id=cite1031>[2] <a href=http://pllab.is.ocha.ac.jp/~asai/>Professor Kenichi Asai's home page</a></span><br><span id=cite1032>[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span><br><span id=cite1033>[4] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/>CW 2011 Tutorial: home page</a></span><br><span id=cite1034>[5] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf>CW 2011 Tutorial: slides</a></span><br></div></body></html><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/monads/>monads</a>&nbsp;
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.091) (memory #(12582912 3001600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1027>[1] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf>Introduction to Programming with Shift and Reset</a></span><br><span id=cite1028>[2] <a href=http://pllab.is.ocha.ac.jp/~asai/>Professor Kenichi Asai's home page</a></span><br><span id=cite1029>[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span><br><span id=cite1030>[4] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/>CW 2011 Tutorial: home page</a></span><br><span id=cite1031>[5] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf>CW 2011 Tutorial: slides</a></span><br></div></body></html><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/monads/>monads</a>&nbsp;
 <a href=https://massimo-nocentini.github.io/tags/callcc/>callcc</a>&nbsp;
 <a href=https://massimo-nocentini.github.io/tags/shift/>shift</a>&nbsp;
 <a href=https://massimo-nocentini.github.io/tags/reset/>reset</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2001-02-01-callcc-patterns/>Call with Current Continuation Patterns</a></li><li><a href=/post/1996-01-31-the-seasoned-schemer/>The Seasoned Schemer</a></li><li><a href=/post/1994-02-01-filinski-representing-monads/>Representing monads</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2001-02-01-callcc-patterns/ data-toggle=tooltip data-placement=top title="Call with Current Continuation Patterns">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-01-12-igraph-paper/ data-toggle=tooltip data-placement=top title="The igraph software package for complex network research">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
