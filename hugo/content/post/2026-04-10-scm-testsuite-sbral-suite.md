@@ -9,8 +9,6 @@ tags = ['sbral', 'scheme', 'persistent', 'functional', 'sequences', 'indexing', 
 
 # Skew Binary Random-Access Lists in Scheme
 
-## Abstract
-
 We describe a CHICKEN Scheme implementation of *skew binary random-access lists*
 (SBRALs), a purely functional data structure that provides \\(O(1)\\) worst-case
 `cons`, `car`, and `cdr` at the front while supporting \\(O(\\log n)\\) indexed
@@ -19,6 +17,8 @@ structure as a list of weight-annotated complete binary trees whose sizes follow
 the skew binary number system.  We present the representation, walk through 
 every exported definition, give complexity bounds, and illustrate the invariants
 with a concrete trace drawn from the accompanying test suite.
+
+
 
 ## 1. Motivation
 
