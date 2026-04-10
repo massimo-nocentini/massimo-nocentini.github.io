@@ -12,16 +12,16 @@ This post explains the implementation of the SBRAL data structure in this reposi
 
 The code lives in `(aux fds sbral)` and implements a persistent sequence with:
 
-- O(1) amortized insertion at the front (`cons/sbral`)
-- O(1) front access and removal (`car/sbral`, `cdr/sbral`)
-- O(log n) indexed lookup and update (`sbral-ref`, `update/sbral`)
+- \\(O(1)\\) amortized insertion at the front (`cons/sbral`)
+- \\(O(1)\\) front access and removal (`car/sbral`, `cdr/sbral`)
+- \\(O(log n)\\) indexed lookup and update (`sbral-ref`, `update/sbral`)
 
 The implementation combines a list-like interface with tree-based indexing.
 
 ## Why SBRAL?
 
-A plain linked list gives O(1) `cons` and `car`, but O(n) indexed access.
-A vector gives O(1) indexing, but front insertion is expensive.
+A plain linked list gives \\(O(1)\\) `cons` and `car`, but \\(O(n)\\) indexed access.
+A vector gives \\(O(1)\\) indexing, but front insertion is expensive.
 
 A skew binary random-access list balances these trade-offs by storing values in a
 small forest of complete binary trees, each tagged with its size.
@@ -45,7 +45,7 @@ Examples from the tests:
 '((7 g (f (e) (d)) (c (b) (a))))
 ```
 
-Notice how tree sizes are always of the form $2^k - 1$ (1, 3, 7, 15, ...).
+Notice how tree sizes are always of the form \\(2^k - 1\\) (1, 3, 7, 15, ...).
 
 ## Core invariant
 
@@ -96,7 +96,7 @@ These encapsulate the local tree encoding and keep the navigation code readable.
 
 Reads the value at the root of the first tree.
 
-Because every non-empty SBRAL puts its logical front at that root, this is O(1).
+Because every non-empty SBRAL puts its logical front at that root, this is \\(O(1)\\).
 
 ### `cdr/sbral`
 
@@ -105,7 +105,7 @@ Removes the front element.
 - if first tree has size 1 (leaf), drop it
 - if first tree is a node of size `w`, split it into two trees of size `w/2`
 
-This is the inverse of the merge done by `cons/sbral`, and is O(1).
+This is the inverse of the merge done by `cons/sbral`, and is \\(O(1)\\).
 
 ### `sbral-tree-lookup`
 
@@ -114,7 +114,7 @@ Performs indexed traversal inside one weighted tree.
 - index 0 is the root
 - remaining indexes are routed left or right using `whalf = (quotient w 2)`
 
-The recursion depth is tree height, so O(log w).
+The recursion depth is tree height, so \\(O(log w)\\).
 
 ### `sbral-ref`
 
@@ -123,7 +123,7 @@ Lookup across the whole structure:
 - if index `i` falls in first weighted tree (size `size`), delegate to `sbral-tree-lookup`
 - otherwise recurse on the tail with shifted index `(- i size)`
 
-Because there are only O(log n) weighted trees and each tree lookup is O(log n),
+Because there are only \\(O(log n)\\) weighted trees and each tree lookup is \\(O(log n)\\),
 this stays logarithmic in practice for this representation.
 
 ### `sbral-tree-update` and `update/sbral`
@@ -134,7 +134,7 @@ Update mirrors lookup:
 - rebuild only the nodes along the path
 - share untouched subtrees
 
-This keeps persistence and immutability while making update O(log n).
+This keeps persistence and immutability while making update \\(O(log n)\\).
 
 ### folds and conversions
 
@@ -177,14 +177,14 @@ This is the compact comment-style reference for every definition in the module.
 
 ## Complexity summary
 
-For a structure with $n$ elements:
+For a structure with \\(n\\) elements:
 
-- `cons/sbral`: O(1) amortized
-- `car/sbral`: O(1)
-- `cdr/sbral`: O(1)
-- `sbral-ref`: O(log n)
-- `update/sbral`: O(log n)
-- `length/sbral`: O(number of weighted trees), which is O(log n)
+- `cons/sbral`: \\(O(1)\\) amortized
+- `car/sbral`: \\(O(1)\\)
+- `cdr/sbral`: \\(O(1)\\)
+- `sbral-ref`: \\(O(log n)\\)
+- `update/sbral`: \\(O(log n)\\)
+- `length/sbral`: O(number of weighted trees), which is \\(O(log n)\\)
 
 ## Small worked example
 
