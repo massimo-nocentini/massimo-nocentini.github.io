@@ -1,12 +1,13 @@
 +++
 date = '2026-04-10T09:58:04+01:00'
-subtitle = 'Aka SBRALs and the (aux fds sbral) Scheme module.'
-title = 'Skew Binary Random-Access Lists'
-summary = ' '
+title = 'The (aux fds sbral) module'
+subtitle = 'Skew Binary Random-Access Lists, aka SBRALs.'
+summary = 'A walkthrough of the Scheme module `(aux fds sbral)`, showing how skew binary random-access lists support persistent front operations in constant amortized time and indexed lookup and update in logarithmic time.'
 categories = ['scheme']
+tags = ['sbral', 'scheme', 'persistent', 'functional', 'sequences', 'indexing', 'trees', 'lookup', 'update', 'amortized']
 +++
 
-# Inside aux.scm: Skew Binary Random-Access Lists (SBRAL)
+# Skew Binary Random-Access Lists (SBRALs)
 
 This post explains the implementation of the SBRAL data structure in this repository.
 
@@ -18,7 +19,7 @@ The code lives in `(aux fds sbral)` and implements a persistent sequence with:
 
 The implementation combines a list-like interface with tree-based indexing.
 
-## Why SBRAL?
+## Why SBRALs?
 
 A plain linked list gives \\(O(1)\\) `cons` and `car`, but \\(O(n)\\) indexed access.
 A vector gives \\(O(1)\\) indexing, but front insertion is expensive.

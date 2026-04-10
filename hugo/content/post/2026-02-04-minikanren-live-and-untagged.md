@@ -3,9 +3,9 @@ date = '2012-09-09T18:33:23+01:00'
 title = "miniKanren, live and untagged"
 author = ['William E. Byrd', 'Eric Holk', 'Daniel P. Friedman']
 subtitle = 'Quine generation via relational interpreters'
-tags = [ "kanren", 'pattern matching' ]
+tags = [ 'kanren', 'minikanren', 'scheme', 'relational', 'interpreters', 'quines', 'logic', 'constraints', 'untagged', 'matching' ]
 categories = [ "scheme", 'papers']
-summary = ' '
+summary = 'This paper presents relational interpreters for subsets of Scheme in miniKanren, emphasizing backward execution, quine generation, constraint-based reasoning, and untagged representations that simplify interpreter design.'
 +++
 
 {{< bibtex
