@@ -295,7 +295,7 @@ generale. Perciò i padri insistono per dire che l'antivirus della lussuria non
 del cuore, una tensione desta contro l'ira e contro le altre passioni. E poi, a
 fondamento di tutto, conclude Cassiano:
 
-> Si deve porre una vera umiltà, senza la quale non si potranno trionfare di
+> Si deve porre una vera umiltà, senza la quale non si potrà mai trionfare di
 > alcun vizio.
 
 Terzo antivirus: custodisci il tuo cuore. Dice il libro dei Proverbi:
@@ -305,7 +305,7 @@ Terzo antivirus: custodisci il tuo cuore. Dice il libro dei Proverbi:
 Ecco un'indicazione importante: è dal di dentro che deve sgorgare l'antivirus.
 Ciò che riempie il cuore, cioè l'amore, la pace interiore, sono i migliori
 rimedi. Ricordiamo questo principio spirituale: è ciò che ci riempie che ci
-rende puri, non ciò di cui ci priviamo.  Basilio di Cesarea cosa ha da dire:
+rende puri, non ciò di cui ci priviamo.  Basilio di Cesarea osava dire:
 
 > Non conosco donna eppure non sono vergine.
 
