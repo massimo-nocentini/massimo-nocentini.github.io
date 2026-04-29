@@ -15,7 +15,7 @@ tags = [
     "battesimo",
     "Spirito",
 ]
-categories = ['don Fabio Rosini']
+categories = ['don Fabio Rosini', 'san Basilio Magno']
 author = 'don Fabio Rosini'
 +++
 
@@ -31,13 +31,56 @@ Mediante le tre immersioni e le altrettante invocazioni si compie il grande mist
 
 Perciò il Signore, nel prepararci a quella vita che viene dalla risurrezione, ci propone tutto un modo di vivere secondo il Vangelo. Vuole che non ci adiriamo, che siamo pazienti nelle avversità e puri dall'attaccamento ai piaceri, che i nostri costumi siano liberi dall'amore del denaro. In tal modo ciò che nella vita futura si possiede per condizione connaturale alla nuova esistenza, lo anticipiamo già qui con le disposizioni della nostra anima.
 
-Già qui per mezzo dello Spirito Santo veniamo riammessi in paradiso, possiamo salire nel regno dei cieli, ritorniamo allo stato di adozione di figli, ci viene dato il coraggio di chiamare Dio nostro Padre, di compartecipare alle grazie di Cristo, di venire chiamati figli della luce, di essere partecipi della gloria eterna e, in breve, di vivere nella pienezza della benedizione. Tutto questo già ora come poi nel tempo futuro. Contemplando come in uno specchio la grazia di quelle ricchezze messe da parte per noi nelle promesse della fede, viviamo nell'attesa di poterle godere.
+*Già qui per mezzo dello Spirito Santo veniamo riammessi in paradiso, possiamo salire nel regno dei cieli, ritorniamo allo stato di adozione di figli, ci viene dato il coraggio di chiamare Dio nostro Padre, di compartecipare alle grazie di Cristo, di venire chiamati figli della luce, di essere partecipi della gloria eterna e, in breve, di vivere nella pienezza della benedizione. Tutto questo già ora come poi nel tempo futuro. Contemplando come in uno specchio la grazia di quelle ricchezze messe da parte per noi nelle promesse della fede, viviamo nell'attesa di poterle godere.*
 
 Infatti se tale è il pegno, quale sarà il tesoro da possedere? E se le primizie sono già così abbondanti, quale sarà la misura completa quando tutto avrà raggiunto il traguardo finale?
+
+# Sii sacrificio e sacerdote di Dio
+
+*Dai «Discorsi» di san Pietro Crisologo, vescovo (Disc. 108; PL 52, 499-500).*
+
+---
+
+> Vi prego per la misericordia di Dio (cfr. Rm 12, 1). 
+
+È Paolo che chiede, anzi è Dio per mezzo di Paolo che chiede, perché vuole essere più amato che temuto. Dio chiede perché vuol essere non tanto Signore, quanto Padre. Il Signore chiede per misericordia, per non punire nel rigore.
+
+Ascolta il Signore che chiede:
+
+> vedete, vedete in me il vostro corpo, le vostre membra, il vostro cuore, le vostre ossa, il vostro sangue. E se temete ciò che è di Dio, perché non amate almeno ciò che è vostro? Se rifuggite dal padrone, perché non ricorrete al congiunto?
+
+Ma forse vi copre di confusione la gravità della passione che mi avete inflitto. Non abbiate timore. Questa croce non è un pungiglione per me, ma per la morte. Questi chiodi non mi procurano tanto dolore, quanto imprimono più profondamente in me l'amore verso di voi. Queste ferite non mi fanno gemere, ma piuttosto introducono voi nel mio interno. Il mio corpo disteso anziché accrescere la pena, allarga gli spazi del cuore per accogliervi. Il mio sangue non è perduto per me, ma è donato in riscatto per voi.
+
+> Venite, dunque, ritornate. Sperimentate almeno la mia tenerezza paterna, che ricambia il male col bene, le ingiurie con l'amore, ferite tanto grandi con una carità così immensa.
+
+Ma ascoltiamo adesso l'Apostolo:
+
+> Vi esorto ad offrire i vostri corpi (Rm 12, 1). 
+
+L'Apostolo così vede tutti gli uomini innalzati alla dignità sacerdotale per offrire i propri corpi come sacrificio vivente.
+
+O immensa dignità del sacerdozio cristiano! L'uomo è divenuto vittima e sacerdote per se stesso. L'uomo non cerca fuori di sé ciò che deve immolare a Dio, ma porta con sé e in sé ciò che sacrifica a Dio per sé. La vittima permane, senza mutarsi, e rimane uguale a se stesso il sacerdote, poiché la vittima viene immolata ma vive, e il sacerdote non può dare la morte a chi compie il sacrificio.
+
+Mirabile sacrificio, quello dove si offre il corpo senza ferimento del corpo e il sangue senza versamento di sangue.
+
+> Vi esorto per la misericordia di Dio ad offrire i vostri corpi come sacrificio vivente
+
+Fratelli, questo sacrificio è modellato su quello di Cristo e risponde al disegno che egli si prefisse, perché, per dare vita al mondo, egli immolò e rese vivo il suo corpo; e davvero egli fece il suo corpo ostia viva perché, ucciso, esso vive. In questa vittima, dunque, è corrisposto alla morte il suo prezzo. Ma la vittima rimane, la vittima vive e la morte è punita. Da qui viene che i martiri nascono quando muoiono, cominciano a vivere con la fine, vivono quando sono uccisi, brillano nel cielo essi che sulla terra erano creduti estinti.
+
+> Vi prego, dice, fratelli, per la misericordia di Dio, di offrire i vostri corpi come sacrificio vivente, santo (cfr. Rm 12, 1). 
+
+Questo è quanto il profeta ha predetto: Non hai voluto sacrificio né offerta, ma mi hai dato un corpo (cfr. Sal 39, 7 volg.).
+
+> Sii, o uomo, sii sacrificio e sacerdote di Dio; non perdere ciò che la divina volontà ti ha dato e concesso. Rivesti la stola della santità. Cingi la fascia della castità. Cristo sia la protezione del tuo capo. La croce permanga a difesa della tua fronte. Accosta al tuo petto il sacramento della scienza divina. Fa' salire sempre l'incenso della preghiera come odore soave. Afferra la spada dello spirito, fa' del tuo cuore un altare, e così presenta con ferma fiducia il tuo corpo quale vittima a Dio.
+
+Dio cerca la fede, non la morte. Ha sete della tua preghiera, non del tuo sangue. Viene placato dalla volontà, non dalla morte.
+
 
 #  Io sono la porta delle pecore
 
 *Dal Vangelo secondo Giovanni. (Gv 10, 1-10)*
+
+---
 
 In quel tempo, Gesù disse:
 

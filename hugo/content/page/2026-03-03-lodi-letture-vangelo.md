@@ -3,7 +3,7 @@ date = '2026-03-03T10:59:04+01:00'
 title = "Vangelo del 3 Marzo 2026"
 subtitle = 'Con un commento di San Basilio di Seleucia'
 summary = "Nel Vangelo Gesù annuncia la sua Passione e corregge l'ambizione dei discepoli insegnando che la vera grandezza si compie nel servizio e nel dono della vita. Il commento di san Basilio di Seleucia legge invece nella richiesta della madre dei figli di Zebedeo una fede audace, capace di intravedere il Regno e la risurrezione già nell'ora in cui la croce si profila."
-categories = ['santi padri']
+categories = ['san Basilio Magno']
 author = 'San Basilio di Seleucia'
 tags = [
     "Gerusalemme",
@@ -18,6 +18,7 @@ tags = [
     "discepoli",
 ]
 +++
+
 # Lo condanneranno a morte
 
 *Dal Vangelo secondo Matteo (Mt 20, 17-28)*
