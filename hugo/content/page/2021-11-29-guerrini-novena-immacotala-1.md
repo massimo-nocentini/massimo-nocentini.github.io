@@ -2,7 +2,6 @@
 date = '2021-11-29T16:00:21+01:00'
 title = '"Ave Maria...": Novena Immacolata, I serata'
 author = 'fra Paolo Guerrini'
-subtitle = 'Ogni istante è gravido di futuro'
 categories = ["ofm", "porziuncola", "guerrini", "novena immacolata 2021"]
 tags = [
     "Ave",
@@ -19,9 +18,8 @@ tags = [
 summary = "Fra Paolo Guerrini medita sull'Ave Maria e sull'Annunciazione mostrando come Dio entri nella quotidianità e nel cuore umano; Maria, nell'ascolto, nel silenzio e nell'accoglienza, diventa modello di una fede che trasforma la vita e rende ogni istante gravido di futuro."
 +++
 
-*[I serata](https://www.youtube.com/watch?v=bR5OK4hdGfQ) 
-della Novena dell'Immacolata Concezione della B.V. Maria in Porziuncola.
-Presiede fr Paolo Guerrini, OFM*
+
+{{< youtubeicon "bR5OK4hdGfQ" "Prima serata della Novena dell'Immacolata Concezione della B.V. Maria in Porziuncola. Presiede fr Paolo Guerrini, OFM" >}}
 
 ---
 

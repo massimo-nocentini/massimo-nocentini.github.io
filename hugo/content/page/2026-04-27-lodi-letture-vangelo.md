@@ -1,7 +1,7 @@
 +++
 date = '2026-04-27T7:59:04+01:00'
 title = "Io sono la porta delle pecore"
-subtitle = 'Omelia e un commento «Su lo Spirito Santo»'
+subtitle = 'Omelia di don Fabio, un commento «Su lo Spirito Santo» e un «discorso» di san Pietro Crisologo'
 summary = "San Basilio mostra come il battesimo unisca acqua e Spirito: morte al peccato e nascita a una vita nuova, già pregustata come adozione filiale e caparra della gloria. Nel Vangelo Gesù si presenta come pastore che chiama per nome e come porta che fa uscire dal recinto del peccato per entrare nel pascolo della vita in abbondanza. Don Fabio Rosini sottolinea che la relazione con Cristo non si impone con forzature, ma fiorisce nella libertà di un cuore che riconosce la sua voce e accetta di uscire da ciò che distrugge per entrare nella bellezza della vita nuova."
 tags = [
     "pastore",
@@ -9,9 +9,9 @@ tags = [
     "voce",
     "libertà",
     "pecore",
-    "relazione",
-    "vita",
     "uscire",
+    "vita",
+    "relazione",
     "battesimo",
     "Spirito",
 ]
@@ -22,6 +22,8 @@ author = 'don Fabio Rosini'
 # Lo Spirito dà la vita
 
 *Dal libro «Su lo Spirito Santo» di san Basilio Magno, vescovo. (Cap. 15, 35-36; PG 32, 130-131)*
+
+---
 
 Il Signore, che governa la nostra vita, ha istituito per noi il patto del battesimo, espressione sia della morte che della vita. L'acqua dà l'immagine della morte, lo Spirito invece ci dà la garanzia della vita. Da ciò risulta evidente ciò che cercavamo, cioè per quale motivo l'acqua sia unita allo Spirito. Infatti nel battesimo sono due i fini che ci si propone di raggiungere, l'uno che venga eliminato il corpo del peccato, perché non abbia più a produrre frutti di morte, l'altro che si viva dello Spirito e si ottenga così il frutto nella santificazione.
 
