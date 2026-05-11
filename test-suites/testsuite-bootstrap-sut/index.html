@@ -652,18 +652,18 @@ This test suite drove the implementation of the unittest framework itself.
   (⊦= '() (unittest/testcase-log t))
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '(teardown test-method setup) (unittest/testcase-log t)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1770792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1770792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-result><a href=#test-result><code>test-result</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1772112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1772112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-failed><a href=#test-failed><code>test-failed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
   (lettest
     ((t 'test-broken))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
           (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1773320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1773320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-unbound-variable><a href=#test-unbound-variable><code>test-unbound-variable</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
     ((t 'test-unbound-variable))
@@ -674,7 +674,7 @@ This test suite drove the implementation of the unittest framework itself.
               (test-unbound-variable
                 &quot;\nError: unbound variable: unbound-v\n&quot;)))
           (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1774424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1774424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-failed-result><a href=#test-failed-result><code>test-failed-result</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
   (unittest/result-started! r)
   (unittest/result-failed! r 'no-reason)
@@ -685,7 +685,7 @@ This test suite drove the implementation of the unittest framework itself.
     ((suite '(test-running test-failed)))
     (unittest/testsuite-run suite r bootstrap-sut)
     (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1776432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(6291456 1776432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-⊨><a href=#test-⊨><code>test-⊨</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
 </code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1777432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-⊭><a href=#test-⊭><code>test-⊭</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
@@ -699,7 +699,7 @@ This test suite drove the implementation of the unittest framework itself.
     ((exn-a) (void)))
   (condition-case (⊦⧳ ((exn)) (signal 99)) (() (void)))
   (⊦⧳ () 99))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1781480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1781480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-auxtest/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

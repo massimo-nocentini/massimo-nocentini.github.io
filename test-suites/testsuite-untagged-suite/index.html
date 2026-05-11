@@ -57,8 +57,8 @@ test-λ-calculus-interpreter: pass
       (((λ (,x) ,body) ⊣ (and (symbol? x) (not-in-env? 'λ env)))
        `(closure ,x ,body ,env))
       ((',v ⊣ (not-in-env? 'quote env)) v)
-      (((list unquote a∗) ⊣ (not-in-env? 'list env))
-       (map (λ (e) (eval-exp e env)) a∗))
+      (((list unquote a*) ⊣ (not-in-env? 'list env))
+       (map (λ (e) (eval-exp e env)) a*))
       ((,x ⊣ (symbol? x)) (lookup x env))))
   (define-syntax-rule
     (eval/env0 body)
@@ -73,8 +73,135 @@ test-λ-calculus-interpreter: pass
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
 
 
-((eta 0.001) (memory #(8468512 1873136 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Tests test-λ-calculus-interpreter: pass (define (test-λ-calculus-interpreter _) (define (lookup x env) (match\/non-overlapping env (() (error \u0027lookup \u0026quot;unbound variable\u0026quot; x)) ((((,y unquote v) unquote rest) ⊣ (equal? x y)) v) ((((,y unquote v) unquote rest) ⊣ (not (equal? x y))) (lookup x rest)))) (define (not-in-env? x env) (match\/non-overlapping env (() #t) ((((,y unquote v) unquote rest) ⊣ (equal? x y)) #f) ((((,y unquote v) unquote rest) ⊣ (not (equal? x y))) (not-in-env? x rest)))) (define rator? (let1 (op-names \u0027(lambda quote list)) (λ (x env) (not (and (symbol? x) (memq x op-names) (not-in-env? x env)))))) (define (eval-exp exp env) (match\/non-overlapping exp (((,rator ,rand) ⊣ (rator? rator env)) (let ((proc (eval-exp rator env)) (arg (eval-exp rand env))) (match\/non-overlapping proc ((closure ,x ,body ,env2) (eval-exp body \u0060((,x unquote arg) unquote env2)))))) (((λ (,x) ,body) ⊣ (and (symbol? x) (not-in-env? \u0027λ env))) \u0060(closure ,x ,body ,env)) ((\u0027,v ⊣ (not-in-env? \u0027quote env)) v) (((list unquote a∗) ⊣ (not-in-env? \u0027list env)) (map (λ (e) (eval-exp e env)) a∗)) ((,x ⊣ (symbol? x)) (lookup x env)))) (define-syntax-rule (eval\/env0 body) (eval-exp \u0027body (interaction-environment\/symbols \u0027()))) (⊦ equal? \u0060(closure z z ()) (eval\/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a)))) (⊦ equal? \u0060(closure y x ((x closure z z ()))) (eval\/env0 ((λ (x) (λ (y) x)) (λ (z) z)))) (⊦ equal? \u0060(closure y y ()) (eval\/env0 ((λ (x) x) (λ (y) y)))) (⊦ equal? \u0060(closure y y ()) (eval\/env0 (\u0027(closure x x ()) (λ (y) y))))) ((eta 0.001) (memory #(8468512 1873136 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":250,"dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+((eta 0.005) (memory #(12582912 2215360 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+
+test/eval-exp°: pass
+
+(define (test/eval-exp° _)
+  (define (proper-list° exp env val)
+    (cond°
+      ((=° '() exp) (=° '() val))
+      ((fresh°
+         (a d v-a v-d)
+         (=° `(,a unquote d) exp)
+         (=° `(,v-a unquote v-d) val)
+         (eval-exp° a env v-a)
+         (proper-list° d env v-d)))))
+  (define (not-in-env° x env)
+    (cond°
+      ((=° '() env))
+      ((fresh°
+         (y v rest)
+         (=° `((,y unquote v) unquote rest) env)
+         (≠° y x)
+         (not-in-env° x rest)))))
+  (define (lookup° x env t)
+    (fresh°
+      (y v rest)
+      (=° `((,y unquote v) unquote rest) env)
+      (cond° ((=° y x) (=° v t)) ((≠° y x) (lookup° x rest t)))))
+  (define (eval-exp° exp env val)
+    (cond°
+      ((fresh°
+         (v)
+         (=° `',v exp)
+         (not-in-env° 'quote env)
+         (absent° 'closure v)
+         (=° v val)))
+      ((fresh°
+         (a*)
+         (=° `(list unquote a*) exp)
+         (not-in-env° 'list env)
+         (absent° 'closure a*)
+         (proper-list° a* env val)))
+      ((symbol° exp) (lookup° exp env val))
+      ((fresh°
+         (rator rand x body envˆ a)
+         (=° `(,rator ,rand) exp)
+         (eval-exp° rator env `(closure ,x ,body ,envˆ))
+         (eval-exp° rand env a)
+         (eval-exp° body `((,x unquote a) unquote envˆ) val)))
+      ((fresh°
+         (x body)
+         (=° `(λ (,x) ,body) exp)
+         (symbol° x)
+         (not-in-env° 'λ env)
+         (=° `(closure ,x ,body ,env) val)))))
+  (⊦= '(bar)
+        (°->list
+          #t
+          (fresh° (q) (lookup° 'y (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+  (⊦= '()
+        (°->list
+          #t
+          (fresh° (q) (lookup° 'w (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+  (let* ((Q (car (°->list #f (take° 1 (fresh° (q) (eval-exp° q '() q))))))
+         (λQ (eval Q))
+         (quine (λQ 'α)))
+    (⊦= '(λ (α)
+               (begin (deny (equal? α 'list)))
+               (begin (deny (equal? α 'quote)))
+               (assert (every (μ v (symbol? v)) (list α)))
+               (cons (cons 'λ
+                           (cons (cons α '())
+                                 (cons (cons 'list
+                                             (cons α
+                                                   (cons (cons 'list
+                                                               (cons (cons 'quote (cons 'quote '()))
+                                                                     (cons α '())))
+                                                         '())))
+                                       '())))
+                     (cons (cons 'quote
+                                 (cons (cons 'λ
+                                             (cons (cons α '())
+                                                   (cons (cons 'list
+                                                               (cons α
+                                                                     (cons (cons 'list
+                                                                                 (cons (cons 'quote (cons 'quote '()))
+                                                                                       (cons α '())))
+                                                                           '())))
+                                                         '())))
+                                       '()))
+                           '())))
+          Q)
+    (⊦= '((λ (α) (list α (list 'quote α)))
+            '(λ (α) (list α (list 'quote α))))
+          quine)
+    (⊦= quine (eval quine)))
+  (⊦= '((λ (α)
+              (assert (absent? 'closure α))
+              (cons (cons 'quote (cons α '())) (cons '→ (cons α '()))))
+          (λ () (cons (cons 'list '()) (cons '→ (cons '() '()))))
+          (λ (α β)
+              (assert (every (μ v (symbol? v)) (list α)))
+              (cons (cons 'λ (cons (cons α '()) (cons β '())))
+                    (cons '→
+                          (cons (cons 'closure
+                                      (cons α (cons β (cons '() '()))))
+                                '()))))
+          (λ (α)
+              (assert (absent? 'closure α))
+              (cons (cons 'list (cons (cons 'quote (cons α '())) '()))
+                    (cons '→ (cons (cons α '()) '()))))
+          (λ ()
+              (cons (cons 'list (cons (cons 'list '()) '()))
+                    (cons '→ (cons (cons '() '()) '()))))
+          (λ (α β)
+              (assert (absent? 'closure α))
+              (assert (absent? 'closure β))
+              (cons (cons 'list
+                          (cons (cons 'quote (cons α '()))
+                                (cons (cons 'quote (cons β '())) '())))
+                    (cons '→ (cons (cons α (cons β '())) '())))))
+        (°->list
+          #f
+          (take°
+            6
+            (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
+
+
+((eta 0.126) (memory #(12582912 2225992 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Tests test-λ-calculus-interpreter: pass (define (test-λ-calculus-interpreter _) (define (lookup x env) (match\/non-overlapping env (() (error \u0027lookup \u0026quot;unbound variable\u0026quot; x)) ((((,y unquote v) unquote rest) ⊣ (equal? x y)) v) ((((,y unquote v) unquote rest) ⊣ (not (equal? x y))) (lookup x rest)))) (define (not-in-env? x env) (match\/non-overlapping env (() #t) ((((,y unquote v) unquote rest) ⊣ (equal? x y)) #f) ((((,y unquote v) unquote rest) ⊣ (not (equal? x y))) (not-in-env? x rest)))) (define rator? (let1 (op-names \u0027(lambda quote list)) (λ (x env) (not (and (symbol? x) (memq x op-names) (not-in-env? x env)))))) (define (eval-exp exp env) (match\/non-overlapping exp (((,rator ,rand) ⊣ (rator? rator env)) (let ((proc (eval-exp rator env)) (arg (eval-exp rand env))) (match\/non-overlapping proc ((closure ,x ,body ,env2) (eval-exp body \u0060((,x unquote arg) unquote env2)))))) (((λ (,x) ,body) ⊣ (and (symbol? x) (not-in-env? \u0027λ env))) \u0060(closure ,x ,body ,env)) ((\u0027,v ⊣ (not-in-env? \u0027quote env)) v) (((list unquote a*) ⊣ (not-in-env? \u0027list env)) (map (λ (e) (eval-exp e env)) a*)) ((,x ⊣ (symbol? x)) (lookup x env)))) (define-syntax-rule (eval\/env0 body) (eval-exp \u0027body (interaction-environment\/symbols \u0027()))) (⊦ equal? \u0060(closure z z ()) (eval\/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a)))) (⊦ equal? \u0060(closure y x ((x closure z z ()))) (eval\/env0 ((λ (x) (λ (y) x)) (λ (z) z)))) (⊦ equal? \u0060(closure y y ()) (eval\/env0 ((λ (x) x) (λ (y) y)))) (⊦ equal? \u0060(closure y y ()) (eval\/env0 (\u0027(closure x x ()) (λ (y) y))))) ((eta 0.005) (memory #(12582912 2215360 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/eval-exp°: pass (define (test\/eval-exp° _) (define (proper-list° exp env val) (cond° ((=° \u0027() exp) (=° \u0027() val)) ((fresh° (a d v-a v-d) (=° \u0060(,a unquote d) exp) (=° \u0060(,v-a unquote v-d) val) (eval-exp° a env v-a) (proper-list° d env v-d))))) (define (not-in-env° x env) (cond° ((=° \u0027() env)) ((fresh° (y v rest) (=° \u0060((,y unquote v) unquote rest) env) (≠° y x) (not-in-env° x rest))))) (define (lookup° x env t) (fresh° (y v rest) (=° \u0060((,y unquote v) unquote rest) env) (cond° ((=° y x) (=° v t)) ((≠° y x) (lookup° x rest t))))) (define (eval-exp° exp env val) (cond° ((fresh° (v) (=° \u0060\u0027,v exp) (not-in-env° \u0027quote env) (absent° \u0027closure v) (=° v val))) ((fresh° (a*) (=° \u0060(list unquote a*) exp) (not-in-env° \u0027list env) (absent° \u0027closure a*) (proper-list° a* env val))) ((symbol° exp) (lookup° exp env val)) ((fresh° (rator rand x body envˆ a) (=° \u0060(,rator ,rand) exp) (eval-exp° rator env \u0060(closure ,x ,body ,envˆ)) (eval-exp° rand env a) (eval-exp° body \u0060((,x unquote a) unquote envˆ) val))) ((fresh° (x body) (=° \u0060(λ (,x) ,body) exp) (symbol° x) (not-in-env° \u0027λ env) (=° \u0060(closure ,x ,body ,env) val))))) (⊦= \u0027(bar) (°-\u0026gt;list #t (fresh° (q) (lookup° \u0027y (list (cons \u0027x \u0027foo) (cons \u0027y \u0027bar)) q)))) (⊦= \u0027() (°-\u0026gt;list #t (fresh° (q) (lookup° \u0027w (list (cons \u0027x \u0027foo) (cons \u0027y \u0027bar)) q)))) (let* ((Q (car (°-\u0026gt;list #f (take° 1 (fresh° (q) (eval-exp° q \u0027() q)))))) (λQ (eval Q)) (quine (λQ \u0027α))) (⊦= \u0027(λ (α) (begin (deny (equal? α \u0027list))) (begin (deny (equal? α \u0027quote))) (assert (every (μ v (symbol? v)) (list α))) (cons (cons \u0027λ (cons (cons α \u0027()) (cons (cons \u0027list (cons α (cons (cons \u0027list (cons (cons \u0027quote (cons \u0027quote \u0027())) (cons α \u0027()))) \u0027()))) \u0027()))) (cons (cons \u0027quote (cons (cons \u0027λ (cons (cons α \u0027()) (cons (cons \u0027list (cons α (cons (cons \u0027list (cons (cons \u0027quote (cons \u0027quote \u0027())) (cons α \u0027()))) \u0027()))) \u0027()))) \u0027())) \u0027()))) Q) (⊦= \u0027((λ (α) (list α (list \u0027quote α))) \u0027(λ (α) (list α (list \u0027quote α)))) quine) (⊦= quine (eval quine))) (⊦= \u0027((λ (α) (assert (absent? \u0027closure α)) (cons (cons \u0027quote (cons α \u0027())) (cons \u0027→ (cons α \u0027())))) (λ () (cons (cons \u0027list \u0027()) (cons \u0027→ (cons \u0027() \u0027())))) (λ (α β) (assert (every (μ v (symbol? v)) (list α))) (cons (cons \u0027λ (cons (cons α \u0027()) (cons β \u0027()))) (cons \u0027→ (cons (cons \u0027closure (cons α (cons β (cons \u0027() \u0027())))) \u0027())))) (λ (α) (assert (absent? \u0027closure α)) (cons (cons \u0027list (cons (cons \u0027quote (cons α \u0027())) \u0027())) (cons \u0027→ (cons (cons α \u0027()) \u0027())))) (λ () (cons (cons \u0027list (cons (cons \u0027list \u0027()) \u0027())) (cons \u0027→ (cons (cons \u0027() \u0027()) \u0027())))) (λ (α β) (assert (absent? \u0027closure α)) (assert (absent? \u0027closure β)) (cons (cons \u0027list (cons (cons \u0027quote (cons α \u0027())) (cons (cons \u0027quote (cons β \u0027())) \u0027()))) (cons \u0027→ (cons (cons α (cons β \u0027())) \u0027()))))) (°-\u0026gt;list #f (take° 6 (fresh° (q e v) (eval-exp° e \u0027() v) (=° \u0060(,e → ,v) q)))))) ((eta 0.126) (memory #(12582912 2225992 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":753,"dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
 
 
 
@@ -133,8 +260,8 @@ test-λ-calculus-interpreter: pass
       (((λ (,x) ,body) ⊣ (and (symbol? x) (not-in-env? 'λ env)))
        `(closure ,x ,body ,env))
       ((',v ⊣ (not-in-env? 'quote env)) v)
-      (((list unquote a∗) ⊣ (not-in-env? 'list env))
-       (map (λ (e) (eval-exp e env)) a∗))
+      (((list unquote a*) ⊣ (not-in-env? 'list env))
+       (map (λ (e) (eval-exp e env)) a*))
       ((,x ⊣ (symbol? x)) (lookup x env))))
   (define-syntax-rule
     (eval/env0 body)
@@ -149,7 +276,134 @@ test-λ-calculus-interpreter: pass
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
 
 
-((eta 0.001) (memory #(8468512 1873136 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.005) (memory #(12582912 2215360 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+
+test/eval-exp°: pass
+
+(define (test/eval-exp° _)
+  (define (proper-list° exp env val)
+    (cond°
+      ((=° '() exp) (=° '() val))
+      ((fresh°
+         (a d v-a v-d)
+         (=° `(,a unquote d) exp)
+         (=° `(,v-a unquote v-d) val)
+         (eval-exp° a env v-a)
+         (proper-list° d env v-d)))))
+  (define (not-in-env° x env)
+    (cond°
+      ((=° '() env))
+      ((fresh°
+         (y v rest)
+         (=° `((,y unquote v) unquote rest) env)
+         (≠° y x)
+         (not-in-env° x rest)))))
+  (define (lookup° x env t)
+    (fresh°
+      (y v rest)
+      (=° `((,y unquote v) unquote rest) env)
+      (cond° ((=° y x) (=° v t)) ((≠° y x) (lookup° x rest t)))))
+  (define (eval-exp° exp env val)
+    (cond°
+      ((fresh°
+         (v)
+         (=° `',v exp)
+         (not-in-env° 'quote env)
+         (absent° 'closure v)
+         (=° v val)))
+      ((fresh°
+         (a*)
+         (=° `(list unquote a*) exp)
+         (not-in-env° 'list env)
+         (absent° 'closure a*)
+         (proper-list° a* env val)))
+      ((symbol° exp) (lookup° exp env val))
+      ((fresh°
+         (rator rand x body envˆ a)
+         (=° `(,rator ,rand) exp)
+         (eval-exp° rator env `(closure ,x ,body ,envˆ))
+         (eval-exp° rand env a)
+         (eval-exp° body `((,x unquote a) unquote envˆ) val)))
+      ((fresh°
+         (x body)
+         (=° `(λ (,x) ,body) exp)
+         (symbol° x)
+         (not-in-env° 'λ env)
+         (=° `(closure ,x ,body ,env) val)))))
+  (⊦= '(bar)
+        (°->list
+          #t
+          (fresh° (q) (lookup° 'y (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+  (⊦= '()
+        (°->list
+          #t
+          (fresh° (q) (lookup° 'w (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+  (let* ((Q (car (°->list #f (take° 1 (fresh° (q) (eval-exp° q '() q))))))
+         (λQ (eval Q))
+         (quine (λQ 'α)))
+    (⊦= '(λ (α)
+               (begin (deny (equal? α 'list)))
+               (begin (deny (equal? α 'quote)))
+               (assert (every (μ v (symbol? v)) (list α)))
+               (cons (cons 'λ
+                           (cons (cons α '())
+                                 (cons (cons 'list
+                                             (cons α
+                                                   (cons (cons 'list
+                                                               (cons (cons 'quote (cons 'quote '()))
+                                                                     (cons α '())))
+                                                         '())))
+                                       '())))
+                     (cons (cons 'quote
+                                 (cons (cons 'λ
+                                             (cons (cons α '())
+                                                   (cons (cons 'list
+                                                               (cons α
+                                                                     (cons (cons 'list
+                                                                                 (cons (cons 'quote (cons 'quote '()))
+                                                                                       (cons α '())))
+                                                                           '())))
+                                                         '())))
+                                       '()))
+                           '())))
+          Q)
+    (⊦= '((λ (α) (list α (list 'quote α)))
+            '(λ (α) (list α (list 'quote α))))
+          quine)
+    (⊦= quine (eval quine)))
+  (⊦= '((λ (α)
+              (assert (absent? 'closure α))
+              (cons (cons 'quote (cons α '())) (cons '→ (cons α '()))))
+          (λ () (cons (cons 'list '()) (cons '→ (cons '() '()))))
+          (λ (α β)
+              (assert (every (μ v (symbol? v)) (list α)))
+              (cons (cons 'λ (cons (cons α '()) (cons β '())))
+                    (cons '→
+                          (cons (cons 'closure
+                                      (cons α (cons β (cons '() '()))))
+                                '()))))
+          (λ (α)
+              (assert (absent? 'closure α))
+              (cons (cons 'list (cons (cons 'quote (cons α '())) '()))
+                    (cons '→ (cons (cons α '()) '()))))
+          (λ ()
+              (cons (cons 'list (cons (cons 'list '()) '()))
+                    (cons '→ (cons (cons '() '()) '()))))
+          (λ (α β)
+              (assert (absent? 'closure α))
+              (assert (absent? 'closure β))
+              (cons (cons 'list
+                          (cons (cons 'quote (cons α '()))
+                                (cons (cons 'quote (cons β '())) '())))
+                    (cons '→ (cons (cons α (cons β '())) '())))))
+        (°->list
+          #f
+          (take°
+            6
+            (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
+
+
+((eta 0.126) (memory #(12582912 2225992 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 "><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-untagged-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
@@ -195,7 +449,7 @@ test-λ-calculus-interpreter: pass
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
 </button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section934><header><h1>Tests</h1></header></section><h2 id=test-λ-calculus-interpreter><a href=#test-λ-calculus-interpreter><code>test-λ-calculus-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section1327><header><h1>Tests</h1></header></section><h2 id=test-λ-calculus-interpreter><a href=#test-λ-calculus-interpreter><code>test-λ-calculus-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
   (define (lookup x env)
     (match/non-overlapping
       env
@@ -226,8 +480,8 @@ test-λ-calculus-interpreter: pass
       (((λ (,x) ,body) ⊣ (and (symbol? x) (not-in-env? 'λ env)))
        `(closure ,x ,body ,env))
       ((',v ⊣ (not-in-env? 'quote env)) v)
-      (((list unquote a∗) ⊣ (not-in-env? 'list env))
-       (map (λ (e) (eval-exp e env)) a∗))
+      (((list unquote a*) ⊣ (not-in-env? 'list env))
+       (map (λ (e) (eval-exp e env)) a*))
       ((,x ⊣ (symbol? x)) (lookup x env))))
   (define-syntax-rule
     (eval/env0 body)
@@ -240,7 +494,129 @@ test-λ-calculus-interpreter: pass
        (eval/env0 ((λ (x) (λ (y) x)) (λ (z) z))))
   (⊦ equal? `(closure y y ()) (eval/env0 ((λ (x) x) (λ (y) y))))
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8468512 1873136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2215360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°><a href=#test/eval-exp°><code>test/eval-exp°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp° _)
+  (define (proper-list° exp env val)
+    (cond°
+      ((=° '() exp) (=° '() val))
+      ((fresh°
+         (a d v-a v-d)
+         (=° `(,a unquote d) exp)
+         (=° `(,v-a unquote v-d) val)
+         (eval-exp° a env v-a)
+         (proper-list° d env v-d)))))
+  (define (not-in-env° x env)
+    (cond°
+      ((=° '() env))
+      ((fresh°
+         (y v rest)
+         (=° `((,y unquote v) unquote rest) env)
+         (≠° y x)
+         (not-in-env° x rest)))))
+  (define (lookup° x env t)
+    (fresh°
+      (y v rest)
+      (=° `((,y unquote v) unquote rest) env)
+      (cond° ((=° y x) (=° v t)) ((≠° y x) (lookup° x rest t)))))
+  (define (eval-exp° exp env val)
+    (cond°
+      ((fresh°
+         (v)
+         (=° `',v exp)
+         (not-in-env° 'quote env)
+         (absent° 'closure v)
+         (=° v val)))
+      ((fresh°
+         (a*)
+         (=° `(list unquote a*) exp)
+         (not-in-env° 'list env)
+         (absent° 'closure a*)
+         (proper-list° a* env val)))
+      ((symbol° exp) (lookup° exp env val))
+      ((fresh°
+         (rator rand x body envˆ a)
+         (=° `(,rator ,rand) exp)
+         (eval-exp° rator env `(closure ,x ,body ,envˆ))
+         (eval-exp° rand env a)
+         (eval-exp° body `((,x unquote a) unquote envˆ) val)))
+      ((fresh°
+         (x body)
+         (=° `(λ (,x) ,body) exp)
+         (symbol° x)
+         (not-in-env° 'λ env)
+         (=° `(closure ,x ,body ,env) val)))))
+  (⊦= '(bar)
+        (°-&gt;list
+          #t
+          (fresh° (q) (lookup° 'y (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+  (⊦= '()
+        (°-&gt;list
+          #t
+          (fresh° (q) (lookup° 'w (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+  (let* ((Q (car (°-&gt;list #f (take° 1 (fresh° (q) (eval-exp° q '() q))))))
+         (λQ (eval Q))
+         (quine (λQ 'α)))
+    (⊦= '(λ (α)
+               (begin (deny (equal? α 'list)))
+               (begin (deny (equal? α 'quote)))
+               (assert (every (μ v (symbol? v)) (list α)))
+               (cons (cons 'λ
+                           (cons (cons α '())
+                                 (cons (cons 'list
+                                             (cons α
+                                                   (cons (cons 'list
+                                                               (cons (cons 'quote (cons 'quote '()))
+                                                                     (cons α '())))
+                                                         '())))
+                                       '())))
+                     (cons (cons 'quote
+                                 (cons (cons 'λ
+                                             (cons (cons α '())
+                                                   (cons (cons 'list
+                                                               (cons α
+                                                                     (cons (cons 'list
+                                                                                 (cons (cons 'quote (cons 'quote '()))
+                                                                                       (cons α '())))
+                                                                           '())))
+                                                         '())))
+                                       '()))
+                           '())))
+          Q)
+    (⊦= '((λ (α) (list α (list 'quote α)))
+            '(λ (α) (list α (list 'quote α))))
+          quine)
+    (⊦= quine (eval quine)))
+  (⊦= '((λ (α)
+              (assert (absent? 'closure α))
+              (cons (cons 'quote (cons α '())) (cons '→ (cons α '()))))
+          (λ () (cons (cons 'list '()) (cons '→ (cons '() '()))))
+          (λ (α β)
+              (assert (every (μ v (symbol? v)) (list α)))
+              (cons (cons 'λ (cons (cons α '()) (cons β '())))
+                    (cons '→
+                          (cons (cons 'closure
+                                      (cons α (cons β (cons '() '()))))
+                                '()))))
+          (λ (α)
+              (assert (absent? 'closure α))
+              (cons (cons 'list (cons (cons 'quote (cons α '())) '()))
+                    (cons '→ (cons (cons α '()) '()))))
+          (λ ()
+              (cons (cons 'list (cons (cons 'list '()) '()))
+                    (cons '→ (cons (cons '() '()) '()))))
+          (λ (α β)
+              (assert (absent? 'closure α))
+              (assert (absent? 'closure β))
+              (cons (cons 'list
+                          (cons (cons 'quote (cons α '()))
+                                (cons (cons 'quote (cons β '())) '())))
+                    (cons '→ (cons (cons α (cons β '())) '())))))
+        (°-&gt;list
+          #f
+          (take°
+            6
+            (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.126) (memory #(12582912 2225992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html></article><ul class="pager blog-pager"><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
