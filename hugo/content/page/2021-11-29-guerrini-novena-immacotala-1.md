@@ -1,8 +1,8 @@
 +++
 date = '2021-11-29T16:00:21+01:00'
-title = '"Ave Maria...": Novena Immacolata, I serata'
+title = 'Novena Immacolata "Ave Maria...", I serata'
 author = 'fra Paolo Guerrini'
-categories = ["ofm", "porziuncola", "guerrini", "novena immacolata 2021"]
+categories = ["ofm", "porziuncola", "guerrini", "novena immacolata 2021 a Santa Maria degli Angeli"]
 tags = [
     "Ave",
     "Maria",
