@@ -109,7 +109,6 @@ Perché dice così Gesù? Perché fin adesso nessuno ne ha parlato.
 
 Perché l'ha detto?
 Gesù è entrato e Pilato l'ha guardato e gli è venuta questa domanda. E Gesù lo deve rendere cosciente di quella cosa.
-*Dici questo da te o altri te lo hanno detto sul mio conto? E' farina del tuo sacco per caso?*
 
 Infatti guardate bene: si sta rovesciando la posizione. Chi interroga chi?
 C'è l'uomo più potente della zona, un romano che rappresenta Roma, che poteva fare quello che voleva, esercitare violenza senza problemi. Sta di fronte a Gesù e Gesù sta iniziando a dialogare con lui.
@@ -117,7 +116,7 @@ Gesù fino adesso è stato molto frenato. Con Pilato invece si mette a parlare. 
 
 > Dici questo da te oppure altri te l'hanno detto sul mio conto?
 
-Gesù sta esaminando Pilato. Infatti Pilato va in confusione e risponde:
+*E' farina del tuo sacco per caso?* Gesù sta esaminando Pilato. Infatti Pilato va in confusione e risponde:
 
 > Sono forse io giudeo? La tua gente e i tuoi capi ti hanno consegnato a me. Che cosa hai fatto?
 
