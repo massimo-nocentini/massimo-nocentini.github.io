@@ -83,7 +83,7 @@ L'altro, scuotendo lentamente la testa, rispose:
 
 Il Corte chiese ancora, con una scherzosa disinvoltura come di chi accenna a cose tragiche che non lo riguardano:
 
-> Ma allora, se al quarto sono già così gravi, al quinto chi mettono allora?
+> Ma allora, se al quarto sono già così gravi, al primo chi mettono allora?
 
 > Oh, al primo sono proprio i moribondi. Laggiù i medici non hanno più niente da fare. C'è solo il prete che lavora. E naturalmente...
 
@@ -205,7 +205,7 @@ ribatteva il dottore.
 
 > Mi spiego: l'intensità del male è minima, ma considerevole l'ampiezza; il processo distruttivo delle cellule...
 
-(era la prima volta che Giuseppe Corte sentiva là dentro quella sinistra espressione: "il processo distruttivo delle cellule")
+era la prima volta che Giuseppe Corte sentiva là dentro quella sinistra espressione:
 
 > ...è assolutamente agli inizi, forse non è neppure cominciato, ma tende, dico, solo tende, a colpire contemporaneamente vaste porzioni dell'organismo. Solo per questo, secondo me, lei può essere curato più efficacemente qui, al sesto, dove i metodi terapeutici sono più tipici ed intensi.
 
