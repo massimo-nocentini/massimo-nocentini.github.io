@@ -1,32 +1,27 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Final shift for call/cc - A small measure of peace</title><meta name=description content="Direct implementation of shift and reset"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"Final shift for call/cc","@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/","url":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"Posts","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/","name":"Final shift for call/cc","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"},"author":{"name":"[Martin Gasbichler Michael Sperber]","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"Final shift for call/cc","description":"","inLanguage":"en","wordCount":1823,"timeRequired":"PT9M","dateCreated":"2002-09-17T18:33:23+01:00","datePublished":"2002-09-17T18:33:23+01:00","dateModified":"2002-09-17T18:33:23+01:00","keywords":["monads, callcc, shift, reset"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Final shift for call/cc"><meta property="og:description" content="Direct implementation of shift and reset"><meta property="og:url" content="https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Final shift for call/cc"><meta name=twitter:description content="Direct implementation of shift and reset"><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.161.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
-<span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span>
-<span class=icon-bar></span>
-<span class=icon-bar></span>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><script>(function(){var t,n=localStorage.getItem("theme"),e=!1;n==="dark"?(document.documentElement.setAttribute("data-theme","dark"),e=!0):n==="light"?document.documentElement.setAttribute("data-theme","light"):window.matchMedia("(prefers-color-scheme: dark)").matches&&(document.documentElement.setAttribute("data-theme","dark"),e=!0),t=document.getElementById("hljs-dark"),t&&(t.disabled=!e)})()</script><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Final shift for call/cc - A small measure of peace</title><meta name=description content="Direct implementation of shift and reset"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"Posts","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/","name":"Final shift for call/cc","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"Final shift for call/cc","url":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"},{"@id":"https://massimo-nocentini.github.io/#author-martin-gasbichler","@type":"Person","name":"Martin Gasbichler","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-michael-sperber","@type":"Person","name":"Michael Sperber","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-martin-gasbichler"},{"@id":"https://massimo-nocentini.github.io/#author-michael-sperber"}],"dateCreated":"2002-09-17T18:33:23+01:00","dateModified":"2002-09-17T18:33:23+01:00","datePublished":"2002-09-17T18:33:23+01:00","description":"","headline":"Final shift for call/cc","inLanguage":"en","keywords":["monads","callcc","shift","reset"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT11M","wordCount":2208}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="Final shift for call/cc"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2002-09-17T18:33:23+01:00"><meta property="article:modified_time" content="2002-09-17T18:33:23+01:00"><meta property="article:tag" content="Monads"><meta property="article:tag" content="Callcc"><meta property="article:tag" content="Shift"><meta property="article:tag" content="Reset"><link rel=canonical href=https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/><meta name=twitter:title content="Final shift for call/cc"><meta name=twitter:description content="Direct implementation of shift and reset"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.163.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/brands.css integrity=sha384-+PvcAGLOWIanfjuRoscHUyZB100N7wP779T8D3ao0FniyFFKMw9MIJpgtJO3+pdF crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/fontawesome.css integrity=sha384-mj4mLShEAyWi4Bui9LmFkAjPYWof6WrG8DfS8ebHhjm4/MClMqMMHpQzehNk5HeM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/regular.css integrity=sha384-eS8Ja07iO8AOH11Hzegc5aZyN8CpY+oFwClH6MIlOKUOA3J4Oqjt8Xia9VUSU0GB crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/solid.css integrity=sha384-LpGibDKKReBRP3epUOaN9WBgkrQ1pJIvrrTugkYxVQgDvYuMCRaXk6YkrZ/h3aWk crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/svg.css integrity=sha384-V18zH+yIEosaHAByV0h4dqHHMPzBxZ7CYz9GQ1YsLTE9QIkEme0jAw9Qir7aIFT+ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/svg-with-js.css integrity=sha384-K25UPiwKhSAcEPQskU+UjXpz4iScCTNX5tcEpAGp1hQFNkOoIIwZiV69SfEfaRjK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v4-font-face.css integrity=sha384-YFnAdl87B7pW+Vhp7w9pvA8ZdBL8DQni4/++wrZ0f7o/Sc0pyThczmxZk9xLyc0Z crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v4-shims.css integrity=sha384-FnTDI00psVcN3KkfAip/6yRCeN17N3R7HZoAj+2+nttp8n1/vHfYUWvlscoUUhGJ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v5-font-face.css integrity=sha384-FUMXkSpZU/e6Ua2owr0Mktp/gtxxiK1OgCS1vDr8Lsz+gbyDFMSiKeHBRa07EjDn crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/css/print.css media=print><link rel=stylesheet href=/css/dark.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=/css/syntax.css><link id=hljs-dark rel=stylesheet href=/css/syntax-dark.css><link rel=stylesheet href=/css/codeblock.css><link rel=stylesheet href=/css/toc.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>A small measure of peace</a><div class="d-flex align-items-center"><button class=theme-toggle id=theme-toggle aria-label=Theme data-bs-toggle=tooltip data-bs-placement=bottom data-tooltip-auto="Auto (follows system)" data-tooltip-light="Light mode" data-tooltip-dark="Dark mode" title="Auto (follows system)">
+<span class="fas fa-adjust" id=theme-icon-auto></span>
+<span class="fas fa-sun" id=theme-icon-light style=display:none></span>
+<span class="fas fa-moon" id=theme-icon-dark style=display:none></span>
 </button>
-<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
-<a href=/libpq-rs/libpq/index.html>Crate libpq-rs</a>
-<a href=/igraph-rs/igraph/>Crate igraph-rs</a></div></li></ul></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-</button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><div class=post-heading><h1>Final shift for call/cc</h1><h2 class=post-subheading>Direct implementation of shift and reset</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 17, 2002
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;min
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1823&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Martin Gasbichler
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Michael Sperber</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><hr><blockquote cite>Gasbichler, Martin and Sperber, Michael,
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class=nav-item><a class=nav-link title=About href=/page/about/>About</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>Externals</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/Booklet-DSst/>Data Structures in Smalltalk</a></li><li><a class=dropdown-item href=/libpq-rs/libpq/index.html>Crate libpq-rs</a></li><li><a class=dropdown-item href=/igraph-rs/igraph/>Crate igraph-rs</a></li></ul></li></ul></div></div></nav><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>Final shift for call/cc</h1><h2 class=post-subheading>Direct implementation of shift and reset</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 17, 2002
+&nbsp;|&nbsp;
+<i class="fas fa-clock"></i>&nbsp;11&nbsp;min
+&nbsp;|&nbsp;
+<i class="fas fa-book"></i>&nbsp;2208&nbsp;words
+&nbsp;|&nbsp;
+<i class="fas fa-user"></i>&nbsp;Martin Gasbichler<i class="fas fa-user"></i>&nbsp;Michael Sperber</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><hr><blockquote cite>Gasbichler, Martin and Sperber, Michael,
 2002.
 <a href=https://doi.org/10.1145/583852.581504 target=_blank><i>Final shift for call/cc: direct implementation of shift and reset.</i></a>
 In SIGPLAN Not.,
 Association for Computing Machinery,
 New York, NY, USA,
 vol. 37,
-pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications.</i></p><hr><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href=#cite1157>1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href=#cite1158>2</a>]</cite> recorded a talk <cite>[<a href=#cite1159>3</a>]</cite> that given in the workshop <cite>[<a href=#cite1160>4</a>]</cite>, slides <cite>[<a href=#cite1161>5</a>]</cite> are also available.</p><section id=section1162><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
+pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications.</i></p><hr><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite>[<a href=#cite1464>1</a>]</cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite>[<a href=#cite1465>2</a>]</cite> recorded a talk <cite>[<a href=#cite1466>3</a>]</cite> that given in the workshop <cite>[<a href=#cite1467>4</a>]</cite>, slides <cite>[<a href=#cite1468>5</a>]</cite> are also available.</p><section id=section1469><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
 </code></pre></div>where the expressions <code class=w3-codespan>body ...</code> execute in a delimited context; for the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(delimcc-reset (τ body ...))
-</code></pre></div></p><section id=section1165><header><h1>The <code class=w3-codespan>letcc/shift</code> macro</h1></header></section><p>The expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
+</code></pre></div></p><section id=section1472><header><h1>The <code class=w3-codespan>letcc/shift</code> macro</h1></header></section><p>The expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
 </code></pre></div>is explained by author's word:<blockquote class="w3-panel w3-leftbar w3-round w3-border" style=max-width:61.8%><span style=font-size:261%;opacity:.2>&#10077;</span><br><i><ol><li>clears the current continuation</li><li>binds the cleared continuation to <code class=w3-codespan>k</code></li><li>and executes <code class=w3-codespan>body ...</code></li></ol></i><footer><p class=w3-right-align>Kenichi Asai</p></footer></blockquote>For the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(delimcc-shift (λ (k) body ...))
-</code></pre></div></p><section id=section1168><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+</code></pre></div></p><section id=section1475><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
   (aux continuation delimited)
   *
   (import scheme (chicken base) srfi-1 (aux base) (aux continuation))
@@ -48,18 +43,23 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
     (letcc/shift k (λ args (let1 (x (begin body ...)) (k x)))))
   (define-syntax-rule (τ-shift body ...) (λ-shift () body ...))
   (define *meta-continuation*
-    (λ (v) (warning &quot;Missing enclosing resetcc&quot; v) v))
+    (λ args
+        (warning &quot;Missing enclosing resetcc, called with args&quot; args)
+        (apply values args)))
   (define (delimcc-reset thunk)
     (let1 (mc *meta-continuation*)
           (letcc k
                  (set! *meta-continuation*
-                   (λ (v) (set! *meta-continuation* mc) (k v)))
-                 (let1 (v (thunk)) (*meta-continuation* v)))))
+                   (λ args (set! *meta-continuation* mc) (apply k args)))
+                 (receive args (thunk) (apply *meta-continuation* args)))))
   (define (delimcc-shift f)
     (letcc k
-           (let1 (v* (f (λ (v) (resetcc (k v))))) (*meta-continuation* v*))))
+           (receive
+             args*
+             (f (λ args (resetcc (apply k args))))
+             (apply *meta-continuation* args*))))
   (define (delimcc-extract) (letcc/shift k k))
-  (define (delimcc-discard v) (letcc/shift _ v))
+  (define (delimcc-discard . args) (letcc/shift _ (apply values args)))
   (define (delimcc-either lst) (letcc/shift k (map k lst)))
   (define (delimcc-either/map f lst)
     (letcc/shift k (map (λ (v) (let1 (v* (f v)) (k v*))) lst)))
@@ -69,6 +69,14 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
     (letcc/shift
       k
       (filter-map (λ (v) (let1 (v* (pred? v)) (and v* (k v*)))) lst)))
+  (define (delimcc-compose . fns) (letcc/shift k (apply compose (cons k fns))))
+  (define (delimcc-state-get) (letcc/shift k (λ (state) ((k state) state))))
+  (define (delimcc-state-put v) (letcc/shift k (λ (state) ((k state) v))))
+  (define-syntax-rule
+    (delimcc-state-monad init body ...)
+    (let* ((t (τ body ...))
+           (R (resetcc (let1 (result (t)) (λ (state) result)))))
+      (R init)))
   (define (yield v) (letcc/shift k (cons v (k (void)))))
   (define (yield/extract v) (letcc/shift k (cons v k)))
   (define-syntax
@@ -81,7 +89,7 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
            (cond ((eq? r witness) b)
                  (else (f (car r) (L (let1 (k (cdr r)) (k (void))))))))
          (L (resetcc body ... witness)))))))
-</code></pre></div><section id=section1169><header><h1>Tests</h1></header></section><h2 id=test/delimcc/basic><a href=#test/delimcc/basic><code>test/delimcc/basic</code>: <span class=w3-text-green>pass</span></a></h2><p>This test case introduces basic expressions to get introduced to delimited continuations.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/basic _)
+</code></pre></div><section id=section1476><header><h1>Tests</h1></header></section><h2 id=test/delimcc/basic><a href=#test/delimcc/basic><code>test/delimcc/basic</code>: <span class=w3-text-green>pass</span></a></h2><p>This test case introduces basic expressions to get introduced to delimited continuations.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/basic _)
   (⊦= 10 (letcc/shift k 10))
   (⊦= '(1 2 10) (cons 1 (cons 2 (letcc/shift k (k (k '(10)))))))
   (⊦= '(1 2 2 10) (cons 1 (resetcc (cons 2 (letcc/shift k (k (k '(10))))))))
@@ -102,41 +110,41 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
         (resetcc
           (cons 10
                 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005)
- (memory #(12582912 3031224 1048576))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.006)
+ (memory #(12582912 3142040 1048576))
  (stdout &quot;&quot;)
- (stderr &quot;\nWarning: Missing enclosing resetcc: 10\n&quot;))
+ (stderr &quot;\nWarning: Missing enclosing resetcc, called with args: (10)\n&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/discard><a href=#test/delimcc/tutorial/discard><code>test/delimcc/tutorial/discard</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/discard _)
   (⊦= 10 (resetcc (sub1 (+ 3 (letcc/shift k (* 5 2))))))
   (⊦= '(10) (resetcc (cdr (cons 3 (letcc/shift k (list (* 5 2)))))))
   (⊦= 9 (sub1 (resetcc (+ 3 (letcc/shift k (* 5 2))))))
   (⊦= '() (cdr (resetcc (cons 3 (letcc/shift k (list (* 5 2)))))))
   (⊦= 'hello (resetcc (sub1 (+ 3 (letcc/shift k 'hello))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3034264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3145016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/discard/prod><a href=#test/delimcc/tutorial/discard/prod><code>test/delimcc/tutorial/discard/prod</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/discard/prod _)
   (define (prod lst)
     (cond ((null? lst) 1)
           ((zero? (car lst)) (delimcc-discard 'zero))
           (else (* (car lst) (prod (cdr lst))))))
   (⊦= 'zero (resetcc (prod '(2 3 0 5)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3032904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3143592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/extract><a href=#test/delimcc/tutorial/extract><code>test/delimcc/tutorial/extract</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/extract _)
   (define-resetcc f (sub1 (+ 3 (letcc/shift k k))))
   (⊦= (sub1 (+ 3 10)) (f 10))
   (define-resetcc g (sub1 (+ 3 (delimcc-extract))))
   (⊦= 12 (g 10)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3036552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3147304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/extract/appender><a href=#test/delimcc/tutorial/extract/appender><code>test/delimcc/tutorial/extract/appender</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/extract/appender _)
   (define (appender lst)
     (cond ((null? lst) (delimcc-extract))
           (else (cons (car lst) (appender (cdr lst))))))
   (define-resetcc A (appender '(1 2 3)))
   (⊦= '(1 2 3 4 5 6) (A '(4 5 6))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3037352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3148072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield><a href=#test/delimcc/yield><code>test/delimcc/yield</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield _)
   (⊦= '(1) (resetcc+null (yield 1)))
   (⊦= '(1 2) (resetcc+null (yield 1) (yield 2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3038448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3149168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield/extract><a href=#test/delimcc/yield/extract><code>test/delimcc/yield/extract</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield/extract _)
   (⊦= '((a 1) (a 2))
         (§-&gt;list
@@ -148,12 +156,12 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
           +
           (resetcc+null (yield/extract 1) (yield/extract 2))
           0)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3037096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3147784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield§><a href=#test/delimcc/yield§><code>test/delimcc/yield§</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield§ _)
   (⊦= '(1) (§-&gt;list (resetcc+null (yield§ 1))))
   (⊦= '(1) (§-&gt;list (take§ 1 (resetcc+null (yield§ 1) (yield§ 2)))))
   (⊦= '(1 2) (§-&gt;list (resetcc+null (yield§ 1) (yield§ 2)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3040472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3151192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/yield§/walk><a href=#test/delimcc/tutorial/yield§/walk><code>test/delimcc/tutorial/yield§/walk</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/yield§/walk _)
   (define (walk f tree)
     (cond ((null? tree) (void))
@@ -165,10 +173,10 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
           100
           ((each prod) (* each prod))
           (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3042120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3143456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/either><a href=#test/delimcc/tutorial/either><code>test/delimcc/tutorial/either</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/either _)
   (⊦= '(1 3 3) (resetcc (delimcc-either `(1 ,(add1 2) 3)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3043288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3144624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/either/tensor><a href=#test/delimcc/tutorial/either/tensor><code>test/delimcc/tutorial/either/tensor</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/either/tensor _)
   (⊦= '(((p #t) (q #f)))
         (let1 (sols '())
@@ -187,15 +195,15 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
               ,(if (and (or p q) (or p (not q)) (or (not p) (not q)))
                  'yes
                  'no))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3041480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3144928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/τ><a href=#test/delimcc/tutorial/τ><code>test/delimcc/tutorial/τ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/τ _)
   (define-resetcc a (append (τ-shift '(hello)) '(world)))
   (⊦= '(hello world) (a)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3044904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3148384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/λ><a href=#test/delimcc/tutorial/λ><code>test/delimcc/tutorial/λ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/λ _)
   (define-resetcc p (append '(hello) (λ-shift (x) (list x)) '(world)))
   (⊦= '(hello 4 world) (p 4)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3048336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3151848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/letcc/delimcc+monad><a href=#test/letcc/delimcc+monad><code>test/letcc/delimcc+monad</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcc/delimcc+monad _)
   (define (reflect meaning) (letcc/shift k (extend k meaning)))
   (define (reify* t) (resetcc (eta (t))))
@@ -221,7 +229,7 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
     (define (f x) (+ x (amb 6 4 2 8) (amb 2 4 5 4 1)))
     (reify (f (f (f (amb 0 2 3 4 5 32))))))
   (⊦= 48000 (length (wwww))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.081) (memory #(12582912 3047632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.09) (memory #(12582912 3150072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/asai-pwl-talk/take><a href=#test/asai-pwl-talk/take><code>test/asai-pwl-talk/take</code>: <span class=w3-text-green>pass</span></a></h2><p>Given a list <code>lst</code> and a number <code>n</code>, the function <code>T</code> returns a list that is the same as <code>lst</code> but with the <code>n</code>-th element moved to the front. The test cases show that if <code>n</code> is zero or greater than the length of the list, the result is the same as the input list.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/asai-pwl-talk/take _)
   (define (T lst n)
     (letrec ((L (λ (lst n)
@@ -236,32 +244,112 @@ pp. 271–282.</blockquote><p><strong>Abstract:</strong> <i>We present a direct 
   (⊦= '(0 1 2 3 4) (T '(0 1 2 3 4) 5))
   (⊦= '(3 0 1 2 4) (T '(0 1 2 3 4) 3))
   (⊦= '(1 0 2 3 4) (T '(0 1 2 3 4) 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3051256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><h2 id=test/asai-pwl-talk/anf><a href=#test/asai-pwl-talk/anf><code>test/asai-pwl-talk/anf</code>: <span class=w3-text-green>pass</span></a></h2><p>Given an S-expression <code>expr</code> and a variable name <code>v</code>, the function <code>anf</code> transforms <code>expr</code> into an A-normal form, where all intermediate results are (uniquely) named by a let-binding. The test case shows that the expression <code><quote><->a
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3154080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/asai-pwl-talk/anf><a href=#test/asai-pwl-talk/anf><code>test/asai-pwl-talk/anf</code>: <span class=w3-text-green>pass</span></a></h2><p>Given an S-expression <code>expr</code> and a variable name <code>v</code>, the function <code>anf/let</code> transforms <code>expr</code> into an A-normal form, where all intermediate results are (uniquely) named by a let-binding. The test case shows that the expression <code><quote><->a
 <->bcd</quote></code> is transformed into an A-normal form where the intermediate result of <code><quote><->bcd</quote></code> is named by a let-binding with variable name <code><quote>α</quote></code>.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/asai-pwl-talk/anf _)
-  (define (anf expr v)
-    (letrec ((L (λ (e)
+  (define (anf/let expr w)
+    (letrec ((count 0)
+             (L (λ (e)
                     (match/first
                       e
+                      ((λ (,v) unquote d)
+                       `(λ (,v) unquote (map (λ (e) (resetcc (L e))) d)))
                       ((,a unquote d)
-                       (let ((d* (map L d)))
-                         (letcc/shift k `(let1 (,v (,a ,@d*)) ,(k v)))))
+                       (letcc/shift
+                         k
+                         (let ((w (symbol-append
+                                    w
+                                    (string-&gt;symbol (number-&gt;string count))))
+                               (_ (add1! count))
+                               (a* (L a))
+                               (d* (map L d)))
+                           `(let1 (,w (,a* unquote d*)) ,(k w)))))
                       (,v v)))))
       (resetcc (L expr))))
-  (⊦= '(let1 (α (- b c d)) (let1 (α (- a α)) α))
-        (anf '(- a (- b c d)) 'α)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3053488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1157>[1] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf>Introduction to Programming with Shift and Reset</a></span><br><span id=cite1158>[2] <a href=http://pllab.is.ocha.ac.jp/~asai/>Professor Kenichi Asai's home page</a></span><br><span id=cite1159>[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span><br><span id=cite1160>[4] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/>CW 2011 Tutorial: home page</a></span><br><span id=cite1161>[5] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf>CW 2011 Tutorial: slides</a></span><br></div></body></html><div class=blog-tags><a href=https://massimo-nocentini.github.io/tags/monads/>monads</a>&nbsp;
-<a href=https://massimo-nocentini.github.io/tags/callcc/>callcc</a>&nbsp;
-<a href=https://massimo-nocentini.github.io/tags/shift/>shift</a>&nbsp;
-<a href=https://massimo-nocentini.github.io/tags/reset/>reset</a>&nbsp;</div><h4 class=see-also>See also</h4><ul><li><a href=/post/2001-02-01-callcc-patterns/>Call with Current Continuation Patterns</a></li><li><a href=/post/1996-01-31-the-seasoned-schemer/>The Seasoned Schemer</a></li><li><a href=/post/1994-02-01-filinski-representing-monads/>Representing monads</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/post/2001-02-01-callcc-patterns/ data-toggle=tooltip data-placement=top title="Call with Current Continuation Patterns">&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/post/2026-01-12-igraph-paper/ data-toggle=tooltip data-placement=top title="The igraph software package for complex network research">Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-paypal fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://telegram.me/username title=Telegram><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-telegram fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://discord.gg/invite%20code%20%28https://discord.gg/massimo.nocentini%29 title=Discord><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-discord fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
-&nbsp;&bull;&nbsp;&copy;
+  (define (anf/λ expr w)
+    (letrec ((count 0)
+             (L (λ1-match/first
+                  ((λ (,v) unquote d)
+                   `(λ (,v) unquote (map (λ (e) (resetcc (L e))) d)))
+                  ((,a unquote d)
+                   (letcc/shift
+                     k
+                     (let ((w (symbol-append
+                                w
+                                (string-&gt;symbol (number-&gt;string count))))
+                           (_ (add1! count))
+                           (a* (L a))
+                           (d* (map L d)))
+                       `((λ (,w) ,(k w)) (,a* unquote d*)))))
+                  (,v v))))
+      (resetcc (L expr))))
+  (⊦= '(let1 (α1 (- b c d)) (let1 (α0 (- a α1)) α0))
+        (anf/let '(- a (- b c d)) 'α))
+  (⊦= '((λ (α1) ((λ (α0) α0) (- a α1))) (- b c d))
+        (anf/λ '(- a (- b c d)) 'α))
+  (⊦= '((λ (α2) ((λ (α1) ((λ (α0) α0) (- a α1))) (+ b α2))) (/ c d))
+        (anf/λ '(- a (+ b (/ c d))) 'α))
+  (⊦= '((λ (α1) ((λ (α2) ((λ (α0) α0) (if α1 0 α2))) (void)))
+          (null? l))
+        (anf/λ '(if (null? l) 0 (void)) 'α))
+  (⊦= '((λ (α1)
+              ((λ (α4)
+                   ((λ (α3)
+                        ((λ (α5)
+                             ((λ (α2) ((λ (α0) α0) (if α1 0 α2)))
+                              (if α3 1 α5)))
+                         (void)))
+                    (null? α4)))
+               (cdr l)))
+          (null? l))
+        (anf/λ '(if (null? l) 0 (if (null? (cdr l)) 1 (void))) 'α))
+  (⊦= '((λ (α1)
+              ((λ (α4)
+                   ((λ (α3)
+                        ((λ (α7)
+                             ((λ (α6)
+                                  ((λ (α8)
+                                       ((λ (α5)
+                                            ((λ (α2) ((λ (α0) α0) (if α1 0 α2)))
+                                             (if α3 1 α5)))
+                                        (if α6 2 α8)))
+                                   (void)))
+                              (null? α7)))
+                         (cdr l)))
+                    (null? α4)))
+               (cdr l)))
+          (null? l))
+        (anf/λ
+          '(if (null? l)
+             0
+             (if (null? (cdr l)) 1 (if (null? (cdr l)) 2 (void))))
+          'α))
+  (⊦= '(λ (x)
+             (λ (y)
+                 (λ (z)
+                     (let1 (α1 (x z))
+                           (let1 (α2 (y z)) (let1 (α0 (α1 α2)) α0))))))
+        (anf/let '(λ (x) (λ (y) (λ (z) ((x z) (y z))))) 'α))
+  (⊦= '(λ (x)
+             (λ (y)
+                 (λ (z)
+                     ((λ (α1) ((λ (α2) ((λ (α0) α0) (α1 α2))) (y z)))
+                      (x z)))))
+        (anf/λ '(λ (x) (λ (y) (λ (z) ((x z) (y z))))) 'α)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3160184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><hr><div class=w3-container><header><b>References</b></header><span id=cite1464>[1] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf>Introduction to Programming with Shift and Reset</a></span><br><span id=cite1465>[2] <a href=http://pllab.is.ocha.ac.jp/~asai/>Professor Kenichi Asai's home page</a></span><br><span id=cite1466>[3] <a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></span><br><span id=cite1467>[4] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/>CW 2011 Tutorial: home page</a></span><br><span id=cite1468>[5] <a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf>CW 2011 Tutorial: slides</a></span><br></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;<a href=/categories/papers/>papers</a>&nbsp;</div><div class=blog-tags><span>Tags: </span><a href=/tags/monads/>monads</a>&nbsp;<a href=/tags/callcc/>callcc</a>&nbsp;<a href=/tags/shift/>shift</a>&nbsp;<a href=/tags/reset/>reset</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2001-02-01-callcc-patterns/ class=see-also-item><span class=see-also-item-title>Call with Current Continuation Patterns</span>
+</a><a href=/post/1996-01-31-the-seasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Seasoned Schemer</span>
+</a><a href=/post/1994-02-01-filinski-representing-monads/ class=see-also-item><span class=see-also-item-title>Representing monads</span></a></div></article><a href=/post/2001-02-01-callcc-patterns/ class="nav-side-arrow nav-side-prev" title="Call with Current Continuation Patterns" aria-label="Previous Post: Call with Current Continuation Patterns"><i class="fas fa-chevron-left"></i>
+</a><a href=/post/2026-01-12-igraph-paper/ class="nav-side-arrow nav-side-next" title="The igraph software package for complex network research" aria-label="Next Post: The igraph software package for complex network research"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2001-02-01-callcc-patterns/ data-bs-toggle=tooltip data-bs-placement=top title="Call with Current Continuation Patterns"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-01-12-igraph-paper/ data-bs-toggle=tooltip data-bs-placement=top title="The igraph software package for complex network research">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://paypal.me/username title=PayPal aria-label=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-paypal fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://telegram.me/username title=Telegram aria-label=Telegram><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-telegram fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://discord.gg/invite%20code%20%28https://discord.gg/massimo.nocentini%29 title=Discord aria-label=Discord><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-discord fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
 2026
 &nbsp;&bull;&nbsp;
-<a href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.161.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js integrity=sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js integrity=sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-3.7.0.slim.min.js integrity=sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js integrity=sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/main.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js integrity=sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js integrity=sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/load-photoswipe.js></script></body></html>
+<a href=/>A small measure of peace</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.163.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-4.0.0.slim.min.js integrity=sha384-tcspKDb5tWvyRCOWzevlAeQgHeEzYdUHJpcgnIhcP9w4CnfD7DLAcS+k9QzLbRJO crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=/js/main.js></script><script src=/js/toc.js></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=/js/load-photoswipe.js></script></body></html>

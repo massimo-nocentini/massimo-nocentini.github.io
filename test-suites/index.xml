@@ -33,14 +33,14 @@
  (⊦= 3 c))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(25165824 2364768 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(25165824 2363064 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/let1"&gt;&lt;a href="#test/let1"&gt;&lt;code&gt;test/let1&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/let1 _) (let1 (a 1) (⊦= a 1)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2365848 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2364144 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letcar&amp;amp;cdr"&gt;&lt;a href="#test/letcar&amp;amp;cdr"&gt;&lt;code&gt;test/letcar&amp;cdr&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -53,7 +53,7 @@
  (⊦= dd 3)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2367280 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2365576 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/λ"&gt;&lt;a href="#test/λ"&gt;&lt;code&gt;test/λ&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -63,7 +63,7 @@
  (⊦= 5 ((λ (x y) (+ x y)) 2 3)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2368184 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2366480 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letmaptensor"&gt;&lt;a href="#test/letmaptensor"&gt;&lt;code&gt;test/letmaptensor&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -76,7 +76,7 @@
  (list (add1 x) y z))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2368856 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2367152 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letmap"&gt;&lt;a href="#test/letmap"&gt;&lt;code&gt;test/letmap&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -98,7 +98,7 @@
  (list (add1 x) y z))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2369824 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(25165824 2368120 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/procc/λ-memo"&gt;&lt;a href="#test/procc/λ-memo"&gt;&lt;code&gt;test/procc/λ-memo&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -123,14 +123,14 @@
  (let1 (v (fib-memo 10)) (⊦= 55 v) (⊦= 11 count)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(25165824 2370816 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(25165824 2368296 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/load/string"&gt;&lt;a href="#test/load/string"&gt;&lt;code&gt;test/load/string&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/load/string _) (⊦= '(+ 3 4) (load/string &amp;quot;(+ 3 4)&amp;quot;)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2371864 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(25165824 2369344 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/simdjson/version"&gt;&lt;a href="#test/simdjson/version"&gt;&lt;code&gt;test/simdjson/version&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The current version of &lt;code class="w3-codespan"&gt;simdjson&lt;/code&gt; is &lt;code class="w3-codespan"&gt;4.6.4&lt;/code&gt;.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-bootstrap-sut/</guid><description>&lt;!doctype html&gt;
@@ -345,7 +345,7 @@
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
 &lt;h2 id="test-running"&gt;&lt;a href="#test-running"&gt;&lt;code&gt;test-running&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;hello&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/</guid><description>&lt;!doctype html&gt;
+&lt;p&gt;hello&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-category-list-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-category-list-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
 &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" /&gt;
@@ -368,8 +368,38 @@
 &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.highlightAll();&lt;/script&gt;&lt;/head&gt;
 &lt;body&gt;
-&lt;p&gt;In this page we describe two fundamental macros, &lt;code class="w3-codespan"&gt;resetcc&lt;/code&gt; and &lt;code class="w3-codespan"&gt;letcc/shift&lt;/code&gt; respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to &lt;i&gt;discard&lt;/i&gt;, &lt;i&gt;extract&lt;/i&gt;, &lt;i&gt;preserve&lt;/i&gt;, and &lt;i&gt;wrap&lt;/i&gt; delimited continuations, accordingly to the tutorial &lt;cite&gt;[&lt;a href="#cite1157"&gt;1&lt;/a&gt;]&lt;/cite&gt; by Kenichi Asai and Oleg Kiselyov. The former author &lt;cite&gt;[&lt;a href="#cite1158"&gt;2&lt;/a&gt;]&lt;/cite&gt; recorded a talk &lt;cite&gt;[&lt;a href="#cite1159"&gt;3&lt;/a&gt;]&lt;/cite&gt; that given in the workshop &lt;cite&gt;[&lt;a href="#cite1160"&gt;4&lt;/a&gt;]&lt;/cite&gt;, slides &lt;cite&gt;[&lt;a href="#cite1161"&gt;5&lt;/a&gt;]&lt;/cite&gt; are also available.&lt;/p&gt;
-&lt;section id="section1162"&gt;
+&lt;section id="section300"&gt;
+&lt;header&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
+&lt;p&gt;This section tests the list monad, which is a monad that represents non-deterministic computations. A value of type (list a) represents a non-deterministic computation that can produce any of the values in the list. The monad operations allow us to combine these computations in various ways, such as sequencing them with &amp;gt;&amp;gt;= or combining them with ⊕/monad.&lt;/p&gt;
+&lt;section id="section301"&gt;
+&lt;header&gt;
+&lt;h1&gt;Implementation&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
+&lt;p&gt;The list monad is implemented as follows, which defines the monad operations for lists. The return operation creates a singleton list, and the &amp;gt;&amp;gt;= operation uses append-map to apply a function to each element of the list and concatenate the results. The ⊕/monad operation is defined as append, which combines two lists of computations.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/</guid><description>&lt;!doctype html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
+&lt;head&gt;
+&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" /&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;hljs.highlightAll();&lt;/script&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;In this page we describe two fundamental macros, &lt;code class="w3-codespan"&gt;resetcc&lt;/code&gt; and &lt;code class="w3-codespan"&gt;letcc/shift&lt;/code&gt; respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to &lt;i&gt;discard&lt;/i&gt;, &lt;i&gt;extract&lt;/i&gt;, &lt;i&gt;preserve&lt;/i&gt;, and &lt;i&gt;wrap&lt;/i&gt; delimited continuations, accordingly to the tutorial &lt;cite&gt;[&lt;a href="#cite1464"&gt;1&lt;/a&gt;]&lt;/cite&gt; by Kenichi Asai and Oleg Kiselyov. The former author &lt;cite&gt;[&lt;a href="#cite1465"&gt;2&lt;/a&gt;]&lt;/cite&gt; recorded a talk &lt;cite&gt;[&lt;a href="#cite1466"&gt;3&lt;/a&gt;]&lt;/cite&gt; that given in the workshop &lt;cite&gt;[&lt;a href="#cite1467"&gt;4&lt;/a&gt;]&lt;/cite&gt;, slides &lt;cite&gt;[&lt;a href="#cite1468"&gt;5&lt;/a&gt;]&lt;/cite&gt; are also available.&lt;/p&gt;
+&lt;section id="section1469"&gt;
 &lt;header&gt;
 &lt;h1&gt;The &lt;code class="w3-codespan"&gt;resetcc&lt;/code&gt; macro&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
 &lt;p&gt;Continuations are delimited by the &lt;code class="w3-codespan"&gt;resetcc&lt;/code&gt; syntax as in the following generic expression
@@ -431,7 +461,7 @@
  (#(hello ,r ,e) r))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.008) (memory #(8470688 2274000 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.008) (memory #(8475808 2271032 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/h-non-overlapping"&gt;&lt;a href="#test/h-non-overlapping"&gt;&lt;code&gt;test/h-non-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -444,7 +474,7 @@
  (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8470688 2275024 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8475808 2268080 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/h-overlapping"&gt;&lt;a href="#test/h-overlapping"&gt;&lt;code&gt;test/h-overlapping&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -458,7 +488,7 @@
  (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(8470688 2278080 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(8475808 2273336 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/meta-circular-interpreter"&gt;&lt;a href="#test/meta-circular-interpreter"&gt;&lt;code&gt;test/meta-circular-interpreter&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -497,7 +527,7 @@
  (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8470688 2274008 1048576)) (stdout &amp;quot;x&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8475808 2272416 1048576)) (stdout &amp;quot;x&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/λ-match-first"&gt;&lt;a href="#test/λ-match-first"&gt;&lt;code&gt;test/λ-match-first&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -510,7 +540,7 @@
  (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8470688 2274264 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8475808 2272672 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/λ-match-first/unquote-unquote-pattern"&gt;&lt;a href="#test/λ-match-first/unquote-unquote-pattern"&gt;&lt;code&gt;test/λ-match-first/unquote-unquote-pattern&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -518,7 +548,7 @@
  (⊦= 2 (match/first '(1 (1)) ((,x (,,x)) (add1 x)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8470688 2275712 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8475808 2274120 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -589,7 +619,7 @@
  (⊦ = 0 (judy-array-bytes a))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(8456480 1815760 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(8456480 1816888 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/set!-ref"&gt;&lt;a href="#test/set!-ref"&gt;&lt;code&gt;test/set!-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -605,7 +635,7 @@
  (⊦ equal? 'missing (judy-array-ref/default a 0 (λ_ 'missing)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(8456480 1816952 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(8456480 1817896 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/alist-&amp;gt;judy-array"&gt;&lt;a href="#test/alist-&amp;gt;judy-array"&gt;&lt;code&gt;test/alist-&gt;judy-array&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -621,7 +651,7 @@
  (⊦ equal? 'missing (judy-array-ref/default a 3 (λ_ 'missing)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1817904 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1818792 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/list-&amp;gt;judy-array"&gt;&lt;a href="#test/list-&amp;gt;judy-array"&gt;&lt;code&gt;test/list-&gt;judy-array&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -636,7 +666,7 @@
  (⊦ equal? 'missing (judy-array-ref/default a 11 (λ_ 'missing)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1818984 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1819816 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/judy-array-&amp;gt;alist"&gt;&lt;a href="#test/judy-array-&amp;gt;alist"&gt;&lt;code&gt;test/judy-array-&gt;alist&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -646,7 +676,7 @@
  (⊦ equal? alist (judy-array-&amp;gt;alist a)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(8456480 1819824 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(8456480 1820600 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/list-&amp;gt;judy-array/iota"&gt;&lt;a href="#test/list-&amp;gt;judy-array/iota"&gt;&lt;code&gt;test/list-&gt;judy-array/iota&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -657,7 +687,7 @@
  (for-each (λ (i) (⊦ = i (judy-array-ref a i))) I))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.039) (memory #(8456480 4221072 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.039) (memory #(8456480 4218344 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/judy-array-walk"&gt;&lt;a href="#test/judy-array-walk"&gt;&lt;code&gt;test/judy-array-walk&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -672,7 +702,7 @@
  (⊦ equal? I (reverse collected))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.033) (memory #(16912960 4222144 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.034) (memory #(16912960 4219360 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-learning-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -708,7 +738,7 @@
  (⊦= #f (alist-ref 'c alst))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 1311896 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 1312320 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/len"&gt;&lt;a href="#test/len"&gt;&lt;code&gt;test/len&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -723,7 +753,7 @@
  (⊦= 11 (my-strlen &amp;quot;hello world&amp;quot;))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1312832 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1313256 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/unquote"&gt;&lt;a href="#test/unquote"&gt;&lt;code&gt;test/unquote&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Very interesting test about quasiquotation &lt;cite&gt;[&lt;a href="#cite44"&gt;1&lt;/a&gt;]&lt;/cite&gt; : it shows how &lt;code class="w3-codespan"&gt;unquote&lt;/code&gt; can be used in a quasiquotation pattern in the &lt;code class="w3-codespan"&gt;cdr&lt;/code&gt; slot.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-letcc-suite/</guid><description>&lt;!doctype html&gt;
@@ -749,19 +779,21 @@
 &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.highlightAll();&lt;/script&gt;&lt;/head&gt;
 &lt;body&gt;
-&lt;section id="section716"&gt;
+&lt;section id="section772"&gt;
 &lt;header&gt;
 &lt;h1&gt;Call with current continuation: the &lt;code class="w3-codespan"&gt;letcc&lt;/code&gt; macro&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
 &lt;p&gt;The fundamental macro &lt;code class="w3-codespan"&gt;letcc&lt;/code&gt; in the form 
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(letcc k body ...)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt; binds &lt;code class="w3-codespan"&gt;k&lt;/code&gt; to the &lt;i&gt;current continuation &lt;/i&gt;&lt;cite&gt;[&lt;a href="#cite717"&gt;1&lt;/a&gt;]&lt;/cite&gt;&lt;cite&gt;[&lt;a href="#cite718"&gt;2&lt;/a&gt;]&lt;/cite&gt;&lt;cite&gt;[&lt;a href="#cite719"&gt;3&lt;/a&gt;]&lt;/cite&gt;&lt;cite&gt;[&lt;a href="#cite720"&gt;4&lt;/a&gt;]&lt;/cite&gt; in &lt;code class="w3-codespan"&gt;body...&lt;/code&gt; expressions; for the sake of clarity, it expands to
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt; binds &lt;code class="w3-codespan"&gt;k&lt;/code&gt; to the &lt;i&gt;current continuation &lt;/i&gt;&lt;cite&gt;[&lt;a href="#cite773"&gt;1&lt;/a&gt;]&lt;/cite&gt;&lt;cite&gt;[&lt;a href="#cite774"&gt;2&lt;/a&gt;]&lt;/cite&gt;&lt;cite&gt;[&lt;a href="#cite775"&gt;3&lt;/a&gt;]&lt;/cite&gt;&lt;cite&gt;[&lt;a href="#cite776"&gt;4&lt;/a&gt;]&lt;/cite&gt; in &lt;code class="w3-codespan"&gt;body...&lt;/code&gt; expressions; for the sake of clarity, it expands to
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(continuation-capture
  (λ (cont)
- (let1 (k (λ (arg) (continuation-graft cont (τ arg)))) body ...)))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;where &lt;code class="w3-codespan"&gt;continuation-capture&lt;/code&gt; and &lt;code class="w3-codespan"&gt;continuation-return&lt;/code&gt; are defined in &lt;cite&gt;[&lt;a href="#cite728"&gt;5&lt;/a&gt;]&lt;/cite&gt; and based on &lt;cite&gt;[&lt;a href="#cite729"&gt;6&lt;/a&gt;]&lt;/cite&gt; by Marc Feeley, respectively.&lt;/p&gt;
-&lt;section id="section730"&gt;
+ (let1 (k (λ args (continuation-graft cont (τ (apply values args)))))
+ body
+ ...)))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;where &lt;code class="w3-codespan"&gt;continuation-capture&lt;/code&gt; and &lt;code class="w3-codespan"&gt;continuation-return&lt;/code&gt; are defined in &lt;cite&gt;[&lt;a href="#cite786"&gt;5&lt;/a&gt;]&lt;/cite&gt; and based on &lt;cite&gt;[&lt;a href="#cite787"&gt;6&lt;/a&gt;]&lt;/cite&gt; by Marc Feeley, respectively.&lt;/p&gt;
+&lt;section id="section788"&gt;
 &lt;header&gt;
 &lt;h1&gt;Implementation&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
 &lt;div&gt;
@@ -776,7 +808,8 @@
  (letcc hop body ...)
  (continuation-capture
  (λ (cont)
- (let1 (hop (λ (arg) (continuation-graft cont (τ arg))))
+ (let1 (hop (λ args
+ (continuation-graft cont (τ (apply values args)))))
  body
  ...))))
  (define (callcc f) (letcc k (f k)))
@@ -791,7 +824,7 @@
  (trycc (next exp ...) (else body ...))
  (letcc* hop ((v (let1 (next (τ (hop (void)))) exp)) ...) body ...)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;section id="section731"&gt;
+&lt;section id="section789"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
 &lt;h2 id="test/letcc/multiarg"&gt;&lt;a href="#test/letcc/multiarg"&gt;&lt;code&gt;test/letcc/multiarg&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -799,10 +832,10 @@
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/letcc/multiarg _) (⊦= 'a (letcc k (k 'a))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 2057792 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 2073760 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letcc*"&gt;&lt;a href="#test/letcc*"&gt;&lt;code&gt;test/letcc*&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The frame in &lt;cite&gt;[&lt;a href="#cite732"&gt;7&lt;/a&gt;]&lt;/cite&gt; is of inspiration of the &lt;code class="w3-codespan"&gt;letcc*&lt;/code&gt; macro.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/</guid><description>&lt;!doctype html&gt;
+&lt;p&gt;The frame in &lt;cite&gt;[&lt;a href="#cite790"&gt;7&lt;/a&gt;]&lt;/cite&gt; is of inspiration of the &lt;code class="w3-codespan"&gt;letcc*&lt;/code&gt; macro.&lt;/p&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-letnondeterministic-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
 &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" /&gt;
@@ -834,8 +867,8 @@
  (⊦= '() (letnondeterministic (? ¿ ⊦ • !) (? '()))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.008)
- (memory #(12582912 2377568 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.009)
+ (memory #(12582912 2374384 1048576))
  (stdout &amp;quot;((left 0) (tried 1) (accepted 0) (ratio 0.0) (distribution ()))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -846,9 +879,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.007)
- (memory #(12582912 2384392 1048576))
+ (memory #(12582912 2381288 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/choose§"&gt;&lt;a href="#test/letnondeterministic/choose§"&gt;&lt;code&gt;test/letnondeterministic/choose§&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -860,10 +893,10 @@
  (? (cons§ 1 (cons§ 2 (cons§ 3 '())))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2380168 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
+ (memory #(12582912 2377032 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((3 0.333333333333333) (2 0.333333333333333) (1 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 7)\n (accepted 3)\n (ratio 0.428571428571429)\n (distribution\n ((1 0.333333333333333) (3 0.333333333333333) (2 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/choose-rec"&gt;&lt;a href="#test/letnondeterministic/choose-rec"&gt;&lt;code&gt;test/letnondeterministic/choose-rec&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -876,7 +909,7 @@
  (letnondeterministic§ (? ¿ ⊦ • !) (? (fibs§ 0 1)))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.005) (memory #(12582912 2384368 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.005) (memory #(12582912 2386048 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/choose+nested"&gt;&lt;a href="#test/letnondeterministic/choose+nested"&gt;&lt;code&gt;test/letnondeterministic/choose+nested&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -885,8 +918,8 @@
  (letnondeterministic (? ¿ ⊦ • !) (? `(1 ,(? '(4 5)) 3)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
- (memory #(12582912 2390904 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
+ (memory #(12582912 2392616 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((1 0.333333333333333)\n (3 0.333333333333333)\n (5 0.166666666666667)\n (4 0.166666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
@@ -899,9 +932,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
- (memory #(12582912 2397616 1048576))
+ (memory #(12582912 2399360 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((3 0.333333333333333)\n (1 0.333333333333333)\n (4 0.166666666666667)\n (5 0.166666666666667))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 17)\n (accepted 6)\n (ratio 0.352941176470588)\n (distribution\n ((3 0.333333333333333)\n (1 0.333333333333333)\n (5 0.166666666666667)\n (4 0.166666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/choose+double"&gt;&lt;a href="#test/letnondeterministic/choose+double"&gt;&lt;code&gt;test/letnondeterministic/choose+double&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -912,7 +945,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2398880 1048576))
+ (memory #(12582912 2400624 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 19)\n (accepted 6)\n (ratio 0.315789473684211)\n (distribution\n ((7 0.333333333333333)\n (6 0.333333333333333)\n (8 0.166666666666667)\n (5 0.166666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
@@ -950,7 +983,7 @@
  (map§ (lambda (v) (list 'c v)) (fibs§ 0 1)))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2386848 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2396632 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/choose+fair"&gt;&lt;a href="#test/letnondeterministic/choose+fair"&gt;&lt;code&gt;test/letnondeterministic/choose+fair&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -962,9 +995,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2393424 1048576))
+ (memory #(12582912 2403240 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 2) 0.2) ((a 3) 0.2) ((a 1) 0.2) ((b 1) 0.2) ((a 2) 0.2))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 11)\n (accepted 5)\n (ratio 0.454545454545455)\n (distribution (((b 1) 0.2) ((a 2) 0.2) ((a 1) 0.2) ((a 3) 0.2) ((b 2) 0.2))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/odd"&gt;&lt;a href="#test/letnondeterministic/odd"&gt;&lt;code&gt;test/letnondeterministic/odd&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -977,7 +1010,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2400000 1048576))
+ (memory #(12582912 2409848 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 7)\n (accepted 2)\n (ratio 0.285714285714286)\n (distribution ((3 0.5) (1 0.5))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
@@ -1010,9 +1043,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002)
- (memory #(12582912 2389480 1048576))
+ (memory #(12582912 2391672 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n (((1 3 3) 0.0666666666666667)\n ((2 2 3) 0.0666666666666667)\n ((2 3 2) 0.0666666666666667)\n ((3 1 3) 0.0666666666666667)\n ((3 2 2) 0.0666666666666667)\n ((3 3 1) 0.0666666666666667)\n ((1 1 5) 0.0666666666666667)\n ((1 2 4) 0.0666666666666667)\n ((1 4 2) 0.0666666666666667)\n ((1 5 1) 0.0666666666666667)\n ((2 1 4) 0.0666666666666667)\n ((2 4 1) 0.0666666666666667)\n ((4 1 2) 0.0666666666666667)\n ((4 2 1) 0.0666666666666667)\n ((5 1 1) 0.0666666666666667))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 311)\n (accepted 15)\n (ratio 0.0482315112540193)\n (distribution\n (((1 1 5) 0.0666666666666667)\n ((1 3 3) 0.0666666666666667)\n ((1 5 1) 0.0666666666666667)\n ((3 1 3) 0.0666666666666667)\n ((3 3 1) 0.0666666666666667)\n ((5 1 1) 0.0666666666666667)\n ((1 2 4) 0.0666666666666667)\n ((1 4 2) 0.0666666666666667)\n ((2 1 4) 0.0666666666666667)\n ((2 2 3) 0.0666666666666667)\n ((2 3 2) 0.0666666666666667)\n ((2 4 1) 0.0666666666666667)\n ((3 2 2) 0.0666666666666667)\n ((4 1 2) 0.0666666666666667)\n ((4 2 1) 0.0666666666666667))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/parlor+sorted"&gt;&lt;a href="#test/letnondeterministic/parlor+sorted"&gt;&lt;code&gt;test/letnondeterministic/parlor+sorted&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -1031,9 +1064,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
- (memory #(12582912 2392048 1048576))
+ (memory #(12582912 2394128 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 1 5) 0.25) ((1 2 4) 0.25) ((1 3 3) 0.25) ((2 2 3) 0.25))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 311)\n (accepted 4)\n (ratio 0.0128617363344051)\n (distribution (((1 2 4) 0.25) ((2 2 3) 0.25) ((1 1 5) 0.25) ((1 3 3) 0.25))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/coin"&gt;&lt;a href="#test/letnondeterministic/coin"&gt;&lt;code&gt;test/letnondeterministic/coin&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -1067,10 +1100,10 @@
  (reverse attempts)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002)
- (memory #(12582912 2388888 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
+ (memory #(12582912 2392024 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n ((((la 1 1) (la 1 2)) 0.333333333333333)\n (((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n (((la 1 1)\n (la 1 2)\n (la 2 1)\n (la 2 2)\n (ny 1 1)\n (ny 1 2)\n (ny 2 1)\n (ny 2 2)\n (bos 1 1)\n (bos 1 2)\n (bos 2 1)\n (bos 2 2))\n 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 43)\n (accepted 3)\n (ratio 0.0697674418604651)\n (distribution\n ((((la 1 1) (la 1 2) (la 2 1) (la 2 2) (ny 1 1)) 0.333333333333333)\n (((la 1 1)\n (la 1 2)\n (la 2 1)\n (la 2 2)\n (ny 1 1)\n (ny 1 2)\n (ny 2 1)\n (ny 2 2)\n (bos 1 1)\n (bos 1 2)\n (bos 2 1)\n (bos 2 2))\n 0.333333333333333)\n (((la 1 1) (la 1 2)) 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/coin+cut"&gt;&lt;a href="#test/letnondeterministic/coin+cut"&gt;&lt;code&gt;test/letnondeterministic/coin+cut&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -1097,9 +1130,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2393432 1048576))
+ (memory #(12582912 2393912 1048576))
  (stdout
- &amp;quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n 0.333333333333333)\n (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333)\n (((la 1 1) (la 1 2)) 0.333333333333333))))\n&amp;quot;)
+ &amp;quot;((left 0)\n (tried 23)\n (accepted 3)\n (ratio 0.130434782608696)\n (distribution\n ((((la 1 1) (la 1 2) (ny 1 1) (bos 1 1) (bos 1 2) (bos 2 1) (bos 2 2))\n 0.333333333333333)\n (((la 1 1) (la 1 2)) 0.333333333333333)\n (((la 1 1) (la 1 2) (ny 1 1)) 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/letnondeterministic/graph+cycles/bfs"&gt;&lt;a href="#test/letnondeterministic/graph+cycles/bfs"&gt;&lt;code&gt;test/letnondeterministic/graph+cycles/bfs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
@@ -1121,8 +1154,8 @@
  (let* ((source 'a) (p (path source 'a '()))) (cons source p)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0)
- (memory #(12582912 2397096 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001)
+ (memory #(12582912 2397152 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 17)\n (accepted 3)\n (ratio 0.176470588235294)\n (distribution\n (((a b d e a) 0.333333333333333)\n ((a b c a) 0.333333333333333)\n ((a b c e a) 0.333333333333333))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
@@ -1296,8 +1329,8 @@
  (map (λ (triple) (list (car triple) (cadr triple))) p))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004)
- (memory #(12582912 2460560 1048576))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003)
+ (memory #(12582912 2462840 1048576))
  (stdout
  &amp;quot;((left 0)\n (tried 4013)\n (accepted 130)\n (ratio 0.0323947171692001)\n (distribution\n ((((a b) ((a 1) (b 2))) 0.00769230769230769)\n (((a b) ((a 1) (b 3))) 0.00769230769230769)\n (((a c) ((a 1) (b 2) (c 5))) 0.00769230769230769)\n (((a c) ((a 1) (b 3) (c 5))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 3))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 4))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 5))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 6))) 0.00769230769230769)\n (((a d) ((a 1) (b 2) (d 7))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 4))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 5))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 6))) 0.00769230769230769)\n (((a d) ((a 1) (b 3) (d 7))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (c 5) (e 6))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (c 5) (e 7))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (d 3) (e 4))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (d 3) (e 5))) 0.00769230769230769)\n (((a e) ((a 1) (b 2) (d 4) (e 5))) 0.00769230769230769)\n (((a e) ((a 1) (b 3) (c 5) (e 6))) 0.00769230769230769)\n (((a e) ((a 1) (b 3) (c 5) (e 7))) 0.00769230769230769)\n (((a e) ((a 1) (b 3) (d 4) (e 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 3))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 4))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 4))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 3) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 4) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 4) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 4) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 5) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 2) (e 6) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (c 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (c 5) (e 6) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 4))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 3) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 4) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 4) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 4) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 2) (e 5) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 4) (a 5))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 4) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 4) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 3) (e 5) (a 7))) 0.00769230769230769)\n (((b a) ((b 1) (d 4) (e 5) (a 6))) 0.00769230769230769)\n (((b a) ((b 1) (d 4) (e 5) (a 7))) 0.00769230769230769)\n (((b c) ((b 1) (c 2))) 0.00769230769230769)\n (((b c) ((b 1) (c 5))) 0.00769230769230769)\n (((b d) ((b 1) (d 2))) 0.00769230769230769)\n (((b d) ((b 1) (d 3))) 0.00769230769230769)\n (((b d) ((b 1) (d 4))) 0.00769230769230769)\n (((b d) ((b 1) (d 5))) 0.00769230769230769)\n (((b d) ((b 1) (d 6))) 0.00769230769230769)\n (((b d) ((b 1) (d 7))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 3))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 4))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 5))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 6))) 0.00769230769230769)\n (((b e) ((b 1) (c 2) (e 7))) 0.00769230769230769)\n (((b e) ((b 1) (c 5) (e 6))) 0.00769230769230769)\n (((b e) ((b 1) (c 5) (e 7))) 0.00769230769230769)\n (((b e) ((b 1) (d 2) (e 3))) 0.00769230769230769)\n (((b e) ((b 1) (d 2) (e 4))) 0.00769230769230769)\n (((b e) ((b 1) (d 2) (e 5))) 0.00769230769230769)\n (((b e) ((b 1) (d 3) (e 4))) 0.00769230769230769)\n (((b e) ((b 1) (d 3) (e 5))) 0.00769230769230769)\n (((b e) ((b 1) (d 4) (e 5))) 0.00769230769230769)\n (((c a) ((c 1) (a 2))) 0.00769230769230769)\n (((c a) ((c 1) (a 3))) 0.00769230769230769)\n (((c a) ((c 1) (a 4))) 0.00769230769230769)\n (((c a) ((c 1) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 3))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 4))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 2) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 4))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 3) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 4) (a 5))) 0.00769230769230769)\n (((c a) ((c 1) (e 4) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 4) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 5) (a 6))) 0.00769230769230769)\n (((c a) ((c 1) (e 5) (a 7))) 0.00769230769230769)\n (((c a) ((c 1) (e 6) (a 7))) 0.00769230769230769)\n (((c b) ((c 1) (a 2) (b 3))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n (((c d) ((c 1) (a 2) (b 3) (d 7))) 0.00769230769230769)\n (((c e) ((c 1) (a 2) (b 3) (d 4) (e 5))) 0.00769230769230769)\n (((c e) ((c 1) (e 2))) 0.00769230769230769)\n (((c e) ((c 1) (e 3))) 0.00769230769230769)\n (((c e) ((c 1) (e 4))) 0.00769230769230769)\n (((c e) ((c 1) (e 5))) 0.00769230769230769)\n (((c e) ((c 1) (e 6))) 0.00769230769230769)\n (((c e) ((c 1) (e 7))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 4))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 5))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 6))) 0.00769230769230769)\n (((d a) ((d 1) (e 3) (a 7))) 0.00769230769230769)\n (((d a) ((d 1) (e 4) (a 5))) 0.00769230769230769)\n (((d a) ((d 1) (e 4) (a 6))) 0.00769230769230769)\n (((d a) ((d 1) (e 4) (a 7))) 0.00769230769230769)\n (((d a) ((d 1) (e 5) (a 6))) 0.00769230769230769)\n (((d a) ((d 1) (e 5) (a 7))) 0.00769230769230769)\n (((d e) ((d 1) (e 3))) 0.00769230769230769)\n (((d e) ((d 1) (e 4))) 0.00769230769230769)\n (((d e) ((d 1) (e 5))) 0.00769230769230769)\n (((e a) ((e 1) (a 2))) 0.00769230769230769)\n (((e a) ((e 1) (a 3))) 0.00769230769230769)\n (((e a) ((e 1) (a 4))) 0.00769230769230769)\n (((e a) ((e 1) (a 5))) 0.00769230769230769)\n (((e a) ((e 1) (a 6))) 0.00769230769230769)\n (((e a) ((e 1) (a 7))) 0.00769230769230769)\n (((e b) ((e 1) (a 2) (b 3))) 0.00769230769230769)\n (((e c) ((e 1) (a 2) (b 3) (c 5))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 4))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 5))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 6))) 0.00769230769230769)\n (((e d) ((e 1) (a 2) (b 3) (d 7))) 0.00769230769230769))))\n&amp;quot;)
  (stderr &amp;quot;&amp;quot;))
@@ -1352,14 +1385,14 @@
  (⊦= 'a (μkanren-state-find v2 s2))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.005) (memory #(12582912 2562976 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.006) (memory #(12582912 2572064 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/=°"&gt;&lt;a href="#test/=°"&gt;&lt;code&gt;test/=°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/=° _) (⊦= '(α) (°-&amp;gt;list/ground (=° 'z 'z))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.014) (memory #(12582912 2564120 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.014) (memory #(12582912 2573160 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/sharing"&gt;&lt;a href="#test/sharing"&gt;&lt;code&gt;test/sharing&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1373,7 +1406,7 @@
  (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.007) (memory #(12582912 2569928 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.007) (memory #(12582912 2571760 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/peano°"&gt;&lt;a href="#test/peano°"&gt;&lt;code&gt;test/peano°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1407,7 +1440,7 @@
  (°-&amp;gt;list/ground (take° 10 (fresh° (n) (church° n))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.015) (memory #(12582912 2573328 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.016) (memory #(12582912 2583480 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/append°"&gt;&lt;a href="#test/append°"&gt;&lt;code&gt;test/append°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1448,7 +1481,7 @@
  (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2581896 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2585800 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/project°"&gt;&lt;a href="#test/project°"&gt;&lt;code&gt;test/project°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1463,7 +1496,7 @@
  (project° ((s* s)) (=° r (+ s* 500))))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(12582912 2569896 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(12582912 2572432 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/groupby°/empty"&gt;&lt;a href="#test/groupby°/empty"&gt;&lt;code&gt;test/groupby°/empty&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The following table has been kept from the PostgreSQL documentation example on &lt;i&gt;window functions &lt;/i&gt;&lt;cite&gt;[&lt;a href="#cite1576"&gt;1&lt;/a&gt;]&lt;/cite&gt;:
@@ -1525,7 +1558,7 @@
  (⊭ (fds-queue-empty? t))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 1817832 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 1809424 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-cons-cdr"&gt;&lt;a href="#test-cons-cdr"&gt;&lt;code&gt;test-cons-cdr&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1558,7 +1591,7 @@
  (⊨ (fds-queue-empty? q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1818384 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1809976 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-empty-car"&gt;&lt;a href="#test-empty-car"&gt;&lt;code&gt;test-empty-car&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1569,7 +1602,7 @@
  (⊦⧳ ((exn)) (fds-queue-cdr q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 1824968 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(6291456 1816560 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -1630,7 +1663,7 @@
  (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(6291456 1822080 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(6291456 1820992 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-ref"&gt;&lt;a href="#test-ref"&gt;&lt;code&gt;test-ref&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1645,7 +1678,7 @@
  (⊦= 'g (sbral-ref q 6))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1823584 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1822424 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-list-&amp;gt;sbral"&gt;&lt;a href="#test-list-&amp;gt;sbral"&gt;&lt;code&gt;test-list-&gt;sbral&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1681,7 +1714,7 @@
  (list-&amp;gt;sbral ll))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1827168 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1825512 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-length"&gt;&lt;a href="#test-length"&gt;&lt;code&gt;test-length&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1690,7 +1723,7 @@
  (⊦= (length l) (length/sbral q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1828704 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1827024 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-update"&gt;&lt;a href="#test-update"&gt;&lt;code&gt;test-update&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1700,7 +1733,7 @@
  (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1830168 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1828464 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test-identity"&gt;&lt;a href="#test-identity"&gt;&lt;code&gt;test-identity&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1708,7 +1741,7 @@
  (let1 (l '(a b c d e f g)) (⊦= l (sbral-&amp;gt;list (list-&amp;gt;sbral l)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 1830832 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1829072 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-stream-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -1743,7 +1776,7 @@
  (§-&amp;gt;list nats))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(6291456 1855192 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(6291456 1859728 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/stream/fibs"&gt;&lt;a href="#test/stream/fibs"&gt;&lt;code&gt;test/stream/fibs&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1772,7 +1805,7 @@
  (§-&amp;gt;list fibs))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(6291456 1867864 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(6291456 1871704 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/stream/ones"&gt;&lt;a href="#test/stream/ones"&gt;&lt;code&gt;test/stream/ones&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1781,7 +1814,7 @@
  (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&amp;gt;list ones))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1871352 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(6291456 1875264 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/stream/primes"&gt;&lt;a href="#test/stream/primes"&gt;&lt;code&gt;test/stream/primes&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1791,7 +1824,7 @@
  (§-&amp;gt;list primes))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.01) (memory #(6291456 2049400 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.01) (memory #(6291456 2032472 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/stream/ones+τ"&gt;&lt;a href="#test/stream/ones+τ"&gt;&lt;code&gt;test/stream/ones+τ&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -1800,7 +1833,7 @@
  (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&amp;gt;list ones))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 2052920 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.001) (memory #(6291456 2035992 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-timsort-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
@@ -1938,7 +1971,7 @@
  (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.005) (memory #(12582912 2215360 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.004) (memory #(12582912 2218192 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id="test/eval-exp°"&gt;&lt;a href="#test/eval-exp°"&gt;&lt;code&gt;test/eval-exp°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
@@ -2065,5 +2098,5 @@
  (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.126) (memory #(12582912 2225992 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.127) (memory #(12582912 2228992 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item></channel></rss>

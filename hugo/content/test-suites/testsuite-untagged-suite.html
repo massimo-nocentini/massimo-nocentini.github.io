@@ -73,7 +73,7 @@
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2215360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2218192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/eval-exp°"><a href="#test/eval-exp°"><code>test/eval-exp°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -200,5 +200,5 @@
             (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.126) (memory #(12582912 2225992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.127) (memory #(12582912 2228992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

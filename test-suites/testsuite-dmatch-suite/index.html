@@ -1,4 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Massimo Nocentini - A small measure of peace</title><meta name=description content="<!doctype html>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><script>(function(){var t,n=localStorage.getItem("theme"),e=!1;n==="dark"?(document.documentElement.setAttribute("data-theme","dark"),e=!0):n==="light"?document.documentElement.setAttribute("data-theme","light"):window.matchMedia("(prefers-color-scheme: dark)").matches&&(document.documentElement.setAttribute("data-theme","dark"),e=!0),t=document.getElementById("hljs-dark"),t&&(t.disabled=!e)})()</script><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Massimo Nocentini - A small measure of peace</title><meta name=description content="<!doctype html>
 
 
 
@@ -51,7 +51,7 @@ test/base-non-overlapping: pass
           (#(hello ,r ,e) r))))
 
 
-((eta 0.008) (memory #(8470688 2274000 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.008) (memory #(8475808 2271032 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/h-non-overlapping: pass
 
@@ -64,7 +64,7 @@ test/h-non-overlapping: pass
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 
 
-((eta 0.0) (memory #(8470688 2275024 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(8475808 2268080 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/h-overlapping: pass
 
@@ -78,7 +78,7 @@ test/h-overlapping: pass
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
 
 
-((eta 0.004) (memory #(8470688 2278080 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.004) (memory #(8475808 2273336 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/meta-circular-interpreter: pass
 
@@ -117,7 +117,7 @@ test/meta-circular-interpreter: pass
   (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
 
 
-((eta 0.001) (memory #(8470688 2274008 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
+((eta 0.001) (memory #(8475808 2272416 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
 
 test/λ-match-first: pass
 
@@ -130,7 +130,7 @@ test/λ-match-first: pass
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
 
 
-((eta 0.0) (memory #(8470688 2274264 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+((eta 0.0) (memory #(8475808 2272672 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
 
 test/λ-match-first/unquote-unquote-pattern: pass
 
@@ -138,8 +138,8 @@ test/λ-match-first/unquote-unquote-pattern: pass
   (⊦= 2 (match/first '(1 (1)) ((,x (,,x)) (add1 x)))))
 
 
-((eta 0.0) (memory #(8470688 2275712 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebSite","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#website"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Organization","name":"Massimo Nocentini","@id":"https://massimo-nocentini.github.io/#organization","url":"https://massimo-nocentini.github.io/"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebPage","name":"","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/","url":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#breadcrumb"}}</script><script type=application/ld+json>{"@context":"https://schema.org","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/","name":"","position":3}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#article","isPartOf":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/"},"author":{"name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/","@id":"https://massimo-nocentini.github.io/#author"},"headline":"","description":"\u003c!doctype html\u003e Implementation Tests test\/base-non-overlapping: pass (define (test\/base-non-overlapping _) (⊦= \u0027empty (match\/non-overlapping \u0027() (() \u0027empty))) (⊦= \u0027empty (match\/non-overlapping #() (#() \u0027empty))) (⊦= \u0027() (match\/non-overlapping \u0027() (,r r))) (⊦= #() (match\/non-overlapping #() (,r r))) (⊦= \u0027p (match\/non-overlapping \u0027(p) ((,r) r))) (⊦= #t (match\/non-overlapping #(p) (#(p) #t))) (⊦= \u0027p (match\/non-overlapping #(p) (#(,r) r))) (⊦= 3 (match\/non-overlapping #(3 2) (#(,r 2) r))) (⊦= \u0027(3 2) (match\/non-overlapping #(3 2) (#(,r ,s) (list r s)))) (⊦= \u0027(3 2 ()) (match\/non-overlapping (vector-\u0026gt;list #(3 2)) ((,r ,s unquote t) (list r s t)))) (⊦⧳ ((exn)) (match\/non-overlapping #(3 2) ((,r 2 ,t) r))) (⊦= 3 (match\/non-overlapping #(3 2) (#(,r ,e) r))) (⊦= 3 (match\/non-overlapping (make-record-instance \u0027hello 3 2) (#(hello ,r ,e) r)))) ((eta 0.008) (memory #(8470688 2274000 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/h-non-overlapping: pass (define (test\/h-non-overlapping _) (define (h x y) (match\/non-overlapping (cons x y) (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b)) (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (\u002b a b c)))) (⊦= \u0027(12 8) (list (h 3 4) (apply h \u0027(1 (3 4)))))) ((eta 0.0) (memory #(8470688 2275024 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/h-overlapping: pass (define (test\/h-overlapping _) (define (w x y) (match\/non-overlapping (cons x y) (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b)) ((,a unquote b) (\u002b a b)) (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (\u002b a b c)))) (⊦⧳ ((exn)) (list (w 3 4) (apply w \u0027(1 (3 4)))))) ((eta 0.004) (memory #(8470688 2278080 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/meta-circular-interpreter: pass (define (test\/meta-circular-interpreter _) (define (lookup x env) (cond ((assq x env) =\u0026gt; cdr) (else (error \u0026quot;Can\u0027t find \u0026quot; x)))) (define (int code env) (match\/non-overlapping code (\u0027,x x) (((let (,x ,e) ,body) ⊣ (symbol? x)) (let ((xv (int e env))) (int body (cons (cons x xv) env)))) ((τ ,body) (τ (int body env))) (((λ ,argl ,body) ⊣ (symbol? argl)) (λ arglv (int body (cons (cons argl arglv) env)))) (((λ (,x) ,body) ⊣ (symbol? x)) (λ (xv) (int body (cons (cons x xv) env)))) (((,op unquote args) ⊣ (not (or (eq? op \u0027quote) (eq? op \u0027let) (eq? op \u0027τ) (eq? op \u0027λ)))) (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args))) (apply opv argvs))) ((,x ⊣ (symbol? x)) (lookup x env)) ((,x ⊣ (or (number? x) (string? x))) x))) (define env0 (interaction-environment\/symbols \u0027(\u002b - display identity))) (define-syntax-rule (dint body) (int \u0027body env0)) (⊦ equal? 1 (dint 1)) (⊦ equal? \u0027x (dint \u0027x)) (⊦ void? (dint (display \u0027x))) (⊦ equal? \u0027x (dint (identity \u0027x))) (⊦⧳ ((exn)) (dint (display x))) (⊦ equal? 6 (dint (let (x (\u002b 1 2 3)) x))) (⊦ equal? 1 (let1 (t (dint (τ 1))) (t))) (⊦ equal? 1 ((dint (λ (x) x)) 1)) (⊦ equal? \u0027(1 2 3) ((dint (λ x x)) 1 2 3)) (⊦ equal? 5 (((dint (λ (x) (λ (y) (\u002b x y)))) 2) 3))) ((eta 0.001) (memory #(8470688 2274008 1048576)) (stdout \u0026quot;x\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/λ-match-first: pass (define (test\/λ-match-first _) (define h (λ-match\/first (((,a ,b) ⊣ (and (number? a) (number? b))) (* a b)) (((,a (,b ,c)) ⊣ (and (number? a) (number? b) (number? c))) (\u002b a b c)))) (⊦= \u0027(12 8) (list (h 3 4) (apply h \u0027(1 (3 4)))))) ((eta 0.0) (memory #(8470688 2274264 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) test\/λ-match-first\/unquote-unquote-pattern: pass (define (test\/λ-match-first\/unquote-unquote-pattern _) (⊦= 2 (match\/first \u0027(1 (1)) ((,x (,,x)) (add1 x))))) ((eta 0.0) (memory #(8470688 2275712 1048576)) (stdout \u0026quot;\u0026quot;) (stderr \u0026quot;\u0026quot;)) ","inLanguage":"en","wordCount":568,"dateCreated":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","keywords":[""],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/"},"publisher":{"@type":"Organization","name":"https://massimo-nocentini.github.io/","logo":{"@type":"ImageObject","url":"https://massimo-nocentini.github.io/","height":60,"width":60}}}</script><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html>
+((eta 0.0) (memory #(8475808 2274120 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
+"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/","name":"Test-Suites","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/","name":"","position":3}]},{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"","url":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"0001-01-01T00:00:00+00:00","dateModified":"0001-01-01T00:00:00+00:00","datePublished":"0001-01-01T00:00:00+00:00","description":"\u003c!doctype html\u003e Implementation Tests test/base-non-overlapping: pass (define (test/base-non-overlapping _) (⊦= 'empty (match/non-overlapping '() (() 'empty))) (⊦= 'empty (match/non-overlapping #() (#() 'empty))) (⊦= '() (match/non-overlapping '() (,r r))) (⊦= #() (match/non-overlapping #() (,r r))) (⊦= 'p (match/non-overlapping '(p) ((,r) r))) (⊦= #t (match/non-overlapping #(p) (#(p) #t))) (⊦= 'p (match/non-overlapping #(p) (#(,r) r))) (⊦= 3 (match/non-overlapping #(3 2) (#(,r 2) r))) (⊦= '(3 2) (match/non-overlapping #(3 2) (#(,r ,s) (list r s)))) (⊦= '(3 2 ()) (match/non-overlapping (vector-\u003elist #(3 2)) ((,r ,s unquote t) (list r s t)))) (⊦⧳ ((exn)) (match/non-overlapping #(3 2) ((,r 2 ,t) r))) (⊦= 3 (match/non-overlapping #(3 2) (#(,r ,e) r))) (⊦= 3 (match/non-overlapping (make-record-instance 'hello 3 2) (#(hello ,r ,e) r)))) ((eta 0.008) (memory #(8475808 2271032 1048576)) (stdout \"\") (stderr \"\")) test/h-non-overlapping: pass (define (test/h-non-overlapping _) (define (h x y) (match/non-overlapping (cons x y) (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b)) (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c)))) (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4)))))) ((eta 0.0) (memory #(8475808 2268080 1048576)) (stdout \"\") (stderr \"\")) test/h-overlapping: pass (define (test/h-overlapping _) (define (w x y) (match/non-overlapping (cons x y) (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b)) ((,a unquote b) (+ a b)) (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c)))) (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4)))))) ((eta 0.004) (memory #(8475808 2273336 1048576)) (stdout \"\") (stderr \"\")) test/meta-circular-interpreter: pass (define (test/meta-circular-interpreter _) (define (lookup x env) (cond ((assq x env) =\u003e cdr) (else (error \"Can't find \" x)))) (define (int code env) (match/non-overlapping code (',x x) (((let (,x ,e) ,body) ⊣ (symbol? x)) (let ((xv (int e env))) (int body (cons (cons x xv) env)))) ((τ ,body) (τ (int body env))) (((λ ,argl ,body) ⊣ (symbol? argl)) (λ arglv (int body (cons (cons argl arglv) env)))) (((λ (,x) ,body) ⊣ (symbol? x)) (λ (xv) (int body (cons (cons x xv) env)))) (((,op unquote args) ⊣ (not (or (eq? op 'quote) (eq? op 'let) (eq? op 'τ) (eq? op 'λ)))) (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args))) (apply opv argvs))) ((,x ⊣ (symbol? x)) (lookup x env)) ((,x ⊣ (or (number? x) (string? x))) x))) (define env0 (interaction-environment/symbols '(+ - display identity))) (define-syntax-rule (dint body) (int 'body env0)) (⊦ equal? 1 (dint 1)) (⊦ equal? 'x (dint 'x)) (⊦ void? (dint (display 'x))) (⊦ equal? 'x (dint (identity 'x))) (⊦⧳ ((exn)) (dint (display x))) (⊦ equal? 6 (dint (let (x (+ 1 2 3)) x))) (⊦ equal? 1 (let1 (t (dint (τ 1))) (t))) (⊦ equal? 1 ((dint (λ (x) x)) 1)) (⊦ equal? '(1 2 3) ((dint (λ x x)) 1 2 3)) (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3))) ((eta 0.001) (memory #(8475808 2272416 1048576)) (stdout \"x\") (stderr \"\")) test/λ-match-first: pass (define (test/λ-match-first _) (define h (λ-match/first (((,a ,b) ⊣ (and (number? a) (number? b))) (* a b)) (((,a (,b ,c)) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c)))) (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4)))))) ((eta 0.0) (memory #(8475808 2272672 1048576)) (stdout \"\") (stderr \"\")) test/λ-match-first/unquote-unquote-pattern: pass (define (test/λ-match-first/unquote-unquote-pattern _) (⊦= 2 (match/first '(1 (1)) ((,x (,,x)) (add1 x))))) ((eta 0.0) (memory #(8475808 2274120 1048576)) (stdout \"\") (stderr \"\")) ","headline":"","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"wordCount":568}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="Massimo Nocentini"><meta property="og:description" content="<!doctype html> Implementation Tests test/base-non-overlapping: pass (define (test/base-non-overlapping _) (⊦= 'empty (match/non-overlapping '() (() 'empty))) (⊦= 'empty (match/non-overlapping #() (#() 'empty))) (⊦= '() (match/non-overlapping '() (,r r))) (⊦= #() (match/non-overlapping #() (,r r))) (⊦= 'p (match/non-overlapping '(p) ((,r) r))) (⊦= #t (match/non-overlapping #(p) (#(p) #t))) (⊦= 'p (match/non-overlapping #(p) (#(,r) r))) (⊦= 3 (match/non-overlapping #(3 2) (#(,r 2) r))) (⊦= '(3 2) (match/non-overlapping #(3 2) (#(,r ,s) (list r s)))) (⊦= '(3 2 ()) (match/non-overlapping (vector->list #(3 2)) ((,r ,s unquote t) (list r s t)))) (⊦⧳ ((exn)) (match/non-overlapping #(3 2) ((,r 2 ,t) r))) (⊦= 3 (match/non-overlapping #(3 2) (#(,r ,e) r))) (⊦= 3 (match/non-overlapping (make-record-instance 'hello 3 2) (#(hello ,r ,e) r)))) ((eta 0.008) (memory #(8475808 2271032 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;)) test/h-non-overlapping: pass (define (test/h-non-overlapping _) (define (h x y) (match/non-overlapping (cons x y) (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b)) (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c)))) (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4)))))) ((eta 0.0) (memory #(8475808 2268080 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;)) test/h-overlapping: pass (define (test/h-overlapping _) (define (w x y) (match/non-overlapping (cons x y) (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b)) ((,a unquote b) (+ a b)) (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c)))) (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4)))))) ((eta 0.004) (memory #(8475808 2273336 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;)) test/meta-circular-interpreter: pass (define (test/meta-circular-interpreter _) (define (lookup x env) (cond ((assq x env) => cdr) (else (error &#34;Can't find &#34; x)))) (define (int code env) (match/non-overlapping code (',x x) (((let (,x ,e) ,body) ⊣ (symbol? x)) (let ((xv (int e env))) (int body (cons (cons x xv) env)))) ((τ ,body) (τ (int body env))) (((λ ,argl ,body) ⊣ (symbol? argl)) (λ arglv (int body (cons (cons argl arglv) env)))) (((λ (,x) ,body) ⊣ (symbol? x)) (λ (xv) (int body (cons (cons x xv) env)))) (((,op unquote args) ⊣ (not (or (eq? op 'quote) (eq? op 'let) (eq? op 'τ) (eq? op 'λ)))) (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args))) (apply opv argvs))) ((,x ⊣ (symbol? x)) (lookup x env)) ((,x ⊣ (or (number? x) (string? x))) x))) (define env0 (interaction-environment/symbols '(+ - display identity))) (define-syntax-rule (dint body) (int 'body env0)) (⊦ equal? 1 (dint 1)) (⊦ equal? 'x (dint 'x)) (⊦ void? (dint (display 'x))) (⊦ equal? 'x (dint (identity 'x))) (⊦⧳ ((exn)) (dint (display x))) (⊦ equal? 6 (dint (let (x (+ 1 2 3)) x))) (⊦ equal? 1 (let1 (t (dint (τ 1))) (t))) (⊦ equal? 1 ((dint (λ (x) x)) 1)) (⊦ equal? '(1 2 3) ((dint (λ x x)) 1 2 3)) (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3))) ((eta 0.001) (memory #(8475808 2272416 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;)) test/λ-match-first: pass (define (test/λ-match-first _) (define h (λ-match/first (((,a ,b) ⊣ (and (number? a) (number? b))) (* a b)) (((,a (,b ,c)) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c)))) (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4)))))) ((eta 0.0) (memory #(8475808 2272672 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;)) test/λ-match-first/unquote-unquote-pattern: pass (define (test/λ-match-first/unquote-unquote-pattern _) (⊦= 2 (match/first '(1 (1)) ((,x (,,x)) (add1 x))))) ((eta 0.0) (memory #(8475808 2274120 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="test-suites"><link rel=canonical href=https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
 
 
 
@@ -172,161 +172,13 @@ test/base-non-overlapping: pass
 
 (define (test/base-non-overlapping _)
   (⊦= 'empty (match/non-overlapping '() (() 'empty)))
-  (⊦= 'empty (match/non-overlapping #() (#() 'empty)))
-  (⊦= '() (match/non-overlapping '() (,r r)))
-  (⊦= #() (match/non-overlapping #() (,r r)))
-  (⊦= 'p (match/non-overlapping '(p) ((,r) r)))
-  (⊦= #t (match/non-overlapping #(p) (#(p) #t)))
-  (⊦= 'p (match/non-overlapping #(p) (#(,r) r)))
-  (⊦= 3 (match/non-overlapping #(3 2) (#(,r 2) r)))
-  (⊦= '(3 2) (match/non-overlapping #(3 2) (#(,r ,s) (list r s))))
-  (⊦= '(3 2 ())
-        (match/non-overlapping
-          (vector->list #(3 2))
-          ((,r ,s unquote t) (list r s t))))
-  (⊦⧳ ((exn)) (match/non-overlapping #(3 2) ((,r 2 ,t) r)))
-  (⊦= 3 (match/non-overlapping #(3 2) (#(,r ,e) r)))
-  (⊦= 3
-        (match/non-overlapping
-          (make-record-instance 'hello 3 2)
-          (#(hello ,r ,e) r))))
-
-
-((eta 0.008) (memory #(8470688 2274000 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-
-test/h-non-overlapping: pass
-
-(define (test/h-non-overlapping _)
-  (define (h x y)
-    (match/non-overlapping
-      (cons x y)
-      (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b))
-      (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c))))
-  (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
-
-
-((eta 0.0) (memory #(8470688 2275024 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-
-test/h-overlapping: pass
-
-(define (test/h-overlapping _)
-  (define (w x y)
-    (match/non-overlapping
-      (cons x y)
-      (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b))
-      ((,a unquote b) (+ a b))
-      (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c))))
-  (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
-
-
-((eta 0.004) (memory #(8470688 2278080 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-
-test/meta-circular-interpreter: pass
-
-(define (test/meta-circular-interpreter _)
-  (define (lookup x env)
-    (cond ((assq x env) => cdr) (else (error &#34;Can't find &#34; x))))
-  (define (int code env)
-    (match/non-overlapping
-      code
-      (',x x)
-      (((let (,x ,e) ,body) ⊣ (symbol? x))
-       (let ((xv (int e env))) (int body (cons (cons x xv) env))))
-      ((τ ,body) (τ (int body env)))
-      (((λ ,argl ,body) ⊣ (symbol? argl))
-       (λ arglv (int body (cons (cons argl arglv) env))))
-      (((λ (,x) ,body) ⊣ (symbol? x))
-       (λ (xv) (int body (cons (cons x xv) env))))
-      (((,op unquote args)
-        ⊣
-        (not (or (eq? op 'quote) (eq? op 'let) (eq? op 'τ) (eq? op 'λ))))
-       (let ((opv (int op env)) (argvs (map (λ (c) (int c env)) args)))
-         (apply opv argvs)))
-      ((,x ⊣ (symbol? x)) (lookup x env))
-      ((,x ⊣ (or (number? x) (string? x))) x)))
-  (define env0 (interaction-environment/symbols '(+ - display identity)))
-  (define-syntax-rule (dint body) (int 'body env0))
-  (⊦ equal? 1 (dint 1))
-  (⊦ equal? 'x (dint 'x))
-  (⊦ void? (dint (display 'x)))
-  (⊦ equal? 'x (dint (identity 'x)))
-  (⊦⧳ ((exn)) (dint (display x)))
-  (⊦ equal? 6 (dint (let (x (+ 1 2 3)) x)))
-  (⊦ equal? 1 (let1 (t (dint (τ 1))) (t)))
-  (⊦ equal? 1 ((dint (λ (x) x)) 1))
-  (⊦ equal? '(1 2 3) ((dint (λ x x)) 1 2 3))
-  (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
-
-
-((eta 0.001) (memory #(8470688 2274008 1048576)) (stdout &#34;x&#34;) (stderr &#34;&#34;))
-
-test/λ-match-first: pass
-
-(define (test/λ-match-first _)
-  (define h
-    (λ-match/first
-      (((,a ,b) ⊣ (and (number? a) (number? b))) (* a b))
-      (((,a (,b ,c)) ⊣ (and (number? a) (number? b) (number? c)))
-       (+ a b c))))
-  (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
-
-
-((eta 0.0) (memory #(8470688 2274264 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-
-test/λ-match-first/unquote-unquote-pattern: pass
-
-(define (test/λ-match-first/unquote-unquote-pattern _)
-  (⊦= 2 (match/first '(1 (1)) ((,x (,,x)) (add1 x)))))
-
-
-((eta 0.0) (memory #(8470688 2275712 1048576)) (stdout &#34;&#34;) (stderr &#34;&#34;))
-"><meta property="og:url" content="https://massimo-nocentini.github.io/test-suites/testsuite-dmatch-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Massimo Nocentini"><meta name=twitter:title content="Massimo Nocentini"><meta name=twitter:description content="<!doctype html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Implementation
-
-
-Tests
-test/base-non-overlapping: pass
-
-(define (test/base-non-overlapping _)
-  (⊦= 'empty (match/non-overlapping '() (() 'empty)))
-  (⊦= …</!doctype>"><meta name=twitter:card content="summary_large_image"><link href=https://massimo-nocentini.github.io/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.161.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css integrity=sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/brands.css integrity=sha384-+eXGm6TmVoCZR1gX03US+L++L2mJIfOvp2X0+luTuEktXaF5F+e3zn0sO0HBvOyT crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/fontawesome.css integrity=sha384-B5nyPZa7e84uCJEYHtevCdVYtQosWsbDSRtq3cy/jeSVtQW05GL8CKXO7waXsjPK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/regular.css integrity=sha384-V71z/A/p/DGaZAryHhiSXRQj8HdQmK2nBgL2bX23MGD+h6ZKpyxOO76f5eSXmIaj crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/solid.css integrity=sha384-1IIShlrK5iYgvS7OAgIH3prz4RAFP7hHZ2MaLIb9l3+trFwwnw/NdCWcUHlymZDU crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg.css integrity=sha384-iBa7uugTOHXqQ2ngvDYJyKrPPQbd9n2P3EQe+o/0+HZe5TNvV+LO5X0lLLUrXLHP crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/svg-with-js.css integrity=sha384-STWnS5AGz6M2YxsnGAd536EqcE2y+ktGovMMuhtXLsCBtl7lujeQj2eN4eDxa57x crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-font-face.css integrity=sha384-fH83IkgQi7kturzlxpXfNdsR8aUOcqj5HUORRVnSvJgObZkIw6aqKAaQx20IWyB/ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v4-shims.css integrity=sha384-cCODJHSivNBsaHei/8LC0HUD58kToSbDU+xT7Rs51BO1v/IvgT/uM0W6xMoUqKfn crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.0.1/css/v5-font-face.css integrity=sha384-atSdF89mIn15dv+o2LKkDM6mCh3hwh6A7mwZ6F2it/kenqZbMu+QW/ye1OG4XSWV crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css integrity=sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu crossorigin=anonymous><link rel=stylesheet href=https://massimo-nocentini.github.io/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://massimo-nocentini.github.io/css/syntax.css><link rel=stylesheet href=https://massimo-nocentini.github.io/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
-<span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span>
-<span class=icon-bar></span>
-<span class=icon-bar></span>
+  (⊦= …</!doctype>"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.163.1"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/brands.css integrity=sha384-+PvcAGLOWIanfjuRoscHUyZB100N7wP779T8D3ao0FniyFFKMw9MIJpgtJO3+pdF crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/fontawesome.css integrity=sha384-mj4mLShEAyWi4Bui9LmFkAjPYWof6WrG8DfS8ebHhjm4/MClMqMMHpQzehNk5HeM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/regular.css integrity=sha384-eS8Ja07iO8AOH11Hzegc5aZyN8CpY+oFwClH6MIlOKUOA3J4Oqjt8Xia9VUSU0GB crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/solid.css integrity=sha384-LpGibDKKReBRP3epUOaN9WBgkrQ1pJIvrrTugkYxVQgDvYuMCRaXk6YkrZ/h3aWk crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/svg.css integrity=sha384-V18zH+yIEosaHAByV0h4dqHHMPzBxZ7CYz9GQ1YsLTE9QIkEme0jAw9Qir7aIFT+ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/svg-with-js.css integrity=sha384-K25UPiwKhSAcEPQskU+UjXpz4iScCTNX5tcEpAGp1hQFNkOoIIwZiV69SfEfaRjK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v4-font-face.css integrity=sha384-YFnAdl87B7pW+Vhp7w9pvA8ZdBL8DQni4/++wrZ0f7o/Sc0pyThczmxZk9xLyc0Z crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v4-shims.css integrity=sha384-FnTDI00psVcN3KkfAip/6yRCeN17N3R7HZoAj+2+nttp8n1/vHfYUWvlscoUUhGJ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v5-font-face.css integrity=sha384-FUMXkSpZU/e6Ua2owr0Mktp/gtxxiK1OgCS1vDr8Lsz+gbyDFMSiKeHBRa07EjDn crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/css/print.css media=print><link rel=stylesheet href=/css/dark.css><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=/css/syntax.css><link id=hljs-dark rel=stylesheet href=/css/syntax-dark.css><link rel=stylesheet href=/css/codeblock.css><link rel=stylesheet href=/css/toc.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>A small measure of peace</a><div class="d-flex align-items-center"><button class=theme-toggle id=theme-toggle aria-label=Theme data-bs-toggle=tooltip data-bs-placement=bottom data-tooltip-auto="Auto (follows system)" data-tooltip-light="Light mode" data-tooltip-dark="Dark mode" title="Auto (follows system)">
+<span class="fas fa-adjust" id=theme-icon-auto></span>
+<span class="fas fa-sun" id=theme-icon-light style=display:none></span>
+<span class="fas fa-moon" id=theme-icon-dark style=display:none></span>
 </button>
-<a class=navbar-brand href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title=About href=/page/about/>About</a></li><li class=navlinks-container><a class=navlinks-parent role=button tabindex=0>Externals</a><div class=navlinks-children><a href=/Booklet-DSst/>Data Structures in Smalltalk</a>
-<a href=/libpq-rs/libpq/index.html>Crate libpq-rs</a>
-<a href=/igraph-rs/igraph/>Crate igraph-rs</a></div></li></ul></div></div></nav><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-</button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><div class=intro-header></div><div class=container role=main><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section2918><header><h1>Implementation</h1></header></section><section id=section2919><header><h1>Tests</h1></header></section><h2 id=test/base-non-overlapping><a href=#test/base-non-overlapping><code>test/base-non-overlapping</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/base-non-overlapping _)
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class=nav-item><a class=nav-link title=About href=/page/about/>About</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>Externals</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/Booklet-DSst/>Data Structures in Smalltalk</a></li><li><a class=dropdown-item href=/libpq-rs/libpq/index.html>Crate libpq-rs</a></li><li><a class=dropdown-item href=/igraph-rs/igraph/>Crate igraph-rs</a></li></ul></li></ul></div></div></nav><div class=intro-header></div><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><section id=section2918><header><h1>Implementation</h1></header></section><section id=section2919><header><h1>Tests</h1></header></section><h2 id=test/base-non-overlapping><a href=#test/base-non-overlapping><code>test/base-non-overlapping</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/base-non-overlapping _)
   (⊦= 'empty (match/non-overlapping '() (() 'empty)))
   (⊦= 'empty (match/non-overlapping #() (#() 'empty)))
   (⊦= '() (match/non-overlapping '() (,r r)))
@@ -346,7 +198,7 @@ test/base-non-overlapping: pass
         (match/non-overlapping
           (make-record-instance 'hello 3 2)
           (#(hello ,r ,e) r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(8470688 2274000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(8475808 2271032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/h-non-overlapping><a href=#test/h-non-overlapping><code>test/h-non-overlapping</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-non-overlapping _)
   (define (h x y)
     (match/non-overlapping
@@ -354,7 +206,7 @@ test/base-non-overlapping: pass
       (((,a unquote b) ⊣ (and (number? a) (number? b))) (* a b))
       (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c))))
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8470688 2275024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8475808 2268080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/h-overlapping><a href=#test/h-overlapping><code>test/h-overlapping</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/h-overlapping _)
   (define (w x y)
     (match/non-overlapping
@@ -363,7 +215,7 @@ test/base-non-overlapping: pass
       ((,a unquote b) (+ a b))
       (((,a ,b ,c) ⊣ (and (number? a) (number? b) (number? c))) (+ a b c))))
   (⊦⧳ ((exn)) (list (w 3 4) (apply w '(1 (3 4))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(8470688 2278080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(8475808 2273336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/meta-circular-interpreter><a href=#test/meta-circular-interpreter><code>test/meta-circular-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/meta-circular-interpreter _)
   (define (lookup x env)
     (cond ((assq x env) =&gt; cdr) (else (error &quot;Can't find &quot; x))))
@@ -397,7 +249,7 @@ test/base-non-overlapping: pass
   (⊦ equal? 1 ((dint (λ (x) x)) 1))
   (⊦ equal? '(1 2 3) ((dint (λ x x)) 1 2 3))
   (⊦ equal? 5 (((dint (λ (x) (λ (y) (+ x y)))) 2) 3)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8470688 2274008 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8475808 2272416 1048576)) (stdout &quot;x&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/λ-match-first><a href=#test/λ-match-first><code>test/λ-match-first</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/λ-match-first _)
   (define h
     (λ-match/first
@@ -405,18 +257,21 @@ test/base-non-overlapping: pass
       (((,a (,b ,c)) ⊣ (and (number? a) (number? b) (number? c)))
        (+ a b c))))
   (⊦= '(12 8) (list (h 3 4) (apply h '(1 (3 4))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8470688 2274264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8475808 2272672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/λ-match-first/unquote-unquote-pattern><a href=#test/λ-match-first/unquote-unquote-pattern><code>test/λ-match-first/unquote-unquote-pattern</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/λ-match-first/unquote-unquote-pattern _)
   (⊦= 2 (match/first '(1 (1)) ((,x (,,x)) (add1 x)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8470688 2275712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div></body></html></article><ul class="pager blog-pager"><li class=previous><a href=https://massimo-nocentini.github.io/test-suites/testsuite-hanseitest/ data-toggle=tooltip data-placement=top title>&larr; Previous Post</a></li><li class=next><a href=https://massimo-nocentini.github.io/test-suites/testsuite-delimcc-suite/ data-toggle=tooltip data-placement=top title>Next Post &rarr;</a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:massimo.nocentini@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/massimo-nocentini title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/massimo-nocentini title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://paypal.me/username title=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-paypal fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://telegram.me/username title=Telegram><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-telegram fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://discord.gg/invite%20code%20%28https://discord.gg/massimo.nocentini%29 title=Discord><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-discord fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
-&nbsp;&bull;&nbsp;&copy;
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8475808 2274120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html></article><a href=/test-suites/testsuite-hanseitest/ class="nav-side-arrow nav-side-prev" title aria-label="Previous Post: "><i class="fas fa-chevron-left"></i>
+</a><a href=/test-suites/testsuite-delimcc-suite/ class="nav-side-arrow nav-side-next" title aria-label="Next Post: "><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/test-suites/testsuite-hanseitest/ data-bs-toggle=tooltip data-bs-placement=top title><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/test-suites/testsuite-delimcc-suite/ data-bs-toggle=tooltip data-bs-placement=top title>Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://paypal.me/username title=PayPal aria-label=PayPal><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-paypal fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://telegram.me/username title=Telegram aria-label=Telegram><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-telegram fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://discord.gg/invite%20code%20%28https://discord.gg/massimo.nocentini%29 title=Discord aria-label=Discord><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-discord fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
 2026
 &nbsp;&bull;&nbsp;
-<a href=https://massimo-nocentini.github.io/>Massimo Nocentini</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.161.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js integrity=sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js integrity=sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-3.7.0.slim.min.js integrity=sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js integrity=sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/main.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js integrity=sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js integrity=sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q crossorigin=anonymous></script><script src=https://massimo-nocentini.github.io/js/load-photoswipe.js></script></body></html>
+<a href=/>A small measure of peace</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.163.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-4.0.0.slim.min.js integrity=sha384-tcspKDb5tWvyRCOWzevlAeQgHeEzYdUHJpcgnIhcP9w4CnfD7DLAcS+k9QzLbRJO crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=/js/main.js></script><script src=/js/toc.js></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=/js/load-photoswipe.js></script></body></html>

@@ -12,6 +12,9 @@ pygmentsCodefencesGuessSyntax = true
 #pygmentsUseClassic = true
 #pygmentOptions = "linenos=inline"
 
+[security]
+  allowContent = ['^text/html$', '^text/markdown$']
+
 [markup]
   [markup.tableOfContents]
     endLevel = 3
