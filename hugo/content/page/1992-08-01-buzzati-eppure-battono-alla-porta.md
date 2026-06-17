@@ -2,6 +2,7 @@
 date = '1992-08-01T14:00:21+01:00'
 title = 'Eppure battono alla porta'
 author = 'Dino Buzzati'
+draft = true
 subtitle = 'La piena del fiume e il rifiuto di vedere'
 tags = [
     "inondazione",

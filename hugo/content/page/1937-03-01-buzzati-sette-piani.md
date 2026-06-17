@@ -2,7 +2,7 @@
 date = '1937-03-01T14:00:21+01:00'
 title = 'Sette piani'
 author = 'Dino Buzzati'
-subtitle = "La discesa di un uomo attraverso la burocrazia della malattia, dove ogni piccolo compromesso diventa un passo verso un destino inevitabile."
+subtitle = "Una metafora del dramma interiore vissuto dall'uomo di fronte all'inevitabile e misteriosa precarietà della vita e della conseguente incapacità psicologica da parte dell'uomo di adattarsi alla realtà della morte."
 tags = [
     "Ospedale",
     "Degrado psicologico",
