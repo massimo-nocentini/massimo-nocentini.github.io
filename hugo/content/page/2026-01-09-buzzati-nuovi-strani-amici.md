@@ -2,6 +2,7 @@
 date = '2017-03-31T14:00:21+01:00'
 title = 'Nuovi strani amici'
 author = 'Dino Buzzati'
+draft = true
 subtitle = 'Una novella di Dino Buzzati'
 tags = [
     "apparenza",

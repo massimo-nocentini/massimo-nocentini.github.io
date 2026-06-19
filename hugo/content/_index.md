@@ -18,8 +18,8 @@
 
 ## Christian faith and life
 
-- [_**Trattato sulla preghiera del Padre Nostro**_](page/2026-06-19-cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/).
+- [_**Trattato sulla preghiera del Padre Nostro**_](page/cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/).
 
-## Training
+<!-- ## Training
 
-- [_**The Standard**_](page/2020-09-01-goruck) by [*GORUCK team*](categories/goruck/).
+- [_**The Standard**_](page/2020-09-01-goruck) by [*GORUCK team*](categories/goruck/). -->

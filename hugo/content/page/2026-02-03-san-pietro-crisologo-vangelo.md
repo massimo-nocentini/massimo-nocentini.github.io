@@ -3,6 +3,7 @@ date = '2026-02-03T09:33:23+01:00'
 title = "Per Dio la morte è davvero un sonno"
 author = 'San Pietro Crisologo'
 subtitle = 'Omelia al Vangelo Mc 5,21–43'
+draft = true
 categories = ["vangelo", "marco"]
 tags = [
     "morte",

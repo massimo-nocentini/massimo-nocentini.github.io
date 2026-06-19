@@ -5,6 +5,7 @@ subtitle = "GORUCK, the Rucking Company"
 tags = []
 categories = ['goruck']
 summary = ' '
+draft = true
 author = 'GORUCK team'
 +++
 

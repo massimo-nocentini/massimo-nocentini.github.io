@@ -1,6 +1,7 @@
 +++
 date = '2016-12-27T10:20:30+01:00'
 title = 'L’avventura di Pinocchio: dare il nome'
+draft = true
 subtitle = 'Noi tutti abbiamo un Padre che ci ha fatto, desiderandoci sin dall’inizio come compagni e amici per l’eternità'
 tags = ["Pinocchio",
 "Geppetto",

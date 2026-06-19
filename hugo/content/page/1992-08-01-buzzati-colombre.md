@@ -2,6 +2,7 @@
 date = '1992-08-01T14:00:21+01:00'
 title = 'Il Colombre'
 author = 'Dino Buzzati'
+draft = true
 subtitle = "Una sola creatura, una sola vita, una sola perla e la scoperta arriva nell'ultimo respiro."
 tags = [
     "colombre",

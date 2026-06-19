@@ -2,6 +2,7 @@
 date = '2021-12-01T16:00:21+01:00'
 title = 'Novena Immacolata "Ave Maria...", III serata'
 author = 'fra Paolo Guerrini'
+draft = true
 categories = ["ofm", "porziuncola", "guerrini", "novena immacolata 2021 a Santa Maria degli Angeli"]
 tags = ["Giuseppe", "Maria", "sogno", "fede", "paura", "silenzio", "amore", "verginità", "mistero", "casa"]
 summary = "Fra Paolo Guerrini medita sull'Annunciazione di Giuseppe, prototipo del credente che diventa credibile accogliendo l'incredibile: turbato e innamorato, sceglie nel sonno la voce di Dio invece della paura, prende con sé Maria e il Figlio concepito dallo Spirito, dà loro il nome senza possederli e inaugura la verginità come amore senza calcolo; nel suo silenzio operoso e nella sua gravidanza interiore insegna a fare casa con Maria, condividendo la stessa sorte e custodendo nella quotidianità il mistero di luce che la fede fa lievitare nel ventre della vita."

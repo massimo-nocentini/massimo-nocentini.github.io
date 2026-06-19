@@ -1,6 +1,7 @@
 +++
 date = '2026-04-27T7:59:04+01:00'
 title = "Io sono la porta delle pecore"
+draft = true
 subtitle = 'Omelia di don Fabio, un commento «Su lo Spirito Santo» e un «discorso» di san Pietro Crisologo'
 summary = "San Basilio mostra come il battesimo unisca acqua e Spirito: morte al peccato e nascita a una vita nuova, già pregustata come adozione filiale e caparra della gloria. Nel Vangelo Gesù si presenta come pastore che chiama per nome e come porta che fa uscire dal recinto del peccato per entrare nel pascolo della vita in abbondanza. Don Fabio Rosini sottolinea che la relazione con Cristo non si impone con forzature, ma fiorisce nella libertà di un cuore che riconosce la sua voce e accetta di uscire da ciò che distrugge per entrare nella bellezza della vita nuova."
 tags = [

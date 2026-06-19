@@ -1,6 +1,7 @@
 +++
 date = '2026-03-18T16:00:21+01:00'
 title = 'Santa Casa di Loreto: 4º quaresimale'
+draft = true
 subtitle = "Oltre l'apparenza, la bellezza che risorge."
 author = 'don Alessandro Bonetti'
 categories = ["Quaresimali 2026 alla Santa Casa Loreto", "don Alessandro Bonetti"]

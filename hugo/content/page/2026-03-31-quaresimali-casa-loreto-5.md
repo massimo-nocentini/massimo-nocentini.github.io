@@ -1,6 +1,7 @@
 +++
 date = '2026-03-31T16:00:21+01:00'
 title = 'Santa Casa di Loreto: 5º quaresimale'
+draft = true
 subtitle = "La bellezza del perdono che ti libera e ti illumina."
 author = 'sour Maria Gloria Riva'
 categories = ["Quaresimali 2026 alla Santa Casa Loreto", "sour Maria Gloria Riva"]

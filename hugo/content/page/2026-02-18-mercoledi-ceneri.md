@@ -1,6 +1,7 @@
 +++
 date = '2026-02-18T10:59:04+01:00'
 title = "Mercoledì delle Ceneri 2026"
+draft = true
 subtitle = 'Salmo 50, Mt 6 e un sermone sul digiuno'
 summary = "Le letture del Mercoledì delle Ceneri mostrano che il vero digiuno non consiste in pratiche esteriori, ma nella conversione del cuore, nella giustizia verso il prossimo e in una penitenza nutrita da misericordia, preghiera ed elemosina. Il testo insiste che il cammino quaresimale è autentico solo quando l'uomo, nel segreto davanti a Dio, unisce il digiuno alla compassione, alla generosità e al ritorno sincero al Padre."
 tags = [

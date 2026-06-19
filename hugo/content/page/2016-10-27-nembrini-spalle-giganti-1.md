@@ -4,8 +4,8 @@ title = 'Sulle spalle dei giganti: Primo incontro'
 subtitle = 'La crisi dell’uomo moderno: un’ipotesi da verificare'
 author = 'Franco Nembrini'
 summary = ' '
-categories = ['nembrini', 'sulle spalle dei giganti']
 draft = true
+categories = ['nembrini', 'sulle spalle dei giganti']
 +++
 
 *Ripreso da [franconembrini.it](https://www.franconembrini.it/sulle-spalle-dei-giganti-primo-incontro/)*

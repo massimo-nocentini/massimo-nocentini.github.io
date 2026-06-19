@@ -2,6 +2,7 @@
 date = '2017-03-10T14:00:21+01:00'
 title = '"Ecce Homo", seconda parte'
 subtitle = ''
+draft = true
 author = 'don Fabio Rosini'
 tags = [
 

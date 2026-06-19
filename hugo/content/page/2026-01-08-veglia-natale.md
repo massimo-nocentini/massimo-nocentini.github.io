@@ -2,6 +2,7 @@
 date = '2025-12-24T16:00:21+01:00'
 title = 'Veglia di Natale'
 author = 'fra Massimo Travascio'
+draft = true
 subtitle = 'Omelia di fra Massimo Travascio OFM'
 tags = [
     "Natale",

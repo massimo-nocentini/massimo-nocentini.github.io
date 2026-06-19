@@ -2,6 +2,7 @@
 date = '1979-03-21T10:59:04+01:00'
 title = "Il digiuno penitenziale"
 subtitle = 'Udienza Generale'
+draft = true
 summary = "Giovanni Paolo II presenta il digiuno quaresimale come via di penitenza e conversione: non solo astinenza dal cibo, ma esercizio di libertà interiore, distacco dal consumismo e apertura alla preghiera, ai valori spirituali e a una vita più pienamente cristiana."
 tags = [
     "digiuno",

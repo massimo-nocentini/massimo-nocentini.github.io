@@ -2,6 +2,7 @@
 date = '2021-11-30T16:00:21+01:00'
 title = 'Novena Immacolata "Ave Maria...", II serata'
 author = 'fra Paolo Guerrini'
+draft = true
 categories = ["ofm", "porziuncola", "guerrini", "novena immacolata 2021 a Santa Maria degli Angeli"]
 tags = ["Maria", "Magnificat", "Elisabetta", "speranza", "futuro", "Dio", "incontro", "gravidanza", "profezia", "misericordia"]
 summary = "Fra Paolo Guerrini medita sulla Visitazione e sul Magnificat: Maria, gravida del Verbo e portata dal Figlio, incontra Elisabetta in un abbraccio tra Antico e Nuovo Testamento, rivelando la profezia della vita iscritta nel grembo delle donne; il suo canto, nato dallo stupore di aver capito Dio, proclama lo scandalo della speranza che attraversa l'evidenza, capovolge la storia puntando sui piccoli e chiama il credente a generare il futuro con mani giunte e maniche rimboccate, ricordando la misericordia di Dio nei volti concreti che squarciano il cielo."

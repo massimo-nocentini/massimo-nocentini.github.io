@@ -3,6 +3,7 @@ date = '2017-06-01T14:00:21+01:00'
 title = 'Vizi/Virus e Antivirus'
 subtitle = "Gli otto vizi nella tradizione dell'Oriente cristiano"
 author = 'Michelina Tenace'
+draft = true
 tags = [
     "gola",
     "lussuria",

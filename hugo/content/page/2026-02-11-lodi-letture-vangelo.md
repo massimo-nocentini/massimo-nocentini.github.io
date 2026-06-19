@@ -1,6 +1,7 @@
 +++
 date = '2026-02-11T10:59:04+01:00'
 title = "Letture e Vangelo del 11 Novembre 2026"
+draft = true
 subtitle = 'Con messaggio del Santo Padre Benedetto XVI per la Quaresima 2010'
 summary = "Le letture e il messaggio di Benedetto XVI mostrano che la legge ha il compito di condurre a Cristo, ma la vera giustizia si manifesta come dono di grazia ricevuto nella fede, che rende l'uomo figlio di Dio e lo libera dall'ingiustizia radicata nel cuore. Da questa giustizia divina, compiuta in Cristo e vivificata dall'amore, nasce anche la possibilità di una conversione personale e di una società più giusta."
 tags = [

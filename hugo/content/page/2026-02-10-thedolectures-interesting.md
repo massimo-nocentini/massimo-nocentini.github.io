@@ -1,6 +1,7 @@
 +++
 date = '2021-09-10T11:59:04+01:00'
 title = "23 Laws Of Interesting"
+draft = true
 tags = [
     "interesting",
     "creativity",
