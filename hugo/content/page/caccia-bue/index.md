@@ -1,5 +1,6 @@
 +++
 date = '2026-02-20T10:59:04+01:00'
+draft = true
 title = "Le Dieci Immagini della Caccia al Bue"
 subtitle = 'Canto della Meditazione e il Sutra del Diamante'
 summary = "Le Dieci Immagini della Caccia al Bue descrivono in forma simbolica il cammino della disciplina zen: dalla ricerca smarrita della propria natura, attraverso la scoperta, la lotta, il dominio della mente e il superamento del dualismo, fino al ritorno all'origine e alla presenza libera e compassionevole nel mondo. Il Canto della Meditazione di Hakuin e il Sutra del Diamante approfondiscono questo itinerario mostrando che la verità, il Buddha e l'illuminazione non sono realtà esterne da possedere, ma coincidono con il distacco, la non-dualità e il risveglio del Sé."

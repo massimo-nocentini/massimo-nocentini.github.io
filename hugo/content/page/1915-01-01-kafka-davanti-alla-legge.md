@@ -1,6 +1,7 @@
 +++
 date = '1915-01-01T14:00:21+01:00'
 title = 'Davanti alla legge'
+draft = true
 subtitle = 'Un uomo attende tutta la vita davanti a una porta aperta che era destinata solo a lui, senza mai attraversarla. La porta era il dono, bastava accoglierlo.'
 author = 'Franz Kafka'
 tags = [
