@@ -13,3 +13,5 @@
         - *Continuations*
             - *Delimited*
                 - [**Final shift for call/cc**](post/2002-09-17-final-shift-for-callcc/)
+
+- [Trattato sulla preghiera del *Padre Nostro*, di *san Cipriano di Cartagine*.](page/2026-06-19-cipriano-trattato-padre-nostro)
