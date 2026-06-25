@@ -2,23 +2,20 @@
 
 # Table of Contents
 
-## Computer Science
+## _Computer Science_
 
-- *By Categories*
-    - *A collection of* [***Papers***](categories/papers/)
-    - *A collection of* [***Books***](categories/books/)
-    - *Topics about programming languages:*
-        - [***C***](categories/c/)
-        - [***Scheme***](categories/scheme/)
-- *By Topics*
-    - *Computer Science*
-        - *Continuations*
-            - *Delimited*
-                - [**Final shift for call/cc**](post/2002-09-17-final-shift-for-callcc/)
+- [***Papers***](categories/papers/)
+    - [_**Final shift for call/cc**_](post/2002-09-17-final-shift-for-callcc/)
+- [***Books***](categories/books/)
+    - [_**The Reasoned Schemer**_](post/the-reasoned-schemer/)
+- [***Posts***](post/)
+    - [_**A logic language for business logic**_](post/plot-engine/)
 
-## Christian faith and life
 
-- [_**Trattato sulla preghiera del Padre Nostro**_](page/cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/).
+
+## Christian faith (in Italian)
+
+- [_**Trattato sulla preghiera del Padre Nostro**_](page/cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/)
 
 <!-- ## Training
 

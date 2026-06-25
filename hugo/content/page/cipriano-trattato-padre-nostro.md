@@ -1,5 +1,5 @@
 +++
-date = '2026-06-19T7:59:04+01:00'
+date = '2026-06-25T7:59:04+01:00'
 title = "La preghiera del Signore"
 subtitle = "Trattato sul Padre Nostro"
 tags = []
