@@ -9,6 +9,7 @@
 - [***Books***](categories/books/)
     - [_**The Reasoned Schemer**_](post/the-reasoned-schemer/)
 - [***Posts***](post/)
+    - [_**NeoVim**_](post/nvim/)
     - [_**A logic language for business logic**_](post/plot-engine/)
 
 
