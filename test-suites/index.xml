@@ -1629,164 +1629,164 @@
 &lt;section id="section1143"&gt;
 &lt;header&gt;
 &lt;h1&gt;Tests&lt;/h1&gt;&lt;/header&gt;&lt;/section&gt;
-&lt;h2 id="test/Allgemein"&gt;&lt;a href="#test/Allgemein"&gt;&lt;code&gt;test/Allgemein&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
-&lt;pre&gt;&lt;code class="w3-code w3-round"&gt;bindingscope Allgemein {
+&lt;h2 id="test/General"&gt;&lt;a href="#test/General"&gt;&lt;code&gt;test/General&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code class="w3-code w3-round"&gt;bindingscope General {
 
- predicate String: [] ist Standort fuer Kostenstelle String: [].
- predicate String: [] ist Pausenmodell fuer Kostenstelle String: [].
- predicate String: [] ist Pausenmodell fuer Standort String: [].
- predicate String: [] ist Pausenmodell fuer Angestellte in Kostenstelle String: [].
- predicate String: [] ist Pausenmodell fuer Angestellte in Standort String: [].
- predicate String: [] ist Pausenmodell fuer Angestellte.
- predicate String: [] ist Pausenmodell generell.
+ predicate String: [] is Location for CostCenter String: [].
+ predicate String: [] is BreakModel for CostCenter String: [].
+ predicate String: [] is BreakModel for Location String: [].
+ predicate String: [] is BreakModel for Employee in CostCenter String: [].
+ predicate String: [] is BreakModel for Employee in Location String: [].
+ predicate String: [] is BreakModel for Employee.
+ predicate String: [] is BreakModel general.
 
- fact &amp;quot;Karlsruhe&amp;quot; ist Standort fuer Kostenstelle &amp;quot;Einkauf&amp;quot;.
- fact &amp;quot;Karlsruhe&amp;quot; ist Standort fuer Kostenstelle &amp;quot;Entwicklung&amp;quot;.
- fact &amp;quot;Durchhausen&amp;quot; ist Standort fuer Kostenstelle &amp;quot;Schulung&amp;quot;.
- fact &amp;quot;Durchhausen&amp;quot; ist Standort fuer Kostenstelle &amp;quot;Fertigung&amp;quot;.
- fact &amp;quot;P4&amp;quot; ist Pausenmodell fuer Kostenstelle &amp;quot;Einkauf&amp;quot;.
- fact &amp;quot;P6&amp;quot; ist Pausenmodell fuer Angestellte in Kostenstelle &amp;quot;Schulung&amp;quot;.
- fact &amp;quot;P3&amp;quot; ist Pausenmodell fuer Angestellte in Standort &amp;quot;Karlsruhe&amp;quot;.
- fact &amp;quot;P1&amp;quot; ist Pausenmodell fuer Angestellte.
- fact &amp;quot;P2&amp;quot; ist Pausenmodell generell.
+ fact &amp;quot;Karlsruhe&amp;quot; is Location for CostCenter &amp;quot;Purchasing&amp;quot;.
+ fact &amp;quot;Karlsruhe&amp;quot; is Location for CostCenter &amp;quot;Development&amp;quot;.
+ fact &amp;quot;Durchhausen&amp;quot; is Location for CostCenter &amp;quot;Training&amp;quot;.
+ fact &amp;quot;Durchhausen&amp;quot; is Location for CostCenter &amp;quot;Production&amp;quot;.
+ fact &amp;quot;P4&amp;quot; is BreakModel for CostCenter &amp;quot;Purchasing&amp;quot;.
+ fact &amp;quot;P6&amp;quot; is BreakModel for Employee in CostCenter &amp;quot;Training&amp;quot;.
+ fact &amp;quot;P3&amp;quot; is BreakModel for Employee in Location &amp;quot;Karlsruhe&amp;quot;.
+ fact &amp;quot;P1&amp;quot; is BreakModel for Employee.
+ fact &amp;quot;P2&amp;quot; is BreakModel general.
 
- rule String: p ist Pausenmodell fuer Angestellte in Kostenstelle &amp;quot;Einkauf&amp;quot; {
- String: p ist Pausenmodell fuer Kostenstelle &amp;quot;Einkauf&amp;quot;.
+ rule String: p is BreakModel for Employee in CostCenter &amp;quot;Purchasing&amp;quot; {
+ String: p is BreakModel for CostCenter &amp;quot;Purchasing&amp;quot;.
  }
 
 };&lt;/code&gt;&lt;/pre&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/Allgemein _)
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/General _)
  (define-predicate
- ((: x string?) ist (: α) generell)
- (fact (&amp;quot;P2&amp;quot; 'Pausenmodell)))
+ ((: x string?) is (: α) general)
+ (fact (&amp;quot;P2&amp;quot; 'BreakModel)))
  (define-predicate
- ((: x string?) ist (: α) fuer (: β) (: y string?))
- (fact (&amp;quot;Karlsruhe&amp;quot; 'Standort 'Kostenstelle &amp;quot;Einkauf&amp;quot;))
- (fact (&amp;quot;Karlsruhe&amp;quot; 'Standort 'Kostenstelle &amp;quot;Entwicklung&amp;quot;))
- (fact (&amp;quot;Durchhausen&amp;quot; 'Standort 'Kostenstelle &amp;quot;Schulung&amp;quot;))
- (fact (&amp;quot;Durchhausen&amp;quot; 'Standort 'Kostenstelle &amp;quot;Fertigung&amp;quot;))
- (fact (&amp;quot;P1&amp;quot; 'Pausenmodell 'Angestellte &amp;quot;&amp;quot;))
- (fact (&amp;quot;P4&amp;quot; 'Pausenmodell 'Kostenstelle &amp;quot;Einkauf&amp;quot;)))
+ ((: x string?) is (: α) for (: β) (: y string?))
+ (fact (&amp;quot;Karlsruhe&amp;quot; 'Location 'CostCenter &amp;quot;Purchasing&amp;quot;))
+ (fact (&amp;quot;Karlsruhe&amp;quot; 'Location 'CostCenter &amp;quot;Development&amp;quot;))
+ (fact (&amp;quot;Durchhausen&amp;quot; 'Location 'CostCenter &amp;quot;Training&amp;quot;))
+ (fact (&amp;quot;Durchhausen&amp;quot; 'Location 'CostCenter &amp;quot;Production&amp;quot;))
+ (fact (&amp;quot;P1&amp;quot; 'BreakModel 'Employee &amp;quot;&amp;quot;))
+ (fact (&amp;quot;P4&amp;quot; 'BreakModel 'CostCenter &amp;quot;Purchasing&amp;quot;)))
  (define-predicate
- ((: x string?) ist (: α) fuer (: β) in (: γ) (: y string?))
- (fact (&amp;quot;P6&amp;quot; 'Pausenmodell 'Angestellte 'Kostenstelle &amp;quot;Schulung&amp;quot;))
- (fact (&amp;quot;P3&amp;quot; 'Pausenmodell 'Angestellte 'Standort &amp;quot;Karlsruhe&amp;quot;))
- (rule (x 'Pausenmodell 'Angestellte 'Kostenstelle &amp;quot;Einkauf&amp;quot;)
+ ((: x string?) is (: α) for (: β) in (: γ) (: y string?))
+ (fact (&amp;quot;P6&amp;quot; 'BreakModel 'Employee 'CostCenter &amp;quot;Training&amp;quot;))
+ (fact (&amp;quot;P3&amp;quot; 'BreakModel 'Employee 'Location &amp;quot;Karlsruhe&amp;quot;))
+ (rule (x 'BreakModel 'Employee 'CostCenter &amp;quot;Purchasing&amp;quot;)
  |:-|
- (ist-fuer° x 'Pausenmodell 'Kostenstelle &amp;quot;Einkauf&amp;quot;)))
- (⊦= '((&amp;quot;P6&amp;quot; Pausenmodell Angestellte Kostenstelle &amp;quot;Schulung&amp;quot;)
- (&amp;quot;P3&amp;quot; Pausenmodell Angestellte Standort &amp;quot;Karlsruhe&amp;quot;)
- (&amp;quot;P4&amp;quot; Pausenmodell Angestellte Kostenstelle &amp;quot;Einkauf&amp;quot;))
- (°-&amp;gt;list/ground (fresh° l (a b c d e) (ist-fuer-in° a b c d e)))))
+ (is-for° x 'BreakModel 'CostCenter &amp;quot;Purchasing&amp;quot;)))
+ (⊦= '((&amp;quot;P6&amp;quot; BreakModel Employee CostCenter &amp;quot;Training&amp;quot;)
+ (&amp;quot;P3&amp;quot; BreakModel Employee Location &amp;quot;Karlsruhe&amp;quot;)
+ (&amp;quot;P4&amp;quot; BreakModel Employee CostCenter &amp;quot;Purchasing&amp;quot;))
+ (°-&amp;gt;list/ground (fresh° l (a b c d e) (is-for-in° a b c d e)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.028) (memory #(12582912 2306712 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.025) (memory #(12582912 2306584 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id="test/genealogie"&gt;&lt;a href="#test/genealogie"&gt;&lt;code&gt;test/genealogie&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id="test/genealogy"&gt;&lt;a href="#test/genealogy"&gt;&lt;code&gt;test/genealogy&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;pre&gt;&lt;code class="w3-code w3-round"&gt;
-bindingscope genealogie {
-	predicate	String: [] ist Vater von String: [].
-	predicate String: [] ist Grossvater von String: [].
-	predicate String: [] ist Bruder von String: [].
-	predicate String: [] ist Cousin von String: [].
+bindingscope genealogy {
+	predicate	String: [] is Father of String: [].
+	predicate String: [] is Grandfather of String: [].
+	predicate String: [] is Brother of String: [].
+	predicate String: [] is Cousin of String: [].
 	
-	fact &amp;quot;Winfred&amp;quot; ist Vater von &amp;quot;Kurt&amp;quot;.
-	fact &amp;quot;Winfred&amp;quot; ist Vater von &amp;quot;Klaus&amp;quot;.
-	fact &amp;quot;Max&amp;quot; ist Vater von &amp;quot;Winfred&amp;quot;.
-	fact &amp;quot;Max&amp;quot; ist Vater von &amp;quot;Willi&amp;quot;.
-	fact &amp;quot;Emil&amp;quot; ist Vater von &amp;quot;Max&amp;quot;.
-	fact &amp;quot;Willi&amp;quot; ist Vater von &amp;quot;Karl&amp;quot;.
+	fact &amp;quot;Winfred&amp;quot; is Father of &amp;quot;Kurt&amp;quot;.
+	fact &amp;quot;Winfred&amp;quot; is Father of &amp;quot;Klaus&amp;quot;.
+	fact &amp;quot;Max&amp;quot; is Father of &amp;quot;Winfred&amp;quot;.
+	fact &amp;quot;Max&amp;quot; is Father of &amp;quot;Willi&amp;quot;.
+	fact &amp;quot;Emil&amp;quot; is Father of &amp;quot;Max&amp;quot;.
+	fact &amp;quot;Willi&amp;quot; is Father of &amp;quot;Karl&amp;quot;.
 
-	rule String: a ist Grossvater von String: c {
-		String: a ist Vater von String: b.
-		String: b ist Vater von String: c.
+	rule String: a is Grandfather of String: c {
+		String: a is Father of String: b.
+		String: b is Father of String: c.
 	}
 
-	rule String: a ist Bruder von String: b {
-		String: papa ist Vater von String: a.
-		String: papa ist Vater von String: b.
+	rule String: a is Brother of String: b {
+		String: dad is Father of String: a.
+		String: dad is Father of String: b.
 	}
 
-	rule String: a ist Cousin von String: b {
-		String: opa ist Grossvater von String: a.
-		String: opa ist Grossvater von String: b.
+	rule String: a is Cousin of String: b {
+		String: grandpa is Grandfather of String: a.
+		String: grandpa is Grandfather of String: b.
 	}
 
 	goal {
-		String: vater ist Vater von String: sohn.
-		show String: vater String: sohn.
+		String: father is Father of String: son.
+		show String: father String: son.
 		fail.
 	}
 
 	goal {
-	 	&amp;quot;Emil&amp;quot; ist Vater von String: sohn.
-		show String: sohn.
+	 	&amp;quot;Emil&amp;quot; is Father of String: son.
+		show String: son.
 		fail.
 	}
 
 	goal {
-		String: grossvater ist Grossvater von String: enkel.
-		show String: grossvater String: enkel.
+		String: grandfather is Grandfather of String: grandchild.
+		show String: grandfather String: grandchild.
 		fail.
 	}
 
 	goal {
-		String: a ist Bruder von String: b.
+		String: a is Brother of String: b.
 		show String: a String: b.
 		fail.
  }
 
 	goal {
-		String: a ist Cousin von String: b.
+		String: a is Cousin of String: b.
 		show String: a String: b.
 		fail.
 	}
 
 };&lt;/code&gt;&lt;/pre&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/genealogie _)
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/genealogy _)
  (define-predicate
- ((: a string?) ist (: α) von (: c))
- (fact (&amp;quot;Winfred&amp;quot; 'Vater &amp;quot;Kurt&amp;quot;))
- (fact (&amp;quot;Winfred&amp;quot; 'Vater &amp;quot;Klaus&amp;quot;))
- (fact (&amp;quot;Max&amp;quot; 'Vater &amp;quot;Winfred&amp;quot;))
- (fact (&amp;quot;Max&amp;quot; 'Vater &amp;quot;Willi&amp;quot;))
- (fact (&amp;quot;Emil&amp;quot; 'Vater &amp;quot;Max&amp;quot;))
- (fact (&amp;quot;Willi&amp;quot; 'Vater &amp;quot;Karl&amp;quot;))
- (rule (a 'Grossvater c)
+ ((: a string?) is (: α) of (: c))
+ (fact (&amp;quot;Winfred&amp;quot; 'Father &amp;quot;Kurt&amp;quot;))
+ (fact (&amp;quot;Winfred&amp;quot; 'Father &amp;quot;Klaus&amp;quot;))
+ (fact (&amp;quot;Max&amp;quot; 'Father &amp;quot;Winfred&amp;quot;))
+ (fact (&amp;quot;Max&amp;quot; 'Father &amp;quot;Willi&amp;quot;))
+ (fact (&amp;quot;Emil&amp;quot; 'Father &amp;quot;Max&amp;quot;))
+ (fact (&amp;quot;Willi&amp;quot; 'Father &amp;quot;Karl&amp;quot;))
+ (rule (a 'Grandfather c)
  (|:-| b)
- (ist-von° a 'Vater b)
- (ist-von° b 'Vater c))
- (rule (a 'Bruder c)
- (|:-| papa)
- (ist-von° papa 'Vater a)
- (ist-von° papa 'Vater c))
+ (is-of° a 'Father b)
+ (is-of° b 'Father c))
+ (rule (a 'Brother c)
+ (|:-| dad)
+ (is-of° dad 'Father a)
+ (is-of° dad 'Father c))
  (rule (a 'Cousin c)
- (|:-| opa)
- (ist-von° opa 'Grossvater a)
- (ist-von° opa 'Grossvater c)))
- (⊦= '((&amp;quot;Winfred&amp;quot; Vater &amp;quot;Kurt&amp;quot;)
- (&amp;quot;Winfred&amp;quot; Vater &amp;quot;Klaus&amp;quot;)
- (&amp;quot;Max&amp;quot; Vater &amp;quot;Winfred&amp;quot;)
- (&amp;quot;Max&amp;quot; Vater &amp;quot;Willi&amp;quot;)
- (&amp;quot;Emil&amp;quot; Vater &amp;quot;Max&amp;quot;)
- (&amp;quot;Willi&amp;quot; Vater &amp;quot;Karl&amp;quot;)
- (&amp;quot;Kurt&amp;quot; Bruder &amp;quot;Kurt&amp;quot;)
- (&amp;quot;Kurt&amp;quot; Bruder &amp;quot;Klaus&amp;quot;)
- (&amp;quot;Max&amp;quot; Grossvater &amp;quot;Kurt&amp;quot;)
- (&amp;quot;Max&amp;quot; Grossvater &amp;quot;Klaus&amp;quot;)
- (&amp;quot;Klaus&amp;quot; Bruder &amp;quot;Kurt&amp;quot;)
- (&amp;quot;Klaus&amp;quot; Bruder &amp;quot;Klaus&amp;quot;)
- (&amp;quot;Max&amp;quot; Grossvater &amp;quot;Karl&amp;quot;)
- (&amp;quot;Emil&amp;quot; Grossvater &amp;quot;Winfred&amp;quot;)
- (&amp;quot;Emil&amp;quot; Grossvater &amp;quot;Willi&amp;quot;)
- (&amp;quot;Winfred&amp;quot; Bruder &amp;quot;Winfred&amp;quot;)
- (&amp;quot;Winfred&amp;quot; Bruder &amp;quot;Willi&amp;quot;)
- (&amp;quot;Willi&amp;quot; Bruder &amp;quot;Winfred&amp;quot;)
- (&amp;quot;Willi&amp;quot; Bruder &amp;quot;Willi&amp;quot;)
- (&amp;quot;Max&amp;quot; Bruder &amp;quot;Max&amp;quot;)
- (&amp;quot;Karl&amp;quot; Bruder &amp;quot;Karl&amp;quot;)
+ (|:-| grandpa)
+ (is-of° grandpa 'Grandfather a)
+ (is-of° grandpa 'Grandfather c)))
+ (⊦= '((&amp;quot;Winfred&amp;quot; Father &amp;quot;Kurt&amp;quot;)
+ (&amp;quot;Winfred&amp;quot; Father &amp;quot;Klaus&amp;quot;)
+ (&amp;quot;Max&amp;quot; Father &amp;quot;Winfred&amp;quot;)
+ (&amp;quot;Max&amp;quot; Father &amp;quot;Willi&amp;quot;)
+ (&amp;quot;Emil&amp;quot; Father &amp;quot;Max&amp;quot;)
+ (&amp;quot;Willi&amp;quot; Father &amp;quot;Karl&amp;quot;)
+ (&amp;quot;Kurt&amp;quot; Brother &amp;quot;Kurt&amp;quot;)
+ (&amp;quot;Kurt&amp;quot; Brother &amp;quot;Klaus&amp;quot;)
+ (&amp;quot;Max&amp;quot; Grandfather &amp;quot;Kurt&amp;quot;)
+ (&amp;quot;Max&amp;quot; Grandfather &amp;quot;Klaus&amp;quot;)
+ (&amp;quot;Klaus&amp;quot; Brother &amp;quot;Kurt&amp;quot;)
+ (&amp;quot;Klaus&amp;quot; Brother &amp;quot;Klaus&amp;quot;)
+ (&amp;quot;Max&amp;quot; Grandfather &amp;quot;Karl&amp;quot;)
+ (&amp;quot;Emil&amp;quot; Grandfather &amp;quot;Winfred&amp;quot;)
+ (&amp;quot;Emil&amp;quot; Grandfather &amp;quot;Willi&amp;quot;)
+ (&amp;quot;Winfred&amp;quot; Brother &amp;quot;Winfred&amp;quot;)
+ (&amp;quot;Winfred&amp;quot; Brother &amp;quot;Willi&amp;quot;)
+ (&amp;quot;Willi&amp;quot; Brother &amp;quot;Winfred&amp;quot;)
+ (&amp;quot;Willi&amp;quot; Brother &amp;quot;Willi&amp;quot;)
+ (&amp;quot;Max&amp;quot; Brother &amp;quot;Max&amp;quot;)
+ (&amp;quot;Karl&amp;quot; Brother &amp;quot;Karl&amp;quot;)
  (&amp;quot;Kurt&amp;quot; Cousin &amp;quot;Kurt&amp;quot;)
  (&amp;quot;Kurt&amp;quot; Cousin &amp;quot;Klaus&amp;quot;)
  (&amp;quot;Kurt&amp;quot; Cousin &amp;quot;Karl&amp;quot;)
@@ -1800,17 +1800,17 @@ bindingscope genealogie {
  (&amp;quot;Winfred&amp;quot; Cousin &amp;quot;Willi&amp;quot;)
  (&amp;quot;Willi&amp;quot; Cousin &amp;quot;Winfred&amp;quot;)
  (&amp;quot;Willi&amp;quot; Cousin &amp;quot;Willi&amp;quot;))
- (°-&amp;gt;list/ground (fresh° l (a b c) (ist-von° a b c)))))
+ (°-&amp;gt;list/ground (fresh° l (a b c) (is-of° a b c)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.008) (memory #(12582912 2308488 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.007) (memory #(12582912 2308384 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id="test/genealogie/refined"&gt;&lt;a href="#test/genealogie/refined"&gt;&lt;code&gt;test/genealogie/refined&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id="test/genealogy/refined"&gt;&lt;a href="#test/genealogy/refined"&gt;&lt;code&gt;test/genealogy/refined&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/genealogie/refined _)
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/genealogy/refined _)
  (define-knowledge
- genealogie
- (fact ((|:a| string?) ist Vater von (|:c| string?))
+ genealogy
+ (fact ((|:a| string?) is Father of (|:c| string?))
  (text/plain
  (&amp;quot;Winfred&amp;quot; &amp;quot;Kurt&amp;quot;)
  (&amp;quot;Winfred&amp;quot; &amp;quot;Klaus&amp;quot;)
@@ -1818,42 +1818,42 @@ bindingscope genealogie {
  (&amp;quot;Max&amp;quot; &amp;quot;Willi&amp;quot;)
  (&amp;quot;Emil&amp;quot; &amp;quot;Max&amp;quot;)
  (&amp;quot;Willi&amp;quot; &amp;quot;Karl&amp;quot;)))
- (rule ((|:a| string) ist Grossvater von (|:c| string))
+ (rule ((|:a| string) is Grandfather of (|:c| string))
  (|:-| (|:b| string))
- (|:a| ist Vater von |:b|)
- (|:b| ist Vater von |:c|)))
+ (|:a| is Father of |:b|)
+ (|:b| is Father of |:c|)))
  (⊦= '((&amp;quot;Winfred&amp;quot; &amp;quot;Kurt&amp;quot;)
  (&amp;quot;Winfred&amp;quot; &amp;quot;Klaus&amp;quot;)
  (&amp;quot;Max&amp;quot; &amp;quot;Winfred&amp;quot;)
  (&amp;quot;Max&amp;quot; &amp;quot;Willi&amp;quot;)
  (&amp;quot;Emil&amp;quot; &amp;quot;Max&amp;quot;)
  (&amp;quot;Willi&amp;quot; &amp;quot;Karl&amp;quot;))
- (°-&amp;gt;list/ground (fresh° l (a b) (genealogie-ist-Vater-von° a b))))
+ (°-&amp;gt;list/ground (fresh° l (a b) (genealogy-is-Father-of° a b))))
  (⊦= '((&amp;quot;Max&amp;quot; &amp;quot;Kurt&amp;quot;)
  (&amp;quot;Max&amp;quot; &amp;quot;Klaus&amp;quot;)
  (&amp;quot;Max&amp;quot; &amp;quot;Karl&amp;quot;)
  (&amp;quot;Emil&amp;quot; &amp;quot;Winfred&amp;quot;)
  (&amp;quot;Emil&amp;quot; &amp;quot;Willi&amp;quot;))
  (°-&amp;gt;list/ground
- (fresh° l (a b) (genealogie-ist-Grossvater-von° a b))))
+ (fresh° l (a b) (genealogy-is-Grandfather-of° a b))))
  (⊦= '((&amp;quot;Max&amp;quot; &amp;quot;Kurt&amp;quot;)
  (&amp;quot;Max&amp;quot; &amp;quot;Klaus&amp;quot;)
  (&amp;quot;Max&amp;quot; &amp;quot;Karl&amp;quot;)
  (&amp;quot;Emil&amp;quot; &amp;quot;Winfred&amp;quot;)
  (&amp;quot;Emil&amp;quot; &amp;quot;Willi&amp;quot;))
  (°-&amp;gt;list/ground
- (fresh° l (|:a| |:b|) (genealogie |:a| ist Grossvater von |:b|))))
- (⊦= 2 (hash-table-size genealogie-hash-table)))
+ (fresh° l (|:a| |:b|) (genealogy |:a| is Grandfather of |:b|))))
+ (⊦= 2 (hash-table-size genealogy-hash-table)))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.003) (memory #(12582912 2310416 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.002) (memory #(12582912 2310320 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id="test/postgresql°"&gt;&lt;a href="#test/postgresql°"&gt;&lt;code&gt;test/postgresql°&lt;/code&gt;: &lt;span class="w3-text-green"&gt;pass&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id="test/postgresql°"&gt;&lt;a href="#test/postgresql°"&gt;&lt;code&gt;test/postgresql°&lt;/code&gt;: &lt;span class="w3-text-red"&gt;fail&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div&gt;
 &lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;(define (test/postgresql° _)
  (define-knowledge
- genealogie
- (fact ((|:a| string?) ist Vater von (|:c| string?))
+ genealogy
+ (fact ((|:a| string?) is Father of (|:c| string?))
  (text/postgresql &amp;quot;SELECT $1::text, 2::int2&amp;quot; &amp;quot;hello&amp;quot;)
  (text/plain
  (&amp;quot;Winfred&amp;quot; &amp;quot;Kurt&amp;quot;)
@@ -1870,7 +1870,7 @@ bindingscope genealogie {
  (&amp;quot;Willi&amp;quot; &amp;quot;Karl&amp;quot;)
  (&amp;quot;hello&amp;quot; 2))
  (°-&amp;gt;list/ground
- (fresh° l (|:a| |:b|) (genealogie |:a| ist Vater von |:b|))))
+ (fresh° l (|:a| |:b|) (genealogy |:a| is Father of |:b|))))
  (⊦= '((&amp;quot;hello&amp;quot; 2))
  (°-&amp;gt;list/ground
  (fresh° (l) (postgresql° l &amp;quot;SELECT $1::text, 2::int2&amp;quot; &amp;quot;hello&amp;quot;))))
@@ -1925,7 +1925,7 @@ bindingscope genealogie {
  &amp;quot;select * from gdms.event order by 1;&amp;quot;)))))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.077) (memory #(12582912 2338968 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
+&lt;pre class="w3-container"&gt;&lt;code class="w3-code w3-round language-scheme"&gt;((eta 0.0) (memory #(12582912 2339048 1048576)) (stdout &amp;quot;&amp;quot;) (stderr &amp;quot;&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</description></item><item><title/><link>https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>massimo.nocentini@gmail.com (Massimo Nocentini)</author><guid>https://massimo-nocentini.github.io/test-suites/testsuite-sbral-suite/</guid><description>&lt;!doctype html&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
 &lt;head&gt;
