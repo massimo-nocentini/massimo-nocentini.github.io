@@ -22,7 +22,6 @@ By the way, some more refinements are given in the following sections.
     - [_**A logic language for business logic**_](post/plot-engine/)
 
 
-
 ## Christian faith 
 
 The following content is given in *Italian*:
@@ -31,6 +30,6 @@ The following content is given in *Italian*:
 
 ## Misc
 
-- [_**The Standard**_](page/goruck) by [*GORUCK team*](categories/goruck/).
+- [_**The Standard**_](page/goruck) by [*GORUCK team*](categories/goruck/)
 
 
