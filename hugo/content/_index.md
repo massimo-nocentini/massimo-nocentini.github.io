@@ -1,6 +1,9 @@
 
 
-# Table of Contents
+
+# Table of Contents [^1]
+
+[^1]: Thank you, [Raymond Smullyan](https://raymondsmullyan.com/books/this-book-needs-no-title/).
 
 All the content hosted in this site is structurally divided in:
 
@@ -9,7 +12,6 @@ All the content hosted in this site is structurally divided in:
 - [**categories**](categories/) and [**tags**](tags/).
 
 By the way, some more refinements are given in the following sections.
-
 
 ## Computer Science
 
