@@ -18,6 +18,6 @@
 
 - [_**Trattato sulla preghiera del Padre Nostro**_](page/cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/)
 
-## Training
+## Misc
 
-- [_**The Standard**_](page/2020-09-01-goruck) by [*GORUCK team*](categories/goruck/).
+- [_**The Standard**_](page/goruck) by [*GORUCK team*](categories/goruck/).
