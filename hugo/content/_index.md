@@ -1,9 +1,7 @@
 
+Both the title and the subtitle have been inspired to the [Raymond Smullyan's book](https://raymondsmullyan.com/books/this-book-needs-no-title/) and to [Alexander Stepanov's website](https://www.stepanovpapers.com/), respectively. Thank you both.
 
-
-# Table of Contents [^1]
-
-[^1]: Thank you, [Raymond Smullyan](https://raymondsmullyan.com/books/this-book-needs-no-title/).
+# Table of Contents
 
 All the content hosted in this site is structurally divided in:
 
@@ -20,7 +18,7 @@ By the way, some more refinements are given in the following sections.
 - [***Books***](categories/books/)
     - [_**The Reasoned Schemer**_](post/the-reasoned-schemer/)
 - [***Posts***](post/)
-    - [_**NeoVim**_](post/nvim/)
+    - [_**Neovim**_](post/nvim/)
     - [_**A logic language for business logic**_](post/plot-engine/)
 
 
