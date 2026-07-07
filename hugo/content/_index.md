@@ -28,7 +28,8 @@ By the way, some more refinements are given in the following sections.
 
 The following content is given in *Italian*:
 
-- [_**Trattato sulla preghiera del Padre Nostro**_](page/cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/)
+- [**Trattato sulla preghiera del Padre Nostro**](page/cipriano-trattato-padre-nostro) di [*san Cipriano di Cartagine*](categories/san-cipriano-di-cartagine/)
+- [**Di padre in figlio: Conversazioni sul rischio di educare**](page/chi-ama-educa) di [*Franco Nembrini*](categories/nembrini/)
 
 ## Misc
 
