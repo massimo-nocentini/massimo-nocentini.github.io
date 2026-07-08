@@ -12,23 +12,22 @@
 {{ $series := .Get "series" }}
 {{ $edition := .Get "edition" }}
 
-<hr>
 
-<blockquote cite="{{ (.Get " url") }}">
+<blockquote cite="{{ print $url }}">
     {{ if $author }} {{ print $author "," }} {{ end }}
     {{ if $year }} {{ print $year "." }} {{ end }}
-    {{ if $author }} <a href="{{ (.Get "url") }}" target="_blank"><i>{{ print $title "." }}</i></a> {{ end }}
+    {{ if $author }} <a href="{{ print $url }}" target="_blank"><i>{{ print $title "." }}</i></a> {{ end }}
     {{ if $series }} {{ print $series ":" }} {{ end }}
-    {{ if $booktitle }} {{ print "In " $booktitle "," }} {{ else }} {{ if $journal }} {{ print "In " $journal "," }} {{ end }} {{ end }}
+    {{ if $booktitle }} {{ print "In " $booktitle "," }} {{ else }} {{ if $journal }} {{ print "In " $journal "," }}
+    {{ end }} {{ end }}
     {{ if $edition }} {{ print $edition " edition," }} {{ end }}
     {{ if $publisher }} {{ print $publisher "," }} {{ end }}
     {{ if $address }} {{ print $address "," }} {{ end }}
     {{ if $volume }} {{ print "vol. " $volume "," }} {{ end }}
     {{ if $pages }} {{ print "pp. " $pages "." }} {{ end }}
+
+    {{ if $abstract }}
+    <hr><p><strong>Abstract:</strong> <i>{{ $abstract }}</i></p>
+    {{ end }}
+
 </blockquote>
-
-{{ if $abstract }}
-    <p><strong>Abstract:</strong> <i>{{ $abstract }}</i></p>
-{{ end }}
-
-<hr>

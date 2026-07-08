@@ -11,15 +11,17 @@ All the content hosted in this site is structurally divided in:
 
 By the way, some more refinements are given in the following sections.
 
-## Computer Science
+## [Computer Science](categories/computer-science/)
 
-- [***Papers***](categories/papers/)
-    - [_**Final shift for call/cc**_](post/2002-09-17-final-shift-for-callcc/)
-- [***Books***](categories/books/)
-    - [_**The Reasoned Schemer**_](post/the-reasoned-schemer/)
-- [***Posts***](post/)
-    - [_**Neovim**_](post/nvim/)
-    - [_**A logic language for business logic**_](post/plot-engine/)
+- [**Papers**](categories/papers/)
+    - [**Final shift for call/cc**](post/2002-09-17-final-shift-for-callcc/)
+- [_**Books**_](categories/books/)
+    - [**The Reasoned Schemer**](post/the-reasoned-schemer/)
+    - [_**The Art Of Computer Programming**_](categories/taocp/)
+        - [**Satisfiability fascicle**](post/taocp-satisfiability/)
+- [_**Tools**_](categories/tools/)
+    - [**Neovim**](post/nvim/)
+    - [**A logic language for business logic**](post/plot-engine/)
 
 
 ## Christian faith 

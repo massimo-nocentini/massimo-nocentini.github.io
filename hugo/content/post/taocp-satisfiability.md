@@ -1,12 +1,35 @@
 +++
 date = '2026-01-28T09:56:03+01:00'
-title = 'TAOCP, Volume 4, Fascicle 6: Satisfiability'
-subtitle = "Literate programming, implementations and their containers."
+title = 'TAOCP: Volume 4, Fascicle 6.'
+subtitle = "Satisfiability"
 author = 'Donald E. Knuth'
 tags = ['satisfiability']
-categories = ['taocp', 'knuth', 'cweb', 'c', 'books']
+categories = ['taocp', 'knuth', 'cweb', 'c', 'books', 'computer science']
 summary = ' '
 +++
+
+The following paper:
+
+{{< bibtex
+author = "Fichte, Johannes K. and Berre, Daniel Le and Hecher, Markus and Szeider, Stefan"
+title = "The Silent (R)evolution of SAT"
+year = "2023"
+issue_date = "June 2023"
+publisher = "Association for Computing Machinery"
+address = "New York, NY, USA"
+volume = "66"
+number = "6"
+issn = "0001-0782"
+url = "https://doi.org/10.1145/3560469"
+doi = "10.1145/3560469"
+abstract = "Today's powerful, robust SAT solvers have become primary tools for solving hard computational problems."
+journal = "Commun. ACM"
+month = may,
+pages = "64–72"
+numpages = "9"
+>}}
+
+inspired us to go deep in Knuth's work on *satisfiability*, which is the topic of the current post.
 
 # Fascicle
 
