@@ -4,11 +4,9 @@ title = '"Ecce Homo", seconda parte'
 subtitle = ''
 draft = true
 author = 'don Fabio Rosini'
-tags = [
-
-]
-categories = ["don fabio rosini", "vangelo"]
-summary = ''
+tags = []
+categories = ["don fabio rosini", "vangelo", 'youtube' ]
+summary = ' '
 +++
 
 {{< youtubeicon "JHXtInDSlp0" "Ecco l'Uomo (seconda parte). Settimana biblica 9-10 marzo 2017 presso la Parrocchia S. Lorenzo da Brindisi di Francavilla Fontana." >}}

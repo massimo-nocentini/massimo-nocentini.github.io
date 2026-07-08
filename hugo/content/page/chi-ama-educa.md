@@ -1,10 +1,10 @@
 +++
 date = '2012-09-28T09:35:10+01:00'
-title = 'Di padre in figlio'
-subtitle = 'Conversazioni sul rischio di educare'
+title = '(Solo) Chi ama educa'
+subtitle = 'Di padre in figlio: conversazioni sul rischio di educare'
 author = 'Franco Nembrini'
 summary = ' '
-categories = ['nembrini', 'educazione' ]
+categories = ['nembrini', 'youtube' ]
 +++
 
 
@@ -12,9 +12,7 @@ categories = ['nembrini', 'educazione' ]
 
 ---
 
-Allora, eh — buongiorno. Grazie mille di questo invito che mi ha permesso di ascoltare una lezione magistrale di altissimo profilo. E però su questo mi imbarazza anche molto adesso, perché — cosa, cosa resta, da dove mi attacco? Boh. Sono così — non è una battuta — sono così interessanti e stimolanti le parole di Don Roberto, che rispetto anche a quel che avevo pensato di dirvi, mi sembrerebbe di ripeterlo.
-
-Allora forse vale la pena fare una cosa più semplice. Mi sono segnato anch'io le cose che m'hanno colpito di più — vi dico come le capisco io, come reagisco io, che cosa mi viene in mente dal punto di vista delle cose che mi sono capitate, delle cose che ho visto. Non sarà ordinato — anzi, sarà un casino. Però sono delle foto, e poi voi le mettete in ordine. Facciamo una roba così? Dopo, quando devo piantarla, te mi dai una gomitata — finita la riunione, perfetto. Bravissimo.
+Allora forse vale la pena fare una cosa più semplice. Mi sono segnato anch'io le cose che m'hanno colpito di più — vi dico come le capisco io, come reagisco io, che cosa mi viene in mente dal punto di vista delle cose che mi sono capitate, delle cose che ho visto. Non sarà ordinato — anzi, sarà un casino. Però sono delle foto, e poi voi le mettete in ordine.
 
 # Io so chi sono se so di chi sono
 
