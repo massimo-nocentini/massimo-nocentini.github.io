@@ -51,7 +51,7 @@ Lei mi ha guardato e mi ha detto:
 
 Mi sembra che questa sia una delle possibili cause — che ha a che fare evidentemente con la distruzione della tradizione religiosa, eccetera eccetera — ma una delle possibili cause proprio di quella che chiamiamo emergenza educativa. *Emergenza educativa vuol dire che sono saltati i fattori di sicurezza della persona, si è sbriciolato l'io*. Detto in altre parole: non ho mai visto soffrire tanto una generazione di giovani — mai. Io, a 37 anni che insegno — ma soffrire così per diventare grandi non ne ho mai visto. Soffrono, soffrono — anche di misteriose patologie. Insomma, guardate — vi leggo. Faccio prima se vi leggo qualcosa, perché io — imparo queste cose, le imparo. Non è che sono intelligente — però guardo quello che mi succede.
 
-# Una lettera
+# Una prima lettera
 
 Per esempio, può succedere di ricevere una lettera così. Anzi, questa lettera me l'ha mandata un papà che riceve questa lettera dal figlio quindicenne e me la manda dicendomi: "Cosa devo fare?" Il figlio scrive al padre:
 

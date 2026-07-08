@@ -2,22 +2,10 @@
 date = '2018-11-02T15:46:29+01:00'
 title = 'Il Grido'
 subtitle = 'Una lettera che spiega la ferita delle nuove generazioni, la terribile responsabilità degli adulti, e che cosa c’entra Dante con gli uni e con gli altri.'
-author = 'Giuseppe'
-draft = true
-categories = ["nembrini", "dante"]
-tags = [
-    "speranza",
-    "verità",
-    "generazioni",
-    "responsabilità",
-    "dialetto",
-    "Dante",
-    "malattia",
-    "ferita",
-    "Cristo",
-    "educazione",
-]
-summary = "In questa lettera Giuseppe descrive la ferita delle nuove generazioni come mancanza di una speranza vera, denunciando l'insufficienza di strumenti educativi e psicologici che aiutano a esprimersi ma non offrono un significato capace di sostenere la vita. Attraverso il contrasto tra il dialetto vissuto dei nonni, Dante e l'esperienza della malattia mentale, il testo indica in Cristo, Verità incarnata, l'unica risposta adeguata al grido umano di senso, compagnia e salvezza."
+author = 'Franco Nembrini'
+categories = ["nembrini"]
+tags = []
+summary = " "
 +++
 
 *Ripresa da [franconembrini.it](https://www.franconembrini.it/il-grido/)*
