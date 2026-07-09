@@ -11,6 +11,12 @@ pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 #pygmentsUseClassic = true
 #pygmentOptions = "linenos=inline"
+enableGitInfo = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+  page = ["HTML"]
 
 [security]
   allowContent = ['^text/html$', '^text/markdown$']
@@ -24,12 +30,13 @@ pygmentsCodefencesGuessSyntax = true
 [Params]
   homeTitle = "This site needs no title"
   subtitle = "Massimo Nocentini's papers, notes, memos and source code."
+  commit = "https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/"
   mainSections = ['']
 #  logo = "samurai.jpg" # Expecting square dimensions
   favicon = "samurai.jpg"
   dateFormat = "January 2, 2006"
   toc = true
-  commit = true
+  #commit = true
   rss = true
   comments = false
   readingTime = true
@@ -39,9 +46,16 @@ pygmentsCodefencesGuessSyntax = true
   delayDisqus = false
   showRelatedPosts = true
 #  cusdisID = "XXX" # Get your App id from cusdis.com
+  showPostNav = true
   hideAuthor = false
+  mathEngine = "katex"
+  showSource = true
+  sourceRepo = "https://github.com/massimo-nocentini/massimo-nocentini.github.io/blob/master/hugo/content/"
 #  gcse = "012345678901234567890:abcdefghijk" # Get your code from google.com/cse. Make sure to go to "Look and Feel" and change Layout to "Full Width" and Theme to "Classic"
 #  disclaimerText = "The opinions expressed herein are my own personal opinions and do not represent my employer’s view in any way."
+
+[Params.search]
+  provider = "fuse"
 
 #[[Params.bigimg]]
 #  src = "img/triangle.jpg"
