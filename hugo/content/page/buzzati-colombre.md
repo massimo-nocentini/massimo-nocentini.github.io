@@ -2,21 +2,9 @@
 date = '1992-08-01T14:00:21+01:00'
 title = 'Il Colombre'
 author = 'Dino Buzzati'
-draft = true
 subtitle = "Una sola creatura, una sola vita, una sola perla e la scoperta arriva nell'ultimo respiro."
-tags = [
-    "colombre",
-    "mare",
-    "pesce",
-    "paura",
-    "destino",
-    "fuga",
-    "ossessione",
-    "perla",
-    "abisso",
-    "morte",
-]
-categories = ["nembrini", "buzzati"]
+tags = []
+categories = ["buzzati"]
 summary = 'Stefano Roi fugge per tutta la vita dal colombre, credendolo un presagio di morte, per scoprire troppo tardi che inseguiva il dono più prezioso del mare.'
 +++
 

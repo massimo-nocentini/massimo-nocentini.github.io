@@ -3,7 +3,7 @@ date = '2026-06-25T7:59:04+01:00'
 title = "La preghiera del Signore"
 subtitle = "Trattato sul Padre Nostro"
 tags = []
-categories = ['san Cipriano di Cartagine']
+categories = ['san Cipriano di Cartagine', 'preghiere']
 summary = ' '
 author = 'san Cipriano di Cartagine'
 +++

@@ -1,30 +1,14 @@
 +++
 date = '2017-03-31T14:00:21+01:00'
 title = 'Nuovi strani amici'
+subtitle = 'Descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio'
 author = 'Dino Buzzati'
-draft = true
-subtitle = 'Una novella di Dino Buzzati'
-tags = [
-    "apparenza",
-    "inferno",
-    "desiderio",
-    "morte",
-    "eternità",
-    "noia",
-    "illusione",
-    "aldilà",
-    "disperazione",
-    "Buzzati",
-]
-categories = ["nembrini", "buzzati", ]
-summary = "Nel racconto di Buzzati, Stefano Martella approda dopo la morte in una città perfetta, ricca e ordinata, che sembra il paradiso ma si rivela essere l'inferno: un luogo senza dolore, senza paura, senza mancanza e quindi senza desiderio, amore o speranza. La novella mostra in forma paradossale che la vera dannazione non è la sofferenza, ma l'estinzione del desiderio e l'impossibilità di vivere il dramma umano del limite, dell'attesa e della morte."
+tags = []
+categories = ["buzzati", ]
+summary = " "
 +++
 
-*Una lettura consigliata da Franco Nembrini, perchè è una*
-
->*“descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio”,*
-
-*ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/)*.
+*Una lettura consigliata da Franco Nembrini, ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/)*.
 
 ---
 
