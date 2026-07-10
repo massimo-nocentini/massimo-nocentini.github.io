@@ -53,14 +53,14 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/empty _) (⊦= '() (do/monad)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1945440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1942400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/return"><a href="#test/return"><code>test/return</code>: <span class="w3-text-green">pass</span></a></h2>Return lifts a value into the list monad, which creates a singleton list.
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/return _) (⊦= '(4) (do/monad ,4)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1946576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1943536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/two-returns"><a href="#test/two-returns"><code>test/two-returns</code>: <span class="w3-text-green">pass</span></a></h2>Multiple return statements in a do/monad block are implicitly combined with &gt;&gt;=, so the above is equivalent to <code>(return 1) &gt;&gt;= (λ x (let y x) (return (+ x y))).</code>
 <div>
@@ -68,7 +68,7 @@
   (⊦= '(2) (do/monad (← x ,1) (let y x) ,(+ x y))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1947872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1944832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/return/⊕"><a href="#test/return/⊕"><code>test/return/⊕</code>: <span class="w3-text-green">pass</span></a></h2>The <code>return/⊕</code> function lifts a value into the list monad, but it also allows you to specify multiple values to lift, which are combined with ⊕/monad (which is append for lists).  So the above is equivalent to <code>(return/⊕ 1 2 3) &gt;&gt;= (λ x (return/⊕ 4 5 6) &gt;&gt;= (λ y (return/⊕ (+ x y) (- x y)))).</code>
 <div>
@@ -88,14 +88,14 @@
           (return/⊕ `((,x ,y) ,(+ x y) ,(- x y))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1949056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1946064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/fmap"><a href="#test/fmap"><code>test/fmap</code>: <span class="w3-text-green">pass</span></a></h2>The <code>map/monad</code> function is the functor operation for the list monad, which applies a function to each value in the list.  So the above is equivalent to <code>(map add1 (return/⊕ 1 2 3)).</code>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fmap _) (⊦= '(2 3 4) (map/monad add1 (return/⊕ 1 2 3))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1950320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1947328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/&lt;*&gt;"><a href="#test/&lt;*&gt;"><code>test/<*></code>: <span class="w3-text-green">pass</span></a></h2>The <code><*></code> function is the applicative functor operation.  It takes a list of functions and a list of values, and applies each function to each value, returning the combined results.  So the above is equivalent to 
 <div>
@@ -103,7 +103,7 @@
   (⊦= '(2 3 4 0 1 2) (&lt;*&gt; (return/⊕ add1 sub1) (return/⊕ 1 2 3))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1951504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1948512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/lift/monad"><a href="#test/lift/monad"><code>test/lift/monad</code>: <span class="w3-text-green">pass</span></a></h2>The <code>lift/monad</code> function is a convenient way to lift a multi-argument function into the monad.  It takes a function and multiple monadic values, and applies the function to the values inside the monad.  So the above is equivalent to <code>(return/⊕ 1 2 3) &gt;&gt;= (λ x (return/⊕ 4 5 6) &gt;&gt;= (λ y (return (+ x y))))).</code>
 <div>
@@ -112,7 +112,7 @@
         (lift/monad + (return/⊕ 1 2 3) (return/⊕ 4 5 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1952832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1949840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/powerset"><a href="#test/powerset"><code>test/powerset</code>: <span class="w3-text-green">pass</span></a></h2>The <code>powerset/monad</code> function generates the powerset of a list, which is the set of all subsets of the list.  It does this by using <code>filter/monad</code> to filter the list with a predicate that non-deterministically returns true or false for each element, effectively including or excluding each element in the subsets.  So the above is equivalent to <code>(filterM (λ (_) (return/⊕ #f #t)) '(1 2 3 4 5)).</code>
 <div>
@@ -152,5 +152,5 @@
         (powerset/monad '(1 2 3 4 5))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1951096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1951080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

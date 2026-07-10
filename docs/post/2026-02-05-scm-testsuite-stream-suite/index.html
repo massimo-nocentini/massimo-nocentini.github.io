@@ -9,7 +9,7 @@
   (let1 (nats (take§ 20 (nats§ 0)))
         (⊦= '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
               (§-&gt;list nats))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1859728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1863464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/fibs><a href=#test/stream/fibs><code>test/stream/fibs</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/fibs _)
   (let1 (fibs (take§ 20 (fibs§ 0 1)))
         (⊦= '(0
@@ -33,20 +33,20 @@
                 2584
                 4181)
               (§-&gt;list fibs))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1871704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1876904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/ones><a href=#test/stream/ones><code>test/stream/ones</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones _)
   (let1 (ones (take§ 20 (const§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1875264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1880464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/primes><a href=#test/stream/primes><code>test/stream/primes</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/primes _)
   (let1 (primes (take§ 20 primes§))
         (⊦= '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71)
               (§-&gt;list primes))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 2032472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 2065168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/ones+τ><a href=#test/stream/ones+τ><code>test/stream/ones+τ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones+τ _)
   (let1 (ones (take§ 20 (thunk§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2035992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2068688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div></article><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class="nav-side-arrow nav-side-prev" title="The (aux unittest) module" aria-label="Previous Post: The (aux unittest) module"><i class="fas fa-chevron-left"></i>
 </a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class="nav-side-arrow nav-side-next" title="Learning tests for Scheme" aria-label="Next Post: Learning tests for Scheme"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux unittest) module"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-02-05-scm-testsuite-learning-suite/ data-bs-toggle=tooltip data-bs-placement=top title="Learning tests for Scheme">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

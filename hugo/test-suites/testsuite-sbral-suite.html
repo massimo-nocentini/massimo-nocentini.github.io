@@ -58,7 +58,7 @@
         (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1820992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1824808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-ref"><a href="#test-ref"><code>test-ref</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -73,7 +73,7 @@
         (⊦= 'g (sbral-ref q 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1822424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1826240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-list-&gt;sbral"><a href="#test-list-&gt;sbral"><code>test-list->sbral</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -109,7 +109,7 @@
           (list-&gt;sbral ll))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1825512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1829328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-length"><a href="#test-length"><code>test-length</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -118,7 +118,7 @@
     (⊦= (length l) (length/sbral q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1827024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1830840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-update"><a href="#test-update"><code>test-update</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -128,7 +128,7 @@
         (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1828464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1832280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-identity"><a href="#test-identity"><code>test-identity</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -136,5 +136,5 @@
   (let1 (l '(a b c d e f g)) (⊦= l (sbral-&gt;list (list-&gt;sbral l)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1829072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1832888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

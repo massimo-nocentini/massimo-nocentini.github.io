@@ -16,10 +16,10 @@ All the content hosted in this site is structurally divided in:
 
 - [_Papers_](categories/papers/)
     - [**Final shift for call/cc**](post/2002-09-17-final-shift-for-callcc/)
-- [_Books_](categories/books/)
+- [_Logic Programming_](categories/logic-programming/)
     - [**The Reasoned Schemer**](post/the-reasoned-schemer/)
-    - [_The Art Of Computer Programming_](categories/taocp/)
-        - [**Satisfiability fascicle**](post/taocp-satisfiability/)
+- [_The Art Of Computer Programming_](categories/taocp/)
+    - [**Satisfiability fascicle**](post/taocp-satisfiability/)
 - [_Tools_](categories/tools/)
     - [**Neovim**](post/nvim/)
     - [**A logic language for business logic**](post/plot-engine/)
