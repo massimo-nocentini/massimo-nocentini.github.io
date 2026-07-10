@@ -4,7 +4,7 @@ title = 'TAOCP: Volume 4, Fascicle 6.'
 subtitle = "Satisfiability"
 author = 'Donald E. Knuth'
 tags = ['satisfiability']
-categories = ['taocp', 'knuth', 'cweb', 'c', 'books', 'computer science']
+categories = ['taocp', 'cweb', 'c', 'books', 'computer science']
 summary = ' '
 +++
 

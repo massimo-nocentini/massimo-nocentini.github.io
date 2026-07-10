@@ -3,7 +3,7 @@ date = '2020-09-01T7:59:04+01:00'
 title = "The Standard"
 subtitle = "GORUCK, the Rucking Company"
 tags = []
-categories = ['goruck', 'youtube', 'motivational' ]
+categories = ['youtube', 'motivational' ]
 summary = ' '
 author = 'GORUCK team'
 +++

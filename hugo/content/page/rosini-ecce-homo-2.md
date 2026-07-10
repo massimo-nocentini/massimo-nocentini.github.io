@@ -5,7 +5,7 @@ subtitle = ''
 draft = true
 author = 'don Fabio Rosini'
 tags = []
-categories = ["don fabio rosini", "vangelo", 'youtube' ]
+categories = [ "vangelo", 'youtube' ]
 summary = ' '
 +++
 

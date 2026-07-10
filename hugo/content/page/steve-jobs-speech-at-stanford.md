@@ -3,7 +3,7 @@ date = '2005-06-12T7:59:04+01:00'
 title = "You’ve got to find what you love"
 subtitle = "This is a prepared text of the Commencement Address delivered by Steve Jobs, CEO of Apple Computer and of Pixar Animation Studios."
 tags = []
-categories = ['jobs', 'motivational' ]
+categories = ['motivational']
 summary = ' '
 author = 'Steve Jobs'
 +++

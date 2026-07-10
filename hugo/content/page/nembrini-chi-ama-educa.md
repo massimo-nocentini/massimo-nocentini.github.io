@@ -4,7 +4,7 @@ title = '(Solo) Chi ama educa'
 subtitle = 'Di padre in figlio: conversazioni sul rischio di educare'
 author = 'Franco Nembrini'
 summary = ' '
-categories = ['nembrini', 'youtube', 'education']
+categories = ['youtube', 'education']
 +++
 
 

@@ -4,7 +4,7 @@ title = 'Nuovi strani amici'
 subtitle = 'Descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio'
 author = 'Dino Buzzati'
 tags = []
-categories = ["buzzati", ]
+categories = ["novelle", ]
 summary = " "
 +++
 

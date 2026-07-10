@@ -4,7 +4,7 @@ title = 'Il Colombre'
 author = 'Dino Buzzati'
 subtitle = "Una sola creatura, una sola vita, una sola perla e la scoperta arriva nell'ultimo respiro."
 tags = []
-categories = ["buzzati"]
+categories = ["novelle"]
 summary = 'Stefano Roi fugge per tutta la vita dal colombre, credendolo un presagio di morte, per scoprire troppo tardi che inseguiva il dono più prezioso del mare.'
 +++
 
