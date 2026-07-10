@@ -3,7 +3,7 @@ date = '2019-03-15T18:33:23+01:00'
 title = "Functions and Jordan canonical forms of Riordan matrices"
 author = ['Massimo Nocentini', 'Donatella Merlini']
 tags = [ "matrices", 'riordan', 'canonical', 'hermite', 'jordan' ]
-categories = ['papers']
+categories = ['generating functions']
 summary = ' '
 +++
 

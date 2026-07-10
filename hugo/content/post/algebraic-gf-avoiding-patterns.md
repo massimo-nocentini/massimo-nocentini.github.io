@@ -3,7 +3,7 @@ date = '2018-01-21T18:33:23+01:00'
 title = "Algebraic Generating Functions for Languages Avoiding Riordan Patterns"
 author = ['Massimo Nocentini', 'Donatella Merlini']
 tags = [ "matrices", 'riordan', 'generating functions', 'patterns', 'algebraic' ]
-categories = ['papers']
+categories = ['generating functions']
 summary = ' '
 +++
 

@@ -2,8 +2,9 @@
 date = '2018-03-09T10:02:03+01:00'
 title = 'The Reasoned Schemer'
 subtitle = 'miniKanren, microKanren and some implementations'
+author = ['Daniel P. Friedman',  'William E. Byrd',  'Oleg Kiselyov', 'Jason Hemann']
 summary = ' '
-categories = ['scheme', 'kanren', 'logic programming']
+categories = ['scheme', 'logic programming']
 tags = ['sbral']
 +++
 
