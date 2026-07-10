@@ -22,7 +22,6 @@ All the content hosted in this site is structurally divided in:
     - [**Satisfiability fascicle**](post/taocp-satisfiability/)
 - [_Tools_](categories/tools/)
     - [**Neovim**](post/nvim/)
-    - [**A logic language for business logic**](post/plot-engine/)
 
 
 The following content is given in *Italian*, grouped by authors:

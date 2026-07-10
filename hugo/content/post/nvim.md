@@ -3,7 +3,7 @@ date = '2026-07-03T09:58:04+01:00'
 title = 'Neovim'
 subtitle = 'Hyperextensible Vim-based text editor'
 summary = ' '
-categories = ['editor', 'lua']
+categories = ['tools', 'lua']
 +++
 
 # Vision 
