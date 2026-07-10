@@ -5,10 +5,9 @@ Both the title and the subtitle have been inspired to the [Raymond Smullyan's bo
 
 # Table of Contents
 
-All the content hosted in this site is structurally divided in [*posts*](post/) and [*pages*](page/);
-moreover, it is grouped by [*categories*](categories/) and [*tags*](tags/). 
+All the content hosted in this site is structurally divided in [*posts*](post/) and [*pages*](page/).
 
-## Topics
+## [*Categories*](categories/) 
 
 - [_Generating Functions_](categories/generating-functions/)
 - [_Logic Programming_](categories/logic-programming/)
@@ -19,12 +18,9 @@ moreover, it is grouped by [*categories*](categories/) and [*tags*](tags/).
 - [_Motivational_](categories/motivational/)
 - [_Praying_](categories/preghiere/)
 
-## Authors
+## [*Tags*](tags/)
+
+## [*Authors*](author/)
 
 - [_Franco Nembrini_](categories/nembrini/)
 - [_Dino Buzzati_](categories/buzzati/)
-
-
-
-
-

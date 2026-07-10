@@ -108,6 +108,11 @@ enableGitInfo = true
   #lastfm = "username"
   #bluesky = "username"
 
+[taxonomies]
+  author = "author"
+  #date = "date"
+  #year = "years"
+
 [[menu.main]]
     name = "About"
     url = "page/about/"
