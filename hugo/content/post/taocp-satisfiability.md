@@ -6,6 +6,7 @@ author = 'Donald E. Knuth'
 tags = ['satisfiability']
 categories = ['taocp', 'cweb', 'c', 'books', 'computer science']
 summary = ' '
+ghRepo = 'massimo-nocentini/SAT.cweb'
 +++
 
 The following paper:

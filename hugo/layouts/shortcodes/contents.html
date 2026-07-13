@@ -1,0 +1,5 @@
+<ul>
+    {{ range where .Site.RegularPages.ByDate.Reverse "Section" (.Get 0) }}
+    <li><a href="{{ .Permalink }}">{{ .LinkTitle }} <sub><i>{{ .Date.Format "January 2, 2006" }}</i></sub></a></li>
+    {{ end }}
+</ul>

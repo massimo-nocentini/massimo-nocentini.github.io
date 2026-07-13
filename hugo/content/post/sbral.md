@@ -1,7 +1,7 @@
 +++
 date = '2026-04-10T09:58:04+01:00'
 title = 'The SBRAL data structure'
-subtitle = 'Aka: Skew Binary Random-Access Lists'
+subtitle = 'Skew Binary Random-Access Lists'
 summary = ' '
 categories = ['scheme', 'data structure']
 tags = ['sbral']
