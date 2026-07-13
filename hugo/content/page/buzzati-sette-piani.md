@@ -2,22 +2,10 @@
 date = '1937-03-01T14:00:21+01:00'
 title = 'Sette piani'
 author = 'Dino Buzzati'
-draft = true
 subtitle = "Una metafora del dramma interiore vissuto dall'uomo di fronte all'inevitabile e misteriosa precarietà della vita e della conseguente incapacità psicologica da parte dell'uomo di adattarsi alla realtà della morte."
-tags = [
-    "Ospedale",
-    "Degrado psicologico",
-    "Assurdo",
-    "Sistema istituzionale",
-    "Morte",
-    "Ansia",
-    "Condizionamento",
-    "Identità",
-    "Kafkaesco",
-    "Esistenzialismo"
-]
-categories = ["buzzati"]
-summary = "Racconto della storia di Giuseppe Corte, ricoverato in un sanatorio dove i pazienti sono distribuiti su sette piani in base alla gravità della malattia. Pur essendo affetto da una forma lieve, una serie di trasferimenti apparentemente giustificati lo porta progressivamente verso i piani inferiori. Tra burocrazia, paura e rassegnazione, Corte finisce al primo piano, riservato ai moribondi, vittima di un sistema che trasforma piccoli compromessi in una condanna inevitabile."
+tags = []
+categories = ['novelle']
+summary = " "
 +++
 
 Dopo un giorno di viaggio in treno, Giuseppe Corte arrivò, una mattina di marzo, alla città dove c'era la famosa casa cura. Aveva un po' di febbre, ma volle fare ugualmente a piedi strada fra la stazione e l'ospedale, portandosi la sua valigetta.

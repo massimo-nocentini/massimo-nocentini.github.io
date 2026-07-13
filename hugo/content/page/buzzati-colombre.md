@@ -5,7 +5,7 @@ author = 'Dino Buzzati'
 subtitle = "Una sola creatura, una sola vita, una sola perla e la scoperta arriva nell'ultimo respiro."
 tags = []
 categories = ["novelle"]
-summary = 'Stefano Roi fugge per tutta la vita dal colombre, credendolo un presagio di morte, per scoprire troppo tardi che inseguiva il dono più prezioso del mare.'
+summary = ' '
 +++
 
 Quando Stefano Roí compí i dodici anni, chiese in regalo a suo padre, capitano di mare
