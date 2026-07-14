@@ -11,9 +11,7 @@ Both the title and the subtitle have been inspired to the [Raymond Smullyan's bo
 ## [*Authors*](author/)
 
 ## [*Pages*](page/)
-
 {{< contents "page" >}}
 
 ## [*Posts*](post/)
-
 {{< contents "post" >}}

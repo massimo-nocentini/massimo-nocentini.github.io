@@ -49,7 +49,27 @@ Our implementation contains:
 - matching of *vectors* and *records*,
 - *guards* are introduced after the `⇒` keyword,
 - *injection* and *negated injection* of expressions in patterns (see those in action in a [more complex interpreter]({{% relref "post/minikanren-live-and-untagged/#test-%CE%BB-calculus-interpreter" %}}))
-- sexp-based *error reporting* in case of either no matches or overlapping patterns. 
+- sexp-based *error reporting* in case of either no matches or overlapping patterns.
+
+The implementation of the corresponding syntaxes tackles the critique in:
+
+{{< bibtex
+author = "Wadler, P"
+title = "A critique of Abelson and Sussman or why calculating is better than scheming"
+year = "1987"
+issue_date = "March 1987"
+publisher = "Association for Computing Machinery"
+address = "New York, NY, USA"
+volume = "22"
+number = "3"
+issn = "0362-1340"
+url = "https://doi.org/10.1145/24697.24706"
+doi = "10.1145/24697.24706"
+journal = "SIGPLAN Not."
+month = mar,
+pages = "83–94"
+numpages = "12"
+>}}
 
 # An example
 

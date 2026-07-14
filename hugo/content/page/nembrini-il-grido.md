@@ -10,6 +10,10 @@ summary = " "
 
 *Ripresa da [franconembrini.it](https://www.franconembrini.it/il-grido/)*
 
+[^1]: [Giovannino Guareschi](https://it.wikipedia.org/wiki/Giovannino_Guareschi) (Fontanelle di Roccabianca, 1º maggio 1908 – Cervia, 22 luglio 1968): La sua opera più popolare è il [*Mondo Piccolo*](https://it.wikipedia.org/wiki/Don_Camillo_(romanzo)), un insieme di 347 racconti ambientati nella città fittizia di Ponteratto, una località della bassa padana emiliana. Tutte le storie narrano le vicende degli amici-rivali Don Camillo, il parroco, e Peppone, il sindaco comunista del paesino.
+
+
+
 ---
 
 Ciao Franco,
@@ -17,7 +21,7 @@ Ciao Franco,
 Dopotutto voi avevate il dialetto… La mia mamma mi sgridava in dialetto e le cose più vere di sé le dice in dialetto.
 Voi vivevate in dialetto e vi siete adattati all’italiano. Io mi esprimo in Italiano, dico le cose in Italiano, ma non vivo in Italiano, almeno non tanto bene come voi in dialetto.
 
-Sembra una cosa complicata ma provo a spiegarti: Guareschi diceva di conoscere pochissimi vocaboli, ma che con quelli riusciva a dire tutto quello che aveva bisogno di dire.
+Sembra una cosa complicata ma provo a spiegarti: Guareschi [^1] diceva di conoscere pochissimi vocaboli, ma che con quelli riusciva a dire tutto quello che aveva bisogno di dire.
 A scuola ci hanno massacrato con Dante, Petrarca, Foscolo, Leopardi, Manzoni, Pascoli, le figure retoriche, l’esprimersi come si deve ecc.
 Ma il punto è: certo che ci si deve esprimere bene, ma bisogna avere soprattutto qualcosa da dire, bisogna avere una speranza vera da comunicare.
 
