@@ -1,8 +1,8 @@
 
 +++
-date = '1994-01-01T14:00:21+01:00'
+date = '1994-12-09T14:00:21+01:00'
 title = 'Riconoscere Cristo'
-subtitle = 'La lezione agli esercizi spirituali degli universitari di Comunione e Liberazione.'
+subtitle = 'Una presenza nello sguardo'
 draft = true
 author = 'don Luigi Giussani'
 tags = []
@@ -11,9 +11,9 @@ summary = ' '
 +++
 
 - {{< youtubeicon "MUlyhZWMIgg" "Riconoscere Cristo - Comunione e Liberazione" >}}.
-- Una trascrizione in [pdf](https://www.clonline.org/storage_files/pages-images/1727253075-riconoscere-cristo-il-tempo-e-il-tempio.pdf).
-- Parte del libro [Il tempo e il tempio](https://www.scritti.luigigiussani.org/s/il-tempo-e-il-tempio-dio-e-l-uomo-20000126).
-- [Supplemento](https://www.scritti.luigigiussani.org/s/riconoscere-cristo-in-una-presenza-nello-sguardo-esercizi-spirituali-di-comunione-e-liberazione-20150825) a [*Una presenza nello sguardo*](https://www.clonline.org/storage_files/18728/una-presenza-nello.pdf), libretto degli Esercizi spirituali della Fraternità di Comunione e Liberazione.
+- Una trascrizione in [*pdf*](https://www.clonline.org/storage_files/pages-images/1727253075-riconoscere-cristo-il-tempo-e-il-tempio.pdf), completo di note e riferimenti.
+- Parte del libro [*Il tempo e il tempio*](https://www.scritti.luigigiussani.org/s/il-tempo-e-il-tempio-dio-e-l-uomo-20000126).
+- Supplemento a [*Una presenza nello sguardo*](https://www.clonline.org/storage_files/18728/una-presenza-nello.pdf), libretto degli [*Esercizi spirituali della Fraternità di Comunione e Liberazione*](https://www.scritti.luigigiussani.org/s/riconoscere-cristo-in-una-presenza-nello-sguardo-esercizi-spirituali-di-comunione-e-liberazione-20150825).
 
 
 ---
