@@ -41,6 +41,10 @@ Extensible. Usable. Vim.
 
 # Learning and docs
 
+## [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
+
+by [Steve Losh](https://stevelosh.com/).
+
 ## [Typecraft's](https://typecraft.dev/) playlists
 
 [Chris Power](https://typecraft.dev/authors/chris-power) is the author of the followings:
