@@ -1,7 +1,7 @@
 
+[*About me*](about/).
 
 # *Table of Contents*
-
 
 - ## [*Pages*](page/)
 <!-- {{< contents "page" >}} -->
