@@ -120,7 +120,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
 
 [[menu.main]]
     name = "About"
-    url = "page/about/"
+    url = "about/"
     weight = 1
 
 #[[menu.main]]
@@ -143,25 +143,25 @@ ignoreLogs = ['warning-goldmark-raw-html']
 #    url = "categories/"
 #    weight = 4
 
-[[menu.main]]
-    identifier = "externals"
-    name = "Externals"
-    weight = 5
+#[[menu.main]]
+#    identifier = "externals"
+#    name = "Externals"
+#    weight = 5
 
-[[menu.main]]
-    parent = "externals"
-    name = "Data Structures in Smalltalk"
-    url = "https://massimo-nocentini.github.io/Booklet-DSst/"
-    weight = 1
+#[[menu.main]]
+#    parent = "externals"
+#    name = "Data Structures in Smalltalk"
+#    url = "https://massimo-nocentini.github.io/Booklet-DSst/"
+#    weight = 1
 
-[[menu.main]]
-    parent = "externals"
-    name = "Crate libpq-rs"
-    url = "https://massimo-nocentini.github.io/libpq-rs/libpq/index.html"
-    weight = 2
+#[[menu.main]]
+#    parent = "externals"
+#    name = "Crate libpq-rs"
+#    url = "https://massimo-nocentini.github.io/libpq-rs/libpq/index.html"
+#    weight = 2
 
-[[menu.main]]
-    parent = "externals"
-    name = "Crate igraph-rs"
-    url = "https://massimo-nocentini.github.io/igraph-rs/igraph/"
-    weight = 3
+#[[menu.main]]
+#    parent = "externals"
+#    name = "Crate igraph-rs"
+#    url = "https://massimo-nocentini.github.io/igraph-rs/igraph/"
+#    weight = 3

@@ -1,5 +1,7 @@
 # Me
 
+Both the title and the subtitle have been inspired to the [Raymond Smullyan's book](https://raymondsmullyan.com/books/this-book-needs-no-title/) and to [Alexander Stepanov's website](https://www.stepanovpapers.com/), respectively. Thank you both.
+
 ## Education
 
 - [deeplearning.ai](https://www.deeplearning.ai/deep-learning-specialization/)'s *Deep Learning Specialization* completed on July 27, 2020 ([certificate](https://coursera.org/share/5cf1b2682cfa4c3b972540081f9ed6e5)).
