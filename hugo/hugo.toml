@@ -12,6 +12,7 @@ pygmentsCodefencesGuessSyntax = true
 #pygmentsUseClassic = true
 #pygmentOptions = "linenos=inline"
 enableGitInfo = true
+ignoreLogs = ['warning-goldmark-raw-html']
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

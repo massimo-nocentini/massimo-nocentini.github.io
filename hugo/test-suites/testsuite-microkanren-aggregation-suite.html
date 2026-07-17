@@ -21,9 +21,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section815">
-<header>
-<h1>Tests</h1></header></section>
 <h2 id="test/project°"><a href="#test/project°"><code>test/project°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/project° _)
@@ -37,10 +34,10 @@
               (project° ((s* s)) (=° r (+ s* 500))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.026) (memory #(12582912 2136912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.026) (memory #(12582912 2136856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/groupby°/empty"><a href="#test/groupby°/empty"><code>test/groupby°/empty</code>: <span class="w3-text-green">pass</span></a></h2>
-<p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite>[<a href="#cite816">1</a>]</cite>:
+<p>The following table has been kept from the PostgreSQL documentation example on <i>window functions </i><cite><a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL Window Functions</a></cite>:
 <pre><code class="w3-code w3-round">  depname  | empno | salary |          avg
 -----------+-------+--------+-----------------------
  develop   |    11 |   5200 | 5020.0000000000000000
@@ -74,7 +71,7 @@
                 (=° r s*)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2151896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2152032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/groupby°/one-column"><a href="#test/groupby°/one-column"><code>test/groupby°/one-column</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -96,7 +93,7 @@
               (λ (a b) (&lt; (cadr a) (cadr b))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2139120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2139184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/set°"><a href="#test/set°"><code>test/set°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -117,7 +114,7 @@
               (λ (a b) (&lt; (cadr a) (cadr b))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2140944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2140856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/enumerate°"><a href="#test/enumerate°"><code>test/enumerate°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -147,7 +144,7 @@
                 (=° r c)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2154784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2154760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/window°"><a href="#test/window°"><code>test/window°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -200,9 +197,5 @@
                 (=° r `(,d ,e ,s ,s*))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2144912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div>
-<hr />
-<div class="w3-container">
-<header><b>References</b></header><span id="cite816">[1] <a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL Window Functions</a></span>
-<br /></div></body></html>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2144824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

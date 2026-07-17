@@ -21,9 +21,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section1806">
-<header>
-<h1>Tests</h1></header></section>
 <h2 id="test-λ-calculus-interpreter"><a href="#test-λ-calculus-interpreter"><code>test-λ-calculus-interpreter</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
@@ -73,7 +70,7 @@
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2481200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2481144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/eval-exp°"><a href="#test/eval-exp°"><code>test/eval-exp°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -200,7 +197,7 @@
             (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.128) (memory #(12582912 2491072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.127) (memory #(12582912 2491304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/symbol°"><a href="#test/symbol°"><code>test/symbol°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -210,7 +207,7 @@
   (⊦= '((λ (α) α)) (°-&gt;list #f (fresh° (s r) (symbol° r)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2492088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2492320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/≠°"><a href="#test/≠°"><code>test/≠°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -292,7 +289,7 @@
             (=° q (list p r))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2484712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2484632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/rember°/naive"><a href="#test/rember°/naive"><code>test/rember°/naive</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -314,7 +311,7 @@
   (⊦= '(α) (μkanren-run (q -1 #t) (rember° 'b '(b) '(b)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2484480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2484392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/rember°/fixed"><a href="#test/rember°/fixed"><code>test/rember°/fixed</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -345,7 +342,7 @@
           (fresh° (q x out) (rember° x '(a b c) out) (=° (list x out) q)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2491152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2491048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/absent°"><a href="#test/absent°"><code>test/absent°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -363,5 +360,5 @@
             (absent° 'panda q)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2492232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2492128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

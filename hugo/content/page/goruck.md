@@ -468,3 +468,7 @@ You become a part of something greater.
 There's finally something where there's a bar, and if you don't make it, nobody cares.
 
 > Meet the standard or quit.
+
+# Products
+
+- [GR1 Explained by Jason, GORUCK’s Founder](https://blog.goruck.com/travel/gr1-explained-by-jason-gorucks-founder/)

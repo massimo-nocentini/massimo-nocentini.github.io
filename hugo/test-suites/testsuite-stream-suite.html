@@ -21,9 +21,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
 <script>hljs.highlightAll();</script></head>
 <body>
-<section id="section175">
-<header>
-<h1>Tests</h1></header></section>
 <h2 id="test/stream/nats"><a href="#test/stream/nats"><code>test/stream/nats</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream/nats _)
@@ -32,7 +29,7 @@
               (§-&gt;list nats))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1863464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1863376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/fibs"><a href="#test/stream/fibs"><code>test/stream/fibs</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -61,7 +58,7 @@
               (§-&gt;list fibs))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1876904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1878472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/ones"><a href="#test/stream/ones"><code>test/stream/ones</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -70,7 +67,7 @@
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1880464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1882032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/primes"><a href="#test/stream/primes"><code>test/stream/primes</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -80,7 +77,7 @@
               (§-&gt;list primes))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 2065168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 2083056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/ones+τ"><a href="#test/stream/ones+τ"><code>test/stream/ones+τ</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -89,5 +86,5 @@
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2068688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2086576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

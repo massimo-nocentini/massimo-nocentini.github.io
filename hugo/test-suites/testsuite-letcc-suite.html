@@ -27,15 +27,15 @@
 <p>The fundamental macro <code class="w3-codespan">letcc</code> in the form 
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(letcc k body ...)
-</code></pre></div> binds <code class="w3-codespan">k</code> to the <i>current continuation </i><cite>[<a href="#cite773">1</a>]</cite><cite>[<a href="#cite774">2</a>]</cite><cite>[<a href="#cite775">3</a>]</cite><cite>[<a href="#cite776">4</a>]</cite> in <code class="w3-codespan">body...</code> expressions; for the sake of clarity, it expands to
+</code></pre></div> binds <code class="w3-codespan">k</code> to the <i>current continuation </i><cite><a href="https://docs.scheme.org/schintro/schintro_141.html"></a></cite><cite><a href="https://en.wikipedia.org/wiki/Call-with-current-continuation"></a></cite><cite><a href="https://ds26gte.github.io/tyscheme/index-Z-H-15.html"></a></cite><cite><a href="https://matt.might.net/articles/programming-with-continuations--exceptions-backtracking-search-threads-generators-coroutines/">Continuations by example</a></cite> in <code class="w3-codespan">body...</code> expressions; for the sake of clarity, it expands to
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(continuation-capture
   (λ (cont)
       (let1 (k (λ args (continuation-graft cont (τ (apply values args)))))
             body
             ...)))
-</code></pre></div>where <code class="w3-codespan">continuation-capture</code> and <code class="w3-codespan">continuation-return</code> are defined in <cite>[<a href="#cite786">5</a>]</cite> and based on <cite>[<a href="#cite787">6</a>]</cite> by Marc Feeley, respectively.</p>
-<section id="section788">
+</code></pre></div>where <code class="w3-codespan">continuation-capture</code> and <code class="w3-codespan">continuation-return</code> are defined in <cite><a href="https://wiki.call-cc.org/man/5/Module%20(chicken%20continuation)">Module <code class="w3-codespan">(chicken continuation)</code></a></cite> and based on <cite><a href="http://www.iro.umontreal.ca/~feeley/papers/FeeleySW01.pdf">A Better API for First-Class Continuations</a></cite> by Marc Feeley, respectively.</p>
+<section id="section782">
 <header>
 <h1>Implementation</h1></header></section>
 <div>
@@ -66,18 +66,15 @@
     (trycc (next exp ...) (else body ...))
     (letcc* hop ((v (let1 (next (τ (hop (void)))) exp)) ...) body ...)))
 </code></pre></div>
-<section id="section789">
-<header>
-<h1>Tests</h1></header></section>
 <h2 id="test/letcc/multiarg"><a href="#test/letcc/multiarg"><code>test/letcc/multiarg</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcc/multiarg _) (⊦= 'a (letcc k (k 'a))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 2075120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 2075064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/letcc*"><a href="#test/letcc*"><code>test/letcc*</code>: <span class="w3-text-green">pass</span></a></h2>
-<p>The frame in <cite>[<a href="#cite790">7</a>]</cite> is of inspiration of the <code class="w3-codespan">letcc*</code> macro.</p>
+<p>The frame in <cite><a href="https://mitpress.mit.edu/9780262561006/the-seasoned-schemer/">The Seasoned Schemer: page 89, see <code class="w3-codespan">rember1*</code> definition.</a></cite> is of inspiration of the <code class="w3-codespan">letcc*</code> macro.</p>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(continuation-capture
   (λ (cont)
@@ -102,7 +99,7 @@
         (letcc* ⤶ ((v (cons 3 (⤶ '(2))))) (cons 1 (⤶ (cons 4 v))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2077472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2077416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/trycc"><a href="#test/trycc"><code>test/trycc</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -112,7 +109,7 @@
   (⊦= '(3) (trycc (✗ (+ 1 (✗)) (+ 2 (✗))) (else (cons 3 '())))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2078968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2078912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/letcc/dfs"><a href="#test/letcc/dfs"><code>test/letcc/dfs</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -213,15 +210,5 @@
           (dft2 ((dft-comb t2) t1)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 2089792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div>
-<hr />
-<div class="w3-container">
-<header><b>References</b></header><span id="cite773">[1] <a href="https://docs.scheme.org/schintro/schintro_141.html">https://docs.scheme.org/schintro/schintro_141.html</a></span>
-<br /><span id="cite774">[2] <a href="https://en.wikipedia.org/wiki/Call-with-current-continuation">https://en.wikipedia.org/wiki/Call-with-current-continuation</a></span>
-<br /><span id="cite775">[3] <a href="https://ds26gte.github.io/tyscheme/index-Z-H-15.html">https://ds26gte.github.io/tyscheme/index-Z-H-15.html</a></span>
-<br /><span id="cite776">[4] <a href="https://matt.might.net/articles/programming-with-continuations--exceptions-backtracking-search-threads-generators-coroutines/">Continuations by example</a></span>
-<br /><span id="cite786">[5] <a href="https://wiki.call-cc.org/man/5/Module%20(chicken%20continuation)">Module <code class="w3-codespan">(chicken continuation)</code></a></span>
-<br /><span id="cite787">[6] <a href="http://www.iro.umontreal.ca/~feeley/papers/FeeleySW01.pdf">A Better API for First-Class Continuations</a></span>
-<br /><span id="cite790">[7] <a href="https://mitpress.mit.edu/9780262561006/the-seasoned-schemer/">The Seasoned Schemer: page 89, see <code class="w3-codespan">rember1*</code> definition.</a></span>
-<br /></div></body></html>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 2089688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>
