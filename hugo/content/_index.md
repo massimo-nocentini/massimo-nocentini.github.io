@@ -1,5 +1,4 @@
 
-[*About me*](about/).
 
 # *Table of Contents*
 
