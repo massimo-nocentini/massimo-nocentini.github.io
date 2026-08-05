@@ -49,7 +49,7 @@ A questo punto noi seguiamo Gesù che viene portato da Pilato. Leggiamo:
 Questa cosa è grottesca. Stanno portando avanti un processo completamente storto, hanno fatto delle cose senza senso, hanno legato Gesù, lo portano legato.
 Però loro stanno facendo questa ingiustizia e intanto non si contaminano per celebrare la Pasqua. Cioè non toccano il pavimento del pretorio perché è un luogo di pagani. Questa cosa qui è sporca, terribile.
 È come dire: sto menando mia moglie, però faccio il digiuno un'ora prima della Messa.
-Sto menando Gesù, però non mi contamino per celebrare la Pasqua. 
+Sto menando Gesù, però non mi contamino per celebrare la Pasqua.
 Sto rifiutando il Messia, però i riti li faccio giusti, le regole le seguo perfette.
 
 Che succede? Loro lo portano lì osservando le regole della Pasqua.
@@ -58,14 +58,14 @@ Che succede? Loro lo portano lì osservando le regole della Pasqua.
 
 Il governatore, che è un magistrato, deve uscire lui fuori perché questi stanno con il venerdì prima della Pasqua, il giorno importante, e quindi devono osservare i loro riti.
 
-> Uscì verso di loro e domandò: “Che accusa portate contro questo uomo?”
+> Uscì verso di loro e domandò: "Che accusa portate contro questo uomo?"
 
 Parla da magistrato, formale: *"Ditemi l'accusa. Formulate l'accusa."* Sentite la risposta:
 
 > Se costui non fosse un malfattore, non te l'avremmo consegnato.
 
 Vi sembra un'accusa questa? È un miracolo di reticenza. Non dicono niente:
-*“Se non fosse un malfattore non te lo consegnavamo”*. Ma che cosa ha fatto questo benedetto uomo? Niente.
+*"Se non fosse un malfattore non te lo consegnavamo"*. Ma che cosa ha fatto questo benedetto uomo? Niente.
 Allora Pilato disse loro:
 
 > Prendetelo voi e giudicatelo secondo la vostra legge.
@@ -88,7 +88,7 @@ e loro rispondono:
 > Sì, ma ci avete tolto il diritto di uccidere le persone, quindi tocca a te farlo
 
 Così si compivano le parole che Gesù aveva detto indicando di quale morte doveva morire, cioè per mano dei pagani.
-Pilato allora entrò nel pretorio, fece chiamare Gesù e gli disse: 
+Pilato allora entrò nel pretorio, fece chiamare Gesù e gli disse:
 
 > Sei tu il re dei Giudei?
 
@@ -115,7 +115,7 @@ Gesù fino adesso è stato molto frenato. Con Pilato invece si mette a parlare. 
 
 > Dici questo da te oppure altri te l'hanno detto sul mio conto?
 
-*E' farina del tuo sacco per caso?* Gesù sta esaminando Pilato. Infatti Pilato va in confusione e risponde:
+*È farina del tuo sacco per caso?* Gesù sta esaminando Pilato. Infatti Pilato va in confusione e risponde:
 
 > Sono forse io giudeo? La tua gente e i tuoi capi ti hanno consegnato a me. Che cosa hai fatto?
 
@@ -124,8 +124,7 @@ Sta giustificando la sua risposta. Perché Gesù gli ha toccato qualcosa. Pilato
 > Il mio regno non è di questo mondo. Se il mio regno fosse di questo mondo i miei servitori avrebbero combattuto perché non fossi consegnato ai Giudei. Ma il mio regno non è di quaggiù.
 
 Dobbiamo stare molto attenti perché noi questa frase la intendiamo male.
-Noi la intendiamo così: *“sto fuori casa, quindi i miei soldati non possono combattere per difendermi, perchè se 
-stavamo a casa mia...”*. Ma Gesù non sta dicendo questo. Usa una particella greca che vuol dire:
+Noi la intendiamo così: *"sto fuori casa, quindi i miei soldati non possono combattere per difendermi, perché se stavamo a casa mia..."*. Ma Gesù non sta dicendo questo. Usa una particella greca che vuol dire:
 
 > Il mio regno non viene da questo mondo,
 
@@ -139,7 +138,7 @@ Sta citando Pietro che ha tirato fuori la spada e ha tagliato il lobo dell'orecc
 
 Il mio regno non è del tipo del tuo, caro Pilato. E tu sei rappresentante del più grande regno della terra in questo momento. Tu combatti con la spada. Io non faccio questo.
 
-> “Se il mio regno fosse di questo mondo, i miei servitori avrebbero combattuto”
+> "Se il mio regno fosse di questo mondo, i miei servitori avrebbero combattuto"
 
 Se fosse stato di questo mondo, sarebbe stato giusto combattere. Sarebbe stato giusto.
 E invece non è giusto combattere.
@@ -152,42 +151,42 @@ Ed è interessante, perché questa è una cosa strana, inaspettata, imbarazzante
 
 Ma Pilato dice:
 
-> “Dunque tu sei re?”
+> "Dunque tu sei re?"
 
 Nel greco non c'è il punto interrogativo: è un'affermazione.
 
-> “Dunque tu sei re.”
+> "Dunque tu sei re."
 
 E Gesù:
 
-> “Tu lo dici.”
+> "Tu lo dici."
 
 Attenti: noi crediamo che questa frase di Gesù sia un modo di parlare abituale, come dire:
 
-> “Ci vuoi due cucchiaini di zucchero nel caffè?”  
-> “Tu lo dici.”
+> "Ci vuoi due cucchiaini di zucchero nel caffè?"
+> "Tu lo dici."
 
 Ma non è così.
 È solamente qui, in questo dialogo, che compare questa espressione da parte di Gesù.
 E ci siamo dimenticati della domanda precedente:
 
-> “Dici questo da te oppure altri te l'hanno detto sul mio conto?”
+> "Dici questo da te oppure altri te l'hanno detto sul mio conto?"
 
 Pilato aveva risposto:
 
-> “Ma io non sono giudeo! La tua gente ti ha consegnato. Che hai fatto?”
+> "Ma io non sono giudeo! La tua gente ti ha consegnato. Che hai fatto?"
 
 E Gesù:
 
-> “Il mio regno non è di questo mondo.”
+> "Il mio regno non è di questo mondo."
 
 Cioè: non è di questo tipo.
 
-> “Se fosse di questo mondo i miei servitori avrebbero combattuto perché non fossi consegnato. Ma il mio regno non è di questo mondo.”
+> "Se fosse di questo mondo i miei servitori avrebbero combattuto perché non fossi consegnato. Ma il mio regno non è di questo mondo."
 
 E allora Gesù praticamente gli dice:
 
-> “Vedi che lo dici tu?”
+> "Vedi che lo dici tu?"
 
 Risultato: l'hai detto tu. Sei tu che me lo stai dicendo.
 Guardate come Gesù si avvolge con Pilato in un dialogo serrato, approfondito.
@@ -197,67 +196,67 @@ Roma — il diritto romano, il potere — doveva emettere una sentenza su di lui
 E Pilato, appena lo vede, quella sentenza la emette.
 Chi è Pilato? È un magistrato romano, nominato governatore. Uno che ha fatto carriera, che viene da Roma, che vive in mezzo a imperatori, senatori, potenti, re.
 Questo se ne intende di persone. Se ne intende di valore, di nobiltà, di alto lignaggio.
-E quando vede entrare Gesù, lo guarda e capisce subito: *“Questo non è un uomo normale.”*
+E quando vede entrare Gesù, lo guarda e capisce subito: *"Questo non è un uomo normale."*
 È un uomo particolare. È un uomo nobile.
 
 Pensateci: entra Gesù, legato, umiliato, già percosso, con addosso i segni delle violenze. E ti guarda dritto negli occhi.
 Gesù di Nazaret. C'è stato un ebreo che ha studiato moltissimo la Sindone, e una volta gli chiesero:
 
-> “Secondo lei chi è l'uomo della Sindone?”
+> "Secondo lei chi è l'uomo della Sindone?"
 
 E lui rispose:
 
-> “Non si può non restare sconvolti dai lineamenti di quel volto, che sono di una luminosità straordinaria. Non si può non restare colpiti. Non ti può non entrare nel cuore il volto di quell'uomo.”
+> "Non si può non restare sconvolti dai lineamenti di quel volto, che sono di una luminosità straordinaria. Non si può non restare colpiti. Non ti può non entrare nel cuore il volto di quell'uomo."
 
-Ecco, voi pensate che quest'uomo te stà davanti. Lo vedi subito quando una persona è una persona.
+Ecco, voi pensate che quest'uomo te sta davanti. Lo vedi subito quando una persona è una persona.
 E poi ci sono quelli che hanno occhio. I commercianti vedono subito che tipo di cliente è entrato:
 
-> “Questo compra. Questo guarda soltanto. Questo è uno serio.”
+> "Questo compra. Questo guarda soltanto. Questo è uno serio."
 
 Ognuno ha l'occhio del suo mestiere.
 Pilato ha l'occhio del potere.
 Ha visto subito un potente davanti a sé.
 E allora gli dice:
 
-> “Tu sei re.”
+> "Tu sei re."
 
 Chi lo dice?
 
-> “Tu lo dici.”
+> "Tu lo dici."
 
 Tu, magistrato romano, mi stai iniziando a riconoscere.
 E infatti Pilato continuerà a essere attirato da lui.
 Gesù allora prosegue:
 
-> “Io per questo sono nato e per questo sono venuto nel mondo: per dare testimonianza alla verità. Chiunque è dalla verità ascolta la mia voce.”
+> "Io per questo sono nato e per questo sono venuto nel mondo: per dare testimonianza alla verità. Chiunque è dalla verità ascolta la mia voce."
 
 Gesù inizia a catturare Pilato. Hai detto tu che sono re. Sai, io sono nato proprio per questo. Sono venuto nel mondo per rendere testimonianza alla verità.
 Dobbiamo capire bene questa cosa, perché qui Gesù sta spiegando il motivo dell'incarnazione, il motivo della sua missione.
 Qual è la sua missione? *Dare testimonianza alla verità.* E che vuol dire?
 
-> “Chiunque è dalla verità ascolta la mia voce.”
+> "Chiunque è dalla verità ascolta la mia voce."
 
 Chi sta ascoltando la sua voce in quel momento? Pilato. E Pilato inizia ad avere un problema. Allora reagisce e dice:
 
-> “Che cos'è la verità?” E detto questo uscì.
+> "Che cos'è la verità?" E detto questo uscì.
 
-Perché è importante questa frase? Sembra quasi assurda: *“Che cos'è la verità?”*
+Perché è importante questa frase? Sembra quasi assurda: *"Che cos'è la verità?"*
 
 Fai la domanda e poi te ne vai? No. La domanda ammette la sua realtà.
 Pilato — il potere romano, il magistrato, il diritto, la giustizia forense — non sanno cos'è la verità.
 
-> “Che cos'è la verità?”
+> "Che cos'è la verità?"
 
 Lui non lo sa. Ed è interessante: la verità giudiziaria forse non è la verità. È una verità interna a un sistema.
 Pilato non conosce la verità. E Pilato sta ammettendo la propria ignoranza.
 Lui, che dovrebbe stabilire la verità con una sentenza, non sa che cosa sia la verità.
 Ed esce. E sentite come parla:
 
-> “Io non trovo in lui colpa alcuna.”
+> "Io non trovo in lui colpa alcuna."
 
 Qui ha finito l'interrogatorio e ha detto:
 
-> “È innocente.”
+> "È innocente."
 
 È la prima volta che lo dichiara innocente. E continuerà a dichiararlo innocente molte altre volte.
 Pilato ha capito che la situazione è sporca. Sapeva che glielo avevano consegnato per invidia, per giochi di potere.
@@ -266,61 +265,60 @@ Quest'uomo non c'entra niente.
 È nobile.
 Ed è innocente.
 
-
 Allora conseguentemente dice:
 
-> Facciamo così… Voi vi state incastrando da soli a fare questo processo. Vi offro il cavillo, il contro-cavillo, no? Così voi possiate dire: “Non è che non viene ucciso perché non è colpevole, ma perché abbiamo un’altra possibilità.”
+> Facciamo così… Voi vi state incastrando da soli a fare questo processo. Vi offro il cavillo, il contro-cavillo, no? Così voi possiate dire: "Non è che non viene ucciso perché non è colpevole, ma perché abbiamo un'altra possibilità."
 
 E infatti dice subito:
 
-> “Vi è tra voi l’usanza che io rimetta in libertà uno per voi in occasione della Pasqua. Volete dunque che io rimetta in libertà per voi il re dei Giudei?”
+> "Vi è tra voi l'usanza che io rimetta in libertà uno per voi in occasione della Pasqua. Volete dunque che io rimetta in libertà per voi il re dei Giudei?"
 
 Ormai Pilato non discuterà più questa definizione di Gesù. Per lui questa cosa è assodata.
 Sta portando avanti un dibattimento. Dice:
 
-> “Facciamo così: ve lo rimetto in libertà per il fatto della Pasqua. Voi state contenti, perché comunque viene liberato per un cavillo legale, senza che io debba condannare un innocente.”
+> "Facciamo così: ve lo rimetto in libertà per il fatto della Pasqua. Voi state contenti, perché comunque viene liberato per un cavillo legale, senza che io debba condannare un innocente."
 
 Allora essi gridarono di nuovo:
 
-> “Non costui, ma Barabba!”
+> "Non costui, ma Barabba!"
 
 Barabba era un brigante, un lestofante.
 Compare poco in Giovanni, ma sarebbe interessantissimo andare nel Vangelo di Matteo per una cosa curiosissima.
-“Barabba” è un soprannome. *Bar-Abba*: *bar* = figlio, *abba* = padre. Quindi: “figlio del padre”.
+"Barabba" è un soprannome. *Bar-Abba*: *bar* = figlio, *abba* = padre. Quindi: "figlio del padre".
 Strano nome. Ma aveva anche un nome proprio. In alcuni codici antichi del Vangelo di Matteo compare il suo vero nome:
 
 > Gesù.
 
 E il testo suonerebbe così:
 
-> “Volete che vi rimetta in libertà Gesù il Nazareno oppure Gesù il figlio di suo padre?”
+> "Volete che vi rimetta in libertà Gesù il Nazareno oppure Gesù il figlio di suo padre?"
 
 Quale Gesù volete?
 
 Non abbiamo il tempo di approfondire questa cosa, ma qui ci sono due tipi di salvezza:
 la forza, la violenza, la rivolta, la sommossa. Oppure: il regno che non combatte, che non tira fuori la spada.
-Un lestofante che ha fatto una sommossa, oppure uno che si sottomette e che ama il nemico. 
+Un lestofante che ha fatto una sommossa, oppure uno che si sottomette e che ama il nemico.
 Interessantissimo. Qual è davvero la soluzione dei problemi? Ma andiamo avanti.
 
 Pilato è costretto a liberare Barabba e deve continuare la procedura.
 
-> “Allora Pilato fece prendere Gesù e lo fece flagellare.”
+> "Allora Pilato fece prendere Gesù e lo fece flagellare."
 
 E perché?
 Perché lo fai flagellare?
 Scusa: hai deciso che è un re, lo hai già dichiarato innocente. Hai tentato di liberarlo. Perché adesso lo flagelli?
 
-Noi abbiamo sempre una lettura molto “a-storica” dei Vangeli. Non ci rendiamo conto delle cose nel loro contesto reale.
+Noi abbiamo sempre una lettura molto "a-storica" dei Vangeli. Non ci rendiamo conto delle cose nel loro contesto reale.
 Sapete da quanto tempo è veramente scomparsa la tortura come sistema giudiziario?
 Non da molto.
 Anche in Italia, fino a due o trecento anni fa, era normale che durante gli interrogatori gli imputati venissero torturati.
-Nel Seicento questo si faceva tranquillamente. Nel Settecento comincia lentamente a decadere. Nell’Ottocento sparisce.
+Nel Seicento questo si faceva tranquillamente. Nel Settecento comincia lentamente a decadere. Nell'Ottocento sparisce.
 
 Figuratevi nel 30 dopo Cristo. Per loro era una cosa logica:
-*“Prendiamo uno, lo torturiamo e vediamo se ammette la colpa.”*
+*"Prendiamo uno, lo torturiamo e vediamo se ammette la colpa."*
 Perché le torture erano talmente dure che, se uno aveva una colpa, prima o poi parlava.
 Veniva torturato malamente.
-Sarebbe interessante vedere il corpo dell’uomo della Sindone: presenta una quantità impressionante di colpi.
+Sarebbe interessante vedere il corpo dell'uomo della Sindone: presenta una quantità impressionante di colpi.
 Terribile.
 È stato colpito tantissime volte.
 Ma lasciamo perdere.
@@ -332,23 +330,23 @@ il fatto che lui sia il re dei Giudei.
 
 > I soldati, intrecciata una corona di spine...
 
-E attenzione: le spine di quella zona sono freschi lunghe cinque o sei centimetri. Entrano nella carne.
+E attenzione: le spine di quella zona sono lunghe cinque o sei centimetri. Entrano nella carne.
 Aculei fortissimi. Una cosa terribile.
 Un mio amico le ha fatte crescere nel giardino della parrocchia per mostrarle alla gente:
 
-> “Queste sono le spine con cui è stata fatta la corona di Gesù.”
+> "Queste sono le spine con cui è stata fatta la corona di Gesù."
 
 Roba veramente dolorosa.
 
-> “Intrecciarono una corona di spine, gliela posero sul capo e gli misero addosso un mantello di porpora.”
+> "Intrecciarono una corona di spine, gliela posero sul capo e gli misero addosso un mantello di porpora."
 
 Una cosa regale. Poi si avvicinavano e dicevano:
 
-> “Salve, re dei Giudei!”
+> "Salve, re dei Giudei!"
 
-E gli davano schiaffi. Questo dopo la flagellazione. Dopo aver ridotto quest’uomo a un ammasso di carne sanguinante.
+E gli davano schiaffi. Questo dopo la flagellazione. Dopo aver ridotto quest'uomo a un ammasso di carne sanguinante.
 Sapete come funzionava la flagellazione romana?
-C’era un manico da cui partivano strisce di cuoio. Alla fine delle strisce erano fissate due palline di piombo collegate tra loro. Queste palline sono visibili perfino nei segni impressi sull’uomo della Sindone.
+C'era un manico da cui partivano strisce di cuoio. Alla fine delle strisce erano fissate due palline di piombo collegate tra loro. Queste palline sono visibili perfino nei segni impressi sull'uomo della Sindone.
 Una delle cose più impressionanti è proprio questa: come faceva un falsario medievale a conoscere esattamente la struttura del *flagrum* romano?
 
 Il colpo non era il problema principale. Il problema era lo strappo.
@@ -357,23 +355,23 @@ Il colpo entrava e strappava.
 Questa era la flagellazione.
 Gesù viene tumefatto, ferito, lacerato.
 E quando le palline entravano bene, il corpo veniva strappato.
-Poi, così come stà messo, gli battono sulla testa una corona di spine, gli mettono addosso un mantello da re e gli gridano:
+Poi, così come sta messo, gli battono sulla testa una corona di spine, gli mettono addosso un mantello da re e gli gridano:
 
-> “Salve, re dei Giudei! Ave, re dei Giudei!”
+> "Salve, re dei Giudei! Ave, re dei Giudei!"
 
 Perché? Perché vogliono che dica:
 
-> “Basta! Basta! Non sono io! Non mi menate più”
+> "Basta! Basta! Non sono io! Non mi menate più"
 
 Lo colpiscono, non erano schiaffetti, lo prendono a cazzotti, lo umiliano.
 Lo stanno massacrando perché rinneghi quello che è.
 E allora vedete qual è la conseguenza. Pilato uscì di nuovo e disse loro:
 
-> “Ecco, io ve lo conduco fuori perché sappiate che non trovo in lui colpa alcuna.”
+> "Ecco, io ve lo conduco fuori perché sappiate che non trovo in lui colpa alcuna."
 
-Lo ha detto ufficialmente per la seconda volta. _“Non trovo in lui colpa alcuna.”_
+Lo ha detto ufficialmente per la seconda volta. _"Non trovo in lui colpa alcuna."_
 
-Cioè: *“Ve lo faccio vedere. L’ho flagellato. L’ho torturato. Gli ho fatto le peggio cose. Ho cercato la colpa… e non l’ho trovata.”*
+Cioè: *"Ve lo faccio vedere. L'ho flagellato. L'ho torturato. Gli ho fatto le peggio cose. Ho cercato la colpa… e non l'ho trovata."*
 
 Adesso l'ho anche ridotto. E questo è — questo è Rinascimento. Quest'è roba per mangiare "tranquilli". Se vedi veramente com'era Gesù Cristo, si blocca lo stomaco, non mangi per du giorni — era un'altra cosa rispetto a questa immagine un po' perfettina.
 
@@ -383,14 +381,14 @@ Allora Gesù uscì portando la corona di spine e il mantello di porpora, esce �
 
 > "Ecce homo!"
 
-Siamo in Giovanni, la cosa c'ha un altro spessore. Gesù ha preso su di sé quello che l'uomo ha su di se. Dietro queste belle faccette ci stanno chissà quanti dolori. Dietro questi sorrisi, questi sguardi, l'uomo vero c'ha tante ferite. Chissà quante ferite c'avete voi. Chissà quante cose che nessuno sa. Chissà quante cose hai dentro. Gesù manifesta l'uomo all'uomo — dice il [Concilio Vaticano II](https://www.vatican.va/archive/hist_councils/ii_vatican_council/documents/vat-ii_const_19651207_gaudium-et-spes_it.html).
+Siamo in Giovanni, la cosa c'ha un altro spessore. Gesù ha preso su di sé quello che l'uomo ha su di sé. Dietro queste belle faccette ci stanno chissà quanti dolori. Dietro questi sorrisi, questi sguardi, l'uomo vero c'ha tante ferite. Chissà quante ferite c'avete voi. Chissà quante cose che nessuno sa. Chissà quante cose hai dentro. Gesù manifesta l'uomo all'uomo — dice il [Concilio Vaticano II](https://www.vatican.va/archive/hist_councils/ii_vatican_council/documents/vat-ii_const_19651207_gaudium-et-spes_it.html).
 
 > "Ecco l'Uomo!"
 
 Questo delirio di noi che siamo forti, che siamo i super uomini — siamo uomini, donne, la pubblicità, modelli perfetti, belli che non invecchiano mai, altissimi, purissimi, bellissimi, perfettissimi — non è la verità. Siamo tutti molto poveri.
 Ho un caro amico gesuita che dice:
 
-_"Sai, tutte le tentazioni della lussuria, me se sono presentate quando nella mia esperienza, nella mia formazione gesuita, mi mandato per un anno a lavare e curare i vecchi malati. Tieni conto cosa diventa il corpo umano — che povertà, che fragilità. Tieni conto — una povera persona malata, devi accoglierla. Che è tanto povero l'uomo."_
+_"Sai, tutte le tentazioni della lussuria, mi si sono presentate quando nella mia esperienza, nella mia formazione gesuita, mi hanno mandato per un anno a lavare e curare i vecchi malati. Tieni conto cosa diventa il corpo umano — che povertà, che fragilità. Tieni conto — una povera persona malata, devi accoglierla. Che è tanto povero l'uomo."_
 
 L'uomo lo conosci solamente quando conosci la sua croce. Un uomo lo conosci veramente quando conosci i suoi dolori. Allora ne capisci anche gli errori, perché ogni nostro singolo peccato è la fuga da una croce. Dietro ogni nostro peccato c'è una croce scartata, c'è una croce che ci fa paura.
 
@@ -410,13 +408,13 @@ Gli rispondono questo e udite queste parole, Pilato ebbe ancora più paura e rie
 
 > "Di dove sei tu?"
 
-Perché ha paura Pilato? Ha ancora più paura. Perché ha capito di essere di fronte a un personaggio particolare che gli ha detto che non è di questo mondo, che il suo regno non è di questo mondo. E nella mentalità di un politeista come Pilato, possiamo pensare che doveva essere una cosa come: _"Ma che sto davanti a un semidio? Ma di dove sei? Hanno detto che sei figlio di Dio..."_ Come a dire: ch' ha detto lui? Che è figlio di Dio? Siccome ha già capito che quest'uomo dice la verità, che non si fa problemi a dirla in faccia, che lui è uno che è dalla verità e ascolta la sua voce — entra e dice: "Ma di dove sei? Magari non lo sapevo — è un ebreo, dov'era? Da dove vieni?" Gli domanda questo perché Pilato sta temendo: _"Ma chi sto trattando? Chi sto maneggiando? Che roba è?"_ Sta capendo sempre di più con chi ha che fare.
+Perché ha paura Pilato? Ha ancora più paura. Perché ha capito di essere di fronte a un personaggio particolare che gli ha detto che non è di questo mondo, che il suo regno non è di questo mondo. E nella mentalità di un politeista come Pilato, possiamo pensare che doveva essere una cosa come: _"Ma che sto davanti a un semidio? Ma di dove sei? Hanno detto che sei figlio di Dio..."_ Come a dire: che ha detto lui? Che è figlio di Dio? Siccome ha già capito che quest'uomo dice la verità, che non si fa problemi a dirla in faccia, che lui è uno che è dalla verità e ascolta la sua voce — entra e dice: "Ma di dove sei? Magari non lo sapevo — è un ebreo, dov'era? Da dove vieni?" Gli domanda questo perché Pilato sta temendo: _"Ma chi sto trattando? Chi sto maneggiando? Che roba è?"_ Sta capendo sempre di più con chi ha che fare.
 
 > Ma Gesù non gli diede risposta. Gli disse allora Pilato:
-> 
+>
 > "Non mi parli? Non sai che ho il potere di metterti in libertà e il potere di metterti in croce?"
 
-_"Oh, io ho potere! Rispettami un po'!"_ Ma lui è talmente impaurito, imbarazzato, che si mette a dire: _"No! Rispondimi! Oh, ma io sono quello che ti puo' libera', però anche quello che ti... Ma mi vuoi stare a sentire? Rispondimi!"
+_"Oh, io ho potere! Rispettami un po'!"_ Ma lui è talmente impaurito, imbarazzato, che si mette a dire: _"No! Rispondimi! Oh, ma io sono quello che ti puo' libera', però anche quello che ti... Ma mi vuoi stare a sentire? Rispondimi!"_
 
 Sentite come risponde Gesù:
 
@@ -424,9 +422,9 @@ Sentite come risponde Gesù:
 
 _"Tu potere? Ma non c'hai niente! Che potere c'hai? Te l'hanno dato il potere — tu sei una marionetta, tu sei un burattino. Tira un filo, tu. Il potere ce l'hai solamente se te lo danno — non hai nessun potere."_ Oh, ma sta parlando questo qua con il magistrato — il quale gli ha detto "io ho potere su di te" — "Ma che potere hai? Anzi, te scuso pure! La colpa vera ce l'hanno quelli che mi hanno consegnato a te." Eh Pilato, non ti prende troppo sul serio: non sei così importante.
 
-Allora viene colpito sulla sua personalità. Allora cosa fa? 
+Allora viene colpito sulla sua personalità. Allora cosa fa?
 
-> Da quel momento Pilato cercava di metterlo in libertà. 
+> Da quel momento Pilato cercava di metterlo in libertà.
 
 Non ce la farà — e Gesù aveva ragione. Ma i Giudei gridavano:
 
@@ -434,11 +432,11 @@ Non ce la farà — e Gesù aveva ragione. Ma i Giudei gridavano:
 
 Gliel'ha appena detto Gesù: il potere viene dato dall'alto. Chi è "l'alto" di Pilato? Cesare. E lo citano subito.
 
-"Pilato, buono con ste proposte, caro. Ti sembra di poter andare avanti così? Guarda che devi fare contento Cesare — tu devi fare l'amico di Cesare, tu devi essere l'amico dell'imperatore. Ma dove vai, bello? Ma dove credi di andare? 
+"Pilato, buono con ste proposte, caro. Ti sembra di poter andare avanti così? Guarda che devi fare contento Cesare — tu devi fare l'amico di Cesare, tu devi essere l'amico dell'imperatore. Ma dove vai, bello? Ma dove credi di andare?"
 
 > "Se liberi costui non sei amico di Cesare: chiunque, infatti, si fa re, si mette contro Cesare."
 
-Allora Pilato si risveglia. Cosa succede? I Giudei tirano il filo e Pilato alza la mano dall'altra parte. Lui si scopre e si muove secondo una logica — e la logica è il potere: _"Tu sei solo un ingranaggio. Ricordati qual era la manovella che ti gira."_ Allora Pilato capisce che è arrivato il giorno in cui la ragion politica gli interessa pure a lui, perché lui sta lì per quello. Conduce fuori Gesù e si siede in tribunale sul luogo chiamato *Litostrotos*, in ebraico *Gabbatà*. Era la parasceve della Pasqua, verso mezzogiorno. Pilato disse ai Giudei:
+Allora Pilato si risveglia. Cosa succede? I Giudei tirano il filo e Pilato alza la mano dall'altra parte. Lui si scopre e si muove secondo una logica — e la logica è il potere: _"Tu sei solo un ingranaggio. Ricordati qual era la manovella che ti gira."_ Allora Pilato capisce che è arrivato il giorno in cui la ragion politica gli interessa pure a lui, perché lui sta lì per quello. Conduce fuori Gesù e si siede in tribunale sul luogo chiamato *Litòstroto*, in ebraico *Gabbatà*. Era la parasceve della Pasqua, verso mezzogiorno. Pilato disse ai Giudei:
 
 > "Ecco il vostro re!"
 
@@ -454,19 +452,19 @@ Risposero i capi dei sacerdoti:
 
 > "Non abbiamo altro re che Cesare!"
 
-Fatta! Si sono incastrati da soli! Sulla bocca dei capi — questa è una bestemmia, perché questo popolo non si è mai sottomesso  a una autorità. Il loro re è Dio. Il loro re, al limite, sarà il Messia — ce l'hanno proprio davanti, il Messia! Ma, più che il fatto che loro non lo riconoscono come Messia, stanno dicendo che non hanno altro re che Cesare — cioè stanno sottomettendosi a Roma. Pilato doveva ottenere questo — era la sua missione: sottomettere quel popolo di teste calde. Ce l'ha fatta. È arrivato. A quel punto Gesù lo può guardare negli occhi: "Hai visto? Hai visto che non può dare proprio niente? La ragione vince — 8 a 0."
+Fatta! Si sono incastrati da soli! Sulla bocca dei capi — questa è una bestemmia, perché questo popolo non si è mai sottomesso a un'autorità. Il loro re è Dio. Il loro re, al limite, sarà il Messia — ce l'hanno proprio davanti, il Messia! Ma, più che il fatto che loro non lo riconoscono come Messia, stanno dicendo che non hanno altro re che Cesare — cioè stanno sottomettendosi a Roma. Pilato doveva ottenere questo — era la sua missione: sottomettere quel popolo di teste calde. Ce l'ha fatta. È arrivato. A quel punto Gesù lo può guardare negli occhi: "Hai visto? Hai visto che non può dare proprio niente? La ragione vince — 8 a 0."
 
 > Allora lo consegnò loro perché fosse crocifisso. Essi presero Gesù ed egli, portando la croce, si avviò.
 
 È lui che si avvia. _Egli, offrendosi liberamente alla sua passione_ — dice la Preghiera Eucaristica Seconda. Lui si avvia. Giovanni ricorda che lui sembra che stia subendo, ma in realtà è lui che conduce questa storia. Si avviò verso il luogo detto del Cranio, in ebraico *Golgota*, dove lo crocifissero. Con lui altri due — uno da una parte e uno dall'altra — e Gesù in mezzo.
 
-> Pilato compose anche l'iscrizione e la fece porre sulla croce. 
+> Pilato compose anche l'iscrizione e la fece porre sulla croce.
 
 Cos'è questa iscrizione? Il *titulus*. Quando uno veniva condannato a una pena e la doveva scontare pubblicamente, veniva messo il motivo della condanna — c'erano i passanti che tutti avevano assistito al processo: "lestofante", "bestemmiatore", "assassino"... quello che sia. E lui mette il *titulus*. E che cosa ci scrive?
 
 > "Vi era scritto: Gesù il Nazareno, il re dei Giudei."
-> 
-> Molti Giudei lessero questa iscrizione. Quel posto dove Gesù fu crocifisso era vicino alla città. Era scritta in ebraico, in latino e in greco. 
+>
+> Molti Giudei lessero questa iscrizione. Quel posto dove Gesù fu crocifisso era vicino alla città. Era scritta in ebraico, in latino e in greco.
 
 È interessante — le tre lingue: la lingua della religione ebraica, la lingua del potere in latino, e la lingua della cultura, il greco. Siamo in una zona del tempo della cultura ellenistica. Il Vangelo sarà scritto in greco — evangelizzavano in greco — sarà la lingua franca e la lingua colta del tempo.
 Allora: in tutte le lingue, sotto tutti i punti di vista, qui veramente politica, religione e cultura ammettono la loro sconfitta — ammettono che questo era un innocente, era il re dei Giudei, e che è stato appiccicato ad una croce iniquamente.
@@ -479,7 +477,7 @@ Questa è l'ultima scrittura definitiva del processo — questa è la famosa sen
 
 > "Quello che ho scritto, ho scritto."
 
-Eh insomma...Mi avete fatto la strana con la storia della sottomissione a Cesare — vi siete incastrati. Però questa non passa: questo è innocente. Questo è il re dei Giudei. Lo crocifigge perché è il re dei Giudei — è Roma che parla. Questa è la condanna ufficiale. Ma è anche la testimonianza ufficiale.
+Eh insomma... Mi avete fatto la strana con la storia della sottomissione a Cesare — vi siete incastrati. Però questa non passa: questo è innocente. Questo è il re dei Giudei. Lo crocifigge perché è il re dei Giudei — è Roma che parla. Questa è la condanna ufficiale. Ma è anche la testimonianza ufficiale.
 
 Questo è il Messia. Il Messia più inaspettato di tutti. Il Messia più incredibile, più inaccettabile di tutti. La salvezza che nessuno vuole. Una salvezza che non toglie i problemi — una salvezza che si prende i problemi. Una salvezza che non ti tira fuori da quello che ti fa soffrire, ma te lo illumina dal di dentro. Una salvezza che non ti toglie il tumore — ti fa vivere il tumore come un incontro con Dio. Una salvezza che non ti aggiusta i problemi economici, ma te li fa vivere uniti a Cristo.
 
@@ -489,13 +487,13 @@ I soldati, poi, quando ebbero crocifisso Gesù, presero le sue vesti e ne fecero
 
 > "Non stracciamola — tiriamo a sorte a chi tocca."
 
-Perché questo testo? Cosa ci ricorda? Varie cose — non le possiamo dire tutte. Una cosa è questa: gli stanno togliendo tutto. Tu capisci che non sei ancora morto e vedi che la gente sta a spartire le cose tue. A qualcuno succede: stai sul letto di morte e vedi già i tuoi figli che stanno a litigare per le cose tue. Eh! La gente qui si sta a dividere le cose sue. E tu — c'hai anche quello, pure quello t'hanno tolto — e se stanno a dividere. Proprio tu non sei niente. Sei nulla. Lui sta ancora lì, li vede, e fanno questo. E che cosa scoprono? Che quest'uomo c'ha una tunica inconsumibile — cioè una tunica tutta d'un pezzo. È un pezzo di sartoria. Capite? È fatta su misura, tutta d'un pezzo. È il vestito di un principe. Gesù aveva una tunica preziosa, perché portava i segni della persona peculiare, dell'unto. E questa veste è la sua veste, _"la prendiamo noi."_
+Perché questo testo? Cosa ci ricorda? Varie cose — non le possiamo dire tutte. Una cosa è questa: gli stanno togliendo tutto. Tu capisci che non sei ancora morto e vedi che la gente sta a spartire le cose tue. A qualcuno succede: stai sul letto di morte e vedi già i tuoi figli che stanno a litigare per le cose tue. Eh! La gente qui si sta a dividere le cose sue. E tu — c'hai anche quello, pure quello t'hanno tolto — e se stanno a dividere. Proprio tu non sei niente. Sei nulla. Lui sta ancora lì, li vede, e fanno questo. E che cosa scoprono? Che quest'uomo c'ha una tunica inconsutile — cioè una tunica tutta d'un pezzo. È un pezzo di sartoria. Capite? È fatta su misura, tutta d'un pezzo. È il vestito di un principe. Gesù aveva una tunica preziosa, perché portava i segni della persona peculiare, dell'unto. E questa veste è la sua veste, _"la prendiamo noi."_
 
 E questi soldati — un po' ci stiamo tutti, noi — con le mani sue, ci prendiamo la sua veste, il suo corpo. Il velo del suo corpo di guardia — lo prendiamo noi, lo riceviamo nell'Eucarestia. Noi, con le nostre distrazioni, stiamo a pensare a Milan-Juventus, stiamo a pensare ai nostri quattro conti, a che ci mangiamo stasera, a tutte ste cose qua. E ci dà la sua carne. Tu ce la lasci e tiriamo a sorte.
 
 > "Vi è capitata a sorte la veste di Gesù. Vi è capitato di essere cristiani. La sorte è caduta per me su luoghi deliziosi."
 
-Dice Salmo. Che sorte hai, tu? A noi capita la sorte di portare, di avere il filo di Gesù, di essere il suo corpo in questo mondo. Beh — questi non si rendono conto di quello che fanno.
+Dice il Salmo. Che sorte hai, tu? A noi capita la sorte di portare, di avere il filo di Gesù, di essere il suo corpo in questo mondo. Beh — questi non si rendono conto di quello che fanno.
 
 > "Così si compiva la Scrittura che dice: _'Si sono divisi tra loro le mie vesti, sulla mia tunica hanno gettato la sorte.'_"
 
@@ -504,7 +502,7 @@ Sono andati via così. Cioè — non sta succedendo qualcosa di banale: sta succ
 Il problema è — abbiamo detto che questo è un re. Ma non è il re di questo mondo. I suoi soldati non fanno ste cose qua. Ed ecco che comparirà l'atto regale: perché lui sta sul trono. In questo momento, con il titolo messo dall'impero Romano, lui stesso è stato nominato anche da Roma re dei Giudei. E amministra il suo popolo.
 
 > "Stavano presso la croce di Gesù sua madre, la sorella di sua madre, Maria madre di Cleofa e Maria di Màgdala."
-> 
+>
 > Gesù allora, vedendo la madre e accanto a lei il discepolo che egli amava, disse alla madre:
 >
 > "Donna, ecco il tuo figlio!"
@@ -521,7 +519,7 @@ Questo è Gesù dalla Croce che ci ha regalati gli uni agli altri. Questa è la 
 
 > "Quanto è buono e soave che i fratelli stiano insieme."
 
-Che le persone si riconoscano negli altri. Che le persone preghino gli uni per gli altri. Quante volte avete trovato misericordia, accoglienza, nei sacerdoti. I sacerdoti hanno trovato misericordia, accoglienza nel santo popolo di Dio — nel vero santo di tutto il secolo, il santo popolo di Dio. Eh, quanta pazienza c'hanno noi sacerdoti! Chi ha stabilito che mi debba occupare dei ragazzi? Chi ha stabilito che adesso debba fare il padre della fede a tutte queste persone che stanno venendo a sentire le catechesi che sto facendo a Roma? Chi ha stabilito che adesso sia a voi? Il vostro vescovo mi ha chiamato — ed è la sua carità quello che voi ricevete. Io lavoro in questo momento con lui, ma è un regalo. Gesù dalla Croce ha detto: siete gli uni degli altri.
+Che le persone si riconoscano negli altri. Che le persone preghino gli uni per gli altri. Quante volte avete trovato misericordia, accoglienza, nei sacerdoti. I sacerdoti hanno trovato misericordia, accoglienza nel santo popolo di Dio — nel vero santo di tutto il secolo, il santo popolo di Dio. Eh, quanta pazienza c'hanno con noi sacerdoti! Chi ha stabilito che mi debba occupare dei ragazzi? Chi ha stabilito che adesso debba fare il padre della fede a tutte queste persone che stanno venendo a sentire le catechesi che sto facendo a Roma? Chi ha stabilito che adesso sia a voi? Il vostro vescovo mi ha chiamato — ed è la sua carità quello che voi ricevete. Io lavoro in questo momento con lui, ma è un regalo. Gesù dalla Croce ha detto: siete gli uni degli altri.
 
 E notate bene — gioca su qualcosa che era suo. Quella è sua madre e te la regala a te. Quello è il suo discepolo amato e lo regala a sua madre. Ciò che era suo diventa tuo. Questo è ancora più profondo: perché tutto ciò che è di Cristo, il Padre ha stabilito che diventa nostro.
 
@@ -535,7 +533,7 @@ Come però — fortissimo — il simbolo del sangue rappresenta la vita:
 
 > "La mia vita è vostra. Io sono il Signore Dio tuo"
 
-C'ha il possessivo. Oh, se potessimo imparare a prenderci ciò che Dio ci dà! Se noi sfruttassimo in fondo tutti i regali che Dio ci fa — tutte le cose che ci dà . Dio è con noi — uno che ci ha regalato un mare di cose che non abbiamo mai prese, non abbiamo mai sfruttato, abbiamo parate, abbiamo messo da parte.
+C'ha il possessivo. Oh, se potessimo imparare a prenderci ciò che Dio ci dà! Se noi sfruttassimo in fondo tutti i regali che Dio ci fa — tutte le cose che ci dà. Dio è con noi — uno che ci ha regalato un mare di cose che non abbiamo mai prese, non abbiamo mai sfruttato, abbiamo parate, abbiamo messo da parte.
 
 "Tua madre." "Tuo figlio."
 
@@ -551,7 +549,7 @@ Si compie la Scrittura — è il piano del Padre, la volontà del Padre. Sta com
 
 Beh — pensate che uno l'hanno flagellato, gli hanno fatto perdere un sacco di sangue. Adesso l'hanno inchiodato sui polsi e sui piedi, sta sanguinando da tutte le parti. Voi capite che sete ha uno così? Quanti liquidi ha perso? Quanti liquidi sta perdendo? Ha una arsura mostruosa. Sta esprimendo tutto il bisogno umano di liquidità. Si muore prima di sete che di fame. Sta citando i nostri bisogni. Noi abbiamo bisogni, abbiamo appetiti, abbiamo necessità. I bambini — bisogna cullarli — hanno bisogno di mangiare, di bere, di essere coperti. Tante necessità abbiamo noi.
 
-Ecco — questo è il Figlio Benedetto di Dio che sta lì senza assistenza alcuna, che sta esprimendo il più essenziale dei suoi bisogni. In questo momento urlava nel suo corpo il bisogno di liquidi — la sete. L'arzura. E sta proprio compiendo lo svuotamento totale di sé.
+Ecco — questo è il Figlio Benedetto di Dio che sta lì senza assistenza alcuna, che sta esprimendo il più essenziale dei suoi bisogni. In questo momento urlava nel suo corpo il bisogno di liquidi — la sete. L'arsura. E sta proprio compiendo lo svuotamento totale di sé.
 
 Vi era un vaso pieno di aceto. Posero una spugna intrisa di aceto in cima a un'asta di issopo e gliela accostarono alla bocca. Non è cattiveria: l'aceto era per fermare la sete. Se avete mai bevuto un sorso d'aceto — poi viene la bocca dolce, perché è acido, c'ha la reazione basica — ferma un po' la sete. Era quello che dava. Però gli danno aceto per calmare la sete perché di fatto, comunque, devi morire: _"Non gli danno l'acqua. Muori, muori, muori, muori. Smettila di lamentarti — per l'aceto così la senti la sete. Ma muori, per favore."_
 
@@ -629,13 +627,13 @@ Così comincia la Lettera agli Ebrei. Questo è Dio. Questo qui. Quel Dio di cui
 
 Non c'è violenza. Non c'è durezza. Cosa ha fatto fino all'ultimo? Ha regalato. Prima rinuncia al cielo per venire giù da me. Quindi rinuncia anche alla terra per salvarci. Scende giù nella zona del nulla — lì dove l'uomo ha paura di andare — per venirci a prendere. Noi — pecora perduta — è sceso per le valli, è venuto in mezzo a noi, ci ha preso sulle spalle e ci ha riportato a casa. Ecco la sua salvezza.
 
-E la salvezza è credere a quest'uomo qui. Credere che Dio ti vuole bene. Credere che Dio ha preso su di sé quello che io e te mereremmo. Ha preso su di sé — come se tu adesso, pensa che stasera piove e c'è un povero disgraziato che dorme per strada, e mi dici: "Facciamo, mettiamoci d'accordo così: tu vai a casa mia, il mio caldo, dormi nel mio letto. Io dormirò qui al posto tuo. Io mi prenderò il tuo freddo e tu ti prenderai il mio caldo. Facciamo questo scambio."
+E la salvezza è credere a quest'uomo qui. Credere che Dio ti vuole bene. Credere che Dio ha preso su di sé quello che io e te meriteremmo. Ha preso su di sé — come se tu adesso, pensa che stasera piove e c'è un povero disgraziato che dorme per strada, e mi dici: "Facciamo, mettiamoci d'accordo così: tu vai a casa mia, il mio caldo, dormi nel mio letto. Io dormirò qui al posto tuo. Io mi prenderò il tuo freddo e tu ti prenderai il mio caldo. Facciamo questo scambio."
 
-Questo ha fatto Cristo. Ha preso il nostro freddo e ci ha dato il nostro caldo. La nostra vita piena di misericordia. Quanti peccati ci perdona Dio! Quanto è generosa la vita, quanto è paziente la vita, quanto è paziente la provvidenza. Veramente:
+Questo ha fatto Cristo. Ha preso il nostro freddo e ci ha dato il suo caldo. La nostra vita piena di misericordia. Quanti peccati ci perdona Dio! Quanto è generosa la vita, quanto è paziente la vita, quanto è paziente la provvidenza. Veramente:
 
 "Dio, come vi meritate da me?"
 
-No — se mi trattasse come mi merito, scianterebbe in questo momento. Ma Dio mi tiene nella mano. La sua misericordia: io vivo di misericordia.
+No — se mi trattasse come mi merito, schianterebbe in questo momento. Ma Dio mi tiene nella mano. La sua misericordia: io vivo di misericordia.
 
 Guardiamo questa croce e diciamo: questo è Dio. È vero — questo è Dio — è proprio vero. Perché Dio non ci tratta secondo i nostri peccati, non ci tratta secondo le nostre giustizie. Lento all'ira, ricco d'amore, paziente, tenero — tutto regala per averci. Tutto dà, perché noi finalmente volgiamo lo sguardo a lui.
 
@@ -649,7 +647,7 @@ Ha sentito qualcuno che ti parla di Cristo. Ma senti qualcuno che ti dice:
 
 "Guarda che Dio non t'ha abbandonato. Guarda che Dio è buono. Guarda che Dio ti vuole bene. Fidati. Se la merita il Signore. Se merita che non smettiamo di cercare noi stessi. Iniziamo un pochino a cercare lui."
 
-Questa passione di Giovanni è straordinaria, meravigliosa. È un processo che è stato innescato all'origine dei tempi — innescato nel nostro cuore. Di quante cose brontola nella vostra vita? Quante cose pensate che non vi dovevano capitare? Guardate questa croce. Forse Dio la sa più lunga di me. Forse Dio era il meritevole di fiducia.
+Questa passione di Giovanni è straordinaria, meravigliosa. È un processo che è stato innescato all'origine dei tempi — innescato nel nostro cuore. Di quante cose brontolate nella vostra vita? Quante cose pensate che non vi dovevano capitare? Guardate questa croce. Forse Dio la sa più lunga di me. Forse Dio era il meritevole di fiducia.
 
 Esiste una pace grandiosa, meravigliosa — l'amore di Dio. Esistono le opere che sorgono dal lasciarsi finalmente amare da Dio. Lasciate che lui appaia ai vostri occhi come è veramente. Solo la verità.
 
