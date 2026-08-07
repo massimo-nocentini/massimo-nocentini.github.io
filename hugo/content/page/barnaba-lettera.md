@@ -5,10 +5,13 @@ subtitle = ''
 author = 'Barnaba'
 tags = []
 categories = [ 'lettere' ]
-summary = "Questo scritto che fa parte del gruppo denominato dei Padri Apostolici. L'opera godette di un'enorme diffusione e alcuni autori, come nel caso di Origene, arrivarono a considerarla canonica. Venne scritta intorno al 131 (l'opera parla della distruzione di Gerusalemme per mano di Adriano). Non conosciamo il suo autore , ma vi sono senza dubbio molti argomenti favorevoli per attribuirne la redazione ad un giudeo-cristiano, forse alessandrino;  in ogni caso, l'opera presenta elementi ellenizzanti. La possibile attribuzione a un discepolo dell'apostolo Paolo spiega perché alcuni studiosi la considerino come una lettera apocrifa. L'opera si divide in due sezioni, non ben delineate, dedicate ad aspetti teologici e pratici. Essa sostiene la credenza in una preesistenza del Cristo (forse contro le eresie giudeo-cristiane che la negavano, come nel caso degli Ebioniti) e collega l'adozione a figli di Dio con il battesimo. L'autore sottolinea che i cristiani sono tenuti ad osservare la domenica, giorno della risurrezione di Cristo, al posto del sabato (XV, 8-9), considerando la domenica il giorno della festa cristiana e non il settimo giorno. L'opera fa eco a una escatologia millenarista (XV, 1-9) e contiene uno dei primi testi cristiani esplicitamente e direttamente contrari alla pratica dell'aborto (XIX, 5)."
+summary = " "
 +++
 
 *Ripresa da [www.ansdt.it](https://www.ansdt.it/AgliAmici/TestiPerAmici/LetteraBarnaba.html).*
+
+> Questo scritto che fa parte del gruppo denominato dei Padri Apostolici. L'opera godette di un'enorme diffusione e alcuni autori, come nel caso di Origene, arrivarono a considerarla canonica. Venne scritta intorno al 131 (l'opera parla della distruzione di Gerusalemme per mano di Adriano). Non conosciamo il suo autore , ma vi sono senza dubbio molti argomenti favorevoli per attribuirne la redazione ad un giudeo-cristiano, forse alessandrino;  in ogni caso, l'opera presenta elementi ellenizzanti. La possibile attribuzione a un discepolo dell'apostolo Paolo spiega perché alcuni studiosi la considerino come una lettera apocrifa. L'opera si divide in due sezioni, non ben delineate, dedicate ad aspetti teologici e pratici. Essa sostiene la credenza in una preesistenza del Cristo (forse contro le eresie giudeo-cristiane che la negavano, come nel caso degli Ebioniti) e collega l'adozione a figli di Dio con il battesimo. L'autore sottolinea che i cristiani sono tenuti ad osservare la domenica, giorno della risurrezione di Cristo, al posto del sabato (XV, 8-9), considerando la domenica il giorno della festa cristiana e non il settimo giorno. L'opera fa eco a una escatologia millenarista (XV, 1-9) e contiene uno dei primi testi cristiani esplicitamente e direttamente contrari alla pratica dell'aborto (XIX, 5).
+
 
 # Il saluto
 

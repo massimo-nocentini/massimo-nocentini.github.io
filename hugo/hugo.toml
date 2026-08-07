@@ -5,12 +5,6 @@ title = "Massimo Nocentini"
 theme = "beautifulhugo"
 # Or when using theme as hugo module
 # theme = "github.com/halogenica/beautifulhugo"
-pygmentsStyle = "monokai"
-pygmentsUseClasses = true
-pygmentsCodeFences = true
-pygmentsCodefencesGuessSyntax = true
-#pygmentsUseClassic = true
-#pygmentOptions = "linenos=inline"
 enableGitInfo = true
 ignoreLogs = ['warning-goldmark-raw-html']
 
@@ -28,6 +22,18 @@ ignoreLogs = ['warning-goldmark-raw-html']
     ordered = false
     startLevel = 0
 
+  # Chroma highlighting. noClasses = false makes Chroma emit CSS classes so the
+  # theme's static/css/syntax.css and syntax-dark.css are used (this replaces the
+  # legacy top-level pygments* keys).
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+    guessSyntax = true
+
+  # Enables {.class #id} attribute blocks on headings, tables, code fences, ...
+  [markup.goldmark.parser.attribute]
+    block = true
+
 [Params]
   homeTitle = "This site needs no title"
   subtitle = "Massimo Nocentini's papers, notes, memos and source code."
@@ -35,7 +41,8 @@ ignoreLogs = ['warning-goldmark-raw-html']
   mainSections = ['']
 #  logo = "samurai.jpg" # Expecting square dimensions
   favicon = "samurai.jpg"
-  dateFormat = "January 2, 2006"
+  dateFormat = "January 2, 2006" # or a locale token such as ":date_long"
+  since = 2016 # start year of the footer copyright range
   toc = true
   #commit = true
   rss = true
@@ -47,16 +54,35 @@ ignoreLogs = ['warning-goldmark-raw-html']
   socialShare = false
   delayDisqus = false
   showRelatedPosts = true
+#  related_content_limit = 5 # max number of related posts to list
 #  cusdisID = "XXX" # Get your App id from cusdis.com
   showPostNav = true
   hideAuthor = false
-  mathEngine = "katex"
-  colorScheme = "light"
+  mathEngine = "katex" # "katex", "mathjax" or "none"
+  colorScheme = "light" # "auto", "light" or "dark"
   selfHosted = false
   showSource = false
   sourceRepo = "https://github.com/massimo-nocentini/massimo-nocentini.github.io/blob/master/hugo/content/"
   ghBadge = ["star", "fork"]
   ghCount = true
+#  disableFigureOverride = true # use Hugo's native figure shortcode instead of the theme's
+#  headerImgStyle = "narrow" # "big" (default) or "narrow"; applies to Params.bigimg headers
+#  showPageDates = true # show dates on "page" type content
+#  hidePostDates = true # hide dates on "post" type content
+#  disableCanonical = true # suppress <link rel="canonical"> site-wide
+
+# Optional schema.org/JSON-LD overrides (see the theme's "SEO & i18n" page).
+#  organizationName = "Massimo Nocentini"
+#  organizationLogo = "https://massimo-nocentini.github.io/samurai.jpg"
+#  alternatePageName = "Massimo Nocentini's notes"
+  socialProfiles = [
+    "https://github.com/massimo-nocentini",
+    "https://gitlab.com/massimo-nocentini",
+  ]
+
+# Site-wide <meta name="robots"> defaults; only applies to Params.mainSections.
+#[Params.seo.robots]
+#  ai-summary-limit = "nosnippet"
 #  gcse = "012345678901234567890:abcdefghijk" # Get your code from google.com/cse. Make sure to go to "Look and Feel" and change Layout to "Full Width" and Theme to "Classic"
 #  disclaimerText = "The opinions expressed herein are my own personal opinions and do not represent my employer’s view in any way."
 
@@ -97,8 +123,8 @@ ignoreLogs = ['warning-goldmark-raw-html']
   #bandcamp = "username"
   #itchio = "username"
   #vk = "username"
-  paypal = "username"
-  telegram = "username"
+  #paypal = "username"
+  #telegram = "username"
   #500px = "username"
   #codepen = "username"
   #mastodon = "url"
@@ -106,7 +132,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
   #weibo = "username"
   #slack = "username"
   #medium = "username"
-  discord = "invite code (https://discord.gg/massimo.nocentini)"
+  #discord = "invite code" # appended to https://discord.gg/
   #strava = "userid"
   #lastfm = "username"
   #bluesky = "username"
