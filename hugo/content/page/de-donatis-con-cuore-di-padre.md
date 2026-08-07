@@ -1,24 +1,21 @@
 +++
 date = '2021-03-16T14:00:21+01:00'
-title = 'Con cuore di padre'
+title = 'Con cuore di Padre'
 subtitle = 'Meditazioni dedicate a San Giuseppe'
-author = 'card De Donatis'
-tags = []
+author = 'card Angelo De Donatis'
+tags = ['san Giuseppe', 'Ef 1', 'Gal 3', 'Gv 13']
 categories = [ 'youtube' ]
 summary = " "
 +++
 
-
-# La paternità nel segreto del Padre
-
-{{< youtubeicon "26odDT7Eeto" "Prima meditazione del card. De Donatis dedicata a San Giuseppe" >}}
-
----
-
 Carissimi, buongiorno. Vogliamo vivere semplicemente tre tappe, tre meditazioni in preparazione alla festa di san Giuseppe: vogliamo entrare nella sua paternità.
 E in un tempo come il nostro, attraversato dalla piaga della pandemia, tutti abbiamo bisogno di un supplemento di paternità. Vogliamo vivere un abbraccio, l'abbraccio del Padre, la vicinanza di Dio: e allora san Giuseppe ci aiuterà in questo.
 
-La prima meditazione ha come titolo *"La paternità nel segreto del Padre"*. Entriamo nel segreto della paternità di san Giuseppe.
+# La paternità nel segreto del Padre [^1]
+
+[^1]: {{< youtubeicon "26odDT7Eeto" "Prima meditazione del card. De Donatis dedicata a San Giuseppe" >}}
+
+Entriamo nel segreto della paternità di san Giuseppe.
 All'inizio della Quaresima abbiamo accolto la parola di san Matteo:
 
 > Il Padre tuo, che vede nel segreto, ti ricompenserà.
@@ -42,7 +39,13 @@ La paternità di san Giuseppe ha così la sua radice nel segreto del Padre. Sì:
 
 Che onore grande: ogni paternità spirituale può toccare la paternità del cielo. La nostra paternità sa di paradiso, ha a che fare con un'ampiezza, una grandezza che ci supera, che ci rende capaci di abbracciarla e di esprimerla.
 
-E vi invito a prendere il testo di san Paolo agli Efesini, primo capitolo, versetti 3-6: questo testo ci conduce proprio nel segreto della paternità del Padre.
+E vi invito a prendere il testo di san Paolo agli Efesini, primo capitolo, versetti 3-6:
+> Benedetto Dio, Padre del Signore nostro Gesù Cristo, che ci ha benedetti con ogni benedizione spirituale nei cieli in Cristo.
+In lui ci ha scelti prima della creazione del mondo per essere santi e immacolati di fronte a lui nella carità,
+predestinandoci a essere per lui figli adottivi mediante Gesù Cristo, secondo il disegno d'amore della sua volontà,
+a lode dello splendore della sua grazia, di cui ci ha gratificati nel Figlio amato.
+
+Questo testo ci conduce proprio nel segreto della paternità del Padre.
 Ognuno di noi, nel silenzio, provi ad elencare e a contemplare come lo Spirito ci ha fatto vedere dal vivo, fin dal fonte battesimale, ogni benedizione spirituale. Ci sono episodi, spazi, tempi dove queste benedizioni hanno dispiegato la paternità di Dio; quelle benedizioni ci hanno plasmato. Ogni benedizione spirituale ha dato sostanza alla nostra paternità.
 
 La nostra paternità ha così le stesse caratteristiche di quella di san Giuseppe. Nel segreto della paternità del Padre ci ritroviamo a cogliere le caratteristiche di questa paternità: è una paternità santa e immacolata.
@@ -51,34 +54,30 @@ Giuseppe, con i piedi dentro il cielo, consapevole di una continua benedizione d
 
 Essere un padre nella santità significa fare in modo che tutti gli spazi occupati della nostra vita siano riempiti dalla presenza di Dio. San Giuseppe non ha potuto farne a meno: se ritroviamo in lui un'ansia permanente, potremmo dire così, è che non ci fosse nulla della sua paternità estraneo alla presenza di Dio.
 
-E nel cuore della Quaresima farà bene considerare tutti gli spazi che noi attraversiamo. Pensiamo ai nostri affetti, alle nostre relazioni, agli ambiti che attraversiamo, agli spazi che fisicamente abitiamo, alle parole che pronunciamo. *Posso dire che sono occupati totalmente da Dio? La mia paternità ha le caratteristiche della santità? Ci sono spazi affettivi, situazioni in cui Dio fa ancora fatica ad entrare?* Rischio di collocare la mia paternità fuori dal cielo.
+E nel cuore della Quaresima ci farà bene considerare tutti gli spazi che noi attraversiamo. Pensiamo ai nostri affetti, alle nostre relazioni, agli ambiti che attraversiamo, agli spazi che fisicamente abitiamo, alle parole che pronunciamo. *Posso dire che sono occupati totalmente da Dio? La mia paternità ha le caratteristiche della santità? Ci sono spazi affettivi, situazioni in cui Dio fa ancora fatica ad entrare? Rischio di collocare la mia paternità fuori dal cielo?*
 
 Il correre di Giuseppe da Maria, il correre verso Betlemme, verso l'Egitto, il portare il bambino nel tempio, il cercarlo dopo tre giorni a Gerusalemme era mosso solo dal desiderio che non ci fosse neppure un frammento di vita estraneo alla benedizione spirituale del cielo: uno spazio santo, una paternità dove ogni spazio esistenziale è denso di Spirito Santo.
 
 Sentiamo affascinante la chiamata di riempire di Dio, ogni giorno di più, tutti gli spazi della nostra vita: ogni giorno di più santi nell'amore. Una paternità svuotata di Dio è una paternità inutile.
 
 Mentre ripercorriamo nella memoria grata ciascuna delle benedizioni spirituali ricevute nella vita, facciamo anche memoria degli spazi ancora troppo vuoti di Dio. Magari è solo uno, intimo, tenacemente ancora senza Dio Padre: permettiamo che la misericordia paterna abbracci quello spazio e la nostra paternità torni gioiosamente ad essere santa. Sia di nuovo la nostra paternità proprietà di Dio.
-Liberiamo gli spazi occupati da una paternità mondana, troppo piena di noi stessi, dei nostri progetti, dei nostri idoli. Facciamo come san Giuseppe: padri silenziosi.
+Liberiamo gli spazi occupati da una paternità mondana, troppo piena di noi stessi, dei nostri progetti, dei nostri idoli. Facciamo come san Giuseppe: *padri silenziosi*.
 
 La paternità immacolata, poi — l'ultima cosa — ha a che fare con le azioni. La paternità santa offre il terreno fecondo per azioni immacolate: ogni atto paterno di san Giuseppe è immacolato.
 L'intenzione immacolata è quella che lascia fuori dalla porta ogni interesse, ogni utile, ma fa della paternità un servizio senza guadagno, disinteressato. Mentre si genera, ci si ritira, ci si perde: una santità immacolata ci fa indietreggiare, sparire come san Giuseppe, perché le sue azioni paterne rendono visibile solo l'intenzionalità del Padre del cielo.
 
 La paternità immacolata ci consentirà di mettere in atto azioni semplici, feriali, umili: trasparenza del modo di agire di Dio.
-Sarà bello, nel cammino verso la Pasqua, mentre facciamo memoria di ogni benedizione spirituale, mettere in fila le azioni quotidiane del nostro vivere. Spesso si ripetono, diventiamo anche schiavi di riti monotoni, stanchi; ma tutto necessita di essere purificato, di tornare immacolato, che tutte le azioni siano ricche del pensiero del Padre.
+Sarà bello, nel cammino verso la Pasqua, mentre facciamo memoria di ogni benedizione spirituale, mettere in fila le azioni quotidiane del nostro vivere. Spesso si ripetono, diventiamo anche schiavi di ritmi monotoni, stanchi; ma tutto necessita di essere purificato, di tornare immacolato, che tutte le azioni siano ricche del pensiero del Padre.
 
 Vi auguro di sperimentare la dolcezza del Padre che, nel segreto, vi ricompenserà.
 
 > San Giuseppe, intercedi per noi; chiedi per il cuore di noi presbiteri, religiosi, consacrati e consacrate, di tutto il popolo santo di Dio, l'abbondanza dello Spirito.
-> Scendi su di noi, Spirito forte, saggio: accompagnaci nella nostra preghiera, illumina la nostra intelligenza perché penetri nel segreto della paternità di Dio, apri le nostre orecchie perché ci possiamo mettere in ascolto della parola del Padre, sciogli le nostre labbra per poter gridare con il cuore: *Abbà, Padre!*
+> Scendi su di noi, Spirito forte, saggio: accompagnaci nella nostra preghiera, illumina la nostra intelligenza perché penetri nel segreto della paternità di Dio, apri le nostre orecchie perché ci possiamo mettere in ascolto della parola del Padre, ungi le nostre labbra per poter gridare con il cuore: *Abbà, Padre!*
 > Riscalda i nostri cuori perché siano consapevoli dell'onore grande, impagabile, di essere figli. Amen.
 
-# La paternità nel segreto del Figlio
+# La paternità nel segreto del Figlio [^2]
 
-{{< youtubeicon "gjxfRlr_kS8" "Seconda meditazione del card. De Donatis dedicata a San Giuseppe" >}}
-
----
-
-Carissimi, buongiorno. Eccoci per il secondo appuntamento in preparazione alla festa di san Giuseppe. Il titolo di questa meditazione è *"La paternità nel segreto del Figlio"*.
+[^2]: {{< youtubeicon "gjxfRlr_kS8" "Seconda meditazione del card. De Donatis dedicata a San Giuseppe" >}}
 
 Giuseppe, e con lui la sua sposa, sono entrati più di ogni altro nel segreto del Figlio. La paternità di Giuseppe è stata vissuta immergendosi nella ferialità di Gesù: è stato il padre che lo ha visto crescere in sapienza, età e grazia davanti a Dio e agli uomini.
 
@@ -117,7 +116,7 @@ Giuseppe si è alzato dal sogno della notte, ha preso Maria sua sposa, si è aff
 Entrare nel segreto del Figlio, per san Giuseppe, è aver avuto la gratitudine per ciò che di grande è stato posto nelle sue mani. Spero che questo avvenga per tutti noi.
 
 Spesso, in maniera quasi inconscia, si ha la percezione che Giuseppe sia stato sì un uomo obbediente, giusto, saggio, ma che abbia dovuto di fatto vivere un'obbedienza a una situazione difficile e innaturale.
-Dimentichiamo che la sua obbedienza nasce da una gratitudine. Non si è sentito fuori luogo, obbediente a un progetto sbagliato che gli era dovuto capitare addosso così. No: ha vissuto una gratitudine, e questa gratitudine è aumentata nel suo cuore nel vedere crescere quel figlio di età in età. Ringraziava.
+Dimentichiamo che la sua obbedienza nasce da una gratitudine. Non si è sentito fuori luogo, obbediente a un progetto sbagliato che gli era dovuto capitare addosso così. No: ha vissuto una gratitudine, e questa gratitudine è aumentata nel suo cuore nel vedere crescere quel figlio di età in età e in grazia.
 
 Quanto deve essere stato bello, per Gesù, accorgersi della gratitudine segreta di Giuseppe, perché consapevole di avere tutto nelle mani.
 Quanta gratitudine abbiamo bisogno di vivere nella nostra vita, che la nostra vita sia piena di gratitudine! Quanta obbedienza è vissuta, purtroppo, senza rendimento di grazie.
@@ -131,15 +130,11 @@ Allora andiamo da servi verso coloro che ci sono stati affidati; mentre laveremo
 > San Giuseppe, donaci di essere padri come te hai saputo essere padre, facendo maturare in te il segreto del Figlio. Occuparsi delle cose del Padre: sia così per noi, glorioso san Giuseppe. Amen.
 
 
-# La paternità nel segreto dello Spirito
+# La paternità nel segreto dello Spirito [^3]
 
-{{< youtubeicon "HueOxQLEfY8" "Terza meditazione del card. De Donatis dedicata a San Giuseppe" >}}
+[^3]: {{< youtubeicon "HueOxQLEfY8" "Terza meditazione del card. De Donatis dedicata a San Giuseppe" >}}
 
----
-
-Carissimi, buongiorno. Eccoci ancora insieme per la terza tappa in preparazione alla festa di san Giuseppe. La meditazione di oggi ha come titolo *"La paternità nel segreto dello Spirito"*.
-
-Vi invito a ripetere nel cuore una frase della Scrittura, l'espressione che Giuseppe e la madre si sono sentiti dire dal Figlio nel tempio di Gerusalemme:
+Vi invito a ripetere nel cuore una frase della Scrittura, l'espressione che Giuseppe e la Madre si sono sentiti dire dal Figlio nel tempio di Gerusalemme:
 
 > Non sapevate che io devo occuparmi delle cose del Padre mio?
 
@@ -149,7 +144,7 @@ Il Figlio sta indicando la via della paternità: entrare nelle cose del Padre è
 Queste cose del Padre hanno a che fare con quella creatività dello Spirito che viene a plasmare ognuno di noi: ciascuno di noi è un frammento prezioso del volto paterno di Dio.
 Giuseppe sapeva bene che le cose del Padre, che lo coinvolgevano, gli permettevano di comprendersi, di configurarsi alla sua volontà, di ricevere identità.
 
-Allora occorre una familiarità con lo Spirito: lui solo sa donare l'intelligenza delle cose del Padre. Entrare con quello Spirito nelle cose del Padre significa essere accompagnati a trovare oggi la via per dare forma visibile, concreta, alla nostra paternità.
+Allora occorre una familiarità con lo Spirito: lui solo sa donare l'intelligenza delle cose del Padre. Entrare con lo Spirito nelle cose del Padre significa essere accompagnati a trovare oggi la via per dare forma visibile, concreta, alla nostra paternità.
 
 Un brano della lettera ai Galati ci può aiutare — Galati 3, versetti 1-5 — quando Paolo dice:
 
@@ -157,7 +152,7 @@ Un brano della lettera ai Galati ci può aiutare — Galati 3, versetti 1-5 — 
 
 Cioè, il testo ci invita a conversione: a rimanere nelle cose del Padre, a non distrarci e finire nel segno della carne, come dice Paolo, lontani, estranei alle cose dello Spirito.
 
-Il silenzio di san Giuseppe è un silenzio generativo, fecondo, proprio perché nell'ombra dello Spirito Santo. San Giuseppe, dice papa Francesco nella lettera apostolica *Patris corde*, è un padre del coraggio, è un padre del coraggio creativo. Il coraggio creativo nello Spirito Santo è il coraggio del padre che sa trasformare un problema in un'opportunità, anteponendo sempre la fiducia nella provvidenza.
+Il silenzio di san Giuseppe è un silenzio generativo, fecondo, proprio perché nell'ombra dello Spirito Santo. San Giuseppe, dice papa Francesco nella lettera apostolica [*Patris corde*](https://www.vatican.va/content/francesco/it/apost_letters/documents/papa-francesco-lettera-ap_20201208_patris-corde.html), è un padre del coraggio, è un padre del coraggio creativo. Il coraggio creativo nello Spirito Santo è il coraggio del padre che sa trasformare un problema in un'opportunità, anteponendo sempre la fiducia nella provvidenza.
 
 Giuseppe è stato così aiutato, nel tempio di Gerusalemme, a rileggere la sua paternità nel segno dello Spirito Santo. Solo entrando nelle cose del Padre si diventa capaci di introdurre un figlio nella storia dove Dio è protagonista: l'essere nelle cose del Padre ci allontana da ogni sterile protagonismo.
 Sì: se non entriamo da padri nel segreto dello Spirito, rischiamo di essere padri protagonisti. L'assenza dello Spirito non favorisce lo spazio della paternità, ma dà spazio solo alla propria sterile onnipotenza.
