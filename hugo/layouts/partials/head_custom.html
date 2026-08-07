@@ -21,18 +21,274 @@ Or you can delete these file if you don't need it.
 <!-- <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet"> -->
 <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,700;1,7..72,400&display=swap"> -->
 <style>
+  /* ------------------------------------------------------------------
+     Golden-ratio spacing scale.
+
+     Every vertical gap in the site is a power of phi times one base unit,
+     and the base unit is the body font size (18px in beautifulhugo), so the
+     whole page is one geometric progression:
+
+       phi^-4  phi^-3  phi^-2  phi^-1  phi^0  phi^1  phi^2  phi^3  phi^4
+        2.6px   4.2px   6.9px  11.1px  18px  29.1px 47.1px 76.2px 123.4px
+
+     Body copy leads at exactly phi: the baseline-to-baseline distance is
+     1.618... times the font size.
+     ------------------------------------------------------------------ */
+  :root {
+    --phi: 1.6180339887498949;
+
+    /* Powers of phi, precomputed so nothing depends on calc() division. */
+    --phi-n4: 0.14589803375031546;
+    --phi-n3: 0.2360679774997897;
+    --phi-n2: 0.3819660112501051;
+    --phi-n1: 0.6180339887498949;
+    --phi-p1: 1.6180339887498949;
+    --phi-p2: 2.6180339887498949;
+    --phi-p3: 4.23606797749979;
+    --phi-p4: 6.854101966249685;
+
+    /* Base unit == body font size (18px). Change this one value to
+       rescale every gap on the site while keeping the proportions. */
+    --gr-base: 1.125rem;
+
+    --gr-3xs: calc(var(--gr-base) * var(--phi-n4)); /*   2.6px */
+    --gr-2xs: calc(var(--gr-base) * var(--phi-n3)); /*   4.2px */
+    --gr-xs:  calc(var(--gr-base) * var(--phi-n2)); /*   6.9px */
+    --gr-sm:  calc(var(--gr-base) * var(--phi-n1)); /*  11.1px */
+    --gr-md:  var(--gr-base);                       /*  18.0px */
+    --gr-lg:  calc(var(--gr-base) * var(--phi-p1)); /*  29.1px */
+    --gr-xl:  calc(var(--gr-base) * var(--phi-p2)); /*  47.1px */
+    --gr-2xl: calc(var(--gr-base) * var(--phi-p3)); /*  76.2px */
+    --gr-3xl: calc(var(--gr-base) * var(--phi-p4)); /* 123.4px */
+
+    /* Unitless, so each element leads relative to its *own* font size.
+       (A value in `em` would freeze the leading at the body size and leak
+       that fixed length into every descendant.)
+
+       phi is the loose end of the usable range for running text. If the
+       page still reads airy, this is the knob: 1.5 is the conventional
+       value for a serif at this size and measure, and it is the only
+       number here that is not phi-derived. Everything else stays. */
+    --gr-leading: var(--phi);                      /* 1.618 — running text */
+    --gr-leading-tight: calc(1 + var(--phi-n2));   /* 1.382 — headings     */
+
+    /* One full line of body copy. Used only to set off standalone blocks
+       (code, figures, tables) -- paragraphs use the smaller 1em gap. */
+    --gr-line: calc(1em * var(--gr-leading));
+  }
+
+  /* --- Leading ---------------------------------------------------- */
+
   body {
     /* font-family:  'Literata', system-ui, serif; */
     /* font-family:  Georgia; */
-    /* max-width: 61.8%; */
-    line-height: 1.618em;
+    line-height: var(--gr-leading);
   }
 
+  p,
+  li,
+  dd,
+  dt,
+  blockquote,
+  figcaption,
+  .caption,
+  table tr th,
+  table tr td {
+    line-height: var(--gr-leading);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--gr-leading-tight);
+  }
+
+  /* --- Block rhythm ------------------------------------------------
+
+     The paragraph gap is one base unit (1em), not one full line. That is
+     the defining identity of phi at work:
+
+         within a paragraph, baseline to baseline = phi^1 * base = 29.1px
+         across a paragraph break                 = phi^1 + phi^0
+                                                  = phi^2 * base = 47.1px
+
+     because phi^n = phi^(n-1) + phi^(n-2). So the rhythm still steps by
+     exactly one power of phi at a paragraph boundary, but the block reads
+     as a block instead of drifting apart. A full blank line between
+     paragraphs is roughly 60% too much air at this measure.            */
+
+  p,
+  p + p {
+    margin: 0 0 1em;
+  }
+
+  /* Headings are self-similar: the space above is the heading's own font
+     size, the space below is that over phi^2. The asymmetry matters --
+     a heading belongs to the text beneath it, so it has to sit closer to
+     what follows than to what precedes. phi:1 was not enough separation
+     to make that grouping read. */
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 1em;
+    margin-bottom: calc(1em * var(--phi-n2));
+  }
+
+  .post-preview .post-entry :is(h1, h2, h3, h4, h5, h6) {
+    margin: 1em 0 calc(1em * var(--phi-n2));
+  }
+
+  .blog-post :is(ul, ol),
+  .content-section :is(ul, ol),
+  .post-entry :is(ul, ol) {
+    margin: 0 0 1em;
+    padding-left: var(--gr-lg);
+  }
+
+  /* No gap between list items: they already lead at phi, and adding a
+     step on top of that shreds a list into unrelated lines. Only nested
+     lists get a hairline of separation from their parent item. */
+  .blog-post :is(ul, ol) :is(ul, ol),
+  .content-section :is(ul, ol) :is(ul, ol),
+  .post-entry :is(ul, ol) :is(ul, ol) {
+    margin: var(--gr-2xs) 0 0;
+  }
+
+  .blog-post blockquote {
+    padding: var(--gr-sm) var(--gr-lg);
+    margin: 0 0 1em;
+    border-left-width: var(--gr-2xs);
+  }
+
+  .blog-post :is(pre, figure, table) {
+    margin-bottom: var(--gr-line);
+  }
+
+  hr.small {
+    margin: var(--gr-sm) auto;
+  }
+
+  .blog-post hr {
+    margin-top: var(--gr-lg);
+    margin-bottom: var(--gr-lg);
+  }
+
+  /* --- Structural spacing ------------------------------------------ */
+
+  .intro-header {
+    margin: var(--gr-2xl) 0 var(--gr-md);
+  }
+
+  /* margin-top stays 54px: it clears the fixed navbar, it is not a
+     decorative gap. */
+  .intro-header.big-img {
+    margin-bottom: var(--gr-lg);
+  }
+
+  .post-preview {
+    padding: var(--gr-md) 0;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .post-preview {
+      padding: var(--gr-lg) 0;
+    }
+  }
+
+  .post-preview .post-title,
+  .post-preview .post-subtitle {
+    margin-bottom: var(--gr-sm);
+  }
+
+  .post-entry {
+    margin-top: var(--gr-sm);
+  }
+
+  .blog-tags,
+  .blog-categories {
+    margin-bottom: var(--gr-lg);
+  }
+
+  .content-section {
+    padding: var(--gr-lg);
+    margin-bottom: var(--gr-lg);
+  }
+
+  table tr th,
+  table tr td {
+    padding: var(--gr-xs) var(--gr-sm);
+  }
+
+  figcaption,
+  .caption,
+  .blog-post .caption {
+    padding: var(--gr-sm);
+  }
+
+  footer {
+    padding: var(--gr-lg) 0;
+  }
+
+  footer .theme-by {
+    margin: var(--gr-sm) 0 0;
+  }
+
+  footer div.disclaimer {
+    padding: var(--gr-sm);
+    margin: var(--gr-md) var(--gr-md) var(--gr-md) var(--gr-2xs);
+  }
+
+  /* Code blocks: pad by phi^-2 of the base unit, sit one phi^-1 step off
+     the surrounding text. The :first-child/:last-child gutter rules in
+     codeblock.css are more specific and still win, so line-numbered
+     tables keep their seam. */
+  .highlight,
+  pre:not(.chroma) {
+    margin: var(--gr-sm) 0;
+  }
+
+  .highlight > pre,
+  .highlight > .chroma,
+  .highlight .lntd pre,
+  pre:not(.chroma) > code:not(.hljs),
+  pre code.hljs {
+    padding: var(--gr-xs);
+  }
+
+  /* --- Lateral margins ---------------------------------------------
+
+     Horizontally the page is divided by the golden section: the text
+     column takes phi^-1 of the row and surrenders the remaining phi^-2,
+     split evenly, to the two lateral margins. This replaces Bootstrap's
+     `col-md-10 offset-md-1` (83.3% / 8.3%), which is a twelfth-based
+     grid and has no phi in it.
+
+     At the md breakpoint the full golden section would leave only ~46
+     characters per line, so there the page gives up the smaller step
+     phi^-3 instead and takes the full section from lg up. Both fractions
+     are powers of phi; only the exponent changes with the room available.
+
+     Header, content and footer all use this same column, so they stay
+     flush with one another.                                            */
+
+  /* Bootstrap derives container side padding and column gutters from
+     this one variable; it is declared on .container/.row, so it has to
+     be overridden there rather than on :root. */
+  .container,
+  .container-fluid,
+  .row {
+    --bs-gutter-x: var(--gr-lg);
+  }
+
+  @media only screen and (min-width: 768px) {
+    .row > .offset-md-1 {
+      width: calc(100% * (1 - var(--phi-n3)));      /* 76.4% */
+      margin-left: calc(100% * var(--phi-n3) * .5); /* 11.8% */
+      margin-right: calc(100% * var(--phi-n3) * .5);
+    }
+  }
+
+  @media only screen and (min-width: 992px) {
+    .row > .offset-md-1 {
+      width: calc(100% * var(--phi-n1));            /* 61.8% */
+      margin-left: calc(100% * var(--phi-n2) * .5); /* 19.1% */
+      margin-right: calc(100% * var(--phi-n2) * .5);
+    }
+  }
 </style>
-<!-- .content,
-main,
-article {
-  /* match your theme's container class */
-  width: 61.8%;
-  margin-inline: auto;
-} -->
