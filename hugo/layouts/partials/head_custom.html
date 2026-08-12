@@ -16,10 +16,23 @@ Or you can delete these file if you don't need it.
 <!-- or you could include some additional css libraries:
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.css" integrity="sha256-I1UoFd33KHIydu88R9owFaQWzwkiZV4hXXug5aYaM28=" crossorigin="anonymous" />
 -->
-<!-- <link href="https://fonts.googleapis.com/css?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap" rel="stylesheet"> -->
 
-<!-- <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet"> -->
-<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,700;1,7..72,400&display=swap"> -->
+<!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap"
+  rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css?family=Crimson+Pro" rel="stylesheet">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,700;1,7..72,400&display=swap">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+<link
+  href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap"
+  rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet"> -->
+
 <style>
   /* ------------------------------------------------------------------
      Golden-ratio spacing scale.
@@ -51,15 +64,24 @@ Or you can delete these file if you don't need it.
        rescale every gap on the site while keeping the proportions. */
     --gr-base: 1.125rem;
 
-    --gr-3xs: calc(var(--gr-base) * var(--phi-n4)); /*   2.6px */
-    --gr-2xs: calc(var(--gr-base) * var(--phi-n3)); /*   4.2px */
-    --gr-xs:  calc(var(--gr-base) * var(--phi-n2)); /*   6.9px */
-    --gr-sm:  calc(var(--gr-base) * var(--phi-n1)); /*  11.1px */
-    --gr-md:  var(--gr-base);                       /*  18.0px */
-    --gr-lg:  calc(var(--gr-base) * var(--phi-p1)); /*  29.1px */
-    --gr-xl:  calc(var(--gr-base) * var(--phi-p2)); /*  47.1px */
-    --gr-2xl: calc(var(--gr-base) * var(--phi-p3)); /*  76.2px */
-    --gr-3xl: calc(var(--gr-base) * var(--phi-p4)); /* 123.4px */
+    --gr-3xs: calc(var(--gr-base) * var(--phi-n4));
+    /*   2.6px */
+    --gr-2xs: calc(var(--gr-base) * var(--phi-n3));
+    /*   4.2px */
+    --gr-xs: calc(var(--gr-base) * var(--phi-n2));
+    /*   6.9px */
+    --gr-sm: calc(var(--gr-base) * var(--phi-n1));
+    /*  11.1px */
+    --gr-md: var(--gr-base);
+    /*  18.0px */
+    --gr-lg: calc(var(--gr-base) * var(--phi-p1));
+    /*  29.1px */
+    --gr-xl: calc(var(--gr-base) * var(--phi-p2));
+    /*  47.1px */
+    --gr-2xl: calc(var(--gr-base) * var(--phi-p3));
+    /*  76.2px */
+    --gr-3xl: calc(var(--gr-base) * var(--phi-p4));
+    /* 123.4px */
 
     /* Unitless, so each element leads relative to its *own* font size.
        (A value in `em` would freeze the leading at the body size and leak
@@ -69,8 +91,10 @@ Or you can delete these file if you don't need it.
        page still reads airy, this is the knob: 1.5 is the conventional
        value for a serif at this size and measure, and it is the only
        number here that is not phi-derived. Everything else stays. */
-    --gr-leading: var(--phi);                      /* 1.618 — running text */
-    --gr-leading-tight: calc(1 + var(--phi-n2));   /* 1.382 — headings     */
+    --gr-leading: var(--phi);
+    /* 1.618 — running text */
+    --gr-leading-tight: calc(1 + var(--phi-n2));
+    /* 1.382 — headings     */
 
     /* One full line of body copy. Used only to set off standalone blocks
        (code, figures, tables) -- paragraphs use the smaller 1em gap. */
@@ -81,8 +105,12 @@ Or you can delete these file if you don't need it.
 
   body {
     /* font-family:  'Literata', system-ui, serif; */
-    /* font-family:  Georgia; */
+    /* font-family: 'Merriweather'; */
     line-height: var(--gr-leading);
+    /* font-family: "Merriweather", serif; */
+    font-optical-sizing: auto;
+    /* font-weight: 400; */
+    font-style: normal;
   }
 
   p,
@@ -97,7 +125,12 @@ Or you can delete these file if you don't need it.
     line-height: var(--gr-leading);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     line-height: var(--gr-leading-tight);
   }
 
@@ -116,7 +149,7 @@ Or you can delete these file if you don't need it.
      paragraphs is roughly 60% too much air at this measure.            */
 
   p,
-  p + p {
+  p+p {
     margin: 0 0 1em;
   }
 
@@ -125,7 +158,12 @@ Or you can delete these file if you don't need it.
      a heading belongs to the text beneath it, so it has to sit closer to
      what follows than to what precedes. phi:1 was not enough separation
      to make that grouping read. */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-top: 1em;
     margin-bottom: calc(1em * var(--phi-n2));
   }
@@ -243,10 +281,10 @@ Or you can delete these file if you don't need it.
     margin: var(--gr-sm) 0;
   }
 
-  .highlight > pre,
-  .highlight > .chroma,
+  .highlight>pre,
+  .highlight>.chroma,
   .highlight .lntd pre,
-  pre:not(.chroma) > code:not(.hljs),
+  pre:not(.chroma)>code:not(.hljs),
   pre code.hljs {
     padding: var(--gr-xs);
   }
@@ -277,17 +315,21 @@ Or you can delete these file if you don't need it.
   }
 
   @media only screen and (min-width: 768px) {
-    .row > .offset-md-1 {
-      width: calc(100% * (1 - var(--phi-n3)));      /* 76.4% */
-      margin-left: calc(100% * var(--phi-n3) * .5); /* 11.8% */
+    .row>.offset-md-1 {
+      width: calc(100% * (1 - var(--phi-n3)));
+      /* 76.4% */
+      margin-left: calc(100% * var(--phi-n3) * .5);
+      /* 11.8% */
       margin-right: calc(100% * var(--phi-n3) * .5);
     }
   }
 
   @media only screen and (min-width: 992px) {
-    .row > .offset-md-1 {
-      width: calc(100% * var(--phi-n1));            /* 61.8% */
-      margin-left: calc(100% * var(--phi-n2) * .5); /* 19.1% */
+    .row>.offset-md-1 {
+      width: calc(100% * var(--phi-n1));
+      /* 61.8% */
+      margin-left: calc(100% * var(--phi-n2) * .5);
+      /* 19.1% */
       margin-right: calc(100% * var(--phi-n2) * .5);
     }
   }
