@@ -17,7 +17,7 @@ tags = [
     "epiclesi",
     "missione",
 ]
-summary = "Una catechesi sull'adorazione eucaristica: l'eucaristia non è opera nostra ma azione del Padre nello Spirito Santo, che ci rende corpo di Cristo, ci unisce gli uni agli altri e coinvolge la creazione intera nella nuova creazione del Risorto. Di qui l'adorazione come superamento dell'individualismo, trionfo della comunione e invio alla missione nella Galilea della vita quotidiana."
+summary = " "
 +++
 
 
