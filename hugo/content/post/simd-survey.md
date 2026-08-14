@@ -5,238 +5,90 @@ date = '2026-08-14T06:58:04+01:00'
 title = 'SIMD'
 subtitle = 'Single instruction, multiple data.'
 summary = 'A reading path and a working survey.'
-categories = ['ai generated']
+categories = ['AI generated']
 +++
 
-# A reading path
-
 Inspired after reading [*Hashimoto*'s __"Everyone Should Know SIMD"__](https://mitchellh.com/writing/everyone-should-know-simd)
-and [Wikipedia](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data);
-ordered the way I'd actually take it, not by prestige.
+and [Wikipedia](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data).
+# SIMD with Clang and Rust — a verified survey
 
-## 1. Start with one book chapter and one PDF
+Everything here was compiled and run on one machine: **Ubuntu 24.04, Intel Xeon
+(Cascade Lake / Sapphire Rapids class: AVX-512F/DQ/BW/VL/CD + VNNI), 2.8 GHz, 1 vCPU**, with
+**clang 18.1.3** and **rustc 1.75.0**. Where the compiler refused something, the refusal is
+kept — those are the interesting parts. Full sources are in the appendix.
 
-### *Algorithms for Modern Hardware* — Sergey Slotin
-<https://en.algorithmica.org/hpc/>
+> The C harness uses a `volatile` sink; the Rust harness uses `std::hint::black_box`. Compare
+> within a table, never across the two languages.
 
-The best free introduction. **Chapter 10** is the SIMD chapter: it argues that
-auto-vectorization only works on certain loop shapes and often yields suboptimal results,
-which is exactly why you need the lower-level view. Sections cover intrinsics and vector
-types, moving data, reductions, masking and blending, in-register shuffles, and
-auto-vectorization/SPMD.
-
-The author explicitly suggests **starting the book at chapter 10** if you're already
-comfortable with systems material. Chapters 11–12 are the payoff:
-
-> argmin · prefix sum · reading/writing decimal integers · string searching · sorting ·
-> matrix multiplication · binary search · static B-trees · segment trees · hash tables
-
-### *SIMD for C++ Developers* — Konstantin (const.me)
-<http://const.me/articles/simd/simd.pdf> (~23 pages)
-
-The fastest way to build a mental map of what the x86 instruction families actually *do*.
-Deliberately an overview and starting point rather than a reference, focused on intrinsics,
-written from the observation that the official guide is only useful once you already know
-which intrinsic you want.
-
-Companion for ARM: <http://const.me/articles/simd/NEON.pdf>
-
-
-
-## 2. References to keep open, not to read
-
-| Resource | Why |
-|---|---|
-| [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html) | Searchable by operation; latency/throughput per microarchitecture |
-| [officedaytime.com/simd512e](https://www.officedaytime.com/simd512e/) | The same data **drawn as pictures** — far better than prose for shuffles, pack/unpack |
-| [uops.info](https://uops.info) · [Agner Fog's tables](https://www.agner.org/optimize/) | Ground truth for port pressure and latency |
-| [ARM intrinsics reference](https://developer.arm.com/architectures/instruction-sets/intrinsics/) | NEON and SVE |
-| Clang *Language Extensions* | `vector_size`, `ext_vector_type`, `__builtin_elementwise_*`, `__builtin_reduce_*` |
-| LLVM *Auto-Vectorization in LLVM* | What the loop and SLP vectorizers promise |
-
-The last two are what the clang survey is annotating empirically.
-
-
-
-## 3. The part that will actually interest you
-
-### Wojciech Muła — <http://0x80.pl/>
-
-The closest thing to a *Journal of Algorithmic SIMD*: an ongoing archive of articles on
-optimization, SIMD and algorithms, each with a companion repo of runnable benchmarks —
-`sse-popcount`, `sse4-strstr`, `base64-avx512`, `simd-search`.
-
-### Daniel Lemire — blog + `simdjson`, and the joint papers
-
-* Lemire & Muła, *Transcoding billions of Unicode characters per second with SIMD
-  instructions*, SP&E 52(2), 2022
-* Muła, Kurz & Lemire, *Faster Population Counts Using AVX2 Instructions*
-* Muła & Lemire, *Base64 Encoding and Decoding at Almost the Speed of a Memory Copy*
-* Lemire & Boytsov, *Decoding Billions of Integers per Second Through Vectorization*
-
-This is where SIMD stops being a compiler flag and becomes **algorithm design**. The
-recurring moves:
-
-1. compare → `movemask` → `tzcnt` (turn a vector predicate into a scalar index)
-2. `pshufb` as a 16-entry parallel lookup table
-3. reformulating a data-dependent problem as a branch-free table lookup
-
-Highest intellectual density of anything on this list.
-
-### The SWAR ancestry
-
-* Knuth, **TAOCP 7.1.3** — *Bitwise tricks and techniques* (broadword computation)
-* Warren, **Hacker's Delight**
-
-Most "clever" SIMD kernels are broadword algorithms with wider registers.
-
-
-
-## 4. When you want the library answer
-
-### Google Highway — <https://github.com/google/highway>
-
-The reference implementation of the *one generic kernel, many target clones* pattern, done
-properly: a collection of platform-agnostic ops implemented via platform-specific intrinsics,
-supporting both static and dynamic dispatch — where dynamic dispatch replicates only your SIMD
-code rather than the whole binary. An independent evaluation of C++ SIMD libraries rated it
-strongest across multiple SIMD extensions.
-
-Read [`g3doc/quick_reference.md`](https://github.com/google/highway/blob/master/g3doc/quick_reference.md)
-even if you never link it — the op vocabulary it settled on is a good design study for what a
-cross-ISA abstraction has to expose, and it's the same primitive set you'd want in a Rust or
-Pharo binding.
-
-Also worth knowing: **xsimd**, **SLEEF** (vector math), **ISPC** (SPMD-on-SIMD language),
-**VOLK**.
-
-
-
-## 5. For measurement discipline
-
-* Denis Bakhvalov, *Performance Analysis and Tuning on Modern CPUs* (free PDF) — top-down
-  microarchitectural analysis, `perf`, and why microbenchmarks lie
-* [Compiler Explorer](https://godbolt.org) — instant `-Rpass` + asm feedback
-* [uiCA](https://uica.uops.info) alongside `llvm-mca` — static throughput estimates
-
-
-
-## Compressed
-
-> Read Algorithmica ch. 10–11 with Compiler Explorer open, then reimplement two of Muła's
-> kernels **from the article text alone** before looking at his code.
-
-That gets you further than any amount of intrinsics-guide browsing.
-
-# SIMD in C with Clang — a working survey
-
-Every code fragment, flag, diagnostic and number below was compiled and run with
-**Ubuntu clang 18.1.3, x86-64, Intel Xeon (Cascade Lake: AVX-512F/DQ/BW/VL/CD + VNNI), 1 vCPU @ 2.8 GHz**.
-Where the compiler *refused* something I kept the refusal — those are the interesting parts.
-
-
+---
 
 ## 0. The four levels
 
-| Level | Mechanism | Portability | Control |
-|---|---|---|---|
-| 0 | autovectorizer (`-O2`, `-march`) | total | none |
-| 1 | guide it (`restrict`, alignment, pragmas, FP flags) | total | weak but cheap |
-| 2 | generic vectors (`vector_size`, `ext_vector_type`, `__builtin_*`) | source-portable across ISAs | good |
-| 3 | intrinsics (`immintrin.h`, `arm_neon.h`, `arm_sve.h`) + runtime dispatch | per-ISA | total |
+| Level | C / clang | Rust |
+|---|---|---|
+| 0 — autovectorizer | `-O2 -march=…` | `-O -C target-cpu=…` |
+| 1 — guide it | `restrict`, pragmas, FP flags | `chunks_exact` + array accumulators |
+| 2 — portable vectors | `vector_size`, `__builtin_*` | `std::simd` (nightly), `wide` |
+| 3 — intrinsics + dispatch | `immintrin.h`, `target(…)`, `target_clones` | `core::arch`, `#[target_feature]`, `multiversion` |
 
-The interesting engineering position is **level 2 with level-3 dispatch**: one generic kernel,
-compiled several times through `__attribute__((target(...)))` clones (§7). It gets you ~99 % of
-the intrinsics performance in this benchmark with none of the per-ISA source.
+The position worth occupying in both languages is **level 2 with level-3 dispatch**: one generic
+kernel, compiled several times under different target features. In the benchmark below it reaches
+~99% of hand-written intrinsics with none of the per-ISA source.
 
+---
 
+# Part I — C with clang
 
-## 1. What the flags actually do
+## 1. Flags
 
-Clang runs **both** vectorizers (loop + SLP) at `-O2` and above. `-O3` does not "turn on SIMD";
-it mostly loosens the unrolling/inlining cost model.
+Clang runs **both** vectorizers (loop + SLP) at `-O2`. `-O3` does not "turn on SIMD"; it loosens
+the unroll/inline cost model.
 
 ```
 -O2                       loop vectorizer + SLP on
--Os / -Oz                 loop vectorizer still on, but cost model is size-driven
 -fno-vectorize            disable loop vectorizer
 -fno-slp-vectorize        disable straight-line (superword) vectorizer
 -march=x86-64-v2/v3/v4    portable ISA levels: SSE4.2 / AVX2+FMA+BMI / AVX-512
--march=native             this machine only
 -mprefer-vector-width=N   override LLVM's default cap
 -mtune=…                  cost model only, no new instructions
 ```
 
-`-march` levels are the sane portable choice: `x86-64-v3` ≈ Haswell+ (AVX2, FMA, BMI2),
-`x86-64-v4` ≈ Skylake-SP (AVX-512F/BW/DQ/VL). ARM equivalents are `-mcpu=` / `-march=armv8-a+sve`.
-
-### Width is capped independently of `-march`
+Width is capped independently of `-march`:
 
 ```c
-void scale(float *a, const float *b, float k, size_t n) {
-    for (size_t i = 0; i < n; i++) a[i] = b[i] * k;
-}
+for (size_t i = 0; i < n; i++) a[i] = b[i] * k;
 ```
-
 ```
-$ clang -O2                                  -Rpass=loop-vectorize
-remark: vectorized loop (vectorization width: 4, interleaved count: 2)     # SSE2 baseline
-$ clang -O2 -march=native                    -Rpass=loop-vectorize
-remark: vectorized loop (vectorization width: 8, interleaved count: 4)     # 256-bit, not 512!
-$ clang -O2 -march=native -mprefer-vector-width=512
-remark: vectorized loop (vectorization width: 16, interleaved count: 4)
+-O2                                        width 4,  interleave 2   (SSE2 baseline)
+-O2 -march=native                          width 8,  interleave 4   (256-bit, not 512!)
+-O2 -march=native -mprefer-vector-width=512  width 16, interleave 4
 ```
 
 On Skylake-SP-class targets LLVM sets `prefer-256-bit` because 512-bit code drops the core clock.
-If your kernel is long and compute-dense, measure `-mprefer-vector-width=512`; if it is a short
-memcpy-ish loop sprinkled through a big program, leave the default.
+Measure before overriding — see the AVX-512 row in §8, which is *slower* than AVX2.
 
-
-
-## 2. Diagnostics: never guess
+## 2. Diagnostics — never guess
 
 ```bash
 clang -O2 -march=x86-64-v3 \
-      -Rpass=loop-vectorize \        # what vectorized
-      -Rpass-missed=loop-vectorize \ # what didn't
-      -Rpass-analysis=loop-vectorize # why not
-```
-
-`-Rpass=slp-vectorizer` for straight-line code. Machine-readable form:
-
-```bash
+      -Rpass=loop-vectorize \         # what vectorized
+      -Rpass-missed=loop-vectorize \  # what didn't
+      -Rpass-analysis=loop-vectorize  # why not
 clang -O2 -fsave-optimization-record -foptimization-record-file=rec.yaml -c f.c
 ```
 
-```yaml
- !AnalysisFPCommute
-Pass:            loop-vectorize
-Name:            CantReorderFPOps
-DebugLoc:        { File: 03_reduce.c, Line: 4, Column: 38 }
-Function:        sum_strict
-Args:
-  - String: 'loop not vectorized: cannot prove it is safe to reorder floating-point operations'
-```
+`-Rpass=slp-vectorizer` for straight-line code. The YAML feeds LLVM's `opt-viewer.py`. Then
+confirm at instruction level (`-S`, `llvm-objdump -d`) and reason about throughput with
+`llvm-mca -mcpu=skylake-avx512 -iterations=100 inner.s`.
 
-Feed that to LLVM's `opt-viewer.py` for an annotated HTML source listing. Then confirm at the
-instruction level (`-S`, `llvm-objdump -d --no-show-raw-insn`) and, for throughput reasoning,
-`llvm-mca`:
+Order of questions: *did it vectorize* → *what did it emit* → *is it throughput- or
+latency-bound*.
 
-```
-$ llvm-mca -mcpu=skylake-avx512 -iterations=100 inner_loop.s
-Iterations: 100   Total Cycles: 410   Block RThroughput: 1.0
-```
+## 3. Making the vectorizer say yes
 
-The three questions in order: *did it vectorize* (remarks) → *what did it emit* (asm) →
-*is the emitted loop throughput- or latency-bound* (mca + measurement).
+### 3.1 `restrict` — highest value per keystroke
 
-
-
-## 3. Making the autovectorizer say yes
-
-### 3.1 `restrict` — the single highest-value annotation
-
-Without it, clang emits a runtime overlap check plus a full scalar fallback loop:
+Without it, clang emits a runtime overlap check plus a full scalar fallback:
 
 ```asm
 cmpq $32, %rdx      ; n >= 32 ?
@@ -244,16 +96,11 @@ jb   .LBB0_6        ; -> scalar path
 cmpq $128, %rcx     ; |a-b| far enough apart ?
 jb   .LBB0_6
 ```
-
 ```
 text size, same loop:   no restrict 315 bytes    with restrict 166 bytes
 ```
 
-Same speed in the hot case, half the code and no branch misprediction risk at entry.
-Put `restrict` on every non-overlapping pointer parameter; it is a promise about *the function's
-whole body*, so it is checkable by inspection.
-
-### 3.2 Floating-point reassociation
+### 3.2 FP reassociation
 
 A reduction reorders FP additions, so by default clang refuses:
 
@@ -263,14 +110,14 @@ remark: loop not vectorized: cannot prove it is safe to reorder floating-point
         before the loop or by providing the compiler option '-ffast-math'
 ```
 
-Four ways to grant permission, in increasing order of blast radius:
+Four ways to grant permission, increasing blast radius:
 
 ```c
-/* (a) per loop — also implies "reorder FP for this loop" */
+/* (a) per loop — also implies "reorder FP here" */
 #pragma clang loop vectorize(enable)
 for (size_t i = 0; i < n; i++) s += a[i];
 
-/* (b) per block — NOTE: must start a compound statement, not just precede a loop */
+/* (b) per block — MUST start a compound statement, not merely precede a loop */
 {
 #pragma clang fp reassociate(on)
     for (size_t i = 0; i < n; i++) s += a[i];
@@ -280,114 +127,85 @@ for (size_t i = 0; i < n; i++) s += a[i];
 #pragma omp simd reduction(+:s)
 for (size_t i = 0; i < n; i++) s += a[i];
 
-/* (d) -ffast-math — whole TU, and it also enables FTZ/DAZ via crtfastmath.o */
+/* (d) -ffast-math — whole TU, and it links crtfastmath.o which sets FTZ/DAZ process-wide */
 ```
 
-Placing `#pragma clang fp` immediately before a `for` is an **error**, not a warning:
+Putting `#pragma clang fp` immediately before a `for` is a **hard error**:
 `'#pragma clang fp' can only appear at file scope or at the start of a compound statement`.
-Wrap it in braces. (a) and (c) confirmed vectorized at width 8 × interleave 4; the unannotated
-one stayed scalar.
+Verified: (a) and (c) vectorize at width 8 × interleave 4; the bare loop stays scalar.
 
-Prefer the surgical subsets of `-ffast-math` when you can name what you need:
-`-fno-math-errno`, `-ffp-contract=fast`, `-fassociative-math`, `-freciprocal-math`,
-`-fno-signed-zeros`, `-ffinite-math-only`.
+Prefer named subsets of `-ffast-math`: `-fno-math-errno`, `-ffp-contract=fast`,
+`-fassociative-math`, `-freciprocal-math`, `-fno-signed-zeros`, `-ffinite-math-only`.
 
 ### 3.3 FMA contraction is already on
 
-Clang 18 defaults to `-ffp-contract=on` (C's `FP_CONTRACT` within one expression):
+Clang 18 defaults to `-ffp-contract=on` (C's `FP_CONTRACT`, within one expression):
 
-```c
-f32v8 madd(f32v8 a, f32v8 b, f32v8 c) { return a*b + c; }
 ```
-```
-default / =fast :  vfmadd213ps %ymm2, %ymm1, %ymm0
--ffp-contract=off: vmulps ; vaddps
+a*b + c   default / =fast :  vfmadd213ps
+          -ffp-contract=off: vmulps ; vaddps
 ```
 
-So write `acc = va*vb + acc` and you get FMA where the target has it, plain mul+add where it
-doesn't. **Do not** reach for `__builtin_elementwise_fma` unless you truly need single-rounding
-`fma` semantics: on a target without FMA hardware it lowers to `fmaf` *library calls*
-(`undefined reference to 'fmaf'` at link time without `-lm`, and glacial at runtime).
+So write `acc = va*vb + acc`. **Do not** reach for `__builtin_elementwise_fma` unless you need
+single-rounding `fma` semantics: without FMA hardware it lowers to `fmaf` *library calls*
+(link error without `-lm`, glacial at runtime).
 
-### 3.4 Math functions in the loop
+### 3.4 Math calls in the loop
 
-```c
-for (size_t i = 0; i < n; i++) o[i] = sinf(a[i]);
 ```
-```
-plain:                  remark: library call cannot be vectorized. Try compiling
-                                with -fno-math-errno, -ffast-math, or similar flags
--fno-math-errno:        remark: vectorized loop (width 8) — but the asm still holds
-                                9 scalar `callq sinf` (the loop is vectorized *around*
-                                scalarized calls: usually a pessimization)
+plain:                   remark: library call cannot be vectorized. Try compiling
+                                 with -fno-math-errno, -ffast-math, or similar flags
+-fno-math-errno:         remark: vectorized loop (width 8) — but the asm holds 9 scalar
+                                 `callq sinf`: vectorized *around* scalarized calls
 -fveclib=libmvec
-      -fno-math-errno:  callq _ZGVdN8v_sinf   ← a real 8-wide vector sine
+     + -fno-math-errno:  callq _ZGVdN8v_sinf   ← a real 8-wide vector sine
 ```
 
 `-fveclib` values accepted by this build: `Accelerate`, `libmvec`, `MASSV`, `SVML`,
-`Darwin_libsystem_m`, `none`. (`SLEEF`, `ArmPL`, `AMDLIBM` exist in other versions/targets — the
-set is version- and target-dependent, so probe it rather than trusting docs.)
-You still need `-lm` (glibc ≥ 2.22 ships libmvec) at link time.
+`Darwin_libsystem_m`, `none`. (`SLEEF`, `ArmPL`, `AMDLIBM` exist elsewhere — probe, don't trust
+docs.) Still needs `-lm`.
 
 ### 3.5 Loop shape
 
-* **Countable trip count.** Early-exit search loops are *not* vectorized by clang 18:
-  `loop not vectorized: could not determine number of loop iterations`. Newer LLVM has
-  early-exit vectorization behind a flag; today, hand-write the search with intrinsics
-  (compare → `movemask` → `tzcnt`).
-* **Induction variables.** `size_t` is fine and generally better than `int` (no need to prove
-  no-wrap)… but see the signedness trap in §9.
-* **Conditional stores vectorize** into masked stores; branchless selects vectorize into blends.
-  Both were vectorized at width 8 here, but the select form is cheaper:
+* **Early exit is fatal** in clang 18: `loop not vectorized: could not determine number of loop
+  iterations`. Hand-write searches (compare → `movemask` → `tzcnt`).
+* **Conditional stores** vectorize into masked stores; **branchless selects** into blends. Both
+  reached width 8, but the select form avoids masked-store port pressure:
   ```
-  if (b[i] > 0) a[i] = b[i];       ->  4× vcmpltps + 4× vmaskmovps   (AVX2)
-                                       vmovups %zmm, (…){%k1}        (AVX-512)
-  a[i] = b[i] > 0 ? b[i] : a[i];   ->  compare + blend, no masked store unit pressure
+  if (b[i] > 0) a[i] = b[i];      -> 4× vcmpltps + 4× vmaskmovps  (AVX2)
+                                     vmovups %zmm, (…){%k1}       (AVX-512)
+  a[i] = b[i] > 0 ? b[i] : a[i];  -> compare + blend
   ```
-* **Gathers.** `o[i] = t[idx[i]]` was "vectorized" but clang emitted **no `vgather*`** — the
-  cost model preferred scalar loads + inserts. Gather is rarely a win outside AVX-512 with
-  cache-resident tables. Prefer restructuring the data.
-* **AoS vs SoA.** Strided access (`p[i].x` over a 16-byte struct) becomes interleaved
-  loads + shuffles. It vectorizes, but SoA is what actually goes fast.
+* **Gathers**: `o[i] = t[idx[i]]` reported "vectorized" but emitted **no `vgather*`** — the cost
+  model preferred scalar loads + inserts. Restructure the data instead.
+* **AoS** strided access becomes interleaved loads + shuffles. It vectorizes; SoA goes fast.
 
 ### 3.6 Alignment and trip-count facts
 
 ```c
-void f_aligned(float *restrict a, const float *restrict b, size_t n) {
-    a = __builtin_assume_aligned(a, 64);
-    b = __builtin_assume_aligned(b, 64);
-    n &= ~(size_t)15;                  /* trip count is a multiple of 16 */
-    for (size_t i = 0; i < n; i++) a[i] += b[i];
-}
+a = __builtin_assume_aligned(a, 64);
+b = __builtin_assume_aligned(b, 64);
+n &= ~(size_t)15;                      /* trip count is a multiple of 16 */
+for (size_t i = 0; i < n; i++) a[i] += b[i];
 ```
 
-Result: all eight moves in the body become `vmovaps` (versus `vmovups` in the plain version),
-and the scalar remainder loop disappears entirely. On modern x86 the aligned/unaligned
-*instruction* difference is nil; what you actually buy is (i) no cache-line-split loads, and
-(ii) no epilogue. `__builtin_assume(n % 16 == 0)` works too, as does `aligned_alloc(64, …)` +
-`_Alignas(64)`.
+All eight moves become `vmovaps` instead of `vmovups`, and the scalar remainder loop disappears
+entirely. On modern x86 the instruction difference is nil; what you buy is no cache-line-split
+loads and no epilogue.
 
-
-
-## 4. The pragma vocabulary
-
-All verified to parse and take effect in clang 18:
+## 4. Pragma vocabulary (all verified in clang 18)
 
 ```c
 #pragma clang loop vectorize(enable|disable)
-#pragma clang loop vectorize_width(8)               // or (8, fixed) / (4, scalable)
-#pragma clang loop interleave_count(4)              // accumulator count / unroll-in-vector
-#pragma clang loop vectorize_predicate(enable)      // fold the tail into a mask (SVE, AVX-512)
+#pragma clang loop vectorize_width(8)            // or (8, fixed) / (4, scalable)
+#pragma clang loop interleave_count(4)           // accumulator count
+#pragma clang loop vectorize_predicate(enable)   // fold the tail into a mask (SVE, AVX-512)
 #pragma clang loop unroll_count(4)
-#pragma clang loop distribute(enable)               // split a loop to break a dependence
-#pragma clang loop unroll(disable)
+#pragma clang loop distribute(enable)            // split a loop to break a dependence
 ```
 
-`vectorize(disable)` cleanly suppressed vectorization (remark: *cost-model indicates
-vectorization is not beneficial*). `vectorize_width(8, fixed) interleave_count(2)` gave exactly
-width 8 / interleave 2. Note the pragma applies to the **immediately following** loop.
-
-Region-level attribute application (useful for whole headers of intrinsic wrappers):
+Region-level target features, useful for headers of intrinsic wrappers — this compiles
+**without** `-mavx2` on the command line:
 
 ```c
 #pragma clang attribute push(__attribute__((target("avx2,fma"))), apply_to=function)
@@ -395,21 +213,14 @@ __m256 f(__m256 a, __m256 b, __m256 c){ return _mm256_fmadd_ps(a,b,c); }
 #pragma clang attribute pop
 ```
 
-This compiles **without** `-mavx2` on the command line.
-
-
-
-## 5. Generic vector extensions (level 2)
-
-Two flavours, both C-legal in clang:
+## 5. Generic vector extensions
 
 ```c
-typedef float  f32x8 __attribute__((vector_size(32)));   /* GCC-compatible */
-typedef float  e32x8 __attribute__((ext_vector_type(8)));/* OpenCL-style   */
+typedef float f32x8 __attribute__((vector_size(32)));    /* GCC-compatible */
+typedef float e32x8 __attribute__((ext_vector_type(8))); /* OpenCL-style   */
 ```
 
-Both give you `+ - * / % & | ^ ~ << >>`, comparisons (lane result `-1` / `0`), and
-subscripting `v[i]`. Differences that matter:
+Both give `+ - * / % & | ^ ~ << >>`, comparisons (lane result `-1`/`0`), subscripting. Differences:
 
 | | `vector_size` | `ext_vector_type` |
 |---|---|---|
@@ -418,83 +229,52 @@ subscripting `v[i]`. Differences that matter:
 | GCC compatibility | yes | clang/OpenCL only |
 
 ```c
-e32x8 z = x > y ? x : y;     /* OK   -> lane-wise max */
-f32x8 z = x > y ? x : y;     /* error: used type '…vector of 8 int' where
-                                arithmetic or pointer type is required */
+e32x8 z = x > y ? x : y;   /* OK -> lane-wise max */
+f32x8 z = x > y ? x : y;   /* error: used type '…vector of 8 int' where arithmetic
+                              or pointer type is required */
 ```
 
-For `vector_size` types use `__builtin_elementwise_max(a,b)` or a bitwise select instead.
-
-### Portable builtins
-
-```c
-__builtin_shufflevector(a, b, i0, …)   /* constant indices; b's lanes continue a's numbering */
-__builtin_convertvector(v, other_type) /* lane-wise conversion, e.g. f32x8 -> i32x8 */
-__builtin_reduce_add / _mul / _and / _or / _xor / _max / _min
-__builtin_elementwise_abs / _max / _min / _fma / _ceil / _roundeven / _popcount / …
-```
+Portable builtins: `__builtin_shufflevector`, `__builtin_convertvector`,
+`__builtin_reduce_{add,mul,and,or,xor,max,min}`,
+`__builtin_elementwise_{abs,max,min,fma,ceil,roundeven,popcount,…}`.
 
 Two clang-18 gotchas found by compiling:
 
-* **`__builtin_reduce_add` is integer-only.** `float` gives
-  *"1st argument must be a vector of integers"* — because an FP add reduction needs an ordering
-  choice. `__builtin_reduce_max` *does* accept float. Roll your own FP horizontal sum:
+* **`__builtin_reduce_add` is integer-only** (*"1st argument must be a vector of integers"*) —
+  an FP add reduction needs an ordering choice. `__builtin_reduce_max` does accept float. Roll
+  your own FP horizontal sum (`hsum8` in the appendix).
+* Wide vectors as parameters on a narrow target get
+  `warning: AVX vector argument … without 'avx' enabled changes the ABI [-Wpsabi]`. Keep such
+  functions `static inline`/`always_inline`, or give them a `target` attribute.
+
+Load with `memcpy`, **not** `*(f32x8 *)p`: the typedef carries `aligned(32)` and no `may_alias`,
+so the cast is both an alignment and a strict-aliasing hazard. `memcpy` of a constant size
+compiles to one unaligned move.
+
+## 6. Intrinsics
+
+Gate the *function*, not the translation unit:
 
 ```c
-typedef float f32x8 __attribute__((vector_size(32)));
-typedef float f32x4 __attribute__((vector_size(16)));
-static inline float hsum8(f32x8 v) {
-    f32x4 lo = __builtin_shufflevector(v, v, 0,1,2,3);
-    f32x4 hi = __builtin_shufflevector(v, v, 4,5,6,7);
-    f32x4 q  = lo + hi;
-    return q[0] + q[1] + q[2] + q[3];
-}
+__attribute__((target("avx2,fma")))  float dot_avx2  (…);
+__attribute__((target("avx512f")))   float dot_avx512(…);
 ```
 
-* **Wide vectors as parameters on a narrow target** get
-  `warning: AVX vector argument … without 'avx' enabled changes the ABI [-Wpsabi]`.
-  Keep wide-vector functions `static inline`/`always_inline`, or give them a `target` attribute.
+Verified: in a plain `-O2` build with no `-march`, `dot_avx512` still contains `zmm` registers and
+runs at full speed. Clang's header types confirm the aliasing story: `__m256` is `aligned(32)`,
+`__m256_u` is `aligned(1)`, and `_mm256_loadu_*` reads through a `__packed__, __may_alias__`
+struct — so `_mm256_loadu_ps(p)` is safe and `*(__m256*)p` is not.
 
-Loading: use `memcpy` (or the intrinsic `loadu`), **not** `*(f32x8 *)p`. The typedef carries
-`aligned(32)` and no `may_alias`, so the cast is both an alignment and a strict-aliasing hazard.
-`memcpy` of a compile-time-constant size compiles to a single unaligned move.
-
-
-
-## 6. Intrinsics (level 3)
-
-x86: `#include <immintrin.h>` gets everything; per-ISA headers exist but there is no reason to
-use them. Gate the *function*, not the *translation unit*:
+Three tail idioms:
 
 ```c
-__attribute__((target("avx2,fma")))
-float dot_avx2(const float *restrict a, const float *restrict b, size_t n);
+for (; i < n; i++) s += a[i]*b[i];                 /* scalar epilogue: always correct */
 
-__attribute__((target("avx512f")))
-float dot_avx512(const float *restrict a, const float *restrict b, size_t n);
-```
-
-Clang lets you write AVX-512 intrinsics inside such a function while the rest of the file is
-built for baseline x86-64. Verified: in a plain `-O2` build (no `-march`), `dot_avx512` still
-contains `zmm` registers and runs at full speed.
-
-Note the clang header types: `__m256` is `aligned(32)`, `__m256_u` is `aligned(1)`, and
-`_mm256_loadu_*` reads through a `__packed__, __may_alias__` struct. So `_mm256_loadu_ps(p)` is
-alignment- *and* aliasing-safe; `*(__m256*)p` is neither.
-
-### Tail handling, three idioms
-
-```c
-/* scalar epilogue — always correct, always available */
-for (; i < n; i++) s += a[i]*b[i];
-
-/* AVX-512 mask — no epilogue at all */
-__mmask16 m = (__mmask16)((1u << (n - i)) - 1u);
+__mmask16 m = (__mmask16)((1u << (n - i)) - 1u);   /* AVX-512 mask: no epilogue at all */
 acc = _mm512_fmadd_ps(_mm512_maskz_loadu_ps(m, a+i),
                       _mm512_maskz_loadu_ps(m, b+i), acc);
 
-/* over-read into padding — fastest, requires you to own the allocation
-   (pad to a vector multiple and zero the pad; otherwise it is a page-fault bug) */
+/* over-read into padding you own — fastest; a page-fault bug if you don't own it */
 ```
 
 ### ARM
@@ -502,51 +282,39 @@ acc = _mm512_fmadd_ps(_mm512_maskz_loadu_ps(m, a+i),
 Cross-checked with `clang --target=aarch64-linux-gnu -nostdlibinc -O2 -S`:
 
 ```c
-#include <arm_neon.h>
-float32x4_t c0 = vdupq_n_f32(0);
-c0 = vfmaq_f32(c0, vld1q_f32(a+i), vld1q_f32(b+i));   /* -> fmla v0.4s, v4.4s, v2.4s */
-float s = vaddvq_f32(c0);                              /* -> faddp/addv               */
+c0 = vfmaq_f32(c0, vld1q_f32(a+i), vld1q_f32(b+i));  /* -> fmla v0.4s, v4.4s, v2.4s */
+float s = vaddvq_f32(c0);                             /* -> faddp / addv             */
 ```
 
-SVE is *sizeless* — vector length is unknown at compile time, so you loop with a predicate and
-never write an epilogue:
+SVE is *sizeless* — length unknown at compile time, so you loop with a predicate and never write
+an epilogue:
 
 ```c
-#include <arm_sve.h>
 svfloat32_t acc = svdup_f32(0.0f);
 for (size_t i = 0; i < n; i += svcntw()) {
     svbool_t pg = svwhilelt_b32(i, n);
     acc = svmla_f32_x(pg, acc, svld1_f32(pg,a+i), svld1_f32(pg,b+i));
 }
 return svaddv_f32(svptrue_b32(), acc);
-```
-```
--> whilelt / fmla z0.s, p0/m, z1.s, z2.s / faddv s0, p0, z0.s
+/* -> whilelt / fmla z0.s, p0/m, z1.s, z2.s / faddv s0, p0, z0.s */
 ```
 
-The autovectorizer targets SVE natively with *scalable* factors:
-
+The autovectorizer targets SVE with *scalable* factors:
 ```
 $ clang --target=aarch64-linux-gnu -march=armv8-a+sve -O2 -Rpass=loop-vectorize
 remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2)
 ```
-
-`-msve-vector-bits=256` fixes the length if you need SVE types in structs/ABI.
-RISC-V RVV is the same story (`-march=rv64gcv`, `riscv_vector.h`, `vsetvl`-style strip-mining).
-
-
+RISC-V RVV is the same story (`-march=rv64gcv`, `riscv_vector.h`, `vsetvl` strip-mining).
 
 ## 7. Runtime dispatch
 
-### 7.1 `target_clones` — zero-effort multiversioning
+### `target_clones` — zero effort
 
 ```c
 __attribute__((target_clones("default","avx2","avx512f")))
 float sum(const float *restrict a, size_t n) { … }
 ```
-
-Produces, via an IFUNC resolved once by the dynamic loader:
-
+produces, via an IFUNC resolved once by the loader:
 ```
 0000000000002600 i sum
 00000000000022b0 T sum.avx2.0
@@ -555,26 +323,19 @@ Produces, via an IFUNC resolved once by the dynamic loader:
 0000000000002600 W sum.resolver
 R_X86_64_IRELATIV  2600
 ```
+Cost: an indirect call per invocation — put it on the *outer* function.
 
-Cost: an indirect call per invocation (so put it on the *outer* function, not the inner one),
-and no control over which loop body each clone gets. Great for a handful of leaf kernels.
-
-### 7.2 Explicit dispatch — control over everything
+### Explicit — control over everything
 
 ```c
-static dot_fn pick(void) {
-    if (__builtin_cpu_supports("avx512f"))                        return dot_avx512;
-    if (__builtin_cpu_supports("avx2") && __builtin_cpu_supports("fma")) return dot_avx2;
-    return dot_scalar;
-}
+if (__builtin_cpu_supports("avx512f")) return dot_avx512;
+if (__builtin_cpu_supports("avx2") && __builtin_cpu_supports("fma")) return dot_avx2;
+return dot_scalar;
 ```
+Caveat: this reports CPUID bits only. AVX-512 also needs OS state enabled (`xgetbv`/`XCR0`).
+Cache the pointer instead of re-querying per call.
 
-`__builtin_cpu_supports` / `__builtin_cpu_init` handle CPUID for you.
-**Caveat:** it only reports CPUID bits. For AVX-512 you also need the OS to have enabled the
-state (`xgetbv`); glibc's resolver accounts for this, but if you roll your own CPUID, check
-`XCR0` too. Also cache the pointer (as above) rather than re-querying per call.
-
-### 7.3 The pattern worth stealing: one kernel, many clones, no intrinsics
+### The pattern worth stealing: one kernel, many clones, no intrinsics
 
 ```c
 #define KERNEL(NAME, W)                                                        \
@@ -597,129 +358,310 @@ __attribute__((target("avx2,fma"))) static float dot_256(…){ return  k8_impl(a
 static                              float dot_128(…){ return  k4_impl(a,b,n); }
 ```
 
-Built with plain `-O2` and no `-march`, `dot_512` emits `zmm` + `vfmadd`, `dot_256` emits `ymm`.
-`always_inline` is what forces re-codegen of the kernel under each function's target features.
-Portable to AArch64/RVV unchanged — only the width list changes.
+Built with plain `-O2`, no `-march`: `dot_512` emits `zmm`, `dot_256` emits `ymm`.
+`always_inline` is what forces re-codegen under each target feature set. Portable to
+AArch64/RVV unchanged — only the width list changes.
 
-
-
-## 8. Measured: a dot product, six ways
+## 8. Measured (C)
 
 `n = 8003` floats (L2-resident, deliberately not a multiple of 16), 20 000 repetitions.
-Full source in `dot_bench.c`.
+Source: `dot_bench.c` in the appendix.
 
-**Built `-O2 -march=x86-64-v3`:**
+| variant | `-O2 -march=x86-64-v3` | plain `-O2` (SSE2) |
+|---|---|---|
+| `scalar` — strictly-ordered reduction | 1.63 | 1.65 |
+| `autovec` — `vectorize(enable) interleave_count(4)` | **25.30** | 12.23 |
+| `generic` — `vector_size(32)`, **one** accumulator | 13.66 | 12.27 |
+| `generic4` — `vector_size(32)`, **four** accumulators | 23.71 | 15.19 |
+| `avx2` — `_mm256_fmadd_ps` ×4 | 23.73 | **23.60** |
+| `avx512` — `_mm512_fmadd_ps` + masked tail | 26.41 | **25.30** |
+| `dispatch` — `__builtin_cpu_supports` | 26.46 | **25.97** |
 
+(GFLOP/s. All seven produced bit-identical `-8.5000` here, because the data is small integers
+scaled by powers of two — not a general guarantee.)
+
+1. **Accumulator count dominates ISA width.** `generic` (8-wide, one chain) loses to `generic4`
+   by 1.7×. One FMA chain at 4-cycle latency ⇒ 8 lanes × 2 flops / 4 cycles × 2.8 GHz ≈
+   11 GFLOP/s — which is what we measure.
+2. **A well-guided autovectorizer ties hand-written intrinsics** on a kernel this simple. Go to
+   level 3 when the operation isn't loop-shaped (shuffles, `pshufb` LUTs, `movemask` search) or
+   when the cost model is wrong.
+3. **`target` attributes decouple the hot kernel from the baseline build** — the right column is
+   the whole argument for shipping one binary.
+
+## 9. C pitfalls, ranked by frequency
+
+1. **Unsigned wraparound in index arithmetic.** This was in my first draft:
+   `a[i] = (float)((i % 17) - 8) * 0.25f;` with `i` a `size_t` wraps to ~1.8e19 → `inf`.
+   Cast to signed *before* subtracting.
+2. **`*(__m256*)p` / `*(f32x8*)p`** — alignment UB *and* strict-aliasing UB.
+3. **Over-reading past the end** in the tail: only legal into padding you allocated.
+4. **`-ffast-math` in a library** — `crtfastmath.o` sets FTZ/DAZ process-wide for code that
+   never opted in.
+5. **`__builtin_elementwise_fma` without FMA hardware** ⇒ `fmaf` library calls.
+6. **Vectorizing around scalarized calls** — remark says "vectorized", asm says nine `callq sinf`.
+7. **Reduction results change with `-march`** because the accumulator count changes the summation
+   order. Fix the count in your own code if you need reproducibility.
+8. **Sanitizers suppress vectorization.** Test under `-fsanitize=address,undefined -O1`, measure
+   under `-O2 -march=…`, never the same build.
+
+---
+
+# Part II — Rust
+
+## 10. The difference that changes everything: Rust never contracts FMA
+
+Clang defaults to `-ffp-contract=on`. **Rust has no equivalent** — it emits `llvm.fma` only for
+an explicit `mul_add`, and never sets fast-math flags. Verified:
+
+```rust
+c[i] = a[i] * b[i] + c[i];        // 8× vmulss + 8× vaddss
+c[i] = a[i].mul_add(b[i], c[i]);  // 8× vfmadd213ss
 ```
-scalar     1.63 GFLOP/s      strictly-ordered reduction, no vectorization
-autovec   25.30 GFLOP/s      #pragma clang loop vectorize(enable) interleave_count(4)
-generic   13.66 GFLOP/s      vector_size(32), ONE accumulator
-generic4  23.71 GFLOP/s      vector_size(32), FOUR accumulators
-avx2      23.73 GFLOP/s      _mm256_fmadd_ps, four accumulators
-avx512    26.41 GFLOP/s      _mm512_fmadd_ps + masked tail
-dispatch  26.46 GFLOP/s      __builtin_cpu_supports -> avx512
+
+Two consequences:
+
+1. **FP reductions are strictly ordered by the language.** LLVM cannot reassociate them, and
+   there is no `#pragma clang loop vectorize(enable)` and no `-ffast-math`. So
+   `a.iter().zip(b).map(|(x,y)| x*y).sum()` will not vectorize, ever. You reassociate by hand.
+2. **`f32::mul_add` is a true single-rounding fma**, exactly like `__builtin_elementwise_fma` —
+   so without FMA hardware it becomes libm calls. Caught in the baseline `std::simd` build:
+   `movq fmaf@GOTPCREL(%rip), %r13` then **eight** `callq *%r13` per 8-lane vector. That one
+   mistake costs 18×.
+
+## 11. Level 1 — steering the autovectorizer
+
+The Rust idiom replacing `#pragma omp simd reduction` is `chunks_exact` plus an array
+accumulator. The array *is* the reassociation licence: `acc[i] += …` for `i in 0..W` are `W`
+independent chains, which is a claim about ordering the language can honour.
+
+```rust
+let ca = a.chunks_exact(W);
+let cb = b.chunks_exact(W);
+let (ra, rb) = (ca.remainder(), cb.remainder());   // grab tails BEFORE consuming
+let mut acc = [0.0f32; W];
+for (x, y) in ca.zip(cb) {
+    for i in 0..W { acc[i] += x[i] * y[i]; }
+}
 ```
 
-**Same source, plain `-O2` (SSE2 baseline):**
+`chunks_exact` is what elides the bounds checks — LLVM knows each `x` has length exactly `W`.
+I also tested the folklore `let x: &[f32; W] = x.try_into().unwrap();` refinement: **no
+measurable difference** here (6.32 vs 6.35 GFLOP/s). Don't cargo-cult it; measure.
 
-```
-scalar     1.65 GFLOP/s
-autovec   12.23 GFLOP/s      4-wide
-generic   12.27 GFLOP/s
-generic4  15.19 GFLOP/s
-avx2      23.60 GFLOP/s      ← still fast: target attributes, not command-line -march
-avx512    25.30 GFLOP/s
-dispatch  25.97 GFLOP/s
-```
+**Choose `W` for dependency chains, not register width:**
 
-All six produce **bit-identical** results here (`-8.5000`), because the data is small integers
-scaled by powers of two — do not read that as a general guarantee.
+| build | `W = 8` | `W = 32` |
+|---|---|---|
+| `rustc -O` (SSE2 baseline) | 4.59 | 14.77 |
+| `rustc -O -C target-cpu=x86-64-v3` | 6.40 | **29.07** |
 
-Three things this table teaches:
-
-1. **Accumulator count dominates ISA width.** `generic` (8-wide, one accumulator) loses to
-   `generic4` by 1.7×. One FMA chain at 4-cycle latency ⇒ 8 lanes × 2 flops / 4 cycles ×
-   2.8 GHz ≈ 11 GFLOP/s — which is exactly what we measure. You need ≈ latency × throughput
-   independent chains (4 on this core; often 8–10 on newer ones).
-2. **A well-guided autovectorizer ties hand-written intrinsics** on a kernel this simple. Reach
-   for level 3 when the operation isn't loop-shaped (shuffles, `pshufb` LUTs, `movemask` search,
-   bit tricks) or when the cost model is wrong.
-3. **`target` attributes decouple the hot kernel from the baseline build**, which is what lets
-   you ship one binary.
-
-
-
-## 9. Pitfalls, ranked by how often they bite
-
-1. **Unsigned wraparound in index arithmetic.** This bug was in my first draft of the benchmark:
-   ```c
-   a[i] = (float)((i % 17) - 8) * 0.25f;   /* i is size_t -> (i%17)-8 wraps to ~1.8e19 */
-   ```
-   Result: `inf`. Cast to a signed type *before* subtracting. Vector code amplifies this because
-   you write more index arithmetic than usual.
-2. **`*(__m256*)p` / `*(f32x8*)p`.** Alignment UB *and* strict-aliasing UB. Use `_mm256_loadu_ps`
-   or `memcpy`.
-3. **Over-reading past the end** in the tail. Only legal into padding *you* allocated. Otherwise
-   it is a page fault waiting for the one input that ends at a page boundary — and ASan will find
-   it, which is a feature.
-4. **`-ffast-math` in a library.** It links `crtfastmath.o`, which sets FTZ/DAZ **process-wide**,
-   changing denormal behaviour for code that never opted in. Prefer the named subsets, or the
-   per-loop pragmas.
-5. **`__builtin_elementwise_fma` without FMA hardware** ⇒ `fmaf` library calls (§3.3).
-6. **Vectorizing around scalarized calls** (`-fno-math-errno` alone, §3.4): the remark says
-   "vectorized", the asm says nine `callq sinf`. Always read the asm after a surprising remark.
-7. **Reduction results change with `-march`.** The number of accumulators changes the summation
-   order, so results differ between builds. If you need reproducibility, fix the accumulator
-   count in *your* code (level 2/3) instead of letting `interleave_count` float.
-8. **`-Wpsabi`** when wide vectors cross a function boundary on a narrow target (§5).
-9. **Sanitizers suppress vectorization.** Benchmark and sanitize in separate builds; test
-   correctness under `-fsanitize=address,undefined -O1`, measure under `-O2 -march=…`.
-
-
-
-## 10. Testing and measuring
-
-* Keep the scalar reference as a **compiled, tested function**, not a comment. Diff it against
-  every vector variant over randomized `n` — especially `n` in `[0, 2W)` and `n ≡ W-1 (mod W)`,
-  where tail bugs live.
-* For FP, compare with a tolerance derived from the reordering, or accumulate the reference in
-  `double`, or use Kahan. Bit-equality is the wrong test for a reassociated reduction.
-* `-fsanitize=address` catches over-reads; `-fsanitize=alignment` catches the `__m256*` cast.
-* Pin the frequency story: AVX-512-heavy code on Skylake-SP downclocks, so a microbenchmark can
-  look better than the same kernel does inside a mixed workload. `-mprefer-vector-width=256` is
-  often the right whole-program default even on `-march=x86-64-v4`.
-* `llvm-mca` for a static throughput estimate; `perf stat -e cycles,instructions,fp_arith_inst_retired.*`
-  for the truth.
-
-
-
-## 11. When to stop writing intrinsics
-
-* **Google Highway** — the current best answer for portable SIMD in C/C++: one source, scalable
-  and fixed-width targets (SSE4…AVX-512, NEON, SVE, RVV, WASM), with runtime dispatch built in.
-  Essentially §7.3 done properly.
-* **xsimd**, **Eigen**, **VOLK**, **SLEEF** (vector math), **ISPC** (SPMD-on-SIMD source
-  language, excellent when the kernel is genuinely data-parallel and branchy).
-* **OpenMP** `#pragma omp simd` / `declare simd` with `-fopenmp-simd` (no runtime dependency) —
-  the standardized version of §4, and the way to get vector clones of your own functions callable
-  from vectorized loops.
-* **BLAS/oneDNN/Accelerate** if the kernel has a name someone else already optimized.
-
-
-
-## Appendix — reproducing this
+`W = 8` on AVX2 is *one* 256-bit accumulator — latency-bound, the `generic` row of §8 again. In a
+separate test `W = 8` ran **faster on SSE2 than on AVX2** (7.52 vs 6.32): two 128-bit chains beat
+one 256-bit chain. Width is not speed; chains are speed.
 
 ```bash
-clang --version                       # Ubuntu clang 18.1.3
-clang -O2 -march=x86-64-v3 dot_bench.c -o dot_bench && ./dot_bench
-clang -O2                  dot_bench.c -o dot_bench_base && ./dot_bench_base
-clang -O2 -march=x86-64-v3 -Rpass=loop-vectorize -Rpass-missed=loop-vectorize \
-      -Rpass-analysis=loop-vectorize -c yourfile.c -o /dev/null
-clang --target=aarch64-linux-gnu -nostdlibinc -march=armv8-a+sve -O2 -S -o - arm.c
+RUSTFLAGS="-C target-cpu=native" cargo build --release
+rustc -O -C target-cpu=x86-64-v3        # portable ISA levels work here too
+rustc -O -C llvm-args=-pass-remarks=loop-vectorize    # LLVM remarks, no -Rpass equivalent
 ```
 
-Complete source code:
+## 12. Level 2 — `std::simd` (portable SIMD, still nightly)
 
+```rust
+#![feature(portable_simd)]
+use std::simd::{f32x8, num::SimdFloat, StdFloat};  // on 1.75: std::simd::SimdFloat
+let mut acc = [f32x8::splat(0.0); 4];              // four chains again
+acc[i % 4] = vx.mul_add(vy, acc[i % 4]);
+```
+
+Same kernel, three builds:
+
+```
+rustc -O                          1.69 GFLOP/s   ← mul_add lowered to 8× callq fmaf
+rustc -O -C target-cpu=x86-64-v3 30.62 GFLOP/s
+rustc -O -C target-cpu=native    31.58 GFLOP/s
+```
+
+**This is the `std::simd` trap.** `f32x8` is not "an AVX register"; it is a portable type that
+lowers to whatever `-C target-cpu` permits, with **no runtime dispatch whatsoever**. Ship a
+default-target binary and your portable SIMD runs at scalar speed or worse.
+
+Worth knowing in the API: `Simd<T, N>`, `from_slice`/`copy_to_slice`, `simd_lt`/`simd_gt` →
+`Mask<T, N>`, `select`, `reduce_sum`/`reduce_max`, `simd_swizzle!`,
+`gather_or_default`/`scatter`, `Mask::any`/`all`/`to_bitmask` (the `movemask` idiom). Closer to
+Highway than to intrinsics, which is the right level for most work.
+
+## 13. Level 3 — `core::arch`, `#[target_feature]`, dispatch
+
+```rust
+#[target_feature(enable = "avx2,fma")]
+unsafe fn dot_avx2(a: &[f32], b: &[f32]) -> f32 { /* _mm256_fmadd_ps ×4 */ }
+
+pub fn dot(a: &[f32], b: &[f32]) -> f32 {
+    if is_x86_feature_detected!("avx2") && is_x86_feature_detected!("fma") {
+        return unsafe { dot_avx2(a, b) };
+    }
+    dot_chunked32(a, b)
+}
+```
+
+Measured with plain `rustc -O`, **no** `-C target-cpu`:
+
+```
+scalar      2.98 GFLOP/s   .iter().zip().map().sum() — cannot reassociate
+chunked8    4.59 GFLOP/s
+chunked32  14.77 GFLOP/s
+avx2       31.87 GFLOP/s   ← full speed from a baseline build
+dispatch   31.84 GFLOP/s
+mul_add     1.58 GFLOP/s   ← serial fold of true fmas: one 4-cycle chain
+```
+
+* `is_x86_feature_detected!` does CPUID **and** the `xgetbv` OS-support check — more than C's
+  `__builtin_cpu_supports`. It caches internally; still hoist it out of hot loops.
+* `#[target_feature]` on an `unsafe fn` has always been stable. Since **Rust 1.86** it may be
+  applied to *safe* functions too: still unsafe to call from a plain context, but safe to call
+  from another `#[target_feature]` function with a superset of features.
+* **AVX-512 target features and intrinsics are stable since Rust 1.89** (Aug 2025); before that,
+  `#![feature(avx512_target_feature)]` / `stdarch_x86_avx512` on nightly.
+* `core::arch` is `no_std`-friendly. `safe_arch` wraps x86 intrinsics in safe functions.
+
+### The same clone pattern, in Rust
+
+```rust
+#[inline(always)]                                    // ← this is what makes it work
+fn dot_kernel<const W: usize>(a: &[f32], b: &[f32]) -> f32 { /* §11 body */ }
+
+#[target_feature(enable = "avx512f")]  unsafe fn dot_512(…) -> f32 { dot_kernel::<64>(a, b) }
+#[target_feature(enable = "avx2,fma")] unsafe fn dot_256(…) -> f32 { dot_kernel::<32>(a, b) }
+fn dot_128(…) -> f32 { dot_kernel::<16>(a, b) }
+```
+
+Verified from a plain `rustc -O` build with no `-C target-cpu`: `dot_512` contains `%zmm`,
+`dot_256` contains `%ymm`, `dot_128` stays on `%xmm`.
+
+```
+sse2        6.08 GFLOP/s
+avx2       28.56 GFLOP/s
+avx512     24.19 GFLOP/s   ← slower than AVX2: 512-bit downclocking, exactly as in C
+dispatch   23.63 GFLOP/s
+```
+
+The `multiversion` crate automates this, dispatch table included — use it once you have more
+than one kernel.
+
+## 14. Rust pitfalls
+
+1. **Silent scalar fallback** — `std::simd` or a chunked kernel built without `-C target-cpu`,
+   running at 1/18 speed, with no warning. Check at startup, or `--emit asm | grep ymm`.
+2. **`mul_add` without FMA hardware** → libm calls (§10).
+3. **Consuming the iterator before `.remainder()`** — grab `(ra, rb)` before the `for` loop.
+4. **`black_box` or it didn't happen.** My first run showed 21 902 GFLOP/s because LLVM hoisted
+   the pure call out of the timing loop.
+5. **Alignment**: `Vec<f32>` gives 4- or 16-byte alignment, not 32/64. Use `#[repr(align(64))]`
+   wrappers or an aligned allocator; `from_slice` compiles to `loadu` anyway.
+6. **Slice → vector transmutes**: use `bytemuck` (`cast_slice`, `pod_align_to`) or `zerocopy`.
+7. **`#[target_feature]` fns don't implement `Fn*`** and can't be coerced to safe fn pointers.
+   Wrap in a closure or plain `fn` for a dispatch table.
+8. **Miri can't run most intrinsics** — keep a scalar reference and `#[cfg(miri)]` to it.
+
+---
+
+# Part III — Cross-cutting lessons
+
+1. **Chains beat width.** Every table above shows it. You need ≈ latency × throughput independent
+   accumulators (4 on this core; 8–10 on newer ones). A 512-bit single-chain kernel loses to a
+   128-bit four-chain one.
+2. **Vector width is a cost-model decision, not a capability decision.** AVX-512 was *slower*
+   than AVX2 in both languages here, on real hardware, because of downclocking.
+3. **Target-feature attributes are how you ship one binary.** Both `__attribute__((target(…)))`
+   and `#[target_feature]` let a baseline-compiled program contain full-speed AVX-512 kernels.
+4. **FP contraction and reassociation are the two axes of "unsafe" FP.** C gives you contraction
+   for free and reassociation by request; Rust gives you neither, and asks you to express
+   reassociation structurally. Rust's choice is more honest and more work.
+5. **The remark is not the truth; the disassembly is.** "Vectorized loop" appeared over nine
+   scalar `sinf` calls.
+6. **Keep the scalar reference as a compiled function.** Diff every vector variant against it
+   over randomised `n`, especially `n ∈ [0, 2W)` and `n ≡ W−1 (mod W)`, where tail bugs live. For
+   FP, compare with a tolerance or accumulate the reference in `f64`; bit-equality is the wrong
+   test for a reassociated reduction.
+
+---
+
+# Part IV — References
+
+## Start here
+* **[Algorithms for Modern Hardware](https://en.algorithmica.org/hpc/)** (Sergey Slotin) — best
+  free introduction. Ch. 10 is SIMD (intrinsics, moving data, reductions, masking, shuffles,
+  autovectorization/SPMD); the author suggests starting there if you're comfortable with systems
+  material. Ch. 11–12 are the payoff: argmin, prefix sum, decimal parsing, string search,
+  sorting, binary search, static B-trees.
+* **[SIMD for C++ Developers](http://const.me/articles/simd/simd.pdf)** (Konstantin, ~23 pp) —
+  fastest map of what the x86 instruction families *do*. ARM companion:
+  [NEON.pdf](http://const.me/articles/simd/NEON.pdf).
+
+## Keep open, don't read
+| Resource | Why |
+|---|---|
+| [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html) | Searchable by operation; per-uarch latency/throughput |
+| [officedaytime.com/simd512e](https://www.officedaytime.com/simd512e/) | The same data **drawn** — far better for shuffles and pack/unpack |
+| [uops.info](https://uops.info) · [Agner Fog](https://www.agner.org/optimize/) | Ground truth for port pressure |
+| [ARM intrinsics reference](https://developer.arm.com/architectures/instruction-sets/intrinsics/) | NEON and SVE |
+| Clang *Language Extensions* · LLVM *Auto-Vectorization* | What Part I annotates empirically |
+| [`core::arch`](https://doc.rust-lang.org/core/arch/) · [stdarch](https://github.com/rust-lang/stdarch) | Every stable Rust intrinsic, and its implementation |
+| [portable-simd](https://github.com/rust-lang/portable-simd) · [`std::simd`](https://doc.rust-lang.org/nightly/std/simd/index.html) | Nightly; the repo has a beginner's guide |
+| [Reference § `target_feature`](https://doc.rust-lang.org/reference/attributes/codegen.html#the-target_feature-attribute) · [RFC 2325](https://rust-lang.github.io/rfcs/2325-stable-simd.html) | Feature names, safety rules, design rationale |
+
+## Algorithmic SIMD — the interesting part
+* **[Wojciech Muła — 0x80.pl](http://0x80.pl/)** — the closest thing to a journal of algorithmic
+  SIMD, each article with a runnable repo (`sse-popcount`, `sse4-strstr`, `base64-avx512`,
+  `simd-search`).
+* **Daniel Lemire** — blog, `simdjson`, and the joint papers: *Transcoding billions of Unicode
+  characters per second with SIMD instructions* (SP&E 2022), *Faster Population Counts Using AVX2
+  Instructions*, *Base64 Encoding and Decoding at Almost the Speed of a Memory Copy*, *Decoding
+  Billions of Integers per Second Through Vectorization*.
+  The recurring moves: compare → `movemask` → `tzcnt`; `pshufb` as a 16-entry parallel LUT;
+  reformulating a data-dependent problem as a branch-free lookup.
+* **SWAR ancestry**: Knuth **TAOCP 7.1.3** (*Bitwise tricks and techniques*) and Warren's
+  **Hacker's Delight**. Most "clever" SIMD kernels are broadword algorithms with wider registers.
+
+## Libraries
+* **[Google Highway](https://github.com/google/highway)** — the §7 pattern done properly:
+  platform-agnostic ops over platform-specific intrinsics, static *and* dynamic dispatch, where
+  dynamic dispatch replicates only your SIMD code rather than the whole binary. An independent
+  evaluation of C++ SIMD libraries rated it strongest across multiple extensions. Read
+  [`g3doc/quick_reference.md`](https://github.com/google/highway/blob/master/g3doc/quick_reference.md)
+  even if you never link it — the op vocabulary is a design study for any cross-ISA abstraction.
+* C/C++: **xsimd**, **SLEEF** (vector math), **ISPC** (SPMD-on-SIMD language), **VOLK**,
+  **OpenMP** `#pragma omp simd` with `-fopenmp-simd`.
+* Rust: **`multiversion`** (≈ `target_clones`), **`pulp`** (arch abstraction with runtime
+  dispatch, from the `faer` project — the most Highway-like design in Rust), **`wide`** (stable,
+  static dispatch), **`safe_arch`**, **`bytemuck`**/**`zerocopy`**.
+  Read the source of **`memchr`** and **`aho-corasick`** (BurntSushi) — production SIMD substring
+  search and the Teddy algorithm, the best-commented SIMD code in the ecosystem. Also
+  **`simd-json`**, **`simdutf8`**, **`faer`**. Deprecated, don't start there: `packed_simd`,
+  `simdeez`, `faster`.
+
+## Tooling and measurement
+* Denis Bakhvalov, **Performance Analysis and Tuning on Modern CPUs** (free PDF) — top-down
+  analysis, `perf`, why microbenchmarks lie.
+* [Compiler Explorer](https://godbolt.org) · `llvm-mca` · [uiCA](https://uica.uops.info) ·
+  LLVM `opt-viewer.py`
+* Rust: `cargo-show-asm`, `criterion`, `iai-callgrind`, `cargo miri`
+* `perf stat -e cycles,instructions,fp_arith_inst_retired.*` for the truth
+
+**Compressed:** read Algorithmica ch. 10–11 with Compiler Explorer open, then reimplement two of
+Muła's kernels *from the article text alone* before looking at his code.
+
+---
+
+# Appendix — the sources, exactly as tested
+
+## A. `dot_bench.c`
+```
+clang -O2 -march=x86-64-v3 dot_bench.c -o dot_bench && ./dot_bench
+clang -O2                  dot_bench.c -o dot_base  && ./dot_base
+```
 ```c
 /* build: clang -O2 -march=x86-64-v3 06_dot.c -o 06_dot */
 #include <immintrin.h>
@@ -860,4 +802,428 @@ int main(void) {
     }
     free(a); free(b); return 0;
 }
+```
+
+## B. `dot.rs` — Rust scalar / chunked / AVX2 / dispatch / `mul_add` trap
+```
+rustc -O dot.rs -o dot && ./dot
+rustc -O -C target-cpu=x86-64-v3 dot.rs -o dot3 && ./dot3
+```
+```rust
+use std::hint::black_box;
+use std::time::Instant;
+
+// 1. naive: LLVM may NOT reorder these adds -> stays scalar
+#[inline(never)]
+pub fn dot_scalar(a: &[f32], b: &[f32]) -> f32 {
+    a.iter().zip(b).map(|(x, y)| x * y).sum()
+}
+
+// 2. explicit lanes: the array accumulator gives 8 independent chains
+#[inline(never)]
+pub fn dot_chunked(a: &[f32], b: &[f32]) -> f32 {
+    const W: usize = 8;
+    let mut acc = [0.0f32; W];
+    let ca = a.chunks_exact(W);
+    let cb = b.chunks_exact(W);
+    let (ra, rb) = (ca.remainder(), cb.remainder());
+    for (x, y) in ca.zip(cb) {
+        for i in 0..W {
+            acc[i] += x[i] * y[i];
+        }
+    }
+    let mut s: f32 = acc.iter().sum();
+    for (x, y) in ra.iter().zip(rb) {
+        s += x * y;
+    }
+    s
+}
+
+// 3. 32 lanes = 4 vectors of 8 -> 4 dependency chains
+#[inline(never)]
+pub fn dot_chunked4(a: &[f32], b: &[f32]) -> f32 {
+    const W: usize = 32;
+    let mut acc = [0.0f32; W];
+    let ca = a.chunks_exact(W);
+    let cb = b.chunks_exact(W);
+    let (ra, rb) = (ca.remainder(), cb.remainder());
+    for (x, y) in ca.zip(cb) {
+        for i in 0..W {
+            acc[i] += x[i] * y[i];
+        }
+    }
+    let mut s: f32 = acc.iter().sum();
+    for (x, y) in ra.iter().zip(rb) {
+        s += x * y;
+    }
+    s
+}
+
+// 4. intrinsics
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
+
+#[cfg(target_arch = "x86_64")]
+#[target_feature(enable = "avx2,fma")]
+#[inline(never)]
+pub unsafe fn dot_avx2(a: &[f32], b: &[f32]) -> f32 {
+    let n = a.len().min(b.len());
+    let (mut c0, mut c1) = (_mm256_setzero_ps(), _mm256_setzero_ps());
+    let (mut c2, mut c3) = (_mm256_setzero_ps(), _mm256_setzero_ps());
+    let (pa, pb) = (a.as_ptr(), b.as_ptr());
+    let mut i = 0;
+    while i + 32 <= n {
+        c0 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i)),      _mm256_loadu_ps(pb.add(i)),      c0);
+        c1 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 8)),  _mm256_loadu_ps(pb.add(i + 8)),  c1);
+        c2 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 16)), _mm256_loadu_ps(pb.add(i + 16)), c2);
+        c3 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i + 24)), _mm256_loadu_ps(pb.add(i + 24)), c3);
+        i += 32;
+    }
+    while i + 8 <= n {
+        c0 = _mm256_fmadd_ps(_mm256_loadu_ps(pa.add(i)), _mm256_loadu_ps(pb.add(i)), c0);
+        i += 8;
+    }
+    let v = _mm256_add_ps(_mm256_add_ps(c0, c1), _mm256_add_ps(c2, c3));
+    let mut q = _mm_add_ps(_mm256_castps256_ps128(v), _mm256_extractf128_ps(v, 1));
+    q = _mm_add_ps(q, _mm_movehl_ps(q, q));
+    q = _mm_add_ss(q, _mm_shuffle_ps(q, q, 1));
+    let mut s = _mm_cvtss_f32(q);
+    while i < n {
+        s += a[i] * b[i];
+        i += 1;
+    }
+    s
+}
+
+// 5. runtime dispatch
+pub fn dot(a: &[f32], b: &[f32]) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        if is_x86_feature_detected!("avx2") && is_x86_feature_detected!("fma") {
+            return unsafe { dot_avx2(a, b) };
+        }
+    }
+    dot_chunked4(a, b)
+}
+
+// 6. the mul_add trap: this is a TRUE fma, not "multiply then add"
+#[inline(never)]
+pub fn dot_muladd(a: &[f32], b: &[f32]) -> f32 {
+    a.iter().zip(b).fold(0.0f32, |s, (x, y)| x.mul_add(*y, s))
+}
+
+const N: usize = 8003;
+fn bench(name: &str, f: impl Fn(&[f32], &[f32]) -> f32, a: &[f32], b: &[f32]) {
+    let r = f(a, b);
+    let t = Instant::now();
+    let mut sink = 0.0f32;
+    for _ in 0..20_000 {
+        sink += black_box(f(black_box(a), black_box(b)));
+    }
+    let dt = t.elapsed().as_secs_f64();
+    println!("{name:10} result={r:12.4}  {:6.2} GFLOP/s  (sink {})",
+             2.0 * N as f64 * 20_000.0 / dt / 1e9, sink.is_finite());
+}
+fn main() {
+    let a: Vec<f32> = (0..N).map(|i| ((i % 17) as i64 - 8) as f32 * 0.25).collect();
+    let b: Vec<f32> = (0..N).map(|i| ((i % 13) as i64 - 6) as f32 * 0.5).collect();
+    bench("scalar", dot_scalar, &a, &b);
+    bench("chunked8", dot_chunked, &a, &b);
+    bench("chunked32", dot_chunked4, &a, &b);
+    bench("avx2", |a, b| unsafe { dot_avx2(a, b) }, &a, &b);
+    bench("dispatch", dot, &a, &b);
+    bench("mul_add", dot_muladd, &a, &b);
+}
+```
+
+## C. `clone.rs` — one generic kernel, target-feature clones, runtime dispatch
+```
+rustc -O clone.rs -o clone && ./clone      # needs Rust >= 1.89 for the AVX-512 arm
+```
+```rust
+// Requires Rust >= 1.89 (AVX-512 target features stabilised). Build: rustc -O clone.rs
+
+use std::hint::black_box;
+use std::time::Instant;
+
+/// One generic kernel. `#[inline(always)]` is what makes it get *re-codegen'd*
+/// with the caller's target features.
+#[inline(always)]
+fn dot_kernel<const W: usize>(a: &[f32], b: &[f32]) -> f32 {
+    let ca = a.chunks_exact(W);
+    let cb = b.chunks_exact(W);
+    let (ra, rb) = (ca.remainder(), cb.remainder());
+    let mut acc = [0.0f32; W];
+    for (x, y) in ca.zip(cb) {
+        for i in 0..W { acc[i] += x[i] * y[i]; }
+    }
+    let mut s = 0.0f32;
+    for v in acc { s += v; }
+    for (x, y) in ra.iter().zip(rb) { s += x * y; }
+    s
+}
+
+#[target_feature(enable = "avx512f")]
+unsafe fn dot_512(a: &[f32], b: &[f32]) -> f32 { dot_kernel::<64>(a, b) }
+#[target_feature(enable = "avx2,fma")]
+unsafe fn dot_256(a: &[f32], b: &[f32]) -> f32 { dot_kernel::<32>(a, b) }
+fn dot_128(a: &[f32], b: &[f32]) -> f32 { dot_kernel::<16>(a, b) }
+
+pub fn dot(a: &[f32], b: &[f32]) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        if is_x86_feature_detected!("avx512f") { return unsafe { dot_512(a, b) }; }
+        if is_x86_feature_detected!("avx2") && is_x86_feature_detected!("fma") {
+            return unsafe { dot_256(a, b) };
+        }
+    }
+    dot_128(a, b)
+}
+
+const N: usize = 8003;
+fn bench(name: &str, f: impl Fn(&[f32], &[f32]) -> f32, a: &[f32], b: &[f32]) {
+    let r = f(a, b);
+    let t = Instant::now(); let mut s = 0.0f32;
+    for _ in 0..20_000 { s += black_box(f(black_box(a), black_box(b))); }
+    println!("{name:9} result={r:12.4}  {:6.2} GFLOP/s  {}",
+        2.0*N as f64*20_000.0/t.elapsed().as_secs_f64()/1e9, s.is_finite());
+}
+fn main() {
+    let a: Vec<f32> = (0..N).map(|i| ((i % 17) as i64 - 8) as f32 * 0.25).collect();
+    let b: Vec<f32> = (0..N).map(|i| ((i % 13) as i64 - 6) as f32 * 0.5).collect();
+    bench("sse2",     dot_128, &a, &b);
+    bench("avx2",     |a,b| unsafe { dot_256(a,b) }, &a, &b);
+    bench("avx512",   |a,b| unsafe { dot_512(a,b) }, &a, &b);
+    bench("dispatch", dot, &a, &b);
+}
+```
+
+## D. `psimd.rs` — `std::simd`, and the baseline-build trap
+```
+rustc -O psimd.rs -o psimd && ./psimd                            #  1.69 GFLOP/s
+rustc -O -C target-cpu=x86-64-v3 psimd.rs -o psimd3 && ./psimd3  # 30.62 GFLOP/s
+```
+Needs nightly (or `RUSTC_BOOTSTRAP=1`, which is how it was verified here).
+```rust
+#![feature(portable_simd)]
+use std::simd::{f32x8, SimdFloat, StdFloat};
+use std::hint::black_box;
+use std::time::Instant;
+
+#[inline(never)]
+pub fn dot_psimd(a: &[f32], b: &[f32]) -> f32 {
+    const W: usize = 8;
+    let ca = a.chunks_exact(W);
+    let cb = b.chunks_exact(W);
+    let (ra, rb) = (ca.remainder(), cb.remainder());
+    let mut acc = [f32x8::splat(0.0); 4];
+    for (i, (x, y)) in ca.zip(cb).enumerate() {
+        let (vx, vy) = (f32x8::from_slice(x), f32x8::from_slice(y));
+        acc[i % 4] = vx.mul_add(vy, acc[i % 4]);
+    }
+    let v = (acc[0] + acc[1]) + (acc[2] + acc[3]);
+    let mut s = v.reduce_sum();
+    for (x, y) in ra.iter().zip(rb) { s += x * y; }
+    s
+}
+const N: usize = 8003;
+fn main() {
+    let a: Vec<f32> = (0..N).map(|i| ((i % 17) as i64 - 8) as f32 * 0.25).collect();
+    let b: Vec<f32> = (0..N).map(|i| ((i % 13) as i64 - 6) as f32 * 0.5).collect();
+    let r = dot_psimd(&a, &b);
+    let t = Instant::now(); let mut s = 0.0f32;
+    for _ in 0..20_000 { s += black_box(dot_psimd(black_box(&a), black_box(&b))); }
+    println!("psimd    result={r:12.4}  {:6.2} GFLOP/s  {}",
+        2.0*N as f64*20_000.0/t.elapsed().as_secs_f64()/1e9, s.is_finite());
+}
+```
+
+## E. `contract.rs` — proof that Rust does not contract mul+add
+```
+rustc -O -C target-cpu=x86-64-v3 --emit asm contract.rs
+  ->  8 vaddss   8 vfmadd213ss   8 vmulss
+```
+```rust
+#[inline(never)]
+pub fn madd(a: &[f32], b: &[f32], c: &mut [f32]) {
+    for i in 0..c.len() { c[i] = a[i] * b[i] + c[i]; }
+}
+#[inline(never)]
+pub fn madd_fma(a: &[f32], b: &[f32], c: &mut [f32]) {
+    for i in 0..c.len() { c[i] = a[i].mul_add(b[i], c[i]); }
+}
+fn main(){ let a=[1.0f32;8]; let b=[2.0f32;8]; let mut c=[3.0f32;8];
+  madd(&a,&b,&mut c); madd_fma(&a,&b,&mut c); println!("{}", c[0]); }
+```
+
+## F. Diagnostic snippets used along the way
+
+Reductions and pragma placement (§3.2):
+```c
+#include <stddef.h>
+float sum_strict(const float *a, size_t n) {
+    float s = 0.0f;
+    for (size_t i = 0; i < n; i++) s += a[i];
+    return s;
+}
+float sum_pragma(const float *a, size_t n) {
+    float s = 0.0f;
+    {
+#pragma clang fp reassociate(on)
+        for (size_t i = 0; i < n; i++) s += a[i];
+    }
+    return s;
+}
+float sum_omp(const float *a, size_t n) {
+    float s = 0.0f;
+#pragma omp simd reduction(+:s)
+    for (size_t i = 0; i < n; i++) s += a[i];
+    return s;
+}
+```
+
+Generic vectors, `?:`, reductions, ABI (§5):
+```c
+#include <stdio.h>
+#include <stdint.h>
+typedef float  f32x8 __attribute__((vector_size(32)));
+typedef int32_t i32x8 __attribute__((vector_size(32)));
+typedef float  e32x8 __attribute__((ext_vector_type(8)));
+int main(void){
+  f32x8 a={1,2,3,4,5,6,7,8}, b={8,7,6,5,4,3,2,1};
+  i32x8 ia={1,2,3,4,5,6,7,8};
+  printf("reduce_add int   = %d\n", __builtin_reduce_add(ia));
+  printf("reduce_max float = %.1f\n", __builtin_reduce_max(a));
+  printf("elementwise_max0 = %.1f\n", __builtin_elementwise_max(a,b)[0]);
+  e32x8 x={1,2,3,4,5,6,7,8}, y={8,7,6,5,4,3,2,1};
+  e32x8 z = x > y ? x : y;                 /* ext_vector_type allows ?: */
+  printf("ext ternary lane0=%.1f lane7=%.1f\n", z[0], z[7]);
+  printf("ext .hi/.lo? swizzle x.s0=%.1f\n", x.s0);
+  return 0;
+}
+```
+
+Portable FP horizontal sum (§5):
+```c
+#include <stdio.h>
+typedef float f32x8 __attribute__((vector_size(32)));
+typedef float f32x4 __attribute__((vector_size(16)));
+typedef float f32x2 __attribute__((vector_size(8)));
+
+static inline float hsum_f32x8(f32x8 v) {
+    f32x4 lo = __builtin_shufflevector(v, v, 0,1,2,3);
+    f32x4 hi = __builtin_shufflevector(v, v, 4,5,6,7);
+    f32x4 q  = lo + hi;
+    f32x2 a  = __builtin_shufflevector(q, q, 0,1);
+    f32x2 b  = __builtin_shufflevector(q, q, 2,3);
+    f32x2 d  = a + b;
+    return d[0] + d[1];
+}
+int main(void){ f32x8 v={1,2,3,4,5,6,7,8}; printf("%.1f\n", hsum_f32x8(v)); }
+```
+
+Conditional stores, early exit, gather (§3.5):
+```c
+#include <stddef.h>
+/* conditional store: needs masked stores (AVX-512 / AVX2 maskstore) */
+void clamp_store(float *restrict a, const float *restrict b, size_t n){
+  for (size_t i=0;i<n;i++) if (b[i] > 0.0f) a[i] = b[i];
+}
+/* branchless select: always vectorizes */
+void clamp_sel(float *restrict a, const float *restrict b, size_t n){
+  for (size_t i=0;i<n;i++) a[i] = b[i] > 0.0f ? b[i] : a[i];
+}
+/* early exit (search loop) */
+size_t find(const int *a, size_t n, int k){
+  for (size_t i=0;i<n;i++) if (a[i]==k) return i;
+  return n;
+}
+/* gather */
+void gather(float *restrict o, const float *restrict t, const int *restrict idx, size_t n){
+  for (size_t i=0;i<n;i++) o[i]=t[idx[i]];
+}
+```
+
+Alignment and trip-count assumptions (§3.6):
+```c
+#include <stddef.h>
+void f_plain(float *restrict a, const float *restrict b, size_t n){
+  for (size_t i=0;i<n;i++) a[i]+=b[i];
+}
+void f_aligned(float *restrict a, const float *restrict b, size_t n){
+  a = __builtin_assume_aligned(a, 64);
+  b = __builtin_assume_aligned(b, 64);
+  n &= ~(size_t)15;                 /* also tell it the trip count is a multiple of 16 */
+  for (size_t i=0;i<n;i++) a[i]+=b[i];
+}
+```
+
+ARM NEON and SVE cross-compile check (§6):
+```
+clang --target=aarch64-linux-gnu -nostdlibinc -O2 -S -o - arm.c
+clang --target=aarch64-linux-gnu -nostdlibinc -march=armv8-a+sve -O2 -S -o - arm.c
+```
+```c
+#include <stddef.h>
+#if defined(__ARM_NEON)
+#include <arm_neon.h>
+float dot_neon(const float *restrict a, const float *restrict b, size_t n){
+    float32x4_t c0=vdupq_n_f32(0), c1=vdupq_n_f32(0);
+    size_t i=0;
+    for(; i+8<=n; i+=8){
+        c0=vfmaq_f32(c0, vld1q_f32(a+i),   vld1q_f32(b+i));
+        c1=vfmaq_f32(c1, vld1q_f32(a+i+4), vld1q_f32(b+i+4));
+    }
+    float s=vaddvq_f32(vaddq_f32(c0,c1));
+    for(; i<n; i++) s+=a[i]*b[i];
+    return s;
+}
+#endif
+#if defined(__ARM_FEATURE_SVE)
+#include <arm_sve.h>
+float dot_sve(const float *restrict a, const float *restrict b, size_t n){
+    svfloat32_t acc = svdup_f32(0.0f);
+    for (size_t i=0; i<n; i += svcntw()) {
+        svbool_t pg = svwhilelt_b32(i, n);           /* predicated tail, no epilogue */
+        acc = svmla_f32_x(pg, acc, svld1_f32(pg,a+i), svld1_f32(pg,b+i));
+    }
+    return svaddv_f32(svptrue_b32(), acc);
+}
+#endif
+```
+
+One-kernel-many-clones, C version (§7):
+```c
+#include <stddef.h>
+#include <string.h>
+#include <stdio.h>
+/* One generic kernel, no intrinsics, always_inline so it is recompiled
+   per target-attributed wrapper. Width is a macro so each clone can pick one. */
+#define KERNEL(NAME, W)                                                       \
+typedef float NAME##_v __attribute__((vector_size(4*(W))));                   \
+__attribute__((always_inline)) static inline                                  \
+float NAME##_impl(const float *restrict a, const float *restrict b, size_t n){ \
+    NAME##_v acc = {0}; size_t i = 0;                                         \
+    for (; i + (W) <= n; i += (W)) {                                          \
+        NAME##_v va, vb; memcpy(&va,a+i,4*(W)); memcpy(&vb,b+i,4*(W));        \
+        acc = va*vb + acc;                                                    \
+    }                                                                         \
+    float s = 0; for (int k=0;k<(W);k++) s += acc[k];                         \
+    for (; i < n; i++) s += a[i]*b[i];                                        \
+    return s;                                                                 \
+}
+KERNEL(k4, 4) KERNEL(k8, 8) KERNEL(k16, 16)
+
+__attribute__((target("avx512f"))) static float dot_512(const float*a,const float*b,size_t n){ return k16_impl(a,b,n); }
+__attribute__((target("avx2,fma"))) static float dot_256(const float*a,const float*b,size_t n){ return k8_impl(a,b,n); }
+static float dot_128(const float*a,const float*b,size_t n){ return k4_impl(a,b,n); }
+
+float dot(const float *a, const float *b, size_t n){
+    static float (*impl)(const float*,const float*,size_t);
+    if (!impl) impl = __builtin_cpu_supports("avx512f") ? dot_512
+                    : __builtin_cpu_supports("avx2")    ? dot_256 : dot_128;
+    return impl(a,b,n);
+}
+int main(void){ float a[1000],b[1000]; for(int i=0;i<1000;i++){a[i]=i*0.001f;b[i]=1.0f;}
+    printf("%.4f\n", dot(a,b,1000)); }
 ```
