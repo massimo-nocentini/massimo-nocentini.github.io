@@ -3,14 +3,15 @@
 +++
 date = '2026-08-14T06:58:04+01:00'
 title = 'SIMD'
-subtitle = 'A reading path and a working survey'
-summary = ' '
-categories = ['tools']
+subtitle = 'Single instruction, multiple data.'
+summary = 'A reading path and a working survey.'
+categories = ['ai generated']
 +++
 
 # A reading path
 
-Inspired after reading [*Hashimoto*'s __"Everyone Should Know SIMD"__](https://mitchellh.com/writing/everyone-should-know-simd);
+Inspired after reading [*Hashimoto*'s __"Everyone Should Know SIMD"__](https://mitchellh.com/writing/everyone-should-know-simd)
+and [Wikipedia](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data);
 ordered the way I'd actually take it, not by prestige.
 
 ## 1. Start with one book chapter and one PDF
@@ -715,4 +716,148 @@ clang -O2                  dot_bench.c -o dot_bench_base && ./dot_bench_base
 clang -O2 -march=x86-64-v3 -Rpass=loop-vectorize -Rpass-missed=loop-vectorize \
       -Rpass-analysis=loop-vectorize -c yourfile.c -o /dev/null
 clang --target=aarch64-linux-gnu -nostdlibinc -march=armv8-a+sve -O2 -S -o - arm.c
+```
+
+Complete source code:
+
+```c
+/* build: clang -O2 -march=x86-64-v3 06_dot.c -o 06_dot */
+#include <immintrin.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+/* ---- 1. scalar reference (strictly ordered) ------------------------ */
+__attribute__((noinline))
+float dot_scalar(const float *restrict a, const float *restrict b, size_t n) {
+    float s = 0.0f;
+    for (size_t i = 0; i < n; i++) s += a[i] * b[i];
+    return s;
+}
+
+/* ---- 2. autovectorised: the pragma licenses FP reassociation ------- */
+__attribute__((noinline))
+float dot_autovec(const float *restrict a, const float *restrict b, size_t n) {
+    float s = 0.0f;
+#pragma clang loop vectorize(enable) interleave_count(4)
+    for (size_t i = 0; i < n; i++) s += a[i] * b[i];
+    return s;
+}
+
+/* ---- 3. portable generic vectors (no target header) ---------------- */
+typedef float f32v8 __attribute__((vector_size(32)));
+typedef float f32v4 __attribute__((vector_size(16)));
+static inline float hsum8(f32v8 v) {
+    f32v4 lo = __builtin_shufflevector(v, v, 0,1,2,3);
+    f32v4 hi = __builtin_shufflevector(v, v, 4,5,6,7);
+    f32v4 q  = lo + hi;
+    return q[0] + q[1] + q[2] + q[3];
+}
+__attribute__((noinline))
+float dot_generic(const float *restrict a, const float *restrict b, size_t n) {
+    f32v8 acc = {0};
+    size_t i = 0;
+    for (; i + 8 <= n; i += 8) {
+        f32v8 va, vb;
+        memcpy(&va, a + i, 32);            /* unaligned-safe, no aliasing UB */
+        memcpy(&vb, b + i, 32);
+        acc = va*vb + acc;   /* -ffp-contract=on gives FMA where available */
+    }
+    float s = hsum8(acc);
+    for (; i < n; i++) s += a[i] * b[i];   /* scalar tail */
+    return s;
+}
+
+
+/* ---- 3b. portable generic vectors, 4 accumulators ------------------ */
+__attribute__((noinline))
+float dot_generic4(const float *restrict a, const float *restrict b, size_t n) {
+    f32v8 c0 = {0}, c1 = {0}, c2 = {0}, c3 = {0};
+    size_t i = 0;
+    for (; i + 32 <= n; i += 32) {
+        f32v8 a0,a1,a2,a3,b0,b1,b2,b3;
+        memcpy(&a0,a+i,32);    memcpy(&b0,b+i,32);
+        memcpy(&a1,a+i+8,32);  memcpy(&b1,b+i+8,32);
+        memcpy(&a2,a+i+16,32); memcpy(&b2,b+i+16,32);
+        memcpy(&a3,a+i+24,32); memcpy(&b3,b+i+24,32);
+        c0 = a0*b0 + c0;  c1 = a1*b1 + c1;      /* contracted to FMA by default */
+        c2 = a2*b2 + c2;  c3 = a3*b3 + c3;
+    }
+    f32v8 acc = (c0+c1) + (c2+c3);
+    for (; i + 8 <= n; i += 8) { f32v8 va,vb;
+        memcpy(&va,a+i,32); memcpy(&vb,b+i,32); acc = va*vb + acc; }
+    float s = hsum8(acc);
+    for (; i < n; i++) s += a[i] * b[i];
+    return s;
+}
+
+/* ---- 4. AVX2 intrinsics, 4 accumulators to hide FMA latency -------- */
+__attribute__((noinline, target("avx2,fma")))
+float dot_avx2(const float *restrict a, const float *restrict b, size_t n) {
+    __m256 a0 = _mm256_setzero_ps(), a1 = a0, a2 = a0, a3 = a0;
+    size_t i = 0;
+    for (; i + 32 <= n; i += 32) {
+        a0 = _mm256_fmadd_ps(_mm256_loadu_ps(a+i   ), _mm256_loadu_ps(b+i   ), a0);
+        a1 = _mm256_fmadd_ps(_mm256_loadu_ps(a+i+ 8), _mm256_loadu_ps(b+i+ 8), a1);
+        a2 = _mm256_fmadd_ps(_mm256_loadu_ps(a+i+16), _mm256_loadu_ps(b+i+16), a2);
+        a3 = _mm256_fmadd_ps(_mm256_loadu_ps(a+i+24), _mm256_loadu_ps(b+i+24), a3);
+    }
+    for (; i + 8 <= n; i += 8)
+        a0 = _mm256_fmadd_ps(_mm256_loadu_ps(a+i), _mm256_loadu_ps(b+i), a0);
+    __m256 v = _mm256_add_ps(_mm256_add_ps(a0,a1), _mm256_add_ps(a2,a3));
+    __m128 q = _mm_add_ps(_mm256_castps256_ps128(v), _mm256_extractf128_ps(v,1));
+    q = _mm_add_ps(q, _mm_movehl_ps(q,q));
+    q = _mm_add_ss(q, _mm_shuffle_ps(q,q,1));
+    float s = _mm_cvtss_f32(q);
+    for (; i < n; i++) s += a[i] * b[i];
+    return s;
+}
+
+/* ---- 5. AVX-512 with a masked tail: no scalar epilogue ------------- */
+__attribute__((noinline, target("avx512f")))
+float dot_avx512(const float *restrict a, const float *restrict b, size_t n) {
+    __m512 acc = _mm512_setzero_ps();
+    size_t i = 0;
+    for (; i + 16 <= n; i += 16)
+        acc = _mm512_fmadd_ps(_mm512_loadu_ps(a+i), _mm512_loadu_ps(b+i), acc);
+    if (i < n) {
+        __mmask16 m = (__mmask16)((1u << (n - i)) - 1u);
+        acc = _mm512_fmadd_ps(_mm512_maskz_loadu_ps(m, a+i),
+                              _mm512_maskz_loadu_ps(m, b+i), acc);
+    }
+    return _mm512_reduce_add_ps(acc);
+}
+
+/* ---- 6. runtime dispatch ------------------------------------------- */
+typedef float (*dot_fn)(const float *, const float *, size_t);
+static dot_fn pick(void) {
+    if (__builtin_cpu_supports("avx512f")) return dot_avx512;
+    if (__builtin_cpu_supports("avx2") && __builtin_cpu_supports("fma")) return dot_avx2;
+    return dot_scalar;
+}
+
+/* ---- harness -------------------------------------------------------- */
+static double now(void){ struct timespec t; clock_gettime(CLOCK_MONOTONIC,&t);
+                         return t.tv_sec + 1e-9*t.tv_nsec; }
+#define N 8003
+int main(void) {
+    float *a = aligned_alloc(64, ((N*sizeof(float))+63)/64*64);
+    float *b = aligned_alloc(64, ((N*sizeof(float))+63)/64*64);
+    for (size_t i=0;i<N;i++){ a[i]=(float)((long)(i%17)-8)*0.25f; b[i]=(float)((long)(i%13)-6)*0.5f; }
+
+    struct { const char *nm; dot_fn f; } v[] = {
+        {"scalar ", dot_scalar}, {"autovec", dot_autovec}, {"generic ", dot_generic}, {"generic4", dot_generic4},
+        {"avx2   ", dot_avx2},   {"avx512 ", dot_avx512},  {"dispatch", pick()} };
+
+    for (unsigned k=0;k<sizeof v/sizeof*v;k++) {
+        float r = v[k].f(a,b,N);
+        double t0=now(); volatile float sink=0;
+        for (int it=0; it<20000; it++) sink += v[k].f(a,b,N);
+        double dt=now()-t0;
+        printf("%s  result=%12.4f   %6.2f GFLOP/s\n", v[k].nm, r,
+               2.0*N*20000/dt/1e9);
+    }
+    free(a); free(b); return 0;
+}
 ```
