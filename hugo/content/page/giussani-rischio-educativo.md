@@ -16,12 +16,11 @@ tags = [
     "critica",
     "memoria",
 ]
-draft = true
 summary = "Don Giussani delinea i tre fattori fondamentali del processo educativo: la ricchezza di una tradizione offerta come ipotesi di lavoro con cui affrontare la realtà; la figura dell'educatore, in cui la tradizione resa cosciente diventa proposta e chiede una coerenza anzitutto ideale; la verifica, in cui l'educando paragona quanto ha ricevuto con l'urto della vita. Poiché la verifica si arresta sulla soglia della libertà, l'esito non è mai matematico: qui sta il rischio educativo, e la grandezza dell'educatore è la riproposta indefaticabile, spem contra spem."
 +++
 
 
-{{< youtubeicon "cN5fDeCsOCE" "Conferenza tenuta nella Sala Capitolare della Basilica Di Santa Maria della Passione a Milano." >}}
+{{< youtubeicon "cN5fDeCsOCE" "Conferenza tenuta il 20 Giugno 1985 nella Sala Capitolare della Basilica Di Santa Maria della Passione a Milano." >}}
 
 ---
 
@@ -32,9 +31,9 @@ che il problema educativo è il problema capitale in una società che abbia una
 consapevolezza civile minimamente evoluta.
 
 Io mi ricordo che nei primi anni in cui facevo religione, spesso negli alterchi e
-nella dialettica di classe in classe, dicevo: «Per favore, mandateci in giro —
+nella dialettica di classe in classe, dicevo: *«Per favore, mandateci in giro —
 noi clero — mandateci in giro nudi per le strade, toglieteci tutto, ma non
-toglieteci la capacità, la possibilità di educare». E con mia amarezza ho dovuto
+toglieteci la capacità, la possibilità di educare»*. E con mia amarezza ho dovuto
 constatare negli anni dopo — perché queste cose le dicevo trent'anni fa — che
 abbiamo cercato tutto, ma abbiamo sacrificato la libertà educativa.
 
@@ -230,10 +229,10 @@ certo fatto caso né prima né dopo, per tanto tempo.
 Lo ricordo spesso: la mia povera mamma veniva a darmi il bacio della buonanotte e
 rincalzava le coperte del letto, tutte le sere prima che entrassi in seminario, e
 perciò per almeno dieci anni, tutte le sere. E, cambiando la frase, mi diceva:
-«Pensa ai bambini che non hanno il papà; pensa ai bambini che non hanno la
-mamma»; quando pioveva, «pensa ai bambini che non hanno il tetto, o che hanno il
-tetto bucato e vengono bagnati»; «pensa ai bambini che non hanno mangiato oggi
-come hai mangiato tu». Ma come ha sviluppato il senso delle relazioni, questa
+*«Pensa ai bambini che non hanno il papà; pensa ai bambini che non hanno la
+mamma»*; quando pioveva, *«pensa ai bambini che non hanno il tetto, o che hanno il
+tetto bucato e vengono bagnati»*; *«pensa ai bambini che non hanno mangiato oggi
+come hai mangiato tu»*. Ma come ha sviluppato il senso delle relazioni, questa
 frase breve detta la sera con noncuranza, e senza che io evidentemente ne capissi
 il valore — soltanto commovendomi qualche volta! E ho capito decine d'anni dopo
 quanto debba lo sviluppo di una certa sensibilità a quel comportamento della mia
@@ -291,15 +290,15 @@ grande dell'incoerenza della linea propositiva ai giovani.
 
 Io mi ricordo, al mio liceo Berchet [^5]: una volta stavo uscendo e nell'atrio
 che introduceva alla scala una mamma stava entrando molto agitata. Appena mi ha
-visto con la vestina mi ha assalito dicendo: «Qui è entrato mio figlio in quarta
+visto con la vestina mi ha assalito dicendo: *«Qui è entrato mio figlio in quarta
 ginnasio, veniva con me in chiesa, diceva con me le orazioni; adesso, terza liceo
 classico, non vuol più venire in chiesa, e la colpa è sua, perché è lei
-l'insegnante di religione». Le ho detto: «Ma signora, in cinque anni quante volte
+l'insegnante di religione»*. Le ho detto: *«Ma signora, in cinque anni quante volte
 è venuta a interessarsi di come suo figlio si comportava da me, quale giudizio
 avessi? Come mai non si è mai preoccupata che suo figlio andasse col tale, col
 tale, col tale, continuamente? Come mai, soprattutto, signora, lei non si è mai
 interessata di quanto diceva il professor d'italiano, il professor di filosofia, il
-professor di storia?». E le ho fatto i nomi.
+professor di storia?»*. E le ho fatto i nomi.
 
 [^5]: Il liceo classico Giovanni Berchet di Milano, dove don Giussani insegnò
     religione dal 1954.
@@ -314,8 +313,8 @@ affrontare l'esistenza, o permettere che si affronti l'esistenza, senza
 innanzitutto essere leali con ciò da cui si nasce, dalla tradizione,
 attentamente e criticamente affrontata - *criticamente*,
 lo spiego anche questo tra poco - *criticamente affrontata* significa fare
-ancora una volta della propria reattività il criterio del vivere — «ho voglia,
-non ho voglia», «mi piace, non mi piace», «mi pare o non mi pare».
+ancora una volta della propria reattività il criterio del vivere — *«ho voglia,
+non ho voglia»*, *«mi piace, non mi piace»*, *«mi pare o non mi pare»*.
 
 Perché dico sempre ai giovani che l'uomo nasce con una delle due famose bisacce
 di Esopo dietro le spalle [^6]. E in questa bisaccia che sta dietro le spalle —
@@ -476,7 +475,7 @@ indefaticabile, continua riproposta. Proprio come dice la più bella frase di
 tutta la Bibbia per me, perché ne ho bisogno: *in spem contra spem* [^9],
 sperando contro ogni evidenza.
 
-[^9]: *Rm* 4,18: di Abramo, che «credendo sperò contro ogni speranza».
+[^9]: *Rm* 4,18: di Abramo, che *«credendo sperò contro ogni speranza»*.
 
 # I tre fattori
 
