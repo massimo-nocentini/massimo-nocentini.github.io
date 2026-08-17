@@ -9,7 +9,10 @@ categories = ['AI generated']
 +++
 
 Inspired after reading [*Hashimoto*'s __"Everyone Should Know SIMD"__](https://mitchellh.com/writing/everyone-should-know-simd)
-and [Wikipedia](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data).
+and [Wikipedia](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data); *Claude* generates the following content according to [this session](https://claude.ai/share/9036f116-968d-4b21-a4e5-4473f04aeb35).
+
+
+
 # SIMD with Clang and Rust — a verified survey
 
 Everything here was compiled and run on one machine: **Ubuntu 24.04, Intel Xeon
