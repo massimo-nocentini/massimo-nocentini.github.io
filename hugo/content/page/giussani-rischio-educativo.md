@@ -40,7 +40,7 @@ abbiamo cercato tutto, ma abbiamo sacrificato la libertà educativa.
 Dunque vorrei iniziare gli accenni a quelli che mi sembrano i valori
 fondamentali, i tratti fondamentali del fenomeno educativo, con un brano di
 Eliot, che con Leopardi è il mio poeta preferito, per cui lo leggo quasi ogni
-giorno. *"Di tutto ciò che fu fatto in passato"*: *passato* questa è la prima parola del
+giorno. *"Di tutto ciò che fu fatto in passato"*: *passato*, questa è la prima parola del
 problema educativo.
 
 > Ma di tutto ciò che fu fatto in passato voi mangiate il frutto, marcio o maturo
@@ -85,16 +85,15 @@ rapporto presente.
 
 Ma per educare... Un grande, buon teologo austriaco mi ha dato quella che io
 ritengo la definizione migliore di educazione che abbia trovato fino ad ora: dice
-che l'educazione è l'*introduzione alla realtà totale* [^2]. Introduzione alla
-realtà totale.
+che l'educazione è l'*introduzione alla realtà totale* [^2].
 
 [^2]: Josef Andreas Jungmann, liturgista e teologo austriaco, la cui definizione
     dell'educazione come «introduzione alla realtà totale» don Giussani riprende
     e commenta in [*Il rischio
     educativo*](https://www.scritti.luigigiussani.org/s/il-rischio-educativo-19770101).
 
-Ma perché l'uomo deve essere educato, cioè introdotto alla realtà totale? Perché
-— osserva continuamente il Papa quando parla di educazione o di cultura, che in
+Ma perché l'uomo deve essere educato, cioè introdotto alla realtà totale?
+Osserva continuamente il Papa quando parla di educazione o di cultura, che in
 fondo è lo stesso, perché l'educazione è lo strumento principe della cultura, e
 ultimamente le due parole hanno due radici che si richiamano — l'uomo deve
 essere educato perché diventi più se stesso, si realizzi. L'uomo, infatti, non si
