@@ -4,6 +4,7 @@ title = 'Con cuore di Padre'
 subtitle = 'Meditazioni dedicate a San Giuseppe'
 author = 'card Angelo De Donatis'
 tags = ['san Giuseppe', 'Ef 1', 'Gal 3', 'Gv 13']
+reading = ['must have']
 categories = [ 'youtube' ]
 summary = " "
 +++

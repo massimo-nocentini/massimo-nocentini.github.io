@@ -5,6 +5,7 @@ subtitle = 'Descrizione paradossale del Paradiso e dell’Inferno rispettivament
 author = 'Dino Buzzati'
 tags = []
 categories = ["novelle", ]
+reading = ['must have']
 summary = " "
 +++
 

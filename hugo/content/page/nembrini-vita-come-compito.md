@@ -20,7 +20,7 @@ tags = [
 +++
 
 
-{{< youtubeicon "9bce2k5nAD4" "LA VITA COME COMPITO: IL BELLO DELL'EDUCAZIONE, IL GUSTO DEL LAVORO" >}}
+{{< youtubeicon "9bce2k5nAD4" "La vita come compito: il bello dell'educazione, il gusto del lavoro." >}}
 
 ---
 
@@ -135,9 +135,9 @@ quando prendiamo a cazzotti l’allenatore di calcio perché non ha messo in
 squadra, ha tenuto in panchina il tuo piccolo Maradona di sei anni. Eh, noi
 pensiamo di farli sentire importanti: c’entra niente.
 
-> *Prima di morire ha voluto farmi conoscere la comunità di Emmaus* —
+> *Prima di morire ha voluto farmi conoscere la comunità di Emmaus*
 
-quella stessa comunità che mi chiamava su a Kharkiv —
+quella stessa comunità che mi chiamava su a Kharkiv,
 
 > *quella comunità che è diventata la mia famiglia. A Emmaus mi hanno proposto
 > di vivere con loro, e nella mia nuova casa ho sperimentato un amore che mi ha
@@ -160,7 +160,7 @@ Che idea del lavoro.
 > *Avevo un lavoro in un bar del centro a Kharkiv, ma nei primi giorni della
 > guerra il bar è stato distrutto da un missile, e per me questo è stato un
 > dolore gigantesco. Quando sono arrivata in Italia desideravo tanto trovare
-> lavoro* —
+> lavoro*
 
 insomma, fa la lavapiatti presso una mensa universitaria.
 
@@ -176,7 +176,7 @@ insomma, fa la lavapiatti presso una mensa universitaria.
 > persona. È proprio per questo che, quando la guerra finirà, voglio tornare a
 > casa.*
 
-Pensate che roba: poco più di vent’anni.
+Pensate che roba: poco più che vent’anni.
 
 > *Per questo voglio tornare a casa: perché se riuscirò ad aiutare anche solo
 > una persona a fare quel cammino di perdono, questa sarà una prima vittoria
@@ -189,9 +189,9 @@ conosce.
 > una situazione come quella, che ne sarà di loro: se dovessimo morire, chi si
 > prenderà cura di loro? Questa esperienza in qualche modo è simile alla mia,
 > anche se io sono cresciuta in orfanotrofio. Ciascuno di noi: quei bambini
-> speciali, i loro genitori, io disabile e orfana* —
+> speciali, i loro genitori, io disabile e orfana*,
 
-e aggiungo io, adesso anche profuga di guerra —
+e aggiungo io, adesso anche profuga di guerra,
 
 > *e i ragazzi che sono sani fisicamente: anche loro però sono orfani. Insomma,
 > ciascuno di noi ha bisogno di essere amato, di non essere abbandonato.*
@@ -212,8 +212,8 @@ Ecco, questo punto unisce tutti. Perdonate la lunghezza, eh, ma quando uno legge
 una roba così potremmo andare a casa, che ce ne sarebbe da meditare, no?
 
 Ecco, quel che dico sull’educazione, guardate, alla fine è molto semplice. Si
-può ridurre a due o tre grandi affermazioni, che se volete sviluppiamo insieme —
-fatemi eventualmente delle domande — ma ci sono due o tre cose che bisogna dire
+può ridurre a due o tre grandi affermazioni, che se volete sviluppiamo insieme 
+ma ci sono due o tre cose che bisogna dire
 con forza, che bisogna dire con chiarezza.
 
 La prima è che i nostri figli ci guardano. Cosa voglio dire? Che il problema non
@@ -783,22 +783,3 @@ bambini, di cui almeno uno portatore di handicap gravi, e il marito in guerra o
 morto: quindi o vedove, o col marito in guerra. Siamo riusciti a ottenere i
 permessi eccetera; insomma, verranno quest’estate in Italia per quindici giorni,
 di cui una settimana al mare — e vedranno il mare per la prima volta.
-
-E niente: l’operazione, come potete immaginare, costa un sacco di soldi, i voli
-e la permanenza eccetera. Sappiate che se comprate i libri o lasciate
-un’offerta, tutto quello che tiro su in questi periodi è per questo scopo. Se
-volete darmi una mano, all’uscita. Ecco, ho fatto proprio la vigliaccata.
-
-**D.** — Perfetto. Allora, all’uscita ci sono Lisa e Lara che vi aspettano,
-perché ci sono i libri di Franco, e c’è il nostro libro, *Un padre nella
-tempesta*, che racconta da dove saltiamo fuori, da chi ci ha generato: la
-vicenda di don Angelo Cassani. Interessante, un pezzo del Novecento e del
-Duemila, e una testimonianza che vale la pena, inaspettata, ve lo dico; per cui
-è un altro punto che vale la pena. E poi, se ci volete lasciare un’offerta per
-questa serata, c’è la nostra cassettina, che aiuterà qualcosa: poi copriamo i
-costi della serata e tutto quello che può tornare utile va a fin di bene, perché
-va appunto per voi e per il nostro doposcuola. Intanto grazie, grazie per essere
-venuti questa sera.
-
-**Franco Nembrini** — Se riprendete un lavoro insieme, fatemelo sapere, che torno
-volentierissimo: facciamo la puntata due. Grazie mille a tutti.

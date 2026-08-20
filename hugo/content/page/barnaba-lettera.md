@@ -4,6 +4,7 @@ title = 'La lettera di Barnaba'
 subtitle = ''
 author = 'Barnaba'
 tags = []
+reading = ['must have']
 categories = [ 'lettere' ]
 summary = " "
 +++

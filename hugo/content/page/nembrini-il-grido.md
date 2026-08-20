@@ -4,6 +4,7 @@ title = 'Il Grido'
 subtitle = 'Una lettera che spiega la ferita delle nuove generazioni, la terribile responsabilità degli adulti, e che cosa c’entra Dante con gli uni e con gli altri.'
 author = 'Franco Nembrini'
 categories = ["education", "lettere"]
+reading = ['must have']
 tags = []
 summary = " "
 +++
