@@ -1,7 +1,6 @@
 +++
 date = '2017-03-31T14:00:21+01:00'
 title = 'Nuovi strani amici'
-subtitle = 'Descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio'
 author = 'Dino Buzzati'
 tags = []
 categories = ["novelle", ]
@@ -9,7 +8,7 @@ reading = ['must have']
 summary = " "
 +++
 
-*Una lettura consigliata da Franco Nembrini, ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/)*.
+*Una lettura consigliata da Franco Nembrini, ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/): una descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio.*
 
 ---
 
