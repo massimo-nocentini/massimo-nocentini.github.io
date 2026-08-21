@@ -6,6 +6,69 @@ categories = ['poesie']
 summary = "Alda Merini racconta l'anima, il manicomio e la poesia: l'uscita dalla rianimazione e la domanda del medico, la follia come casa in cui è cresciuta la poesia, la società più feroce del manicomio, l'innamoramento del poeta e i sentimenti dei vecchi. Nel mezzo legge alcune sue poesie, dai trafugamenti di madre e di donna fino alle mura di Gerico."
 +++
 
+# Davanti alla *Pietà Rondanini* [^3]
+
+[^3]: {{< youtubeicon "hwfGBRB-eLo" "Alda Merini parla della Pieta' Rondanini al Castello Sforzesco di Milano 2001 Regia di Guido Anelli per RAISAT ART" >}}
+
+![](https://upload.wikimedia.org/wikipedia/commons/e/eb/Piet%C3%A0_Rondanini.jpg?utm_source=it.wikipedia.org&utm_campaign=imageinfo&utm_content=original)
+
+Michelangelo mi ha sempre colpito molto, anche perché ha avuto una vita straziata
+dal male, proprio dal male fisico e morale. E però da questo male umano e disumano
+sono nate delle cose grandiose. Però secondo me non necessariamente il dolore deve
+scatenare l’arte: penso che anche la gioia lo possa fare.
+
+Nella *Pietà Rondanini* ci sono due tipi di dolore. Il dolore fisico, il
+rilassamento fisico di un Cristo che cade dalla Croce — quindi è morto, ormai è
+senza dolore, dopo aver passato il travaglio della carne — e il dolore morale di
+Maria. Cioè, sono due tipi di dolore. Nella vita, purtroppo, abbiamo il dolore
+fisico, quello di chi si è fatto male a un piede, e il dolore del sentimento, che
+alle volte è molto più devastante di quello.
+
+Si fa tanto caso al dolore mariano proprio perché la Madonna è stata ferita a
+morte: il figlio è talmente legato alla madre che anche il dolore del figlio,
+carnalmente, lo sente anche la madre. Quindi la madre non si può estrarre da
+questi due tipi di dolore.
+
+Moralmente Cristo come uomo ha sentito il dolore da uomo, e come Dio penso
+che abbia sentito una grossa svalutazione di quello che era la sua grandezza, la
+sua grandiosità. È quello che un po’ sente il poeta a contatto con certa gente
+mediocre: si sente svalutato, si sente ferito a morte. Perché è difficile, per una
+persona, per un uomo, per un essere che in sé aveva l’idea del divino, fare una
+morte così ignominiosa.
+
+Come terzo composto di questa Pietà c’è anche la vergogna di vedere un Cristo
+depauperato di tutto. Poi io, quando ho scritto i michelangioleschi, non ero stata
+in casa di cura — che è proprio quello che prova, alle volte, chi viene internato,
+svestito e dato in pasto a degli infermieri scabrosi, ignoranti, inetti e
+confusionari. Cioè, c’è una grande confusione nel *corpus* di Michelangelo, ed è
+la confusione morale di coloro che non hanno capito chi era Cristo tra la folla.
+Ecco il composto della confusione, della massa, che trascina anche il genio e che
+lo distrugge — ovviamente, ogni artista come Michelangelo.
+
+Poi si tratta di una scultura appena sgrossata, che non è finita, che è
+abbandonata e ripresa, ripresa e abbandonata, come fanno molti artisti perché
+hanno magari un lampo. E poi voglio dire che tutte le opere di Michelangelo
+riflettono il suo travaglio, ma anche l’opera di uno scrittore. In ogni
+espressione artistica c’è qualcosa di divino, io credo; ma anche nel lavoro
+manuale, anche in quelli che hanno fatto queste statue, perché l’operosità
+dell’uomo è un segno della decadenza dell’uomo, ma anche della condanna divina e
+anche della presenza divina. Quindi non c’è niente da scartare di quello che c’è
+sull’universo.
+
+Mi domandano: *«Che cos’è la materia?»*. E la materia, secondo me, è proprio
+questa. La materia sono corpi, questi marmi, questi bronzi, nei quali è più
+presente la materia del canto, anche se il canto è evidentissimo. Quindi portano
+in sé stessi il mistero anche della vita: come, usando la materia, si riesce a far
+cantare la materia, a farla urlare.
+
+Quindi nella Pietà c’è anche l’urlo segreto, che non si sente. E quanta gente come
+noi urla lungo la giornata! Cioè, non è la voce che è sintomo di dolore, ma spesso
+anche il silenzio. Noi vediamo nella *Pietà Rondanini* un silenzio mostruoso, una
+morte della parola. E infatti muore il Verbo, diciamo così: muore proprio la
+parola.
+
+Basta.
+
 # Lezioni d'autore [^1]
 
 [^1]: {{< youtubeicon "MUlyhZWMIgg" "Università Telematica Internazionale UNINETTUNO: Episodio 05 - Alda Merini parla del libro 'L'anima Innamorata'" >}}.
@@ -173,6 +236,18 @@ Senti come canta l’uccello fuori.
 > *sono discesa all’inferno*  
 > *da dove riguardo stupita*  
 > *le mura di Gerico antica.*  
+
+## Spazio
+
+> *Spazio spazio, io voglio, tanto spazio*  
+> *per dolcissima muovermi ferita:*  
+> *voglio spazio per cantare crescere*  
+> *errare e saltare il fosso*  
+> *della divina sapienza.*  
+> *Spazio datemi spazio*  
+> *ch’io lanci un urlo inumano,*  
+> *quell’urlo di silenzio negli anni*  
+> *che ho toccato con mano.*  
 
 ## Sono nata il ventuno a primavera
 
