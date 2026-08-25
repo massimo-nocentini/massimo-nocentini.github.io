@@ -3,7 +3,7 @@ date = '2020-12-08T00:00:00+01:00'
 title = 'Patris corde'
 subtitle = 'Nel 150° anniversario della dichiarazione di san Giuseppe quale patrono della Chiesa universale'
 author = 'papa Francesco'
-tags = ['san Giuseppe', 'paternità']
+tags = ['san Giuseppe', 'paternità', 'spem contra spem',]
 categories = ['lettere']
 summary = " "
 +++

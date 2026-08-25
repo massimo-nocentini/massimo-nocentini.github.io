@@ -15,8 +15,9 @@ tags = [
     "coerenza",
     "critica",
     "memoria",
+    "spem contra spem",
 ]
-summary = "Don Giussani delinea i tre fattori fondamentali del processo educativo: la ricchezza di una tradizione offerta come ipotesi di lavoro con cui affrontare la realtà; la figura dell'educatore, in cui la tradizione resa cosciente diventa proposta e chiede una coerenza anzitutto ideale; la verifica, in cui l'educando paragona quanto ha ricevuto con l'urto della vita. Poiché la verifica si arresta sulla soglia della libertà, l'esito non è mai matematico: qui sta il rischio educativo, e la grandezza dell'educatore è la riproposta indefaticabile, spem contra spem."
+summary = " "
 +++
 
 

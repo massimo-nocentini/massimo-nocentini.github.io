@@ -1,9 +1,10 @@
 +++
 date = '2018-11-21T14:00:21+01:00'
 title = 'Alda Merini'
+subtitle = "L'anima, il manicomio e la poesia"
 tags = ['manicomio', "L'anima innamorata", 'follia', 'vecchiaia', 'amore', 'La Terra Santa']
 categories = ['poesie']
-summary = "Alda Merini racconta l'anima, il manicomio e la poesia: l'uscita dalla rianimazione e la domanda del medico, la follia come casa in cui è cresciuta la poesia, la società più feroce del manicomio, l'innamoramento del poeta e i sentimenti dei vecchi. Nel mezzo legge alcune sue poesie, dai trafugamenti di madre e di donna fino alle mura di Gerico."
+summary = " "
 +++
 
 # Davanti alla *Pietà Rondanini* [^3]
