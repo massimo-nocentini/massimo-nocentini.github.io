@@ -1,0 +1,1091 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Inspecting the Payments Graph - This site needs no title</title><meta name=description content="A Bitcoint induced graph about transactions"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/payments-graph/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/payments-graph/","name":"Inspecting the Payments Graph","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/payments-graph/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/payments-graph/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"Inspecting the Payments Graph","url":"https://massimo-nocentini.github.io/post/payments-graph/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/payments-graph/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-08-28T09:58:04+01:00","dateModified":"2026-08-28T09:58:04+01:00","datePublished":"2026-08-28T09:58:04+01:00","description":"","headline":"Inspecting the Payments Graph","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/payments-graph/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT81M","wordCount":17084}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/payments-graph/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="Inspecting the Payments Graph"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-08-28T09:58:04+01:00"><meta property="article:modified_time" content="2026-08-28T09:58:04+01:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/payments-graph/><meta name=twitter:title content="Inspecting the Payments Graph"><meta name=twitter:description content="A Bitcoint induced graph about transactions"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.165.0"><link rel=alternate href=https://massimo-nocentini.github.io/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/brands.css integrity=sha384-+PvcAGLOWIanfjuRoscHUyZB100N7wP779T8D3ao0FniyFFKMw9MIJpgtJO3+pdF crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/fontawesome.css integrity=sha384-mj4mLShEAyWi4Bui9LmFkAjPYWof6WrG8DfS8ebHhjm4/MClMqMMHpQzehNk5HeM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/regular.css integrity=sha384-eS8Ja07iO8AOH11Hzegc5aZyN8CpY+oFwClH6MIlOKUOA3J4Oqjt8Xia9VUSU0GB crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/solid.css integrity=sha384-LpGibDKKReBRP3epUOaN9WBgkrQ1pJIvrrTugkYxVQgDvYuMCRaXk6YkrZ/h3aWk crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/svg.css integrity=sha384-V18zH+yIEosaHAByV0h4dqHHMPzBxZ7CYz9GQ1YsLTE9QIkEme0jAw9Qir7aIFT+ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/svg-with-js.css integrity=sha384-K25UPiwKhSAcEPQskU+UjXpz4iScCTNX5tcEpAGp1hQFNkOoIIwZiV69SfEfaRjK crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v4-font-face.css integrity=sha384-YFnAdl87B7pW+Vhp7w9pvA8ZdBL8DQni4/++wrZ0f7o/Sc0pyThczmxZk9xLyc0Z crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v4-shims.css integrity=sha384-FnTDI00psVcN3KkfAip/6yRCeN17N3R7HZoAj+2+nttp8n1/vHfYUWvlscoUUhGJ crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/v5-font-face.css integrity=sha384-FUMXkSpZU/e6Ua2owr0Mktp/gtxxiK1OgCS1vDr8Lsz+gbyDFMSiKeHBRa07EjDn crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/css/print.css media=print><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=/css/syntax.css><link rel=stylesheet href=/css/codeblock.css><link rel=stylesheet href=/css/toc.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap" rel=stylesheet><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,700;1,7..72,400&display=swap"><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,700;1,400&display=swap"><link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&display=swap" rel=stylesheet><style>:root{--phi:1.6180339887498949;--phi-n4:0.14589803375031546;--phi-n3:0.2360679774997897;--phi-n2:0.3819660112501051;--phi-n1:0.6180339887498949;--phi-p1:1.6180339887498949;--phi-p2:2.6180339887498949;--phi-p3:4.23606797749979;--phi-p4:6.854101966249685;--gr-base:1.125rem;--gr-3xs:calc(var(--gr-base) * var(--phi-n4));--gr-2xs:calc(var(--gr-base) * var(--phi-n3));--gr-xs:calc(var(--gr-base) * var(--phi-n2));--gr-sm:calc(var(--gr-base) * var(--phi-n1));--gr-md:var(--gr-base);--gr-lg:calc(var(--gr-base) * var(--phi-p1));--gr-xl:calc(var(--gr-base) * var(--phi-p2));--gr-2xl:calc(var(--gr-base) * var(--phi-p3));--gr-3xl:calc(var(--gr-base) * var(--phi-p4));--gr-leading:var(--phi);--gr-leading-tight:calc(1 + var(--phi-n2));--gr-line:calc(1em * var(--gr-leading))}body{line-height:var(--gr-leading);font-family:literata,stix two text,libre baskerville;font-optical-sizing:auto;font-weight:400;font-style:normal}p,li,dd,dt,blockquote,figcaption,.caption,table tr th,table tr td{line-height:var(--gr-leading)}h1,h2,h3,h4,h5,h6{line-height:var(--gr-leading-tight)}p,p+p{margin:0 0 1em}h1,h2,h3,h4,h5,h6{margin-top:1em;margin-bottom:calc(1em * var(--phi-n2))}.post-preview .post-entry :is(h1,h2,h3,h4,h5,h6){margin:1em 0 calc(1em * var(--phi-n2))}.blog-post :is(ul,ol),.content-section :is(ul,ol),.post-entry :is(ul,ol){margin:0 0 1em;padding-left:var(--gr-lg)}.blog-post :is(ul,ol) :is(ul,ol),.content-section :is(ul,ol) :is(ul,ol),.post-entry :is(ul,ol) :is(ul,ol){margin:var(--gr-2xs)0 0}.blog-post blockquote{padding:var(--gr-sm)var(--gr-lg);margin:0 0 1em;border-left-width:var(--gr-2xs)}.blog-post :is(pre,figure,table){margin-bottom:var(--gr-line)}hr.small{margin:var(--gr-sm)auto}.blog-post hr{margin-top:var(--gr-lg);margin-bottom:var(--gr-lg)}.intro-header{margin:var(--gr-2xl)0 var(--gr-md)}.intro-header.big-img{margin-bottom:var(--gr-lg)}.post-preview{padding:var(--gr-md)0}@media only screen and (min-width:768px){.post-preview{padding:var(--gr-lg)0}}.post-preview .post-title,.post-preview .post-subtitle{margin-bottom:var(--gr-sm)}.post-entry{margin-top:var(--gr-sm)}.blog-tags,.blog-categories{margin-bottom:var(--gr-lg)}.content-section{padding:var(--gr-lg);margin-bottom:var(--gr-lg)}table tr th,table tr td{padding:var(--gr-xs)var(--gr-sm)}figcaption,.caption,.blog-post .caption{padding:var(--gr-sm)}footer{padding:var(--gr-lg)0}footer .theme-by{margin:var(--gr-sm)0 0}footer div.disclaimer{padding:var(--gr-sm);margin:var(--gr-md)var(--gr-md)var(--gr-md)var(--gr-2xs)}.highlight,pre:not(.chroma){margin:var(--gr-sm)0}.highlight>pre,.highlight>.chroma,.highlight .lntd pre,pre:not(.chroma)>code:not(.hljs),pre code.hljs{padding:var(--gr-xs)}.container,.container-fluid,.row{--bs-gutter-x:var(--gr-lg)}@media only screen and (min-width:768px){.row>.offset-md-1{width:calc(100% * (1 - var(--phi-n3)));margin-left:calc(100% * var(--phi-n3) * .5);margin-right:calc(100% * var(--phi-n3) * .5)}}@media only screen and (min-width:992px){.row>.offset-md-1{width:calc(100% * var(--phi-n1));margin-left:calc(100% * var(--phi-n2) * .5);margin-right:calc(100% * var(--phi-n2) * .5)}}</style></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=toc-toggle aria-label="Table of contents" data-bs-toggle=tooltip data-bs-placement=bottom title="Table of contents">
+<span class="fas fa-list"></span>
+</button>
+<button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<span class="fas fa-search"></span>
+</button>
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class=nav-item><a class=nav-link title=About href=/about/>About</a></li></ul></div></div></nav><div id=navbar-search-overlay class=navbar-search-overlay aria-hidden=true role=search><div class="navbar-search-inner container-fluid"><span class="fas fa-search navbar-search-icon" aria-hidden=true></span>
+<input type=search id=navbar-search-input class=navbar-search-input placeholder="Search posts and pages…" aria-label=Search autocomplete=off>
+<button id=navbar-search-close class=theme-toggle aria-label="Close search">
+<span class="fas fa-times"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>Inspecting the Payments Graph</h1><hr class=small><h2 class=post-subheading>A Bitcoint induced graph about transactions</h2></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><h1 id=topology--subgraph-patterns-in-databitcoinbitcoin-webgraphpg>Topology & subgraph patterns in <code>/data/bitcoin/bitcoin-webgraph/pg</code></h1><p>Live analysis log — appended as findings appear (<code>tail -f</code> friendly).
+Tooling: <code>webgraph-rs</code> (this working copy), driven from a small standalone probe crate
+that memory-maps the BvGraph and fans out over 112 cores.</p><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>nodes</td><td>668,261,953</td></tr><tr><td>arcs</td><td>2,162,523,341</td></tr><tr><td>avg out-degree</td><td>3.236</td></tr><tr><td>transpose</td><td><code>pg-t</code> (same n, same m)</td></tr><tr><td>bits/link</td><td>8.987 (compratio 0.309)</td></tr></tbody></table><hr><h2 id=0-setup--how-things-are-measured>0. Setup / how things are measured</h2><p>All numbers below come from full scans of the graph (no sampling) unless the
+section says &ldquo;sample&rdquo;. Each scan is a <code>par_apply</code>/rayon fan-out over node ranges,
+<code>graph.successors(u)</code> per node, folding per-thread histograms. The transpose <code>pg-t</code>
+is used whenever an in-degree / predecessor question shows up.</p><hr><h2 id=01-notation--every-symbol-used-in-this-document>0.1 Notation — every symbol used in this document</h2><h3 id=the-graph>The graph</h3><table><thead><tr><th>symbol</th><th>meaning</th></tr></thead><tbody><tr><td><code>n</code></td><td>number of nodes = 668,261,953</td></tr><tr><td><code>m</code></td><td>number of arcs = 2,162,523,341</td></tr><tr><td><code>u</code>, <code>v</code></td><td>node IDs, in <code>0 .. n-1</code></td></tr><tr><td><code>u -> v</code></td><td>an arc: &ldquo;TXO <code>u</code> was spent by the transaction that created TXO <code>v</code>&rdquo;</td></tr><tr><td><code>succ(u)</code></td><td>the successor list (out-neighbourhood) of <code>u</code></td></tr><tr><td><code>outdeg(u)</code>, <code>indeg(v)</code></td><td>sizes of the out- / in-neighbourhood</td></tr><tr><td><code>pg</code>, <code>pg-t</code></td><td>the graph and its transpose. <code>pg-t.successors(v)</code> = the <strong>predecessors</strong> of <code>v</code> in <code>pg</code></td></tr><tr><td>DAG</td><td>directed acyclic graph. Proven for this graph in §2</td></tr><tr><td><code>D</code></td><td>the length of the longest path in the DAG = <strong>2,168,061</strong> hops (§7)</td></tr></tbody></table><h3 id=transactions-the-biclique-decomposition-of-4>Transactions (the biclique decomposition of §4)</h3><p>Because every successor list is a contiguous interval (§3), the arc set factors exactly into one
+complete bipartite graph per transaction. That gives the following objects, used everywhere below.</p><ul><li><code>T</code> — a transaction.</li><li><code>I(T)</code> — its <strong>input set</strong>: the older TXOs it spends. An arbitrary, scattered set of node IDs.</li><li><code>O(T)</code> — its <strong>output set</strong>: always a <em>contiguous interval</em> of node IDs <code>[s, s+len)</code>.</li><li><code>|I|</code> and <code>|O|</code> — the sizes of those sets, i.e. the transaction&rsquo;s input count and output count.
+These two numbers are the workhorses of this whole document.</li><li><strong>shape</strong> <code>(|I|, |O|)</code> — the pair. <code>(1,2)</code> = one input, two outputs = the canonical &ldquo;pay + change&rdquo;
+transaction, and 55.8 % of the ledger.</li><li><code>K(|I|,|O|)</code> — the complete bipartite graph <code>I(T) x O(T)</code>. The entire arc set is a disjoint union
+of these, one per transaction (§4).</li><li><code>s</code> — a <strong>block start</strong>: the first node ID of some <code>O(T)</code>. Since the intervals partition the node
+set, <code>s</code> identifies its transaction uniquely, and is used as the transaction&rsquo;s name throughout.</li><li><strong>class</strong> <code>|O| = L</code> — the set of all transactions with exactly <code>L</code> outputs. Most of Part III is
+about telling these classes apart.</li></ul><blockquote><p><strong>A warning about the word &ldquo;block&rdquo;.</strong> It is overloaded in this document, unavoidably:</p><ul><li>an <strong>output block</strong> / <strong>interval</strong> / <strong>biclique</strong> is <code>O(T)</code> — the outputs of <em>one transaction</em>;</li><li>a <strong>Bitcoin block</strong> / <strong>segment</strong> is a mined block containing <em>many</em> transactions (§5).</li></ul><p>Where it matters I say &ldquo;output block&rdquo; or &ldquo;Bitcoin block&rdquo;. A bare &ldquo;block start <code>s</code>&rdquo; always means
+the former; &ldquo;in-block chaining&rdquo; (§22) and &ldquo;same block&rdquo; (§18.3) always mean the latter.</p></blockquote><h3 id=derived-arrays-what-the-probe-binaries-actually-build>Derived arrays (what the probe binaries actually build)</h3><p>Every measurement in this document is computed from these five arrays plus the graph itself:</p><ul><li><code>ss[u]</code> — the <strong>start</strong> of <code>u</code>&rsquo;s successor interval, i.e. <em>which transaction spent <code>u</code></em>.
+<code>NONE</code> if <code>u</code> is unspent.</li><li><code>blk_len[s]</code> — <code>|O|</code> of the transaction whose output block starts at <code>s</code>; <code>0</code> if <code>s</code> is not a
+block start.</li><li><code>blk_mul[s]</code> — <code>|I|</code> of that transaction (the number of nodes <code>u</code> with <code>ss[u] == s</code>).</li><li><code>own[v]</code> — <code>|O|</code> of the transaction that <strong>created</strong> <code>v</code> (paint <code>blk_len[s]</code> across <code>[s, s+len)</code>);
+<code>0</code> means <code>v</code> is a coinbase output.</li><li><code>seg[v]</code> — which <strong>Bitcoin block</strong> <code>v</code> belongs to, recovered from runs of in-degree-0 nodes (§5).</li></ul><p>Two linear sweeps over the ID axis then give:</p><ul><li><code>depth[v]</code> — length of the <strong>longest</strong> chain of transactions from <em>any</em> coinbase output down to <code>v</code>.</li><li><code>height[u]</code> — length of the longest chain from <code>u</code> forward to an <em>unspent</em> output.</li><li><strong>critical</strong> node — one with <code>depth[v] + height[v] == D</code>, i.e. lying on <em>at least one</em> longest
+path (§24).</li><li><strong>critical width</strong> at depth <code>d</code> — how many critical nodes share that depth. Width 1 = a <strong>forced</strong>
+level: every longest path in the graph must pass through that one node.</li></ul><h3 id=statistics>Statistics</h3><ul><li><strong>baseline</strong> — what a quantity would be if the population were drawn at random from the whole
+ledger. Always stated explicitly, because the choice of null matters: §25.1 corrects one of my own
+claims that used the wrong one.</li><li><strong>enrichment</strong> (written <code>12x</code>) — observed share divided by baseline share. <code>1x</code> means no signal.</li><li><strong>self-affinity</strong> of class <code>L</code> — the fraction of an <code>|O|=L</code> transaction&rsquo;s <em>inputs</em> that were
+created by another <code>|O|=L</code> transaction. Background is ~1–5 %; the mixer of §17 sits at 78.8 %.</li><li><code>R</code> — same-class arcs per transaction: how many of a transaction&rsquo;s outputs are consumed by another
+transaction of the same class (§21.1).</li><li><code>Cnorm</code> — (share of those same-class arcs leaving the <strong>last</strong> output position) multiplied by <code>L</code>.
+<code>1</code> = spread uniformly over all positions; <code>L</code> = all of it through one position, i.e. a change
+output (§21.1).</li><li><code>ext_out / ext_in</code> — coins leaving a class per coin entering it. Much greater than 1 means a
+distributor; near 1 with heavy recirculation means a mixer.</li><li><strong>residence time</strong> — expected number of same-class transactions a coin passes through before
+leaving (§20.2). A <em>model</em> quantity: there is no value data here.</li><li><strong>first gap</strong> and <strong>inner gap</strong> — <code>s_u - u</code> (how far ahead the spending transaction lies) and
+<code>v_i - v_(i-1)</code> within a successor list (§3.2).</li><li><strong>run</strong> — a maximal stretch of consecutive integers in a successor list (§3), or of consecutive
+depth levels sharing some property (§24.2).</li><li><code>p5</code>, <code>p50</code>, <code>p90</code>, … — percentiles; <code>p50</code> is the median.</li><li>σ (sigma), z — standard deviations from the mean, used when asking whether a per-position
+difference is real rather than noise (§25.1).</li></ul><blockquote><p><strong>Table convention.</strong> Inside markdown tables the bars are dropped — <code>O=101</code> means <code>|O|=101</code>,
+<code>I=25</code> means <code>|I|=25</code> — because a literal <code>|</code> would split the table cell.</p></blockquote><hr><h2 id=02-glossary--the-bitcoin-side>0.2 Glossary — the Bitcoin side</h2><p>Enough to read this document; not a tutorial. Terms are ordered so each depends only on earlier ones.</p><p><strong>Transaction.</strong> The unit of the Bitcoin ledger. It <em>consumes</em> some existing outputs (its <strong>inputs</strong>)
+and <em>creates</em> new ones (its <strong>outputs</strong>). Nothing else happens on the chain.</p><p><strong>Output / TXO</strong> (transaction output). A discrete parcel of coin, created by exactly one transaction
+and destroyed by at most one later transaction. <strong>This is what a node in this graph is.</strong> Outputs of
+one transaction are numbered <code>vout = 0, 1, 2, …</code> — which is why <code>O(T)</code> is a contiguous interval here.</p><p><strong>Input.</strong> A reference from a transaction back to an older, still-unspent output. <strong>This is what an
+arc is.</strong> An input is not a separate object on the chain; it is a pointer.</p><p><strong>UTXO</strong> (unspent transaction output). An output no transaction has consumed yet — the coins that
+&ldquo;exist&rdquo; right now. In this graph: <strong>out-degree 0</strong>, 53,078,524 nodes (7.94 %).</p><p><strong>Coinbase.</strong> The first transaction of every mined block. It has <strong>no inputs</strong> — it mints the block
+reward out of nothing. In this graph: <strong>in-degree 0</strong>, 2,032,814 nodes. Because it is always the
+<em>first</em> transaction in its block, coinbase outputs form a contiguous run at the start of each block&rsquo;s
+ID range, which is how §5 recovers the time axis for free.</p><p><strong>Bitcoin block.</strong> A batch of transactions committed to the chain roughly every 10 minutes, in a
+strict order. <strong>Block height</strong> is its index (block 0 = January 2009). Node IDs here are assigned
+<code>(block height, transaction index within the block, vout)</code>, which is why the graph is already
+topologically sorted (§2).</p><p><strong>Block reward / subsidy.</strong> The newly minted coins a miner pays itself in the coinbase transaction.</p><p><strong>Change output.</strong> If you hold a 10-BTC output and want to pay 3 BTC, you must spend the <em>whole</em>
+output: 3 BTC to the payee and ~7 BTC <strong>back to yourself</strong>. That second output is the change. It is
+why <code>(1,2)</code> is 55.8 % of all transactions (§11) and why batchers show up as <code>10k + 1</code> outputs — <em>k</em>
+payouts plus one change (§4.2).</p><p><strong>Peel chain.</strong> Repeatedly spending the change: a big coin &ldquo;peels off&rdquo; one payment at a time,
+each transaction consuming the previous one&rsquo;s change output. Appears here as chains of <code>(1,2)</code>
+transactions — 136.7 M of them (§8), and the 101,158-long isthmus of §19 is one.</p><p><strong>Consolidation / sweep.</strong> The opposite move: gather many small outputs into one
+(<code>|I|</code> large, <code>|O|</code> = 1). Wallet software does this in fixed batch sizes, which is why input counts
+spike on round numbers — 20, 25, 50, 100, 200 — and why nine transactions have <strong>exactly</strong> 20,000
+inputs (§10, §23.3).</p><p><strong>Batching.</strong> An exchange paying many customers in one transaction instead of many. Signature:
+<code>|O| = k + 1</code> for round <em>k</em>, with a genuine change output at a fixed position (§21).</p><p><strong>CoinJoin / mixer.</strong> Several parties co-sign <em>one</em> transaction that takes each of their coins as
+inputs and emits <strong>equal, interchangeable outputs</strong>, so an observer cannot match input to output.
+Signature: <code>|I| ≈ |O|</code>, no distinguished change position, and heavy recirculation. §17 and §21.3
+identify exactly one such service in this ledger.</p><p><strong>Dust.</strong> Outputs so small they cost more to spend than they are worth, so nobody ever spends them.
+A <strong>dust flood</strong> / <strong>stress test</strong> creates millions of them to bloat the UTXO set — visible in §23
+as a campaign whose outputs are <strong>97.6 % unspent</strong> to this day.</p><p><strong>Mempool.</strong> The queue of transactions a node has heard about but that are not yet in a block.</p><p><strong>Ancestor limit</strong> (<code>-limitancestorcount</code>). A node&rsquo;s <em>policy</em> cap on how many unconfirmed ancestors a
+mempool transaction may have; the Bitcoin Core default became <strong>25</strong> in version 0.12 (early 2016).
+It is a local policy, not a consensus rule — which is exactly why §22 sees it arrive as a staircase
+of independent miner upgrades rather than a single cliff.</p><p><strong>CPFP</strong> (child pays for parent). Spending your own unconfirmed output to attach a higher fee.
+One reason long chains of transactions appear <em>inside a single block</em> (§18.3, §22).</p><p><strong>P2Pool.</strong> A decentralised mining pool whose coinbase transaction pays every participating miner
+directly, producing coinbase transactions with hundreds of outputs — the 8,604 coinbase runs of
+length ≥ 64 in §5.</p><p><strong>SegWit commitment.</strong> Since August 2017 a block&rsquo;s coinbase carries an extra <code>OP_RETURN</code> output
+committing to witness data — which is why the last coinbase runs in §5 all have length exactly 2.</p><p><strong>txid / address / satoshi.</strong> A transaction&rsquo;s hash, a payment destination, and the smallest unit of
+value. <strong>None of the three exist in this dataset.</strong> Every claim in this document is derived from arc
+structure alone, which is why operators are described by <em>shape</em> and never named.</p><hr><h2 id=1-first-look--the-graph-is-id-ordered-and-forward-only>1. FIRST LOOK — the graph is ID-ordered and forward-only</h2><p><strong>What I did.</strong> Loaded <code>pg</code> random-access and dumped the successor lists of the
+first 10 nodes, of 3 nodes at 1/4, 1/2, 3/4 of the ID range, and of the last 5 nodes.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>node            0 outdeg      0 -&gt; []
+</span></span><span class=line><span class=cl>node            9 outdeg      2 -&gt; [171, 172]
+</span></span><span class=line><span class=cl>node    167065488 outdeg      1 -&gt; [167680989]
+</span></span><span class=line><span class=cl>node    334130976 outdeg      3 -&gt; [334233088, 334233089, 334233090]
+</span></span><span class=line><span class=cl>node    501196464 outdeg      1 -&gt; [501263516]
+</span></span><span class=line><span class=cl>node    668261952 outdeg      0 -&gt; []
+</span></span></code></pre></div><p><strong>Pattern (hypothesis, to be verified by a full scan):</strong></p><ol><li><strong>Every arc points forward in node-ID space</strong> (<code>v > u</code>). If this holds
+globally the graph is a <strong>DAG already given in topological order</strong> — exactly
+what you get when Bitcoin entities are numbered in blockchain/temporal order
+and an arc means &ldquo;value flows from an earlier object to a later one&rdquo;.</li><li><strong>Successor lists contain runs of consecutive IDs</strong> (<code>334233088, 334233089, 334233090</code>). The <code>.properties</code> file agrees: <code>intervalisedarcs=917,147,391</code>, i.e.
+<strong>42.4% of all arcs live inside an interval</strong> of consecutive destinations, and
+<code>avgbitsforintervals=3.082</code>. That is the fingerprint of a <em>fan-out to a block of
+consecutively-numbered children</em> — e.g. a transaction node pointing at the
+outputs it creates, which were allocated contiguous IDs.</li><li>The <strong>low IDs are sinks/isolated</strong> (<code>0..=8</code> have out-degree 0) while the
+<strong>high IDs are also out-degree 0</strong>. Two different reasons are likely
+(genesis-side vs. unspent-tip-side); the in-degree scan will separate them.</li></ol><p>Next: full scan to confirm forward-only, and to get exact degree distributions.</p><hr><h2 id=2-confirmed--the-graph-is-a-dag-given-in-topological-order>2. CONFIRMED — the graph is a <strong>DAG given in topological order</strong></h2><p><strong>What I did.</strong> Full parallel scan of all 668,261,953 nodes / 2,162,523,341 arcs
+(<code>rayon</code> over 65 536-node chunks, <code>g.successors(u)</code> on the mmapped BvGraph;
+2.5 s wall, ~4 min CPU on 112 cores). For every arc <code>u -> v</code> I classified
+<code>v > u</code>, <code>v &lt; u</code>, <code>v == u</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>forward (v &gt; u) = 2,162,523,341     &lt;- 100.000000 %
+</span></span><span class=line><span class=cl>backward(v &lt; u) =             0
+</span></span><span class=line><span class=cl>self-loops      =             0
+</span></span></code></pre></div><p><strong>Pattern.</strong> <em>Not one</em> arc goes backwards. So:</p><ul><li>the graph is <strong>acyclic</strong> — no SCC of size > 1 exists, no cycle-finding needed;</li><li>the identity permutation is already a <strong>topological sort</strong>;</li><li>node IDs carry a <strong>total temporal order</strong>. For a Bitcoin artefact this means
+IDs were assigned in blockchain order (block height, then position in block).</li></ul><p>Practical consequence: any DP over the DAG (reachability, longest path, value
+flow, ancestor counts) can be done in <strong>one linear sweep in ID order</strong>, no
+visit machinery needed. That is worth knowing before running anything expensive.</p><hr><h2 id=3-the-big-one--every-successor-list-is-one-contiguous-interval>3. THE BIG ONE — every successor list is <strong>one contiguous interval</strong></h2><p><strong>What I did.</strong> In the same scan I decomposed each successor list into maximal
+runs of consecutive IDs and histogrammed (a) the number of runs per node, (b) the
+run lengths, (c) all &ldquo;inner&rdquo; gaps <code>v_i - v_(i-1)</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>--- #maximal consecutive runs per node ---
+</span></span><span class=line><span class=cl>runs   1:     615,183,429        &lt;- and NOTHING else. no node has 2+ runs.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- inner gaps (v_i - v_(i-1)) ---
+</span></span><span class=line><span class=cl>gap == 1 : 1,547,339,912   (= 100.000 % of all 1,547,339,912 inner gaps)
+</span></span><span class=line><span class=cl>gap  &gt; 1 : 0
+</span></span></code></pre></div><p><code>615,183,429</code> is exactly the number of nodes with out-degree > 0.</p><p><strong>Pattern.</strong> For <strong>every</strong> node <code>u</code> with out-degree <code>d > 0</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>succ(u) = { s_u , s_u + 1 , s_u + 2 , ... , s_u + d - 1 }      exactly.
+</span></span></code></pre></div><p>The whole 2.16-billion-arc graph is therefore <em>losslessly</em> described by two
+numbers per node — <code>(start, length)</code> — i.e. <strong>~5 GB of intervals, and nothing
+else</strong>. There is zero &ldquo;irregular&rdquo; adjacency anywhere in the graph. This is why
+BvGraph compresses it to 8.99 bits/link with <code>intervalisedarcs = 917 M</code> and
+<code>avgbitsforintervals = 3.08</code>.</p><p><strong>How to read it.</strong> A node&rsquo;s out-neighbourhood is <em>a block of consecutively
+allocated objects</em>. The natural generative story: <code>u</code> is consumed by some event
+<code>T</code>, and <code>T</code> <strong>creates a contiguous run of new nodes</strong>; <code>u</code> points at all of them.
+In Bitcoin terms: <strong>node = transaction output (TXO); arc <code>u -> v</code> = &ldquo;output <code>u</code>
+was spent by the transaction that created output <code>v</code>&rdquo;</strong>. The outputs of one
+transaction were numbered consecutively, hence the interval. Everything below
+tests that model.</p><h3 id=31-degree-distribution--the-shape-of-bitcoin-transactions>3.1 Degree distribution = the shape of Bitcoin transactions</h3><p><code>out-degree(u)</code> under that model is <em>the number of outputs of the transaction
+that spent <code>u</code></em>, and it reproduces the textbook Bitcoin output-count profile:</p><table><thead><tr><th>out-deg</th><th># nodes</th><th>share</th><th>reading</th></tr></thead><tbody><tr><td>0</td><td>53,078,524</td><td>7.94 %</td><td><strong>unspent</strong> (UTXO / unspendable)</td></tr><tr><td>1</td><td>136,486,476</td><td>20.42 %</td><td>sweeps / consolidations, no change</td></tr><tr><td><strong>2</strong></td><td><strong>405,920,772</strong></td><td><strong>60.74 %</strong></td><td><strong>payment + change — the canonical tx</strong></td></tr><tr><td>3</td><td>22,298,825</td><td>3.34 %</td><td></td></tr><tr><td>4</td><td>5,929,845</td><td>0.89 %</td><td></td></tr><tr><td>5..20</td><td>~1–4 M each</td><td></td><td>smooth decay</td></tr><tr><td><strong>21</strong></td><td><strong>10,812,004</strong></td><td><strong>1.62 %</strong></td><td><strong>anomalous spike, see §4</strong></td></tr><tr><td>22..∞</td><td>decaying</td><td></td><td></td></tr><tr><td>max</td><td><strong>13,107</strong></td><td></td><td>one single node, id 300,889,132</td></tr></tbody></table><p>The 60.7 % mass on degree exactly 2 is the single most recognisable fingerprint
+of a Bitcoin spend graph (pay-to-someone + change-back-to-self).</p><h3 id=32-distance-to-the-block-a-bimodal-time-to-spend-curve>3.2 Distance to the block: a bimodal &ldquo;time-to-spend&rdquo; curve</h3><p>Histogram of the <strong>first gap</strong> <code>s_u - u</code> (how far ahead in ID space the spending
+event lies) is strongly bimodal on a log scale:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>gap [2^0 .. 2^1) : 22,424,860     &lt;- spent immediately, next few IDs
+</span></span><span class=line><span class=cl>gap [2^1 .. 2^2) : 16,011,216
+</span></span><span class=line><span class=cl>gap [2^2 .. 2^8) : ~4 M per octave   (flat valley)
+</span></span><span class=line><span class=cl>gap [2^13..2^16) : ~44.5 M per octave &lt;- the mode
+</span></span><span class=line><span class=cl>gap [2^28..2^29) :  3,193,157
+</span></span><span class=line><span class=cl>gap [2^29..2^30) :    266,761      &lt;- spent ~half a graph later
+</span></span></code></pre></div><p>Two populations: a sharp <strong>&ldquo;spent within the same block / next few objects&rdquo;</strong>
+peak at gaps 1–3, and a broad log-normal-ish bulk peaking around gap 2^14–2^15
+(~30 000 objects ahead). The first peak is chained/immediate spending (child-pays-
+for-parent, exchange internal shuffles, peel chains); the bulk is ordinary
+coins sitting idle for a while. The tail reaches 2^30 — coins dormant across a
+third of the whole history.</p><hr><h2 id=4-the-global-structure--an-exact-decomposition-into-245-m-bicliques>4. THE GLOBAL STRUCTURE — an exact decomposition into 245 M <strong>bicliques</strong></h2><p><strong>What I did.</strong> For every node <code>u</code> with out-degree > 0 I recorded the pair
+<code>(s_u, d_u)</code> = (first successor, out-degree). Then, in an atomic array indexed by
+<code>s</code>, I (a) checked that all nodes sharing a start also share the length,
+(b) counted the multiplicity of each start, (c) painted the interval
+<code>[s, s+len)</code> into a coverage array to test whether the intervals overlap.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>length conflicts at same start        = 0            &lt;-- lengths are a function of the start
+</span></span><span class=line><span class=cl>distinct successor-intervals (blocks) = 244,930,113
+</span></span><span class=line><span class=cl>sum of block lengths                  = 666,229,139
+</span></span><span class=line><span class=cl>sum of len * multiplicity             = 2,162,523,341  == m exactly
+</span></span><span class=line><span class=cl>coverage: nodes in 0 blocks = 2,032,814
+</span></span><span class=line><span class=cl>          nodes in exactly 1 block = 666,229,139
+</span></span><span class=line><span class=cl>          nodes in &gt;=2 blocks = 0          max coverage = 1
+</span></span></code></pre></div><p><strong>Pattern — this is the whole topology, exactly:</strong></p><blockquote><p>The 668 M nodes are <strong>partitioned</strong> into 244,930,113 intervals <code>O(T)</code> (plus
+2,032,814 leftover nodes). Each interval <code>O(T)</code> has a set of &ldquo;parents&rdquo; <code>I(T)</code>,
+and the arc set is <strong>exactly</strong> the disjoint union of the complete bipartite
+graphs
+<code>I(T) x O(T)</code>.</p><p><code>E = ⨆_T K_{|I(T)|, |O(T)|}</code> — 244,930,113 edge-disjoint bicliques,
+with the O-sides tiling the vertex set contiguously.</p></blockquote><p>That &ldquo;sum of len·mult == m&rdquo; line is the proof: no arc lives outside a biclique,
+and no biclique overlaps another. Every node in a block has <strong>identical
+in-neighbourhoods</strong> and <strong>identical in-degree</strong>. There is no other structure in
+this graph — clustering coefficient, motif counts, community structure are all
+<em>determined</em> by the (|I|,|O|) profile and by which older nodes each block picks
+as parents.</p><h3 id=41-ground-truth-this-is-the-bitcoin-utxo-spend-graph>4.1 Ground truth: this is the Bitcoin <strong>UTXO spend graph</strong></h3><p>The head of <code>pg.txt</code> (the arc list) settles the semantics against history:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>9 171
+</span></span><span class=line><span class=cl>9 172
+</span></span><span class=line><span class=cl>171 193673
+</span></span><span class=line><span class=cl>172 184
+</span></span><span class=line><span class=cl>172 185
+</span></span></code></pre></div><p>Node <code>9</code> is the only node in <code>0..=9</code> with out-degree > 0; nodes <code>0..=8</code> are
+sinks. Block 9&rsquo;s coinbase output is precisely the 50 BTC that Satoshi spent in
+<strong>block 170 — the first Bitcoin transaction ever</strong>, 1 input → 2 outputs
+(10 BTC to Hal Finney, 40 BTC change). Those two outputs are nodes <code>171, 172</code>,
+and <code>172</code> (the change) is spent again in block 181 into nodes <code>184, 185</code>. It
+matches the real chain exactly.</p><p>So the dictionary is:</p><table><thead><tr><th>graph object</th><th>Bitcoin object</th></tr></thead><tbody><tr><td>node <code>v</code></td><td>a <strong>transaction output (TXO)</strong>, numbered in blockchain order</td></tr><tr><td>block <code>O(T)</code> = interval</td><td>the <strong>output set of one transaction</strong> <code>T</code></td></tr><tr><td><code>I(T)</code> = parents of the block</td><td>the <strong>input set</strong> (the TXOs <code>T</code> spends)</td></tr><tr><td>arc <code>u -> v</code></td><td>&ldquo;TXO <code>u</code> was consumed by the tx that created TXO <code>v</code>&rdquo;</td></tr><tr><td>out-degree(<code>u</code>)</td><td>number of outputs of the tx that spent <code>u</code></td></tr><tr><td>in-degree(<code>v</code>)</td><td>number of inputs of the tx that created <code>v</code></td></tr><tr><td><strong>out-degree 0</strong></td><td><strong>unspent — the UTXO set: 53,078,524 nodes (7.94 %)</strong></td></tr><tr><td><strong>in-degree 0</strong></td><td><strong>coinbase outputs (newly minted): 2,032,814 nodes (0.30 %)</strong></td></tr><tr><td># blocks</td><td><strong>244,930,113 non-coinbase transactions</strong></td></tr></tbody></table><p>The graph is therefore the <em>transaction-level</em> Bitcoin ledger, losslessly, in
+~2.4 GB.</p><h3 id=42-outputs-per-transaction-ot--and-the->4.2 Outputs per transaction |O(T)| — and the <strong>&ldquo;batch + change&rdquo; combs</strong></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|O| = 1 :  29,610,210   (12.1 %)
+</span></span><span class=line><span class=cl>|O| = 2 : 195,103,097   (79.7 %)   &lt;-- pay + change
+</span></span><span class=line><span class=cl>|O| = 3 :  10,235,168
+</span></span><span class=line><span class=cl>|O| = 4 :   1,960,112
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p>79.7 % of all transactions have exactly two outputs. But the tail is not smooth —
+it has sharp, isolated <strong>spikes at 11, 21, 41, 51, 61, 101</strong>:</p><table><thead><tr><th>|O|</th><th>count</th><th>neighbours</th><th>ratio</th><th></th></tr></thead><tbody><tr><td>10</td><td>294,634</td><td></td><td></td><td></td></tr><tr><td><strong>11</strong></td><td><strong>532,286</strong></td><td>294,634 / 177,438</td><td><strong>~2.3x</strong></td><td></td></tr><tr><td>20</td><td>146,134</td><td></td><td></td><td></td></tr><tr><td><strong>21</strong></td><td><strong>660,257</strong></td><td>146,134 / 110,756</td><td><strong>~5.1x</strong></td><td></td></tr><tr><td><strong>41</strong></td><td>37,771</td><td>11,477 / 20,779</td><td>~2.3x</td><td></td></tr><tr><td>50</td><td>51,887</td><td></td><td></td><td></td></tr><tr><td><strong>51</strong></td><td><strong>209,271</strong></td><td>51,887 / 5,801</td><td><strong>~7.2x</strong> (36x vs</td><td>O</td></tr><tr><td><strong>61</strong></td><td>17,204</td><td>4,001 / 3,238</td><td><strong>~4.7x</strong></td><td></td></tr><tr><td><strong>101</strong></td><td>67,231</td><td>(100 is &lt; 20 k)</td><td>large</td><td></td></tr></tbody></table><p><strong>Pattern: <code>|O| = 10k + 1</code>.</strong> Those are <strong>exchange / payment-processor batch
+payouts</strong>: pay <em>k</em> round-numbered customers in one transaction, plus <strong>one change
+output</strong>. The +1 is the tell — the change output is what turns 10/20/50/100 into
+11/21/51/101. Nothing else in the distribution produces spikes on that lattice.
+(<code>|O| = 51</code> at 7.2x its neighbours and 36x <code>|O| = 52</code> is the sharpest single
+anomaly in the whole degree profile.)</p><p>Largest blocks: max <code>|O| = 13,107</code> (one transaction), 3 transactions in
+<code>[2^13, 2^14)</code>, 827 in <code>[2^12, 2^13)</code>.</p><h3 id=43-inputs-per-transaction-it--round-number-consolidation-combs>4.3 Inputs per transaction |I(T)| — round-number <strong>consolidation combs</strong></h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|I| = 1 : 166,299,586   (67.9 %)
+</span></span><span class=line><span class=cl>|I| = 2 :  42,398,598   (17.3 %)
+</span></span><span class=line><span class=cl>|I| = 3 :  13,136,146
+</span></span><span class=line><span class=cl>|I| = 4 :   7,084,100
+</span></span></code></pre></div><p>Two-thirds of all transactions spend a <strong>single</strong> input. Again the tail carries
+spikes, but on a <em>different</em> lattice — the <strong>round numbers themselves</strong>, with no <code>+1</code>:</p><p>| |I| | count | neighbours |
+|&mdash;|&mdash;|&mdash;|&mdash;|
+| <strong>20</strong> | 317,468 | 210,586 / 182,553 |
+| <strong>25</strong> | 217,816 | 116,728 / 113,042 |
+| <strong>30</strong> | 105,648 | 79,644 / 75,241 |
+| <strong>40</strong> | 58,326 | 30,786 / 31,805 |
+| <strong>50</strong> | 29,077 | 18,704 / 18,162 |
+| <strong>100</strong> | 89,321 | (large spike) |
+| <strong>200</strong> | 31,270 | |
+| max | <strong>20,000</strong> | exactly, at block start 230,725,307 |</p><p><strong>Pattern: consolidation/sweeping software with a hard-coded input cap.</strong> Wallets
+that sweep dust &ldquo;N inputs at a time&rdquo; produce exactly these spikes at
+20/25/30/40/50/100/200. And the single largest transaction in the whole ledger
+spends <strong>exactly 20,000 inputs</strong> — a round software limit, not an accident.</p><p>The asymmetry is the interesting bit: <strong>outputs cluster at <code>10k+1</code> (batching pays
+out and keeps change), inputs cluster at <code>10k</code> (consolidation has nothing to keep
+back).</strong> Two different automated behaviours, visible purely from degrees.</p><hr><h2 id=5-the-temporal-segmentation-hidden-in-the-node-ids>5. The <strong>temporal segmentation</strong> hidden in the node IDs</h2><p><strong>What I did.</strong> In-degree-0 nodes = coinbase outputs. Since a block&rsquo;s coinbase is
+its <em>first</em> transaction, those nodes form a <strong>contiguous run at the start of each
+block&rsquo;s ID range</strong>. I painted the covered nodes into a bitmap and scanned for
+maximal runs of uncovered nodes.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>maximal runs of in-degree-0 nodes = 392,047
+</span></span><span class=line><span class=cl>total in-degree-0 nodes           = 2,032,814
+</span></span><span class=line><span class=cl>run-length histogram: len 1 : 333,902   len 2 : 35,233   len 3 : 3,861
+</span></span><span class=line><span class=cl>                      len&gt;=64: 8,604  (these hold ~1.38 M of the coinbase outputs)
+</span></span><span class=line><span class=cl>first runs: (0,171) (173,11) (186,1) (189,1) (192,4) (197,34) (232,27) (261,248) ...
+</span></span><span class=line><span class=cl>last runs : (668219989,2) (668224272,2) ... (668257853,2)
+</span></span></code></pre></div><p><strong>Pattern — the runs are block boundaries, and they check out against history:</strong></p><ul><li>the very first run is <code>(start=0, len=171)</code>: nodes <code>0..170</code> are the coinbase
+outputs of <strong>blocks 0…170</strong>, one each, all unspent except node 9 — exactly the
+real chain, where block 170 is the first block containing a non-coinbase
+transaction. The second run <code>(173, 11)</code> = blocks 171…181 all empty, and the
+next transaction outputs are <code>184,185</code> — matching the real spend of node <code>172</code>.</li><li><strong>the last runs all have length exactly 2</strong> — the modern coinbase shape:
+<em>block reward output + segwit witness-commitment <code>OP_RETURN</code></em>.</li><li><strong>8,604 runs of length ≥ 64</strong>, holding ~1.38 M coinbase outputs (~160 outputs
+each on average): these are <strong>P2Pool blocks</strong>, whose coinbase pays every share
+holder directly. They are the only reason the coinbase-output count (2.03 M) is
+5x the run count.</li></ul><p>So node ID ordering is <code>(block height, tx index in block, output index)</code>, and
+runs of in-degree-0 nodes give a free, exact <strong>time axis</strong> — no external metadata
+needed. (Runs merge across <em>empty</em> blocks, so 392,047 is a lower bound on block
+height; combined with 244.9 M non-coinbase transactions and a 53.1 M UTXO set,
+the snapshot sits at roughly block ~475 k, i.e. <strong>mid-2017</strong>.)</p><h3 id=51-the-ledgers-growth-curve-read-off-the-graph-alone>5.1 The ledger&rsquo;s growth curve, read off the graph alone</h3><p>Bucketing the ID axis into 400 equal slices (each 1.67 M outputs):</p><table><thead><tr><th>node range</th><th>outs/tx</th><th>ins/tx</th><th>% of tx with O=2</th><th>unspent %</th><th>reading</th></tr></thead><tbody><tr><td>0 – 17 M</td><td>2.09</td><td>1.75</td><td>74.2</td><td>9.7</td><td>2009–2011, tiny blocks, many empty</td></tr><tr><td>17 M – 50 M</td><td>~2.5</td><td>~2.2</td><td><strong>90–92</strong></td><td>7.2</td><td>2011–2012, maximally &ldquo;canonical&rdquo; era</td></tr><tr><td>83 M – 150 M</td><td>~3.1</td><td>~2.9</td><td>76–81</td><td>~5</td><td>2013–2014, richer transactions</td></tr><tr><td>210 M – 250 M</td><td><strong>3–13</strong></td><td>2.0–4.8</td><td><strong>36–80</strong></td><td>up to <strong>56</strong></td><td>the anomaly zone, §6</td></tr><tr><td>300 M – 668 M</td><td>~2.5</td><td>~2.4</td><td>77–82</td><td>7.5 → 14</td><td>2016–2017, steady state</td></tr></tbody></table><p>Two things stand out: (a) the <code>|O| = 2</code> share peaks at <strong>92 %</strong> around node 17–33 M
+and never returns there — the ledger was at its most &ldquo;one payment + change&rdquo;
+uniform in 2011–2012; (b) the unspent fraction rises monotonically toward the end
+of the ID axis (7 % → 14 %) exactly as it must, since recent outputs have had
+less time to be spent. Any deviation from that monotone ramp is a red flag — and
+there is a huge one.</p><hr><h2 id=6-anomaly--two-distinct-spam--batching-campaigns-visible-as-degree-spikes-localised-in-time>6. ANOMALY — two distinct <strong>spam / batching campaigns</strong>, visible as degree spikes localised in time</h2><blockquote><p><strong>[SUPERSEDED IN PART III — see §23.]</strong> The measurements below are all correct, but the
+<em>reading</em> of them is not. There are <strong>two disjoint flood campaigns</strong> in this window, not one
+flood followed by its clean-up. The sweep wave of §6 consumes <code>|O|=101</code> dust <strong>below chance
+(0.58x baseline)</strong>; what it actually eats is a different campaign&rsquo;s output.</p></blockquote><p><strong>What I did.</strong> Zoomed the ID axis to nodes 210 M – 250 M in 1 M-node buckets and
+tracked, per bucket, the fraction of transactions with <code>|O| = 21 / 51 / 101</code> and
+the fraction of outputs that are <strong>never spent</strong>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>bkt  first_node    txs  outs/tx ins/tx  %|O|=2 %|O|=51 %|O|=101 %|O|&gt;=20 unspent%
+</span></span><span class=line><span class=cl>  7   217000000  129487    7.72   2.21   42.79   0.002    3.145   11.247   56.05   &lt;-- A
+</span></span><span class=line><span class=cl>  8   218000000  157278    6.36   2.11   42.25   0.004    2.057    9.161   42.15   &lt;-- A
+</span></span><span class=line><span class=cl>  9   219000000  190397    5.25   2.03   36.43   0.003    2.033    5.120   45.35   &lt;-- A
+</span></span><span class=line><span class=cl> 10   220000000  275769    3.62   4.76   72.09   0.019    0.257    3.366   10.12   &lt;-- sweep
+</span></span><span class=line><span class=cl> 11   221000000  359544    2.78   4.56   70.55   0.012    0.022    1.545    4.92   &lt;-- sweep
+</span></span><span class=line><span class=cl> 16   226000000   74481   13.42   3.36   61.17  18.709    0.003   23.311    2.06   &lt;-- B
+</span></span><span class=line><span class=cl> 19   229000000   93621   10.68   2.55   67.61  14.322    0.003   17.860    2.01   &lt;-- B
+</span></span><span class=line><span class=cl> 21   231000000   81441   12.27   3.10   64.69  15.695    0.006   19.782    3.04   &lt;-- B
+</span></span><span class=line><span class=cl> 23   233000000   77014   12.98   2.82   62.91  18.141    0.004   22.241    2.11   &lt;-- B
+</span></span><span class=line><span class=cl> 26   236000000   94736   10.55   2.85   66.78  14.100    0.004   17.562    2.24   &lt;-- B
+</span></span><span class=line><span class=cl>(baseline elsewhere:  outs/tx ~2.8, %|O|=51 ~0.005, %|O|=101 ~0.02, unspent ~5)
+</span></span></code></pre></div><h3 id=campaign-a--a-dust-flood-nodes--217-m--220-m>Campaign A — a <strong>dust flood</strong> (nodes ≈ 217 M – 220 M)</h3><ul><li><code>|O| = 101</code> transactions jump from a 0.02 % baseline to <strong>3.1 %</strong> — a <strong>~150x</strong>
+enrichment, concentrated in a 3 M-node window.</li><li>Mean out-degree per tx explodes to <strong>7.7</strong> while mean in-degree <em>drops</em> to
+<strong>2.2</strong> — pure fan-out, no consolidation.</li><li>The decisive tell: <strong>56 %, 42 %, 45 % of the outputs created in that window are
+still unspent</strong> — against a 5 % baseline for that era. Nobody ever picked them
+up.</li></ul><p>That is the fingerprint of a <strong>dust-spam / stress-test attack</strong>: many
+identically-shaped 101-output transactions spraying economically-unspendable
+amounts into the UTXO set. It is <em>the</em> single largest deviation from the
+background in the entire 668 M-node ID axis.</p><h3 id=the-sweep-that-follows-nodes--220-m--222-m>The sweep that follows (nodes ≈ 220 M – 222 M)</h3><p>Immediately after, <code>ins/tx</code> spikes to <strong>4.76 / 4.56</strong> (baseline ≈ 2.7) while
+<code>outs/tx</code> collapses to 2.8 and the unspent fraction returns to normal. This is
+the <strong>clean-up wave</strong>: wallets and miners consolidating the surviving dust back
+into normal outputs. Flood → sweep is legible as a two-phase signature in the
+degree time-series, with no external data at all.</p><h3 id=campaign-b--a-sustained-50-way-batch-payout-nodes--226-m--237-m>Campaign B — a <strong>sustained 50-way batch payout</strong> (nodes ≈ 226 M – 237 M)</h3><ul><li><code>|O| = 51</code> transactions go from a <strong>0.005 %</strong> baseline to a sustained
+<strong>10 – 19 %</strong> of <em>all transactions</em> over an 11 M-node window — a <strong>~3000x</strong>
+enrichment, the sharpest concentration found anywhere in the graph.</li><li>But here the unspent fraction stays at the floor (<strong>~2 %</strong>) and <code>ins/tx</code> is
+normal (2.8–3.4).</li></ul><p>So this is <em>not</em> spam: it is a single high-volume service emitting
+<strong>50 payouts + 1 change</strong> per transaction, month after month — an exchange,
+faucet or gambling-payout batcher. Same <code>10k+1</code> lattice as §4.2, but here one
+operator is large enough to dominate a whole era of the ledger.</p><p>A third, milder episode sits at nodes 246 M – 248 M (<code>%|O| >= 20</code> = 16 % / 24 %,
+unspent 0.4–0.8 %) — another batcher, different output size.</p><hr><h2 id=7-the-graph-is-astonishingly-deep--a-217-million-hop-spine-across-the-whole-history>7. The graph is <strong>astonishingly deep</strong> — a 2.17-million-hop spine across the whole history</h2><p><strong>What I did.</strong> Because the graph is a DAG in ID order (§2) and every
+out-neighbourhood is an interval (§3), longest-path DP needs <strong>no visit at all</strong> —
+just two linear sweeps over the ID axis:</p><ul><li>forward sweep → <code>depth[v]</code> = longest chain of transactions from <em>any coinbase</em>
+down to <code>v</code>;</li><li>backward sweep → <code>height[u]</code> = longest chain from <code>u</code> forward to an unspent
+output.</li></ul><p>Each block&rsquo;s max is memoised at its start, so the total work is <code>O(n)</code>, ~40 s.</p><p><strong>Sanity check against the real chain</strong> (node 9 = block-9 coinbase, 171/172 = the
+first transaction&rsquo;s outputs, …):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>depth[9]=0  depth[171]=1  depth[172]=1  depth[184]=2  depth[185]=2  depth[187]=3  depth[190]=4
+</span></span></code></pre></div><p>— exactly the hand-computed values. The DP is correct.</p><h3 id=71-result>7.1 Result</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>MAX DEPTH  = 2,168,061 transaction hops
+</span></span><span class=line><span class=cl>MAX HEIGHT = 2,168,061  , attained starting at node 84,564
+</span></span></code></pre></div><p>Both extremes coincide: there is <strong>one longest path of 2,168,062 nodes</strong>, running
+from node <code>84,564</code> (an output from very early in the chain) to node
+<code>668,259,783</code> (essentially the last output in the snapshot). <strong>A single
+dependency chain spans the entire history of the ledger.</strong></p><p>Depth percentiles over all 668 M nodes:</p><table><thead><tr><th>percentile</th><th>depth</th></tr></thead><tbody><tr><td>p1</td><td>1</td></tr><tr><td><strong>p5</strong></td><td><strong>758</strong></td></tr><tr><td><strong>p10</strong></td><td><strong>367,419</strong></td></tr><tr><td>p25</td><td>835,234</td></tr><tr><td><strong>p50</strong></td><td><strong>1,477,293</strong></td></tr><tr><td>p75</td><td>1,885,606</td></tr><tr><td>p90</td><td>2,058,158</td></tr><tr><td>p99</td><td>2,159,369</td></tr><tr><td>p100</td><td>2,168,061</td></tr></tbody></table><p><strong>Pattern — this DAG is &ldquo;long and thin&rdquo;, not &ldquo;wide and shallow&rdquo;.</strong> The <em>median</em>
+output sits <strong>1.48 million transaction-hops</strong> from freshly minted coins — 68 % of
+the maximum possible depth — even though there are only 244.9 M transactions in
+total. Nearly every coin in the ledger is a descendant of a chain that has passed
+through more than a million transactions.</p><p>Note the <strong>hard structural break between p5 and p10</strong>: depth jumps from <strong>758 to
+367,419</strong>. There is no smooth middle. Coins are either &ldquo;still near the mint&rdquo;
+(~5–8 % of outputs: recent coinbase, freshly-minted, early-history) or they are
+deep inside the circulating economy — nothing in between. The same break shows in
+the UTXO set (p5 = 16, p10 = 289,647).</p><h3 id=72-the-spine-is-locally-dense--chained-transactions-inside-single-blocks>7.2 The spine is <em>locally</em> dense — chained transactions inside single blocks</h3><p>Walking the longest path node by node and measuring how far each hop moves in
+node-ID space:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>spine hop gap: min 1   p25 2   median 3   p75 23   p95 1,224   max 2,313,071
+</span></span></code></pre></div><p><strong>The median hop advances only 3 node IDs.</strong> Since IDs are <code>(block, tx index, vout)</code>, that means the next transaction in the chain is usually <em>the very next
+transaction in the very same block</em>, spending the change output the previous one
+just created. Half of the world-record dependency chain is built out of
+<strong>back-to-back same-block transaction chains</strong> (unconfirmed-chain spending / CPFP
+/ high-frequency wallets), stitched together by occasional long jumps (max hop
+2.3 M IDs — a coin that sat idle for a long time).</p><p>Sampled every 5 % of the way, the spine&rsquo;s node IDs climb monotonically through
+the whole ID range (84 k → 11.8 M → 60.9 M → 134.7 M → 218.0 M → 322.2 M →
+469.6 M → 668.3 M), confirming it really does traverse the full history rather
+than looping inside one era.</p><hr><h2 id=8-peel-chains--558--of-transactions-are-1-in2-out-and-they-chain-up-to-25343-deep>8. PEEL CHAINS — 55.8 % of transactions are 1-in/2-out, and they chain up to 25,343 deep</h2><p><strong>What I did.</strong> A <em>peel step</em> is a transaction with <strong>exactly one input and
+exactly two outputs</strong> (<code>|I(T)| = 1, |O(T)| = 2</code>) — the canonical &ldquo;peel a payment
+off a big coin, keep the change&rdquo; shape. In the biclique language of §4 that is a
+block with <code>multiplicity = 1</code> and <code>length = 2</code>. I ran a reverse-order DP
+<code>pl[u] = 1 + max(pl[first output], pl[second output])</code> restricted to peel steps,
+giving the longest run of <em>consecutive</em> peel transactions reachable from every node.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>1-in / 2-out transactions = 136,671,203   (55.80 % of all 244,930,113 transactions)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>LONGEST PEEL CHAIN = 25,343 consecutive 1-in-2-out hops, starting at node 473,099,131
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>chains of length &gt;=      2 :  91,537,787
+</span></span><span class=line><span class=cl>chains of length &gt;=     10 :  38,054,599
+</span></span><span class=line><span class=cl>chains of length &gt;=    100 :  10,564,647
+</span></span><span class=line><span class=cl>chains of length &gt;=  1,000 :   1,555,210
+</span></span><span class=line><span class=cl>chains of length &gt;=  5,000 :     156,228
+</span></span><span class=line><span class=cl>chains of length &gt;= 10,000 :      32,268
+</span></span><span class=line><span class=cl>chains of length &gt;= 20,000 :       5,344
+</span></span></code></pre></div><p><strong>Pattern.</strong> More than half of the entire Bitcoin ledger is the <em>same</em> elementary
+motif, and those motifs <strong>concatenate</strong>: over 10.5 M nodes start a peel chain of
+at least 100 steps, and <strong>32,268 nodes start a peel chain of at least 10,000
+steps</strong>. The record is a single unbroken run of <strong>25,343 peel transactions</strong>
+beginning at node 473,099,131.</p><p>The chain-length distribution decays close to a power law — the counts at
+<code>L >= 10 / 100 / 1000 / 10000</code> are <code>38.1 M / 10.6 M / 1.56 M / 32.3 k</code>, i.e. each
+10x in length costs roughly 3–5x in count up to L≈1000 and then steepens. That is
+the classic signature of <strong>automated peeling wallets</strong> (exchanges, mixers,
+payment processors paying out one customer at a time from a rolling change
+output) rather than of independent human transactions, which would give an
+exponential tail.</p><p>This motif plus the spine of §7 are the same phenomenon seen two ways: a
+long-running service whose change output is respent immediately, over and over.</p><hr><h2 id=9-the-transpose-pg-t--the-asymmetry-is-the-whole-story>9. The transpose <code>pg-t</code> — the <strong>asymmetry</strong> is the whole story</h2><p><strong>What I did.</strong> Ran the same full scan on <code>pg-t</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>forward(v&gt;u)=0   backward(v&lt;u)=2,162,523,341   selfloops=0        &lt;- mirror of §2, as it must be
+</span></span><span class=line><span class=cl>nodes with in-degree &gt; 0 = 666,229,139         &lt;- exactly the 666,229,139 covered nodes of §4
+</span></span><span class=line><span class=cl>in-degree 0              =   2,032,814         &lt;- exactly the coinbase outputs
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>in-degree histogram:  1 -&gt; 432,184,402 (64.67 %)   2 -&gt; 101,856,527 (15.24 %)   3 -&gt; 34,370,113
+</span></span><span class=line><span class=cl>consecutive inner gaps (=1) = 89,540,795 / 1,496,294,202  =  5.98 %
+</span></span><span class=line><span class=cl>#runs per predecessor list: 1 -&gt; 433,902,015   2 -&gt; 102,074,212   3 -&gt; 34,207,536  ...  &gt;=255 -&gt; 76,668
+</span></span></code></pre></div><p><strong>Pattern — the graph is maximally structured forward and unstructured backward.</strong>
+Out-neighbourhoods are <strong>100 %</strong> single intervals (§3); in-neighbourhoods are
+single intervals only when the in-degree is 1. Restricting to transactions with
+<code>|I| >= 2</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>transactions with |I| &gt;= 2                            = 78,630,527
+</span></span><span class=line><span class=cl>  ... whose input set is ONE contiguous ID interval    =    646,996   (0.823 %)
+</span></span></code></pre></div><p>So <strong>inputs are essentially arbitrary</strong> — a transaction reaches back to a
+scattered handful of older outputs, which is why <code>pg-t</code> needs <code>RESIDUALS_ZETA</code>
+while <code>pg</code> gets away with pure intervals. The information content of the whole
+ledger lives in <em>which</em> old outputs each transaction picks, not in its shape.</p><h3 id=91-but-the-08--of-contiguous-input-sets-are-not-random>9.1 …but the 0.8 % of contiguous input sets are not random</h3><p>Sizes of the fully-contiguous (&ldquo;sweep a whole earlier batch&rdquo;) input sets:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|I| =  2 : 569,986      |I| = 11 : 1,513      |I| = 20 :  288
+</span></span><span class=line><span class=cl>|I| =  3 :  41,326      |I| = 14 : 2,193      |I| = 21 :  159
+</span></span><span class=line><span class=cl>|I| =  4 :  10,983      |I| = 15 : 5,002 &lt;--  |I| = 25 : 2,082 &lt;--
+</span></span><span class=line><span class=cl>|I| =  5 :   5,412      |I| = 16 :    76      |I| = 50 :   961 &lt;--
+</span></span><span class=line><span class=cl>|I| = 12 :     290      |I| = 17 :   126      (neighbours ~10-30)
+</span></span></code></pre></div><p><code>|I| = 15</code>, <code>25</code>, <code>50</code> stand <strong>20–70x above their neighbours</strong>. These are
+transactions that swallow <em>an entire earlier batch payout in one bite</em> — the
+mirror image of the <code>10k+1</code> fan-outs of §4.2. Fan out 15/25/50 ways, then later
+reel all 15/25/50 back in. Same operator on both sides.</p><hr><h2 id=10-the-largest-bicliques-and-a-hard-coded-20000-input-limit>10. The largest bicliques, and a <strong>hard-coded 20,000-input limit</strong></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>--- transactions with the most inputs ---
+</span></span><span class=line><span class=cl>block start 230,910,487  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 231,014,489  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 231,081,170  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,994,044  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,926,434  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,873,887  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,843,654  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,844,251  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,725,307  |I| = 20000  |O| = 1
+</span></span><span class=line><span class=cl>block start 230,703,549  |I| =  9997  |O| = 1
+</span></span><span class=line><span class=cl>block start 217,299,929  |I| =  7350  |O| = 1
+</span></span><span class=line><span class=cl>block start 214,921,415  |I| =  5569  |O| = 1   (five distinct txs with exactly 5569)
+</span></span><span class=line><span class=cl>block start 215,900,164  |I| =  5000  |O| = 1   (five distinct txs with exactly 5000)
+</span></span></code></pre></div><p><strong>Pattern.</strong> <strong>Nine</strong> separate transactions, all inside a 380 k-node window
+(230.70 M – 231.09 M), each spending <strong>exactly 20,000 inputs into 1 output</strong>. A
+number that round, repeated nine times back-to-back, is a <strong>software limit</strong>, not
+a coincidence — one operator ran a dust-vacuum in a loop with a 20 000-input
+batch size. The same signature repeats at 5,000 (x5) and 5,569 (x5).</p><p>Note where they sit: <strong>right at the end of Campaign B</strong> (§6, nodes 226 M–237 M).
+The fan-out era is followed by the clean-up era, at 20,000 inputs a go.</p><p>The largest bicliques by arc count <code>|I| x |O|</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>start  75,551,394   |I|=235  |O|=1653   388,455 arcs
+</span></span><span class=line><span class=cl>start  90,737,762   |I|=300  |O|=1256   376,800 arcs
+</span></span><span class=line><span class=cl>start  90,739,018   |I|=300  |O|=1256   376,800 arcs   &lt;-- 90,739,018 - 90,737,762 = 1256 exactly
+</span></span><span class=line><span class=cl>start 156,167,817   |I|=543  |O|= 500   271,500 arcs
+</span></span><span class=line><span class=cl>start 232,101,973   |I|=497  |O|= 500
+</span></span><span class=line><span class=cl>start 224,707,371   |I|=245  |O|=1001
+</span></span><span class=line><span class=cl>start  77,269,405   |I|=237  |O|=1001
+</span></span><span class=line><span class=cl>start 204,255,026   |I|=414  |O|= 501
+</span></span></code></pre></div><p>Two things: (a) the round <code>|O| = 500 / 501 / 1000 / 1001</code> values are the <code>10^k</code>
+and <code>10^k + 1</code> lattice of §4.2 scaled up; (b) the pair at <code>90,737,762</code> and
+<code>90,739,018</code> are <strong>two identical <code>K(300, 1256)</code> bicliques whose output blocks are
+exactly adjacent</strong> — the same program emitted the same transaction twice in a row
+in the same block.</p><p>That is a general motif: <strong>1,725,413 pairs of adjacent transactions share an
+identical <code>(|I|, |O|)</code> shape with <code>|O| >= 4</code></strong> — machine-emitted, back-to-back.</p><hr><h2 id=11-only-15378-distinct-transaction-shapes-and-3-of-them-are-78--of-the-ledger>11. Only <strong>15,378</strong> distinct transaction shapes, and 3 of them are 78 % of the ledger</h2><p><strong>What I did.</strong> Counted transactions by their shape <code>(|I|, |O|)</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>(|I|=1, |O|=2) : 136,671,203   55.800 %   cumulative 55.800 %   &lt;- peel / pay+change
+</span></span><span class=line><span class=cl>(|I|=2, |O|=2) :  33,065,895   13.500 %   cumulative 69.300 %
+</span></span><span class=line><span class=cl>(|I|=1, |O|=1) :  20,598,005    8.410 %   cumulative 77.710 %   &lt;- forward / sweep
+</span></span><span class=line><span class=cl>(|I|=3, |O|=2) :   9,676,604    3.951 %   cumulative 81.661 %
+</span></span><span class=line><span class=cl>(|I|=4, |O|=2) :   5,720,998    2.336 %   cumulative 83.996 %
+</span></span><span class=line><span class=cl>(|I|=2, |O|=3) :   4,900,580    2.001 %   cumulative 85.997 %
+</span></span><span class=line><span class=cl>(|I|=1, |O|=3) :   3,624,360    1.480 %
+</span></span><span class=line><span class=cl>(|I|=2, |O|=1) :   3,112,887    1.271 %
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>(|I|=1, |O|=11):     386,187    0.158 %   &lt;- the batch-of-10 + change, still in the top 25
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>top 25 shapes  -&gt; 94.868 %
+</span></span><span class=line><span class=cl>top 50 shapes  -&gt; 96.686 %
+</span></span><span class=line><span class=cl>top 100 shapes -&gt; 97.927 %
+</span></span><span class=line><span class=cl>distinct shapes present -&gt; 15,378
+</span></span></code></pre></div><p><strong>Pattern.</strong> The generative &ldquo;vocabulary&rdquo; of the whole 2.16-billion-arc graph is
+tiny. <strong>Three shapes account for 77.7 %</strong> of all 244.9 M bicliques, 25 shapes for
+94.9 %. Note also the strong <code>|O| = 2</code> column: for <em>every</em> <code>|I|</code> from 1 to 12,
+the modal output count is 2 — the change-output convention is invariant to how
+many inputs you gather.</p><p>The one shape that breaks the smooth decay inside the top 25 is
+<strong><code>(1, 11)</code> = batch-of-10 + change</strong>, sitting above <code>(1, 10)</code> (153,906) and
+<code>(1, 12)</code> (98,015) by 2.5–4x. There is also a striking local bump at
+<strong><code>(11, 11)</code> = 9,843</strong> against <code>(11, 10) = 2,875</code> and <code>(11, 12) = 1,970</code> — an
+11-in / 11-out shape emitted by some specific service.</p><hr><h2 id=12-connectivity--one-giant-component-and-256331-coins-that-never-moved>12. Connectivity — one giant component, and 256,331 coins that never moved</h2><p><strong>What I did.</strong> Union–find over the undirected version, exploiting §4: for each
+block I union its output interval together and union each of its inputs into it —
+so ~1.28 G union operations with no graph access at all in the sequential phase.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>weakly connected components = 258,087
+</span></span><span class=line><span class=cl>largest component           = 667,989,823 nodes = 99.9593 %
+</span></span><span class=line><span class=cl>second largest              =         391 nodes
+</span></span><span class=line><span class=cl>nodes outside the giant component = 272,130 (0.0407 %)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>component-size histogram (log2):
+</span></span><span class=line><span class=cl>  size 1        : 256,331 components
+</span></span><span class=line><span class=cl>  size [2,4)    :   1,029
+</span></span><span class=line><span class=cl>  size [4,8)    :     393
+</span></span><span class=line><span class=cl>  size [8,16)   :     151
+</span></span><span class=line><span class=cl>  ...
+</span></span><span class=line><span class=cl>  size [256,512):       5
+</span></span><span class=line><span class=cl>  size [2^29,2^30):     1     &lt;- the giant
+</span></span></code></pre></div><p><strong>Pattern.</strong> The ledger is <strong>one economy</strong>. 99.96 % of all outputs are weakly
+connected, and the gap between the giant component (6.68 x 10^8) and the runner-up
+(391) is <strong>six orders of magnitude</strong> — there is no second cluster, no meaningful
+&ldquo;separate economy&rdquo;, not even a large isolated exchange sub-ledger.</p><p>Everything outside the giant component is trivia, and almost all of it is one
+thing:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>isolated nodes (in-degree 0 AND out-degree 0) = 256,331
+</span></span></code></pre></div><p>Those are <strong>coinbase outputs that were mined and never spent</strong> — 256,331 block
+rewards that have never moved, 12.6 % of all 2,032,814 coinbase outputs. They are
+graph-theoretically invisible: no ancestors, no descendants, no component. (This
+is the population that includes the early never-moved mining rewards.)</p><hr><h2 id=13-the-dag-is-217-million-layers-deep-and---a-filament-not-a-blob>13. The DAG is <strong>2.17 million layers deep and ~150 nodes wide</strong> — a filament, not a blob</h2><p><strong>What I did.</strong> Levelled the DAG by the <code>depth</code> of §7 and measured the width
+(number of nodes) of each level.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>levels = 2,168,062   (every single one occupied — no gaps)
+</span></span><span class=line><span class=cl>width:  min 1   p25 62   median 149   p75 328   p95 1,074   p99 2,322   mean 308.2
+</span></span><span class=line><span class=cl>widest level: depth 1, with 4,823,986 nodes  (everything spent straight off a coinbase)
+</span></span></code></pre></div><p><strong>Pattern.</strong> For a graph with 668 million nodes this is an absurd aspect ratio:
+<strong>2.17 M levels, median width 149</strong>. Practically the entire ledger is a bundle of
+long filaments running in parallel, not a broad shallow fan. And <em>every</em> one of
+the 2,168,062 levels is occupied — the depth function is surjective, there is no
+gap anywhere along the chain.</p><p>The width profile has a pronounced <strong>waist</strong>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>depth       0 ..   54,201 : mean width 685.2   (37.1 M nodes)
+</span></span><span class=line><span class=cl>depth  54,201 ..  108,403 : mean width  77.6
+</span></span><span class=line><span class=cl>depth 108,403 ..  162,604 : mean width  25.2   &lt;-- narrowest
+</span></span><span class=line><span class=cl>depth 162,604 ..  216,806 : mean width  33.1   &lt;--
+</span></span><span class=line><span class=cl>depth 216,806 ..  271,007 : mean width  97.6
+</span></span><span class=line><span class=cl>depth 325,209 ..  379,410 : mean width 269.7
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>depth 1,897,054..1,951,255: mean width 675.2
+</span></span><span class=line><span class=cl>depth 2,005,457..2,113,860: mean width ~640
+</span></span></code></pre></div><p>Cross-referencing with the spine samples of §7.2: depths 108 k–217 k correspond to
+node IDs ~11.8 M–15.3 M. So in a <strong>3.5 M-node stretch of the ledger the longest
+chain advanced by 108,000 hops</strong> — chains were being extended far faster than new
+outputs were being created. That early hyper-chaining episode is the bottleneck
+that every deep coin in the graph must pass through: the DAG has a genuine
+<strong>hourglass waist ~25 nodes wide</strong> at depth ~150 k. Everything below it is one
+narrow strand of history.</p><hr><h2 id=14-the-10k1-combs-are-three-different-operators-not-one-phenomenon>14. The <code>10k+1</code> combs are <strong>three different operators</strong>, not one phenomenon</h2><p><strong>What I did.</strong> For the three anomalous output counts (<code>|O| = 11, 21, 51</code>) I
+tabulated the <em>input</em>-count distribution and the position along the ID axis.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl> |I|    |O|=11      |O|=21      |O|=51
+</span></span><span class=line><span class=cl>   1    386,187      48,061     197,816     &lt;- 11 and 51 are funded by ONE input
+</span></span><span class=line><span class=cl>   2     48,210       8,634       3,257
+</span></span><span class=line><span class=cl>   5      7,787       2,462         764
+</span></span><span class=line><span class=cl>  10      3,499      10,214         345
+</span></span><span class=line><span class=cl>  15      1,356      39,158         115
+</span></span><span class=line><span class=cl>  17        877      55,268          87
+</span></span><span class=line><span class=cl>  18        815      58,248 &lt;-mode    73
+</span></span><span class=line><span class=cl>  19        729      57,424          68
+</span></span><span class=line><span class=cl>  20         -       53,178          -
+</span></span><span class=line><span class=cl>  23         -       42,501          -
+</span></span><span class=line><span class=cl>  25         -       12,479          -
+</span></span></code></pre></div><p><strong>Pattern — same output lattice, opposite input behaviour:</strong></p><ul><li><strong><code>|O| = 11</code> and <code>|O| = 51</code></strong> are overwhelmingly <strong><code>|I| = 1</code></strong> (58 % and 30 %
+of their class, decaying monotonically). These are <strong>peel-style batchers</strong>: one
+big rolling change output funds 10 (or 50) payouts plus the next change. They
+are the large-scale version of the <code>(1,2)</code> peel motif of §8.</li><li><strong><code>|O| = 21</code> is completely different</strong> — its input count has a <strong>broad mode at
+<code>|I| = 18</code></strong> (58,248) with a hump spanning <code>|I| = 13..25</code>, i.e. <strong><code>|I| ≈ |O|</code></strong>.
+Fixed 21 outputs, variable ~20 inputs, gathered from scattered older coins:</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>example: block start 16,880,894   |O| = 21   |I| = 20
+</span></span><span class=line><span class=cl>  inputs: 14144381, 16325571, 16569506, 16696995, 16728530, 16728840, 16796132,
+</span></span><span class=line><span class=cl>          16813861, 16826054, 16826124, 16853034, 16859415, 16860099, 16860103,
+</span></span><span class=line><span class=cl>          16860105, 16860107, 16860187, 16860215, 16860227, 16860257
+</span></span><span class=line><span class=cl>  out-degrees of the 21 outputs: [2,2,2,1,29,2,2,1,2,2,0,2,2,2,1,1,2,2,2,2,2]
+</span></span></code></pre></div><p>Note the inputs: a scattered tail plus a <strong>tight cluster of 8 consecutive-ish
+IDs around 16,860,1xx</strong> — coins gathered from one recent block. The 21 outputs
+then go on to be spent completely normally (mostly out-degree 2). That is
+either a <strong>20-payee payout batcher that funds itself from ~20 UTXOs each run</strong>,
+or a <strong>CoinJoin/mixing-service</strong> shape (<code>|I| ~ |O|</code>, many participants). The
+<em>rigidly fixed</em> <code>|O| = 21</code> against a <em>broad</em> <code>|I|</code> favours the batcher reading —
+a mixer would vary both.</p><p><strong>Temporally they are also distinct.</strong> The <code>|O| = 21</code> class is sharply confined:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>slices  0.. 8 (nodes 0..150 M)      :  ~1-8 k each
+</span></span><span class=line><span class=cl>slices  9..21 (nodes 150 M..367 M)  :  27 k - 68 k each   &lt;-- the operator&#39;s active life
+</span></span><span class=line><span class=cl>slices 22..39 (nodes 367 M..668 M)  :  ~2-4 k each        &lt;-- switched off
+</span></span></code></pre></div><p>It switches on around node 150 M, runs for ~217 M outputs, and switches off
+abruptly at node ~367 M — an operator with a beginning and an end, recoverable
+from nothing but out-degree counts.</p><hr><h2 id=15-summary--the-complete-structural-description>15. Summary — the complete structural description</h2><p>Putting §2–§14 together, the graph is <strong>fully characterised</strong> by:</p><ol><li><strong>A DAG in topological ID order.</strong> 2,162,523,341 / 2,162,523,341 arcs point
+forward. No cycles, no self-loops, no SCCs. (§2)</li><li><strong>Every out-neighbourhood is one contiguous interval.</strong> 615,183,429 non-sink
+nodes, 615,183,429 single runs, zero inner gaps > 1. (§3)</li><li><strong>Therefore the arc set is exactly a disjoint union of 244,930,113 complete
+bipartite graphs</strong> <code>K(|I|,|O|)</code>, whose O-sides <em>partition</em> the vertex set
+(666,229,139 nodes covered exactly once, 2,032,814 uncovered). Verified by
+<code>Σ |I|·|O| = m</code> to the arc. (§4)</li><li><strong>The uncovered nodes are the mint events</strong> and their runs recover the block
+structure — a free time axis. (§5)</li><li>Everything else — degree distributions, motif counts, communities — is a
+consequence of (a) the <code>(|I|,|O|)</code> shape vocabulary (15,378 shapes, 3 of which
+are 78 % of the ledger, §11), and (b) which older nodes each block chooses as
+parents (essentially unstructured, §9).</li></ol><p><strong>The findings that are <em>not</em> implied by the construction</strong> — i.e. the real
+discoveries:</p><table><thead><tr><th>#</th><th>pattern</th><th>evidence</th></tr></thead><tbody><tr><td>§4.2</td><td>output counts spike on the <strong><code>10k+1</code> lattice</strong> (11, 21, 41, 51, 61, 101)</td><td>up to 36x the neighbouring bin</td></tr><tr><td>§4.3</td><td>input counts spike on the <strong><code>10k</code> lattice</strong> (20, 25, 30, 40, 50, 100, 200)</td><td>consolidation software</td></tr><tr><td>§6</td><td>a <strong>dust flood</strong> at nodes 217–220 M</td><td><code>%O=101</code> 150x baseline; <strong>56 % of outputs never spent</strong></td></tr><tr><td>§6</td><td>its <strong>sweep-up wave</strong> at 220–222 M</td><td>ins/tx 4.76 vs 2.7 baseline</td></tr><tr><td>§6</td><td>an <strong>11 M-node batch-payout era</strong> at 226–237 M</td><td><code>%O=51</code> = 10–19 % of <em>all</em> tx, ~3000x baseline</td></tr><tr><td>§7</td><td>a <strong>2,168,062-node dependency spine</strong> across the whole history</td><td>node 84,564 → 668,259,783</td></tr><tr><td>§7</td><td><strong>median output is 1.48 M hops deep</strong>; hard break between p5 (758) and p10 (367,419)</td><td></td></tr><tr><td>§7.2</td><td>the spine&rsquo;s <strong>median hop is 3 node IDs</strong> — same-block chained spending</td><td></td></tr><tr><td>§8</td><td><strong>136.7 M peel transactions (55.8 %)</strong>, longest unbroken <strong>peel chain 25,343</strong></td><td>32,268 chains ≥ 10,000</td></tr><tr><td>§9.1</td><td>contiguous &ldquo;swallow the whole batch&rdquo; inputs spike at <strong>I = 15, 25, 50</strong></td><td>20–70x neighbours</td></tr><tr><td>§10</td><td><strong>nine transactions with exactly 20,000 inputs</strong>, all in a 380 k-node window</td><td>hard software cap</td></tr><tr><td>§10</td><td><strong>1,725,413 back-to-back twin transactions</strong> with identical shape</td><td>machine-emitted</td></tr><tr><td>§12</td><td><strong>one economy</strong>: giant WCC 99.9593 %, runner-up <strong>391 nodes</strong></td><td>6 orders of magnitude gap</td></tr><tr><td>§12</td><td><strong>256,331 mined coins that never moved</strong> (isolated nodes)</td><td>12.6 % of all coinbase outputs</td></tr><tr><td>§13</td><td>DAG aspect ratio <strong>2.17 M levels x median width 149</strong>, with an <strong>hourglass waist of width ~25</strong> at depth ~150 k</td><td></td></tr><tr><td>§14</td><td>the <code>O=11/21/51</code> combs are <strong>three distinct operators</strong> with opposite input behaviour, and the <code>O=21</code> one <strong>switches off</strong> at node ~367 M</td><td></td></tr></tbody></table><h3 id=practical-consequences-for-anyone-computing-on-this-graph>Practical consequences for anyone computing on this graph</h3><ul><li><strong>Never run a generic SCC / cycle detection</strong> — §2 makes it trivially the
+identity partition.</li><li><strong>Never run a generic BFS/DFS for reachability, distances or DP.</strong> §3 means all
+of it collapses to <em>linear sweeps in ID order</em> with per-block memoisation: the
+longest-path DP over 2.16 G arcs takes <strong>40 seconds single-threaded</strong>.</li><li><strong>Store the graph as <code>(start, length)</code> pairs</strong> if you need random access in
+your own code — it is exact and needs no decoder.</li><li><strong>Don&rsquo;t run community detection expecting communities.</strong> §12: there is one
+component and nothing else. The meaningful partition is by <em>transaction shape</em>
+and <em>time</em>, not by cut.</li><li>Careful with <strong>degree-based heuristics</strong> — the degree distribution is not a
+natural process; it is a superposition of a few pieces of payout software with
+hard-coded batch sizes (§4.2, §4.3, §10, §14).</li></ul><hr><h2 id=16-method--reproduction>16. Method / reproduction</h2><p>Probe crate (standalone, path-depends on this working copy of <code>webgraph-rs</code>):
+<strong><code>/home/mnocentini/Developer/working-copies/pgprobe</code></strong> — with the raw output of
+every run alongside it (<code>scan_pg.txt</code>, <code>blocks.txt</code>, <code>depth.txt</code>, <code>spine.txt</code>, …).</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>cd /home/mnocentini/Developer/working-copies/pgprobe &amp;&amp; cargo build --release
+</span></span><span class=line><span class=cl>./target/release/pgprobe  &lt;basename&gt;   # full degree/gap/run scan of any BvGraph
+</span></span><span class=line><span class=cl>./target/release/blocks                # interval partition + biclique verification
+</span></span><span class=line><span class=cl>./target/release/segments              # coinbase runs -&gt; block segmentation
+</span></span><span class=line><span class=cl>./target/release/series                # 400-bucket temporal series
+</span></span><span class=line><span class=cl>./target/release/zoom &lt;lo&gt; &lt;hi&gt; &lt;n&gt;    # zoom the ID axis
+</span></span><span class=line><span class=cl>./target/release/depth                 # depth / height / peel-chain DP
+</span></span><span class=line><span class=cl>./target/release/spine                 # percentiles + longest-path extraction
+</span></span><span class=line><span class=cl>./target/release/tx                    # joint (|I|,|O|), top bicliques, input contiguity
+</span></span><span class=line><span class=cl>./target/release/shapes                # shape vocabulary, twins, isolated nodes
+</span></span><span class=line><span class=cl>./target/release/wcc                   # union-find connectivity
+</span></span><span class=line><span class=cl>./target/release/width                 # DAG layer widths
+</span></span><span class=line><span class=cl>./target/release/o21                   # the |O|=21 operator
+</span></span></code></pre></div><p>All measurements are <strong>full scans, no sampling</strong>. Wall-clock on 112 cores with
+the graph mmapped: 2.5 s for a full arc scan, 5 s for the biclique
+decomposition, 35–48 s for the sequential DP passes.</p><h3 id=caveats>Caveats</h3><ul><li>Node semantics (TXO) are inferred from the graph plus the first arcs of
+<code>pg.txt</code> matching the real chain (block 170&rsquo;s transaction); there is no
+txid/address metadata in this dataset, so <strong>entity-level</strong> claims (which
+exchange, which mixer) are shape-based inference, not identification.</li><li>The block count 392,047 is a <strong>lower bound</strong> on chain height (runs merge across
+empty blocks); the &ldquo;mid-2017&rdquo; dating is inferred from 244.9 M transactions +
+53.1 M UTXOs + a 2-output modern coinbase, not from timestamps.</li><li><code>|O| = 21</code> as batcher-vs-CoinJoin (§14) is the one genuinely ambiguous call
+in this document; value data would settle it, and this graph has none.</li></ul><p><em>End of log.</em></p><hr><h1 id=part-ii--deeper-dives>PART II — deeper dives</h1><h2 id=17-the-o--21-operator-resolved-it-is-a-self-recycling-mixer-not-a-payout-batcher>17. The <code>|O| = 21</code> operator, resolved: it is a <strong>self-recycling mixer</strong>, not a payout batcher</h2><p>§14 left this open. Four independent tests settle it.</p><h3 id=171-test-1--positional-structure-of-the-outputs-the-decisive-one>17.1 Test 1 — positional structure of the outputs (the decisive one)</h3><p>A <em>batcher</em> has a <strong>change output</strong>: one distinguished position that is respent
+quickly, and respent by another transaction of the same class. A <em>CoinJoin /
+mixer</em> has <strong>equal, indistinguishable outputs</strong>: no position is special.</p><p>For every transaction in each class I measured, <strong>per output position <code>j</code></strong>, the
+unspent rate, the rate of being consumed by another transaction of the same
+class, and the mean ID gap to the spend.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|O| = 11                                 |O| = 51
+</span></span><span class=line><span class=cl> pos  unspent%  -&gt;|O|=11%   mean gap      pos  unspent%  -&gt;|O|=51%   mean gap
+</span></span><span class=line><span class=cl>   0   7.571      6.640    11,928,580       0   4.683     1.516    120,922,994
+</span></span><span class=line><span class=cl>   5   6.564      6.446    11,656,291      25   4.595     1.461    120,804,790
+</span></span><span class=line><span class=cl>   9   6.593      6.717    11,669,133      49   4.647     1.488    121,022,186
+</span></span><span class=line><span class=cl>  10   5.922     15.560    10,382,314 &lt;--  50   3.176     6.858    117,663,620 &lt;--
+</span></span></code></pre></div><p>Both have a <strong>clearly distinguished last position</strong>: position 10 of an <code>|O|=11</code>
+transaction returns into the class at <strong>15.56 %</strong> against 6.4–6.7 % for the other
+ten (<strong>2.4x</strong>), and position 50 of an <code>|O|=51</code> transaction at <strong>6.86 %</strong> against
+~1.47 % (<strong>4.6x</strong>), with a shorter gap and a lower unspent rate in both cases.
+<strong>Confirmed: <code>|O| = 11</code> and <code>|O| = 51</code> are &ldquo;batch of 10/50 + change&rdquo;, and the
+change is the last output.</strong></p><p>Now <code>|O| = 21</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl> pos   unspent%   -&gt;|O|=21%    mean gap    spent within 1000 IDs%
+</span></span><span class=line><span class=cl>   0     1.211      62.175     1,052,466        47.761
+</span></span><span class=line><span class=cl>   1     1.187      62.168     1,064,990        47.743
+</span></span><span class=line><span class=cl>   ...      ...        ...          ...            ...
+</span></span><span class=line><span class=cl>  18     1.136      62.103     1,014,002        47.661
+</span></span><span class=line><span class=cl>  19     1.136      62.161     1,008,798        47.621
+</span></span><span class=line><span class=cl>  20     0.815      63.333       776,986        48.859
+</span></span></code></pre></div><p><strong>All 21 positions are statistically identical</strong> <em>(qualified in §25.1: positions 0–19 are
+identical, but position 20 is distinguishable at +23.5 σ / −25.6 σ with a 2.3 % effect size —
+against 2.4x and 4.6x for the two real batchers, so the verdict stands)</em>. Unspent rate 1.11–1.21 %,
+return rate 62.02–62.20 %, mean gap 1.01–1.06 M, immediate-spend rate
+47.5–47.8 %. Position 20 is barely distinguishable (63.3 % vs 62.1 %) — nothing
+like the 2.4x / 4.6x change signature of the other two classes. <strong>There is no
+change output. The 21 outputs are interchangeable.</strong> That is the definition of an
+equal-output join.</p><h3 id=172-test-2--the-self-affinity-spectrum-a-control-over-every-output-size>17.2 Test 2 — the self-affinity spectrum (a control over every output size)</h3><p>For every output size <code>L</code>, what fraction of an <code>|O|=L</code> transaction&rsquo;s inputs were
+created by another <code>|O|=L</code> transaction, against the baseline share of arcs that
+class holds?</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>  L  |    #tx     | inputs from |O|=L | outputs to |O|=L | baseline | in-enrich | unspent%
+</span></span><span class=line><span class=cl>  19 |     131363 |     7.988%        |     4.126%       | 0.0575%  |    139x   |   3.61%
+</span></span><span class=line><span class=cl>  20 |     146134 |     7.037%        |     3.375%       | 0.0606%  |    116x   |   6.48%
+</span></span><span class=line><span class=cl>  21 |     660257 |    78.835%        |    62.180%       | 0.5000%  |    158x   |   1.13%   &lt;===
+</span></span><span class=line><span class=cl>  22 |     110756 |     9.609%        |     2.859%       | 0.0325%  |    296x   |   3.13%
+</span></span><span class=line><span class=cl>  23 |      90326 |     8.162%        |     2.832%       | 0.0261%  |    312x   |  21.61%
+</span></span></code></pre></div><p>Against its immediate neighbours <code>|O| = 20</code> and <code>|O| = 22</code>, class 21 has <strong>8–11x
+the raw self-feeding rate</strong>, and it has <strong>the lowest unspent rate of any output
+class in the entire graph (1.13 %)</strong> — every coin it makes gets used again.
+Nothing sits still inside this system.</p><p>The spectrum also exposes the other operators, cleanly separated from the smooth
+background (~1–5 % self-feeding):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>L=11: 24.6 % (326x)   L=14: 41.0 % (688x)   L=35: 22.7 % (3828x)   L=42: 16.4 % (1302x)
+</span></span><span class=line><span class=cl>L=41:  9.7 % (1223x)  L=50: 39.2 % (3064x)  L=51: 50.2 % (3362x)   L=31:  5.9 % (499x)
+</span></span></code></pre></div><h3 id=173-test-3--the-input-count-of-the-consumers-i--o>17.3 Test 3 — the input count of the <em>consumers</em> (<code>|I| ~ |O|</code>)</h3><p>Splitting the consumers of an <code>|O|=21</code> output by whether they are themselves in
+the class:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>  |I|   consumer is |O|=21   consumer is NOT |O|=21
+</span></span><span class=line><span class=cl>    1             11,222              395,242
+</span></span><span class=line><span class=cl>    5                774              411,751
+</span></span><span class=line><span class=cl>   10             69,876              142,089
+</span></span><span class=line><span class=cl>   15            477,057               46,519
+</span></span><span class=line><span class=cl>   18            878,976               42,055
+</span></span><span class=line><span class=cl>   19            912,715  &lt;-- mode      44,866
+</span></span><span class=line><span class=cl>   20            889,168               48,376
+</span></span><span class=line><span class=cl>   21            796,274               41,513
+</span></span><span class=line><span class=cl>   25            202,564              463,293
+</span></span></code></pre></div><p>Inside the system the consumer&rsquo;s input count is <strong>sharply peaked at <code>|I| = 19</code></strong>
+with a tight symmetric hump over 15–24 — i.e. <strong><code>|I| ≈ |O| ≈ 20</code>, a balanced
+join</strong>. Outside the system the same outputs are consumed by transactions with a
+completely different, dispersed <code>|I|</code> (modes at 1, 5 and 25). The balanced shape
+is a property of the <em>system</em>, not of the coins.</p><h3 id=174-test-4--flow-accounting-it-recirculates-it-does-not-distribute>17.4 Test 4 — flow accounting: it recirculates, it does not distribute</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|O|=11 : inputs 1,631,461 (400,798 internal) ; 5,067,431 outputs leave  -&gt; ext_out/ext_in = 4.12
+</span></span><span class=line><span class=cl>|O|=51 : inputs   322,922 (162,139 internal) ; 10,021,600 outputs leave -&gt; ext_out/ext_in = 62.33
+</span></span><span class=line><span class=cl>|O|=21 : inputs 10,812,004 (8,523,609 internal, 2,288,395 external)
+</span></span><span class=line><span class=cl>         outputs 13,865,397 (157,332 unspent, 8,523,609 internal, 5,184,456 leave)
+</span></span><span class=line><span class=cl>                                                        -&gt; ext_out/ext_in = 2.27
+</span></span></code></pre></div><p><code>|O| = 51</code> is a <strong>distributor</strong>: 160 k coins in, 10.0 M coins out, a 62x fan-out,
+almost nothing recirculating. <code>|O| = 21</code> is the opposite: <strong>8.52 M of its 13.87 M
+outputs (61 %) never leave the system at all</strong> — they are immediately re-joined.
+Only a 2.27x split. It is a closed loop with a slow drip in and out.</p><h3 id=175-the-shape-of-the-loop>17.5 The shape of the loop</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>LONGEST in-class chain = 394,638 hops  (touches 59.8 % of the whole class),
+</span></span><span class=line><span class=cl>                         starting at node 152,191,764
+</span></span><span class=line><span class=cl>  chain &gt;=  10,000 rounds : 531,748 tx (80.5 %)
+</span></span><span class=line><span class=cl>  chain &gt;= 100,000 rounds : 411,104 tx (62.3 %)
+</span></span><span class=line><span class=cl>  chain &gt;= 300,000 rounds : 131,208 tx (19.9 %)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>in-class weakly connected components = 76,000
+</span></span><span class=line><span class=cl>  largest = 549,191 transactions = 83.18 % of the class
+</span></span><span class=line><span class=cl>  runners-up = 1,524 / 754 / 483 / 455 / 450
+</span></span><span class=line><span class=cl>  isolated  = 66,487
+</span></span></code></pre></div><p><strong>83 % of all 660,257 <code>|O|=21</code> transactions are one connected system, and a single
+unbroken chain runs through 394,638 of them.</strong> For comparison, the longest peel
+chain in the <em>entire</em> rest of the ledger (§8) is 25,343. This one subsystem has a
+recycling chain <strong>15x longer</strong> than the largest peel chain anywhere else.</p><h3 id=176-it-has-a-birth-and-a-death>17.6 It has a birth and a death</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>core density along the ID axis (transactions taking &gt;=1 input from the class):
+</span></span><span class=line><span class=cl>  slice  8 (node 133 M) :   3,186
+</span></span><span class=line><span class=cl>  slice  9 (node 150 M) :  58,778   &lt;-- switched ON
+</span></span><span class=line><span class=cl>  slice 10 (node 167 M) :  67,646
+</span></span><span class=line><span class=cl>  ...
+</span></span><span class=line><span class=cl>  slice 21 (node 351 M) :  28,076
+</span></span><span class=line><span class=cl>  slice 22 (node 368 M) :   1,526   &lt;-- switched OFF (18x cliff)
+</span></span><span class=line><span class=cl>  slice 23 (node 384 M) :     312   (100x below peak)
+</span></span></code></pre></div><p>The operator appears abruptly at node ~150 M, runs for ~217 M outputs, and stops
+abruptly at node ~367 M. Both edges are cliffs, not ramps.</p><h3 id=177-and-it-has-a-family>17.7 …and it has a family</h3><p>The cross-affinity matrix (<code>mat[dst][src]</code> = arcs from an <code>|O|=src</code> transaction
+into an <code>|O|=dst</code> one) shows <code>|O| = 15..23</code> forming a loose cluster that feeds
+<em>itself</em> at 15–21x enrichment, with <code>|O|=21</code> as its hub:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|O|=18 &lt;- [21: 11.0% x5] [17: 9.7% x20] [18: 8.3% x21] [19: 8.1% x21] [20: 7.1% x16]
+</span></span><span class=line><span class=cl>|O|=19 &lt;- [21: 12.6% x6] [17: 8.6% x18] [19: 8.0% x20] [18: 7.4% x19] [20: 7.1% x16]
+</span></span><span class=line><span class=cl>|O|=20 &lt;- [21: 19.7% x9] [17: 7.1% x14] [20: 7.0% x16] [19: 6.7% x17] [18: 6.2% x16]
+</span></span><span class=line><span class=cl>|O|=21 &lt;- [21: 78.8% x35] [2: 9.8% x0] [20: 2.0% x5] [19: 1.2% x3] [17: 1.2% x2]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>FAMILY |O| in 15..=21 : 70.91 % of its inputs come from inside the family
+</span></span><span class=line><span class=cl>                        (baseline 4.67 %)  -&gt;  15x
+</span></span></code></pre></div><p>So <code>21</code> is a <strong>hard cap, not a fixed batch size</strong>: full rounds produce 21 outputs
+and dominate; short rounds (15–20 participants) produce fewer and draw heavily
+from the 21-class. <code>|O|=21</code> alone is 78.8 % self-fed; widening to the 15–21 family
+raises the <em>family&rsquo;s</em> internal share to 70.9 % of a 4x larger input volume.</p><p><strong>Verdict.</strong> Equal, positionally-indistinguishable outputs; <code>|I| ≈ |O| ≈ 20</code>;
+61 % of all output value recirculating internally; the lowest idle rate in the
+graph; 83 % of the class in one component with a 394,638-round chain; a variable
+participant count capped at 21; and a hard on/off switch. That is a
+<strong>CoinJoin-style mixing / shuffling service</strong>, and §14&rsquo;s batcher reading is
+wrong. (Era and size are consistent with the large 2013–2016 web mixers, but with
+no txids or values in this dataset that remains shape-based inference, not an
+identification.)</p><h3 id=178-bonus-o--50-and-o--51-are-the-same-operator>17.8 Bonus: <code>|O| = 50</code> and <code>|O| = 51</code> are the <em>same</em> operator</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|O|=50 &lt;- [50: 39.2% x98] [2: 23.4%] [51: 17.2% x10] ...
+</span></span><span class=line><span class=cl>|O|=51 &lt;- [51: 50.2% x30] [2: 24.7%] [50:  8.1% x20] ...
+</span></span></code></pre></div><p>They cross-feed each other far above baseline in both directions. One batcher
+paying 50 recipients: <strong>51 outputs when it needs a change output, 50 when it does
+not.</strong> The same reading applies to the <code>41/42</code> pair (<code>|O|=42 &lt;- [42: 16.4% x122]</code>
+with 41 nearby) and to <code>|O| = 14 / 35</code> as separate independent operators.</p><hr><h2 id=18-the-spine-dissected-an-almost-unique-217-m-hop-chain-that-lives-inside-blocks-and-rides-the-mixer>18. The spine, dissected: an <strong>almost-unique</strong> 2.17 M-hop chain that lives inside blocks and rides the mixer</h2><p>§7 established that one path of 2,168,062 nodes runs from node 84,564 to node
+668,259,783. Here is what it is made of.</p><h3 id=181-how-unique-is-it--the-critical-subgraph>18.1 How unique is it? — the critical subgraph</h3><p>A node lies on <em>some</em> longest path iff <code>depth[v] + height[v] == D</code> (<code>D = 2,168,061</code>).
+One extra linear pass gives the whole critical subgraph.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>critical nodes = 4,057,782   (0.60721 % of the graph)
+</span></span><span class=line><span class=cl>critical width per level: p50 = 1   p90 = 4   p99 = 11   max = 102
+</span></span><span class=line><span class=cl>levels with 0 critical nodes   =         0     (as it must be)
+</span></span><span class=line><span class=cl>levels with exactly 1 critical node = 1,644,664 / 2,168,062  =  75.86 %
+</span></span></code></pre></div><p><strong>At 76 % of its levels the longest path has no choice at all</strong> — a single node is
+forced. The whole family of longest paths is only 4.06 M nodes wide across 2.17 M
+levels, i.e. <strong>1.87 alternatives per level on average</strong>, never more than 102.</p><p>And the forced levels are not scattered:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>longest run of consecutive FORCED levels = 101,158 levels, depths 125,757 .. 226,914
+</span></span></code></pre></div><p><strong>A 101,158-transaction isthmus that every single longest path in the graph must
+traverse node by node.</strong> This is exactly the hourglass waist located
+independently in §13 (depth 108 k–217 k, mean <em>total</em> width ~25). The two
+measurements agree: in that stretch the ledger&rsquo;s deep structure narrows to a
+single unbranchable strand.</p><p>The opposite extreme — where alternatives are widest — is a tight cluster:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>depth 970,289 / 970,290 : 102 critical nodes each
+</span></span><span class=line><span class=cl>depth 999,455..999,458  : 82-90 critical nodes each
+</span></span><span class=line><span class=cl>depth 978,170..978,175  : 66-67 critical nodes each
+</span></span></code></pre></div><p>Always in <em>consecutive pairs</em> of levels, i.e. short parallel bundles, never a
+sustained wide region.</p><h3 id=182-what-the-hops-are-made-of>18.2 What the hops are made of</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>hops                                          : 2,168,061
+</span></span><span class=line><span class=cl>hops staying inside the SAME block            : 1,984,617  (91.54 %)
+</span></span><span class=line><span class=cl>hops that are 1-in/2-out peel steps           : 1,271,584  (58.65 %)
+</span></span><span class=line><span class=cl>hops through an |O|=21 (mixer) transaction    :   230,913  (10.65 %)
+</span></span><span class=line><span class=cl>hops where &gt;1 output tied for the max height  :   489,138  (22.56 %)
+</span></span><span class=line><span class=cl>hops taking the LAST output of the transaction: 1,096,963  (50.60 %)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>output index chosen:   index 0 : 28.79 %    index 1 : 52.73 %    index &gt;=2 : 18.48 %
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>top shapes along the spine:
+</span></span><span class=line><span class=cl>  (|I|= 1, |O|= 2) : 58.65 %      (all ledger: 55.80 %)  -&gt;  1.05x
+</span></span><span class=line><span class=cl>  (|I|= 2, |O|= 2) :  8.91 %      (all ledger: 13.50 %)  -&gt;  0.66x
+</span></span><span class=line><span class=cl>  (|I|=18, |O|=21) :  1.08 %  |
+</span></span><span class=line><span class=cl>  (|I|=19, |O|=21) :  1.08 %  |   all |O|=21 : 10.65 %
+</span></span><span class=line><span class=cl>  (|I|=20, |O|=21) :  1.01 %  |   (all ledger: 0.2696 %)  -&gt;  39.5x
+</span></span><span class=line><span class=cl>  (|I|=17, |O|=21) :  1.01 %  |
+</span></span><span class=line><span class=cl>  (|I|= 3, |O|= 2) :  1.07 %
+</span></span></code></pre></div><p><strong>Two findings here.</strong></p><ol><li><strong>The spine is heavily over-represented in mixer transactions.</strong> <em>(The &ldquo;39.5x&rdquo; below uses a
+per-transaction baseline; §25.1 corrects it — the matched null for a hop gives <strong>6.1x</strong>.)</em>
+The <code>|O|=21</code> class is
+0.27 % of all transactions but <strong>10.65 % of the world-record dependency
+chain</strong>. Peel transactions, by contrast, appear at essentially their
+background rate (1.05x) and <code>(2,2)</code> transactions are <em>depleted</em> (0.66x). The
+longest chain in the ledger is not made of ordinary payments — it is
+disproportionately made of the mixer of §17.</li><li><strong>Index 1 is taken at 52.7 % of hops</strong> and the <em>last</em> output at 50.6 %. For
+the dominant <code>(1,2)</code> shape those are the same thing: the spine follows the
+<strong>change output</strong>. That is what makes it long — a wallet&rsquo;s rolling change is
+the one output guaranteed to be respent by the same actor.</li></ol><h3 id=183-it-lives-inside-blocks-in-bursts>18.3 It lives inside blocks, in bursts</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>hop gap (node-id distance):
+</span></span><span class=line><span class=cl>  gap  1        :    93,530  ( 4.31 %)
+</span></span><span class=line><span class=cl>  gap  2-3      : 1,073,437  (49.51 %)   &lt;-- the mode
+</span></span><span class=line><span class=cl>  gap  4-7      :   125,659  ( 5.80 %)
+</span></span><span class=line><span class=cl>  gap  16-31    :   302,930  (13.97 %)
+</span></span><span class=line><span class=cl>  gap &gt;= 8192   :    41,000  ( ~1.9 %)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>maximal runs of consecutive same-block hops = 135,269   (mean 14.7 hops each)
+</span></span><span class=line><span class=cl>longest single-block burst = 2,695 consecutive hops, around node 215,091,253
+</span></span></code></pre></div><p><strong>91.5 % of the spine&rsquo;s hops never leave the block they are in.</strong> The chain
+crosses a block boundary only 183,444 times over 2.17 M hops; the rest of the
+time it is walking a chain of unconfirmed transactions <em>within one block</em>,
+averaging <strong>14.7 transactions deep</strong> per visit.</p><p>The record is <strong>2,695 chained transactions inside a single block</strong>, around node
+215,091,253 — squarely inside the 2015 flood era of §6. (For context, Bitcoin
+Core&rsquo;s default in-mempool ancestor limit is 25, introduced in 0.12 / early 2016;
+a 2,695-deep in-block chain belongs to the period before that policy existed.)</p><h3 id=184-it-weaves-through-the-mixer-it-does-not-ride-it>18.4 It weaves through the mixer, it does not ride it</h3><p>The mixer&rsquo;s own internal chain is 394,638 rounds long (§17.5), so one might
+expect the spine to simply follow it. It does not:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>230,913 mixer hops in 47,632 maximal stretches   (mean 4.8 hops per stretch)
+</span></span><span class=line><span class=cl>LONGEST uninterrupted mixer stretch = 125 consecutive hops (near node 167,014,925)
+</span></span><span class=line><span class=cl>  stretches of  1 hop     : 23,266
+</span></span><span class=line><span class=cl>  stretches of  2-3 hops  :  8,380
+</span></span><span class=line><span class=cl>  stretches of 32-63 hops :    694
+</span></span><span class=line><span class=cl>  stretches of 64-127 hops:     50
+</span></span></code></pre></div><p>The spine <strong>enters and leaves the mixer 47,632 times</strong>, typically for fewer than
+5 hops. So the mixer is not a corridor the longest path travels down — it is a
+dense mesh the longest path repeatedly cuts across, gaining a couple of levels of
+depth each time. That is why the mixer contributes 10.65 % of the spine while its
+own longest internal chain contributes at most 125 consecutive hops to it.</p><h3 id=185-chaining-intensity-collapsed-14x-over-the-ledgers-life>18.5 Chaining intensity collapsed 14x over the ledger&rsquo;s life</h3><p>Spine hops per 16.7 M-node slice of the ID axis:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>slice  0 (node          0..) : 234,438 hops   = 1.40 % of the slice&#39;s nodes
+</span></span><span class=line><span class=cl>slice  1 (node 16,706,548..) : 114,191
+</span></span><span class=line><span class=cl>slice  4 (node 66,826,195..) :  41,446
+</span></span><span class=line><span class=cl>slice  8 (node 133,652,390..): 105,101
+</span></span><span class=line><span class=cl>slice 13 (node 217,185,134..):  33,053
+</span></span><span class=line><span class=cl>slice 24 (node 400,957,171..):  21,212
+</span></span><span class=line><span class=cl>slice 39 (node 651,555,404..):  16,451 hops   = 0.098 % of the slice&#39;s nodes
+</span></span></code></pre></div><p>The earliest 16.7 M outputs contribute <strong>234,438</strong> hops to the longest chain; the
+most recent 16.7 M contribute <strong>16,451</strong> — a <strong>14x</strong> decline in &ldquo;how much depth a
+given amount of ledger activity buys&rdquo;. Early Bitcoin was chained; late Bitcoin is
+broad. This is the same phenomenon as the §13 waist seen from the other side: the
+depth axis was mostly built in the first sixth of the ID axis, and everything
+since has widened rather than deepened the DAG.</p><h3 id=186-summary-of-part-ii>18.6 Summary of Part II</h3><p>| | <code>|O| = 21</code> system | the spine |
+|&mdash;|&mdash;|&mdash;|
+| size | 660,257 tx, 83.2 % in one component | 2,168,062 nodes |
+| defining test | all 21 output positions statistically identical -> <strong>no change output</strong> | 75.86 % of levels have a <strong>unique</strong> critical node |
+| self-structure | 78.8 % of inputs internal (158x), 62.2 % of outputs internal (124x) | 91.5 % of hops stay inside one block |
+| record | in-class chain of <strong>394,638 rounds</strong> | in-block burst of <strong>2,695 hops</strong>; forced isthmus of <strong>101,158 levels</strong> |
+| lifetime | node 150 M -> 367 M, hard on/off | node 84,564 -> 668,259,783, the whole history |
+| link between them | | the spine is <strong>39.5x enriched</strong> in <code>|O|=21</code> transactions, entering/leaving them 47,632 times |</p><p><strong>Revision to §14:</strong> the <code>|O| = 21</code> class is a <strong>CoinJoin-style self-recycling
+mixer</strong>, not a payout batcher — see §17. <code>|O| = 11</code> and <code>|O| = 51</code> <em>are</em> batchers,
+now positively confirmed by their change-output signature (§17.1).</p><hr><hr><h1 id=part-iii--six-parallel-deep-dives>PART III — six parallel deep dives</h1><p>Six probes were run concurrently, each written as an independent binary against the mmapped graph.
+<strong>Every track was then handed to a second, independent agent whose only job was to refute its
+headline numbers</strong> by re-deriving them through a different code path. Verification status is marked
+on each section. Three claims were killed outright; they are recorded in §25 rather than hidden.</p><hr><h2 id=19-the-isthmus-is-one-wallet>19. The isthmus is <strong>one wallet&rsquo;s peel chain from early 2011</strong></h2><p><em>(this track is my own — its agent hit a tooling failure and I re-ran it)</em></p><p><strong>What I did.</strong> Extracted the unique critical node at each of the 101,158 forced levels
+(depths 125,757 … 226,914) and characterised the resulting sequence.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>SANITY depth 9/171/184/187/190 = 0 1 2 3 4          (correct)
+</span></span><span class=line><span class=cl>longest forced run = 101,158 levels, depths 125,757..226,914
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== ISTHMUS: 101,158 nodes ===
+</span></span><span class=line><span class=cl>node id range           12,439,718 .. 15,655,652     (span 3,215,934 ids)
+</span></span><span class=line><span class=cl>block (segment) range      107,831 .. 114,202        (2,997 distinct blocks touched)
+</span></span><span class=line><span class=cl>broken links (not parent-&gt;child) = 0                 -&gt; it IS a path
+</span></span><span class=line><span class=cl>hops staying in the SAME block = 98,161 / 101,157    (97.04 %)
+</span></span><span class=line><span class=cl>hop gap: min 1  p25 2  median 2  p75 6  p95 76  max 128,219
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- transaction shapes along the isthmus ---
+</span></span><span class=line><span class=cl>  (|I|=1, |O|=2) : 101,033  (99.88 %)
+</span></span><span class=line><span class=cl>  (|I|=2, |O|=2) :      35  ( 0.03 %)
+</span></span><span class=line><span class=cl>  (|I|=1, |O|=4) :      28  ( 0.03 %)
+</span></span><span class=line><span class=cl>  (|I|=1, |O|=3) :      16  ( 0.02 %)
+</span></span><span class=line><span class=cl>  ... 18 distinct shapes in total
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>output index taken:  index 0 : 101,009 (99.85 %)   index 1 : 134   index 2 : 14
+</span></span><span class=line><span class=cl>takes the LAST output at 121 / 101,157 hops (0.12 %)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>inputs of isthmus transactions that are themselves isthmus nodes: 101,157 / 101,479 = 99.68 %
+</span></span></code></pre></div><p><strong>Pattern.</strong> The object that pins down 101,158 levels of the entire graph&rsquo;s depth — through which
+<em>every one of the ~10^270,178 longest paths must pass node by node</em> (§24) — is:</p><blockquote><p><strong>a single unbroken chain of 101,158 one-input / two-output peel transactions, run by one actor
+across ~3,000 Bitcoin blocks (index 107,831 → 114,202, i.e. early 2011), always spending output
+index 0 and always respending immediately.</strong></p></blockquote><p>99.68 % of the chain&rsquo;s inputs are its own previous outputs: it is essentially closed. 97 % of its
+hops stay inside a single block, and the median hop advances <strong>2 node IDs</strong> — the next transaction
+is literally the next transaction in the block. Over 101,158 hops it advances only 3.2 M node IDs,
+so it was emitting transactions far faster than the rest of the ledger was producing outputs. That
+is exactly why the DAG&rsquo;s depth axis narrows to a thread here (§13&rsquo;s width-25 waist): in early 2011
+<strong>one automated wallet was single-handedly extending the longest dependency chain in Bitcoin.</strong></p><p>Note it is <em>not</em> a pure peel chain end-to-end — 124 of the 101,157 hops pass through a non-<code>(1,2)</code>
+transaction, which is why §8&rsquo;s longest <em>unbroken</em> peel run (25,343) is smaller and lives elsewhere.</p><hr><h2 id=20-inside-the-mixer-five-disjoint-eras-36-rounds-and-a-25-input-software-limit-on-both-sides>20. Inside the mixer: five disjoint eras, ~3.6 rounds, and a 25-input software limit on both sides</h2><p><em>Verification: claims 1 and 2 <strong>CONFIRMED</strong> (matrix re-derived twice, byte-identical; residence time
+re-derived by three independent methods agreeing to 0.07 % with exact quantile match). Claim 3/4
+<strong>PARTIAL</strong> — the substantive numbers all confirm, one enrichment baseline was wrong and is corrected
+below.</em></p><h3 id=201-o--21-is-not-one-operator--it-is-five-and-they-never-touch>20.1 <code>|O| = 21</code> is not one operator — it is five, and they never touch</h3><p>Bucketing the class by node ID and counting <strong>in-class arcs between buckets</strong>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>in-class arc matrix (row = source era, column = destination era)
+</span></span><span class=line><span class=cl>A  &lt;45M     [ 1,173        0         0          0        0    ]
+</span></span><span class=line><span class=cl>B  45-60M   [     0   31,981         0          0        0    ]
+</span></span><span class=line><span class=cl>C  60-150M  [     0        0    42,207         57        0    ]
+</span></span><span class=line><span class=cl>D  150-367M [     0        0         0  8,433,566      325    ]
+</span></span><span class=line><span class=cl>E  &gt;=367M   [     0        0         0          0   14,300    ]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>era |  n_tx   | mean |I| | self-affinity | unspent %
+</span></span><span class=line><span class=cl> A  |   4,530 |   1.787  |    0.1449     | 14.800
+</span></span><span class=line><span class=cl> B  |   2,045 |  16.061  |    0.9737     |  3.337
+</span></span><span class=line><span class=cl> C  |  34,991 |  16.438  |    0.0734     |  1.306
+</span></span><span class=line><span class=cl> D  | 568,888 |  17.590  |    0.8428     |  0.570
+</span></span><span class=line><span class=cl> E  |  49,803 |   3.794  |    0.0774     |  6.130
+</span></span></code></pre></div><p><strong>382 of 8,523,609 internal arcs (0.0045 %) cross an era boundary.</strong> The matrix is essentially
+diagonal. So §17&rsquo;s &ldquo;one mixer&rdquo; is really <strong>era D (nodes 150 M–367 M, 568,888 transactions)</strong>, which
+holds 86.2 % of the class and 98.9 % of its internal arcs. Era B (45–60 M) is a <em>separate, purer</em>
+precursor — 97.37 % self-affinity, only 864 external inputs in its entire life, and <strong>zero arcs to
+any other era</strong>. Era C is a variable-output family (self-affinity only 0.073, drawing inputs from
+<code>|O|</code> 16..28 at 15–36×), i.e. a different service. Eras A and E are background noise.</p><h3 id=202-residence-time-362-rounds>20.2 Residence time: <strong>3.62 rounds</strong></h3><p>Exact unit-mass flow simulation (each external input seeds one unit; each in-class transaction pushes
+its round-vector, shifted by one and divided by 21, to its 21 outputs; mass leaving the class is
+tallied by round). Mass conservation error 0.000000.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>round r | % of exiting mass | cumulative
+</span></span><span class=line><span class=cl>   1    |     31.92 %       |  31.92
+</span></span><span class=line><span class=cl>   2    |     18.38 %       |  50.30
+</span></span><span class=line><span class=cl>   3    |     13.13 %       |  63.44
+</span></span><span class=line><span class=cl>   5    |      6.95 %       |  79.90
+</span></span><span class=line><span class=cl>  10    |      1.56 %       |  95.25
+</span></span><span class=line><span class=cl>  20    |      0.09 %       |  99.70
+</span></span><span class=line><span class=cl>mean 3.6192   median 2   p90 8   p99 16   ends unspent 0.930 %
+</span></span></code></pre></div><p>Re-derived by the verifier three ways (exact backward DP 3.6167; exact backward distribution DP
+mean 3.6167 with median 2 / p90 8 / p99 16 <strong>exactly</strong>; Monte Carlo over 25,173,136 stratified random
+walks 3.6159). The 0.07 % spread is a denominator convention, not an error.</p><p><strong>Caveats the verifier insisted on, and they are right:</strong> this is a <em>model</em> quantity assuming a
+uniform 1/21 split at every transaction — there is no value data in this dataset — and the tail is
+<strong>not</strong> geometric: the continuation probability <em>rises</em> monotonically from 0.574 to ~0.76, so the
+exit hazard falls from 43 % at round 1 to ~24 % by round 22. The tail is fatter than geometric.</p><h3 id=203-the-mixer-has-a-symbiotic-partner-class-defined-by-i--25>20.3 The mixer has a symbiotic partner class defined by <code>|I| = 25</code></h3><p>Of the 1,573,321 external inputs entering era D, <strong>15.302 % were produced by transactions with
+exactly 25 inputs</strong>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>producer shapes (|I|,|O|), top rows:
+</span></span><span class=line><span class=cl>  (1,2) 16.12 %   (2,2) 8.23 %   (4,2) 7.79 %   (5,2) 7.71 %   (3,2) 5.76 %
+</span></span><span class=line><span class=cl>  (25,20) 5.05 %  (25,19) 3.00 % (25,18) 2.19 % (25,17) 1.82 % (25,16) 1.15 %
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>partner class (|I|=25, |O|=20): 8,479 tx
+</span></span><span class=line><span class=cl>   inputs  211,975 : 113,139 (53.37 %) come FROM an |O|=21 transaction
+</span></span><span class=line><span class=cl>   outputs 169,580 : 82,627 of 169,379 spent (48.78 %) go BACK to an |O|=21 transaction
+</span></span><span class=line><span class=cl>                     201 unspent (0.119 %)
+</span></span><span class=line><span class=cl>   (|I|=25,|O|=19): 6,740 tx, 44.38 % in / 39.63 % out
+</span></span><span class=line><span class=cl>   (|I|=25,|O|=17): 6,195 tx, 35.24 % in / 30.24 % out
+</span></span></code></pre></div><p>Roughly <strong>half in, half out</strong> — this class is wired into the mixer as a counterparty. And <code>|I| = 25</code>
+is itself a ledger-wide spike (<code>|I|</code>=24: 116,728 → <strong>25: 217,816</strong> → 26: 113,042).</p><p><em>Corrected baseline (the verifier&rsquo;s fix):</em> ledger-wide only <strong>0.2794 %</strong> of spent outputs are produced
+by an <code>|I|=25</code> transaction, so the mixer&rsquo;s 15.302 % is a <strong>54.8× enrichment</strong> — the original agent&rsquo;s
+12.4× figure compared a transaction-level rate against an arc-level baseline. The conclusion is
+<em>stronger</em> than claimed, not weaker.</p><p><em>Also corrected:</em> &ldquo;entry money is ordinary peel change at baseline&rdquo; holds only in the <code>|O|</code> marginal
+(<code>|O|=2</code>: 60.36 % of entries vs a 60.59 % baseline, 1.00×). In the <code>|I|</code> marginal it is strongly
+non-random — producers with <code>|I|=1</code> are <strong>18.97 % of entries against a 64.07 % baseline (0.30×)</strong>.
+The mixer draws <em>multi-input</em> peels, not ordinary single-input change.</p><h3 id=204-the-25-input-cap>20.4 The 25-input cap</h3><p>Exact <code>|I|</code> histogram over all 568,888 era-D transactions:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>|I|  14: 5.06 %   15: 6.49 %   16: 8.08 %   17: 9.39 %   18: 9.99 % (mode)
+</span></span><span class=line><span class=cl>     19: 9.82 %   20: 9.12 %   21: 7.81 %   22: 6.14 %   23: 7.28 %   24: 3.77 %   25: 1.76 %
+</span></span><span class=line><span class=cl>     ------------------------------------------------------------- cliff -------
+</span></span><span class=line><span class=cl>     26: 0.141 %  27: 70 tx   28: 82 tx   29: 70 tx   30: 187 tx
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>P(|I| &lt;= 25) = 99.689 %       25 -&gt; 26 drop factor = 12.51x
+</span></span></code></pre></div><p><strong>Both sides of the interface are capped at 25 inputs</strong> — the mixer itself and its partner class.
+One piece of software, one constant.</p><h3 id=205-the-isolated-o21-transactions-are-a-different-species>20.5 The isolated <code>|O|=21</code> transactions are a different species</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>                    isolated (66,487)   connected (593,770)
+</span></span><span class=line><span class=cl>unspent rate            5.416 %              0.655 %      (8.3x)
+</span></span><span class=line><span class=cl>|I| = 1                49.87 %               2.51 %
+</span></span><span class=line><span class=cl>modal |I|                  1                   18
+</span></span><span class=line><span class=cl>share of class inside 150M-367M   0.56-9.95 %
+</span></span><span class=line><span class=cl>share of class outside 367M      54-89 %
+</span></span></code></pre></div><p>They are ordinary transactions that happen to have 21 outputs. The mixer is the connected component,
+not the output count.</p><h3 id=206-drift-over-its-lifetime>20.6 Drift over its lifetime</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>node bucket | n_tx   | mean |I| | mode |I| | self-aff(in) | self-aff(out) | unspent %
+</span></span><span class=line><span class=cl>   150M     | 33,701 |  19.46   |    23    |    0.804     |    0.750      |  0.316
+</span></span><span class=line><span class=cl>   200M     | 38,283 |  18.33   |    18    |    0.816     |    0.714      |  0.267
+</span></span><span class=line><span class=cl>   300M     | 22,555 |  16.16   |    18    |    0.836     |    0.654      |  1.661
+</span></span><span class=line><span class=cl>   360M     | 13,031 |  15.34   |    18    |    0.778     |    0.569      |  0.849
+</span></span></code></pre></div><p>Inputs shrink, the outward recycling loosens (0.75 → 0.57), single-input transactions grow 8×, and
+the unspent rate rises 2.7× — a service winding down. <strong>The <code>|I|</code> mode stays locked at 18 throughout.</strong></p><hr><h2 id=21-an-operator-taxonomy-for-the-whole-ledger--and-o21-is-the-only-real-coinjoin>21. An operator taxonomy for the whole ledger — and <code>|O|=21</code> is the <em>only</em> real CoinJoin</h2><p><em>Verification: the arithmetic reproduced to the last digit across ~60 reported numbers. Two
+interpretive claims were overturned (§25). The taxonomy itself survives.</em></p><h3 id=211-a-three-number-classifier>21.1 A three-number classifier</h3><p>For an output-size class <code>L</code>:</p><ul><li><strong>R</strong> = same-class arcs per transaction (how many of a transaction&rsquo;s outputs are consumed by
+another transaction of the same class);</li><li><strong>Cnorm</strong> = (share of those same-class arcs leaving the <strong>last</strong> output position) × L — equal to
+1 if the recirculation is spread uniformly over positions, equal to L if it all flows through one;</li><li><strong>ext_out / ext_in</strong> = coins leaving per coin entering.</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>R &gt;&gt; 1 and Cnorm ~ 1                   -&gt;  MIXER          (recirculates, no change output)
+</span></span><span class=line><span class=cl>R ~ 1 and Cnorm &gt;&gt; 1                   -&gt;  BATCHER        (a chain through one change output)
+</span></span><span class=line><span class=cl>R &lt;&lt; 1 and ext_out/ext_in &gt;&gt; 1         -&gt;  DISTRIBUTOR    (sprays, does not recirculate)
+</span></span></code></pre></div><h3 id=212-the-table>21.2 The table</h3><table><thead><tr><th>L</th><th>#tx</th><th>verdict</th><th>deciding number</th><th>lifetime (node-id p5..p95)</th></tr></thead><tbody><tr><td>11</td><td>532,286</td><td>BATCHER (weak)</td><td>last-pos return 15.86 % vs 5.39 % (2.9×), Cnorm 2.1</td><td>111 M..636 M</td></tr><tr><td>14</td><td>174,108</td><td><strong>consolidate-and-resplit loop</strong> (see §25)</td><td>R=3.03 but 78.6 % of inputs from ONE predecessor tx</td><td>271 M..370 M</td></tr><tr><td>16, 17, 42, 31</td><td>406,248 total</td><td>family, flat positions</td><td>22.45 % internal at 19×</td><td>broad</td></tr><tr><td><strong>21</strong></td><td><strong>660,257</strong></td><td><strong>MIXER (multi-party CoinJoin)</strong></td><td><strong>R=12.91; median 9 distinct same-class predecessors; parallel-arc multiplicity 1</strong></td><td>core 158 M..351 M</td></tr><tr><td>35</td><td>42,583</td><td>BATCHER, <em>randomised</em> change position</td><td>R=0.68, Cnorm 1.2, positions uniform</td><td>49.5 % of class in 1 % of the axis</td></tr><tr><td>41</td><td>37,771</td><td>DISTRIBUTOR</td><td>R=0.44, ext_out/ext_in 8.7, WCC 0.29 %</td><td>19 M..613 M</td></tr><tr><td>48</td><td>17,944</td><td>DISTRIBUTOR</td><td>R=0.14, ext_out/ext_in 12.9</td><td>47.6 % in 1 % of axis</td></tr><tr><td>50</td><td>51,887</td><td>BATCHER, change <strong>externalised</strong> to 51</td><td>Cnorm 1.1, receives 47,606 arcs from 51</td><td>225 M..583 M</td></tr><tr><td>51</td><td>209,271</td><td>BATCHER</td><td>Cnorm 4.4, 94.5 % have I=1</td><td>177 M..492 M</td></tr><tr><td><strong>61</strong></td><td>17,204</td><td>BATCHER</td><td><strong>last output returns at 28.8 % vs 0.36–0.79 % (80×)</strong></td><td>122 M..663 M</td></tr><tr><td>101</td><td>67,231</td><td>DISTRIBUTOR (dust)</td><td>unspent 31.8 %, ext_out/ext_in 63</td><td>the 2015 flood</td></tr><tr><td>102</td><td>12,823</td><td>BATCHER, randomised change</td><td>R=0.84, Cnorm 1.5</td><td>59 % in 1 % of axis</td></tr><tr><td>138,139,140,141,144,146,200,2001</td><td>20,576+</td><td><strong>pure-chain BATCHERS</strong></td><td>96–99.6 % of <em>all</em> same-class flow leaves the <strong>last</strong> output</td><td>50 M..660 M</td></tr><tr><td>291, 301, 501, 1001, 2501</td><td>1–15 k each</td><td>BATCHER / dust DISTRIBUTOR</td><td>all of the form <code>N+1</code></td><td>broad</td></tr><tr><td>36,40,47,49,76,150,151,251</td><td>2–24 k each</td><td>NOISE</td><td>R&lt;0.3, no position structure</td><td>broad</td></tr></tbody></table><p>A full sweep of <code>L = 2 .. 13,107</code> finds <strong>six</strong> significant classes above <code>L = 256</code>, and every one is
+of the form <strong><code>N+1</code></strong>: 291, 301, 501, 1001, 2001, 2501. The <code>10^k + 1</code> lattice of §4.2 runs all the
+way to the top of the degree distribution.</p><h3 id=213-the-decisive-statistic-how-many-counterparties>21.3 The decisive statistic: how many counterparties?</h3><p>The classifier above cannot separate &ldquo;many people joining&rdquo; from &ldquo;two wallets shuffling&rdquo;. The
+verifier&rsquo;s control does:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>                                      share of a tx&#39;s inputs supplied by
+</span></span><span class=line><span class=cl>class core        distinct same-class    its single largest predecessor tx
+</span></span><span class=line><span class=cl>                  predecessors (median)   median      &gt;=80 % from &lt;=2 preds
+</span></span><span class=line><span class=cl>|O| = 21  core          9                 0.214            0.50 %
+</span></span><span class=line><span class=cl>|O| = 14  core          2                 0.786           80.88 %
+</span></span><span class=line><span class=cl>|O| = 50  core          1                 ~1.0            (|I| p25=p50=p75=61,
+</span></span><span class=line><span class=cl>                                                          one tx swallows all 50
+</span></span><span class=line><span class=cl>                                                          outputs of the previous)
+</span></span></code></pre></div><p><strong><code>|O| = 21</code> is the only class in the ledger where a transaction&rsquo;s inputs come from ~9 different
+counterparties in roughly equal share.</strong> Every other &ldquo;mixer-like&rdquo; class is a
+consolidate-and-resplit pipeline between one or two wallets. This <em>strengthens</em> §17: the CoinJoin
+verdict now rests on counterparty multiplicity, which is far harder to fake than positional
+uniformity.</p><h3 id=214-two-batchers-that-randomise-the-change-position>21.4 Two batchers that randomise the change position</h3><p><code>|O| = 35</code> and <code>|O| = 102</code> both emit ~0.7–0.8 same-class-consumed outputs per transaction (one chain
+link, like a batcher), but spread it <strong>uniformly across all output positions</strong> instead of at the last:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>L=35 : R=0.682, per-position self-arcs min 765 max 879 (1.15x), Cnorm 1.2, 84.8 % have |I|=1
+</span></span><span class=line><span class=cl>L=102: R=0.844, per-position min 80 max 146 (1.82x), Cnorm 1.5, 81.7 % have |I|=1
+</span></span><span class=line><span class=cl>contrast L=138: R=0.875 but Cnorm 136.2 ;  L=200: R=0.715, Cnorm 199.3
+</span></span></code></pre></div><p>Same mechanism, deliberately shuffled output order — an early anti-heuristic measure. <strong>Both burst in
+the same node-ID window as the 2015 flood</strong>, and §23 shows why.</p><hr><h2 id=22-a-mempool-policy-change-is-directly-visible-in-the-graph-topology>22. A mempool policy change is <strong>directly visible in the graph topology</strong></h2><p><em>Verification: the ceiling <strong>CONFIRMED</strong> exactly (independent pull-DP over the transpose, plus exact
+per-block bitset ancestor closure). The word &ldquo;absolute&rdquo; was <strong>refuted</strong> — see below. Every number in
+the top-20 table reproduced digit for digit, in the same order.</em></p><p><strong>What was measured.</strong> For each of the 392,047 block segments, the longest chain of transactions
+<code>T1 -> T2 -> ... -> Tk</code> <strong>entirely inside that block</strong>, each spending an output of the previous.</p><h3 id=221-the-ceiling>22.1 The ceiling</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Post-transition region (segment index &gt;= 329,000, node &gt;= 394,909,953): 63,047 blocks
+</span></span><span class=line><span class=cl>  per-block max in-block chain length:
+</span></span><span class=line><span class=cl>    25 -&gt; 39,501 blocks (62.65 %)
+</span></span><span class=line><span class=cl>    24 -&gt;  3,344        ( 5.30 %)
+</span></span><span class=line><span class=cl>    23 -&gt;  1,408        ( 2.23 %)
+</span></span><span class=line><span class=cl>    26 and above -&gt;  0 blocks
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Per-transaction chain depth, AFTER: cd=24 0.1256 %  cd=25 0.1039 %  cd&gt;=26  50 transactions total
+</span></span><span class=line><span class=cl>Per-transaction chain depth, BEFORE (segments 300,000-307,250, 8,990,176 tx):
+</span></span><span class=line><span class=cl>                                    cd=24 0.1064 %  cd=25 0.1005 %  cd=26 0.0930 %  cd=30 0.0756 %
+</span></span><span class=line><span class=cl>                                    cd&gt;=26 = 263,388 tx (2.93 %) — decays smoothly straight through 25
+</span></span></code></pre></div><p><strong>Bitcoin Core 0.12&rsquo;s default <code>-limitancestorcount = 25</code> is legible in the arc structure of the
+graph.</strong> Before, the distribution decays smoothly through 25 with 2.93 % of transactions above it;
+after, it stops dead — 50 transactions out of 109.5 million.</p><p>Over the whole ledger the fingerprint shows as an 11× spike:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>per-block max chain length, all 392,047 blocks:
+</span></span><span class=line><span class=cl>   1 -&gt; 66,276 (16.91 %)    10 -&gt; 9,709 (median)     23 -&gt;  4,629
+</span></span><span class=line><span class=cl>  24 -&gt;  6,830              25 -&gt; 51,147 (13.05 %)   26 -&gt;  2,405     &gt;=64 -&gt; 17,754 (4.53 %)
+</span></span></code></pre></div><h3 id=222-it-is-a-staircase-not-a-cliff--miners-upgrading-one-at-a-time>22.2 It is a <strong>staircase</strong>, not a cliff — miners upgrading one at a time</h3><p>Adoption proxy <code>r = P(a block exceeds 25 | it reached 25)</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>segment  &lt;307,100 (node &lt;309.5M) : r = 0.94-0.98    (22.34 % of blocks exceed 25)
+</span></span><span class=line><span class=cl>segment 307,100-312,999           : r = 0.73-0.81
+</span></span><span class=line><span class=cl>segment 313,000-318,999           : r = 0.29-0.54
+</span></span><span class=line><span class=cl>segment 319,000-327,999           : r = 0.087-0.23
+</span></span><span class=line><span class=cl>segment 328,000-328,999           : r = 0.015-0.022
+</span></span><span class=line><span class=cl>segment &gt;=329,000                 : r = 0.0000      (2 of 63,047)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>step 1 at seg ~307,100 (node 309,460,867)   step 2 at seg 313,000 (node 332,106,370)
+</span></span><span class=line><span class=cl>step 3 at seg ~315,500 (node 342,030,503)   step 4 at seg ~328,000 (node 390,852,547)
+</span></span></code></pre></div><p>Four discrete steps over ~22,000 blocks. That is exactly the shape of a <strong>policy default propagating
+through independent miners</strong>, not of a consensus rule switching on. A consensus change would be one
+vertical line.</p><h3 id=223-the-two-survivors>22.3 The two survivors</h3><p><em>(this is where &ldquo;absolute&rdquo; was refuted — and the exception is more interesting than the rule)</em></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>seg 352,284  nodes 485,897,115..485,901,807  ntx 2,081  max chain = 50 transactions
+</span></span><span class=line><span class=cl>   traced: 485,899,252 -&gt; 485,899,254 -&gt; ... -&gt; 485,899,350, stepping by exactly 2
+</span></span><span class=line><span class=cl>   tx 1: |I|=2,|O|=2 ; tx 2..50: all |I|=1,|O|=2  -- a pure peel chain laid down contiguously
+</span></span><span class=line><span class=cl>   50 = exactly 2 x 25
+</span></span><span class=line><span class=cl>seg 352,470  node 486,868,136  max ancestor set = 26 (chain depth still &lt;= 25)
+</span></span></code></pre></div><p><strong>Exactly one block in 63,047 breaks the ceiling, and it breaks it by exactly 2×25.</strong> Two 25-chains
+concatenated — consistent with a miner assembling two separately-relayed 25-transaction packages.</p><h3 id=224-the-deepest-in-block-chains-anywhere-and-what-they-are-made-of>22.4 The deepest in-block chains anywhere, and what they are made of</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>rank  segment   node range                    ntx    max chain
+</span></span><span class=line><span class=cl>  1   273,371   198,428,543..198,435,066     3,264     3,218
+</span></span><span class=line><span class=cl>  2   316,193   344,634,817..344,642,225     3,682     3,141
+</span></span><span class=line><span class=cl>  3   279,136   215,996,694..216,002,935     3,055     2,932
+</span></span><span class=line><span class=cl>  4   307,632   311,520,012..311,526,092     3,030     2,920
+</span></span><span class=line><span class=cl>  5   278,719   212,628,896..212,638,823     3,508     2,913
+</span></span><span class=line><span class=cl>  6   279,004   215,085,419..215,094,766     3,458     2,696   &lt;- the §18.3 spine block
+</span></span></code></pre></div><p>Every one of the 11 traced record chains is <strong>100 % single-input</strong>, and each has a single constant
+<code>|O|</code>: chains 1,2,3,4,6,9 are 100 % <code>(1,2)</code>; chains 5,7,8,10 are 100 % <code>(1,3)</code>. The record — <strong>3,218
+chained transactions inside one block</strong>, nodes 198,428,631..198,435,065, perfectly contiguous with
+stride 2 — is a single machine emitting a peel chain as fast as it can into one block.</p><p>And the composition shifts with the policy:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>era              blocks   chain-tx    peel %   |I|=1 %   |O|=2 %
+</span></span><span class=line><span class=cl>seg &lt;200k       136,081  2,213,240    85.15     90.12     93.10
+</span></span><span class=line><span class=cl>seg 200-300k     98,512  2,816,560    59.96     77.29     71.99
+</span></span><span class=line><span class=cl>seg &gt;=328.9k     62,713  1,330,943    95.20     97.62     96.68   (mean |I| = 1.067)
+</span></span></code></pre></div><p>After the limit lands, in-block chains become almost purely <code>(1,2)</code> peels with mean <code>|I|</code> of 1.067 —
+the only chaining that survives a 25-ancestor cap is the simplest possible one.</p><hr><h2 id=23-the-2015-anomalies-two-disjoint-floods-and-the-sweeper-did-not-eat-the-flooders-dust>23. The 2015 anomalies: <strong>two disjoint floods</strong>, and the sweeper did <em>not</em> eat the flooder&rsquo;s dust</h2><p><em>Verification: all four headline claims <strong>CONFIRMED</strong>, several by deliberately opposite traversal
+directions (forward scan vs transpose enumeration). One sub-number is a definitional divergence,
+not an error. This section <strong>overturns the reading I gave in §6.</strong></em></p><p>§6 read the 217–220 M dust flood and the 220–222 M sweep wave as one story: flood, then clean-up.
+That is wrong.</p><h3 id=231-the-falsification>23.1 The falsification</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Ten mega-consolidations (nine with |I| = 20,000, one with 9,997; all |O| = 1),
+</span></span><span class=line><span class=cl>nodes 230,703,549 .. 231,081,170.  189,997 distinct inputs, 0 duplicates.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>HOP 1 (their inputs)   : own = 1   -&gt; 189,997 = 100.0000 %
+</span></span><span class=line><span class=cl>                         own = 101 -&gt;       0 =   0.0000 %   (global baseline 0.7524 %)
+</span></span><span class=line><span class=cl>HOP 2 (grandparents), 208,776 slots, nothing else present:
+</span></span><span class=line><span class=cl>                         own = 102 -&gt; 174,751 = 83.70 %
+</span></span><span class=line><span class=cl>                         own =  35 -&gt;  34,025 = 16.30 %
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Direct reachability: family-A (|O| in {101,47,48}) spent outputs in 216.5-220.5M = 30,437
+</span></span><span class=line><span class=cl>                     reaching a mega transaction in 1 hop = 0 ; in 2 hops = 0
+</span></span></code></pre></div><p><strong>Not one of the 189,997 inputs of the giant consolidations descends from the <code>|O|=101</code> flood.</strong>
+Their entire two-hop ancestry is a <em>different</em> campaign — <code>|O|=102</code> and <code>|O|=35</code> spray chains.</p><h3 id=232-two-campaigns-same-window-opposite-fates>23.2 Two campaigns, same window, opposite fates</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>in block starts 216.5M - 220.5M:
+</span></span><span class=line><span class=cl>class      n_tx     outputs    unspent            fed by                   eaten by
+</span></span><span class=line><span class=cl>|O|=102   2,835     289,170    1  (0.000 %)    99.86 % itself           99.02 % |O|=1
+</span></span><span class=line><span class=cl>|O|= 35   8,662     303,170    16 (0.005 %)    99.86 % itself           97.09 % |O|=1
+</span></span><span class=line><span class=cl>|O|=101  11,869   1,198,769    1,170,427 (97.636 %)   87 % itself + 6.5 % |O|=48 + 6.0 % |O|=47
+</span></span><span class=line><span class=cl>|O|= 47     715      33,605    96.980 % unspent      97.93 % by |O|=101
+</span></span><span class=line><span class=cl>|O|= 48     778      37,344    97.108 % unspent      98.97 % by |O|=101
+</span></span></code></pre></div><ul><li><strong>Flood-2</strong> (<code>|O| = 102</code> + <code>|O| = 35</code>) is a <strong>closed spray-and-reclaim loop</strong>: it sprays, sweeps
+itself back up with <code>|O|=1</code> transactions, and leaves <strong>essentially zero permanent dust</strong> — 17
+unspent outputs out of 592,340.</li><li><strong>Flood-A</strong> (<code>|O| = 101</code> + 47 + 48) <strong>abandoned 97.6 % of everything it created.</strong></li></ul><p>The two families <strong>never exchange a single arc</strong> in either direction. A third, weaker campaign
+(<code>|O| = 23</code>, 78.0 % abandoned) is disjoint from both.</p><h3 id=233-the-consolidations-tile-a-contiguous-id-interval-exactly>23.3 The consolidations tile a contiguous ID interval, exactly</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>start=230,703,549 |I|= 9,997  inputs [216,863,076 .. 216,914,993]
+</span></span><span class=line><span class=cl>start=230,843,654 |I|=20,000         [216,914,994 .. 217,502,485]
+</span></span><span class=line><span class=cl>start=230,926,434 |I|=20,000         [217,502,486 .. 217,849,905]
+</span></span><span class=line><span class=cl>start=231,081,170 |I|=20,000         [217,849,906 .. 218,398,580]
+</span></span><span class=line><span class=cl>start=230,994,044 |I|=20,000         [218,398,581 .. 218,912,985]
+</span></span><span class=line><span class=cl>start=230,873,887 |I|=20,000         [218,912,986 .. 219,102,837]
+</span></span><span class=line><span class=cl>start=231,014,489 |I|=20,000         [219,102,838 .. 219,372,985]
+</span></span><span class=line><span class=cl>start=230,844,251 |I|=20,000         [219,372,986 .. 219,677,752]
+</span></span><span class=line><span class=cl>start=230,910,487 |I|=20,000         [219,677,753 .. 219,880,238]
+</span></span><span class=line><span class=cl>start=230,725,307 |I|=20,000         [219,880,239 .. 224,132,043]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>every max + 1 equals the next min.  gaps = 0.  overlaps = 0.
+</span></span><span class=line><span class=cl>union = 189,997 inputs covering [216,863,076 .. 224,132,043].  all ten outputs UNSPENT.
+</span></span></code></pre></div><p><strong>One operator sweeping its own outputs in strict ID order, in batches of exactly 20,000.</strong> Note the
+batch order in ID space is <em>not</em> the order of the consolidating transactions themselves. And the
+exact-count proof: of the <code>|O|=1</code> sweep transactions in 216.8–224.2 M, precisely
+<strong>180,000 = 9 × 20,000</strong> of their outputs flow into <code>|I| >= 20,000</code> consumers, and every single
+mega-feeding sweep has a pure flood-2 diet with <strong>zero</strong> family-A inputs.</p><p>There is also an earlier tier of the same operation — <code>|I|</code> = 7,350 (×2), 5,569 (×5), 5,000 (×5),
+5,160, 4,691 at nodes 213.8 M–217.3 M — each 100 % fed by <code>|O|=102</code>, <code>|O|=35</code> or <code>|O|=15</code>.</p><h3 id=234-the-abandoned-dust-is-27--of-the-entire-utxo-set>23.4 The abandoned dust is 2.7 % of the entire UTXO set</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>window 217-220M: 3,000,000 nodes, 1,435,470 unspent (47.85 %)
+</span></span><span class=line><span class=cl>  by creating class:  own=101 -&gt; 1,101,735 UTXOs (76.75 % of the window), unspent rate 97.58 %
+</span></span><span class=line><span class=cl>                      own= 23 -&gt;   201,066        (14.01 %), rate 78.03 %
+</span></span><span class=line><span class=cl>                      own= 47 -&gt;    32,581,  own=48 -&gt; 32,165  (both ~97.5 %)
+</span></span><span class=line><span class=cl>  family A + |O|=23 = 1,367,547 = 95.27 % of the window&#39;s UTXOs
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>share of ALL 53,078,524 UTXOs in the graph:
+</span></span><span class=line><span class=cl>  217-220M          -&gt; 1,435,470 = 2.7044 %
+</span></span><span class=line><span class=cl>  216.5-220.5M      -&gt; 1,637,049 = 3.0842 %
+</span></span><span class=line><span class=cl>  210-225M          -&gt; 2,367,494 = 4.4604 %
+</span></span><span class=line><span class=cl>globally own=101 is the 5th-largest UTXO class: 2,161,797 = 4.07 % of the UTXO set,
+</span></span><span class=line><span class=cl>  50.96 % of which was minted in this one window
+</span></span></code></pre></div><p><strong>A single 2015 campaign, lasting 365 block segments, is still responsible for ~2.7 % of the entire
+unspent-output set two years later</strong> — measured from topology alone, with no value data.</p><p>It also visibly filled blocks: the <code>|O|=101</code> campaign packed 3.23 M outputs into 365 segments =
+<strong>8,854 outputs per block</strong>, against 2,688–2,907 in the neighbouring windows.</p><h3 id=235-and-the-sweep-wave-of-6-was-sweeping-the-other-flood>23.5 And the &ldquo;sweep wave&rdquo; of §6 was sweeping the <em>other</em> flood</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>sweep window 220M-222M: 635,313 tx, 2,950,320 input slots, mean |I| = 4.6439
+</span></span><span class=line><span class=cl>  input class    share      global baseline    ratio
+</span></span><span class=line><span class=cl>  own=  2      30.558 %        60.591 %        0.50x
+</span></span><span class=line><span class=cl>  own=102      19.087 %         0.195 %       98.07x
+</span></span><span class=line><span class=cl>  own= 35      18.210 %         0.234 %       77.91x
+</span></span><span class=line><span class=cl>  own= 15       5.369 %         0.316 %       16.99x
+</span></span><span class=line><span class=cl>  own=101       0.440 %         0.752 %        0.58x   &lt;-- BELOW baseline
+</span></span></code></pre></div><p>The elevated <code>ins/tx</code> I flagged in §6 is real, but it is flood-2 reclaiming its own dust at ~100×
+and ~78× baseline. <strong><code>|O|=101</code> dust is consumed <em>below</em> chance.</strong> Nobody swept it — that is why 97.6 %
+of it is still sitting in the UTXO set.</p><h3 id=236-a-shape-signature-inside-the-flood>23.6 A shape signature inside the flood</h3><p>The <code>|O|=101</code> transactions have <strong>no change output at a fixed position</strong> — the chain-continuation
+output sits at a uniformly random position (per-position mean 96.79, sd 10.97 against a Poisson
+sd of 9.84). But <strong>27 of the 101 output slots are systematically 3–8× more likely to be spent</strong>,
+stably across the whole campaign:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>74 &#34;quiet&#34; positions: spend rate 1.00-2.4 %, ~1 distinct consumer per spend
+</span></span><span class=line><span class=cl>27 &#34;hot&#34;   positions: spend rate 3.07-7.66 %, mean consumer |I| 150-460, many-to-one consumers
+</span></span><span class=line><span class=cl>   hot set = {4,13,19,28,29,34,36,37,41,42,45,46,50,51,61,62,65,66,70,71,73,74,78,79,82,85,88}
+</span></span><span class=line><span class=cl>   stability first-half vs second-half: p=4 446/364, p=13 403/331, p=29 438/349
+</span></span></code></pre></div><p>That is the signature of a <strong>fixed, ordered 101-recipient list</strong> where 27 of the recipients happened
+to sweep their dust and the other 74 ignored it. <em>(Rated medium confidence by the original agent; the
+verifier independently reproduced the position statistics and the exact hot set.)</em></p><hr><h2 id=24-all-10270178-longest-paths>24. All ~10^270,178 longest paths</h2><p><em>Verification: claim 1 <strong>CONFIRMED</strong> by an independent big-float implementation plus a second
+modular prime — log10 agrees to 4×10⁻¹² relative and the mod-2³¹−1 checksum is bit-identical.
+Two sub-claims <strong>PARTIAL</strong> (§25).</em></p><h3 id=241-how-many-are-there>24.1 How many are there</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=n>D</span> <span class=o>=</span> <span class=mi>2</span><span class=p>,</span><span class=mi>168</span><span class=p>,</span><span class=mi>061</span> <span class=p>(</span><span class=mi>2</span><span class=p>,</span><span class=mi>168</span><span class=p>,</span><span class=mi>062</span> <span class=n>levels</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>critical</span> <span class=n>nodes</span>  <span class=mi>4</span><span class=p>,</span><span class=mi>057</span><span class=p>,</span><span class=mi>782</span> <span class=p>(</span><span class=mf>0.60721</span> <span class=o>%</span> <span class=n>of</span> <span class=n>n</span><span class=p>)</span>      <span class=n>critical</span> <span class=n>arcs</span> <span class=mi>11</span><span class=p>,</span><span class=mi>187</span><span class=p>,</span><span class=mi>805</span>
+</span></span><span class=line><span class=cl><span class=n>log10</span><span class=p>(</span><span class=c1># distinct longest paths) = 270,177.978695   =&gt;  ~9.53 x 10^270,177</span>
+</span></span><span class=line><span class=cl>   <span class=n>verified</span> <span class=mi>4</span> <span class=n>ways</span><span class=p>:</span> <span class=n>backward</span> <span class=n>DP</span><span class=p>,</span> <span class=n>forward</span> <span class=n>DP</span><span class=p>,</span> <span class=n>count</span> <span class=n>mod</span> <span class=mi>2</span><span class=o>^</span><span class=mi>31</span><span class=o>-</span><span class=mi>1</span> <span class=o>=</span> <span class=mi>952</span><span class=p>,</span><span class=mi>180</span><span class=p>,</span><span class=mi>286</span> <span class=n>from</span> <span class=n>BOTH</span>
+</span></span><span class=line><span class=cl>   <span class=n>directions</span><span class=p>,</span> <span class=ow>and</span> <span class=n>the</span> <span class=n>level</span> <span class=n>invariant</span> <span class=n>sum_v</span><span class=p>(</span><span class=n>paths_in</span><span class=p>[</span><span class=n>v</span><span class=p>]</span> <span class=o>*</span> <span class=n>paths_out</span><span class=p>[</span><span class=n>v</span><span class=p>])</span> <span class=n>identical</span> <span class=n>mod</span> <span class=n>p</span>
+</span></span><span class=line><span class=cl>   <span class=n>on</span> <span class=n>ALL</span> <span class=mi>2</span><span class=p>,</span><span class=mi>168</span><span class=p>,</span><span class=mi>062</span> <span class=n>levels</span> <span class=p>(</span><span class=mi>0</span> <span class=n>mismatches</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>critical</span> <span class=n>SOURCES</span> <span class=p>(</span><span class=n>depth</span> <span class=mi>0</span><span class=p>):</span> <span class=n>exactly</span> <span class=mi>1</span>  <span class=o>=</span> <span class=n>node</span> <span class=mi>84</span><span class=p>,</span><span class=mi>564</span>
+</span></span><span class=line><span class=cl><span class=n>critical</span> <span class=n>SINKS</span>  <span class=p>(</span><span class=n>height</span> <span class=mi>0</span><span class=p>):</span> <span class=n>exactly</span> <span class=mi>2</span>  <span class=o>=</span> <span class=n>nodes</span> <span class=mi>668</span><span class=p>,</span><span class=mi>259</span><span class=p>,</span><span class=mi>783</span> <span class=ow>and</span> <span class=mi>668</span><span class=p>,</span><span class=mi>259</span><span class=p>,</span><span class=mi>784</span> <span class=p>(</span><span class=n>one</span> <span class=n>final</span> <span class=n>transaction</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>geometric</span><span class=o>-</span><span class=n>mean</span> <span class=n>branching</span> <span class=n>per</span> <span class=n>level</span> <span class=o>=</span> <span class=mf>1.3327</span>
+</span></span><span class=line><span class=cl><span class=n>BRANCH</span> <span class=n>nodes</span> <span class=p>(</span><span class=o>&gt;=</span><span class=mi>2</span> <span class=n>critical</span> <span class=n>children</span><span class=p>):</span> <span class=mi>2</span><span class=p>,</span><span class=mi>128</span><span class=p>,</span><span class=mi>564</span> <span class=o>=</span> <span class=mf>52.46</span> <span class=o>%</span>
+</span></span><span class=line><span class=cl><span class=n>MERGE</span>  <span class=n>nodes</span> <span class=p>(</span><span class=o>&gt;=</span><span class=mi>2</span> <span class=n>critical</span> <span class=n>parents</span><span class=p>)</span> <span class=p>:</span> <span class=mi>2</span><span class=p>,</span><span class=mi>151</span><span class=p>,</span><span class=mi>643</span> <span class=o>=</span> <span class=mf>53.03</span> <span class=o>%</span>
+</span></span></code></pre></div><p><strong>Astronomically many longest paths, all starting at one node and ending at one transaction.</strong></p><h3 id=242-brittle-in-topology-resilient-in-metric>24.2 Brittle in topology, resilient in metric</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>1,644,664 nodes each lie on 100 % of those ~10^270,178 paths (the width-1 levels of §18.1).
+</span></span><span class=line><span class=cl>Deleting any one of them annihilates the entire family.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>27 TRUE single-node deletions (full depth+height DP re-run on G - v; no-deletion control = 2,168,061):
+</span></span><span class=line><span class=cl>  drops sorted: 1,1,1,1,1,6,17,32,40,41,80,188,205,222,267,300,359,819,903,989,
+</span></span><span class=line><span class=cl>                1930,1930,1951,2561,3808,3808,12731
+</span></span><span class=line><span class=cl>  median drop 222.   worst found: node 238,404 -&gt; D&#39; = 2,155,330, drop 12,731 (0.587 % of D)
+</span></span></code></pre></div><p>So the record is <strong>topologically brittle</strong> — 1.64 M distinct single points of failure — but
+<strong>metrically resilient</strong>: killing one of them typically costs only a few hundred of 2.17 M levels.
+Long forced runs are <em>not</em> expensive per se: deleting the head of the 101,158-level isthmus costs
+<strong>6 levels</strong>; deleting a node in its middle costs 1,930.</p><p>The most vital node in the graph is <strong>node 238,404</strong>, at the tail of the one stretch where the
+<em>entire DAG</em> — not just the critical subgraph — is a literal single thread:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>levels with exactly ONE node in the whole graph: 3,809, in exactly 1 maximal run, depths 18,798..22,606
+</span></span><span class=line><span class=cl>  head (node 217,674) -&gt; drop 3,808     mid (node 222,121) -&gt; drop 3,808
+</span></span><span class=line><span class=cl>  tail (node 238,404) -&gt; drop 12,731
+</span></span></code></pre></div><h3 id=243-the-record-is-sharply-peaked>24.3 The record is sharply peaked</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>nodes with D - (depth+height) = g:
+</span></span><span class=line><span class=cl>  g=0: 4,057,782    g=1: 1,793,892    g=2: 1,042,307    g=5: 532,328    g=10: 362,217
+</span></span><span class=line><span class=cl>  then a flat shelf of ~72,000-77,000 nodes per gap level out to g=1,000
+</span></span><span class=line><span class=cl>cumulative: g&lt;=1 0.876 %   g&lt;=10 1.621 %   g&lt;=100 3.699 %   g&lt;=1000 13.819 %
+</span></span></code></pre></div><p>The critical population is a strict local maximum, <strong>2.26× larger than the <code>g=1</code> population</strong>, then
+the almost-critical density collapses and flattens. The depth record is a genuine spike, not the tip
+of a smooth distribution.</p><h3 id=244-the-critical-subgraph-is-two-mixer-bands-separated-by-peel-thread>24.4 The critical subgraph is <strong>two mixer bands separated by peel thread</strong></h3><p>Mean critical width per depth bucket, and the dominant <code>|O|</code> among critical arcs:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>depth       0 -   433,612 : width ~1.00-1.14 , |O|=2 at 92-100 %   (four buckets exactly 100 % |O|=2
+</span></span><span class=line><span class=cl>                                                                    and exactly width 1)
+</span></span><span class=line><span class=cl>depth 433,612 -   813,023 : width 3.07-3.89  , |O|=17 14-19 %, 18 ~13 %, 19 ~12 %, 20 ~10 %, 16 ~11 %
+</span></span><span class=line><span class=cl>                                               (|O|=21 only 5.5-7.4 %)
+</span></span><span class=line><span class=cl>depth 813,023 -   921,426 : width back to 1.06-1.24
+</span></span><span class=line><span class=cl>depth 921,426 - 1,626,046 : width 1.65-3.39  , |O|=21 at 70.7-87.6 %
+</span></span><span class=line><span class=cl>depth 1,626,046 - D       : width 1.000-1.02 , |O|=2 dominant
+</span></span></code></pre></div><p><strong>The longest-path family fans out in exactly two places, and both are mixers</strong> — a <code>|O|=16..20</code>
+band at depths 433 k–813 k and the <code>|O|=21</code> band at 921 k–1,626 k. Everywhere else the family
+collapses to a single width-1 thread of ordinary peel transactions. Critical arcs per bucket run
+~54,200 in the thin regions against 600,000–820,000 in the fat bands, a 15× difference.</p><p>Composition of the critical subgraph as a whole:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>                  share of critical NODES   share of critical ARCS   of critical TRANSACTIONS
+</span></span><span class=line><span class=cl>|O| = 21              27.02 %  (13.0x)          38.13 %  (3.6x)          12.30 %  (45.6x)
+</span></span><span class=line><span class=cl>|O| = 17/18/19        ~5 % each (~10.7x)        ~6 % each                ~31-33x
+</span></span><span class=line><span class=cl>|O| =  2              39.27 %  (0.67x)          (0.40x)                  (0.86x)
+</span></span><span class=line><span class=cl>|O| =  1              (0.13x)                                            
+</span></span><span class=line><span class=cl>same-block arcs       90.79 % vs 17.31 % baseline (5.25x)
+</span></span></code></pre></div><h3 id=245-a-uniformly-random-longest-path-looks-exactly-like-the-greedy-spine>24.5 A uniformly random longest path looks exactly like the greedy spine</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>                       random longest path (exact arc marginals)   greedy spine (§18)
+</span></span><span class=line><span class=cl>peel (|I|=1,|O|=2) hops        58.6683 %                                58.65 %
+</span></span><span class=line><span class=cl>same-block hops                91.5390 %                                91.54 %
+</span></span><span class=line><span class=cl>|O|=21 mixer hops              10.7584 %                                10.65 %
+</span></span></code></pre></div><p>Cross-checked by the verifier with 40 <strong>uniformly sampled</strong> longest paths (walking from the unique
+source, choosing each critical child with probability proportional to its exact <code>paths_out</code>): peel
+58.6680 %, same-block 91.5388 %, mixer 10.7582 %. All 40 sampled paths had length exactly 2,168,061.</p><p><strong>So §18&rsquo;s spine composition was not a greedy artefact</strong> — it is the expected composition of a
+uniformly random member of a family of 10^270,178 paths.</p><h3 id=246-the-longest-path-family-lives-in-the-first-half-of-the-ledger>24.6 The longest-path family lives in the first half of the ledger</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>critical nodes below node 334,130,976 (half the ID axis): 3,379,325 / 4,057,782 = 83.28 %
+</span></span><span class=line><span class=cl>critical nodes below node 167,065,488 (first quarter)   : 2,021,190              = 49.81 %
+</span></span><span class=line><span class=cl>densest slices: 11.7M-13.4M 5.41x , 13.4M-15.0M 4.76x , 85.2M-86.9M 4.19x , 135.3M-137.0M 3.85x
+</span></span><span class=line><span class=cl>sparsest      : 462.8M-464.4M 0.011x , ~400M 0.044x
+</span></span><span class=line><span class=cl>era enrichment: bucket 5 3.33x -&gt; bucket 20 0.78x -&gt; bucket 39 0.171x (monotone decline)
+</span></span></code></pre></div><p>The two densest slices in the whole graph, at 5.4× and 4.8×, are <strong>exactly where the isthmus of §19
+lives</strong> (nodes 12.44 M–15.66 M). The post-400 M era is essentially absent from the longest-path
+family — consistent with §18.5&rsquo;s 14× collapse in chaining intensity.</p><hr><h2 id=25-corrections--what-the-adversarial-pass-killed>25. Corrections — what the adversarial pass killed</h2><p>Every track was re-derived by an independent agent instructed to refute it. This is what did not
+survive, including three of my own claims from Parts I–II.</p><h3 id=251-corrections-to-parts-iii>25.1 Corrections to Parts I–II</h3><table><thead><tr><th>where</th><th>what I wrote</th><th>what is actually true</th></tr></thead><tbody><tr><td><strong>§6</strong></td><td>the 217–220 M dust flood and the 220–222 M sweep are one story — &ldquo;flood → clean-up&rdquo;</td><td><strong>Wrong.</strong> Two disjoint campaigns share that window. The sweep consumes <code>O=102</code>/<code>O=35</code> dust at 98× and 78× baseline and <code>O=101</code> dust at <strong>0.58× — below chance</strong>. The two families exchange <strong>zero</strong> arcs. See §23.</td></tr><tr><td><strong>§17.1</strong></td><td>&ldquo;all 21 output positions are statistically identical … there is no change output&rdquo;</td><td><strong>Too strong.</strong> Positions 0–19 are identical (z −1.5…+1.3). Position 20 is distinguishable at <strong>+23.5 σ</strong> on same-class return (62.82 % vs 61.32–61.48 %) and <strong>−25.6 σ</strong> on unspent rate (0.815 % vs 1.151 %). The <em>effect size</em> is 2.3 % relative, against <strong>2.4×</strong> for <code>O=11</code> and <strong>4.6×</strong> for <code>O=51</code>, so the CoinJoin verdict stands — but &ldquo;no distinguishable change output&rdquo; is false. The verdict now rests on counterparty multiplicity instead (§21.3), which is much stronger evidence.</td></tr><tr><td><strong>§18.2</strong></td><td>&ldquo;the spine is <strong>39.5× enriched</strong> in mixer transactions&rdquo;</td><td><strong>Baseline error.</strong> The hop share (10.65 %, and 10.76 % for a uniformly random longest path) is confirmed exactly. But 39.5× compares a <em>hop</em> share against a <em>transaction</em> share. The matched null for a hop is the share of spent outputs consumed by an <code>O=21</code> transaction = 10,812,004 / 615,183,429 = <strong>1.7575 %</strong>, giving <strong>6.1×</strong>. Against the arc-share null (10.4994 %) it is <strong>1.02× — no enrichment at all</strong>. The mixer really is over-represented on the longest path, but by ~6×, not ~40×.</td></tr><tr><td><strong>§13 / §18.1</strong></td><td>the forced run spans depths 125,757 … <strong>226,915</strong></td><td>Off-by-one: it ends at depth <strong>226,914</strong>. The length, 101,158 levels, is right.</td></tr><tr><td><strong>§17</strong></td><td>&ldquo;the <code>O=21</code> mixer&rdquo; as a single object</td><td>It is <strong>five ID-disjoint eras</strong> with 0.0045 % cross-era arcs. The mixer is <strong>era D</strong> (nodes 150 M–367 M, 568,888 tx). Era B is a separate, purer precursor; era C is a different service. See §20.1.</td></tr></tbody></table><h3 id=252-claims-from-part-iii-that-were-killed>25.2 Claims from Part III that were killed</h3><p><strong>REFUTED — the <code>|O| = 78..102</code> &ldquo;band operator&rdquo;.</strong> An agent reported 25 adjacent output-size classes
+cross-feeding at 12–94×, aggregating to 137,346 transactions with 31.73 % internal input share at
+20× baseline. Every figure reproduced exactly, but three controls the agent never ran destroy the
+inference:</p><ul><li>75.0 % of the &ldquo;internal&rdquo; arcs are the <strong>diagonal</strong>, and 71,244 of those belong to <code>|O|</code> = 101, 102
+and 99 — classes already identified separately. Genuine cross-class band flow is 7.94 % at 4.9×,
+not 31.73 % at 20×.</li><li>A <strong>sliding-window control</strong> over other 25-wide bands: 103–127 gives 27.7×, 153–177 gives 25.8×,
+203–227 gives 27.9× — all <em>higher</em> than 78–102&rsquo;s 4.9×.</li><li><strong>Adjacent-class cross-feeding is generic</strong> for every sparse class above <code>L ≈ 50</code> (114→115 at 219×,
+137→138 at 146×, 153↔154 at 103×/116×).</li></ul><p>Nothing singles out 78..102. Dropped.</p><p><strong>LABEL REFUTED — <code>|O| = 14</code> as &ldquo;a second independent mixer&rdquo;.</strong> All ~25 reported numbers reproduced
+exactly (R = 3.033, flat position profile, 95.07 % one component, no traffic with <code>|O|=21</code>). But the
+control that matters shows it is a <strong>1–2 counterparty consolidate-and-resplit loop</strong>, not a
+multi-party join:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>                              inputs from the single largest predecessor tx
+</span></span><span class=line><span class=cl>|O|=14 core: median 78.6 %,  80.88 % of transactions take &gt;=80 % from &lt;=2 predecessors
+</span></span><span class=line><span class=cl>|O|=21 core: median 21.4 %,   0.50 % of transactions take &gt;=80 % from &lt;=2 predecessors
+</span></span></code></pre></div><p>Its own report used exactly this test to demote <code>|O|=50</code> from &ldquo;mixer&rdquo;, so the two findings were
+mutually inconsistent. Also &ldquo;all 14 positions identical&rdquo; is false — the per-position unspent rate
+runs 4.43 %–6.71 % (z −23 to +25) with a visible step at position 6.</p><p><strong>Net effect: <code>|O| = 21</code> is the only multi-party CoinJoin in the dataset.</strong></p><p><strong>PARTIAL — the pure-chain batchers&rsquo; amplification factor.</strong> The mechanism is confirmed to 2 decimal
+places (96–99.6 % of all same-class recirculation leaves the last output; a spot check on 2,000
+<code>|O|=138</code> transactions found the last output feeding another 138-transaction <strong>1,583 times against 11
+for all 137 other positions combined</strong>). But the reported position ratios of 10⁴–10⁵ were computed on
+the <code>|I|=1</code> subpopulation while the neighbouring columns were class-wide. Class-wide: <code>L=138</code> is
+<strong>10,525</strong>, not 67,668; <code>L=146</code> is 36,845, not 99,905; <code>L=200</code> is 53,914, not 64,393.</p><p><strong>REFUTED — &ldquo;deleting the unique source node 84,564 costs 205 levels&rdquo;.</strong> It costs <strong>1</strong>. Provable
+from the same report&rsquo;s own finding that there is exactly one critical source: <code>D' ≤ D−1</code>, and node
+87,248 (depth 1, height 2,168,060) has a forward cone that avoids 84,564 entirely because all arcs
+point forward in node ID, so <code>D' ≥ 2,168,060</code>. Eight of the nine other named deletion costs
+reproduced exactly.</p><h3 id=253-what-held-up>25.3 What held up</h3><p>The verifiers reproduced, digit for digit and by deliberately different code paths (transpose vs
+forward, pull-DP vs push-DP, bitsets vs sorted unions, big-float vs log-sum-exp, Monte Carlo vs
+exact marginals):</p><ul><li>the five-era matrix of §20.1 — twice, byte-identical, once from each graph direction;</li><li>the residence-time distribution of §20.2 — three methods, exact quantile agreement;</li><li>the 25-transaction in-block ceiling and all 20 rows of the deepest-in-block table (§22);</li><li>the ten mega-consolidations&rsquo; <strong>zero-gap, zero-overlap tiling</strong> of <code>[216,863,076 .. 224,132,043]</code>
+and the 100 %/0 % ancestry split (§23) — re-derived by the opposite traversal direction;</li><li><code>log10(#longest paths) = 270,177.9787</code> with a <strong>bit-identical mod-2³¹−1 checksum of 952,180,286</strong>,
+plus a second independent prime, forward and backward (§24);</li><li>the <code>|O|=21</code> core&rsquo;s median of 9 distinct same-class predecessors with parallel-arc multiplicity 1.</li></ul><p>The coinbase-run segmentation used throughout Parts I–III was independently validated node-for-node:
+&ldquo;uncovered by the interval partition&rdquo; and &ldquo;in-degree 0 in the transpose&rdquo; agree on all 668,261,953
+nodes with <strong>0 disagreements</strong>, giving 392,047 segments and 2,032,814 coinbase outputs both ways.</p><hr><h2 id=26-final-picture>26. Final picture</h2><p>The graph is an exact union of 244,930,113 bicliques whose output sides tile the vertex set (§4).
+Given that scaffold, everything interesting is in <strong>who chooses whose outputs</strong>, and that turns out to
+be dominated by a small number of machines:</p><ol><li><strong>One early-2011 peeling wallet</strong> (§19) emitted 101,158 chained transactions across ~3,000 blocks,
+and in doing so built a 101,158-level unbranchable isthmus that <em>every one of the ~10^270,178
+longest paths in the graph</em> must traverse node by node.</li><li><strong>One CoinJoin mixer</strong> (§17, §20, §21.3) — the only genuinely multi-party one in the ledger —
+recycled coins for ~3.6 rounds each between nodes 150 M and 367 M, capped at 25 inputs on both
+sides of its interface, and it is one of only <strong>two places</strong> where the longest-path family fans
+out at all (§24.4).</li><li><strong>Two simultaneous 2015 spam campaigns</strong> (§23) that never touched each other: one closed loop that
+reclaimed every satoshi it sprayed, and one that abandoned 97.6 % of its output and still accounts
+for <strong>2.7 % of the entire UTXO set</strong>.</li><li><strong>A mempool policy default</strong> (§22) — 25 ancestors, Bitcoin Core 0.12 — that propagated through
+miners in four discrete steps over ~22,000 blocks and is visible in the arc structure as a hard
+ceiling with exactly one survivor in 63,047 blocks.</li><li><strong>A taxonomy of payout software</strong> (§21) whose batch sizes sit on the <code>10^k</code> and <code>10^k + 1</code>
+lattices all the way from <code>|O| = 11</code> to <code>|O| = 2001</code>.</li></ol><p>None of that needed a txid, an address, or a single satoshi of value data. It is all in the shape of
+2,162,523,341 arcs.</p><p><em>End of log.</em></p><div class=blog-categories><span>Categories: </span><a href=/categories/rust/>rust</a>&nbsp;</div></article><a href=/post/simd-survey/ class="nav-side-arrow nav-side-prev" title=SIMD aria-label="Previous Post: SIMD"><i class="fas fa-chevron-left"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/simd-survey/ data-bs-toggle=tooltip data-bs-placement=top title=SIMD><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next></li></ul><div class=toc-wrapper id=toc-wrapper data-toc-mode=headings><div class=toc-panel id=toc-panel role=dialog aria-label="Table of contents"><div class=toc-header><span class=toc-title>Table of Contents</span>
+<button class=toc-close id=toc-close aria-label="Close table of contents">&#215;</button></div><nav class=toc-body><nav id=TableOfContents><ul><li><a href=#topology--subgraph-patterns-in-databitcoinbitcoin-webgraphpg>Topology & subgraph patterns in <code>/data/bitcoin/bitcoin-webgraph/pg</code></a><ul><li><a href=#0-setup--how-things-are-measured>0. Setup / how things are measured</a></li><li><a href=#01-notation--every-symbol-used-in-this-document>0.1 Notation — every symbol used in this document</a><ul><li><a href=#the-graph>The graph</a></li><li><a href=#transactions-the-biclique-decomposition-of-4>Transactions (the biclique decomposition of §4)</a></li><li><a href=#derived-arrays-what-the-probe-binaries-actually-build>Derived arrays (what the probe binaries actually build)</a></li><li><a href=#statistics>Statistics</a></li></ul></li><li><a href=#02-glossary--the-bitcoin-side>0.2 Glossary — the Bitcoin side</a></li><li><a href=#1-first-look--the-graph-is-id-ordered-and-forward-only>1. FIRST LOOK — the graph is ID-ordered and forward-only</a></li><li><a href=#2-confirmed--the-graph-is-a-dag-given-in-topological-order>2. CONFIRMED — the graph is a <strong>DAG given in topological order</strong></a></li><li><a href=#3-the-big-one--every-successor-list-is-one-contiguous-interval>3. THE BIG ONE — every successor list is <strong>one contiguous interval</strong></a><ul><li><a href=#31-degree-distribution--the-shape-of-bitcoin-transactions>3.1 Degree distribution = the shape of Bitcoin transactions</a></li><li><a href=#32-distance-to-the-block-a-bimodal-time-to-spend-curve>3.2 Distance to the block: a bimodal &ldquo;time-to-spend&rdquo; curve</a></li></ul></li><li><a href=#4-the-global-structure--an-exact-decomposition-into-245-m-bicliques>4. THE GLOBAL STRUCTURE — an exact decomposition into 245 M <strong>bicliques</strong></a><ul><li><a href=#41-ground-truth-this-is-the-bitcoin-utxo-spend-graph>4.1 Ground truth: this is the Bitcoin <strong>UTXO spend graph</strong></a></li><li><a href=#42-outputs-per-transaction-ot--and-the->4.2 Outputs per transaction |O(T)| — and the <strong>“batch + change” combs</strong></a></li><li><a href=#43-inputs-per-transaction-it--round-number-consolidation-combs>4.3 Inputs per transaction |I(T)| — round-number <strong>consolidation combs</strong></a></li></ul></li><li><a href=#5-the-temporal-segmentation-hidden-in-the-node-ids>5. The <strong>temporal segmentation</strong> hidden in the node IDs</a><ul><li><a href=#51-the-ledgers-growth-curve-read-off-the-graph-alone>5.1 The ledger&rsquo;s growth curve, read off the graph alone</a></li></ul></li><li><a href=#6-anomaly--two-distinct-spam--batching-campaigns-visible-as-degree-spikes-localised-in-time>6. ANOMALY — two distinct <strong>spam / batching campaigns</strong>, visible as degree spikes localised in time</a><ul><li><a href=#campaign-a--a-dust-flood-nodes--217-m--220-m>Campaign A — a <strong>dust flood</strong> (nodes ≈ 217 M – 220 M)</a></li><li><a href=#the-sweep-that-follows-nodes--220-m--222-m>The sweep that follows (nodes ≈ 220 M – 222 M)</a></li><li><a href=#campaign-b--a-sustained-50-way-batch-payout-nodes--226-m--237-m>Campaign B — a <strong>sustained 50-way batch payout</strong> (nodes ≈ 226 M – 237 M)</a></li></ul></li><li><a href=#7-the-graph-is-astonishingly-deep--a-217-million-hop-spine-across-the-whole-history>7. The graph is <strong>astonishingly deep</strong> — a 2.17-million-hop spine across the whole history</a><ul><li><a href=#71-result>7.1 Result</a></li><li><a href=#72-the-spine-is-locally-dense--chained-transactions-inside-single-blocks>7.2 The spine is <em>locally</em> dense — chained transactions inside single blocks</a></li></ul></li><li><a href=#8-peel-chains--558--of-transactions-are-1-in2-out-and-they-chain-up-to-25343-deep>8. PEEL CHAINS — 55.8 % of transactions are 1-in/2-out, and they chain up to 25,343 deep</a></li><li><a href=#9-the-transpose-pg-t--the-asymmetry-is-the-whole-story>9. The transpose <code>pg-t</code> — the <strong>asymmetry</strong> is the whole story</a><ul><li><a href=#91-but-the-08--of-contiguous-input-sets-are-not-random>9.1 …but the 0.8 % of contiguous input sets are not random</a></li></ul></li><li><a href=#10-the-largest-bicliques-and-a-hard-coded-20000-input-limit>10. The largest bicliques, and a <strong>hard-coded 20,000-input limit</strong></a></li><li><a href=#11-only-15378-distinct-transaction-shapes-and-3-of-them-are-78--of-the-ledger>11. Only <strong>15,378</strong> distinct transaction shapes, and 3 of them are 78 % of the ledger</a></li><li><a href=#12-connectivity--one-giant-component-and-256331-coins-that-never-moved>12. Connectivity — one giant component, and 256,331 coins that never moved</a></li><li><a href=#13-the-dag-is-217-million-layers-deep-and---a-filament-not-a-blob>13. The DAG is <strong>2.17 million layers deep and ~150 nodes wide</strong> — a filament, not a blob</a></li><li><a href=#14-the-10k1-combs-are-three-different-operators-not-one-phenomenon>14. The <code>10k+1</code> combs are <strong>three different operators</strong>, not one phenomenon</a></li><li><a href=#15-summary--the-complete-structural-description>15. Summary — the complete structural description</a><ul><li><a href=#practical-consequences-for-anyone-computing-on-this-graph>Practical consequences for anyone computing on this graph</a></li></ul></li><li><a href=#16-method--reproduction>16. Method / reproduction</a><ul><li><a href=#caveats>Caveats</a></li></ul></li></ul></li><li><a href=#part-ii--deeper-dives>PART II — deeper dives</a><ul><li><a href=#17-the-o--21-operator-resolved-it-is-a-self-recycling-mixer-not-a-payout-batcher>17. The <code>|O| = 21</code> operator, resolved: it is a <strong>self-recycling mixer</strong>, not a payout batcher</a><ul><li><a href=#171-test-1--positional-structure-of-the-outputs-the-decisive-one>17.1 Test 1 — positional structure of the outputs (the decisive one)</a></li><li><a href=#172-test-2--the-self-affinity-spectrum-a-control-over-every-output-size>17.2 Test 2 — the self-affinity spectrum (a control over every output size)</a></li><li><a href=#173-test-3--the-input-count-of-the-consumers-i--o>17.3 Test 3 — the input count of the <em>consumers</em> (<code>|I| ~ |O|</code>)</a></li><li><a href=#174-test-4--flow-accounting-it-recirculates-it-does-not-distribute>17.4 Test 4 — flow accounting: it recirculates, it does not distribute</a></li><li><a href=#175-the-shape-of-the-loop>17.5 The shape of the loop</a></li><li><a href=#176-it-has-a-birth-and-a-death>17.6 It has a birth and a death</a></li><li><a href=#177-and-it-has-a-family>17.7 …and it has a family</a></li><li><a href=#178-bonus-o--50-and-o--51-are-the-same-operator>17.8 Bonus: <code>|O| = 50</code> and <code>|O| = 51</code> are the <em>same</em> operator</a></li></ul></li><li><a href=#18-the-spine-dissected-an-almost-unique-217-m-hop-chain-that-lives-inside-blocks-and-rides-the-mixer>18. The spine, dissected: an <strong>almost-unique</strong> 2.17 M-hop chain that lives inside blocks and rides the mixer</a><ul><li><a href=#181-how-unique-is-it--the-critical-subgraph>18.1 How unique is it? — the critical subgraph</a></li><li><a href=#182-what-the-hops-are-made-of>18.2 What the hops are made of</a></li><li><a href=#183-it-lives-inside-blocks-in-bursts>18.3 It lives inside blocks, in bursts</a></li><li><a href=#184-it-weaves-through-the-mixer-it-does-not-ride-it>18.4 It weaves through the mixer, it does not ride it</a></li><li><a href=#185-chaining-intensity-collapsed-14x-over-the-ledgers-life>18.5 Chaining intensity collapsed 14x over the ledger&rsquo;s life</a></li><li><a href=#186-summary-of-part-ii>18.6 Summary of Part II</a></li></ul></li></ul></li><li><a href=#part-iii--six-parallel-deep-dives>PART III — six parallel deep dives</a><ul><li><a href=#19-the-isthmus-is-one-wallet>19. The isthmus is <strong>one wallet’s peel chain from early 2011</strong></a></li><li><a href=#20-inside-the-mixer-five-disjoint-eras-36-rounds-and-a-25-input-software-limit-on-both-sides>20. Inside the mixer: five disjoint eras, ~3.6 rounds, and a 25-input software limit on both sides</a><ul><li><a href=#201-o--21-is-not-one-operator--it-is-five-and-they-never-touch>20.1 <code>|O| = 21</code> is not one operator — it is five, and they never touch</a></li><li><a href=#202-residence-time-362-rounds>20.2 Residence time: <strong>3.62 rounds</strong></a></li><li><a href=#203-the-mixer-has-a-symbiotic-partner-class-defined-by-i--25>20.3 The mixer has a symbiotic partner class defined by <code>|I| = 25</code></a></li><li><a href=#204-the-25-input-cap>20.4 The 25-input cap</a></li><li><a href=#205-the-isolated-o21-transactions-are-a-different-species>20.5 The isolated <code>|O|=21</code> transactions are a different species</a></li><li><a href=#206-drift-over-its-lifetime>20.6 Drift over its lifetime</a></li></ul></li><li><a href=#21-an-operator-taxonomy-for-the-whole-ledger--and-o21-is-the-only-real-coinjoin>21. An operator taxonomy for the whole ledger — and <code>|O|=21</code> is the <em>only</em> real CoinJoin</a><ul><li><a href=#211-a-three-number-classifier>21.1 A three-number classifier</a></li><li><a href=#212-the-table>21.2 The table</a></li><li><a href=#213-the-decisive-statistic-how-many-counterparties>21.3 The decisive statistic: how many counterparties?</a></li><li><a href=#214-two-batchers-that-randomise-the-change-position>21.4 Two batchers that randomise the change position</a></li></ul></li><li><a href=#22-a-mempool-policy-change-is-directly-visible-in-the-graph-topology>22. A mempool policy change is <strong>directly visible in the graph topology</strong></a><ul><li><a href=#221-the-ceiling>22.1 The ceiling</a></li><li><a href=#222-it-is-a-staircase-not-a-cliff--miners-upgrading-one-at-a-time>22.2 It is a <strong>staircase</strong>, not a cliff — miners upgrading one at a time</a></li><li><a href=#223-the-two-survivors>22.3 The two survivors</a></li><li><a href=#224-the-deepest-in-block-chains-anywhere-and-what-they-are-made-of>22.4 The deepest in-block chains anywhere, and what they are made of</a></li></ul></li><li><a href=#23-the-2015-anomalies-two-disjoint-floods-and-the-sweeper-did-not-eat-the-flooders-dust>23. The 2015 anomalies: <strong>two disjoint floods</strong>, and the sweeper did <em>not</em> eat the flooder’s dust</a><ul><li><a href=#231-the-falsification>23.1 The falsification</a></li><li><a href=#232-two-campaigns-same-window-opposite-fates>23.2 Two campaigns, same window, opposite fates</a></li><li><a href=#233-the-consolidations-tile-a-contiguous-id-interval-exactly>23.3 The consolidations tile a contiguous ID interval, exactly</a></li><li><a href=#234-the-abandoned-dust-is-27--of-the-entire-utxo-set>23.4 The abandoned dust is 2.7 % of the entire UTXO set</a></li><li><a href=#235-and-the-sweep-wave-of-6-was-sweeping-the-other-flood>23.5 And the “sweep wave” of §6 was sweeping the <em>other</em> flood</a></li><li><a href=#236-a-shape-signature-inside-the-flood>23.6 A shape signature inside the flood</a></li></ul></li><li><a href=#24-all-10270178-longest-paths>24. All ~10^270,178 longest paths</a><ul><li><a href=#241-how-many-are-there>24.1 How many are there</a></li><li><a href=#242-brittle-in-topology-resilient-in-metric>24.2 Brittle in topology, resilient in metric</a></li><li><a href=#243-the-record-is-sharply-peaked>24.3 The record is sharply peaked</a></li><li><a href=#244-the-critical-subgraph-is-two-mixer-bands-separated-by-peel-thread>24.4 The critical subgraph is <strong>two mixer bands separated by peel thread</strong></a></li><li><a href=#245-a-uniformly-random-longest-path-looks-exactly-like-the-greedy-spine>24.5 A uniformly random longest path looks exactly like the greedy spine</a></li><li><a href=#246-the-longest-path-family-lives-in-the-first-half-of-the-ledger>24.6 The longest-path family lives in the first half of the ledger</a></li></ul></li><li><a href=#25-corrections--what-the-adversarial-pass-killed>25. Corrections — what the adversarial pass killed</a><ul><li><a href=#251-corrections-to-parts-iii>25.1 Corrections to Parts I–II</a></li><li><a href=#252-claims-from-part-iii-that-were-killed>25.2 Claims from Part III that were killed</a></li><li><a href=#253-what-held-up>25.3 What held up</a></li></ul></li><li><a href=#26-final-picture>26. Final picture</a></li></ul></li></ul></nav></nav></div><div class=toc-backdrop id=toc-backdrop></div></div></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
+2016 - 2026
+&nbsp;&bull;&nbsp;
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.165.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://code.jquery.com/jquery-4.0.0.slim.min.js integrity=sha384-tcspKDb5tWvyRCOWzevlAeQgHeEzYdUHJpcgnIhcP9w4CnfD7DLAcS+k9QzLbRJO crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=/js/main.js></script><script src=/js/toc.js></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=/js/load-photoswipe.js></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/search-fuse.js></script></body></html>
