@@ -83,9 +83,17 @@
 
     var activePostLink = null;
 
-    function setActivePost(index) {
+    // The panel lists every post, but the page shows one pager of previews,
+    // so match previews to links by URL rather than by index.
+    var linkByHref = {};
+    postLinks.forEach(function (link) {
+      linkByHref[link.pathname] = link;
+    });
+
+    function setActivePost(preview) {
       if (activePostLink) activePostLink.classList.remove('toc-active');
-      var link = postLinks[index];
+      var anchor = preview.querySelector('a[href]');
+      var link = anchor ? linkByHref[anchor.pathname] : null;
       if (link) {
         link.classList.add('toc-active');
         activePostLink = link;
@@ -96,10 +104,7 @@
     var postObserver = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            var idx = Array.prototype.indexOf.call(postPreviews, entry.target);
-            if (idx >= 0) setActivePost(idx);
-          }
+          if (entry.isIntersecting) setActivePost(entry.target);
         });
       },
       {

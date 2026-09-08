@@ -455,7 +455,7 @@ img::selection {
   float: right;
   height: 192px;
   width: 192px;
-  margin-top: -35px;
+  margin-left: 20px;
   filter: grayscale(90%);
 }
 
@@ -469,10 +469,12 @@ img::selection {
   }
 }
 
-.post-image img {
-  border-radius: 100px;
+.post-image img,
+.post-image video {
+  border-radius: 8px;
   height: 192px;
   width: 192px;
+  object-fit: cover;
 }
 
 .post-preview .post-read-more {
@@ -487,7 +489,7 @@ img::selection {
 }
 
 @media only screen and (max-width: 500px) {
-  .post-image, .post-image img {
+  .post-image, .post-image img, .post-image video {
     height: 100px;
     width: 100px;
   }
@@ -495,7 +497,7 @@ img::selection {
   .post-image {
     width: 100%;
     text-align: center;
-    margin-top: 0;
+    margin-left: 0;
     float: left;
   }
 }
@@ -816,12 +818,14 @@ img::selection {
 }
 
 .post-pager .pager-prev > a,
-.post-pager .pager-prev > span {
+.post-pager .pager-prev > span,
+.post-pager .pager-prev > button {
   float: left;
 }
 
 .post-pager .pager-next > a,
-.post-pager .pager-next > span {
+.post-pager .pager-next > span,
+.post-pager .pager-next > button {
   float: right;
 }
 
@@ -838,16 +842,19 @@ img::selection {
 }
 
 .post-pager .pager-prev > a,
-.post-pager .pager-prev > span {
+.post-pager .pager-prev > span,
+.post-pager .pager-prev > button {
   float: left;
 }
 
 .post-pager .pager-next > a,
-.post-pager .pager-next > span {
+.post-pager .pager-next > span,
+.post-pager .pager-next > button {
   float: right;
 }
 
-.post-pager li a {
+.post-pager li a,
+.post-pager li button {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   font-size: 14px;
@@ -858,17 +865,21 @@ img::selection {
   border: 1px solid #e0e0e0;
   border-radius: 0;
   color: #404040;
+  cursor: pointer;
 }
 
 .post-pager li a:hover,
-.post-pager li a:focus {
+.post-pager li a:focus,
+.post-pager li button:hover,
+.post-pager li button:focus {
   color: #FFF;
   background: #0085a1;
   border-color: #0085a1;
 }
 
 @media only screen and (min-width: 768px) {
-  .post-pager li a {
+  .post-pager li a,
+  .post-pager li button {
     padding: 15px 25px;
   }
 }

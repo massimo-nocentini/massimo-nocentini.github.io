@@ -11,8 +11,15 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Utility: update URL without reloading
-function updateUrl(query, page) {
+// Utility: decode HTML entities (e.g. from indexed content) before re-escaping
+function decodeHtml(text) {
+  if (!text) return '';
+  return new DOMParser().parseFromString(text, 'text/html').body.textContent || '';
+}
+
+// Utility: update URL without reloading. Use push=true only for explicit
+// page changes; typing keeps replaceState so it does not spam history.
+function updateUrl(query, page, push) {
   const newUrl = new URL(window.location);
   if (query) {
     newUrl.searchParams.set('q', query);
@@ -25,19 +32,16 @@ function updateUrl(query, page) {
   } else {
     newUrl.searchParams.delete('page');
   }
-  window.history.pushState({}, '', newUrl);
-}
-
-// Manage button state (enabled/disabled)
-function setButtonsLoading(loading) {
-  // no-op: search is now triggered via input events
+  if (push) {
+    window.history.pushState({}, '', newUrl);
+  } else {
+    window.history.replaceState({}, '', newUrl);
+  }
 }
 
 async function initSearch() {
-  setButtonsLoading(true);
   try {
     searchEngine = await window.BeautifulHugoSearch.getEngine();
-    setButtonsLoading(false);
     autoSearchFromUrl();
   } catch (e) {
     console.error('Failed to load search index:', e);
@@ -45,24 +49,23 @@ async function initSearch() {
     if (container) {
       container.innerHTML = '<div class="no-results">' + (window.searchConfig ? window.searchConfig.errorIndexLoad : '') + '</div>';
     }
-    setButtonsLoading(false);
   }
 }
 
-window.doSearch = function(page) {
+window.doSearch = function(page, push) {
   page = page || 1;
   const input = document.getElementById('searchInput');
   if (!input) return;
   const query = input.value.trim();
 
   if (!query) {
-    updateUrl('', 1);
+    updateUrl('', 1, push);
     const container = document.getElementById('resultsContainer');
     if (container) container.innerHTML = '';
     return;
   }
 
-  updateUrl(query, page);
+  updateUrl(query, page, push);
 
   const container = document.getElementById('resultsContainer');
   if (container) {
@@ -105,9 +108,9 @@ function renderResults(query, page) {
     pageResults.forEach(function(data) {
       html += '<div class="result">';
       html += '<a class="result-title" href="' + escapeHtml(data.url) + '">' +
-      escapeHtml(data.title || (window.searchConfig ? window.searchConfig.untitledText : '')) + '</a>';
+      escapeHtml(decodeHtml(data.title) || (window.searchConfig ? window.searchConfig.untitledText : '')) + '</a>';
     if (data.excerpt) {
-      html += '<div class="result-excerpt">' + escapeHtml(data.excerpt) + '</div>';
+      html += '<div class="result-excerpt">' + escapeHtml(decodeHtml(data.excerpt)) + '</div>';
     }
     html += '</div>';
   });
@@ -129,32 +132,20 @@ function renderPagination(currentPage, totalResults) {
   if (currentPage > 1) {
     const prevText = window.searchConfig ? window.searchConfig.prevText : '';
     html += '<li class="pager-prev">';
-    html += '<a href="javascript:void(0)" onclick="window.doSearch(' + (currentPage - 1) + ')">&larr; ' + prevText + '</a>';
+    html += '<button type="button" data-page="' + (currentPage - 1) + '">&larr; ' + prevText + '</button>';
     html += '</li>';
   }
 
   if (currentPage < totalPages) {
     const nextText = window.searchConfig ? window.searchConfig.nextText : '';
     html += '<li class="pager-next">';
-    html += '<a href="javascript:void(0)" onclick="window.doSearch(' + (currentPage + 1) + ')">' + nextText + ' &rarr;</a>';
+    html += '<button type="button" data-page="' + (currentPage + 1) + '">' + nextText + ' &rarr;</button>';
     html += '</li>';
   }
 
   html += '</ul>';
   return html;
 }
-
-window.feelingLucky = function() {
-  const input = document.getElementById('searchInput');
-  if (!input || !input.value.trim()) return;
-
-  if (!searchEngine) return;
-
-  const result = searchEngine.lucky(input.value.trim());
-  if (result && result.url) {
-    window.location.href = result.url;
-  }
-};
 
 function autoSearchFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -184,6 +175,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') window.doSearch();
+      });
+    }
+
+    const paginationContainer = document.getElementById('search-pagination');
+    if (paginationContainer) {
+      paginationContainer.addEventListener('click', function(e) {
+        const button = e.target.closest('[data-page]');
+        if (!button) return;
+        window.doSearch(Number(button.dataset.page), true);
       });
     }
 

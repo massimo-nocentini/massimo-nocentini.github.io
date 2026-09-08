@@ -126,7 +126,7 @@ var main = {
         var hljsDark = document.getElementById('hljs-dark');
         if (hljsDark) {
           var isDark = (state === 'dark') || (state === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-          hljsDark.disabled = !isDark;
+          hljsDark.media = isDark ? 'all' : 'not all';
         }
         updateThemeTooltip(state);
       }
@@ -297,10 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const lineNumbers = codeBlockClone.querySelectorAll('.ln');
           lineNumbers.forEach(ln => ln.remove());
 
-          const codeText = codeBlockClone.textContent
-              .split('\n')
-              .map(line => line.trim())
-              .join('\n');
+          const codeText = codeBlockClone.textContent.replace(/\n$/, '');
 
           navigator.clipboard.writeText(codeText)
               .then(() => {

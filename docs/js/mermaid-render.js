@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var lightEl = container.querySelector('.theme-light');
     var darkEl = container.querySelector('.theme-dark');
     var id = 'mermaid-' + idx;
+    function advance() {
+      idx++;
+      renderNext();
+    }
     if (lightEl) {
       mermaid.initialize({startOnLoad: false, theme: 'default'});
       mermaid.render(id + '-light', code).then(function(result) {
@@ -19,21 +23,26 @@ document.addEventListener('DOMContentLoaded', function() {
           mermaid.initialize({startOnLoad: false, theme: 'dark'});
           mermaid.render(id + '-dark', code).then(function(result2) {
             darkEl.innerHTML = result2.svg;
-            idx++;
-            renderNext();
-          });
+          }).catch(function(err) {
+            console.error('mermaid render failed', err);
+          }).finally(advance);
         } else {
-          idx++;
-          renderNext();
+          advance();
         }
+      }).catch(function(err) {
+        console.error('mermaid render failed', err);
+        advance();
       });
     } else if (darkEl) {
       mermaid.initialize({startOnLoad: false, theme: 'dark'});
       mermaid.render(id + '-dark', code).then(function(result) {
         darkEl.innerHTML = result.svg;
-        idx++;
-        renderNext();
-      });
+      }).catch(function(err) {
+        console.error('mermaid render failed', err);
+      }).finally(advance);
+    } else {
+      console.error('mermaid-render: container has neither .theme-light nor .theme-dark', container);
+      advance();
     }
   }
   renderNext();

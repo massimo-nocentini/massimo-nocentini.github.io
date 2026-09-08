@@ -105,14 +105,17 @@
   background-color: rgba(255, 255, 255, 0.04);
 }
 
-[data-theme="dark"] .post-pager li a {
+[data-theme="dark"] .post-pager li a,
+[data-theme="dark"] .post-pager li button {
   background: var(--dark-surface);
   color: var(--dark-fg);
   border-color: var(--dark-surface-active);
 }
 
 [data-theme="dark"] .post-pager li a:hover,
-[data-theme="dark"] .post-pager li a:focus {
+[data-theme="dark"] .post-pager li a:focus,
+[data-theme="dark"] .post-pager li button:hover,
+[data-theme="dark"] .post-pager li button:focus {
   background: var(--dark-accent);
   border-color: var(--dark-accent);
 }
