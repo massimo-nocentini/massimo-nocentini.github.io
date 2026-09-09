@@ -1,13 +1,9 @@
 
+Both [*technical*](post/) and [*personal*](page/) contents are grouped by:
 
-# *Table of Contents*
+- [*categories*](categories/), 
+- [*tags*](tags/),
+- [*authors*](author/) and 
+- [*must have readings*](reading/must-have/),
 
-- [***Pages***](page/) <!-- {{< contents "page" >}} -->
-- [***Posts***](post/) <!-- {{< contents "post" >}} -->
-- *Taxonomies*
-
-    - [***Categories***](categories/)
-    - [***Tags***](tags/)
-    - [***Authors***](author/)
-        - [*Dino Buzzati*](author/dino-buzzati/)
-    - [***Must have readings***](reading/must-have/)
+respectively.
