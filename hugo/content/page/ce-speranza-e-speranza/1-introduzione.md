@@ -1,0 +1,298 @@
++++
+date = '2024-12-21T08:56:00+02:00'
+title = "Introduzione"
+author = 'don Fabio Rosini'
+tags = [
+    "speranza",
+    "giubileo",
+    "virtù teologali",
+    "vita eterna",
+    "illusioni",
+    "delusione",
+    "discernimento",
+    "matrimonio",
+    "provvidenza",
+]
+categories = [ "vangelo" ]
+summary = "Prima puntata della serie giubilare sulla speranza: la speranza cristiana è una virtù teologale, un'opera di Dio nell'uomo, e non il prodotto della psiche o un sinonimo di ottimismo. Non è un sentimento ma un atto, e chiede di passare dalle piccole speranze orizzontali alla grande speranza della vita eterna. Il primo passo del cammino è smascherare le false speranze facendo memoria delle proprie delusioni."
++++
+
+*Ripresa da [__vaticannews.va__](https://www.vaticannews.va/it/podcast/catechesi-di-don-fabio-rosini/ce-speranza-e-speranza/2024/12/speranza-21-12-2024.html)*.
+
+---
+
+Con la presente puntata iniziamo una serie di trasmissioni per affrontare il tema
+di questo Giubileo, che è il tema della speranza, dell'essere pellegrini di
+speranza. E iniziamo facendo un pochino di chiarimenti, ponendo un pochino di
+punti, per aiutarci a non perderci in questo tema come in altri temi. Quello che
+il cristianesimo patisce oggi è soprattutto un problema di mistificazione: cioè,
+quello che noi abbiamo da combattere non è tanto ciò che si oppone al
+cristianesimo, quanto il fatto di presentare il cristianesimo in una maniera
+inadeguata. Cioè di aver perso la radice della bellezza del cristianesimo, per
+una serie di problemi esterni e interni alla vita cristiana, e quindi trovarci
+spesso a contatto con concetti cristiani che sono stati corrotti da tendenze alla
+moda o da istanze mondane di altro genere, o quello che sia; e quindi noi ci
+avviciniamo a temi come la speranza e ci dimentichiamo dei fondamenti di questo
+tipo di virtù.
+
+Allora, in primo luogo, la speranza è una virtù. Che vuol dire? È una cosa che
+richiede un esercizio, per cui dovremo parlare della parte umana della speranza.
+*Ma è una virtù teologale, e cioè è una cosa che viene direttamente da Dio, non è
+un prodotto della psiche umana*. In effetti la speranza cristiana non è
+semplicemente la risultante dei processi mentali umani, perché i processi mentali
+umani restano comunque angustamente rinchiusi dentro le loro prospettive e dentro
+le loro ipotesi.
+
+Invece la speranza cristiana va oltre l'ipotesi umana. Possiamo prendere ad
+esempio la speranza con cui le donne vanno al sepolcro nei racconti della
+risurrezione di Cristo: alla fine dei Vangeli vanno sperando di trovare qualcuno
+che muova loro la pietra. Questa è la loro ipotesi di speranza, cioè poter ungere
+il corpo di Gesù per amore, il suo corpo straziato dopo la tortura della croce. E
+invece trovano che Gesù è addirittura risorto. Cioè, al massimo queste donne, che
+volevano bene a Gesù, potevano pensare di potersene prendere cura da defunto; e
+invece trovano che è vivo. *La speranza cristiana è superiore alla speranza umana
+perché è un'opera di Dio nell'uomo.*
+
+In effetti noi dobbiamo saper distinguere sempre le virtù naturali dalle virtù
+soprannaturali. È una distinzione che fa già san Tommaso d'Aquino, e che
+distingue le virtù cardinali, che sono una dotazione di bordo della nostra
+umanità, dalle virtù teologali o soprannaturali, che sono un'opera di Dio. Sono
+un dono di Dio, che non possono essere pretese dall'uomo ma devono essere accolte
+nella vita interiore dell'uomo, perché diventano il motore di una vita che non è
+la vita umana: è una vita da cristiani, una vita da figli di Dio.
+
+E allora dovremo un po' capire che, quando noi ci troviamo di fronte a una cosa
+di questo genere, dobbiamo salvarci da un mainstream che sulla speranza produce
+tutta una serie di modi di intenderla. Allora il compito di questa trasmissione è
+un po' smontare queste altre speranze; infatti, appunto, la chiamiamo *C'è
+speranza e speranza*, perché ci sono delle speranze false e ci sono delle
+speranze autentiche. *Sant'Agostino distingue la condizione perduta dell'uomo fra
+l'uomo che ha perso la speranza e l'uomo che ha una speranza senza fondamento*. La
+prima condizione può essere rimediata, perché la speranza si può riaccendere;
+invece una speranza senza fondamento diventa ideologia, diventa convinzione e
+diventa pretesa rispetto alla vita, ed è una condizione disperata. Perché è
+tranquillamente destinata alla delusione.
+
+San Paolo parla di una speranza che non delude. Che cos'è questa speranza che non
+delude? Quella che è basata su un fondamento che è l'opera di Dio, che è la
+potenza, l'onnipotenza di Dio. Ci sono molte persone che vivono aspettandosi
+dalla vita cose che non arriveranno mai, perché sono speranze mondane; e così
+questo tipo di esperienza negativa dell'uomo diventa la nostra, diciamo, vulgata,
+la nostra maniera di pensare la speranza, con cose del tipo che *«la speranza non
+costa niente»* — e questo non è vero, perché la speranza, quella vera, è una
+forma di esistere che implica tante scelte molto serie —, che *«la speranza è
+l'ultima a morire»* — e invece quando muore la speranza muore tutto —, e che
+*«chi di speranza vive, disperato muore»*. Ecco, questo è proprio il classico
+detto popolare che fa riferimento alle speranze senza fondamento. Ma la speranza
+cristiana è tutt'un altro paio di maniche.
+
+Allora dobbiamo capire che cos'è. In che cosa agisce la speranza cristiana? E che
+cosa agisce la speranza, che è opera dello Spirito Santo nell'uomo? Nel confidare
+con certezza nell'ottenimento della vita eterna, cioè nel riferimento a qualcosa
+che è un po' più grande che non sperare di risolvere un problema contingente: ma
+è tutti i problemi risolti nel regno dei cieli. Cioè è la speranza globale, che
+indica l'esito definitivo di tutta la vita. È questa la speranza che ci è stata
+donata nel Signore Gesù Cristo, perché sappiamo che la volontà di Dio, come dice
+il Vangelo di Giovanni, è la vita eterna. La volontà di Dio è vita eterna. Ecco,
+noi abbiamo la vita eterna come prospettiva della nostra esistenza.
+
+Accettare questa speranza vuol dire cambiare radicalmente pensiero su tutto, e
+infatti quello è il punto di aggancio della speranza, che poi diventa motore
+operativo dell'esistenza umana. Ma questo continua a essere un modo, diciamo
+così, generico di affrontare il discorso. Confidare con certezza nella
+possibilità della vita eterna vuol dire che ci salviamo comunque? No, non è
+questo il punto, ma che questo è il piano di Dio e che non ne ha un altro. Ci è
+sempre possibile — quindi la salvezza eterna è sempre possibile — in ogni
+condizione e in ogni luogo, dopo ogni nostro errore, comunque trovare la via
+della salvezza. È sempre possibile la salvezza eterna. Disperare della salvezza
+eterna è una cosa contigua con il peccato contro lo Spirito Santo. Certo: chi
+dispera di una salvezza, come può salvarsi? Come può mettersi nella disposizione
+di essere salvato? Non si lascia neanche salvare, perché non ci crede nemmeno,
+non pensa nemmeno possibile che ci sia qualcosa di questo genere.
+
+Quindi dobbiamo capire che, essendo virtù, la speranza non è un sentimento ma un
+atto; e qui mi sembra che possiamo citare uno dei più grandi malintesi sulla
+speranza. Mi spiego: la speranza come sentimento può essere un pochino equiparata
+a un buon carattere, così, all'ottimismo, e cose banali e mediocri di questo
+livello qui. Invece la speranza è un atto: quando uno spera, agisce diversamente.
+Altro è che io, di fronte a un'opzione, non abbia la speranza della vita eterna;
+altro è che, di fronte a un'opzione, io comunque sia orientato, in un certo senso
+resettato, istruito, illuminato dalla meta finale, che diventa quello che spiega
+tutto, diventa quello che comunque mi orienta nella selva delle speranze di vario
+genere.
+
+Allora, l'oggetto della speranza è qualcosa di ultimo, non di penultimo. E questo
+vuol dire che non è un sentimento — lo ripeto — ma un atto, un modo di vivere, un
+modo di esistere. Io cambio radicalmente il mio modo di agire se spero o non
+spero che la mia esistenza sia un cammino verso il regno dei cieli.
+
+Facciamo un esempio per capirci meglio. Altro è prendere la Roma-Milano per
+andare a Firenze, altro è prendere la Roma-Napoli per andare a Firenze. Nel
+secondo caso io continuo a vedere le varie fermate che mi portano, perché la
+strada porta a Napoli: io vedo le fermate di Napoli, io non capisco, penso di
+avvicinarmi a Firenze e non mi avvicino mai. Perché la strada non è sbagliata: è
+la mia intenzione che è sbagliata e non è concorde con la strada. La vita dove ci
+sta portando? La vita ci sta portando al paradiso. Se noi combattiamo contro
+questa predestinazione generosa di Dio nei confronti di ognuno di noi — ogni uomo
+è destinato a questa pienezza — ecco, la vita sembra assurda, sembra senza senso,
+perché io ho perso l'orientamento, la vera logica della mia vita, e mi sembra
+tutto sbagliato. Quando invece io recupero la speranza autentica della mia vita,
+ecco che inizio a capire perché la vita vada in un modo o in un altro.
+
+Facciamo un esempio ulteriore. Un dolore nella vita, nella giovinezza: viviamo
+una prova molto seria. Forse questa è orientata alla nostra formazione, forse
+questa è orientata al bene che dobbiamo fare; forse — anzi, senza forse — questa
+è una zona di esistenza in cui stiamo passando per essere addestrati a qualcosa
+di grande, di importante. In effetti, chi è che sa fare qualcosa di bello nella
+vita? Chi è passato per qualcosa di difficile, chi è passato per qualcosa di
+serio. È come l'allenamento di un atleta: fa questo allenamento in vista del
+fatto di arrivare a una gara. Se il mio orientamento è imparare ad amare, e
+quindi arrivare alla pienezza dell'amore, la mia vita è sempre un addestramento
+utile: una malattia può essere un luogo di crescita, un "no" che la vita mi dice
+può diventare un momento di saggezza, di discernimento.
+
+Ecco, questo è il primo punto, questo è un punto essenziale: cioè capire che, se
+io accolgo la promessa che Dio mi ha fatto di non essere nato per caso ma di
+essere nato con un orientamento grande, con un destino immenso, nobile, bello,
+allora tutto quanto concorre al bene del mio esito finale, come dice san Paolo al
+capitolo 8 della *Lettera ai Romani*: *«tutto concorre al bene di coloro che
+amano Dio»*. Coloro che apprezzano Dio, coloro che riconoscono la sua bontà,
+iniziano a vivere tutto come una grazia, a vivere tutto come qualcosa che concorre
+al loro proprio bene. C'è una forma di vivere che è una forma che trae luce da
+tutto, trae crescita da tutto, trae bellezza da tutto, trae vantaggi da tutto:
+valorizzare, vivere, accogliere quello che si sta vivendo, senza creare una
+strana classifica, quella per cui c'è ciò che è bello e ciò che è brutto. No:
+tutto diventa buono, perché in ogni realtà della vita ogni cosa può essere anche
+parte di un'opera più grande, di una pedagogia più grande da parte di Dio, per
+portarci alla nostra grandezza di figli di Dio.
+
+Approfittiamo di questa prima fase per trarre una conseguenza da tutto quello che
+abbiamo detto nella prima parte della puntata. Quando la speranza cristiana viene
+offerta, non trova una pagina bianca. Mai. Non è che arriva la speranza e accende
+qualcosa che è spento. No: è un fuoco che combatte con un altro fuoco, è una luce
+che combatte con un'altra luce. La pagina è già scritta: noi abbiamo il cuore
+pieno di speranze orizzontali, piccole, cose senza grande prospettiva. E la
+speranza cristiana chiede di spostarsi da quelle piccole speranze alla grande
+speranza, passare dall'idea di realizzare una vita semplicemente comoda a
+realizzare una vita grande, che forse con la propria salvaguardia entrerà un po'
+in rotta di collisione.
+
+Altro è sposarsi per amare, altro è sposarsi per stare bene. Non ci si sposa per
+stare bene, perché questo vuol dire pensare il matrimonio in funzione egoistica,
+narcisistica, e questo purtroppo è la condizione di molta gente. La speranza
+piccola è di sposarsi per mettere in piedi una cosa caruccia, comoda, morbida,
+non so, in qualche maniera piacevole. Altro invece è sposarsi per regalare la
+propria vita a qualcuno e vivere una vita di grandissime prospettive, e mettere
+in piedi — da noi cristiani — una piccola chiesa, un luogo dove splenderà la
+gloria di Dio insieme alla persona con cui si crea il matrimonio. Noi abbiamo un
+sacramento del matrimonio, non semplicemente l'accoppiamento umano secondo quelli
+che possono essere i gusti meteoropatici della persona, e che sono soggetti a
+cambiamenti, evoluzioni e alti e bassi che sono piuttosto difficili da regolare
+dentro un orientamento grande. Ecco, questo è un esempio, se vogliamo banale, che
+cerca di far capire che, se uno si deve aprire alla speranza cristiana nascosta
+per esempio nel sacramento del matrimonio, deve lasciare altre speranze.
+
+Questo è il primo punto e sarà il primo step del nostro viaggio. Come si fa a
+liberarsi dalle false speranze? La risposta è abbastanza semplice: __si fa memoria
+delle proprie delusioni__, perché le delusioni sono un momento molto importante
+della vita. Tutte le volte che uno è deluso è perché prima si era illuso; infatti
+non c'è soluzione di continuità fra false speranze e illusioni. Le illusioni,
+prodotto appunto della nostra immaginazione, normalmente tendono alla distruzione
+della vita, la rendono brutta, perché ci fanno vivere quel famoso viaggio verso
+Napoli pensando di andare verso Milano; mentre la vita ci chiede di diventare
+grandi, adulti, noi stiamo vivendo per aspettative infantili, perché normalmente
+tutte le false speranze sono collegate alla nostra infanzia. Sono un modo di
+metabolizzare i nostri buchi affettivi, le nostre irrisoluzioni, tutte le cose
+che abbiamo patito come carenti: ecco, le andiamo a sperare, le piazziamo nel
+nostro futuro, e questo è un immaginare in maniera estranea alla Provvidenza e
+all'inventiva e alla creatività di Dio.
+
+Conseguentemente il primo punto è *focalizzare quali sono state sempre, nella
+nostra vita, le false speranze tendenziali, le nostre illusioni ripetute*. Fare
+questo tipo di lavoro è molto importante: __domandarsi dov'è che mi sono ingannato
+più volte__, dov'è che io ho avuto questa convergenza storta ad andare a sbattere.
+Mi sono illuso sulle persone, sulla realtà, su me stesso in vari modi, sulle
+cose, sui fatti. Per esempio ci sono coloro che fanno debiti a ripetizione perché
+continuano a illudersi di avere un guadagno facile; ma il guadagno nella vita è
+frutto di lavoro, ed è frutto di un lavoro costante. Perché si cade spesso negli
+inganni del web? Perché si crede a una cosa che è il colpo di fortuna, che adesso
+sia capitato proprio a me di trovare il lavoro dove non faccio niente e guadagno
+tantissimo, di trovare la cosa dove investo un minimo di denaro e avrò un ritorno
+spaventoso. Ma queste cose non esistono, queste cose sono proiezioni: *la vita è
+fatta di una costruzione saggia, adulta, fatta giorno per giorno.*
+
+Per questo, questo tipo di speranze inducono le persone a essere dei debitori
+renitenti, che cascano continuamente in ulteriori debiti. Perché? Perché
+continuano a pensare che tanto si rialzano, e adesso, in quattro e quattr'otto,
+arriverà il colpo di fortuna, e la vita dovrebbe dare questo colpo di fortuna.
+Non si sa da quale film venga questa scena primaria messa nella testa di queste
+persone ingannate. Ecco, le illusioni spesso ce le dicono gli altri: bisogna
+andare da qualcuno e chiedere *«ma io dov'è che mi illudo spesso?»*. Ecco,
+farsi dare la risposta può essere doloroso, anche imbarazzante.
+
+Ecco, questo è un primo step per iniziare a lavorare sulla speranza e
+sull'orientamento della propria vita, sul movimento interiore: __a cosa sono
+orientato? Cosa mi aspetto? Verso cosa vado?__ Restare incastrati nella propria
+struttura psicologica vuol dire restare incastrati dentro un desiderio che forse
+è formato da una paura, perché molto spesso i desideri, gli appetiti, le voglie
+sono forme di fuggire da ciò che temiamo. Molti desideri sono paure truccate da
+desiderio: noi desideriamo sposarci per non essere soli, abbiamo paura della
+solitudine. E allora, per questa cosa qui, scendiamo a
+patti con la realtà, facciamo compromessi con il reale, accettando anche così
+quello che dovremmo verificare un po' meglio — se non c'è qualcosa di grande in
+un rapporto — e poi ci si ritrova sposati in maniera un po' frettolosa.
+
+Quanta gente per esempio procede a fidanzamenti troppo brevi quando si ha una
+certa età, perché si dice: siamo adulti, capiamo le cose, andiamo avanti,
+sposiamoci, dai, siamo a quarant'anni, che stiamo ad aspettare? E poi quelli sono
+i matrimoni più terribili, perché accoppiare due persone con la loro struttura,
+con la loro comprensione della vita a quell'età è molto più difficile che non
+accoppiare due vite quando si è nell'età in cui ci si sta anche definendo, per
+cui ci si definisce insieme, si cresce insieme, ci si orienta insieme, ci si
+adatta più alla forma dell'altro, si entra meglio nella forma della vita,
+dell'esistenza.
+
+Ecco allora il primo punto che noi dobbiamo trarre da questo viaggio nella
+speranza — che non è quella falsa, che non è il mainstream della speranza mondana
+— __è quello di iniziare a sospettare delle nostre aspettative sulla vita__, che non
+siano infantilismi di ritorno, rigurgiti di irrisoluzioni antiche, di cose che
+stanno lì, di domande, di rivendicazioni rispetto alla vita, e poi diventano
+magari anche ecclesiali. Una persona ha avuto nella vita delle carenze, allora
+vuole nella Chiesa trovare quello che la vita non gli ha dato: e questo diventa
+pure una speranza santa, perché riguarda le cose sacre? No, quello è
+strumentalismo, quello è usare le cose di Dio per storcerle al nostro fine, un
+fine piccolo, che è disegnato dal nostro ego.
+
+Terminiamo questa prima puntata ribadendo di peregrinare insieme in questo
+viaggio, che è il viaggio della speranza, passando dalla nostra speranza alla
+sua, passando dalla nostra struttura psicologica che produce aspettative e
+desideri all'opera di Dio in noi, che è basata sulla sua chiamata alla vita — ma
+la vita con la V maiuscola, non alla vitarella, al sopravvivere, a risolvere i
+problemi. Molto spesso la nostra speranza è fatta di problemini, ma Dio non
+risolve i problemi: risolve __il__ problema, _il grande problema_. Possiamo pensare alla
+storia della risurrezione di Lazzaro: mentre tutti gli chiedono di guarire
+Lazzaro mentre è malato, Gesù invece aspetta, per arrivare a fare ben altro, a
+risorgerlo da morte, cioè a richiamarlo dal sepolcro — ben altra esperienza della
+potenza di Dio che non aggiustare la degenerazione di una malattia.
+
+Noi pensiamo a evitare i problemi molto spesso, ma Dio molto spesso non ci porta
+per la strada che evita i problemi, ma per la strada che ci porta a risolvere, a
+illuminare il grande problema, che è il problema della nostra meta ultima, che è
+il problema della nostra vita, che è il problema della morte: cioè illuminare
+nell'eternità tutto quello che è la nostra esistenza.
+
+Molto spesso queste speranze piccole si proiettano sugli altri: genitori si
+aspettano per i figli cose piccole, cose che sono semplicemente la soluzione del
+problema adesso — riuscire a trovare lavoro, riuscire ad avere un nipotino, per
+questo si deve accoppiare in qualche maniera, cercando, sperando che questo
+faccia. Ma ci sono cose molto più grandi da fare. Certo, è una cosa grandissima
+avere una discendenza, avere un figlio, un nipote; certo sono cose importanti. Ma
+la cosa più grande è l'eredità che non si corrompe: non una cosa corruttibile
+come l'argento e l'oro, ma il sangue di Cristo, che ci ha procurato un'eredità
+che non si corrompe e non si macchia, come dice la prima lettera di Pietro.
+
+Possa il Signore donarci di iniziare il percorso di questo Giubileo orientandoci a
+quello che illumina tutto, non per risolvere una contingenza che può essere
+piccola e anche molto deludente. Il Signore ci dia di iniziare a vedere le nostre
+false speranze, le nostre speranze da quattro soldi, per poter iniziare ad aprire
+il cuore alla speranza; e così ci prepariamo a continuare nel nostro viaggio.
