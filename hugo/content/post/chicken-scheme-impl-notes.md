@@ -11,28 +11,32 @@ summary = ' '
 
 The latest CHICKEN release is [*6.0.0*](https://code.call-cc.org), which came out on August 10th, 2026.
 
-# CHICKEN Scheme 6.0.0 — How the implementation works, and where it could go faster
+# How the implementation works, and where it could go faster
 
-*Notes written against the built tree at `~/Developer/snapshots/chicken/chicken-6.0.0`.
-It is an unpacked source snapshot, not a git checkout (there is no `.git`), so there
-is no local repository in which to resolve a commit hash; the identity it reports for
-itself is what `./chicken -version` prints:*
+*Notes written against this repository — `chicken-core` at commit `d6442142`,
+which `git describe` calls **6.0.1pre1-68-gd6442142**, i.e. 68 commits past
+6.0.1pre1 on `master`. Every file:line citation below refers to this tree, and
+because it is a git checkout you can check any of them directly:*
 
+```sh
+git describe --tags            # 6.0.1pre1-68-gd6442142
+git show d6442142:c-platform.scm | sed -n '192,228p'
 ```
-CHICKEN
-Version 6.0.0 (rev 2e30c07e)
-linux-unix-clang-x86-64 [ 64bit dload ptables ]
-```
 
-*It was built on 2026-09-08 with **clang** (`config.make`: `C_COMPILER = clang`,
-`LINKER = clang`), which is why the platform triple reads `linux-unix-clang-x86-64`,
-and at the stock optimization level — `-Os`, not `-O0` and not `-O3` (see §9.1).*
+*It was built with **clang** (`config.make`: `C_COMPILER = clang`) at the stock
+optimization level — `-Os`, not `-O0` and not `-O3` (see §9.1).*
+
+*An earlier revision of these notes was written against the CHICKEN **6.0.0**
+release tarball (rev `2e30c07e`, an ancestor of this commit). All citations have
+been re-verified against this tree; where 6.0.0 and master differ in a way that
+matters to the text it is called out at the point of use — see §5.4 and §6 in
+particular, which describe passes that genuinely changed.*
 
 *Every generated-C listing below was produced by **this tree's own compiler**, and
 each says which flags produced it. Reproduce any of them with:*
 
 ```sh
-T=~/Developer/snapshots/chicken/chicken-6.0.0
+T=~/Developer/working-copies/chicken-core
 cd <scratch dir> && LD_LIBRARY_PATH=$T $T/chicken foo.scm -output-file foo.c -optimize-level N
 ```
 
@@ -94,7 +98,7 @@ Tagging uses the low bits (`chicken.h:316-338`):
 `C_IMMEDIATE_MARK_BITS` = `0x3` at `chicken.h:316`) — a value is a pointer exactly
 when its low two bits are zero. That single test is the hottest predicate in
 the entire runtime; the GC executes it once per slot scanned (`_mark`,
-`runtime.c:3411-3416`, driven by `while(n--) mark(p++);` at `runtime.c:3845`).
+`runtime.c:3392-3397`, driven by `while(n--) mark(p++);` at `runtime.c:3826`).
 
 One bit is the tag, so a fixnum carries a full **63-bit signed** payload on
 64-bit: `C_MOST_POSITIVE_FIXNUM = 0x3fffffffffffffff` (`chicken.h:340`), giving
@@ -126,7 +130,7 @@ The header packs three flag bits, a 4-bit type, and a size
 
 The last one is worth confirming rather than assuming: every use of
 `C_8ALIGN_BIT` in `runtime.c` is inside `#ifndef C_SIXTY_FOUR`
-(`runtime.c:3210-3216`, `:3886-3892`, `:12695-12701`).
+(`runtime.c:3191-3197`, `:3886-3892`, `:12695-12701`).
 
 ```
   Symbol     = [  1|3, Value, Name, Plist]        Name = bytevector, 0-terminated
@@ -161,7 +165,7 @@ cached `(Offset, Index)` cursor pair. Live: `(##sys#size "abc")` ⇒ 4.
 The performance consequences are sharper than "O(1) for ASCII, O(n) otherwise",
 and §9.5 (S1) depends on getting them right:
 
-* `string-length` is **O(1) always** — `C_i_string_length` (`runtime.c:6019`)
+* `string-length` is **O(1) always** — `C_i_string_length` (`runtime.c:5993`)
   just returns the cached `Count` out of slot 1.
 * `string-ref` goes through `utf_index` (`utf.c:3273`), which short-circuits on
   `i == 0` and on the all-ASCII test `bytelength == codepoints`
@@ -183,7 +187,7 @@ from bytes pays a full `C_utf_count` pass to fill in slot 1 (see §9.5 S1).
 
 ## 3. The compiler pipeline
 
-`compile-source-file` (`batch-driver.scm:639-895`) drives the whole thing. In
+`compile-source-file` (`batch-driver.scm:185 (definition); pass sequence at :632-895`) drives the whole thing. In
 order:
 
 ```
@@ -195,25 +199,25 @@ order:
     ├─ (optional user pass)                     user-pass.scm
     ├─ build the node graph                     support.scm    build-node-graph
     │
-    ├─ analysis                                 core.scm:2061  analyze-expression
+    ├─ analysis                                 core.scm:2063  analyze-expression
     ├─ scrutiny (type checking / specialization) scrutinizer.scm:179   [§3.1]
     │
-    ├─ CPS conversion                            core.scm:1923  perform-cps-conversion
+    ├─ CPS conversion                            core.scm:1925  perform-cps-conversion
     │     → every call is a tail call
     │
-    ├─ ┌ analysis                                core.scm:2061  analyze-expression
+    ├─ ┌ analysis                                core.scm:2063  analyze-expression
     │  │   → the "database": per-variable and per-lambda facts
     │  ├ high-level optimization                 optimizer.scm:158
     │  │   → inlining, constant folding, contraction, rewriting
     │  └ leaf-routine / direct-lambda transform  optimizer.scm:1516   [-O1 and up]
     │      loop until no more progress
     │
-    ├─ secondary flow analysis + float unboxing  lfa2.scm:249, lfa2.scm:524   [-O2 and up]
+    ├─ secondary flow analysis + float unboxing  lfa2.scm:247, lfa2.scm:522   [-O2 and up]
     │
-    ├─ closure conversion                        core.scm:2538  perform-closure-conversion
+    ├─ closure conversion                        core.scm:2540  perform-closure-conversion
     │     → lambdas become explicit ##core#closure vectors, free vars become ##core#ref
     │
-    ├─ preparation                               core.scm:3106  prepare-for-code-generation
+    ├─ preparation                               core.scm:3108  prepare-for-code-generation
     │     → variables become numbered temporaries, allocation demand is counted,
     │       literals are collected, the "lambda table" is built
     │
@@ -240,7 +244,7 @@ from its name. It type-checks, producing the warnings; and, when `-specialize` i
 on, it *rewrites* the node tree, replacing checked primitives with unchecked ones
 wherever the inferred types make the check redundant.
 
-The rules live in `types.db` (2491 lines), one line per binding; anything after
+The rules live in `types.db` (2484 lines), one line per binding; anything after
 the type is a specialization clause pairing argument types with a replacement.
 The effect is visible directly: the same source compiled with `-specialize`
 emits `C_u_i_car(t2)` where the default emits `C_i_car(t2)`.
@@ -254,7 +258,7 @@ of pass time on `library.scm` (§9.4) — so it is not itself an optimization ta
 ## 4. CPS conversion
 
 This is the heart of the design, and it is only ~130 lines
-(`core.scm:1921-2058`). The whole pass is a classic Fischer/Plotkin-style
+(`core.scm:1923-2060`). The whole pass is a classic Fischer/Plotkin-style
 one-pass CPS transform written in "compiler-in-CPS" style: `walk` takes a node
 and a *meta-continuation* `k`, a Scheme procedure from "the node holding the
 result value" to "the node for the rest of the computation".
@@ -319,7 +323,7 @@ here. Removing the redundant ones is the optimizer's job (§5), not this pass's.
 ### 4.2 Two small but important refinements
 
 `walk-arguments` does **not** name atomic arguments (`atomic?`,
-`core.scm:2048-2054`): constants, variables, `##core#undefined`, and inline
+`core.scm:2050-2056`): constants, variables, `##core#undefined`, and inline
 operations with atomic operands are spliced straight into the call node instead
 of being let-bound to a fresh temporary. You can see both halves in the raw CPS
 dump of the example below (`chicken fact.scm -debug 3`): the constant argument in
@@ -339,8 +343,8 @@ The `##core#inline_allocate ("C_s_a_i_minus" 29)` node that eventually becomes
 `t4=C_s_a_i_minus(&a,2,t2,C_fix(1));` is produced later, by the optimizer
 (`chicken fact.scm -debug 7`) — and even there it stays a separate temporary
 that is stored into `av2[2]`, rather than an expression built inside the
-argument vector. Both `walk-arguments` (`core.scm:2041`) and the `let` case
-(`core.scm:1965`) also check `node-for-var?` to avoid emitting `(let ((x x)) …)`.
+argument vector. Both `walk-arguments` (`core.scm:2043`) and the `let` case
+(`core.scm:1967`) also check `node-for-var?` to avoid emitting `(let ((x x)) …)`.
 
 Notice also what CPS conversion *deletes*: `##core#the`, `##core#the/result`
 and `##core#typecase` are dropped here, because after scrutiny their information
@@ -439,7 +443,7 @@ The result is an ordinary C function that *does* return. **This pass is opt-in**
 (`-optimize-leaf-routines`, implied by `-O1` and above); at default settings it
 does not run at all.
 
-### 5.2 Customizable procedures (`core.scm:2620-2660`)
+### 5.2 Customizable procedures (`core.scm:2622-2662`)
 
 If every reference to a variable is a call site, the argument counts always
 match, the lambda list is a proper list (no rest parameter), and the procedure
@@ -525,14 +529,26 @@ billion "iterations" finish in 8 ms.
 jobs are (a) removing type checks that specialization left behind and
 (b) recording, for each unassigned `let`-bound flonum variable, a
 `(var boxed unboxed)` triple in `floatvars`. `perform-unboxing`
-(`lfa2.scm:524`) then filters those (`lfa2.scm:525-529`) and rewrites the tree
+(`lfa2.scm:522`) then filters those (`lfa2.scm:523-527`) and rewrites the tree
 with a pair of mutually recursive walkers — `walk` produces boxed results,
 `walk/unbox` produces `double`s — inserting `##core#box_float` /
 `##core#unbox_float` at the boundaries. `##core#let_float` binds a numbered
 `double f<i>` C local (`c-backend.scm:160-165`). `+unboxed-map+`
-(`lfa2.scm:207-244`) is the table of operations that have unboxed counterparts;
-its three entry kinds (`op`, `acc`, `pred`) are consumed at `lfa2.scm:594-601`,
+(`lfa2.scm:205-242`) is the table of operations that have unboxed counterparts;
+its three entry kinds (`op`, `acc`, `pred`) are consumed at `lfa2.scm:592-599`,
 which matters for §9.2 (C1a).
+
+**A pass that changed since 6.0.0.** In the 6.0.0 release the boolean-predicate
+type refinement in this pass was dead code. The `((if ##core#cond))` clause of
+`perform-secondary-flow-analysis` closed its `if` after the *then* branch, so the
+type-refined merge was computed and thrown away and the unrefined merge was always
+the clause's result. Upstream `0f4f5738` ("fix redundant node-traversals in lfa2
+pass", 2026-09-05) moves a single close-paren to repair it; the commit message adds
+that the bug "could even cause the lfa2 pass to loop endlessly in certain code".
+This tree has the fix. The consequence for the rest of this document is that the
+check-elimination half of the pass is genuinely weaker on 6.0.0 than here, so the
+unboxing *opportunity set* is not the same in the two trees — any re-measurement of
+(C1a)/(C1b) has to be taken against master's `lfa2`, not 6.0.0's.
 
 **This pass is opt-in too** — `lfa2` runs only at `-O2` and above, so on a
 default compile the `-debug o` line `number of unboxed float variables` never
@@ -542,7 +558,7 @@ appears at all.
 
 ## 6. Closure conversion and preparation
 
-`perform-closure-conversion` (`core.scm:2538`) does the usual free-variable
+`perform-closure-conversion` (`core.scm:2540`) does the usual free-variable
 analysis (`gather`), records `closure-size` and `captured-variables` in the
 database, and rewrites:
 
@@ -555,13 +571,24 @@ database, and rewrites:
   closures copy values.
 
 CHICKEN 6 adds *closure sharing*, as two independent passes:
-`merge-shareable` (`core.scm:2680`) and `merge-reusable` (`core.scm:2760`).
+`merge-shareable` (`core.scm:2682`) and `merge-reusable` (`core.scm:2762`).
 A "container" closure can hold the transitive free variables of the nested
 closures it dominates, so those nested closures can be smaller or elided.
 Variables shared this way that provably don't escape are un-boxed again
-(`core.scm:2732-2745`).
+(`core.scm:2734-2747`).
 
-`prepare-for-code-generation` (`core.scm:3106`) is the flattening pass:
+The two passes are not enabled at the same optimization levels, and this changed
+after 6.0.0. In 6.0.0 `-O1` turned on `merge-reusable-closures` only, `-O2`
+`merge-shareable-closures` only, and `-O3` and above both. From upstream `810a1433`
+onward — including this tree — `-O2` enables **both** (`chicken.scm:106`). That is a
+real code-generation difference, not a bookkeeping one: recompiling real units under
+the two option sets gives differing C (568 differing lines on `expand.scm`, 460 on
+`optimizer.scm`, 364 on `irregex-core.scm`) with identical `C_CLOSURE_TYPE` counts.
+Relatedly, 6.0.0's compiler rejects `-merge-shareable-closures` on the command line
+with `Warning: invalid compiler option (ignored)` even though `csc` advertised it;
+this tree accepts both flags (`c-platform.scm:109`).
+
+`prepare-for-code-generation` (`core.scm:3108`) is the flattening pass:
 
 * variables become de Bruijn-ish `##core#local` indices into a temporary array;
 * globals become `##core#global` / `##core#setglobal` on a literal-frame slot;
@@ -609,9 +636,9 @@ every allocation the body can perform.
 
 Where does `DEMAND` come from? Overwhelmingly, from generic arithmetic. The
 rewrite table charges 29 words to a two-argument `+` or `-` and 33 to `*`
-(`c-platform.scm:891-893`), because `C_s_a_i_plus` must be able to return a
+(`c-platform.scm:896-898`), because `C_s_a_i_plus` must be able to return a
 complex number whose real and imaginary parts are both ratnums of fix-bignums —
-the comment at `runtime.c:8472-8476` spells the arithmetic out:
+the comment at `runtime.c:8437-8441` spells the arithmetic out:
 `C_SIZEOF_CPLXNUM + C_SIZEOF_RATNUM * 2 + C_SIZEOF_FIX_BIGNUM * 4 = 29 words!`
 That worst case is budgeted at *every* call site, even when both operands are
 fixnums. It is why `fact` in §4.3 demands 33 words for a function that in the
@@ -695,13 +722,13 @@ Cheney on the M.T.A."*:
   `C_save_and_reclaim` (or `C_save_and_reclaim_args` when customizable), which
   copies its arguments to the *temporary stack* (a small malloc'd area that is a
   GC root) and calls `C_reclaim`.
-* `C_reclaim` (`runtime.c:3423`) performs the collection and then
-  `longjmp`s back to `CHICKEN_run` (`runtime.c:1559`), which unwinds the entire
+* `C_reclaim` (`runtime.c:3404`) performs the collection and then
+  `longjmp`s back to `CHICKEN_run` (`runtime.c:1560`), which unwinds the entire
   C stack in one instruction and re-enters the saved continuation via
   `C_restart_trampoline`.
 
 ```c
-/* CHICKEN_run, runtime.c:1585-1602 (abridged) */
+/* CHICKEN_run, runtime.c:1586-1603 (abridged) */
 C_sigsetjmp(C_restart, 0);
 if(!return_to_host) {
   C_word *p = C_alloc(C_restart_c);
@@ -715,13 +742,13 @@ That `setjmp`/`longjmp` pair *is* the trampoline. Note it fires only on GC, not
 on every call — CHICKEN is not a "return-to-trampoline-per-call" system.
 
 An important consequence for §9.2 (C1b): `C_save_and_reclaim_args`
-(`runtime.c:3392`) is varargs over `C_word` — `C_save(va_arg(v, C_word))` —
+(`runtime.c:3373`) is varargs over `C_word` — `C_save(va_arg(v, C_word))` —
 pushing onto the temporary stack, which the collector scans as roots. **There is
 no way to hand a raw `double` to it.** A live unboxed value cannot cross a GC.
 
 ### 8.2 The collector
 
-Two generations, both copying (`C_reclaim`, `runtime.c:3423-3727`):
+Two generations, both copying (`C_reclaim`, `runtime.c:3404-3708`):
 
 * **Minor**: roots are the temporary stack, the trace buffer, and the
   *mutation stack*. Live data is evacuated from the C stack (nursery) into
@@ -730,15 +757,15 @@ Two generations, both copying (`C_reclaim`, `runtime.c:3423-3727`):
 * **Major**: triggered when fromspace fills. A full Cheney copy from fromspace
   into tospace, with roots additionally including literal frames, symbol
   tables, GC roots, collectibles, and finalizers; then the spaces are swapped.
-* **Realloc** (`C_rereclaim2`, `runtime.c:3940`): a major GC into a
+* **Realloc** (`C_rereclaim2`, `runtime.c:3921`): a major GC into a
   freshly-`malloc`ed heap of a different size. Growth/shrink policy is at
-  `runtime.c:3617-3658`, with a `heap_shrink_counter` hysteresis to avoid
+  `runtime.c:3598-3639`, with a `heap_shrink_counter` hysteresis to avoid
   grow/shrink thrashing.
 
-The evacuation core is `really_mark` (`runtime.c:3853`) — chase forwarding
+The evacuation core is `really_mark` (`runtime.c:3834`) — chase forwarding
 pointers, bump-allocate in the target space, `memcpy`, install a forwarding
 pointer — and the breadth-first scan is `mark_nested_objects`
-(`runtime.c:3820-3851`):
+(`runtime.c:3801-3832`):
 
 ```c
 while(heap_scan_top < *tgt_space_top) {
@@ -756,7 +783,7 @@ while(heap_scan_top < *tgt_space_top) {
 }
 ```
 
-**Write barrier.** `C_mutate_slot` (`runtime.c:3086`) records old→new pointers:
+**Write barrier.** `C_mutate_slot` (`runtime.c:3067`) records old→new pointers:
 
 ```c
 if(C_in_stackp((C_word)slot) || (!C_in_stackp(val) && !C_in_scratchspacep(val)))
@@ -768,16 +795,16 @@ return *slot = val;
 Only heap→nursery and heap→scratch edges are remembered. The mutation stack is
 cleared at *every* collection, not only minor ones — the clear lives in
 `mark_live_objects`, which `C_reclaim` calls unconditionally
-(`runtime.c:3512`) and `C_rereclaim2` also calls (`runtime.c:4019`).
+(`runtime.c:3493`) and `C_rereclaim2` also calls (`runtime.c:4000`).
 
-**Scratch space** (`runtime.c:3126`ff) is a third area for objects that must be
+**Scratch space** (`runtime.c:3107`ff) is a third area for objects that must be
 sized before they can be built (temporary bignums, in particular). It is
 malloc'd, is scanned by the GC through recorded back-pointers, and is discarded
 entirely on any non-minor collection.
 
 ### 8.3 Continuations
 
-`call/cc` (`C_call_cc`, `runtime.c:7726`) is nearly free:
+`call/cc` (`C_call_cc`, `runtime.c:7688`) is nearly free:
 
 ```c
 if(C_immediatep(k) || C_block_header(k) != C_VALUES_CONTINUATION_TAG)
@@ -851,7 +878,7 @@ endif
 
 `configure` sets neither variable, so a stock build lands on `-Os`; `-O0` is
 reachable only under `DEBUGBUILD`. Whichever branch wins is baked into
-`C_INSTALL_CFLAGS` at build time (`defaults.make:360`), and that is exactly what
+`C_INSTALL_CFLAGS` at build time (`defaults.make:330`), and that is exactly what
 `csc` passes when compiling *user* programs (`csc.scm:130-131`). This tree
 confirms it — `chicken-defaults.h:15`:
 
@@ -884,15 +911,26 @@ user-code→`libchicken` hop, so LTO is the one likely to pay.
 **`-march=native` is not an option for anything installed.**
 `C_COMPILER_OPTIMIZATION_OPTIONS` is compiled into every `libchicken` object
 *and* baked verbatim into both `C_INSTALL_CFLAGS` and `C_TARGET_CFLAGS`
-(`defaults.make:360,420`), which `csc` reads back and re-passes to the user's C
+(`defaults.make:330,420`), which `csc` reads back and re-passes to the user's C
 compiler. Setting it would (a) ship a `libchicken.so` that dies with SIGILL on
 any CPU lacking the build machine's ISA extensions, and (b) silently stamp
 `-march=native` onto every user program that installation ever compiles — and it
-leaks into the cross-compilation flags (`defaults.make:111-112`), where `native`
+leaks into the cross-compilation flags (`defaults.make:105-106`), where `native`
 is not a valid `-march` value. Any AVX2 path must be **runtime-dispatched**
 (`__builtin_cpu_supports` plus `__attribute__((target("avx2")))`), not
 flag-gated. `-march=native` is fine only for a local, never-installed benchmark
 build.
+
+**Source default versus as-built flags.** Everything above is about what
+`Makefile.linux` *defaults* to, and that is unchanged in this tree. It is not
+necessarily what a given checkout was actually built with, and the distinction
+matters whenever a timing is quoted. Read the generated `chicken-defaults.h`: this
+tree was configured with `OPTIMIZE_FOR_SPEED`, so its `C_INSTALL_CFLAGS` ends `-O3
+-fomit-frame-pointer` and the header opens with
+`/* (this build was optimized for speed) */`, whereas the 6.0.0 tree the earlier
+revision of these notes was measured on ends `-Os -fomit-frame-pointer` and carries
+no marker. So the B1 action item — build the runtime for speed — is already done
+here, and the §10.1 tables state which tree each was produced on.
 
 **(B2) FMA is a build-flag question, not a compiler pass. [measured]**
 
@@ -950,7 +988,7 @@ one people notice would have left the type predicates out of line:
   `+extended-bindings+` alone would have woken the refs, setters and lengths and
   left `f64vector?` still compiling to a CPS call.
 
-76 names across 46 lines, in two tables.
+76 names across 43 lines, in two tables.
 
 **The consequence was that every SRFI-4 element access compiled to a full CPS
 call through the global symbol table.** Confirmed on this tree — a dot-product
@@ -964,7 +1002,7 @@ SRFI-4 intrinsic at any optimization level.
 **The fix, and why the old-vs-new comparison is clean.**
 
 ```sh
-T=~/Developer/snapshots/chicken/chicken-6.0.0
+T=~/Developer/working-copies/chicken-core
 cd $T && sed -i 's/chicken\.number-vector\([a-zA-Z]\)/chicken.number-vector#\1/g' c-platform.scm
 make chicken
 ```
@@ -983,9 +1021,9 @@ runtime, so every number in §10.1 B, G and H is attributable to the compiler pa
 and to nothing else. §10.1 G goes further and includes a configuration whose
 generated C is byte-identical between the two compilers, as a control.
 
-**What woke up.** Pristine had 73 rewrite rules under these names: 63 already
-spelled with `#` but unreachable because their `+extended-bindings+` entries were
-not, plus the 10 misspelled predicates. After the spelling fix all 73 fired for
+**What woke up.** Unpatched master has 73 rewrite rules under these names: 63
+already spelled with `#` but unreachable because their `+extended-bindings+`
+entries were not, plus the 10 misspelled predicates. After the spelling fix all 73 fired for
 the first time in this build. Two of them were unsound and one more was; those
 three are deleted, leaving **70** rules — 36 flagged `#t` (apply in safe mode too)
 and 34 flagged `#f` (unsafe only), per `(or (third classargs) unsafe)` in the
@@ -1003,12 +1041,12 @@ deleted]**
 `C_u_i_f32vector_set` / `C_u_i_f64vector_set`:
 
 ```c
-/* chicken.h:1657-1658 */
+/* chicken.h:1656-1657 */
 #define C_u_i_f64vector_set(v, i, x) \
   ((((double *)C_data_pointer(C_block_item((v), 1)))[ C_unfix(i) ] = C_flonum_magnitude(x)), C_SCHEME_UNDEFINED)
 ```
 
-`C_flonum_magnitude` is an unchecked field read. But `types.db:2330` and `:2338`
+`C_flonum_magnitude` is an unchecked field read. But `types.db:2326` and `:2338`
 declare the value argument as `(or integer float)`:
 
 ```
@@ -1019,7 +1057,7 @@ declare the value argument as `(or integer float)`:
 So a fixnum value dereferences an immediate (segfault) and a bignum value reads
 two words out of a bignum's header as a `double` (silent garbage). The `#f` flag
 means this applied under `-unsafe`, and `-O4` and `-O5` cons `'unsafe` onto the
-options unconditionally (`chicken.scm:120-131` and `:132-147`), so it applied
+options unconditionally (`chicken.scm:121-132` and `:132-147`), so it applied
 there too. Measured with a patch-1-only compiler:
 
 ```
@@ -1045,7 +1083,7 @@ coercion agree for every one of them:
 | `f32/f64vector-set!` | `(or integer float)` | `C_flonum_magnitude(v)` | **no** |
 
 The fix is to delete the two `#f` rules and let both modes use the coercing
-`C_i_f32vector_set` / `C_i_f64vector_set` (`runtime.c:6321`, `:6346`), which
+`C_i_f32vector_set` / `C_i_f64vector_set` (`runtime.c:6295`, `:6346`), which
 accept flonum, fixnum and bignum. That is what `c-platform.scm:1118-1125` now
 does. It is not free — see "Residual performance" below and §10.1 G.
 
@@ -1072,7 +1110,7 @@ one-line wrappers over `C_i_structurep` (`chicken.h:1378`), whose first term is
 `!C_immediatep(x) &&`:
 
 ```c
-/* runtime.c:5040ff */
+/* runtime.c:5023ff */
 C_regparm C_word C_i_s8vectorp(C_word x) { return C_i_structurep(x, s8vector_symbol); }
 ```
 
@@ -1143,15 +1181,15 @@ All 70 surviving rules were enumerated and checked against `chicken.h`,
 **(C0c) A pre-existing runtime bug that is not the compiler's to fix.**
 
 ```c
-/* chicken.h:1489 */  #define C_i_u8vector_set  C_i_bytevector_set
-/* runtime.c:6113 */  C_regparm C_word C_i_bytevector_set(C_word v, C_word i, C_word x) {
+/* chicken.h:1488 */  #define C_i_u8vector_set  C_i_bytevector_set
+/* runtime.c:6087 */  C_regparm C_word C_i_bytevector_set(C_word v, C_word i, C_word x) {
                         if(!C_truep(C_bytevectorp(v)))          /* no C_immediatep */
                           barf(C_BAD_ARGUMENT_TYPE_ERROR, "bytevector-set!", v);
 ```
 
 Structurally this is (C0b). It is **not** a patch regression, because the
 out-of-line path is equally exposed — `srfi-4.scm:171` aliases `u8vector-set!`
-straight to `bytevector-u8-set!`, and `library.scm:3516-3517` is
+straight to `bytevector-u8-set!`, and `library.scm:3520-3521` is
 `(##core#inline "C_i_bytevector_set" bv i b)` with no prior check. Measured, safe
 `-O3`, polymorphic probe, both compilers:
 
@@ -1161,8 +1199,8 @@ straight to `bytevector-u8-set!`, and `library.scm:3516-3517` is
 ```
 
 Byte-identical between pristine and patched. Deleting the rewrite would move the
-crash out of line into the same C function. `C_i_bytevector_ref` (`runtime.c:5659`)
-has the same hole; `C_i_bytevector_length` (`runtime.c:5937`) does **not** — it
+crash out of line into the same C function. `C_i_bytevector_ref` (`runtime.c:5633`)
+has the same hole; `C_i_bytevector_length` (`runtime.c:5911`) does **not** — it
 opens `if(C_immediatep(v) || !C_truep(C_bytevectorp(v)))`. That asymmetry is the
 whole bug, and the fix belongs in `runtime.c`.
 
@@ -1174,17 +1212,17 @@ Both deletions cost something measurable, and both are recoverable without
 reintroducing the defect:
 
 * **(C0a) — a type-conditional unsafe float store.** The checked
-  `C_i_f64vector_set` costs **2.21×** against the deleted macro on an `axpy`
-  kernel at `-O3 -unsafe` (887 → 1959 ms; the two generated `.c` files differ in
-  exactly one instruction line), and **4.0×** on `fft -D unboxed`, which stores
+  `C_i_f64vector_set` costs **1.70×** against the deleted macro on an `axpy`
+  kernel at `-O3 -unsafe` (1036 → 1763 ms; the two generated `.c` files differ in
+  exactly two instruction lines), and **3.2×** on `fft -D unboxed`, which stores
   as often as it loads (§10.1 G). The information needed to make the unsafe rule
   sound is already available: in every one of these loops the value is the result
   of an `fp*`/`fp+`, so the scrutinizer has already proved it a `float`. What is
   missing is a way for the rewrite to consult that. Two things were established
   experimentally about the route: a `types.db` specialization *does* outrank a
-  `c-platform` rewrite when it matches (`f64vector-length` at `types.db:2333`
+  `c-platform` rewrite when it matches (`f64vector-length` at `types.db:2329`
   emits `C_u_i_64vector_length` under both compilers), but a one-line
-  specialization added to `types.db:2338` for the `((struct f64vector) fixnum
+  specialization added to `types.db:2334` for the `((struct f64vector) fixnum
   float)` case never matched — `-debug o` printed no `specializations:` line and
   the emitted C kept `C_i_f64vector_set`. And a specialization would be the wrong
   vehicle anyway: the code that would have gated specializations on safe mode is
@@ -1218,8 +1256,8 @@ All line numbers are in pristine CHICKEN 6.0.0 unless marked.
    not fix these. *(Fixed here.)*
 3. **`c-platform.scm:1113` and `:1115`** — the `#f` rewrites for
    `f32/f64vector-set!` emit `C_u_i_f32vector_set` / `C_u_i_f64vector_set`
-   (`chicken.h:1657-1658`), which apply `C_flonum_magnitude` unchecked, against a
-   `types.db:2330` / `:2338` declaration of `(or integer float)`. Segfault on a
+   (`chicken.h:1656-1657`), which apply `C_flonum_magnitude` unchecked, against a
+   `types.db:2326` / `:2338` declaration of `(or integer float)`. Segfault on a
    fixnum value, silent garbage on a bignum, under `-unsafe`, `-O4` and `-O5`.
    `tests/srfi-4-tests.scm` itself fails at `-O4` once the rules are reachable.
    *(Rules deleted here; a type-conditional replacement is the better fix.)*
@@ -1228,21 +1266,53 @@ All line numbers are in pristine CHICKEN 6.0.0 unless marked.
    and it carries the `#t` flag, so it fires in default safe mode. The
    out-of-line definition it replaces guards with `C_blockp` (`srfi-4.scm:681`).
    *(Rule deleted here; the better fix is an immediate-checking `C_i_bytevectorp`.)*
-5. **`runtime.c:6113` (`C_i_bytevector_set`) and `runtime.c:5659`
+5. **`runtime.c:6087` (`C_i_bytevector_set`) and `runtime.c:5633`
    (`C_i_bytevector_ref`)** lack the `C_immediatep(v) ||` guard that
-   `C_i_bytevector_length` (`runtime.c:5937`) has, so `(u8vector-set! 42 0 1)`
+   `C_i_bytevector_length` (`runtime.c:5911`) has, so `(u8vector-set! 42 0 1)`
    and `(u8vector-ref 42 0)` segfault in safe mode. Reachable with no compiler
-   patch at all, via `srfi-4.scm:171` → `library.scm:3516`. *(Not fixed here —
+   patch at all, via `srfi-4.scm:171` → `library.scm:3520`. *(Not fixed here —
    it is a runtime bug.)*
 6. **`c-platform.scm:197`** — `+extended-bindings+` names
    `chicken.number-vector#f128vector?`, a procedure that does not exist anywhere
-   in the tree. It should be `c128vector?` (`srfi-4.scm:692`, `types.db:2312`).
+   in the tree. It should be `c128vector?` (`srfi-4.scm:692`, `types.db:2308`).
    Harmless today because `c128vector?` has no rewrite; latent if one is added.
    *(Not fixed here — outside the scope of the `#` repair.)*
 7. **`c-platform.scm:1150`, `:1159`, `:1160`** (patched-tree numbering) — the
    `s8vector->`, `c64vector->` and `c128vector->bytevector/shared` rewrites are
    dead: those three names are absent from `+extended-bindings+`, so only 8 of
    the 11 `C_slot` rules can ever fire. Pre-existing. *(Not fixed here.)*
+
+8. **`c-platform.scm` — the partial fix already attempted, and why it is inert.**
+   Upstream `e438ca50` ("correct rewrite rules for all chicken.number-vector
+   operations", 2026-07-30, an ancestor of 6.0.0) corrected 79 names in the
+   *rewrite rule* table — hunks `@@ -1079,76 @@` and `@@ -1207,18 @@` only. It
+   never touched `+extended-bindings+` (`:192-228`) or the ten predicate rules
+   (`:529-538`), and `+extended-bindings+` membership is what gates a rewrite
+   (`(intrinsic? name)` in the class-2 handler). So the rules have been spelled
+   correctly and been unreachable ever since, and the commit produced **no
+   observable change**. This is the single most useful thing to lead a bug report
+   with, because it explains how the tree came to be in a state where the rewrite
+   table looks right and nothing fires. Compounding it, `NEWS:514-515` (in the
+   5.1.0 section) still advertises the feature as working: *"SRFI-4 vector
+   predicates, reference, set and length procedures should now be faster in tight
+   loops as they're inlineable (#757)."*
+9. **`c-platform.scm:620`** — `(rewrite '##sys#bytevector? 2 2 "C_bytevectorp" #t)`
+   gives a one-argument predicate an arity of 2, so this rewrite never fires
+   either. Harmless *today*, but it is a latent second copy of item 4: it targets
+   the same unguarded `C_bytevectorp` with the same safe-mode `#t` flag, so
+   correcting the arity before `C_bytevectorp` gains a `C_immediatep` guard would
+   introduce a fresh safe-mode segfault in internal code. Fix the guard first.
+10. **`tests/gobble.scm` and `tests/sgrep.scm` are broken on master**, unrelated to
+   any of the above. Both are driven by `tests/runbench.sh` and both segfault under
+   the stock compiler: at `-O5 -d0` the missing-variable trap degenerates into a
+   SIGSEGV. Recompiled at `-O3` the real cause shows: `gobble.scm:15` calls
+   `command-line-arguments` with no import form at all, and `sgrep.scm` uses
+   `command-line-arguments` (`:8`) and `fx+` (`:33`, `:35`) while importing only
+   `chicken.io chicken.irregex chicken.port` (`:4`). Neither is auto-imported in
+   CHICKEN 6. One line each: add `(import (chicken process-context))` to
+   `gobble.scm` and `chicken.process-context chicken.fixnum` to `sgrep.scm`'s
+   import list. Any `runbench.sh` figure quoted for `grep` or `allocation` without
+   this fix is timing a segfault, not a benchmark.
 
 **(C1a) `C_ub_i_f64vector_set` exists but nothing emits it. [proposal]**
 
@@ -1274,12 +1344,12 @@ t4=C_flonum(&a,C_ub_i_flonum_plus(f0,C_ub_i_f64vector_ref(((C_word*)t0)[5],t2)))
 t5=C_u_i_f64vector_set(((C_word*)t0)[5],t2,t4);                                    /* … and immediately unboxes */
 ```
 
-The unboxed macro **already exists** — `chicken.h:1662-1663` define
+The unboxed macro **already exists** — `chicken.h:1661-1662` define
 `C_ub_i_f32vector_set` and `C_ub_i_f64vector_set` in exactly the needed form —
 but a whole-tree grep finds no other reference to either name. They are dead
 macros. What is missing is the compiler-side half, and it is more than a table
 row: none of `+unboxed-map+`'s three kinds fits a setter. In `walk`
-(`lfa2.scm:594-601`), `op` unboxes every argument and boxes the result, `acc`
+(`lfa2.scm:592-599`), `op` unboxes every argument and boxes the result, `acc`
 unboxes none and boxes the result, `pred` unboxes every argument and boxes
 nothing. A store needs arguments 1–2 left boxed (the macro applies
 `C_block_item` and `C_unfix` to them), argument 3 unboxed, and **no** box around
@@ -1287,7 +1357,7 @@ the result. So the uniform `(map (if (eq? type 'acc) walk walk/unbox) subs)` has
 to become position-aware and the result-boxing `case` has to learn a fourth kind.
 
 (C0a) adds a constraint that was not visible when this item was written.
-`C_ub_i_f64vector_set` (`chicken.h:1663`) writes `(x)` straight into the array
+`C_ub_i_f64vector_set` (`chicken.h:1662`) writes `(x)` straight into the array
 with no coercion at all, so an unboxed-store rewrite is sound only where the
 value is *known* to be a float — which, inside `lfa2`, it is: the whole point of
 the pass is that it has proved the operand unboxable. So the unboxed store is
@@ -1309,7 +1379,7 @@ per-iteration `C_check_for_interrupt` and `C_demand` (§7.1) and finally lets th
 C compiler vectorize the loop. With (C0) fixed this is now measurable rather than
 hypothetical, and it is the *whole* remaining gap on a reduction: at `-O3 -unsafe`
 the dot kernel emits two `C_ub_i_f64vector_ref` and no out-of-line call at all,
-yet still runs 4.9× off hand-written C — 1041 ms vs 213 ms (§10.1 B) — and the
+yet still runs 5.7× off hand-written C — 1238 ms vs 216 ms (§10.1 B) — and the
 C reference is not vectorized either, because the serial FP reduction blocks it
 there too. That 4.9× is boxing and the trampoline, nothing else.
 
@@ -1348,7 +1418,7 @@ to nursery size.
 Two things the flag hides. **The nursery *is* the C stack**, so `-:s` is capped
 by `RLIMIT_STACK`, and nothing in the tree consults `getrlimit`:
 `C_stack_hard_limit` is computed directly from the requested size
-(`runtime.c:1573`). Under Linux's default `ulimit -s 8192`, `-:s8m` and above do
+(`runtime.c:1574`). Under Linux's default `ulimit -s 8192`, `-:s8m` and above do
 not warn or error — they **segfault** the moment the nursery fills (`-:s7m` is
 fine). That makes a larger nursery unusable as a shipped default and argues that
 any change to `DEFAULT_STACK_SIZE` needs an explicit rlimit check and a real
@@ -1359,11 +1429,11 @@ must reserve `stack_size * 2`.
 
 The port layer is a subsystem this document otherwise ignores, and it has the
 largest measured gap to C of anything here. Ports are method vectors of Scheme
-closures: a port is a 17-word block (`library.scm:4068`) whose slot 2 is a "port
-class" vector with `read-char` in slot 0 (`library.scm:4057-4066`). So
+closures: a port is a 17-word block (`library.scm:4073`) whose slot 2 is a "port
+class" vector with `read-char` in slot 0 (`library.scm:4060-4070`). So
 `(read-char p)` costs a check, two `##sys#slot`s, an indirect *Scheme* call into
 the class closure, and only then `##core#inline "C_read_char"`
-(`runtime.c:4785`), which itself loops over `C_getc` to assemble a UTF-8
+(`runtime.c:4768`), which itself loops over `C_getc` to assemble a UTF-8
 sequence. There is no Scheme-side buffer: every character crosses the boundary.
 
 Over a 16 MB ASCII file at `-O3`: `read-char` 795 ms (20 MB/s), `read-line`
@@ -1384,10 +1454,10 @@ becomes a bounds test and a bytevector index in the common case. Local to
 would avoid the call. Note this is the *same* change as (S3) below, seen from the
 other end — they should be done together, not counted twice.
 
-**(R3) Symbol table. [proposal]** `lookup` (`runtime.c:2471`) walks a bucket
+**(R3) Symbol table. [proposal]** `lookup` (`runtime.c:2466`) walks a bucket
 chain per probe. Two corrections to the obvious framing: the buckets are weak
 *or strong* pairs depending on whether the name is permanent
-(`runtime.c:2621-2625`), and the `C_memcmp` per candidate is already
+(`runtime.c:2616-2620`), and the `C_memcmp` per candidate is already
 short-circuited on length, so it only runs on same-length names. An
 open-addressed table with stored hashes would still avoid the pointer chasing,
 but the memcmp saving is smaller than it looks.
@@ -1470,12 +1540,12 @@ scalar code as fallback, dispatched at runtime rather than by `-march` (see B1).
 The ranking here needed correcting twice over. The function the original notes
 led with, `C_utf_fast_count` (`utf.c:3537`), is **dead code** — the only two
 references in the entire tree are its definition and its prototype
-(`chicken.h:1926`). Vectorising it today buys nothing.
+(`chicken.h:1924`). Vectorising it today buys nothing.
 
 The function actually on the hot path is the *slow* one, `C_utf_count`
 (`utf.c:3500`), which `utf8_decode`s every character just to count them. It is
 reached through `C_utf_length` / `C_utf_range_length` (`chicken.h:1389-1390`) and
-directly from `C_string` / `C_static_string` (`runtime.c:2799`, `:2815`) — so
+directly from `C_string` / `C_static_string` (`runtime.c:2794`, `:2815`) — so
 every string built from bytes pays a full extra pass, including every string
 literal at unit-init time, `##sys#symbol->string`, and `get-output-string`.
 
@@ -1498,13 +1568,13 @@ is 5.1× over the shipped `-Os`, while a portable SWAR version adds a further
 rewrite needing no intrinsics is therefore the right first move.
 
 Also worth fusing: `C_utf_validate` (`utf.c:3516`) has exactly one caller,
-`utf8->string` (`library.scm:3533`), which then immediately re-scans the same
+`utf8->string` (`library.scm:3537`), which then immediately re-scans the same
 bytes via `##sys#buffer->string` → `C_utf_range_length`.
 
 **(S2) Bignum arithmetic — use wide multiply first, SIMD second. [proposal]**
 
 ```c
-/* runtime.c:10520 — schoolbook multiply, decomposing digits into halves */
+/* runtime.c:10485 — schoolbook multiply, decomposing digits into halves */
 for (j = 0; j < length_y; ++j) {
   yj = C_uhword_ref(yd, j);
   if (yj == 0) continue;
@@ -1564,7 +1634,7 @@ position at a time; its `string-scan-char` family runs only on the *pattern*, at
 regex-compile time. Adding a first-character `memchr` skip to the search loop
 would be a genuine addition — and probably the larger of the two wins.
 
-**(S6) `hash_string` (`runtime.c:2460`). [proposal]** Low priority, and for a
+**(S6) `hash_string` (`runtime.c:2455`). [proposal]** Low priority, and for a
 different reason than first assumed. The serial dependency
 (`key ^= (key << 6) + (key >> 2) + *(str++)`) does prevent vectorization, but the
 real point is that there is **no `string-hash` in core CHICKEN 6** to call it on,
@@ -1623,7 +1693,7 @@ bound the way `srfi-4.scm:270` already binds `C_a_i_f64vector_ref`:
 ```
 
 (The `4` is `words-per-flonum`, `c-platform.scm:84`.) The `C_block_item(v,1)` /
-`C_data_pointer` field access is correct as written — compare `chicken.h:1658`.
+`C_data_pointer` field access is correct as written — compare `chicken.h:1657`.
 In-place kernels return no flonum and can use plain `##core#inline`; only the
 reductions need the allocating form, and they need a documented reassociation
 policy (pairwise or Kahan) rather than relying on `-ffast-math`.
@@ -1643,8 +1713,11 @@ best CHICKEN gets is 1803 ms.
 ## 10. How to actually verify any of this
 
 The tree **is** built: `chicken`, `csi`, `csc` and `libchicken.so` sit at the
-tree root and report `Version 6.0.0 (rev 2e30c07e)`,
-`linux-unix-clang-x86-64 [ 64bit dload ptables ]`. Step 1 below is therefore
+tree root and report `6.0.1pre1 (rev d6442142)`,
+`linux-unix-clang-x86-64 [ 64bit dload ptables ]`. (Note that `chicken -version`
+prints this woven through an ASCII-art banner in this tree; 6.0.0 printed it as
+plain lines.) Because this is a git checkout you can also pin the exact source
+state with `git describe --tags`, which gives `6.0.1pre1-68-gd6442142`. Step 1 below is therefore
 already done, and §10.1 holds real numbers for the items tagged **[measured]**
 in §9. The items tagged **[proposal]** are still arguments from source.
 
@@ -1652,7 +1725,7 @@ in §9. The items tagged **[proposal]** are still arguments from source.
    non-GNU make; `GNUmakefile` is the real one, and it includes `config.make`,
    which this tree already has (`PLATFORM = linux`, `C_COMPILER = clang`). So a
    bare `make` rebuilds. CHICKEN 6 replaced the bare `make PLATFORM=…` workflow
-   with a `configure` script (`NEWS:140`, `README:70`), though the old form still
+   with a `configure` script (`NEWS:181`, `README:70`), though the old form still
    works.
 
    The ordinary build does **not** bootstrap through `chicken-boot`: a
@@ -1660,7 +1733,7 @@ in §9. The items tagged **[proposal]** are still arguments from source.
    (`rules.make:66-67`). A boot compiler is needed only when building from git
    sources, and then it is an explicit separate step
    (`./configure --chicken <path>` then `make boot-chicken`,
-   `rules.make:1043-1048`). Changing a compiler `.scm` does mean regenerating and
+   `rules.make:1044-1049`). Changing a compiler `.scm` does mean regenerating and
    recompiling every `.c`, so keeping a known-good compiler around is still good
    advice.
 
@@ -1687,11 +1760,11 @@ in §9. The items tagged **[proposal]** are still arguments from source.
    | message | emitted at | meaning |
    |---|---|---|
    | `direct leaf routine/allocation`, `… with hoistable closures/allocation` | optimizer.scm:1639-1640 | a procedure became a direct (non-CPS) C function |
-   | `number of unboxed float variables`, `number of inline operations replaced with unboxed ones` | lfa2.scm:609, 611 | flonum unboxing (§9.2 C1) |
-   | `customizable procedures` | core.scm:3066 | closures whose calling convention can be specialized |
-   | `calls to known targets` | core.scm:3080 | call sites that became direct C calls |
-   | `identified direct recursive calls` | core.scm:3272 | self-calls the backend can turn into a C loop |
-   | `fast box initializations` / `fast global references` / `fast global assignments` | core.scm:3456/3458/3460 | avoided runtime checks |
+   | `number of unboxed float variables`, `number of inline operations replaced with unboxed ones` | lfa2.scm:607, 609 | flonum unboxing (§9.2 C1) |
+   | `customizable procedures` | core.scm:3068 | closures whose calling convention can be specialized |
+   | `calls to known targets` | core.scm:3082 | call sites that became direct C calls |
+   | `identified direct recursive calls` | core.scm:3274 | self-calls the backend can turn into a C loop |
+   | `fast box initializations` / `fast global references` / `fast global assignments` | core.scm:3458/3460/3462 | avoided runtime checks |
 
    Two caveats. `direct leaf routine` alone is never printed — only the two
    longer forms — and a toy example usually inlines the candidate away before the
@@ -1705,9 +1778,9 @@ in §9. The items tagged **[proposal]** are still arguments from source.
    database.
 
 4. **Measure GC separately from mutator.** These are *runtime* options, parsed by
-   `CHICKEN_parse_command_line` (`runtime.c:1351`); parsing stops at the first
+   `CHICKEN_parse_command_line` (`runtime.c:1352`); parsing stops at the first
    argument that is not `-:...`. Run `<program> -:?` for the built-in list
-   (`runtime.c:1374-1404`).
+   (`runtime.c:1375-1405`).
 
    | option | effect |
    |---|---|
@@ -1730,9 +1803,19 @@ in §9. The items tagged **[proposal]** are still arguments from source.
 
 ### 10.1 What it actually costs (measured)
 
-Machine: Intel Xeon Gold 6238R @ 2.20 GHz, Linux 6.8.0-137. Compiler under test:
-this tree, rev `2e30c07e`, clang 18.1.3, `C_INSTALL_CFLAGS` ending `-Os
--fomit-frame-pointer`. Wall-clock milliseconds, best of 5 whole-process runs;
+Machine: Intel Xeon Gold 6238R @ 2.20 GHz, Linux 6.8.0-137. Compiler under test: `chicken-core` master at `d6442142`
+(`git describe`: 6.0.1pre1-68-gd6442142), clang 18.1.3. **This tree is built
+with `OPTIMIZE_FOR_SPEED`**, so its `C_INSTALL_CFLAGS` ends `-O3
+-fomit-frame-pointer` and `chicken-defaults.h` carries the
+`/* (this build was optimized for speed) */` marker — unlike the 6.0.0 tree the
+earlier revision of these notes was measured on, which was a stock `-Os` build
+(§9.1 B1). `Makefile.linux` is byte-identical between the two trees; the
+difference is the make invocation, not the source. Both compilers link the
+byte-identical
+`libchicken.so` from that tree, which was built by the *unpatched* compiler
+(`make chicken` only), so every difference below is the compiler patch alone.
+Ratios are not comparable with the 6.0.0 measurements: master's runtime differs
+from 6.0.0's by −13% to +23% on the minor-GC path these kernels stress. Wall-clock milliseconds, best of 5 whole-process runs;
 spread under 5%. Process startup (~8 ms) is included everywhere.
 
 #### A. The `goto loop` shape (§5.3) is within 2.3× of C
@@ -1758,14 +1841,14 @@ cells and match the C reference exactly.
 
 | | dot | axpy! | sum | scale! |
 |---|---:|---:|---:|---:|
-| old, `-O3` (safe) | 10658 | 13790 | 6981 | 9454 |
-| **new, `-O3` (safe)** | **5444** | **5762** | **4874** | **4994** |
-| *win* | *1.96×* | *2.39×* | *1.43×* | *1.89×* |
-| old, `-O3 -unsafe` | 7276 | 10075 | 4045 | 6606 |
-| **new, `-O3 -unsafe`** | **1041** | **2107** | **965** | **1803** |
-| *win* | *6.99×* | *4.78×* | *4.19×* | *3.66×* |
-| hand-written C, `clang -O3` | 213 | 118 | 214 | 65 |
-| *new `-unsafe` vs C* | *4.9×* | *17.9×* | *4.5×* | *27.7×* |
+| old, `-O3` (safe) | 10549 | 13623 | 6950 | 9622 |
+| **new, `-O3` (safe)** | **5425** | **5594** | **4821** | **4965** |
+| *win* | *1.94×* | *2.44×* | *1.44×* | *1.94×* |
+| old, `-O3 -unsafe` | 7254 | 9652 | 4124 | 6550 |
+| **new, `-O3 -unsafe`** | **1238** | **1731** | **1222** | **1962** |
+| *win* | *5.86×* | *5.58×* | *3.37×* | *3.34×* |
+| hand-written C, `clang -O3` | 216 | 124 | 216 | 60 |
+| *new `-unsafe` vs C* | *5.7×* | *14.0×* | *5.7×* | *32.7×* |
 
 (The earlier `-ffast-math` figures for dot and axpy — 125 and 123 ms — are
 unaffected by the patch and are omitted only to keep the table narrow.)
@@ -1775,8 +1858,8 @@ What the emitted C shows, which is the mechanism behind every row:
 | unit | `C_ub_i_..._ref` | `C_a_i_..._ref` | `C_i_..._set` | `C_u_i_..._set` | out-of-line `chicken.number-vector#` |
 |---|---:|---:|---:|---:|---|
 | old, any level | 0 | 0 | 0 | 0 | every ref, every set!, `make-f64vector` |
-| new, `-O3` safe | 0 | 1–3 | 0–1 | 0 | `make-f64vector` only |
-| new, `-O3 -unsafe` | 1–3 | 0 | 0–1 | **0** | `make-f64vector` only |
+| new, `-O3` safe | 0 | 1–3 | 1–2 | 0 | `make-f64vector` only |
+| new, `-O3 -unsafe` | 1–3 | 0 | 1–2 | **0** | `make-f64vector` only |
 
 Three readings:
 
@@ -1792,9 +1875,9 @@ Three readings:
 
 Two separate gaps remain, and they are not the same size:
 
-* **The gap the fix closed** is 1.4–2.4× in safe mode and 3.7–7.0× at `-unsafe`.
-* **The gap to hand-written C is 4.5–4.9× on the reductions** (`dot`, `sum`) and
-  17.9×/27.7× on the elementwise kernels. The reduction figure is the honest
+* **The gap the fix closed** is 1.4–2.4× in safe mode and 3.3–5.9× at `-unsafe`.
+* **The gap to hand-written C is 5.7× on the reductions** (`dot`, `sum`) and
+  14.0×/32.7× on the elementwise kernels. The reduction figure is the honest
   like-for-like number: clang does not vectorize a serial FP reduction either, so
   that 4.9× is pure boxing and trampoline overhead, and it is what (C1a) and
   (C1b) are aimed at. The elementwise figures include SIMD that CHICKEN has no
@@ -1884,11 +1967,11 @@ nothing over `-Os` for CHICKEN-generated C.** The level that matters is the one
 
 | configuration | `2000 11` | `2000 14` |
 |---|---:|---:|
-| default build — `f64vector` aliased to Scheme `vector`, old | 1247 | 14326 |
-| default build — same, **new** | 1254 | 14220 |
-| `-D unboxed` — real `f64vector`s, old | 3322 | 31332 |
-| `-D unboxed` — real `f64vector`s, **new** | **702** | **6122** |
-| `-D unboxed`, unchecked store (the deleted (C0a) rule) — *unsound, reference only* | *181* | *1585* |
+| default build — `f64vector` aliased to Scheme `vector`, old | 1217 | 14239 |
+| default build — same, **new** | 1226 | 14340 |
+| `-D unboxed` — real `f64vector`s, old | 3431 | 31980 |
+| `-D unboxed` — real `f64vector`s, **new** | **572** | **5206** |
+| `-D unboxed`, unchecked store (the deleted (C0a) rule) — *unsound, reference only* | *177* | *1567* |
 
 **The default rows are a control, and a strict one: the generated C is
 byte-identical between the two compilers.** `fft.scm`'s `cond-expand` aliases
@@ -1898,11 +1981,12 @@ noise. Anything that moved in the unboxed rows is therefore the patch and nothin
 else.
 
 **The headline is an inversion.** Under the pristine compiler, using real
-`f64vector`s made fft **2.19× slower** than using plain Scheme vectors (31332 vs
-14326 at `2000 14`) — the specialized numeric type was a pessimization, because
+`f64vector`s made fft **2.25× slower** than using plain Scheme vectors (31980 vs
+14239 at `2000 14`) — the specialized numeric type was a pessimization, because
 every access became a CPS call while `vector-ref` inlined. Under the patched
-compiler it is **2.32× faster** (6122 vs 14220), which is what the type was
-always supposed to buy. Against pristine, `-D unboxed` improves 4.73× and 5.12×.
+compiler it is **2.75× faster** (5206 vs 14340), which is what the type was
+always supposed to buy. Against unpatched master, `-D unboxed` improves 6.00× and
+6.14×.
 Output is identical in all four cells (verified with a checksummed variant built
 with identical flags and run at finite iteration counts; stock `fft.scm` prints
 nothing and its 2000-iteration runs overflow to NaN by design).
@@ -1915,7 +1999,7 @@ patched compiler's differ in exactly one thing: 40 occurrences of
 filename and an off-by-one in line comments, `diff` on the two `.c` bodies is
 empty). Both contain the same 50 `C_ub_i_f64vector_ref` and the same 4
 `C_u_i_f64vector_length`. So on a kernel that stores as often as it loads, the
-checked store costs **4.0×** — and the unchecked one segfaults on
+checked store costs **3.2×** — and the unchecked one segfaults on
 `(f64vector-set! v 0 7)`. This is the measurement that makes the type-conditional
 unsafe rewrite proposed in §9.2 worth building rather than merely worth
 mentioning.
@@ -2005,7 +2089,7 @@ other 67 rules is a real negative rather than a blind spot.
   stdout-flush nondeterminism in a deliberately panicking process.
 
 **One intended behaviour change worth a release note.** `-O4` and `-O5` cons
-`'unsafe` onto the options unconditionally (`chicken.scm:120-131`, `:132-147`),
+`'unsafe` onto the options unconditionally (`chicken.scm:121-132`, `:132-147`),
 so now that the ref rewrites fire, bounds checking on SRFI-4 accessors is
 genuinely gone at those levels: reading element 100 of a 4-element `f64vector`
 raises `Error: out of range` under the old compiler at `-O5` and silently returns
@@ -2047,10 +2131,15 @@ executable and the C to read.
 
 Ranked by measured payoff per unit of effort, not by technique.
 
-**Done on this tree: (C0), the `+extended-bindings+` typo.** One missing `#` per
-name, 76 names across 46 lines in two tables, disabled every SRFI-4 rewrite.
-Fixed; measured at 1.4–2.4× safe and 3.7–7.0× at `-unsafe` on f64 kernels, and
-4.7–5.1× on `tests/fft.scm -D unboxed`, with identical output everywhere and a
+**Done on this tree (see §11 for the measurements): (P1) linear canonicalization,
+(C0c) the bytevector immediate guards, (C1a) the unboxed float store, and (S4)
+the number-vector bulk kernels. (R4) buffered `read-char` is implemented but held
+back pending fixes — §11.5.**
+
+**Also done: (C0), the `+extended-bindings+` typo.** One missing `#` per
+name, 76 names across 43 lines in two tables, disabled every SRFI-4 rewrite.
+Fixed; measured at 1.4–2.4× safe and 3.3–5.9× at `-unsafe` on f64 kernels, and
+6.0–6.1× on `tests/fft.scm -D unboxed`, with identical output everywhere and a
 byte-identical-C control cell proving the attribution (§10.1 B, G). Repairing it
 also exposed and fixed two latent upstream bugs — the unsound unsafe float
 setters (C0a) and the safe-mode `u8vector?` segfault (C0b) — and left three items
@@ -2073,7 +2162,7 @@ in the queue below.
 4. **(R4) buffered `read-char`** — 4.5× available to users today by advice alone,
    ~20× against C for a change local to `library.scm`.
 5. **(C0b′)/(C0c) an immediate-checking `C_i_bytevectorp`** — add
-   `C_immediatep` guards to `C_i_bytevector_set` (`runtime.c:6113`) and
+   `C_immediatep` guards to `C_i_bytevector_set` (`runtime.c:6087`) and
    `C_i_bytevector_ref` (`:5659`), mirroring `C_i_bytevector_length` (`:5937`).
    This fixes a live safe-mode segfault reachable with no compiler patch at all,
    and it lets `u8vector?` be inlined again (bounded at 7.15× on a pure-predicate
@@ -2103,6 +2192,185 @@ do not exist in this tree. Also not queued, but worth an upstream report:
 `+extended-bindings+` entry (§9.2, upstream items 6 and 7).
 
 ---
+
+---
+
+## 11. What has been implemented
+
+Four items from the queue are now landed on this branch, each measured before and
+after against a build of the immediately preceding commit, and each gated on the
+full `tests/runtests.sh` suite (102 test groups, 0 failures).
+
+### 11.1 (P1) Canonicalization is linear — `7989824e`
+
+`##sys#line-number-database` is keyed on the expression rather than on the head
+symbol of the call. CHICKEN's GC moves objects, so there is no stable address
+hash for a pair; the table hashes a bounded prefix of the expression's
+*structure* and compares candidates with `eq?`, which makes a weak hash cost
+time but never correctness.
+
+| N forms | before | after | |
+|---|---:|---:|---:|
+| 1000 | 260 ms | 113 ms | 2.3× |
+| 2000 | 1047 ms | 205 ms | 5.1× |
+| 4000 | 4422 ms | 483 ms | 9.2× |
+| 8000 | 18191 ms | 1009 ms | **18.0×** |
+
+The ~4.1×-per-doubling curve collapses to ~2.1×. On hand-written sources the win
+is real but smaller: `library.scm` canonicalization 611 → 301 ms (2.03×), and the
+whole front-end on `library.scm` 4.02 → 3.75 s (6.7%), which is ~1.8% of an
+end-to-end `csc` compile. Every `.scm` in the tree produces byte-identical C.
+
+Two honest limits. N *byte-identical* expressions stay quadratic — a structural
+hash cannot separate them — though even there 4710 → 1994 ms. And a source
+expression destructively modified after registration can no longer be found, so
+`get-line-number` returns `#f` for it; the old `assq` database compared with
+`eq?` and was immune to mutation. A miss can never become a *wrong* location.
+
+### 11.2 (C0c) The bytevector primitives guard against immediates — `91707223`
+
+A correctness fix first and a speedup second. `C_bytevectorp` dereferences its
+argument with no `C_immediatep` check, and several callers used it as a type
+guard, so `(u8vector-set! 42 0 1)` and `(u8vector-ref 42 0)` **segfaulted in
+default safe mode** — reachable with no compiler flags at all. Both now raise a
+proper type error.
+
+With an immediate-safe `C_i_bytevectorp` available, `u8vector?` regains the
+rewrite that had to be deleted for want of one, and `chicken.bytevector#bytevector?`
+— the R7RS spelling of the same predicate — gains one it never had. Measured on
+a polymorphic predicate loop: `u8vector?` **4.3×**, `bytevector?` **5.7×**. That
+is the ceiling, being a pure predicate microbenchmark; the added `C_immediatep`
+costs ≤1% on a ref/set! loop that does nothing else.
+
+`tests/bytevector-guard-tests.scm` covers this, with every call site deliberately
+polymorphic — see §9.2's methodological note.
+
+### 11.3 (C1a) Float stores stop allocating — `c9463c5b`
+
+lfa2 now emits `C_ub_i_f{32,64}vector_set` for a store whose value it has proved
+is a flonum.
+
+| | before | after | |
+|---|---:|---:|---:|
+| `axpy!`, 20M stores, `-O3 -unsafe` | 243 ms | 113 ms | **2.15×** |
+| `scale!`, 20M stores, `-O3 -unsafe` | 222 ms | 129 ms | **1.72×** |
+| minor GCs over 20M stores | 622 | 11 | **56× fewer** |
+
+`C_flonum(&a,…)` and `a=C_alloc(4)` leave the loop body and
+`C_calculate_demand(4,0,2)` becomes `(0,0,2)`. Safe mode is unchanged, the
+rewrite being gated on `unsafe` as well as on the proof.
+
+The dead macros it wires up returned the literal `0`, whose low two bits are the
+POINTER tag — a NULL masquerading as a heap object. That fix is load-bearing, not
+hypothetical: `srfi-4.scm` has 16 hand-written call sites that `perform-unboxing`
+also rewrites, one of which passes the result to a continuation, and reverting
+only that hunk turns `(write (c64vector-set! v 0 1.5))` into a segfault.
+
+This does not reintroduce the unsound store deleted in `8aa2f5b8`: that one
+applied `C_flonum_magnitude` to a value `types.db` declares `(or integer float)`,
+whereas this fires only where the value is *proved* a flonum.
+
+### 11.4 (S4) Bulk kernels for `chicken.number-vector` — `ca7cc4fa`
+
+Twelve operations — `f64vector-fill!/-copy!/-scale!/-axpy!/-sum/-dot` and the f32
+equivalents — as C kernels in the unit's own `foreign-declare`.
+
+| vs the element-at-a-time Scheme loop | L3-resident (1.6 MB) | DRAM-resident (160 MB) |
+|---|---:|---:|
+| `fill!` | 15.6× | 2.4× |
+| `scale!` | 87.6× | 9.0× |
+| `axpy!` | 50.9× | 8.4× |
+| `sum` | 80.4× | 31.5× |
+| `dot` | 46.6× | 20.1× |
+
+Out of cache the elementwise kernels become bandwidth-bound and the win
+collapses; the load-only reductions keep most of theirs. Each lands within a few
+percent of hand-written C at `clang -O3`.
+
+Three deliberate honesty constraints. `-copy!` is **not** claimed as a speedup —
+`->bytevector/shared` plus `bytevector-copy!` is already a memcpy and measures
+the same; its value is ergonomic. Per-call overhead is ~79 ns, so the kernels
+*lose* to an inlined `-unsafe` loop on very short vectors (n=8 `sum` is 0.90×).
+And the reductions genuinely do not auto-vectorize, so they use eight explicit
+accumulators combined pairwise — a documented reassociation that is more accurate
+than the naive loop, and that lets the SLP vectorizer take them. A
+`#pragma STDC FP_CONTRACT OFF` keeps `-axpy!` bit-identical to the Scheme loop,
+which it otherwise would not be on any FMA-capable target.
+
+### 11.5 Held back: (R4) buffered `read-char`
+
+Implemented and measured — `read-char` 1.5×, `peek-char`+`read-char` 4.6×,
+`(read)` over 8 MB of s-expressions 2.4× — and it fixes a genuine pre-existing
+bug: `peek-char` followed by `read-line` merges lines today (894 lines where 900
+is correct). It is **not landed**, because adversarial review found a heap
+overflow in `read-bytevector!` when `COUNT` is `#f`, plus three regressions on
+documented APIs: `file-position` becomes destructive (**5.6× slower**), limited
+`read-line` after a char-level read is **2.2× slower**, and
+`set-buffering-mode! #:none` is silently neutered. End-to-end payoff on the
+flagship consumer is ~nil (compiling `library.scm`, 1.02×). Fixes for all four
+exist; it needs another pass.
+
+### 11.6 Further upstream bugs found while implementing — now fixed
+
+Two of these were found by reviewing the (C0c) fix outward, and are the same
+class of defect. Both are fixed on this branch; the third is a build-system gap,
+left alone.
+
+1. **`##sys#pointer?` and `##sys#generic-structure?` had exactly the (C0c) bug**
+   — `a401727f`. `c-platform.scm` rewrote them to `C_anypointerp` and
+   `C_structurep`, raw header-dereferencing macros with no `C_immediatep`, both
+   carrying the safe-mode flag; the out-of-line definitions in `library.scm`
+   were unguarded too. A polymorphic `(##sys#pointer? 42)` segfaulted in default
+   safe mode. For pointers the guarded equivalent already existed one line below
+   — `pointer?` uses `C_i_safe_pointerp`, which has identical semantics plus the
+   check — so `##sys#pointer?` now points at it. For structures there was no
+   one-argument guarded form (`C_i_structurep` takes a tag), so
+   `C_i_generic_structurep` was added, mirroring `C_i_bytevectorp`. Both stay
+   inlined. The remaining users of the raw macros are safe because they
+   establish blockness first (`lolevel.scm:76` and `library.scm:6658` test
+   `C_blockp`, `extras.scm:155` tests `C_immp`, and the two print paths sit
+   after a `C_blockp` arm in the same `cond`).
+
+2. **`C_i_check_range_2` / `C_i_check_range_including_2` truncated the index**
+   — `1aa47250`. Both held it in an `int`, so on LP64 — where a fixnum is 63
+   bits — an index of 2³²+k was truncated to k, passed a range check it should
+   have failed, and the caller then used the untruncated value:
+
+   ```scheme
+   (##sys#check-range (+ (expt 2 32) 1) 0 3)   ; => accepted (should reject)
+   (##sys#check-range 5 0 3)                   ; => rejected (correct)
+   ```
+
+   Reachable from Scheme through `##sys#check-range` and
+   `##sys#check-range/including`, which the lolevel record accessors and the
+   string operations use to validate an index before indexing without further
+   checks. The bounds were already `C_word`s, so holding the index in one only
+   removes a narrowing. The regression test also asserts that a genuinely
+   in-range index *above* 2³² is still accepted — the fix has to widen the
+   comparison, not reject everything large.
+
+   Both fixes are covered by `tests/bytevector-guard-tests.scm`, whose call
+   sites are deliberately polymorphic for the reason given in §9.2.
+
+3. **`make` does not rebuild a module's import library when its export list
+   changes.** `chicken.<mod>.import.c` has no dependency on the
+   `chicken.<mod>.import.scm` the compiler regenerates, so after adding an export
+   the stale `.import.so` survives and the new binding is invisible to `csi` and
+   to anything resolving through the build tree's repository — while compiled
+   code that imports the unit directly works fine, which makes it look like a
+   module-visibility bug in the change. `tests/srfi-4-tests.scm` fails this way.
+   Force it with `rm -f chicken.<mod>.import.[co] chicken.<mod>.import.so` before
+   rebuilding. This cost real debugging time twice while landing §11.4.
+
+### 11.7 An environment hazard worth knowing
+
+`LD_LIBRARY_PATH` ending in a colon makes the *current directory* a library
+search path. Building CHICKEN inside a worktree then silently shadows the
+installed `libchicken.so.12` with the half-built one in `.`, and a stock
+`chicken` binary loaded against a modified library segfaults in ways that look
+like a bug in the change under test. Build with `env -u LD_LIBRARY_PATH make` if
+in doubt; a clean-environment build of the same tree succeeds where the ambient
+one crashes.
 
 ## Appendix: file map
 
