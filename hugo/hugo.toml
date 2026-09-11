@@ -38,7 +38,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
   homeTitle = "This site needs no title"
   subtitle = "Massimo Nocentini's papers, notes, memos and source code."
   commit = "https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/"
-  mainSections = ['']
+  mainSections = ['post']
 #  logo = "samurai.jpg" # Expecting square dimensions
   favicon = "samurai.jpg"
   dateFormat = "January 2, 2006" # or a locale token such as ":date_long"
@@ -145,30 +145,35 @@ ignoreLogs = ['warning-goldmark-raw-html']
   #date = "date"
   #year = "years"
 
+
 [[menu.main]]
-    name = "About"
-    url = "about/"
+    name = "content"
+    url = ""
     weight = 1
 
-#[[menu.main]]
-#    name = "Blog"
-#    url = ""
-#    weight = 2
+[[menu.main]]
+    parent = "content"
+    name = "About"
+    url = "about/"
+    weight = 0
 
-#[[menu.main]]
-#    name = "Pages"
-#    url = "page/"
-#    weight = 2
+[[menu.main]]
+    parent = "content"
+    name = "Pages"
+    url = "page/"
+    weight = 2
 
-#[[menu.main]]
-#    name = "Tags"
-#    url = "tags"
-#    weight = 3
+[[menu.main]]
+    parent = "content"
+    name = "Tags"
+    url = "tags"
+    weight = 3
 
-#[[menu.main]]
-#    name = "Categories"
-#    url = "categories/"
-#    weight = 4
+[[menu.main]]
+    parent = "content"
+    name = "Categories"
+    url = "categories/"
+    weight = 4
 
 #[[menu.main]]
 #    identifier = "externals"
