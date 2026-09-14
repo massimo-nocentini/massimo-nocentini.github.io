@@ -175,6 +175,12 @@ ignoreLogs = ['warning-goldmark-raw-html']
     url = "categories/"
     weight = 4
 
+[[menu.main]]
+    parent = "content"
+    name = "Authors"
+    url = "author/"
+    weight = 5
+
 #[[menu.main]]
 #    identifier = "externals"
 #    name = "Externals"
