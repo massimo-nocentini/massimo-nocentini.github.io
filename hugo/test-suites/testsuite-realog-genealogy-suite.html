@@ -1,0 +1,820 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script>hljs.highlightAll();</script></head>
+<body>
+<p>A genealogy over <code class="w3-codespan">plot-person</code> records: the two fact tables <code class="w3-codespan">is Father of</code> and <code class="w3-codespan">is Mother of</code>, and the rules that <code class="w3-codespan">define-knowledge</code> derives from them.  Victoria shares only her father with Benjamin and Alexander, whose mother is Margaret: she is the one genuine half sibling of the fixture, and the only case that tells <code class="w3-codespan">is Half Sibling of</code> apart from <code class="w3-codespan">is Sibling of</code>.</p>
+<p><code class="w3-codespan">is Sibling of</code> relates distinct people sharing <i>both</i> parents, <code class="w3-codespan">is Half Sibling of</code> distinct people sharing <i>at least one</i>, so the latter contains the former.  Narrowing it to exactly one shared parent would ask for negation, which this μkanren does not offer.</p>
+<p>Pure unification has no field accessors, so observing a field means rebuilding the record around it; <code class="w3-codespan">define-record°</code> generates that skeleton per field, hence asking for one is a single goal: the four Brother and Sister rules call <code class="w3-codespan">plot-person-sex°</code> themselves, no <code class="w3-codespan">has Sex</code> rule standing between them and the record, and adding a field to <code class="w3-codespan">plot-person</code> leaves them alone.  That goal still comes last in each of them, where the sibling goal has already grounded its argument, but it is no longer obliged to.</p>
+<p>Of the helpers, <code class="w3-codespan">relation-&gt;triples</code> renders a binary relation over plot-persons as a sorted list of readable triples, with duplicate solutions collapsed — <code class="w3-codespan">relation-&gt;triples/duplicates</code> keeps them.  Sorting is what makes the assertions stable: reordering goals inside a rule changes the solver's enumeration order without changing the relation's meaning.  <code class="w3-codespan">by-name</code> does the same for results that come out of a hash table, whose fold order is unspecified.</p>
+<h2 id="test/plot-person°"><a href="#test/plot-person°"><code>test/plot-person°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">plot-person°</code> attributes the tag of its type to a variable and leaves it otherwise unshaped: the answer carries that assertion instead of a record, which is what <code class="w3-codespan">structure°</code> cannot express, committing as it does to a skeleton.</p>
+<p>One variable cannot carry two of these tags, no record being of two types, so the conjunction has no solution at all where the disjunction has two — each branch answering with the tag it attributed.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/plot-person° _)
+  (⊦= '((λ (α) (assert (every (μ v (plot-person? v)) (list α))) α))
+      (°-&gt;list #f (fresh° (a) (plot-person° a))))
+  (⊦= '() (°-&gt;list #f (fresh° (a) (plot-person° a) (plot-location° a))))
+  (⊦= '((λ (α) (assert (every (μ v (plot-person? v)) (list α))) α)
+        (λ (α) (assert (every (μ v (plot-location? v)) (list α))) α))
+      (°-&gt;list #f (fresh° (a) (or° (plot-person° a) (plot-location° a))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3460816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/plot-person-field°"><a href="#test/plot-person-field°"><code>test/plot-person-field°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">define-record°</code> emits one relation per field, over a record and that field alone: <code class="w3-codespan">(plot-person-sex° r v)</code> unifies <code class="w3-codespan">r</code> with a record whose sex slot is <code class="w3-codespan">v</code> and whose other three slots are fresh variables.  Read one way it is a lookup, read the other a test; a record of another type matches neither the type tag nor the arity of that skeleton, hence it simply fails, whatever its slots hold.</p>
+<p>With the record unbound the goal turns constructive: what survives the query is the skeleton itself, and two field goals over the same variable meet on one skeleton rather than on two.  A record cannot be one of its own fields, the occur check sees to that.  Such a skeleton is a <code class="w3-codespan">plot-person</code> as far as the tags are concerned, so it discharges <code class="w3-codespan">plot-person°</code> while it contradicts <code class="w3-codespan">plot-location°</code>.</p>
+<p>That constructive direction is precisely what the hand-written rule could not afford.  Henry has three recorded children, one of whom is a daughter, and the field goal may now be posted <i>before</i> the fact base has produced anybody: it invents a record out of fresh variables and the facts ground it afterwards.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/plot-person-field° _)
+  (⊦= '(1) (°-&gt;list/ground (fresh° (q) (plot-person-id° emma-johnson q))))
+  (⊦= '(&quot;Emma Johnson&quot;)
+      (°-&gt;list/ground (fresh° (q) (plot-person-name° emma-johnson q))))
+  (⊦= '(female)
+      (°-&gt;list/ground (fresh° (q) (plot-person-sex° emma-johnson q))))
+  (⊦= '(34) (°-&gt;list/ground (fresh° (q) (plot-person-age° emma-johnson q))))
+  (⊦= '(ok)
+      (°-&gt;list/ground
+        (fresh° (q) (plot-person-sex° emma-johnson 'female) (=° q 'ok))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh° (q) (plot-person-sex° emma-johnson 'male) (=° q 'ok))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh° (q) (plot-person-sex° (make-plot-location 1 &quot;Firenze&quot;) q))))
+  (⊦= '() (°-&gt;list/ground (fresh° (q) (plot-location-loc° emma-johnson q))))
+  (⊦= '((λ (α β γ) (make-record-instance 'plot-person α β 'female γ)))
+      (°-&gt;list #f (fresh° (q) (plot-person-sex° q 'female))))
+  (⊦= '((λ (α β)
+           (make-record-instance 'plot-person α &quot;Emma Johnson&quot; 'female β)))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (plot-person-sex° q 'female)
+          (plot-person-name° q &quot;Emma Johnson&quot;))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (plot-person-sex° q q))))
+  (⊦= `(,emma-johnson)
+      (°-&gt;list/ground
+        (fresh°
+          (q)
+          (plot-person° q)
+          (plot-person-sex° q 'female)
+          (=° q emma-johnson))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh°
+          (q)
+          (plot-location° q)
+          (plot-person-sex° q 'female)
+          (=° q emma-johnson))))
+  (⊦= `(,emma-johnson)
+      (°-&gt;list/ground
+        (fresh° (q) (plot-person-sex° q 'female) (=° q emma-johnson))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh° (q) (plot-person-sex° q 'male) (=° q emma-johnson))))
+  (⊦= '(&quot;Victoria Lewis&quot;)
+      (sort (map plot-person-name
+                 (°-&gt;list/ground
+                   (fresh°
+                     (k)
+                     (plot-person-sex° k 'female)
+                     (genealogy-is-Father-of° henry-taylor k))))
+            string&lt;?))
+  (⊦= '(&quot;Alexander Thomas&quot; &quot;Benjamin Clark&quot;)
+      (sort (map plot-person-name
+                 (°-&gt;list/ground
+                   (fresh°
+                     (k)
+                     (genealogy-is-Father-of° henry-taylor k)
+                     (plot-person-sex° k 'male))))
+            string&lt;?)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3464048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/structure°"><a href="#test/structure°"><code>test/structure°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">structure°</code> opens on a head clause asserting that a record is of a given type, then names any subset of that type's fields, and unifies the record with the skeleton those clauses describe: the named slots take the given terms, the rest stay fresh.  It is the general case of which the per-field relations are the one-field instance, hence <code class="w3-codespan">(structure° (plot-person q) (sex 'female) (name &quot;Emma Johnson&quot;))</code> and the conjunction of <code class="w3-codespan">plot-person-sex°</code> with <code class="w3-codespan">plot-person-name°</code> reify to the very same skeleton.</p>
+<p>They do not build it the same way, though.  A conjunction posts one skeleton per goal, each with a fresh variable in every slot it does not constrain, and leaves unification to merge them; <code class="w3-codespan">structure°</code> posts a single skeleton, hence one <code class="w3-codespan">=°</code> and one fresh variable per unmentioned slot, however many fields are named.  Naming no field at all still commits the record to a skeleton, which is more than <code class="w3-codespan">plot-person°</code> asks: the tag constrains a variable without giving it a shape.</p>
+<p>A term is any expression — a literal, a logic variable, another record — and a field named twice unifies its two terms rather than losing one of them.  A field the type does not have is an error at the call itself, not a silently failing goal.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/structure° _)
+  (⊦= '(female)
+      (°-&gt;list/ground
+        (fresh° (q) (structure° (plot-person emma-johnson) (sex q)))))
+  (⊦= '((&quot;Emma Johnson&quot; 34))
+      (°-&gt;list/ground
+        (fresh°
+          l
+          (n a)
+          (structure° (plot-person emma-johnson) (name n) (age a)))))
+  (⊦= '(ok)
+      (°-&gt;list/ground
+        (fresh°
+          (q)
+          (structure° (plot-person emma-johnson) (sex 'female) (age 34))
+          (=° q 'ok))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh°
+          (q)
+          (structure° (plot-person emma-johnson) (sex 'female) (age 35))
+          (=° q 'ok))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh°
+          (q)
+          (structure°
+            (plot-person (make-plot-location 1 &quot;Firenze&quot;))
+            (sex q)))))
+  (⊦= '((λ (α β γ δ) (make-record-instance 'plot-person α β γ δ)))
+      (°-&gt;list #f (fresh° (q) (structure° (plot-person q)))))
+  (⊦= '((λ (α β)
+           (make-record-instance 'plot-person α &quot;Emma Johnson&quot; 'female β)))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (structure° (plot-person q) (sex 'female) (name &quot;Emma Johnson&quot;)))))
+  (⊦= (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (plot-person-sex° q 'female)
+          (plot-person-name° q &quot;Emma Johnson&quot;)))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (structure° (plot-person q) (sex 'female) (name &quot;Emma Johnson&quot;)))))
+  (⊦= '((female female))
+      (°-&gt;list/ground
+        (fresh°
+          l
+          (a b)
+          (structure° (plot-person emma-johnson) (sex a) (sex b)))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh°
+          l
+          (a)
+          (structure° (plot-person emma-johnson) (sex a) (sex 'male)))))
+  (⊦= '(&quot;Victoria Lewis&quot;)
+      (map plot-person-name
+           (°-&gt;list/ground
+             (fresh°
+               (k)
+               (structure° (plot-person k) (sex 'female))
+               (genealogy-is-Father-of° henry-taylor k)))))
+  (⊦= 'raised
+      (condition-case
+        (begin
+          (structure° (plot-person emma-johnson) (sxe 'female))
+          'not-raised)
+        ((exn) 'raised))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3468568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/define-record°"><a href="#test/define-record°"><code>test/define-record°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The macro keeps the signature of vanilla <code class="w3-codespan">define-record</code>, slot specifications included: a field written <code class="w3-codespan">(setter slot)</code> keeps its setter, and the relation is named after the slot alone.  A record of a single field is no special case either, its skeleton having no other slot to keep fresh.</p>
+<p>The two parameters of a generated relation are hygienic, hence a record whose fields are named <code class="w3-codespan">r</code> and <code class="w3-codespan">v</code> is no threat to them.  Every such definition also carries along the tag <code class="w3-codespan">μkanren-tag/&lt;name&gt;</code> and the goal <code class="w3-codespan">&lt;name&gt;°</code> that attributes it to a variable.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/define-record° _)
+  (define-record° plot-atom value)
+  (⊦= '(42)
+      (°-&gt;list/ground (fresh° (q) (plot-atom-value° (make-plot-atom 42) q))))
+  (⊦= '((λ () (make-record-instance 'plot-atom 42)))
+      (°-&gt;list #f (fresh° (q) (plot-atom-value° q 42))))
+  (define-record° plot-box (setter r) v)
+  (define box (make-plot-box 'left 'right))
+  (⊨ (plot-box? box))
+  (⊦= '(left) (°-&gt;list/ground (fresh° (q) (plot-box-r° box q))))
+  (⊦= '(right) (°-&gt;list/ground (fresh° (q) (plot-box-v° box q))))
+  (set! (plot-box-r box) 'up)
+  (⊦= '((up right))
+      (°-&gt;list/ground
+        (fresh° l (x y) (plot-box-r° box x) (plot-box-v° box y))))
+  (⊦= '((λ (α) (assert (every (μ v (plot-atom? v)) (list α))) α))
+      (°-&gt;list #f (fresh° (a) (plot-atom° a))))
+  (⊦= '() (°-&gt;list #f (fresh° (a) (plot-atom° a) (plot-box° a)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3470752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/define-knowledge/typed-holes"><a href="#test/define-knowledge/typed-holes"><code>test/define-knowledge/typed-holes</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A hole of a header is written <code class="w3-codespan">(:a plot-person°)</code>: the second element names the relation that holds of the variable, and the macro posts it as a goal ahead of the body, so a declared type is enforced rather than merely documented.  <i>is Twin of</i> and <i>is Same as</i> have the same body, <code class="w3-codespan">(=° :a :c)</code>, and differ only in carrying that annotation: the first rejects a <code class="w3-codespan">plot-location</code> the second accepts.</p>
+<p>The <code class="w3-codespan">:-</code> list is read the same way, hence <i>is Bound to</i> constrains a variable that its own header never mentions.  Left unground, a typed hole shows up in the reified answer as the assertion the tag carries — the annotation is a goal like any other, not a check performed and discarded.</p>
+<p>A second element that names no relation, that is one not ending in <code class="w3-codespan">°</code>, is ignored as it was before, which is why a hole may also be written <code class="w3-codespan">(:a)</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/define-knowledge/typed-holes _)
+  (define-knowledge
+    fixture
+    (rule ((|:a| plot-person°) is Twin of (|:c| plot-person°))
+          (|:-|)
+          (=° |:a| |:c|))
+    (rule ((|:a|) is Same as (|:c|)) (|:-|) (=° |:a| |:c|))
+    (rule ((|:a|) is Bound to (|:c|))
+          (|:-| (|:p| plot-person°))
+          (=° |:p| |:a|)
+          (=° |:c| |:a|)))
+  (⊦= 3 (hash-table-size fixture-hash-table))
+  (⊦= `(,emma-johnson)
+      (°-&gt;list/ground (fresh° (q) (fixture-is-Twin-of° q emma-johnson))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh° (q) (fixture-is-Twin-of° q (make-plot-location 1 &quot;Firenze&quot;)))))
+  (⊦= `(,(make-plot-location 1 &quot;Firenze&quot;))
+      (°-&gt;list/ground
+        (fresh° (q) (fixture-is-Same-as° q (make-plot-location 1 &quot;Firenze&quot;)))))
+  (⊦= `(,emma-johnson)
+      (°-&gt;list/ground (fresh° (q) (fixture-is-Bound-to° emma-johnson q))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh°
+          (q)
+          (fixture-is-Bound-to° (make-plot-location 1 &quot;Firenze&quot;) q))))
+  (⊦= '((λ (α) (assert (every (μ v (plot-person? v)) (list α))) α))
+      (°-&gt;list #f (fresh° (q) (fixture-is-Twin-of° q q)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3472688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/define-knowledge/distinct-holes"><a href="#test/define-knowledge/distinct-holes"><code>test/define-knowledge/distinct-holes</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A third element <code class="w3-codespan">≠°</code> enrols its variable in the one <code class="w3-codespan">all-different°</code> group of the relation, naming the relation that group posts over each of its pairs, as the second element names the one posted over the variable itself.  <i>is Paired with</i> and <i>is Coupled with</i> share a body that draws both variables from Henry's three children, and the marks alone account for the difference: nine ordered pairs become six, the three that repeat a child being exactly what the group forbids.</p>
+<p>The <code class="w3-codespan">:-</code> list is gathered into the same group, so <i>is Trio with</i> forbids its hidden third variable to repeat either of the two it relates: six solutions where an unmarked <code class="w3-codespan">:b</code> would leave eighteen.  One group per relation is all this spelling can express — several would want a name apiece, of which <code class="w3-codespan">≠°</code> would be the default one.</p>
+<p>This is how <code class="w3-codespan">is Sibling of</code> and <code class="w3-codespan">is Half Sibling of</code> now ask for two distinct people, in the header where the rest of their shape is declared, instead of opening their body with <code class="w3-codespan">(≠° :a :c)</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/define-knowledge/distinct-holes _)
+  (define-knowledge
+    sons
+    (rule ((|:a| plot-person° ≠°) is Paired with (|:c| plot-person° ≠°))
+          (|:-|)
+          (genealogy-is-Father-of° henry-taylor |:a|)
+          (genealogy-is-Father-of° henry-taylor |:c|))
+    (rule ((|:a| plot-person°) is Coupled with (|:c| plot-person°))
+          (|:-|)
+          (genealogy-is-Father-of° henry-taylor |:a|)
+          (genealogy-is-Father-of° henry-taylor |:c|))
+    (rule ((|:a| plot-person° ≠°) is Trio with (|:c| plot-person° ≠°))
+          (|:-| (|:b| plot-person° ≠°))
+          (genealogy-is-Father-of° henry-taylor |:a|)
+          (genealogy-is-Father-of° henry-taylor |:b|)
+          (genealogy-is-Father-of° henry-taylor |:c|)))
+  (⊦= '((&quot;Alexander Thomas&quot; x &quot;Benjamin Clark&quot;)
+        (&quot;Alexander Thomas&quot; x &quot;Victoria Lewis&quot;)
+        (&quot;Benjamin Clark&quot; x &quot;Alexander Thomas&quot;)
+        (&quot;Benjamin Clark&quot; x &quot;Victoria Lewis&quot;)
+        (&quot;Victoria Lewis&quot; x &quot;Alexander Thomas&quot;)
+        (&quot;Victoria Lewis&quot; x &quot;Benjamin Clark&quot;))
+      (relation-&gt;triples sons-is-Paired-with° 'x))
+  (⊦= '((&quot;Alexander Thomas&quot; x &quot;Alexander Thomas&quot;)
+        (&quot;Benjamin Clark&quot; x &quot;Benjamin Clark&quot;)
+        (&quot;Victoria Lewis&quot; x &quot;Victoria Lewis&quot;))
+      (lset-difference
+        equal?
+        (relation-&gt;triples sons-is-Coupled-with° 'x)
+        (relation-&gt;triples sons-is-Paired-with° 'x)))
+  (⊦= 6 (length (relation-&gt;triples/duplicates sons-is-Trio-with° 'x)))
+  (⊦= '((&quot;Emma Johnson&quot; sibling &quot;James Miller&quot;))
+      (map (λ (p)
+              (list (plot-person-name (car p))
+                    'sibling
+                    (plot-person-name (cadr p))))
+           (°-&gt;list/ground
+             (fresh°
+               l
+               (a c)
+               (=° a emma-johnson)
+               (genealogy-is-Sibling-of° a c))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(12582912 3484816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/all-different"><a href="#test/all-different"><code>test/all-different</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">all-different°</code> conjoins <code class="w3-codespan">≠°</code> over every unordered pair of the terms it is given, hence a list with no pair at all — empty or a singleton — succeeds trivially, while three variables leave three residual disequalities behind.</p>
+<p>The constraint bites whether it is posted before or after the unifications it forbids, so it <i>prunes</i> a search instead of filtering its results: of the four ways of assigning two variables over two values, only the two injective ones survive.  It is the goal a hole marked <code class="w3-codespan">≠°</code> asks for, hence the sibling rules no longer spell their <code class="w3-codespan">≠°</code> out.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/all-different _)
+  (⊦= '((λ () 'ok)) (°-&gt;list #f (fresh° (q) (all-different° '()) (=° q 'ok))))
+  (⊦= '((λ () 'ok))
+      (°-&gt;list #f (fresh° (q) (all-different° (list q)) (=° q 'ok))))
+  (⊦= '((λ (α β γ)
+           (begin (deny (equal? α β)))
+           (begin (deny (equal? α γ)))
+           (begin (deny (equal? β γ)))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list #f (fresh° l (a b c) (all-different° (list a b c)))))
+  (⊦= '((1 2 3))
+      (°-&gt;list/ground
+        (fresh°
+          l
+          (a b c)
+          (all-different° (list a b c))
+          (=° a 1)
+          (=° b 2)
+          (=° c 3))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh°
+          l
+          (a b c)
+          (all-different° (list a b c))
+          (=° a 1)
+          (=° b 2)
+          (=° c 1))))
+  (⊦= '()
+      (°-&gt;list/ground
+        (fresh° l (a b) (=° a 1) (=° b 1) (all-different° (list a b)))))
+  (⊦= '((1 2) (2 1))
+      (°-&gt;list/ground
+        (fresh°
+          l
+          (a b)
+          (all-different° (list a b))
+          (or° (=° a 1) (=° a 2))
+          (or° (=° b 1) (=° b 2)))))
+  (⊦= '((&quot;Emma Johnson&quot; sibling &quot;James Miller&quot;))
+      (map (λ (p)
+              (list (plot-person-name (car p))
+                    'sibling
+                    (plot-person-name (cadr p))))
+           (°-&gt;list/ground
+             (fresh°
+               l
+               (a c)
+               (all-different° (list a c))
+               (=° a emma-johnson)
+               (genealogy-is-Sibling-of° a c))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3488432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Father-of"><a href="#test/is-Father-of"><code>test/is-Father-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The fact table read back: enumerating the relation yields the seventeen tuples declared for it, rendered by name and sorted.  Six people appear in it both as a child and as a parent, hence the fixture runs three generations deep, and Henry has three children where every other father has two — Victoria being the third.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Father-of _)
+  (⊦= '((&quot;Alexander Thomas&quot; father &quot;Olivia Davis&quot;)
+        (&quot;Alexander Thomas&quot; father &quot;William Brown&quot;)
+        (&quot;Benjamin Clark&quot; father &quot;Emma Johnson&quot;)
+        (&quot;Benjamin Clark&quot; father &quot;James Miller&quot;)
+        (&quot;Christopher Lee&quot; father &quot;Amelia Anderson&quot;)
+        (&quot;Christopher Lee&quot; father &quot;Isabella Jackson&quot;)
+        (&quot;Daniel White&quot; father &quot;Grace Thompson&quot;)
+        (&quot;Daniel White&quot; father &quot;Samuel Martin&quot;)
+        (&quot;David Robinson&quot; father &quot;Christopher Lee&quot;)
+        (&quot;David Robinson&quot; father &quot;Joseph Garcia&quot;)
+        (&quot;Henry Taylor&quot; father &quot;Alexander Thomas&quot;)
+        (&quot;Henry Taylor&quot; father &quot;Benjamin Clark&quot;)
+        (&quot;Henry Taylor&quot; father &quot;Victoria Lewis&quot;)
+        (&quot;Joseph Garcia&quot; father &quot;Charlotte Moore&quot;)
+        (&quot;Joseph Garcia&quot; father &quot;Sophia Wilson&quot;)
+        (&quot;Samuel Martin&quot; father &quot;Ella Martinez&quot;)
+        (&quot;Samuel Martin&quot; father &quot;Mia Harris&quot;))
+      (relation-&gt;triples genealogy-is-Father-of° 'father)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 3500560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Mother-of"><a href="#test/is-Mother-of"><code>test/is-Mother-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The second table, seventeen tuples again, matching the first child for child: everyone the fixture names as a child has both a father and a mother.  Grace Thompson is a mother here and a child there, which is what the derived relations below read as a generation.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Mother-of _)
+  (⊦= '((&quot;Barbara Garcia&quot; mother &quot;Charlotte Moore&quot;)
+        (&quot;Barbara Garcia&quot; mother &quot;Sophia Wilson&quot;)
+        (&quot;Grace Thompson&quot; mother &quot;Victoria Lewis&quot;)
+        (&quot;Karen White&quot; mother &quot;Grace Thompson&quot;)
+        (&quot;Karen White&quot; mother &quot;Samuel Martin&quot;)
+        (&quot;Laura Martin&quot; mother &quot;Ella Martinez&quot;)
+        (&quot;Laura Martin&quot; mother &quot;Mia Harris&quot;)
+        (&quot;Linda Thomas&quot; mother &quot;Olivia Davis&quot;)
+        (&quot;Linda Thomas&quot; mother &quot;William Brown&quot;)
+        (&quot;Margaret Taylor&quot; mother &quot;Alexander Thomas&quot;)
+        (&quot;Margaret Taylor&quot; mother &quot;Benjamin Clark&quot;)
+        (&quot;Nancy Clark&quot; mother &quot;Emma Johnson&quot;)
+        (&quot;Nancy Clark&quot; mother &quot;James Miller&quot;)
+        (&quot;Patricia Robinson&quot; mother &quot;Christopher Lee&quot;)
+        (&quot;Patricia Robinson&quot; mother &quot;Joseph Garcia&quot;)
+        (&quot;Susan Lee&quot; mother &quot;Amelia Anderson&quot;)
+        (&quot;Susan Lee&quot; mother &quot;Isabella Jackson&quot;))
+      (relation-&gt;triples genealogy-is-Mother-of° 'mother)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 3503704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Sibling-of"><a href="#test/is-Sibling-of"><code>test/is-Sibling-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Sixteen ordered pairs, eight siblinghoods seen from both ends: the rule is symmetric because its body treats its two variables alike, and irreflexive because the header marks them <code class="w3-codespan">≠°</code>.  Victoria is absent, sharing as she does only her father.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Sibling-of _)
+  (⊦= '((&quot;Alexander Thomas&quot; sibling &quot;Benjamin Clark&quot;)
+        (&quot;Amelia Anderson&quot; sibling &quot;Isabella Jackson&quot;)
+        (&quot;Benjamin Clark&quot; sibling &quot;Alexander Thomas&quot;)
+        (&quot;Charlotte Moore&quot; sibling &quot;Sophia Wilson&quot;)
+        (&quot;Christopher Lee&quot; sibling &quot;Joseph Garcia&quot;)
+        (&quot;Ella Martinez&quot; sibling &quot;Mia Harris&quot;)
+        (&quot;Emma Johnson&quot; sibling &quot;James Miller&quot;)
+        (&quot;Grace Thompson&quot; sibling &quot;Samuel Martin&quot;)
+        (&quot;Isabella Jackson&quot; sibling &quot;Amelia Anderson&quot;)
+        (&quot;James Miller&quot; sibling &quot;Emma Johnson&quot;)
+        (&quot;Joseph Garcia&quot; sibling &quot;Christopher Lee&quot;)
+        (&quot;Mia Harris&quot; sibling &quot;Ella Martinez&quot;)
+        (&quot;Olivia Davis&quot; sibling &quot;William Brown&quot;)
+        (&quot;Samuel Martin&quot; sibling &quot;Grace Thompson&quot;)
+        (&quot;Sophia Wilson&quot; sibling &quot;Charlotte Moore&quot;)
+        (&quot;William Brown&quot; sibling &quot;Olivia Davis&quot;))
+      (relation-&gt;triples genealogy-is-Sibling-of° 'sibling)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 3513848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Brother-of"><a href="#test/is-Brother-of"><code>test/is-Brother-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Sibling narrowed by the sex of its <i>first</i> argument alone, hence the relation stops being symmetric: three pairs here have no converse, James, William and Samuel each being the brother of a sister.  Read it as <i>a is a brother of c</i>, which says nothing of c.</p>
+<p>Seven pairs here and nine under <code class="w3-codespan">is Sister of</code> make the sixteen of <code class="w3-codespan">is Sibling of</code>: the two relations partition it, every person of the fixture having a sex.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Brother-of _)
+  (⊦= '((&quot;Alexander Thomas&quot; brother &quot;Benjamin Clark&quot;)
+        (&quot;Benjamin Clark&quot; brother &quot;Alexander Thomas&quot;)
+        (&quot;Christopher Lee&quot; brother &quot;Joseph Garcia&quot;)
+        (&quot;James Miller&quot; brother &quot;Emma Johnson&quot;)
+        (&quot;Joseph Garcia&quot; brother &quot;Christopher Lee&quot;)
+        (&quot;Samuel Martin&quot; brother &quot;Grace Thompson&quot;)
+        (&quot;William Brown&quot; brother &quot;Olivia Davis&quot;))
+      (relation-&gt;triples genealogy-is-Brother-of° 'brother)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(12582912 3498416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Sister-of"><a href="#test/is-Sister-of"><code>test/is-Sister-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The mirror of <code class="w3-codespan">is Brother of</code>, and the larger half of the partition at nine pairs.  Emma is a sister of James while James is a brother of Emma: the same siblinghood, entered in whichever table the sex of its first argument calls for.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Sister-of _)
+  (⊦= '((&quot;Amelia Anderson&quot; sister &quot;Isabella Jackson&quot;)
+        (&quot;Charlotte Moore&quot; sister &quot;Sophia Wilson&quot;)
+        (&quot;Ella Martinez&quot; sister &quot;Mia Harris&quot;)
+        (&quot;Emma Johnson&quot; sister &quot;James Miller&quot;)
+        (&quot;Grace Thompson&quot; sister &quot;Samuel Martin&quot;)
+        (&quot;Isabella Jackson&quot; sister &quot;Amelia Anderson&quot;)
+        (&quot;Mia Harris&quot; sister &quot;Ella Martinez&quot;)
+        (&quot;Olivia Davis&quot; sister &quot;William Brown&quot;)
+        (&quot;Sophia Wilson&quot; sister &quot;Charlotte Moore&quot;))
+      (relation-&gt;triples genealogy-is-Sister-of° 'sister)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(12582912 3502312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Half-Brother-of"><a href="#test/is-Half-Brother-of"><code>test/is-Half-Brother-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Nine pairs, the seven of <code class="w3-codespan">is Brother of</code> and exactly two more, both naming Victoria as the one they are half brothers of.  A full brother is a half brother too, the wider sibling relation containing the narrower one whatever sex is asked of it.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Half-Brother-of _)
+  (⊦= '((&quot;Alexander Thomas&quot; half-brother &quot;Benjamin Clark&quot;)
+        (&quot;Alexander Thomas&quot; half-brother &quot;Victoria Lewis&quot;)
+        (&quot;Benjamin Clark&quot; half-brother &quot;Alexander Thomas&quot;)
+        (&quot;Benjamin Clark&quot; half-brother &quot;Victoria Lewis&quot;)
+        (&quot;Christopher Lee&quot; half-brother &quot;Joseph Garcia&quot;)
+        (&quot;James Miller&quot; half-brother &quot;Emma Johnson&quot;)
+        (&quot;Joseph Garcia&quot; half-brother &quot;Christopher Lee&quot;)
+        (&quot;Samuel Martin&quot; half-brother &quot;Grace Thompson&quot;)
+        (&quot;William Brown&quot; half-brother &quot;Olivia Davis&quot;))
+      (relation-&gt;triples genealogy-is-Half-Brother-of° 'half-brother)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(12582912 3509384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Half-Sister-of"><a href="#test/is-Half-Sister-of"><code>test/is-Half-Sister-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Eleven pairs, the nine of <code class="w3-codespan">is Sister of</code> and Victoria's own two, she being a half sister to the brothers who are half brothers to her.  Nine and eleven make the twenty of <code class="w3-codespan">is Half Sibling of</code>, partitioned by sex as the full relation is.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Half-Sister-of _)
+  (⊦= '((&quot;Amelia Anderson&quot; half-sister &quot;Isabella Jackson&quot;)
+        (&quot;Charlotte Moore&quot; half-sister &quot;Sophia Wilson&quot;)
+        (&quot;Ella Martinez&quot; half-sister &quot;Mia Harris&quot;)
+        (&quot;Emma Johnson&quot; half-sister &quot;James Miller&quot;)
+        (&quot;Grace Thompson&quot; half-sister &quot;Samuel Martin&quot;)
+        (&quot;Isabella Jackson&quot; half-sister &quot;Amelia Anderson&quot;)
+        (&quot;Mia Harris&quot; half-sister &quot;Ella Martinez&quot;)
+        (&quot;Olivia Davis&quot; half-sister &quot;William Brown&quot;)
+        (&quot;Sophia Wilson&quot; half-sister &quot;Charlotte Moore&quot;)
+        (&quot;Victoria Lewis&quot; half-sister &quot;Alexander Thomas&quot;)
+        (&quot;Victoria Lewis&quot; half-sister &quot;Benjamin Clark&quot;))
+      (relation-&gt;triples genealogy-is-Half-Sister-of° 'half-sister)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(12582912 3515008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/is-Half-Sibling-of"><a href="#test/is-Half-Sibling-of"><code>test/is-Half-Sibling-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A full sibling shares both parents, hence it satisfies <i>both</i> branches of the rule's <code class="w3-codespan">cond°</code> and is enumerated twice, where a genuine half sibling is enumerated once: 16 full-sibling pairs ×2 plus 4 half-sibling pairs ×1 make 36 raw solutions for 20 distinct ones.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/is-Half-Sibling-of _)
+  (⊦= '((&quot;Alexander Thomas&quot; half-sibling &quot;Benjamin Clark&quot;)
+        (&quot;Alexander Thomas&quot; half-sibling &quot;Victoria Lewis&quot;)
+        (&quot;Amelia Anderson&quot; half-sibling &quot;Isabella Jackson&quot;)
+        (&quot;Benjamin Clark&quot; half-sibling &quot;Alexander Thomas&quot;)
+        (&quot;Benjamin Clark&quot; half-sibling &quot;Victoria Lewis&quot;)
+        (&quot;Charlotte Moore&quot; half-sibling &quot;Sophia Wilson&quot;)
+        (&quot;Christopher Lee&quot; half-sibling &quot;Joseph Garcia&quot;)
+        (&quot;Ella Martinez&quot; half-sibling &quot;Mia Harris&quot;)
+        (&quot;Emma Johnson&quot; half-sibling &quot;James Miller&quot;)
+        (&quot;Grace Thompson&quot; half-sibling &quot;Samuel Martin&quot;)
+        (&quot;Isabella Jackson&quot; half-sibling &quot;Amelia Anderson&quot;)
+        (&quot;James Miller&quot; half-sibling &quot;Emma Johnson&quot;)
+        (&quot;Joseph Garcia&quot; half-sibling &quot;Christopher Lee&quot;)
+        (&quot;Mia Harris&quot; half-sibling &quot;Ella Martinez&quot;)
+        (&quot;Olivia Davis&quot; half-sibling &quot;William Brown&quot;)
+        (&quot;Samuel Martin&quot; half-sibling &quot;Grace Thompson&quot;)
+        (&quot;Sophia Wilson&quot; half-sibling &quot;Charlotte Moore&quot;)
+        (&quot;Victoria Lewis&quot; half-sibling &quot;Alexander Thomas&quot;)
+        (&quot;Victoria Lewis&quot; half-sibling &quot;Benjamin Clark&quot;)
+        (&quot;William Brown&quot; half-sibling &quot;Olivia Davis&quot;))
+      (relation-&gt;triples genealogy-is-Half-Sibling-of° 'half-sibling))
+  (⊦= '(36 20)
+      (list (length
+              (relation-&gt;triples/duplicates genealogy-is-Half-Sibling-of° 'x))
+            (length (relation-&gt;triples genealogy-is-Half-Sibling-of° 'x)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.039) (memory #(12582912 3526064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/Half-Sibling-of-strictly-contains-Sibling-of"><a href="#test/Half-Sibling-of-strictly-contains-Sibling-of"><code>test/Half-Sibling-of-strictly-contains-Sibling-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">is Half Sibling of</code> is strictly wider than <code class="w3-codespan">is Sibling of</code>: the two relations differ exactly on Victoria, who shares only her father with Benjamin and Alexander.  Without her the fixture could not tell the two rules apart.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/Half-Sibling-of-strictly-contains-Sibling-of _)
+  (⊦= '((&quot;Alexander Thomas&quot; x &quot;Victoria Lewis&quot;)
+        (&quot;Benjamin Clark&quot; x &quot;Victoria Lewis&quot;)
+        (&quot;Victoria Lewis&quot; x &quot;Alexander Thomas&quot;)
+        (&quot;Victoria Lewis&quot; x &quot;Benjamin Clark&quot;))
+      (lset-difference
+        equal?
+        (relation-&gt;triples genealogy-is-Half-Sibling-of° 'x)
+        (relation-&gt;triples genealogy-is-Sibling-of° 'x)))
+  (⊦= '()
+      (lset-difference
+        equal?
+        (relation-&gt;triples genealogy-is-Sibling-of° 'x)
+        (relation-&gt;triples genealogy-is-Half-Sibling-of° 'x))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.047) (memory #(12582912 3529616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/groupby°/children-per-father"><a href="#test/groupby°/children-per-father"><code>test/groupby°/children-per-father</code>: <span class="w3-text-green">pass</span></a></h2>
+<section id="section3472">
+<header>
+<h1>Aggregation</h1></header></section>
+<p>The aggregation relations of <code class="w3-codespan">(aux kanren micro)</code> — <code class="w3-codespan">groupby°</code>, <code class="w3-codespan">window°</code>, <code class="w3-codespan">set°</code> and <code class="w3-codespan">enumerate°</code> — each fold the stream of solutions of their <code class="w3-codespan">from</code> goal, so they turn a relation into a summary of a relation.</p>
+<p><code class="w3-codespan">groupby°</code> collapses each group to one solution.  Inside the <code class="w3-codespan">=&gt;</code> body the key variables and the aggregates are <i>Scheme values</i>, not logic variables, hence <code class="w3-codespan">plot-person-name</code> applies to <code class="w3-codespan">dad</code> directly.  Henry has three recorded children, every other father exactly two.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/groupby°/children-per-father _)
+  (⊦= '((&quot;Alexander Thomas&quot; 2)
+        (&quot;Benjamin Clark&quot; 2)
+        (&quot;Christopher Lee&quot; 2)
+        (&quot;Daniel White&quot; 2)
+        (&quot;David Robinson&quot; 2)
+        (&quot;Henry Taylor&quot; 3)
+        (&quot;Joseph Garcia&quot; 2)
+        (&quot;Samuel Martin&quot; 2))
+      (by-name
+        (°-&gt;list/ground
+          (fresh°
+            (out)
+            (fresh°
+              (dad kid)
+              (groupby°
+                (((n length) kid))
+                over
+                (dad)
+                from
+                (genealogy-is-Father-of° dad kid)
+                =&gt;
+                (=° out (list (plot-person-name dad) n)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3501864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/groupby°/children-per-mother"><a href="#test/groupby°/children-per-mother"><code>test/groupby°/children-per-mother</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The aggregate is an arbitrary function of the collected values, not just a count.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/groupby°/children-per-mother _)
+  (⊦= '((&quot;Barbara Garcia&quot; &quot;Charlotte Moore&quot; &quot;Sophia Wilson&quot;)
+        (&quot;Grace Thompson&quot; &quot;Victoria Lewis&quot;)
+        (&quot;Karen White&quot; &quot;Grace Thompson&quot; &quot;Samuel Martin&quot;)
+        (&quot;Laura Martin&quot; &quot;Ella Martinez&quot; &quot;Mia Harris&quot;)
+        (&quot;Linda Thomas&quot; &quot;Olivia Davis&quot; &quot;William Brown&quot;)
+        (&quot;Margaret Taylor&quot; &quot;Alexander Thomas&quot; &quot;Benjamin Clark&quot;)
+        (&quot;Nancy Clark&quot; &quot;Emma Johnson&quot; &quot;James Miller&quot;)
+        (&quot;Patricia Robinson&quot; &quot;Christopher Lee&quot; &quot;Joseph Garcia&quot;)
+        (&quot;Susan Lee&quot; &quot;Amelia Anderson&quot; &quot;Isabella Jackson&quot;))
+      (by-name
+        (°-&gt;list/ground
+          (fresh°
+            (out)
+            (fresh°
+              (mom kid)
+              (groupby°
+                (((names (λ (ks) (sort (map plot-person-name ks) string&lt;?)))
+                  kid))
+                over
+                (mom)
+                from
+                (genealogy-is-Mother-of° mom kid)
+                =&gt;
+                (=° out (cons (plot-person-name mom) names)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3504768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/window°/father-fanout-per-child"><a href="#test/window°/father-fanout-per-child"><code>test/window°/father-fanout-per-child</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">window°</code> keeps one solution per original row and attaches its group's aggregate, so the result has as many rows as the <code class="w3-codespan">from</code> goal has solutions and follows the stream order rather than the hash order.  Unlike <code class="w3-codespan">groupby°</code> it does <i>not</i> rebind the row variables to values, hence the <code class="w3-codespan">project°</code> to read <code class="w3-codespan">kid</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/window°/father-fanout-per-child _)
+  (⊦= '((&quot;Benjamin Clark&quot; 3)
+        (&quot;Alexander Thomas&quot; 3)
+        (&quot;Joseph Garcia&quot; 2)
+        (&quot;Christopher Lee&quot; 2)
+        (&quot;Emma Johnson&quot; 2)
+        (&quot;James Miller&quot; 2)
+        (&quot;Olivia Davis&quot; 2)
+        (&quot;William Brown&quot; 2)
+        (&quot;Sophia Wilson&quot; 2)
+        (&quot;Charlotte Moore&quot; 2)
+        (&quot;Amelia Anderson&quot; 2)
+        (&quot;Isabella Jackson&quot; 2)
+        (&quot;Samuel Martin&quot; 2)
+        (&quot;Grace Thompson&quot; 2)
+        (&quot;Mia Harris&quot; 2)
+        (&quot;Ella Martinez&quot; 2)
+        (&quot;Victoria Lewis&quot; 3))
+      (°-&gt;list/ground
+        (fresh°
+          (out)
+          (fresh°
+            (dad kid)
+            (window°
+              (((n length) kid))
+              over
+              (dad)
+              from
+              (genealogy-is-Father-of° dad kid)
+              =&gt;
+              (project° ((k kid)) (=° out (list (plot-person-name k) n)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3507736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/set°/agrees-with-groupby°"><a href="#test/set°/agrees-with-groupby°"><code>test/set°/agrees-with-groupby°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">set°</code> folds per key instead of collecting: the aggregator sees the key values and the accumulator, never the other columns.  Counting this way must agree with <code class="w3-codespan">groupby°</code> plus <code class="w3-codespan">length</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/set°/agrees-with-groupby° _)
+  (⊦= '((&quot;Alexander Thomas&quot; 2)
+        (&quot;Benjamin Clark&quot; 2)
+        (&quot;Christopher Lee&quot; 2)
+        (&quot;Daniel White&quot; 2)
+        (&quot;David Robinson&quot; 2)
+        (&quot;Henry Taylor&quot; 3)
+        (&quot;Joseph Garcia&quot; 2)
+        (&quot;Samuel Martin&quot; 2))
+      (by-name
+        (°-&gt;list/ground
+          (fresh°
+            (out)
+            (fresh°
+              (dad kid)
+              (set° (n (λ (d acc) (add1 acc)) 0)
+                    over
+                    ((d dad))
+                    from
+                    (genealogy-is-Father-of° dad kid)
+                    =&gt;
+                    (=° out (list (plot-person-name d) n))))))))
+  (⊦= (by-name
+        (°-&gt;list/ground
+          (fresh°
+            (out)
+            (fresh°
+              (dad kid)
+              (groupby°
+                (((n length) kid))
+                over
+                (dad)
+                from
+                (genealogy-is-Father-of° dad kid)
+                =&gt;
+                (=° out (list (plot-person-name dad) n)))))))
+      (by-name
+        (°-&gt;list/ground
+          (fresh°
+            (out)
+            (fresh°
+              (dad kid)
+              (set° (n (λ (d acc) (add1 acc)) 0)
+                    over
+                    ((d dad))
+                    from
+                    (genealogy-is-Father-of° dad kid)
+                    =&gt;
+                    (=° out (list (plot-person-name d) n)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 3507840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/enumerate°/numbers-the-Father-of-facts"><a href="#test/enumerate°/numbers-the-Father-of-facts"><code>test/enumerate°/numbers-the-Father-of-facts</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">enumerate°</code> numbers the solutions and yields the whole numbered list as a single solution.  The indices follow the stream, which runs opposite to the order the facts are declared in, so adding a fact renumbers everything below it.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/enumerate°/numbers-the-Father-of-facts _)
+  (⊦= '((0 &quot;Henry Taylor&quot; &quot;Victoria Lewis&quot;)
+        (1 &quot;Samuel Martin&quot; &quot;Ella Martinez&quot;)
+        (2 &quot;Samuel Martin&quot; &quot;Mia Harris&quot;)
+        (3 &quot;Daniel White&quot; &quot;Grace Thompson&quot;)
+        (4 &quot;Daniel White&quot; &quot;Samuel Martin&quot;)
+        (5 &quot;Christopher Lee&quot; &quot;Isabella Jackson&quot;)
+        (6 &quot;Christopher Lee&quot; &quot;Amelia Anderson&quot;)
+        (7 &quot;Joseph Garcia&quot; &quot;Charlotte Moore&quot;)
+        (8 &quot;Joseph Garcia&quot; &quot;Sophia Wilson&quot;)
+        (9 &quot;Alexander Thomas&quot; &quot;William Brown&quot;)
+        (10 &quot;Alexander Thomas&quot; &quot;Olivia Davis&quot;)
+        (11 &quot;Benjamin Clark&quot; &quot;James Miller&quot;)
+        (12 &quot;Benjamin Clark&quot; &quot;Emma Johnson&quot;)
+        (13 &quot;David Robinson&quot; &quot;Christopher Lee&quot;)
+        (14 &quot;David Robinson&quot; &quot;Joseph Garcia&quot;)
+        (15 &quot;Henry Taylor&quot; &quot;Alexander Thomas&quot;)
+        (16 &quot;Henry Taylor&quot; &quot;Benjamin Clark&quot;))
+      (car (°-&gt;list/ground
+             (fresh°
+               (out)
+               (fresh°
+                 (dad kid)
+                 (enumerate°
+                   (rows (λ (i d k)
+                            (list i
+                                  (plot-person-name d)
+                                  (plot-person-name k))))
+                   over
+                   (dad kid)
+                   from
+                   (genealogy-is-Father-of° dad kid)
+                   =&gt;
+                   (=° out rows))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3527128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/groupby°/half-sibling-duplicates"><a href="#test/groupby°/half-sibling-duplicates"><code>test/groupby°/half-sibling-duplicates</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Aggregation makes the duplication of <code class="w3-codespan">test/is-Half-Sibling-of</code> visible per person: a full sibling is enumerated twice, a genuine half sibling once.  Everyone with a full sibling scores (2 1); Victoria, whose two half siblings are not duplicated, scores (2 2); Alexander and Benjamin score (3 2), one duplicated full sibling plus Victoria.</p>
+<p>One aggregate collects <code class="w3-codespan">c</code>, not two: naming the same variable in several aggregates makes the macro collect its values once per aggregate.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/groupby°/half-sibling-duplicates _)
+  (⊦= '((&quot;Alexander Thomas&quot; 3 2)
+        (&quot;Amelia Anderson&quot; 2 1)
+        (&quot;Benjamin Clark&quot; 3 2)
+        (&quot;Charlotte Moore&quot; 2 1)
+        (&quot;Christopher Lee&quot; 2 1)
+        (&quot;Ella Martinez&quot; 2 1)
+        (&quot;Emma Johnson&quot; 2 1)
+        (&quot;Grace Thompson&quot; 2 1)
+        (&quot;Isabella Jackson&quot; 2 1)
+        (&quot;James Miller&quot; 2 1)
+        (&quot;Joseph Garcia&quot; 2 1)
+        (&quot;Mia Harris&quot; 2 1)
+        (&quot;Olivia Davis&quot; 2 1)
+        (&quot;Samuel Martin&quot; 2 1)
+        (&quot;Sophia Wilson&quot; 2 1)
+        (&quot;Victoria Lewis&quot; 2 2)
+        (&quot;William Brown&quot; 2 1))
+      (by-name
+        (°-&gt;list/ground
+          (fresh°
+            (out)
+            (fresh°
+              (a c)
+              (groupby°
+                (((counts
+                    (λ (ks)
+                       (list (length ks) (length (delete-duplicates ks)))))
+                  c))
+                over
+                (a)
+                from
+                (genealogy-is-Half-Sibling-of° a c)
+                =&gt;
+                (=° out (cons (plot-person-name a) counts)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(12582912 3515736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

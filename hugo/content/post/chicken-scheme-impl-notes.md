@@ -3,7 +3,6 @@
 date = '2026-08-10T10:33:23+01:00'
 title = "CHICKEN Scheme"
 subtitle = "Versions and implementation notes"
-author = ['The CHICKEN team']
 tags = []
 categories = [ "scheme", "AI generated"]
 summary = ' '
