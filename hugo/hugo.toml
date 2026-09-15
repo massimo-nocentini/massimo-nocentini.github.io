@@ -3,8 +3,15 @@ DefaultContentLanguage = "en"
 title = "Massimo Nocentini"
 # Using theme as git submodule
 theme = "beautifulhugo"
-# Or when using theme as hugo module
-# theme = "github.com/halogenica/beautifulhugo"
+# Or when using theme as a hugo module:
+# [[module.imports]]
+#   path = "github.com/halogenica/beautifulhugo/v5"
+#
+# The theme ships its own hugo.toml: it requires Hugo >= 0.146.2 (standard
+# edition is enough, no SCSS/WebP) and supplies the params defaults
+# colorScheme = "auto" and mathEngine = "katex", which the values below
+# override. Hugo merges params from a theme config but not [markup], so the
+# markup settings have to stay here.
 enableGitInfo = true
 ignoreLogs = ['warning-goldmark-raw-html']
 
@@ -23,7 +30,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
     startLevel = 0
 
   # Chroma highlighting. noClasses = false makes Chroma emit CSS classes so the
-  # theme's static/css/syntax.css and syntax-dark.css are used (this replaces the
+  # theme's assets/css/syntax.css and syntax-dark.css are used (this replaces the
   # legacy top-level pygments* keys).
   [markup.highlight]
     noClasses = false
@@ -33,6 +40,26 @@ ignoreLogs = ['warning-goldmark-raw-html']
   # Enables {.class #id} attribute blocks on headings, tables, code fences, ...
   [markup.goldmark.parser.attribute]
     block = true
+
+# Ranking configuration for Params.showRelatedPosts (Hugo's related-content
+# engine). Without it Hugo ranks "See also" by the keywords and date indices
+# only -- never by tags, which is what this site actually uses.
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = false
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+  [[related.indices]]
+    name = "categories"
+    weight = 90
+  [[related.indices]]
+    name = "keywords"
+    weight = 80
+  [[related.indices]]
+    name = "date"
+    weight = 10
 
 [Params]
   homeTitle = "This site needs no title"
@@ -70,6 +97,12 @@ ignoreLogs = ['warning-goldmark-raw-html']
 #  showPageDates = true # show dates on "page" type content
 #  hidePostDates = true # hide dates on "post" type content
 #  disableCanonical = true # suppress <link rel="canonical"> site-wide
+
+# Build-time image processing (page-bundle and assets/ images only; anything
+# under static/, such as samurai.jpg, is always served untouched).
+#  imageProcessing = false # turn the whole feature off
+#  imageWidths = [480, 800, 1200, 1600] # srcset variants for figures/galleries
+#  bigimgWidth = 1920 # max width for Params.bigimg header resources
 
 # Optional schema.org/JSON-LD overrides (see the theme's "SEO & i18n" page).
 #  organizationName = "Massimo Nocentini"
