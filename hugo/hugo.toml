@@ -81,7 +81,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
   socialShare = false
   delayDisqus = false
   showRelatedPosts = true
-  related_content_limit = 10 # max number of related posts to list
+  related_content_limit = 100 # max number of related posts to list
 #  cusdisID = "XXX" # Get your App id from cusdis.com
   showPostNav = true
   hideAuthor = false
@@ -214,6 +214,17 @@ ignoreLogs = ['warning-goldmark-raw-html']
     name = "Authors"
     url = "author/"
     weight = 5
+
+[[menu.main]]
+    identifier = "collections"
+    name = "Collections"
+    weight = 2
+
+[[menu.main]]
+    parent = "collections"
+    name = "C'è Speranza e speranza"
+    url = "page/rosini-speranza-e-speranza/"
+    weight = 1
 
 #[[menu.main]]
 #    identifier = "externals"
