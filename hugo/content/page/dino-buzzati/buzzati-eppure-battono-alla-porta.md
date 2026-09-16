@@ -3,7 +3,7 @@ date = '1992-08-01T14:00:21+01:00'
 title = 'Eppure battono alla porta'
 subtitle = "L'acqua sale nella villa dei Gron e la buona educazione continua a negarla, finché qualcuno bussa e non c'è più nessuno che possa bussare"
 author = 'Dino Buzzati'
-tags = []
+tags = ["catastrofe", "negazione", "rovina", "paura", "presunzione", "mistero", "morte", "quotidianità"]
 categories = ["novelle"]
 summary = "Mentre la pioggia non smette e il fiume rompe gli argini, nella villa dei Gron la famiglia continua a conversare con impeccabile compostezza mondana, negando a uno a uno i segni della catastrofe che avanza: ritratto della negazione come forma estrema di buona educazione, fino alla battuta finale — qualcuno bussa alla porta, e non c'è ormai più nessuno che possa bussare."
 +++

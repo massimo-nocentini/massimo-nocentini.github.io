@@ -1,9 +1,8 @@
 +++
 date = '1940-06-01T14:00:21+01:00'
-title = 'Dino Buzzati'
+title = 'Raccolta Buzzatiana'
 subtitle = "Un romanzo e sette novelle sull'attesa, il tempo che consuma e la speranza che si fa illusione"
 author = 'Dino Buzzati'
-tags = [ "attesa", "tempo", "speranza", "illusione", "destino", "confine", "morte", "desiderio", "occasione" ]
 summary = " "
 +++
 

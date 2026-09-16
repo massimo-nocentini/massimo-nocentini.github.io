@@ -228,9 +228,15 @@ ignoreLogs = ['warning-goldmark-raw-html']
 
 [[menu.main]]
     parent = "collections"
-    name = "Dino Buzzati"
+    name = "Raccolta Buzzatiana"
     url = "page/dino-buzzati/"
-    weight = 1
+    weight = 2
+
+[[menu.main]]
+    parent = "collections"
+    name = "Novena Immacolata 2021"
+    url = "page/fra-guerrini-novena-immacolata-2021/"
+    weight = 3
 
 #[[menu.main]]
 #    identifier = "externals"

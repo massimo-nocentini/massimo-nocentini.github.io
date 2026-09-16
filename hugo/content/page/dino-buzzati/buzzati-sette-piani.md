@@ -3,7 +3,7 @@ date = '1937-03-01T14:00:21+01:00'
 title = 'Sette piani'
 subtitle = "Di piano in piano, per ragioni sempre ragionevoli: la burocrazia come fato e le persiane che scendono lentamente sulla luce"
 author = 'Dino Buzzati'
-tags = []
+tags = ["malattia", "burocrazia", "destino", "paura", "illusione", "solitudine", "paradosso", "morte"]
 categories = ['novelle']
 summary = "Giuseppe Corte entra con una febbriciattola nel celebre sanatorio organizzato su sette piani secondo la gravità dei malati e, per ragioni sempre ragionevoli — una cortesia a una madre, un lavoro di manutenzione, l'assenza estiva di un primario, un errore d'ufficio mai corretto — scende di piano in piano senza che nessuno riconosca il suo male: allegoria della burocrazia come fato e del degradarsi inavvertito di una condizione."
 +++
