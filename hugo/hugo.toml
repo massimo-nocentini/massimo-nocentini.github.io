@@ -226,6 +226,12 @@ ignoreLogs = ['warning-goldmark-raw-html']
     url = "page/rosini-speranza-e-speranza/"
     weight = 1
 
+[[menu.main]]
+    parent = "collections"
+    name = "Dino Buzzati"
+    url = "page/dino-buzzati/"
+    weight = 1
+
 #[[menu.main]]
 #    identifier = "externals"
 #    name = "Externals"
