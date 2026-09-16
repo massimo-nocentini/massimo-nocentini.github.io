@@ -1,8 +1,9 @@
 +++
+date = '2024-12-21T08:56:00+02:00'
 title = "C'è Speranza e speranza"
 subtitle = 'Un viaggio di demistificazione nella virtù teologale della speranza'
 author = 'don Fabio Rosini'
-summary = "Catechesi di don Fabio Rosini per il Giubileo 2025: distinguere la speranza cristiana dalle sue contraffazioni, riconoscere l'utilità della disperazione, e capire come la speranza nasce, rinasce e cresce."
+summary = " "
 bible_refs = [ "Rm 4", "Rm 5", "Col 3" ]
 +++
 
