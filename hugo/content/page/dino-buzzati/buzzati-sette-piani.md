@@ -5,7 +5,7 @@ subtitle = "Di piano in piano, per ragioni sempre ragionevoli: la burocrazia com
 author = 'Dino Buzzati'
 tags = []
 categories = ['novelle']
-summary = " "
+summary = "Giuseppe Corte entra con una febbriciattola nel celebre sanatorio organizzato su sette piani secondo la gravità dei malati e, per ragioni sempre ragionevoli — una cortesia a una madre, un lavoro di manutenzione, l'assenza estiva di un primario, un errore d'ufficio mai corretto — scende di piano in piano senza che nessuno riconosca il suo male: allegoria della burocrazia come fato e del degradarsi inavvertito di una condizione."
 +++
 
 Dopo un giorno di viaggio in treno, Giuseppe Corte arrivò, una mattina di marzo, alla città dove c'era la famosa casa cura. Aveva un po' di febbre, ma volle fare ugualmente a piedi strada fra la stazione e l'ospedale, portandosi la sua valigetta.

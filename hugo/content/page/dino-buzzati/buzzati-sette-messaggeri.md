@@ -5,7 +5,7 @@ subtitle = "Più il viaggio avanza, più i messi tardano e la patria si allontan
 author = 'Dino Buzzati'
 tags = ['viaggio', 'confine', 'attesa', 'tempo', 'distanza', 'morte', 'speranza']
 categories = ["novelle"]
-summary = " "
+summary = "Un principe parte per raggiungere i confini del regno di suo padre e manda sette cavalieri a fare la spola con la capitale: più avanza, più il loro ritorno si dilata, finché il legame con la casa d'origine si spezza e cresce il sospetto che la frontiera non esista; eppure l'ansia della sera non è più rimpianto ma impazienza di conoscere le terre ignote, verso cui il cielo irraggia una luce insolita."
 +++
 
 In *La boutique del mistero*, Oscar Mondadori 1992, pp. 10–13. Ripresa da [*Poetarum Silva*](https://poetarumsilva.com/2017/01/28/prosabato-dino-buzzati-i-sette-messaggeri/) ed inoltre:

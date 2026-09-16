@@ -5,7 +5,7 @@ subtitle = "Una tasca da cui escono banconote senza fine, e ogni volta nel mondo
 author = 'Dino Buzzati'
 tags = ['denaro', 'colpa', 'tentazione', 'coscienza', 'eleganza', 'rovina']
 categories = ["novelle"]
-summary = " "
+summary = "Un abito perfetto, cucito da un sarto sgradevole che non manda mai il conto, ha una tasca da cui si estraggono banconote senza fine; ma a ogni riscossione corrisponde nel mondo un incendio, un furto, un suicidio, e la coscienza del narratore si degrada un poco per volta, finché distruggere la giacca non serve più a niente: «Troppo tardi, troppo tardi»."
 +++
 
 In *La boutique del mistero*, Oscar Mondadori 1992, pp. 211–217. Ripresa da [*Poetarum Silva*](https://poetarumsilva.com/2016/11/12/prosabato-dino-buzzati-la-giacca-stregata/).

@@ -5,7 +5,7 @@ subtitle = "A ogni stazione una rinuncia — l'affare, l'amore, la madre nella n
 author = 'Dino Buzzati'
 tags = ["treno", "viaggio", "tempo", "ritardo", "vita", "destino", "madre", "rinuncia", "vecchiaia"]
 categories = ["novelle"]
-summary = ' '
+summary = "Su un treno lanciato verso una destinazione favolosa che non ha il coraggio di nominare, il narratore perde a ogni stazione qualcosa — l'affare, l'amore di Rosanna, la festa preparata per lui, la madre rannicchiata nella sala d'aspetto sotto la neve — e quando i vagoni si svuotano e si gelano resta la domanda se valesse la pena fuggire con tanta furia dai luoghi e dalle persone amate."
 +++
 
 *«Quel treno prendi?» «Quello»* La locomotiva, sotto la tettoia fumosa, era

@@ -18,7 +18,7 @@ tags = [
     "giovinezza",
 ]
 categories = ["romanzi"]
-summary = " "
+summary = "Il tenente Giovanni Drogo raggiunge la Fortezza Bastiani convinto di fermarsi quattro mesi e vi consuma invece trent'anni ad aspettare i Tartari che non arrivano mai: cronaca implacabile dell'attesa che diventa abitudine e della giovinezza spesa in giorni tutti uguali, fino all'ultima battaglia — quella con la morte — combattuta da solo nella camera di una locanda, e vinta."
 +++
 
 

@@ -5,7 +5,7 @@ subtitle = "Lo squalo che lo insegue per cinquant'anni non voleva divorarlo: dov
 author = 'Dino Buzzati'
 tags = []
 categories = ["novelle"]
-summary = ' '
+summary = "Stefano Roi scopre a dodici anni che il colombre, lo squalo che sceglie la sua vittima e la insegue per tutta la vita, ha scelto lui: fugge il mare e poi vi ritorna, perché più grande delle gioie di una vita agiata e tranquilla è la tentazione dell'abisso; solo da vecchio, andandogli incontro con l'arpione, scopre che il mostro non voleva divorarlo ma consegnargli la Perla del Mare, che dà fortuna, potenza, amore e pace dell'animo."
 +++
 
 Quando Stefano Roí compí i dodici anni, chiese in regalo a suo padre, capitano di mare

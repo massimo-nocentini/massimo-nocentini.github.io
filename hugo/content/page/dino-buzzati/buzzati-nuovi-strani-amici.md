@@ -6,7 +6,7 @@ author = 'Dino Buzzati'
 tags = []
 categories = ["novelle", ]
 reading = ['must have']
-summary = " "
+summary = "Morto a cinquant'anni, Stefano Martella si ritrova in una città magnifica dove non ci sono chiese né bisogno di Dio, e dove gli spiegano che non esistono malattie, paure, rimorsi, nostalgie, desideri e nemmeno la morte: solo allora capisce dove si trova davvero. Una descrizione paradossale dell'inferno come morte del desiderio e, per contrasto, del paradiso come sua esaltazione."
 +++
 
 *Una lettura consigliata da Franco Nembrini, ripresa da [5 passi nella storia](https://cinquepassi.org/antologia/nuovi-strani-amici-dino-buzzati/): una descrizione paradossale del Paradiso e dell’Inferno rispettivamente come esaltazione del desiderio e morte del desiderio.*

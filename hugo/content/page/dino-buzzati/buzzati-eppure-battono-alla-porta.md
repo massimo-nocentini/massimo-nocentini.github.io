@@ -5,7 +5,7 @@ subtitle = "L'acqua sale nella villa dei Gron e la buona educazione continua a n
 author = 'Dino Buzzati'
 tags = []
 categories = ["novelle"]
-summary = " "
+summary = "Mentre la pioggia non smette e il fiume rompe gli argini, nella villa dei Gron la famiglia continua a conversare con impeccabile compostezza mondana, negando a uno a uno i segni della catastrofe che avanza: ritratto della negazione come forma estrema di buona educazione, fino alla battuta finale — qualcuno bussa alla porta, e non c'è ormai più nessuno che possa bussare."
 +++
 
 La signora Maria Gron entrò nella sala al pianterreno della villa col cestino del lavoro. Diede uno sguardo attorno, per constatare che tutto procedesse secondo le norme familiari, depose il cestino su un tavolo, si avvicinò a un vaso pieno di rose, annusando gentilmente. Nella sala c'erano suo marito Stefano, il figlio Federico detto Fedri, entrambi seduti al caminetto, la figlia Giorgina che leggeva, il vecchio amico di casa Eugenio Martora, medico, intento a fumare un sigaro.
