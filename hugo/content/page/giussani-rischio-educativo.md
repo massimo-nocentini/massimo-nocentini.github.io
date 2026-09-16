@@ -15,7 +15,7 @@ tags = [
     "coerenza",
     "critica",
     "memoria",
-    "spem contra spem",
+    "speranza",
 ]
 summary = " "
 +++
