@@ -23,11 +23,9 @@ bible_refs = [ "Am 5", "Is 40" ]
 summary = "Three speeches: Coach D'Amato's locker-room address in \"Any Given Sunday\", where life and football are both a game of inches; Steve Jobs at Stanford, telling three stories about connecting the dots, love and loss, and death; and Martin Luther King's \"I Have a Dream\" at the Lincoln Memorial, cashing the promissory note of the Republic and letting freedom ring."
 +++
 
-# “Any Given Sunday” by Coach D’Amato
+# *Any Given Sunday*, by Coach D’Amato [^4]
 
-{{< youtubeicon "f1yWSePMqsk" "Coach D'Amato (Al Pacino) speech." >}}
-
----
+[^4]: {{< youtubeicon "f1yWSePMqsk" "Coach D'Amato (Al Pacino) speech." >}}
 
 I don’t know what to say really. Three minutes to the biggest battle of our
 professional lives, all comes down to today. Either we heal as a team, or we’re
@@ -68,12 +66,10 @@ when it comes down to it, you’re going to do the same for him. That’s a team
 gentlemen. And either we heal now as a team or we will die as individuals.
 That’s football, guys. That’s all it is. Now, what are you going to do?
 
-# “You’ve got to find what you love” by Steve Jobs
+# *You’ve got to find what you love*, by Steve Jobs [^5]
 
-This is a prepared text of the Commencement Address delivered by Steve Jobs at
+[^5]: This is a prepared text of the Commencement Address delivered by Steve Jobs at
 Stanford University, 12 June 2005.
-
----
 
 I’m honored to be with you today for your commencement from one of the finest
 universities in the world. Truth be told, I never graduated from college. And
@@ -305,11 +301,9 @@ It was their farewell message as they signed off. *“Stay hungry. Stay foolish.
 And I have always wished that for myself. And now, as you graduate to begin
 anew, I wish that for you. Stay hungry. Stay foolish. Thank you all very much.
 
-# “I Have a Dream” by Martin Luther King, Jr.
+# *I Have a Dream*, by Martin Luther King, Jr. [^6]
 
-Delivered 28 August 1963, at the Lincoln Memorial, Washington D.C.
-
----
+[^6]: Delivered 28 August 1963, at the Lincoln Memorial, Washington D.C.
 
 I am happy to join with you today in what will go down in history as the
 greatest demonstration for freedom in the history of our nation.

@@ -1,9 +1,9 @@
 +++
 date = '2026-08-28T09:58:04+01:00'
 title = 'Inspecting the Payments Graph'
-subtitle = 'A Bitcoint induced graph about transactions'
+subtitle = 'A Bitcoint induced graph about transactions till 2017'
 summary = ' '
-categories = ['rust']
+categories = ['rust', 'AI generated']
 +++
 
 # Topology & subgraph patterns in `/data/bitcoin/bitcoin-webgraph/pg`
