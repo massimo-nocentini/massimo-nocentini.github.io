@@ -216,6 +216,12 @@ ignoreLogs = ['warning-goldmark-raw-html']
     weight = 5
 
 [[menu.main]]
+    parent = "content"
+    name = "Bible Refs"
+    url = "bible_refs/"
+    weight = 6
+
+[[menu.main]]
     identifier = "collections"
     name = "Collections"
     weight = 2
