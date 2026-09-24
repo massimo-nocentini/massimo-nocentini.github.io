@@ -189,7 +189,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
     parent = "content"
     name = "About"
     url = "about/"
-    weight = 0
+    weight = 1
 
 [[menu.main]]
     parent = "content"
@@ -214,35 +214,6 @@ ignoreLogs = ['warning-goldmark-raw-html']
     name = "Authors"
     url = "author/"
     weight = 5
-
-[[menu.main]]
-    parent = "content"
-    name = "Bible Refs"
-    url = "bible_refs/"
-    weight = 6
-
-[[menu.main]]
-    identifier = "collections"
-    name = "Collections"
-    weight = 2
-
-[[menu.main]]
-    parent = "collections"
-    name = "C'è Speranza e speranza"
-    url = "page/rosini-speranza-e-speranza/"
-    weight = 1
-
-[[menu.main]]
-    parent = "collections"
-    name = "Raccolta Buzzatiana"
-    url = "page/dino-buzzati/"
-    weight = 2
-
-[[menu.main]]
-    parent = "collections"
-    name = "Novena Immacolata 2021"
-    url = "page/fra-guerrini-novena-immacolata-2021/"
-    weight = 3
 
 #[[menu.main]]
 #    identifier = "externals"
