@@ -1,4 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The Reasoned Schemer - This site needs no title</title><meta name=description content="miniKanren, microKanren and some implementations"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/","name":"The Reasoned Schemer","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The Reasoned Schemer","url":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/"},{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman","@type":"Person","name":"Daniel P. Friedman","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd","@type":"Person","name":"William E. Byrd","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-oleg-kiselyov","@type":"Person","name":"Oleg Kiselyov","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-jason-hemann","@type":"Person","name":"Jason Hemann","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman"},{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd"},{"@id":"https://massimo-nocentini.github.io/#author-oleg-kiselyov"},{"@id":"https://massimo-nocentini.github.io/#author-jason-hemann"}],"dateCreated":"2018-03-09T10:02:03+01:00","dateModified":"2026-07-10T13:16:57+02:00","datePublished":"2018-03-09T10:02:03+01:00","description":"","headline":"The Reasoned Schemer","inLanguage":"en","keywords":["sbral"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT7M","wordCount":1378}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/the-reasoned-schemer/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The Reasoned Schemer"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2018-03-09T10:02:03+01:00"><meta property="article:modified_time" content="2026-07-10T13:16:57+02:00"><meta property="article:tag" content="Sbral"><link rel=canonical href=https://massimo-nocentini.github.io/post/the-reasoned-schemer/><meta name=twitter:title content="The Reasoned Schemer"><meta name=twitter:description content="miniKanren, microKanren and some implementations"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.166.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=toc-toggle aria-controls=toc-panel aria-expanded=false aria-label="Table of Contents" data-bs-toggle=tooltip data-bs-placement=bottom title="Table of Contents">
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The Reasoned Schemer - This site needs no title</title><meta name=description content="miniKanren, microKanren and some implementations"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/","name":"The Reasoned Schemer","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The Reasoned Schemer","url":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/"},{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman","@type":"Person","name":"Daniel P. Friedman","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd","@type":"Person","name":"William E. Byrd","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-oleg-kiselyov","@type":"Person","name":"Oleg Kiselyov","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-jason-hemann","@type":"Person","name":"Jason Hemann","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman"},{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd"},{"@id":"https://massimo-nocentini.github.io/#author-oleg-kiselyov"},{"@id":"https://massimo-nocentini.github.io/#author-jason-hemann"}],"dateCreated":"2018-03-09T10:02:03+01:00","dateModified":"2026-07-10T13:16:57+02:00","datePublished":"2018-03-09T10:02:03+01:00","description":"","headline":"The Reasoned Schemer","inLanguage":"en","keywords":["sbral"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/the-reasoned-schemer/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT19M","wordCount":3867}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/the-reasoned-schemer/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The Reasoned Schemer"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2018-03-09T10:02:03+01:00"><meta property="article:modified_time" content="2026-07-10T13:16:57+02:00"><meta property="article:tag" content="Sbral"><link rel=canonical href=https://massimo-nocentini.github.io/post/the-reasoned-schemer/><meta name=twitter:title content="The Reasoned Schemer"><meta name=twitter:description content="miniKanren, microKanren and some implementations"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=toc-toggle aria-controls=toc-panel aria-expanded=false aria-label="Table of Contents" data-bs-toggle=tooltip data-bs-placement=bottom title="Table of Contents">
 <span class="fas fa-list"></span>
 </button>
 <button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
@@ -11,7 +11,7 @@
 <span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The Reasoned Schemer</h1><h2 class=post-subheading>miniKanren, microKanren and some implementations</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 9, 2018
 &nbsp;(Last modified on July 10, 2026)
 &nbsp;|&nbsp;
-<i class="fas fa-clock"></i>&nbsp;7&nbsp;min
+<i class="fas fa-clock"></i>&nbsp;19&nbsp;min
 &nbsp;|&nbsp;
 <i class="fas fa-user"></i>&nbsp;Daniel P. Friedman<i class="fas fa-user"></i>&nbsp;William E. Byrd<i class="fas fa-user"></i>&nbsp;Oleg Kiselyov<i class="fas fa-user"></i>&nbsp;Jason Hemann</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><h1 id=references>References</h1><h2 id=the-reasoned-schemer-little-book><em>The Reasoned Schemer</em> little book</h2><blockquote cite=https://dl.acm.org/doi/10.5555/3267158>Friedman, Daniel P. and Byrd, William E. and Kiselyov, Oleg and Hemann, Jason,
 2018.
@@ -23,7 +23,7 @@ The MIT Press,<hr><p><strong>Abstract:</strong> <i>A new edition of a book, writ
 2009.
 <a href=https://dl.acm.org/doi/10.5555/1834996 target=_blank><i>Relational programming in minikanren: techniques, applications, and implementations.</i></a><hr><p><strong>Abstract:</strong> <i>The promise of logic programming is that programs can be written relationally , without distinguishing between input and output arguments. Relational programs are remarkably flexible—for example, a relational type-inferencer also performs type checking and type inhabitation, while a relational theorem prover generates theorems as well as proofs and can even be used as a simple proof assistant. Unfortunately, writing relational programs is difficult, and requires many interesting and unusual tools and techniques. For example, a relational interpreter for a subset of Scheme might use nominal unification to support variable binding and scope, Constraint Logic Programming over Finite Domains (CLP(FD)) to implement relational arithmetic, and tabling to improve termination behavior. In this dissertation I present miniKanren , a family of languages specifically designed for relational programming, and which supports a variety of relational idioms and techniques. I show how miniKanren can be used to write interesting relational programs, including an extremely flexible lean tableau theorem prover and a novel constraint-free binary arithmetic system with strong termination guarantees. I also present interesting and practical techniques used to implement miniKanren, including a nominal unifier that uses triangular rather than idempotent substitutions and a novel “walk”-based algorithm for variable lookup in triangular substitutions. The result of this research is a family of languages that supports a variety of relational idioms and techniques, making it feasible and useful to write interesting programs as relations.</i></p></blockquote><h2 id=the-efficient-representations-for-triangular-substitutions-paper>The <em>Efficient representations for triangular substitutions</em> paper</h2><blockquote cite=https://users.soe.ucsc.edu/~lkuper/papers/walk.pdf>Bender, David and Kuper, Lindsey and Byrd, William and Friedman, Daniel,
 2015.
-<a href=https://users.soe.ucsc.edu/~lkuper/papers/walk.pdf target=_blank><i>Efficient representations for triangular substitutions: A comparison in miniKanren.</i></a><hr><p><strong>Abstract:</strong> <i>Unification, a fundamental process for logic programming systems, relies on the ability to efficiently look up values of variables in a substitution. Triangular substitutions, which allow associations to variables that are themselves bound by another association, are an attractive choice for purely functional implementations of logic programming systems because of their fast extension time and linear space requirement, but have the disadvantage of costly lookup. We present several representations for triangular substitutions that decrease the cost of lookup to linear or logarithmic time in the size of the substitution while maintaining most of their desirable properties. In particular, we show that triangular substitutions can be represented efficiently using skew binary random-access lists, and that this representation provides a significant decrease in running time for existing programs written in miniKanren, a declarative logic programming system implemented in a pure functional subset of Scheme.</i></p></blockquote><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><h2 id=test/find><a href=#test/find><code>test/find</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/find _)
+<a href=https://users.soe.ucsc.edu/~lkuper/papers/walk.pdf target=_blank><i>Efficient representations for triangular substitutions: A comparison in miniKanren.</i></a><hr><p><strong>Abstract:</strong> <i>Unification, a fundamental process for logic programming systems, relies on the ability to efficiently look up values of variables in a substitution. Triangular substitutions, which allow associations to variables that are themselves bound by another association, are an attractive choice for purely functional implementations of logic programming systems because of their fast extension time and linear space requirement, but have the disadvantage of costly lookup. We present several representations for triangular substitutions that decrease the cost of lookup to linear or logarithmic time in the size of the substitution while maintaining most of their desirable properties. In particular, we show that triangular substitutions can be represented efficiently using skew binary random-access lists, and that this representation provides a significant decrease in running time for existing programs written in miniKanren, a declarative logic programming system implemented in a pure functional subset of Scheme.</i></p></blockquote><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test/find><a href=#test/find><code>test/find</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/find _)
   (let* ((v1 (make-μkanren-var 0))
          (v2 (make-μkanren-var 1))
          (s0 μkanren-state-empty)
@@ -44,18 +44,152 @@ The MIT Press,<hr><p><strong>Abstract:</strong> <i>A new edition of a book, writ
     (⊦= 5 (μkanren-state-find 5 s2))
     (⊦= 'a (μkanren-state-find v1 s2))
     (⊦= 'a (μkanren-state-find v2 s2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2120256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3102104 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/find/values><a href=#test/find/values><code>test/find/values</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/find/values _)
+  (let* ((v1 (make-μkanren-var 0))
+         (v2 (make-μkanren-var 1))
+         (s0 μkanren-state-empty)
+         (s1 (make-μkanren-state
+               1
+               (cons/sbral 'a (μkanren-state-S s0))
+               empty/sbral
+               empty/sbral
+               empty/sbral
+               '()))
+         (s2 (make-μkanren-state
+               2
+               (cons/sbral v1 (μkanren-state-S s1))
+               empty/sbral
+               empty/sbral
+               empty/sbral
+               '())))
+    (⊦= 1 (μkanren-var-index/sbral (μkanren-state-S s2) v1))
+    (⊦= 0 (μkanren-var-index/sbral (μkanren-state-S s2) v2))
+    (⊦= 'a (μkanren-sbral-ref/var (μkanren-state-S s2) v1))
+    (⊦= v1 (μkanren-sbral-ref/var (μkanren-state-S s2) v2))
+    (⊦= '(a a 5) (μkanren-state-find/values (list v1 v2 5) s2))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3103256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/state-with><a href=#test/state-with><code>test/state-with</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/state-with _)
+  (let* ((s (make-μkanren-state 3 empty/sbral '((d)) '((a)) '((t)) '(tag)))
+         (s* (μkanren-state-with s #:D '() #:tags '())))
+    (⊦= 3 (μkanren-state-vars-count s*))
+    (⊦= '() (μkanren-state-D s*))
+    (⊦= '((a)) (μkanren-state-A s*))
+    (⊦= '((t)) (μkanren-state-T s*))
+    (⊦= '() (μkanren-state-tags s*))
+    (⊦= '((d)) (μkanren-state-D (μkanren-state-with s)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3104880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/state-unify/stores><a href=#test/state-unify/stores><code>test/state-unify/stores</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/state-unify/stores _)
+  (define ((raw=° u v) s)
+    (let1 (r (μkanren-state-unify u v s '())) (if r (list (car r)) '())))
+  (define ((rawS=° u v) s)
+    (let1 (r (μkanren-state-unify u v s '()))
+          (if r
+            (list (μkanren-state-with s #:S (μkanren-state-S (car r))))
+            '())))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh° (x y) (=° q (list x y)) (number° x) (raw=° x 'a) (=° y 1)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh°
+            (x y)
+            (=° q (list x y))
+            (absent° 'a x)
+            (raw=° x 'a)
+            (=° y 1)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh°
+            (x y)
+            (=° q (list x y))
+            (number° x)
+            (rawS=° x 'a)
+            (=° y 1)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh°
+            (x y)
+            (=° q (list x y))
+            (absent° 'a x)
+            (rawS=° x 'a)
+            (=° y 1))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3095192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/rem-subsumed/by><a href=#test/rem-subsumed/by><code>test/rem-subsumed/by</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rem-subsumed/by _)
+  (⊦= '(2 3 1) ((μkanren-rem-subsumed/by member?) '(1 2 1 3 2)))
+  (⊦= '() ((μkanren-rem-subsumed/by member?) '()))
+  (⊦= '(2 3 1) ((μkanren-rem-subsumed/by member? identity list) '(1 2 1 3 2)))
+  (⊦= '(6) ((μkanren-rem-subsumed/by (λ (x L) (pair? L))) '(1 2 3 4 6)))
+  (⊦= '(6 3)
+      ((μkanren-rem-subsumed/by
+         (λ (x L) (pair? L))
+         (μ x (modulo x 2))
+         (μ x (list (modulo x 2))))
+       '(1 2 3 4 6))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3095904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/foldr/verify><a href=#test/foldr/verify><code>test/foldr/verify</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/foldr/verify _)
+  (define (step x acc) (and (odd? x) (cons x acc)))
+  (⊦= '(1 3 5) (μkanren-foldr/verify step '(1 3 5)))
+  (⊦= #f (μkanren-foldr/verify step '(1 2 5)))
+  (⊦= '() (μkanren-foldr/verify step '()))
+  (⊦= '() ((μkanren-verify-T+ 'x μkanren-tag/sym μkanren-state-empty) '()))
+  (⊦= #f ((μkanren-verify-T+ 5 μkanren-tag/sym μkanren-state-empty) '())))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3096912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/partition*><a href=#test/partition*><code>test/partition*</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/partition* _)
+  (let1 (A (list (cons 'a μkanren-tag/sym)
+                 (cons 'b μkanren-tag/num)
+                 (cons 'a μkanren-tag/sym)
+                 (cons 'c μkanren-tag/sym)))
+        (⊦= `((,μkanren-tag/sym a c) (,μkanren-tag/num b))
+            (μkanren-partition* A)))
+  (⊦= '((λ (α β γ)
+           (assert (every (μ v (symbol? v)) (list α γ)))
+           (assert (every (μ v (number? v)) (list β)))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q a b c)
+          (=° q (list a b c))
+          (symbol° a)
+          (number° b)
+          (symbol° c)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3098240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id="test/=°"><a href="#test/=°"><code>test/=°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(α) (°-&gt;list/ground (=° 'z 'z))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(12582912 2121400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3098536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/sharing><a href=#test/sharing><code>test/sharing</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/sharing _)
   (⊦= '(((α z) z (α β)))
-        (°-&gt;list/ground
-          (fresh°
-            r
-            (n q x)
-            (=° q 'z)
-            (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(12582912 2127568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+      (°-&gt;list/ground
+        (fresh°
+          r
+          ←
+          (n q x)
+          (=° q 'z)
+          (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3102656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/fresh°/typo><a href=#test/fresh°/typo><code>test/fresh°/typo</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/fresh°/typo _)
+  (⊦= 'syntax-error
+      (condition-case
+        (eval '(μkanren-run (q 3 #f) (fresh° x (null° x) (=° q x))))
+        ((exn syntax) 'syntax-error)))
+  (⊦= '(()) (μkanren-run (q 3 #t) (fresh° (x) (null° x) (=° q x)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3105376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/define-relation/recursive><a href=#test/define-relation/recursive><code>test/define-relation/recursive</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/define-relation/recursive _)
+  (define-relation (ones° x) (or° (=° x 1) (ones° x)))
+  (⊦= '(1 1 1) (°-&gt;list/ground (take° 3 (fresh° (q) (ones° q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3102744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/peano°><a href=#test/peano°><code>test/peano°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/peano° _)
   (define-relation
     (peano° n)
@@ -64,100 +198,456 @@ The MIT Press,<hr><p><strong>Abstract:</strong> <i>A new edition of a book, writ
     (church° n)
     (fresh° (b) (=° n `(λ (s) (λ (z) ,b))) (peano° b)))
   (⊦= '(z (s z)
-            (s (s z))
-            (s (s (s z)))
-            (s (s (s (s z))))
-            (s (s (s (s (s z)))))
-            (s (s (s (s (s (s z))))))
-            (s (s (s (s (s (s (s z)))))))
-            (s (s (s (s (s (s (s (s z))))))))
-            (s (s (s (s (s (s (s (s (s z))))))))))
-        (°-&gt;list/ground (take° 10 (fresh° (n) (peano° n)))))
+          (s (s z))
+          (s (s (s z)))
+          (s (s (s (s z))))
+          (s (s (s (s (s z)))))
+          (s (s (s (s (s (s z))))))
+          (s (s (s (s (s (s (s z)))))))
+          (s (s (s (s (s (s (s (s z))))))))
+          (s (s (s (s (s (s (s (s (s z))))))))))
+      (°-&gt;list/ground (take° 10 (fresh° (n) (peano° n)))))
   (⊦= '((λ (s) (λ (z) z))
-          (λ (s) (λ (z) (s z)))
-          (λ (s) (λ (z) (s (s z))))
-          (λ (s) (λ (z) (s (s (s z)))))
-          (λ (s) (λ (z) (s (s (s (s z))))))
-          (λ (s) (λ (z) (s (s (s (s (s z)))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s z))))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s (s z)))))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
-        (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(12582912 2139168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+        (λ (s) (λ (z) (s z)))
+        (λ (s) (λ (z) (s (s z))))
+        (λ (s) (λ (z) (s (s (s z)))))
+        (λ (s) (λ (z) (s (s (s (s z))))))
+        (λ (s) (λ (z) (s (s (s (s (s z)))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s z))))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s (s z)))))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
+      (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 3116984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/append°><a href=#test/append°><code>test/append°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/append° _)
   (define-relation
     (append° r s rs)
-    (cond°
-      ((null° r) (=° s rs))
-      ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
+    (cond° ((null° r) (=° s rs))
+           ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
   (⊦ equal?
-       '((λ (α) α)
-         (λ (α β) (cons α β))
-         (λ (α β γ) (cons α (cons β γ)))
-         (λ (α β γ δ) (cons α (cons β (cons γ δ))))
-         (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
-         (λ (α β γ δ ε ζ)
-             (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
-         (λ (α β γ δ ε ζ η)
-             (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
-         (λ (α β γ δ ε ζ η θ)
-             (cons α
-                   (cons β
-                         (cons γ
-                               (cons δ (cons ε (cons ζ (cons η θ))))))))
-         (λ (α β γ δ ε ζ η θ ι)
-             (cons α
-                   (cons β
-                         (cons γ
-                               (cons δ
-                                     (cons ε (cons ζ (cons η (cons θ ι)))))))))
-         (λ (α β γ δ ε ζ η θ ι κ)
-             (cons α
-                   (cons β
-                         (cons γ
-                               (cons δ
-                                     (cons ε
-                                           (cons ζ (cons η (cons θ (cons ι κ)))))))))))
-       (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2136072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+     '((λ (α) α)
+       (λ (α β) (cons α β))
+       (λ (α β γ) (cons α (cons β γ)))
+       (λ (α β γ δ) (cons α (cons β (cons γ δ))))
+       (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
+       (λ (α β γ δ ε ζ) (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
+       (λ (α β γ δ ε ζ η)
+          (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
+       (λ (α β γ δ ε ζ η θ)
+          (cons α (cons β (cons γ (cons δ (cons ε (cons ζ (cons η θ))))))))
+       (λ (α β γ δ ε ζ η θ ι)
+          (cons α
+                (cons β
+                      (cons γ
+                            (cons δ (cons ε (cons ζ (cons η (cons θ ι)))))))))
+       (λ (α β γ δ ε ζ η θ ι κ)
+          (cons α
+                (cons β
+                      (cons γ
+                            (cons δ
+                                  (cons ε (cons ζ (cons η (cons θ (cons ι κ)))))))))))
+     (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3117912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/=°/nan"><a href="#test/=°/nan"><code>test/=°/nan</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/nan _)
+  (⊦= 1 (length (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (=° q (/ 0.0 0.0)))))
+  (⊦= 1
+      (length
+        (μkanren-run
+          (q 2 #f)
+          (=° q (list 1 (/ 0.0 0.0)))
+          (=° q (list 1 (/ 0.0 0.0))))))
+  (⊦= '() (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (≠° q (/ 0.0 0.0))))
+  (⊦= '() (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (=° q 1.0)))
+  (⊦= '() (μkanren-run (q 2 #f) (absent° (/ 0.0 0.0) q) (=° q (/ 0.0 0.0))))
+  (⊦= '() (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (absent° (/ 0.0 0.0) q)))
+  (⊦= '()
+      (μkanren-run
+        (q 2 #f)
+        (absent° (/ 0.0 0.0) q)
+        (=° q (list 1 (/ 0.0 0.0)))))
+  (⊦= '()
+      (μkanren-run
+        (q 2 #f)
+        (absent° (list (/ 0.0 0.0)) q)
+        (=° q (list (/ 0.0 0.0)))))
+  (⊦= 1
+      (length
+        (μkanren-run (q 2 #f) (absent° (/ 0.0 0.0) q) (=° q (list 1.0 2)))))
+  (let1 (c (λ (s) (string-&gt;number s)))
+        (⊦= 1
+            (length
+              (μkanren-run
+                (q 2 #f)
+                (=° q (c &quot;+nan.0+1i&quot;))
+                (=° q (c &quot;+nan.0+1i&quot;)))))
+        (⊦= '()
+            (μkanren-run
+              (q 2 #f)
+              (=° q (c &quot;+nan.0+1i&quot;))
+              (=° q (c &quot;+nan.0+2i&quot;))))
+        (⊦= '()
+            (μkanren-run
+              (q 2 #f)
+              (=° q (c &quot;+nan.0+1i&quot;))
+              (=° q (c &quot;1+nan.0i&quot;))))
+        (⊦= '()
+            (μkanren-run (q 2 #f) (=° q (c &quot;+nan.0+1i&quot;)) (=° q (/ 0.0 0.0))))
+        (⊦= '()
+            (μkanren-run
+              (q 2 #f)
+              (=° q (c &quot;+nan.0+1i&quot;))
+              (≠° q (c &quot;+nan.0+1i&quot;))))
+        (⊦= 1
+            (length
+              (μkanren-run
+                (q 2 #f)
+                (=° q (c &quot;+nan.0+1i&quot;))
+                (≠° q (c &quot;7+nan.0i&quot;)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3105792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/≠°/verify><a href=#test/≠°/verify><code>test/≠°/verify</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/≠°/verify _)
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (≠° x y) (=° q 1) (=° x 5) (=° y 5))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x y) (≠° (list x y) '(1 2)) (=° q 0) (=° x 1) (=° y 2))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x y z) (≠° x (list y)) (=° q 0) (=° y z) (=° x (list z)))))
+  (⊦= '((λ (α) α))
+      (°-&gt;list #f (fresh° (q x b) (=° q b) (≠° b (list x)) (=° x b))))
+  (⊦= '((λ (α) (begin (deny (equal? α (cons 1 '())))) (cons α (cons 1 '()))))
+      (°-&gt;list
+        #f
+        (fresh° (q b x) (=° q (list b x)) (≠° b (list x)) (=° x 1)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3107144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id="test/=°/structure"><a href="#test/=°/structure"><code>test/=°/structure</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure _)
   (define-record person name age)
   (define p (make-person 'alice 30))
   (⊦= #t (record-instance? p))
-  (⊦= `((record ,p))
-        (°-&gt;list/ground (fresh° (r) (=° r (list 'record p)))))
+  (⊦= `((record ,p)) (°-&gt;list/ground (fresh° (r) (=° r (list 'record p)))))
   (⊦= `((record ,(make-person 'α 30)))
-        (°-&gt;list/ground
-          (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2129560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+      (°-&gt;list/ground
+        (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3109992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id="test/=°/structure/vector"><a href="#test/=°/structure/vector"><code>test/=°/structure/vector</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure/vector _)
   (define-record person name age)
   (define p (make-person 'alice 30))
   (⊦= #t (record-instance? p))
   (⊦= #(person alice 30) (record-&gt;vector p))
   (⊦= '((person alice 30))
-        (°-&gt;list/ground (fresh° r (t n a) (=° `#(,t ,n ,a) p)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2129552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+      (°-&gt;list/ground (fresh° r ← (t n a) (=° `#(,t ,n ,a) p)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3110304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/=°/structure/vector/answer"><a href="#test/=°/structure/vector/answer"><code>test/=°/structure/vector/answer</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/structure/vector/answer _)
+  (⊦= '((λ () (vector 1 2))) (°-&gt;list #f (fresh° (q) (=° q (vector 1 2)))))
+  (⊦= '((λ (α) (vector 1 α))) (°-&gt;list #f (fresh° (q r) (=° q (vector 1 r))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3111224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/var->symbol/overflow"><a href="#test/var->symbol/overflow"><code>test/var->symbol/overflow</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/var-&gt;symbol/overflow _)
+  (⊦= '((α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω α1 β1))
+      (°-&gt;list/ground
+        (fresh° r ← (a b c d e f g h i j k l m n o p q s t u v w x y z aa)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3129480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/ground/constrained><a href=#test/ground/constrained><code>test/ground/constrained</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/ground/constrained _)
+  (⊦= '(α) (°-&gt;list/ground (fresh° (q) (number° q))))
+  (⊦= '(α) (°-&gt;list/ground (fresh° (q) (≠° q 'α))))
+  (⊦= '(α) (°-&gt;list/ground (fresh° (q) (symbol° q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3112728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/absent°/symbol°><a href=#test/absent°/symbol°><code>test/absent°/symbol°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent°/symbol° _)
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (symbol° q) (absent° 'closure q) (=° q 'closure))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (absent° 'closure q) (symbol° q) (=° q 'closure))))
+  (⊦= '((λ (α)
+           (begin (deny (equal? α 'closure)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           α))
+      (°-&gt;list #f (fresh° (q) (symbol° q) (absent° 'closure q))))
+  (⊦= '((λ (α β γ)
+           (begin (deny (equal? β 'a)))
+           (assert (every (μ v (symbol? v)) (list α β γ)))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° q (list x y z))
+          (symbol° x)
+          (symbol° y)
+          (symbol° z)
+          (absent° 'a y)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3115688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/≠°/subsumed><a href=#test/≠°/subsumed><code>test/≠°/subsumed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/≠°/subsumed _)
+  (⊦= '((λ (α β)
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (cons α (cons β '()))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (symbol° x)
+          (symbol° y)
+          (≠° (list x y) (list 1 2)))))
+  (⊦= '((λ (α β)
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (cons α (cons β '()))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (symbol° x)
+          (symbol° y)
+          (≠° (list x y) (list 'a 2))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3117168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/≠°/subsumed/keyed><a href=#test/≠°/subsumed/keyed><code>test/≠°/subsumed/keyed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/≠°/subsumed/keyed _)
+  (⊦= '((λ (α β γ) (begin (deny (equal? α β))) (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° q (list x y z))
+          (≠° x y)
+          (≠° (list x z) (list y 1)))))
+  (⊦= '((λ (α β γ) (begin (deny (equal? α β))) (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° q (list x y z))
+          (≠° (list z x) (list 1 y))
+          (≠° y x))))
+  (⊦= '((λ (α β) (begin (deny (equal? β 2))) (cons α (cons β '()))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (≠° (list x y) (list 1 2))
+          (≠° y 2))))
+  (⊦= '((λ (α β γ δ)
+           (begin (deny (equal? α δ)))
+           (begin (deny (equal? β δ)))
+           (cons α (cons β (cons γ (cons δ '()))))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q a b c x)
+          (=° q (list a b c x))
+          (≠° x a)
+          (≠° x b)
+          (≠° (list x c) (list b 1)))))
+  (⊦= '((λ (α β γ δ)
+           (begin (deny (equal? α δ)))
+           (begin (deny (equal? β δ)))
+           (begin (deny (equal? γ δ)))
+           (cons α (cons β (cons γ (cons δ '()))))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q a b c)
+          (fresh°
+            (x)
+            (=° q (list a b c x))
+            (≠° x a)
+            (≠° (list c x) (list 1 b))
+            (≠° x b)
+            (≠° x c))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3120776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stores/order><a href=#test/stores/order><code>test/stores/order</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stores/order _)
+  (⊦= (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° '(b) q) (absent° 'c q)))
+      (°-&gt;list #f (fresh° (q) (absent° 'c q) (absent° '(b) q) (absent° 'a q))))
+  (⊦= (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (≠° q (make-record-instance 'box 1))
+          (≠° q (make-record-instance 'box 2))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (≠° q (make-record-instance 'box 2))
+          (≠° q (make-record-instance 'box 1)))))
+  (⊦= (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (≠° (list x y) '(1 2))
+          (≠° (list y x) '(3 4))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (≠° (list y x) '(3 4))
+          (≠° (list x y) '(1 2))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3122960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/=°/hands-on"><a href="#test/=°/hands-on"><code>test/=°/hands-on</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/=°/hands-on _)
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (symbol° x) (=° x y) (=° y 5))))
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (symbol° x) (number° y) (=° x y))))
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (≠° x 1) (=° x y) (=° y 1))))
+  (⊦= '()
+      (°-&gt;list #f (fresh° (q x y) (absent° 'z x) (=° x (list y)) (=° y 'z))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (absent° '(1 2) (cons x y))
+          (=° y (list z))
+          (=° x 1)
+          (=° z 2))))
+  (⊦= '((λ (α)
+           (begin (deny (equal? α 'a)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           α))
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (x) (absent° 'a x) (symbol° q) (=° x q)))))
+  (⊦= '((λ (α)
+           (begin (deny (equal? α 'a)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           α))
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (x) (absent° 'a q) (symbol° x) (=° x q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3120440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/absent°/structure><a href=#test/absent°/structure><code>test/absent°/structure</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent°/structure _)
+  (⊦= '() (°-&gt;list #f (fresh° (q) (absent° 'a q) (=° q (vector 'a)))))
+  (⊦= '()
+      (°-&gt;list #f (fresh° (q x) (=° q (vector x)) (absent° 'a q) (=° x 'a))))
+  (⊦= '((λ () (vector 'b)))
+      (°-&gt;list #f (fresh° (q) (=° q (vector 'b)) (absent° 'a q))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (=° q (make-record-instance 'box 'a)) (absent° 'a q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/absent°/subsumed><a href=#test/absent°/subsumed><code>test/absent°/subsumed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent°/subsumed _)
+  (⊦= (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q)))
+      (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q) (≠° q 'a))))
+  (⊦= (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q)))
+      (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q) (≠° q 'b)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/absent°/datum><a href=#test/absent°/datum><code>test/absent°/datum</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent°/datum _)
+  (⊦= '((λ () (cons 1 (cons 2 '()))))
+      (°-&gt;list #f (fresh° (q) (=° q '(1 2)) (absent° 5 q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(1 2)) (absent° 2 q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (absent° 5 q) (=° q '(1 5))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3122544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/absent°/compound><a href=#test/absent°/compound><code>test/absent°/compound</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent°/compound _)
+  (⊦= '() (°-&gt;list #f (fresh° (q) (absent° '(1 2) q) (=° q '(1 2)))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(1 2)) (absent° '(1 2) q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(0 (1 2) 3)) (absent° '(1 2) q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(0 1 2)) (absent° '(1 2) q))))
+  (⊦= '((λ () (cons 0 (cons 1 (cons 2 (cons 3 '()))))))
+      (°-&gt;list #f (fresh° (q) (=° q '(0 1 2 3)) (absent° '(1 2) q))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (=° q (list (vector 1 2))) (absent° (vector 1 2) q))))
+  (⊦= '((λ () (vector 0 1 2)))
+      (°-&gt;list #f (fresh° (q) (=° q (vector 0 1 2)) (absent° '(1 2) q))))
+  (⊦= '((λ () (vector 1)))
+      (°-&gt;list #f (fresh° (q) (=° q (vector 1)) (absent° '() q))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x) (=° q (cons 1 x)) (absent° '(1 2) q) (=° x '(2)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x) (absent° '(1 2) q) (=° q (cons 1 x)) (=° x '(2)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x) (absent° '(1 2) q) (=° q (list 0 x)) (=° x '(1 2)))))
+  (⊦= '((λ () (cons 1 (cons 3 '()))))
+      (°-&gt;list
+        #f
+        (fresh° (q x) (=° q (cons 1 x)) (absent° '(1 2) q) (=° x '(3)))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) (cons 1 α))) (cons 1 α)))
+      (°-&gt;list #f (fresh° (q x) (=° q (cons 1 x)) (absent° '(1 2) q))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (cons q z))))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (list q z))))))
+  (⊦= '((λ (α) (assert (absent? '(()) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(()) (cons q z))))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) (cons 1 α))) α))
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (z) (absent° '(1 2) (list (cons 1 q) z))))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (vector z q))))))
+  (⊦= '((λ (α) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (cons z z))))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (z) (absent° '(1 2) (cons q z)) (=° q '(1 2)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3123992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;
 <a href=/categories/logic-programming/>logic programming</a>&nbsp;</div><div class=blog-tags><span>Tags: </span><a href=/tags/sbral/>sbral</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/sbral/ class=see-also-item><span class=see-also-item-title>The SBRAL data structure</span>
 <span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
 </a><a href=/post/microkanren-aggregators/ class=see-also-item><span class=see-also-item-title>Aggregation predicates for µkanren</span>
 <span class=see-also-item-subtitle>Groups, window functions, sets and enumerations</span>
 </a><a href=/post/minikanren-live-and-untagged/ class=see-also-item><span class=see-also-item-title>miniKanren, live and untagged</span>
 <span class=see-also-item-subtitle>Quine generation via relational interpreters</span>
 </a><a href=/post/microkanren-arithmetic/ class=see-also-item><span class=see-also-item-title>Pure, declarative, and constructive arithmetic relations</span>
 <span class=see-also-item-subtitle>A declarative pearl</span>
+</a><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
 </a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
 </a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Versions and implementation notes</span>
 </a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
 <span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
-</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
-</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
 </a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
 <span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
 </a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
@@ -180,5 +670,5 @@ The MIT Press,<hr><p><strong>Abstract:</strong> <i>A new edition of a book, writ
 &copy;
 2016 - 2026
 &nbsp;&bull;&nbsp;
-<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.166.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 &nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/6fbba1ebb8436b4b2dfd0a5ba2a70582b521c42f>6fbba1eb</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

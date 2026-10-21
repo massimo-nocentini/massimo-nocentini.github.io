@@ -1,4 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux unittest) module - This site needs no title</title><meta name=description content="Bootstrapping a unittest framework"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/","name":"The (aux unittest) module","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux unittest) module","url":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-02-05T09:56:03+01:00","dateModified":"2026-02-11T15:40:05+01:00","datePublished":"2026-02-05T09:56:03+01:00","description":"","headline":"The (aux unittest) module","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"wordCount":872}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux unittest) module"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-02-05T09:56:03+01:00"><meta property="article:modified_time" content="2026-02-11T15:40:05+01:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/><meta name=twitter:title content="The (aux unittest) module"><meta name=twitter:description content="Bootstrapping a unittest framework"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.166.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux unittest) module - This site needs no title</title><meta name=description content="Bootstrapping a unittest framework"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/","name":"The (aux unittest) module","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux unittest) module","url":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-02-05T09:56:03+01:00","dateModified":"2026-02-11T15:40:05+01:00","datePublished":"2026-02-05T09:56:03+01:00","description":"","headline":"The (aux unittest) module","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT8M","wordCount":1514}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux unittest) module"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-02-05T09:56:03+01:00"><meta property="article:modified_time" content="2026-02-11T15:40:05+01:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-bootstrap-sut/><meta name=twitter:title content="The (aux unittest) module"><meta name=twitter:description content="Bootstrapping a unittest framework"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
 <span class="fas fa-magnifying-glass"></span>
 </button>
 <button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
@@ -8,13 +8,14 @@
 <span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux unittest) module</h1><h2 class=post-subheading>Bootstrapping a unittest framework</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 5, 2026
 &nbsp;(Last modified on February 11, 2026)
 &nbsp;|&nbsp;
-<i class="fas fa-clock"></i>&nbsp;5&nbsp;min
+<i class="fas fa-clock"></i>&nbsp;8&nbsp;min
 &nbsp;|&nbsp;
-<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>This test suite drove the implementation of the unittest framework itself.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><p>This test suite drove the implementation of the unittest framework itself.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
   (aux unittest)
   *
   (import
     scheme
+    (scheme case-lambda)
     (chicken base)
     (chicken condition)
     (chicken pretty-print)
@@ -33,89 +34,114 @@
     (unittest/testcase-log-set!
       testcase
       (cons msg (unittest/testcase-log testcase))))
+  (define (unittest/testcase-guard result testcase-name witness thunk)
+    (condition-case
+      (thunk)
+      (c (exn unittest-assert-equal)
+         (unittest/result-failed!
+           result
+           (cons testcase-name
+                 (get-condition-property
+                   c
+                   'unittest-assert-equal
+                   'comparison)))
+         witness)
+      (c (exn)
+         (unittest/result-failed!
+           result
+           (list testcase-name
+                 (call-with-output-string
+                   (lambda (port) (print-error-message c port)))))
+         witness)
+      (c () (unittest/result-failed! result (list testcase-name c)) witness)))
   (define (unittest/testcase-run testcase result sut)
     (let* ((methods (cdr sut))
            (setup (alist-ref 'setup methods))
            (teardown (alist-ref 'teardown methods))
-           (testcase-name (unittest/testcase-name testcase)))
+           (testcase-name (unittest/testcase-name testcase))
+           (witness (gensym))
+           (guarded
+             (lambda (thunk)
+               (unittest/testcase-guard result testcase-name witness thunk))))
       (unittest/result-started! result)
-      (let-values
-        ((args (if setup ((car setup) testcase) (values)))
-         ((f code) (apply values (alist-ref testcase-name methods))))
-        (let* ((witness (gensym))
-               (no-outsrt &quot;&quot;)
-               (eta-time 0)
-               (pair (condition-case
-                       (let* ((res (void))
-                              (outstr no-outsrt)
-                              (errstr
-                                (with-error-output-to-string
-                                  (lambda ()
-                                    (set! outstr
-                                      (with-output-to-string
-                                        (lambda ()
-                                          (let-values
-                                            (((u s) (cpu-time)))
-                                            (set! res (apply f testcase args))
-                                            (let-values
-                                              (((uu ss) (cpu-time)))
-                                              (set! eta-time (- (+ uu ss) (+ u s))))))))))))
-                         (list res outstr errstr))
-                       (c (exn unittest-assert-equal)
-                          (begin
-                            (unittest/result-failed!
-                              result
-                              (cons testcase-name
-                                    (get-condition-property
-                                      c
-                                      'unittest-assert-equal
-                                      'comparison)))
-                            (list witness no-outsrt no-outsrt)))
-                       (c (exn)
-                          (begin
-                            (unittest/result-failed!
-                              result
-                              (list testcase-name
-                                    (call-with-output-string
-                                      (lambda (port) (print-error-message c port)))))
-                            (list witness no-outsrt no-outsrt)))
-                       (c ()
-                          (begin
-                            (unittest/result-failed!
-                              result
-                              (list testcase-name c))
-                            (list witness no-outsrt no-outsrt)))))
-               (v (first pair))
-               (outstr (second pair))
-               (errstr (third pair))
-               (hasdoc (and (pair? v) (eq? (car v) 'doc))))
-          (when teardown (apply (car teardown) testcase args))
-          (let ((header-id (symbol-&gt;string testcase-name)))
-            `((h2 (@ (id ,header-id))
-                  (a (@ (href ,(string-append &quot;#&quot; header-id)))
-                     (code ,testcase-name)
-                     &quot;: &quot;
-                     ,(if (eq? v witness)
-                        '(span (@ (class &quot;w3-text-red&quot;)) fail)
-                        '(span (@ (class &quot;w3-text-green&quot;)) pass))))
-              ,@(if hasdoc (cdr v) '())
-              (code/scheme ,(if hasdoc (butlast code) code))
-              (code/scheme
-                ((eta ,(exact-&gt;inexact (/ eta-time 1000)))
-                 (memory ,(memory-statistics))
-                 (stdout ,outstr)
-                 (stderr ,errstr)))))))))
+      (let ((args (if setup
+                    (guarded
+                      (lambda ()
+                        (call-with-values
+                          (lambda () ((car setup) testcase))
+                          list)))
+                    '())))
+        (let-values
+          (((f code) (apply values (alist-ref testcase-name methods))))
+          (let* ((v witness)
+                 (eta-time 0)
+                 (outstr &quot;&quot;)
+                 (errstr
+                   (if (eq? args witness)
+                     &quot;&quot;
+                     (with-error-output-to-string
+                       (lambda ()
+                         (set! outstr
+                           (with-output-to-string
+                             (lambda ()
+                               (let-values
+                                 (((u s) (cpu-time)))
+                                 (set! v
+                                   (guarded (lambda () (apply f testcase args))))
+                                 (let-values
+                                   (((uu ss) (cpu-time)))
+                                   (set! eta-time (- (+ uu ss) (+ u s))))))))))))
+                 (hasdoc (and (pair? v) (eq? (car v) 'doc)))
+                 (torn (cond ((or (not teardown) (eq? args witness)) (void))
+                             ((eq? v witness)
+                              (condition-case
+                                (apply (car teardown) testcase args)
+                                (c ()
+                                   (set! errstr
+                                     (string-append
+                                       errstr
+                                       (call-with-output-string
+                                         (lambda (port) (print-error-message c port)))))
+                                   witness)))
+                             (else
+                              (guarded
+                                (lambda () (apply (car teardown) testcase args)))))))
+            (let ((header-id (symbol-&gt;string testcase-name)))
+              `((h2 (@ (id ,header-id))
+                    (a (@ (href ,(string-append &quot;#&quot; header-id)))
+                       (code ,header-id)
+                       &quot;: &quot;
+                       ,(if (or (eq? v witness) (eq? torn witness))
+                          '(span (@ (class &quot;w3-text-red&quot;)) fail)
+                          '(span (@ (class &quot;w3-text-green&quot;)) pass))))
+                ,@(if hasdoc (cdr v) '())
+                (code/scheme ,(if hasdoc (butlast code) code))
+                (code/scheme
+                  ((eta ,(exact-&gt;inexact (/ eta-time 1000)))
+                   (memory ,(memory-statistics))
+                   (stdout ,outstr)
+                   (stderr ,errstr))))))))))
+  (define (unittest/suite sut)
+    (let loop ((names (map car (cdr sut))))
+      (cond ((null? names) sut)
+            ((memq (car names) (cdr names))
+             (error 'define-suite
+                    &quot;duplicate test case name&quot;
+                    (car sut)
+                    (car names)))
+            (else (loop (cdr names))))))
   (define-syntax
     define-suite
     (syntax-rules
       ()
       ((_ sutname ((casename formal ...) body ...) ...)
        (define sutname
-         `(sutname
-            (casename
-              ,(lambda (formal ...) body ...)
-              ,'(define (casename formal ...) body ...))
-            ...)))))
+         (unittest/suite
+           `(sutname
+              (casename
+                ,(lambda (formal ...) body ...)
+                ,'(define (casename formal ...) body ...))
+              ...))))))
   (define-syntax
     lettest
     (syntax-rules
@@ -136,9 +162,13 @@
       (cons exn (unittest/result-failed result))))
   (define (equal-approx? p)
     (letrec ((? (lambda (a b)
-                  (cond ((and (real? a) (real? b)) (&lt; (abs (- a b)) p))
+                  (cond ((and (real? a) (real? b))
+                         (or (= a b) (&lt; (abs (- a b)) p)))
                         ((and (pair? a) (pair? b))
                          (and (? (car a) (car b)) (? (cdr a) (cdr b))))
+                        ((and (vector? a) (vector? b))
+                         (and (= (vector-length a) (vector-length b))
+                              (every ? (vector-&gt;list a) (vector-&gt;list b))))
                         (else (equal=? a b))))))
       ?))
   (define (⊦ pred? . args)
@@ -177,59 +207,169 @@
           (sxml-tree sut-name `(,@(if sxml ((car sxml) r) '()) ,@docs))
           (symbol-append 'testsuite- sut-name))
         (pretty-print res)
+        (unless
+          (null? (unittest/result-failed r))
+          (implicit-exit-handler (lambda () (exit 1))))
         r)))
-  (define (unittest/condition-expected-actual a b)
-    (condition
-      `(exn message &quot;assert-equal failed&quot;)
-      `(unittest-assert-equal comparison ((expected ,a) (got ,b)))))
+  (define unittest/condition-expected-actual
+    (case-lambda
+      ((a b)
+       (condition
+         `(exn message &quot;assert-equal failed&quot;)
+         `(unittest-assert-equal comparison ((expected ,a) (got ,b)))))
+      (args (condition
+              `(exn message &quot;assert failed&quot;)
+              `(unittest-assert-equal comparison ((got ,@args)))))))
   (define-syntax
     ⊦⧳
     (syntax-rules
       ()
       ((_ ((exn ...) ...) body ...)
-       (condition-case (begin body ...) ((exn ...) (void)) ...)))))
+       (condition-case (begin body ...) ((exn ...) (void)) ...))))
+  (define-syntax
+    ⊦raises
+    (syntax-rules
+      ()
+      ((_ (kind ...) body ...)
+       (⊦= 'raised
+           (condition-case
+             (begin body ... 'not-raised)
+             ((kind ...) 'raised)))))))
 </code></pre></div><h2 id=test-running><a href=#test-running><code>test-running</code>: <span class=w3-text-green>pass</span></a></h2><p>hello</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-running tc t r)
   (⊦= '() (unittest/testcase-log t))
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '(teardown test-method setup) (unittest/testcase-log t)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1770736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2155096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-result><a href=#test-result><code>test-result</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-result tc t r)
   (unittest/testcase-run t r wasrun-sut)
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1772056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2156592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-failed><a href=#test-failed><code>test-failed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed tc _ r)
   (lettest
     ((t 'test-broken))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
-          (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1773264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+        (unittest/result-summary r))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2157976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-unbound-variable><a href=#test-unbound-variable><code>test-unbound-variable</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-unbound-variable tc _ r)
   (lettest
     ((t 'test-unbound-variable))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1)
-            (failed
-              1
-              (test-unbound-variable
-                &quot;\nError: unbound variable: unbound-v\n&quot;)))
-          (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1774368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+          (failed
+            1
+            (test-unbound-variable &quot;\nError: unbound variable: unbound-v\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2159296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-raising-setup><a href=#test-raising-setup><code>test-raising-setup</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-raising-setup tc _ r)
+  (lettest
+    ((t 'test-method))
+    (unittest/testcase-run t r raising-setup-sut)
+    (⊦= '() (unittest/testcase-log t))
+    (⊦= '((ran 1) (failed 1 (test-method &quot;\nError: setup exploded\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2160264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-raising-setup-suite><a href=#test-raising-setup-suite><code>test-raising-setup-suite</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-raising-setup-suite tc _ r)
+  (letsuite
+    ((suite '(test-method test-other)))
+    (unittest/testsuite-run suite r raising-setup-sut)
+    (⊦= '((ran 2)
+          (failed
+            2
+            (test-other &quot;\nError: setup exploded\n&quot;)
+            (test-method &quot;\nError: setup exploded\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2161712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-raising-teardown-after-failure><a href=#test-raising-teardown-after-failure><code>test-raising-teardown-after-failure</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-raising-teardown-after-failure tc _ r)
+  (lettest
+    ((t 'test-broken))
+    (let ((report
+            (cadr (car (reverse
+                         (unittest/testcase-run t r raising-teardown-sut))))))
+      (⊦= '(&quot;\nError: teardown exploded\n&quot;) (alist-ref 'stderr report))
+      (⊦= '((ran 1) (failed 1 (test-broken (expected 1) (got 2))))
+          (unittest/result-summary r)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2163376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-raising-teardown><a href=#test-raising-teardown><code>test-raising-teardown</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-raising-teardown tc _ r)
+  (lettest
+    ((t 'test-method))
+    (unittest/testcase-run t r raising-teardown-sut)
+    (⊦= '(test-method) (unittest/testcase-log t))
+    (⊦= '((ran 1) (failed 1 (test-method &quot;\nError: teardown exploded\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2164312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-duplicate-case-name><a href=#test-duplicate-case-name><code>test-duplicate-case-name</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-duplicate-case-name tc _ _)
+  (⊦= '(&quot;duplicate test case name&quot; (dup-sut t1))
+      (condition-case
+        (let ()
+          (define-suite
+            dup-sut
+            ((t1 _) (⊦= 1 1))
+            ((t2 _) (⊦= 1 1))
+            ((t1 _) (⊦= 1 2)))
+          dup-sut)
+        (c (exn)
+           (list (get-condition-property c 'exn 'message)
+                 (get-condition-property c 'exn 'arguments))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2168544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-exit-status><a href=#test-exit-status><code>test-exit-status</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-exit-status tc _ _)
+  (⊦= 0 (suite-exit-status &quot;(⊦= 1 1)&quot;))
+  (⊦= 1 (suite-exit-status &quot;(⊦= 1 2)&quot;)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2166136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-failed-output><a href=#test-failed-output><code>test-failed-output</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed-output tc _ r)
+  (lettest
+    ((t 'test-printing-broken))
+    (let ((report (cadr (last (unittest/testcase-run t r wasrun-sut)))))
+      (⊦= '(&quot;printed before failing\n&quot;) (alist-ref 'stdout report))
+      (⊦= '(&quot;warned before failing&quot;) (alist-ref 'stderr report))
+      (⊦= '((ran 1) (failed 1 (test-printing-broken (expected 1) (got 2))))
+          (unittest/result-summary r)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2167400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-failed-result><a href=#test-failed-result><code>test-failed-result</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-failed-result tc _ r)
   (unittest/result-started! r)
   (unittest/result-failed! r 'no-reason)
   (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1775008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2168776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-suite><a href=#test-suite><code>test-suite</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-suite tc _ r)
   (letsuite
     ((suite '(test-running test-failed)))
     (unittest/testsuite-run suite r bootstrap-sut)
     (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(6291456 1776376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2169800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test-⊦=-infinities"><a href="#test-⊦=-infinities"><code>test-⊦=-infinities</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊦=-infinities tc _ _)
+  (⊦= +inf.0 +inf.0)
+  (⊦= -inf.0 -inf.0)
+  (⊦= '(1 +inf.0) (list 1.0000001 +inf.0))
+  (⊭ ((equal-approx? 1e-06) +inf.0 -inf.0))
+  (⊭ ((equal-approx? 1e-06) +inf.0 1e+300))
+  (⊭ ((equal-approx? 1e-06) +nan.0 +nan.0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2169976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test-⊦=-vectors"><a href="#test-⊦=-vectors"><code>test-⊦=-vectors</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊦=-vectors tc _ _)
+  (⊦= (vector 1.0000000001 '(2.0000000001 #(3.0000000001)))
+      (vector 1 '(2 #(3))))
+  (⊦= #() #())
+  (⊭ ((equal-approx? 1e-06) #(1 2) #(1)))
+  (⊭ ((equal-approx? 1e-06) #(1.1) #(1)))
+  (⊭ ((equal-approx? 1e-06) #(1) '(1))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2171136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-⊦-arity><a href=#test-⊦-arity><code>test-⊦-arity</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊦-arity tc _ _)
+  (⊦= '(((got 4)) ((got 1 2 3 1)) ((got)))
+      (map (lambda (thunk)
+             (condition-case
+               (thunk)
+               (c (exn unittest-assert-equal)
+                  (get-condition-property
+                    c
+                    'unittest-assert-equal
+                    'comparison))))
+           (list (lambda () (⊦ odd? 4))
+                 (lambda () (⊦ &lt; 1 2 3 1))
+                 (lambda () (⊦ (lambda () #f)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2176232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-⊨><a href=#test-⊨><code>test-⊨</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1777376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2177024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-⊭><a href=#test-⊭><code>test-⊭</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1778488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2178424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test-should-signal><a href=#test-should-signal><code>test-should-signal</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-should-signal tc _ _)
   (⊦⧳ ((exn)) (signal (condition '(exn message &quot;useless&quot;))))
   (⊦⧳ ((exn-a)) (signal (condition '(exn-a message &quot;useless&quot;))))
@@ -239,8 +379,55 @@
     ((exn-a) (void)))
   (condition-case (⊦⧳ ((exn)) (signal 99)) (() (void)))
   (⊦⧳ () 99))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1781424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2178976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-should-raise><a href=#test-should-raise><code>test-should-raise</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-should-raise tc _ _)
+  (⊦raises (exn) (car '()))
+  (⊦raises (exn-a) (signal (condition '(exn-a message &quot;useless&quot;))))
+  (⊦= '((expected raised) (got not-raised))
+      (condition-case
+        (⊦raises (exn) 99)
+        (c (unittest-assert-equal)
+           (get-condition-property c 'unittest-assert-equal 'comparison))))
+  (⊦= 'escaped
+      (condition-case
+        (⊦raises (exn) (signal (condition '(exn-a message &quot;useless&quot;))))
+        ((exn-a) 'escaped))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2180024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
+</a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
 </a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Versions and implementation notes</span>
@@ -248,10 +435,12 @@
 <span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
 </a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
 <span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
-</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
 </a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
-</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
 </a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
 <span class=see-also-item-subtitle>Some docs, refs and containers, respectively.</span>
 </a><a href=/post/the-reasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Reasoned Schemer</span>
@@ -270,7 +459,7 @@
 </a><a href=/post/1996-01-31-the-little-schemer/ class=see-also-item><span class=see-also-item-title>The Little Schemer</span>
 </a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
 </a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span></a></div></article><a href=/post/taocp-satisfiability/ class="nav-side-arrow nav-side-prev" title="TAOCP: Volume 4, Fascicle 6." aria-label="Previous Post: TAOCP: Volume 4, Fascicle 6."><i class="fas fa-chevron-left"></i>
-</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class="nav-side-arrow nav-side-next" title="The (aux stream) module" aria-label="Next Post: The (aux stream) module"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/taocp-satisfiability/ data-bs-toggle=tooltip data-bs-placement=top title="TAOCP: Volume 4, Fascicle 6."><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-02-05-scm-testsuite-stream-suite/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux stream) module">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class="nav-side-arrow nav-side-next" title="The (aux stream) modules" aria-label="Next Post: The (aux stream) modules"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/taocp-satisfiability/ data-bs-toggle=tooltip data-bs-placement=top title="TAOCP: Volume 4, Fascicle 6."><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-02-05-scm-testsuite-stream-suite/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux stream) modules">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
@@ -279,5 +468,5 @@
 &copy;
 2016 - 2026
 &nbsp;&bull;&nbsp;
-<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.166.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 &nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/a6fd4c641fdb2a8ce7dba5448210d3efc809dfa8>a6fd4c64</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

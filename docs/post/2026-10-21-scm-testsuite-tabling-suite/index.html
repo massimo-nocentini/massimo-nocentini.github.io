@@ -1,0 +1,491 @@
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux tabling) module - This site needs no title</title><meta name=description content="Memoization and tabled definitions"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/","name":"The (aux tabling) module","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux tabling) module","url":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-10-21T10:04:00+02:00","dateModified":"2026-10-21T14:46:59+02:00","datePublished":"2026-10-21T10:04:00+02:00","description":"","headline":"The (aux tabling) module","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT7M","wordCount":1363}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux tabling) module"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-10-21T10:04:00+02:00"><meta property="article:modified_time" content="2026-10-21T14:46:59+02:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-tabling-suite/><meta name=twitter:title content="The (aux tabling) module"><meta name=twitter:description content="Memoization and tabled definitions"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<span class="fas fa-magnifying-glass"></span>
+</button>
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>content</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/about/>About</a></li><li><a class=dropdown-item href=/page/>Pages</a></li><li><a class=dropdown-item href=/tags>Tags</a></li><li><a class=dropdown-item href=/categories/>Categories</a></li><li><a class=dropdown-item href=/author/>Authors</a></li></ul></li></ul></div></div></nav><div id=navbar-search-overlay class=navbar-search-overlay aria-hidden=true role=search><div class="navbar-search-inner container-fluid"><span class="fas fa-magnifying-glass navbar-search-icon" aria-hidden=true></span>
+<input type=search id=navbar-search-input class=navbar-search-input placeholder="Search posts and pages…" aria-label=Search autocomplete=off>
+<button id=navbar-search-close class=theme-toggle aria-label="Close search">
+<span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux tabling) module</h1><h2 class=post-subheading>Memoization and tabled definitions</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 21, 2026
+&nbsp;|&nbsp;
+<i class="fas fa-clock"></i>&nbsp;7&nbsp;min
+&nbsp;|&nbsp;
+<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test/naive-fibonacci><a href=#test/naive-fibonacci><code>test/naive-fibonacci</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/naive-fibonacci _)
+  (define F (λ (i) (cond ((&lt; i 2) i) (else (+ (F (- i 1)) (F (- i 2)))))))
+  (⊦= 0 (F 0))
+  (⊦= 1 (F 1))
+  (⊦= '(0 1 1 2 3 5 8 13 21) (map F (iota 9)))
+  (time (⊦= 1346269 (F 31))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.801)
+ (memory #(12582912 2224888 1048576))
+ (stdout &quot;&quot;)
+ (stderr
+   &quot;0.794s CPU time, 0.004s GC time (major), 188258/31374 mutations (total/tracked), 2/13048 GCs (major/minor), maximum live heap: 2.12 MiB\n&quot;))
+</code></pre></div><h2 id=test/define-tabled-fibonacci><a href=#test/define-tabled-fibonacci><code>test/define-tabled-fibonacci</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/define-tabled-fibonacci _)
+  (define-tabled
+    F₀
+    (lambda (i)
+      (cond ((zero? i) 0) ((one? i) 1) (else (+ (F₀ (- i 1)) (F₀ (- i 2)))))))
+  (⊦= 0 (F₀ 0))
+  (⊦= 1 (F₀ 1))
+  (⊦= '(0 1 1 2 3 5 8 13 21) (map F₀ (iota 9)))
+  (time (⊦= 1346269 (F₀ 31))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004)
+ (memory #(12582912 2236400 1048576))
+ (stdout &quot;&quot;)
+ (stderr
+   &quot;0s CPU time, 1578/28 mutations (total/tracked), 0/2 GCs (major/minor), maximum live heap: 2.13 MiB\n&quot;))
+</code></pre></div><h2 id=test/memoize!-letrec><a href=#test/memoize!-letrec><code>test/memoize!-letrec</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/memoize!-letrec _)
+  (define fibonacci
+    (letrec ((F (λ (i) (cond ((&lt; i 2) i) (else (+ (F (- i 1)) (F (- i 2))))))))
+      (memoize! F)))
+  (time (⊦= 354224848179261915075 (fibonacci 100))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005)
+ (memory #(12582912 2245136 1048576))
+ (stdout &quot;&quot;)
+ (stderr
+   &quot;0s CPU time, 332/103 mutations (total/tracked), 0/1 GCs (major/minor), maximum live heap: 2.14 MiB\n&quot;))
+</code></pre></div><h2 id=test/memoize!-define><a href=#test/memoize!-define><code>test/memoize!-define</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/memoize!-define _)
+  (define F₁
+    (memoize! (λ (i) (cond ((&lt; i 2) i) (else (+ (F₁ (- i 1)) (F₁ (- i 2))))))))
+  (time (⊦= 1346269 (F₁ 31))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.798)
+ (memory #(12582912 2228600 1048576))
+ (stdout &quot;&quot;)
+ (stderr
+   &quot;0.792s CPU time, 0.003s GC time (major), 188258/31374 mutations (total/tracked), 2/13048 GCs (major/minor), maximum live heap: 2.13 MiB\n&quot;))
+</code></pre></div><h2 id=test/pascal><a href=#test/pascal><code>test/pascal</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/pascal _)
+  (define-tabled
+    pascal
+    (lambda (n k)
+      (cond ((and (zero? n) (zero? k)) 1)
+            ((zero? n) 0)
+            ((zero? k) (pascal (sub1 n) 0))
+            (else (+ (pascal (sub1 n) (sub1 k)) (pascal (sub1 n) k))))))
+  (define Riordan-array
+    (λ (recurrence)
+       (λ (m)
+          (map (λ (n)
+                  (append-map (λ (k) (list (recurrence n k))) (iota (add1 n))))
+               (iota m)))))
+  (⊦= 1 (pascal 0 0))
+  (⊦= 2 (pascal 2 1))
+  (⊦= 1 (pascal 2 2))
+  (⊦= 3 (pascal 3 2))
+  (⊦= 100891344545564193334812497256 (pascal 100 50))
+  (⊦= '((1)
+        (1 1)
+        (1 2 1)
+        (1 3 3 1)
+        (1 4 6 4 1)
+        (1 5 10 10 5 1)
+        (1 6 15 20 15 6 1)
+        (1 7 21 35 35 21 7 1)
+        (1 8 28 56 70 56 28 8 1)
+        (1 9 36 84 126 126 84 36 9 1)
+        (1 10 45 120 210 252 210 120 45 10 1)
+        (1 11 55 165 330 462 462 330 165 55 11 1)
+        (1 12 66 220 495 792 924 792 495 220 66 12 1)
+        (1 13 78 286 715 1287 1716 1716 1287 715 286 78 13 1)
+        (1 14 91 364 1001 2002 3003 3432 3003 2002 1001 364 91 14 1)
+        (1 15 105 455 1365 3003 5005 6435 6435 5005 3003 1365 455 105 15 1)
+        (1
+         16
+         120
+         560
+         1820
+         4368
+         8008
+         11440
+         12870
+         11440
+         8008
+         4368
+         1820
+         560
+         120
+         16
+         1)
+        (1
+         17
+         136
+         680
+         2380
+         6188
+         12376
+         19448
+         24310
+         24310
+         19448
+         12376
+         6188
+         2380
+         680
+         136
+         17
+         1)
+        (1
+         18
+         153
+         816
+         3060
+         8568
+         18564
+         31824
+         43758
+         48620
+         43758
+         31824
+         18564
+         8568
+         3060
+         816
+         153
+         18
+         1)
+        (1
+         19
+         171
+         969
+         3876
+         11628
+         27132
+         50388
+         75582
+         92378
+         92378
+         75582
+         50388
+         27132
+         11628
+         3876
+         969
+         171
+         19
+         1))
+      ((Riordan-array pascal) 20)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.039) (memory #(12582912 2791336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/catalan><a href=#test/catalan><code>test/catalan</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/catalan _)
+  (define-tabled
+    catalan
+    (lambda (n k)
+      (cond ((and (zero? n) (zero? k)) 1)
+            ((zero? n) 0)
+            ((zero? k) (apply + (map (λ (j) (catalan (sub1 n) j)) (iota n))))
+            (else
+             (apply + (map (λ (j) (catalan (sub1 n) j)) (iota n (sub1 k))))))))
+  (define Riordan-array
+    (λ (recurrence)
+       (λ (m)
+          (map (λ (n)
+                  (append-map (λ (k) (list (recurrence n k))) (iota (add1 n))))
+               (iota m)))))
+  (⊦= '((1)
+        (1 1)
+        (2 2 1)
+        (5 5 3 1)
+        (14 14 9 4 1)
+        (42 42 28 14 5 1)
+        (132 132 90 48 20 6 1)
+        (429 429 297 165 75 27 7 1)
+        (1430 1430 1001 572 275 110 35 8 1)
+        (4862 4862 3432 2002 1001 429 154 44 9 1)
+        (16796 16796 11934 7072 3640 1638 637 208 54 10 1)
+        (58786 58786 41990 25194 13260 6188 2548 910 273 65 11 1)
+        (208012 208012 149226 90440 48450 23256 9996 3808 1260 350 77 12 1)
+        (742900
+         742900
+         534888
+         326876
+         177650
+         87210
+         38760
+         15504
+         5508
+         1700
+         440
+         90
+         13
+         1)
+        (2674440
+         2674440
+         1931540
+         1188640
+         653752
+         326876
+         149226
+         62016
+         23256
+         7752
+         2244
+         544
+         104
+         14
+         1)
+        (9694845
+         9694845
+         7020405
+         4345965
+         2414425
+         1225785
+         572033
+         245157
+         95931
+         33915
+         10659
+         2907
+         663
+         119
+         15
+         1)
+        (35357670
+         35357670
+         25662825
+         15967980
+         8947575
+         4601610
+         2187185
+         961400
+         389367
+         144210
+         48279
+         14364
+         3705
+         798
+         135
+         16
+         1)
+        (129644790
+         129644790
+         94287120
+         58929450
+         33266625
+         17298645
+         8351070
+         3749460
+         1562275
+         600875
+         211508
+         67298
+         19019
+         4655
+         950
+         152
+         17
+         1)
+        (477638700
+         477638700
+         347993910
+         218349120
+         124062000
+         65132550
+         31865925
+         14567280
+         6216210
+         2466750
+         904475
+         303600
+         92092
+         24794
+         5775
+         1120
+         170
+         18
+         1)
+        (1767263190
+         1767263190
+         1289624490
+         811985790
+         463991880
+         245642760
+         121580760
+         56448210
+         24582285
+         10015005
+         3798795
+         1332045
+         427570
+         123970
+         31878
+         7084
+         1309
+         189
+         19
+         1))
+      ((Riordan-array catalan) 20)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.081) (memory #(12582912 2847288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/ackermann><a href=#test/ackermann><code>test/ackermann</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/ackermann _)
+  (define-tabled
+    ackermann
+    (lambda (m n)
+      (cond ((zero? m) (add1 n))
+            ((zero? n) (ackermann (sub1 m) 1))
+            (else (ackermann (sub1 m) (ackermann m (sub1 n)))))))
+  (⊦= 7 (ackermann 2 2))
+  (⊦= 125 (ackermann 3 4)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2308504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/fresh-and-store-keywords><a href=#test/fresh-and-store-keywords><code>test/fresh-and-store-keywords</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/fresh-and-store-keywords _)
+  (define calls 0)
+  (define-tabled
+    sq
+    λH
+    (lambda (x)
+      (cond ((eq? x tabled/get-hidden-hash-table) (λH))
+            (else (set! calls (add1 calls)) (* x x)))))
+  (⊦= 9 (sq 3))
+  (⊦= 1 calls)
+  (⊦= 9 (sq 3))
+  (⊦= 1 calls)
+  (⊦= 9 (sq 3 #:fresh #t))
+  (⊦= 2 calls)
+  (⊦= 16 (sq 4 #:store #f))
+  (⊦= 3 calls)
+  (⊦= 16 (sq 4))
+  (⊦= 4 calls)
+  (⊦= '((3) (4))
+      (sort/lex&lt;=?
+        (hash-table-keys (sq tabled/get-hidden-hash-table #:store #f)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2313000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/letrec-tabled><a href=#test/letrec-tabled><code>test/letrec-tabled</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letrec-tabled _)
+  (⊦= '(#t #f 832040)
+      (letrec-tabled
+        ((ev? (lambda (n) (if (zero? n) #t (od? (sub1 n)))))
+         (od? (lambda (n) (if (zero? n) #f (ev? (sub1 n)))))
+         (fib (lambda (n) (if (&lt; n 2) n (+ (fib (- n 1)) (fib (- n 2)))))))
+        (list (ev? 10) (od? 10) (fib 30))))
+  (⊦= '(1 ((0) (2)))
+      (letrec-tabled
+        ((f H
+            (lambda (x)
+              (if (eq? x tabled/get-hidden-hash-table) (H) (add1 x)))))
+        (f 0)
+        (f 2)
+        (list (f 0)
+              (sort/lex&lt;=?
+                (hash-table-keys
+                  (f tabled/get-hidden-hash-table #:store #f)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2251640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/lambda-tabled><a href=#test/lambda-tabled><code>test/lambda-tabled</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/lambda-tabled _)
+  (let1 (f (lambda-tabled (x y) (+ x y)))
+        (⊦= 3 (f 1 2))
+        (⊦= 3 (f 1 2 #:fresh #t)))
+  (let1 (f (lambda-tabled H → (x) (list x (hash-table-size (H)))))
+        (⊦= '(a 0) (f 'a))
+        (⊦= '(a 0) (f 'a))
+        (⊦= '(b 1) (f 'b))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2253024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/hash-table-ref/store-and-maybe><a href=#test/hash-table-ref/store-and-maybe><code>test/hash-table-ref/store-and-maybe</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/hash-table-ref/store-and-maybe _)
+  (let* ((H (make-hash-table #:test equal?)) (↑ (hash-table-ref/store H)))
+    (⊦= 3 (↑ '(1 2) +))
+    (⊦= 3 (↑ '(1 2) (λ _ 'unused)))
+    (⊦= '(#t 3) (call-with-values (τ (hash-table-ref/maybe H '(1 2))) list))
+    (⊦= '(#f)
+        (call-with-values
+          (τ (hash-table-ref/maybe H '(3)))
+          (λ (found v) (list found))))
+    (⊨ (void? (call-with-values
+                (τ (hash-table-ref/maybe H '(3)))
+                (λ (found v) v))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2253240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/multiple-values><a href=#test/multiple-values><code>test/multiple-values</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/multiple-values _)
+  (define calls 0)
+  (define (divmod a b)
+    (set! calls (add1 calls))
+    (values (quotient a b) (remainder a b)))
+  (memoize! divmod)
+  (⊦= '(3 1) (call-with-values (τ (divmod 7 2)) list))
+  (⊦= '(3 1) (call-with-values (τ (divmod 7 2)) list))
+  (⊦= 1 calls)
+  (define-tabled
+    dm
+    λH
+    (lambda (a b)
+      (if (eq? a tabled/get-hidden-hash-table)
+        (λH)
+        (values (quotient a b) (remainder a b)))))
+  (⊦= '(3 1) (call-with-values (τ (dm 7 2)) list))
+  (⊦= '(3 1) (call-with-values (τ (dm 7 2)) list))
+  (define-tabled none (lambda (a) (values)))
+  (⊦= '() (call-with-values (τ (none 1)) list))
+  (⊦= '() (call-with-values (τ (none 1)) list))
+  (let* ((H (make-hash-table #:test equal?)) (↑ (hash-table-ref/store H)))
+    (⊦= '(1 2) (call-with-values (τ (↑ '(1 2) values)) list))
+    (⊦= 3 (↑ '(3) values))
+    (⊦= 3 (hash-table-ref H '(3)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2263960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
+</a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
+</a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Versions and implementation notes</span>
+</a><a href=/post/sbral/ class=see-also-item><span class=see-also-item-title>The SBRAL data structure</span>
+<span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
+</a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
+<span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
+</a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
+</a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
+<span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
+</a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
+<span class=see-also-item-subtitle>Some docs, refs and containers, respectively.</span>
+</a><a href=/post/the-reasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Reasoned Schemer</span>
+<span class=see-also-item-subtitle>miniKanren, microKanren and some implementations</span>
+</a><a href=/post/microkanren-aggregators/ class=see-also-item><span class=see-also-item-title>Aggregation predicates for µkanren</span>
+<span class=see-also-item-subtitle>Groups, window functions, sets and enumerations</span>
+</a><a href=/post/minikanren-live-and-untagged/ class=see-also-item><span class=see-also-item-title>miniKanren, live and untagged</span>
+<span class=see-also-item-subtitle>Quine generation via relational interpreters</span>
+</a><a href=/post/microkanren-arithmetic/ class=see-also-item><span class=see-also-item-title>Pure, declarative, and constructive arithmetic relations</span>
+<span class=see-also-item-subtitle>A declarative pearl</span>
+</a><a href=/post/2002-09-17-final-shift-for-callcc/ class=see-also-item><span class=see-also-item-title>Final shift for call/cc</span>
+<span class=see-also-item-subtitle>Direct implementation of shift and reset</span>
+</a><a href=/post/2001-02-01-callcc-patterns/ class=see-also-item><span class=see-also-item-title>Call with Current Continuation Patterns</span>
+</a><a href=/post/1996-06-15-sitaram-handling-control-copy/ class=see-also-item><span class=see-also-item-title>Cogen in six lines</span>
+</a><a href=/post/1996-01-31-the-seasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Seasoned Schemer</span>
+</a><a href=/post/1996-01-31-the-little-schemer/ class=see-also-item><span class=see-also-item-title>The Little Schemer</span>
+</a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
+</a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span></a></div></article><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class="nav-side-arrow nav-side-prev" title="The (aux commons) module" aria-label="Previous Post: The (aux commons) module"><i class="fas fa-chevron-left"></i>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class="nav-side-arrow nav-side-next" title="The (aux variable) module" aria-label="Next Post: The (aux variable) module"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-10-21-scm-testsuite-commons-suite/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux commons) module"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-10-21-scm-testsuite-variable-suite/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux variable) module">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
+2016 - 2026
+&nbsp;&bull;&nbsp;
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+&nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/b4a2375c49b56e352fb6848632d6742806368d13>b4a2375c</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

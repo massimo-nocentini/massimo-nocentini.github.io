@@ -1,58 +1,1180 @@
-<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux stream) module - This site needs no title</title><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/","name":"The (aux stream) module","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux stream) module","url":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-02-05T09:58:04+01:00","dateModified":"2026-02-11T15:40:05+01:00","datePublished":"2026-02-05T09:58:04+01:00","description":"","headline":"The (aux stream) module","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"wordCount":222}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux stream) module"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-02-05T09:58:04+01:00"><meta property="article:modified_time" content="2026-02-11T15:40:05+01:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/><meta name=twitter:title content="The (aux stream) module"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.166.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux stream) modules - This site needs no title</title><meta name=description content="Streams, streams after SICP, and sequences and power series"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/","name":"The (aux stream) modules","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux stream) modules","url":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-02-05T09:58:04+01:00","dateModified":"2026-10-21T14:46:59+02:00","datePublished":"2026-02-05T09:58:04+01:00","description":"","headline":"The (aux stream) modules","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT27M","wordCount":5676}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux stream) modules"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-02-05T09:58:04+01:00"><meta property="article:modified_time" content="2026-10-21T14:46:59+02:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-02-05-scm-testsuite-stream-suite/><meta name=twitter:title content="The (aux stream) modules"><meta name=twitter:description content="Streams, streams after SICP, and sequences and power series"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=toc-toggle aria-controls=toc-panel aria-expanded=false aria-label="Table of Contents" data-bs-toggle=tooltip data-bs-placement=bottom title="Table of Contents">
+<span class="fas fa-list"></span>
+</button>
+<button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
 <span class="fas fa-magnifying-glass"></span>
 </button>
 <button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
 <span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>content</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/about/>About</a></li><li><a class=dropdown-item href=/page/>Pages</a></li><li><a class=dropdown-item href=/tags>Tags</a></li><li><a class=dropdown-item href=/categories/>Categories</a></li><li><a class=dropdown-item href=/author/>Authors</a></li></ul></li></ul></div></div></nav><div id=navbar-search-overlay class=navbar-search-overlay aria-hidden=true role=search><div class="navbar-search-inner container-fluid"><span class="fas fa-magnifying-glass navbar-search-icon" aria-hidden=true></span>
 <input type=search id=navbar-search-input class=navbar-search-input placeholder="Search posts and pages…" aria-label=Search autocomplete=off>
 <button id=navbar-search-close class=theme-toggle aria-label="Close search">
-<span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux stream) module</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 5, 2026
-&nbsp;(Last modified on February 11, 2026)
+<span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux stream) modules</h1><h2 class=post-subheading>Streams, streams after SICP, and sequences and power series</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 5, 2026
+&nbsp;(Last modified on October 21, 2026)
 &nbsp;|&nbsp;
-<i class="fas fa-clock"></i>&nbsp;2&nbsp;min
+<i class="fas fa-clock"></i>&nbsp;27&nbsp;min
 &nbsp;|&nbsp;
-<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><h2 id=test/stream/nats><a href=#test/stream/nats><code>test/stream/nats</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/nats _)
+<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><h1 id=aux-stream-naturals-fibonacci-numbers-and-primes><code>(aux stream)</code>: naturals, Fibonacci numbers and primes</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test/stream/nats><a href=#test/stream/nats><code>test/stream/nats</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/nats _)
   (let1 (nats (take§ 20 (nats§ 0)))
         (⊦= '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
-              (§-&gt;list nats))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1863376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+            (§-&gt;list nats))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1944752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/fibs><a href=#test/stream/fibs><code>test/stream/fibs</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/fibs _)
   (let1 (fibs (take§ 20 (fibs§ 0 1)))
-        (⊦= '(0
-                1
-                1
-                2
-                3
-                5
-                8
-                13
-                21
-                34
-                55
-                89
-                144
-                233
-                377
-                610
-                987
-                1597
-                2584
-                4181)
-              (§-&gt;list fibs))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1878472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+        (⊦= '(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181)
+            (§-&gt;list fibs))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1957576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/ones><a href=#test/stream/ones><code>test/stream/ones</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones _)
   (let1 (ones (take§ 20 (const§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1882032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1961248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/primes><a href=#test/stream/primes><code>test/stream/primes</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/primes _)
   (let1 (primes (take§ 20 primes§))
         (⊦= '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71)
-              (§-&gt;list primes))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 2083056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+            (§-&gt;list primes))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2003384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream/long-prefixes><a href=#test/stream/long-prefixes><code>test/stream/long-prefixes</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/long-prefixes _)
+  (⊦= 9999 (list-ref (§-&gt;list (take§ 10000 (nats§ 0))) 9999))
+  (⊦= 541 (list-ref (§-&gt;list (take§ 100 primes§)) 99)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.111) (memory #(12582912 2336512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/stream/ones+τ><a href=#test/stream/ones+τ><code>test/stream/ones+τ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream/ones+τ _)
   (let1 (ones (take§ 20 (thunk§ 1)))
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2086576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
-</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2337760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-stream-sicp-streams-after-sicp><code>(aux stream sicp)</code>: streams, after SICP</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test/stream-sicp/list-roundtrip><a href=#test/stream-sicp/list-roundtrip><code>test/stream-sicp/list-roundtrip</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/list-roundtrip _)
+  (⊦≡ '(a b c d) ((compose stream:-&gt;list list-&gt;stream) '(a b c d))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3107776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/dest-car+cdr><a href=#test/stream-sicp/dest-car+cdr><code>test/stream-sicp/dest-car+cdr</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/dest-car+cdr _)
+  (let* ((n 0)
+         (s (λ () (set! n (add1 n)) (δ (δ (|:\x207a;| 1 2 stream:empty))))))
+    (⊦≡ '(1 1) (stream:dest/car+cdr (s) ((a d) (list a n)) (else 'empty))))
+  (⊦≡ 'empty (stream:dest/car+cdr (δ stream:empty) ((a d) a) (else 'empty)))
+  (⊦≡ '(7 7) (stream:dest/car+cdr (δ 7) ((a d) (list a d)) (else 'empty))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3109168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/ref><a href=#test/stream-sicp/ref><code>test/stream-sicp/ref</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/ref _)
+  (⊦≡ 0 ((stream:ref 0) series:range/0-9))
+  (⊦≡ 5 ((stream:ref 5) series:range/0-9))
+  (⊦≡ 9 ((stream:ref 9) series:range/0-9))
+  (⊨ (condition-case (begin ((stream:ref 10) series:range/0-9) #f) ((exn) #t)))
+  (⊨ (condition-case
+       (begin ((stream:ref 101) series:range/0-9) #f)
+       ((exn) #t))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3116312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/take-basics><a href=#test/stream-sicp/take-basics><code>test/stream-sicp/take-basics</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/take-basics _)
+  (⊦≡ '(3 4 5 6 7) ((list○take 5) (series:from 3)))
+  (⊦≡ '(1 1 1 1 1 1 1 1 1 1) ((list○take 10) stream:1s))
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9) ((list○take 10) numbers/nats))
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9)
+      ((list○take 10) ((stream:append-map list) numbers/nats)))
+  (⊦≡ 117 ((stream:ref 100) ((not-multiples-of 7) numbers/nats)))
+  (⊦≡ '(0 1 3 6 10 15 21 28 36 45 55 66 78 91 105 120 136 153 171 190)
+      ((list○take 20) numbers/triangular))
+  (⊦≡ '(0 1 3 6 10 15 21 28 36 45 55 66 78 91 105 120 136 153 171 190)
+      ((list○take 20) numbers/triangular/∞))
+  (⊦≡ 78 ((stream:ref 6) (evens numbers/triangular)))
+  (⊦≡ '(0 10 15 45 55 105 120 190)
+      ((list○take 8) ((multiples-of 5) numbers/triangular))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3120056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/zip><a href=#test/stream-sicp/zip><code>test/stream-sicp/zip</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/zip _)
+  (⊦≡ '((0 0 0)
+        (1 1 1)
+        (2 1 3)
+        (3 2 6)
+        (4 3 10)
+        (5 5 15)
+        (6 8 21)
+        (7 13 28)
+        (8 21 36)
+        (9 34 45))
+      ((list○take 10)
+       (stream:zip numbers/nats numbers/fibonacci numbers/triangular)))
+  (⊦≡ '(11 22)
+      ((list○take 5)
+       ((stream:zip-with +) (list-&gt;stream '(1 2)) (list-&gt;stream '(10 20)))))
+  (⊦≡ '(101 102 103)
+      ((list○take 5)
+       ((stream:zip-with +) (list-&gt;stream '(1 2 3)) (stream:repeat 100))))
+  (⊦≡ '() (stream:-&gt;list (stream:zip (list-&gt;stream '(1 2 3)) stream:empty)))
+  (⊦≡ '(11 2 3)
+      (stream:-&gt;list
+        ((stream:zip-with + #:pad 0)
+         (list-&gt;stream '(1 2 3))
+         (list-&gt;stream '(10)))))
+  (⊦≡ '((1 a) (#f b))
+      (stream:-&gt;list
+        ((stream:zip-with list #:pad #f)
+         (list-&gt;stream '(1))
+         (list-&gt;stream '(a b)))))
+  (⊦≡ '()
+      (stream:-&gt;list ((stream:zip-with + #:pad 0) stream:empty stream:empty))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/finite-polynomials><a href=#test/stream-series/finite-polynomials><code>test/stream-series/finite-polynomials</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/finite-polynomials _)
+  (⊦≡ '(2 2 3)
+      (stream:-&gt;list (series:+ (list-&gt;stream '(1 2 3)) (list-&gt;stream '(1)))))
+  (⊦≡ '(0 1 2 -1 -1)
+      (stream:-&gt;list
+        (series:- (list-&gt;stream '(1 2 3)) (list-&gt;stream '(1 1 1 1 1)))))
+  (⊦≡ '(1 2 1)
+      (stream:-&gt;list (series:× (list-&gt;stream '(1 1)) (list-&gt;stream '(1 1)))))
+  (⊦≡ '(1 2 2 1)
+      (stream:-&gt;list (series:× (list-&gt;stream '(1 1 1)) (list-&gt;stream '(1 1)))))
+  (⊦≡ '(1 3 3 1 0 0) ((list○take 6) ((series:expt 3) (list-&gt;stream '(1 1)))))
+  (⊦≡ '(1 2 2 2 2 2)
+      ((list○take 6) (series:× (list-&gt;stream '(1 1)) stream:1s)))
+  (⊦≡ '(1 1 1 1 1 1)
+      ((list○take 6) (series:/ (list-&gt;stream '(1)) (list-&gt;stream '(1 -1)))))
+  (⊦≡ '(1 1 1 1 1 1) ((list○take 6) (series:⁻¹ (list-&gt;stream '(1 -1)))))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120)
+      ((list○take 6) (series:exp (list-&gt;stream '(0 1)))))
+  (⊦≡ '(1 0 0 0) ((list○take 4) (series:exp stream:empty)))
+  (⊦≡ '(2 1/4 -1/64 1/512 -5/16384)
+      ((list○take 5) (series:√/∞ (list-&gt;stream '(4 1)))))
+  (⊦≡ '(0 0 0 0) ((list○take 4) (series:√/∞ stream:empty)))
+  (⊦≡ '(0 0 0 0) ((list○take 4) (series:√/∞ (list-&gt;stream '(0)))))
+  (⊦≡ '(0 0 0 0) ((list○take 4) (series:√/∞ (list-&gt;stream '(0 0)))))
+  (⊦≡ '(0 1 0 0) ((list○take 4) (series:√/∞ (list-&gt;stream '(0 0 1)))))
+  (⊦≡ '(1 1/2 1/8 0 -1/128 0)
+      (letdelay
+        ((S (series:√/∞ (series:+ stream:1 (stream:cons 0 S)))))
+        ((list○take 6) S)))
+  (⊦≡ '(1 -1 1/2 0 -1/8 0)
+      (letdelay
+        ((T (series:√/∞ (series:- stream:1 (stream:cons 0 ((series:* 2) T))))))
+        ((list○take 6) T)))
+  (⊦≡ '((1) (1 1) (0 2 1) (0 2 3 1) (0 2 5 4 1))
+      ((list○take 5) (riordan-array (list-&gt;stream '(1 1)) stream:1s)))
+  (⊦≡ ((list○take 5) (riordan-array (list-&gt;poly '(1 1)) stream:1s))
+      ((list○take 5) (riordan-array (list-&gt;stream '(1 1)) stream:1s)))
+  (⊦≡ ((list○take 6) (riordan-array (list-&gt;poly '(1)) (list-&gt;poly '(0 1 1))))
+      ((list○take 6)
+       (riordan-array (list-&gt;stream '(1)) (list-&gt;stream '(0 1 1)))))
+  (⊦≡ '((1) (1 0) (1 0 0) (1 0 0 0))
+      ((list○take 4) (riordan-array stream:1s stream:empty)))
+  (⊦≡ '((0) (0 0) (0 0 0) (0 0 0 0))
+      ((list○take 4) (riordan-array stream:empty stream:1s))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3120928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/foldr-laziness><a href=#test/stream-sicp/foldr-laziness><code>test/stream-sicp/foldr-laziness</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/foldr-laziness _)
+  (⊦≡ 'hello
+      ((stream:foldr (λ (a rest) (and a (force rest))) (λ () 'hello))
+       (|:\x207a;| #t #t #t stream:empty)))
+  (⊦≡ #f
+      ((stream:foldr (λ (a rest) (and a (force rest))) (λ () (list (/ 1 0))))
+       (|:\x207a;| #t #t #t #f #t stream:0s))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/mplus-and-iterator><a href=#test/stream-sicp/mplus-and-iterator><code>test/stream-sicp/mplus-and-iterator</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/mplus-and-iterator _)
+  (⊦≡ '(0 1 2 0 1 2 0 1 2 0)
+      ((list○take 10)
+       (stream:§ (stream:repeat 0) (stream:repeat 1) (stream:repeat 2))))
+  (let ((next (stream:iterator numbers/nats)))
+    (⊦≡ '(0 1 2 3)
+        (collect-values (λ () (values (next) (next) (next) (next)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3122408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/merge-hamming><a href=#test/stream-sicp/merge-hamming><code>test/stream-sicp/merge-hamming</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/merge-hamming _)
+  (let* ((C (○ eval car))
+         (L (λ (p q) `((* ,(C p) ,(C q)) ,(list (cadr p) (cadr q))))))
+    (letdelay
+      ((α (stream:cons
+            '(1 i)
+            ((stream:merge (λ (p q) (&lt; (C p) (C q))))
+             ((stream:zip-with L) α (stream:repeat '(2 a)))
+             ((stream:zip-with L) α (stream:repeat '(3 b)))
+             ((stream:zip-with L) α (stream:repeat '(5 c)))))))
+      (⊦≡ '((1 i)
+            ((* 1 2) (i a))
+            ((* 1 3) (i b))
+            ((* 2 2) ((i a) a))
+            ((* 1 5) (i c))
+            ((* 2 3) ((i a) b))
+            ((* 3 2) ((i b) a))
+            ((* 4 2) (((i a) a) a))
+            ((* 3 3) ((i b) b))
+            ((* 2 5) ((i a) c))
+            ((* 5 2) ((i c) a))
+            ((* 4 3) (((i a) a) b))
+            ((* 6 2) (((i a) b) a))
+            ((* 6 2) (((i b) a) a))
+            ((* 3 5) ((i b) c))
+            ((* 5 3) ((i c) b))
+            ((* 8 2) ((((i a) a) a) a))
+            ((* 6 3) (((i a) b) b))
+            ((* 6 3) (((i b) a) b))
+            ((* 9 2) (((i b) b) a))
+            ((* 4 5) (((i a) a) c))
+            ((* 10 2) (((i a) c) a))
+            ((* 10 2) (((i c) a) a))
+            ((* 8 3) ((((i a) a) a) b))
+            ((* 12 2) ((((i a) a) b) a))
+            ((* 12 2) ((((i a) b) a) a))
+            ((* 12 2) ((((i b) a) a) a))
+            ((* 5 5) ((i c) c))
+            ((* 9 3) (((i b) b) b))
+            ((* 6 5) (((i a) b) c))
+            ((* 6 5) (((i b) a) c))
+            ((* 10 3) (((i a) c) b))
+            ((* 10 3) (((i c) a) b))
+            ((* 15 2) (((i b) c) a))
+            ((* 15 2) (((i c) b) a))
+            ((* 16 2) (((((i a) a) a) a) a))
+            ((* 12 3) ((((i a) a) b) b))
+            ((* 12 3) ((((i a) b) a) b))
+            ((* 12 3) ((((i b) a) a) b))
+            ((* 18 2) ((((i a) b) b) a))
+            ((* 18 2) ((((i b) a) b) a))
+            ((* 18 2) ((((i b) b) a) a))
+            ((* 8 5) ((((i a) a) a) c))
+            ((* 20 2) ((((i a) a) c) a))
+            ((* 20 2) ((((i a) c) a) a))
+            ((* 20 2) ((((i c) a) a) a))
+            ((* 9 5) (((i b) b) c))
+            ((* 15 3) (((i b) c) b))
+            ((* 15 3) (((i c) b) b))
+            ((* 16 3) (((((i a) a) a) a) b)))
+          ((list○take 50) α)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3140480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/enumerations><a href=#test/stream-sicp/enumerations><code>test/stream-sicp/enumerations</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/enumerations _)
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9)
+      ((list○take 10) (stream:enumerate-upper numbers/nats/∞)))
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9)
+      ((list○take 10) (stream:enumerate-lower numbers/nats/∞)))
+  (⊦≡ '((0 0) (0 1) (1 1) (0 2) (1 2) (0 3) (2 2) (0 4) (1 3) (0 5))
+      ((list○take 10) (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0)
+        (0 0 1)
+        (1 0 1)
+        (0 1 1)
+        (1 1 1)
+        (0 0 2)
+        (2 1 1)
+        (0 1 2)
+        (1 0 2)
+        (0 0 3))
+      ((list○take 10)
+       (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0 0)
+        (0 0 0 1)
+        (1 0 0 1)
+        (0 1 0 1)
+        (1 1 0 1)
+        (0 0 1 1)
+        (2 1 0 1)
+        (0 1 1 1)
+        (1 0 1 1)
+        (0 0 0 2))
+      ((list○take 10)
+       (stream:enumerate-upper
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞)))
+  (⊦≡ '((0 0) (1 0) (1 1) (2 0) (2 1) (3 0) (2 2) (4 0) (3 1) (5 0))
+      ((list○take 10) (stream:enumerate-lower numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0)
+        (1 0 0)
+        (1 1 0)
+        (2 0 0)
+        (2 1 0)
+        (3 0 0)
+        (2 1 1)
+        (4 0 0)
+        (3 1 0)
+        (5 0 0))
+      ((list○take 10)
+       (stream:enumerate-lower numbers/nats/∞ numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0 0)
+        (1 0 0 0)
+        (1 1 0 0)
+        (2 0 0 0)
+        (2 1 0 0)
+        (3 0 0 0)
+        (2 1 1 0)
+        (4 0 0 0)
+        (3 1 0 0)
+        (5 0 0 0))
+      ((list○take 10)
+       (stream:enumerate-lower
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞)))
+  (⊦≡ '((0 0) (0 1) (1 0) (1 1) (2 0) (0 2) (3 0) (1 2) (4 0) (0 3))
+      ((list○take 10) (stream:enumerate-all numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ 397
+      ((compose
+         length
+         stream:-&gt;list
+         (stream:take-while (λ (pair) ((compose not equal?) pair '(1 100)))))
+       (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ 1559
+      ((compose
+         length
+         stream:-&gt;list
+         (stream:take-while (λ (pair) (not (equal? pair '(3 100))))))
+       (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞)))
+  (let ((five (list-&gt;stream '(1 2 3 4 5))) (two (list-&gt;stream '(1 2))))
+    (⊦≡ '((1 1) (1 2) (2 2)) (stream:-&gt;list (stream:enumerate-upper five two)))
+    (⊦≡ '((1 1) (1 2) (2 2) (1 3) (2 3) (1 4) (2 4) (1 5) (2 5))
+        (stream:-&gt;list (stream:enumerate-upper two five)))
+    (⊦≡ '((1 1) (2 1) (2 2)) (stream:-&gt;list (stream:enumerate-lower two five)))
+    (⊦≡ '((1 1) (2 1) (2 2) (3 1) (3 2) (4 1) (4 2) (5 1) (5 2))
+        (stream:-&gt;list (stream:enumerate-lower five two)))
+    (⊦≡ 10 (length (stream:-&gt;list (stream:enumerate-all five two))))
+    (⊦≡ '((1 1) (1 2) (2 2))
+        (stream:-&gt;list ((stream:enumerate-weighted +) five two)))
+    (⊦≡ '(1 2) (stream:-&gt;list (stream:enumerate-upper two)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3310776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/map-pairs><a href=#test/stream-sicp/map-pairs><code>test/stream-sicp/map-pairs</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/map-pairs _)
+  (⊦≡ '(3 7)
+      (stream:-&gt;list
+        ((stream:map-consecutive-pairs +) (list-&gt;stream '(1 2 3 4)))))
+  (⊦≡ '(3 7)
+      (stream:-&gt;list
+        ((stream:map-consecutive-pairs +) (list-&gt;stream '(1 2 3 4 5)))))
+  (⊦≡ '(3 5 7)
+      (stream:-&gt;list
+        ((stream:map-overlapping-pairs +) (list-&gt;stream '(1 2 3 4)))))
+  (⊦≡ '()
+      (stream:-&gt;list ((stream:map-overlapping-pairs +) (list-&gt;stream '(1)))))
+  (⊦≡ '(1 5 9 13 17)
+      ((list○take 5) ((stream:map-consecutive-pairs +) numbers/nats)))
+  (⊦≡ '(1 3 5 7 9)
+      ((list○take 5) ((stream:map-overlapping-pairs +) numbers/nats))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3311440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/weighted-enumerations><a href=#test/stream-sicp/weighted-enumerations><code>test/stream-sicp/weighted-enumerations</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/weighted-enumerations _)
+  (⊦≡ '((4 3 5)
+        (3 4 5)
+        (8 6 10)
+        (6 8 10)
+        (12 5 13)
+        (12 9 15)
+        (15 8 17)
+        (5 12 13)
+        (16 12 20)
+        (9 12 15))
+      ((list○take 10) (Pythagorean-triples 2)))
+  (⊦≡ '((0 0) (0 1) (1 1) (0 2) (1 2) (0 3) (2 2) (1 3) (0 4) (2 3))
+      ((list○take 10)
+       ((stream:enumerate-weighted +) numbers/nats/∞ numbers/nats/∞)))
+  (let* ((F (λ (x)
+               (not (or ((divisable-by? 2) x)
+                        ((divisable-by? 3) x)
+                        ((divisable-by? 5) x)))))
+         (O (λ (i j) (+ (* i 2) (* j 3) (* 5 i j))))
+         (pairs ((stream:enumerate-weighted O)
+                 ((stream:filter F) numbers/nats&gt;0)
+                 ((stream:filter F) numbers/nats&gt;0))))
+    (⊦≡ '((1 1)
+          (1 7)
+          (1 11)
+          (1 13)
+          (1 17)
+          (1 19)
+          (1 23)
+          (1 29)
+          (1 31)
+          (7 7)
+          (1 37)
+          (1 41)
+          (1 43)
+          (1 47)
+          (1 49)
+          (1 53)
+          (7 11)
+          (1 59)
+          (1 61)
+          (7 13))
+        ((list○take 20) pairs))
+    (⊦≡ '(10
+          58
+          90
+          106
+          138
+          154
+          186
+          234
+          250
+          280
+          298
+          330
+          346
+          378
+          394
+          426
+          432
+          474
+          490
+          508)
+        ((list○take 20) ((stream:map (λ (p) (apply O p))) pairs)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.028) (memory #(12582912 3192168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/ramanujan-cubes><a href=#test/stream-sicp/ramanujan-cubes><code>test/stream-sicp/ramanujan-cubes</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/ramanujan-cubes _)
+  (let* ((W (λ (i j) (+ (expt i 3) (expt j 3))))
+         (sums-of-cubes
+           ((stream:enumerate-weighted W) numbers/nats&gt;0 numbers/nats&gt;0)))
+    (letrec ((F (λ (s)
+                   (let ((c (stream:car s)) (o (stream:cadr s)))
+                     (delay-force
+                       (cond ((equal? (apply W c) (apply W o))
+                              (stream:cons
+                                (list (apply W c) c o)
+                                (F (stream:cdr s))))
+                             (else (F (stream:cdr s)))))))))
+      (⊦≡ '((1729 (9 10) (1 12))
+            (4104 (9 15) (2 16))
+            (13832 (18 20) (2 24))
+            (20683 (19 24) (10 27))
+            (32832 (18 30) (4 32))
+            (39312 (15 33) (2 34))
+            (40033 (16 33) (9 34))
+            (46683 (27 30) (3 36))
+            (64232 (26 36) (17 39))
+            (65728 (31 33) (12 40)))
+          ((list○take 10) (F sums-of-cubes))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 3289480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/sums-of-three-squares><a href=#test/stream-sicp/sums-of-three-squares><code>test/stream-sicp/sums-of-three-squares</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/sums-of-three-squares _)
+  (let* ((W (λ (i j) (+ (expt i 2) (expt j 2))))
+         (sums-of-squares
+           ((stream:enumerate-weighted W) numbers/nats&gt;0 numbers/nats&gt;0)))
+    (letrec ((F (λ (s)
+                   (let ((c (stream:car s))
+                         (o (stream:cadr s))
+                         (p (stream:caddr s)))
+                     (delay-force
+                       (cond ((and (equal? (apply W c) (apply W o))
+                                   (equal? (apply W o) (apply W p)))
+                              (stream:cons
+                                (list (apply W c) c o p)
+                                (F (stream:cdr s))))
+                             (else (F (stream:cdr s)))))))))
+      (⊦≡ '((325 (10 15) (6 17) (1 18))
+            (425 (13 16) (8 19) (5 20))
+            (650 (17 19) (11 23) (5 25))
+            (725 (14 23) (10 25) (7 26))
+            (845 (19 22) (13 26) (2 29))
+            (850 (15 25) (11 27) (3 29))
+            (925 (21 22) (14 27) (5 30))
+            (1025 (20 25) (8 31) (1 32))
+            (1105 (23 24) (12 31) (9 32))
+            (1105 (12 31) (9 32) (4 33)))
+          ((list○take 10) (F sums-of-squares))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(12582912 3250648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-sicp/interop-with-aux-streams><a href=#test/stream-sicp/interop-with-aux-streams><code>test/stream-sicp/interop-with-aux-streams</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/interop-with-aux-streams _)
+  (⊦≡ '(0 1 2 3 4) ((list○take 5) ℕ))
+  (⊦≡ '(0 1 3 6 10) ((list○take 5) (series:× ℕ stream:1s)))
+  (⊦≡ '(0 1 1 2 3) (§-&gt;list (take§ 5 numbers/fibs/∞)))
+  (⊦≡ '(1 1 2 5 14) (§-&gt;list (take§ 5 taylor/catalan)))
+  (⊦≡ '(0 1) ((list○take 3) (take§ 2 ℕ))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3254904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-stream-series-sequences-and-power-series-as-streams><code>(aux stream series)</code>: sequences and power series as streams</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test/stream-series/fibonacci><a href=#test/stream-series/fibonacci><code>test/stream-series/fibonacci</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/fibonacci _)
+  (⊦≡ '(0 1 1 2 3 5 8 13 21 34) ((list○take 10) numbers/fibonacci))
+  (⊦≡ '(0 1 2 4 7 12 20 33 54 88 143 232 376 609 986 1596 2583 4180 6764 10945)
+      ((list○take 20) numbers/fibonacci-triangular))
+  (⊦≡ ((list○take 10) ((stream:map sub1) numbers/fibonacci&gt;0))
+      ((list○take 10) (stream:cons 0 numbers/fibonacci-triangular))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3175352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/primes><a href=#test/stream-series/primes><code>test/stream-series/primes</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/primes _)
+  (⊦≡ '(2
+        3
+        5
+        7
+        11
+        13
+        17
+        19
+        23
+        29
+        31
+        37
+        41
+        43
+        47
+        53
+        59
+        61
+        67
+        71
+        73
+        79
+        83
+        89
+        97
+        101
+        103
+        107
+        109
+        113
+        127
+        131
+        137
+        139
+        149
+        151
+        157
+        163
+        167
+        173
+        179
+        181
+        191
+        193
+        197
+        199
+        211
+        223
+        227
+        229
+        233
+        239
+        241
+        251
+        257
+        263
+        269
+        271
+        277
+        281
+        283
+        293
+        307
+        311
+        313
+        317
+        331
+        337
+        347
+        349
+        353
+        359
+        367
+        373
+        379
+        383
+        389
+        397
+        401
+        409
+        419
+        421
+        431
+        433
+        439
+        443
+        449
+        457
+        461
+        463
+        467
+        479
+        487
+        491
+        499
+        503
+        509
+        521
+        523
+        541)
+      ((list○take 100) primes/eratosthenes))
+  (⊦≡ '(2
+        3
+        5
+        7
+        11
+        13
+        17
+        19
+        23
+        29
+        31
+        37
+        41
+        43
+        47
+        53
+        59
+        61
+        67
+        71
+        73
+        79
+        83
+        89
+        97
+        101
+        103
+        107
+        109
+        113
+        127
+        131
+        137
+        139
+        149
+        151
+        157
+        163
+        167
+        173
+        179
+        181
+        191
+        193
+        197
+        199
+        211
+        223
+        227
+        229
+        233
+        239
+        241
+        251
+        257
+        263
+        269
+        271
+        277
+        281
+        283
+        293
+        307
+        311
+        313
+        317
+        331
+        337
+        347
+        349
+        353
+        359
+        367
+        373
+        379
+        383
+        389
+        397
+        401
+        409
+        419
+        421
+        431
+        433
+        439
+        443
+        449
+        457
+        461
+        463
+        467
+        479
+        487
+        491
+        499
+        503
+        509
+        521
+        523
+        541)
+      ((list○take 100) primes/∞)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3262336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/radix-expansion><a href=#test/stream-series/radix-expansion><code>test/stream-series/radix-expansion</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/radix-expansion _)
+  (⊦≡ '(1 4 2 8 5 7 1 4 2 8 5 7 1 4 2 8 5 7 1 4)
+      ((list○take 20) (radix-expansion 1 7 10)))
+  (⊦≡ '(18 5 7 1 4 2 8 5 7 1 4 2 8 5 7 1 4 2 8 5)
+      ((list○take 20) (radix-expansion 13 7 10)))
+  (⊦≡ '(3 7 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+      ((list○take 20) (radix-expansion 3 8 10))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3259688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/recursive-definitions><a href=#test/stream-series/recursive-definitions><code>test/stream-series/recursive-definitions</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/recursive-definitions _)
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9) ((list○take 10) numbers/nats/∞))
+  (⊦≡ '(0 1 1 2 3 5 8 13 21 34) ((list○take 10) numbers/fibs/∞))
+  (⊦≡ '(2 1 3 4 7 11 18 29 47 76) ((list○take 10) numbers/lucas/∞))
+  (⊦≡ '(1 2 4 8 16 32 64 128 256 512) ((list○take 10) numbers/powers-of-2))
+  (⊦≡ '(1 2 4 8 16 32 64 128 256 512) ((list○take 10) numbers/powers-of-2/∞))
+  (⊦≡ '(1 3 9 27 81 243 729 2187 6561 19683)
+      ((list○take 10) numbers/powers-of-3))
+  (⊦≡ '(1 3 9 27 81 243 729 2187 6561 19683)
+      ((list○take 10) numbers/powers-of-3/∞))
+  (⊦≡ '(1 1 2 6 24 120 720 5040 40320 362880)
+      ((list○take 10) numbers/factorials/∞))
+  (⊦≡ '(1 2 4 7 11 16 22 29 37 46)
+      ((list○take 10) numbers/central-polygonal/∞)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3259000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/factorization-and-prime?><a href=#test/stream-series/factorization-and-prime?><code>test/stream-series/factorization-and-prime?</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/factorization-and-prime? _)
+  (⊦≡ '(1 0 1 0 0 0 0 0 0 0) ((list○take 10) (factorization 10)))
+  (⊦≡ '(0 0 0 0 0 0 1 0 0 0) ((list○take 10) (factorization 17)))
+  (⊦≡ '(3 1 0 0 0 0 0 0 0 0) ((list○take 10) (factorization 24)))
+  (⊦≡ #t ((○ not prime?) 55))
+  (⊦≡ #t (prime? 17))
+  (⊦≡ #t (prime? 17389))
+  (⊦≡ #f (prime? 17391))
+  (⊦≡ #f (prime? 1)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.073) (memory #(12582912 3396664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/scans><a href=#test/stream-series/scans><code>test/stream-series/scans</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/scans _)
+  (⊦≡ '(0 1 3 6 10 15 21 28 36 45) ((list○take 10) numbers/triangular/+scan))
+  (⊦≡ '(0 1 2 4 7 12 20 33 54 88) ((list○take 10) numbers/fibs/+scan))
+  (⊦≡ ((list○take 10) numbers/fibs/+scan)
+      ((list○take 10)
+       ((stream:zip-with -) (stream:cddr numbers/fibs/∞) stream:1s)))
+  (⊦≡ '(1 1 2 6 30 240 3120 65520 2227680 122522400)
+      ((list○take 10) numbers/fibs/∙scan))
+  (⊦≡ '(100 99 97 94)
+      (stream:-&gt;list ((stream:scan -) (list-&gt;stream '(100 1 2 3)))))
+  (⊦≡ '(a (a b) ((a b) c))
+      (stream:-&gt;list ((stream:scan list) (list-&gt;stream '(a b c)))))
+  (⊦≡ '() (stream:-&gt;list ((stream:scan +) stream:empty))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3400520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/series-basics><a href=#test/stream-series/series-basics><code>test/stream-series/series-basics</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/series-basics _)
+  (⊦≡ '(1 1/2 3/8 5/16 35/128 63/256 231/1024 429/2048 6435/32768 12155/65536)
+      ((list○take 10) (series:√/∞ stream:1s)))
+  (⊦≡ ((list○take 10) stream:1s)
+      ((list○take 10) ((compose (series:expt 2) series:√/∞) stream:1s)))
+  (⊦≡ '(2 1/4 -1/64 1/512 -5/16384)
+      ((list○take 5) (series:√/∞ (list-&gt;poly '(4 1)))))
+  (⊦≡ '(4 1 0 0 0)
+      ((list○take 5)
+       ((compose (series:expt 2) series:√/∞) (list-&gt;poly '(4 1)))))
+  (⊦≡ '(0 1 0 0 0) ((list○take 5) (series:√/∞ (list-&gt;poly '(0 0 1)))))
+  (⊨ (condition-case
+       (begin ((list○take 5) (series:√/∞ (list-&gt;poly '(0 1)))) #f)
+       ((exn) #t)))
+  (⊦≡ '(1 2 3 4 5 6 7 8 9 10) ((list○take 10) (series:× stream:1s stream:1s)))
+  (⊦≡ '(0 1 1 1) (stream:-&gt;list (series:∫ (list-&gt;stream '(1 2 3)))))
+  (⊦≡ '(2 6) (stream:-&gt;list (series:∂ (list-&gt;stream '(1 2 3)))))
+  (⊦≡ '() (stream:-&gt;list (series:∂ (list-&gt;stream '(1)))))
+  (⊦≡ '(0 1 3 6 10 15 21 28 36 45)
+      ((list○take 10) (series:× numbers/nats/∞ stream:1s))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3412344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/series-exp-and-composition><a href=#test/stream-series/series-exp-and-composition><code>test/stream-series/series-exp-and-composition</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/series-exp-and-composition _)
+  (⊨ (condition-case
+       (begin ((list○take 10) (series:exp stream:1)) #f)
+       ((exn) #t)))
+  (⊦≡ '(1 0 0 0 0 0 0 0 0 0) ((list○take 10) (series:exp series:0)))
+  (⊦≡ '(1 0 0 0 0 0 0 0 0 0)
+      ((list○take 10) (series:○ taylor/exponential series:0)))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120 1/720 1/5040 1/40320 1/362880)
+      ((list○take 10) taylor/exponential))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120 1/720 1/5040 1/40320 1/362880)
+      ((list○take 10) (series:exp `(0 ,@stream:1))))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120 1/720 1/5040 1/40320 1/362880)
+      ((list○take 10) (series:exp (list-&gt;poly '(0 1)))))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120 1/720 1/5040 1/40320 1/362880)
+      ((list○take 10) (series:○ taylor/exponential (list-&gt;poly '(0 1)))))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120 1/720 1/5040 1/40320 1/362880)
+      ((list○take 10) (series:exp (list-&gt;poly '(0 1)))))
+  (⊦≡ '(1
+        1
+        3/2
+        13/6
+        73/24
+        167/40
+        4051/720
+        37633/5040
+        43817/4480
+        4596553/362880)
+      ((list○take 10) (series:exp `(0 ,@stream:1s))))
+  (⊦≡ '(1
+        1
+        3/2
+        13/6
+        73/24
+        167/40
+        4051/720
+        37633/5040
+        43817/4480
+        4596553/362880)
+      ((list○take 10) (series:○ taylor/exponential `(0 ,@stream:1s)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3427880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/trigonometric><a href=#test/stream-series/trigonometric><code>test/stream-series/trigonometric</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/trigonometric _)
+  (⊦≡ '(1 0 -1/2 0 1/24 0 -1/720 0 1/40320 0) ((list○take 10) taylor/cosine))
+  (⊦≡ '(0 1 0 -1/6 0 1/120 0 -1/5040 0 1/362880) ((list○take 10) taylor/sine))
+  (let ((sine2+cosine2
+          (series:+
+            (series:× taylor/sine taylor/sine)
+            (series:× taylor/cosine taylor/cosine)))
+        (tangent-series (series:/ taylor/sine taylor/cosine))
+        (arctan-series (series:∫ (series:/ stream:1 (list-&gt;poly '(1 0 1))))))
+    (⊦≡ '(1 0 0 0 0 0 0 0 0 0) ((list○take 10) sine2+cosine2))
+    (⊦≡ '(0 1 0 1/3 0 2/15 0 17/315 0 62/2835) ((list○take 10) tangent-series))
+    (⊦≡ '(0 1 0 -1/3 0 1/5 0 -1/7 0 1/9) ((list○take 10) arctan-series))
+    (⊦≡ ((list○take 10) series:0)
+        ((list○take 10)
+         ((stream:zip-with -)
+          (series:/ taylor/sine taylor/cosine)
+          (series:◇ arctan-series))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3457080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/series-inverse><a href=#test/stream-series/series-inverse><code>test/stream-series/series-inverse</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/series-inverse _)
+  (⊦≡ '(1 -1 0 0 0 0 0 0 0 0) ((list○take 10) (series:⁻¹ stream:1s)))
+  (⊦≡ '(1 -2 1 0 0 0 0 0 0 0) ((list○take 10) (series:⁻¹ numbers/nats&gt;0)))
+  (⊦≡ '(1 0 0 0 0 0 0 0 0 0)
+      ((list○take 10) (series:× numbers/nats&gt;0 (series:⁻¹ numbers/nats&gt;0))))
+  (⊦≡ '(1 -1 -1 0 0 0 0 0 0 0)
+      ((list○take 10) (series:⁻¹ (stream:cdr numbers/fibs/∞))))
+  (⊦≡ '(1 0 0 0 0 0 0 0 0 0)
+      ((list○take 10)
+       (series:× numbers/fibs&gt;0/∞ (series:⁻¹ numbers/fibs&gt;0/∞))))
+  (let ((non-unary-series (stream:cons 4 numbers/nats&gt;0)))
+    (⊦≡ '(1/4
+          -1/16
+          -7/64
+          -33/256
+          -119/1024
+          -305/4096
+          -231/16384
+          3263/65536
+          26537/262144
+          133551/1048576)
+        ((list○take 10) (series:⁻¹ non-unary-series)))
+    (⊦≡ '(1 0 0 0 0 0 0 0 0 0)
+        ((list○take 10)
+         (series:× non-unary-series (series:⁻¹ non-unary-series))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3428768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/series-division-and-reversion><a href=#test/stream-series/series-division-and-reversion><code>test/stream-series/series-division-and-reversion</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/series-division-and-reversion _)
+  (⊦≡ '(1 0 -6 0 12 0 -8 0 0 0)
+      ((list○take 10) ((series:expt 3) (list-&gt;poly '(1 0 -2)))))
+  (⊦≡ '(1 1 1 1 1 1 1 1 1 1)
+      ((list○take 10) (series:/ stream:1 (list-&gt;poly '(1 -1)))))
+  (⊦≡ '(0 1 1 2 3 5 8 13 21 34)
+      ((list○take 10) (series:/ (formalvar-series 1) (list-&gt;poly '(1 -1 -1)))))
+  (⊦≡ '(1 2 3 4 5 6 7 8 9 10)
+      ((list○take 10)
+       (series:/ stream:1 ((series:expt 2) (list-&gt;poly '(1 -1))))))
+  (⊦≡ '(0 1 -1 1 -1 1 -1 1 -1 1)
+      ((list○take 10) (series:◇ (stream:cons 0 stream:1s))))
+  (⊦≡ '(0 1 -1 1 -1 1 -1 1 -1 1)
+      ((list○take 10) (series:/ (formalvar-series 1) (list-&gt;poly '(1 1))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3433800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/riordan-and-multivariate><a href=#test/stream-series/riordan-and-multivariate><code>test/stream-series/riordan-and-multivariate</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/riordan-and-multivariate _)
+  (⊦≡ '((1)
+        (1 1)
+        (1 2 1)
+        (1 3 3 1)
+        (1 4 6 4 1)
+        (1 5 10 10 5 1)
+        (1 6 15 20 15 6 1)
+        (1 7 21 35 35 21 7 1)
+        (1 8 28 56 70 56 28 8 1)
+        (1 9 36 84 126 126 84 36 9 1))
+      ((list○take 10) (riordan-array stream:1s stream:1s)))
+  (⊦≡ ((list○take 10) (series:/ (formalvar-series 1) `(1 1 unquote series:0)))
+      ((list○take 10) (series:◇ (stream:cons 0 stream:1s))))
+  (let ((rows ((list○take 10)
+               (series:○
+                 (series:/ stream:1 (list-&gt;poly '(1 -1)))
+                 (list-&gt;poly `(,(list-&gt;poly '()) ,(list-&gt;poly '(1 1))))))))
+    (⊦≡ '((1)
+          (1 1)
+          (1 2 1)
+          (1 3 3 1)
+          (1 4 6 4 1)
+          (1 5 10 10 5 1)
+          (1 6 15 20 15 6 1)
+          (1 7 21 35 35 21 7 1)
+          (1 8 28 56 70 56 28 8 1)
+          (1 9 36 84 126 126 84 36 9 1))
+        ((map/with-index list○take 1) rows)))
+  (⊦≡ '((1 0 0 0 0 0 0 0 0 0)
+        (1 1 1 1 1 1 1 1 1 1)
+        (1 2 3 4 5 6 7 8 9 10)
+        (1 3 6 10 15 21 28 36 45 55)
+        (1 4 10 20 35 56 84 120 165 220)
+        (1 5 15 35 70 126 210 330 495 715)
+        (1 6 21 56 126 252 462 792 1287 2002)
+        (1 7 28 84 210 462 924 1716 3003 5005)
+        (1 8 36 120 330 792 1716 3432 6435 11440)
+        (1 9 45 165 495 1287 3003 6435 12870 24310))
+      (let ((rows ((list○take 10)
+                   (series:○
+                     (series:/ stream:1 (list-&gt;poly '(1 -1)))
+                     (list-&gt;poly `(,(list-&gt;poly '()) ,stream:1s))))))
+        (map (list○take 10) rows)))
+  (⊦≡ '((1 1 1 1 1 1 1 1 1 1)
+        (0 1 2 3 4 5 6 7 8 9)
+        (0 0 1 3 6 10 15 21 28 36)
+        (0 0 0 1 4 10 20 35 56 84)
+        (0 0 0 0 1 5 15 35 70 126)
+        (0 0 0 0 0 1 6 21 56 126)
+        (0 0 0 0 0 0 1 7 28 84)
+        (0 0 0 0 0 0 0 1 8 36)
+        (0 0 0 0 0 0 0 0 1 9)
+        (0 0 0 0 0 0 0 0 0 1))
+      (let ((rows ((list○take 10)
+                   ((stream:zip-with series:×)
+                    stream:1s
+                    (series:○
+                      (series:/ stream:1 (list-&gt;poly '(1 -1)))
+                      (list-&gt;poly
+                        `(,(list-&gt;poly '()) ,(stream:cons 0 stream:1s))))))))
+        (map (list○take 10) rows)))
+  (⊦≡ '((1 0 0 0 0 0 0 0 0 0)
+        (0 1 1 1 1 1 1 1 1 1)
+        (0 0 1 2 3 4 5 6 7 8)
+        (0 0 0 1 3 6 10 15 21 28)
+        (0 0 0 0 1 4 10 20 35 56)
+        (0 0 0 0 0 1 5 15 35 70)
+        (0 0 0 0 0 0 1 6 21 56)
+        (0 0 0 0 0 0 0 1 7 28)
+        (0 0 0 0 0 0 0 0 1 8)
+        (0 0 0 0 0 0 0 0 0 1))
+      (let ((rows ((list○take 10)
+                   (series:○
+                     (series:/ stream:1 (list-&gt;poly '(1 -1)))
+                     (list-&gt;poly
+                       `(,(list-&gt;poly '()) ,(stream:cons 0 stream:1s)))))))
+        (map (list○take 10) rows)))
+  (⊦≡ '((1 0 0 0 0 0 0 0 0 0)
+        (0 1 1 1 1 1 1 1 1 1)
+        (0 0 2 3 4 5 6 7 8 9)
+        (0 0 0 3 7 12 18 25 33 42)
+        (0 0 0 0 5 15 31 54 85 125)
+        (0 0 0 0 0 8 30 73 145 255)
+        (0 0 0 0 0 0 13 58 162 361)
+        (0 0 0 0 0 0 0 21 109 344)
+        (0 0 0 0 0 0 0 0 34 201)
+        (0 0 0 0 0 0 0 0 0 55))
+      (let ((rows ((list○take 10)
+                   (series:○
+                     (series:/ stream:1 (list-&gt;poly '(1 -1)))
+                     (list-&gt;poly
+                       `(,(list-&gt;poly '())
+                         ,(stream:cons 0 stream:1s)
+                         ,(stream:cons 0 (stream:cons 0 stream:1s))))))))
+        (map (list○take 10) rows)))
+  (⊦≡ '((1)
+        (1 1)
+        (1 3 1)
+        (1 6 5 1)
+        (1 10 15 7 1)
+        (1 15 35 28 9 1)
+        (1 21 70 84 45 11 1)
+        (1 28 126 210 165 66 13 1)
+        (1 36 210 462 495 286 91 15 1)
+        (1 45 330 924 1287 1001 455 120 17 1))
+      ((list○take 10) (riordan-array stream:1s (series:from 1)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.081) (memory #(12582912 3442696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/bivariate-products><a href=#test/stream-series/bivariate-products><code>test/stream-series/bivariate-products</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/bivariate-products _)
+  (let ((rows (λ (n m s) (map (list○take m) ((list○take n) s))))
+        (x+y (list-&gt;poly (list (list-&gt;poly '(0 1)) 1)))
+        (|1+x| (list-&gt;poly (list (series:const 1) (series:const 1)))))
+    (⊦≡ '((0 0 1) (0 2 0) (1 0 0)) (rows 3 3 (series:×* x+y x+y)))
+    (⊦≡ '((1 0 0 0) (2 0 0 0) (1 0 0 0)) (rows 3 4 (series:×* |1+x| |1+x|)))
+    (⊦≡ '((0 0 0) (0 0 0) (1 0 0) (0 2 0) (0 0 1))
+        (rows 5
+              3
+              (series:○
+                (list-&gt;poly '(0 0 1))
+                (list-&gt;poly (list (list-&gt;poly '()) 1 (list-&gt;poly '(0 1)))))))
+    (let ((zeros (stream:repeat 0))
+          (geometric (series:/ stream:1 (list-&gt;poly '(1 -1))))
+          (|1+y| (list-&gt;poly '(1 1)))
+          (y (list-&gt;poly '(0 1))))
+      (⊦≡ '((1 0 0) (1 1 0) (1 2 1))
+          (rows 3 3 (series:○ geometric (list-&gt;poly (list zeros |1+y|)))))
+      ((stream:ref 3) zeros)
+      ((stream:ref 3) series:0)
+      (⊦≡ '((1 0 0) (1 1 0) (1 2 1))
+          (rows 3 3 (series:○ geometric (list-&gt;poly (list zeros |1+y|)))))
+      (⊦≡ '((1 1 1 1) (1 2 3 4) (1 3 6 10) (1 4 10 20))
+          (rows 4 4 (series:○ geometric x+y)))
+      (⊦≡ '((1 1 1 1) (0 1 2 3) (0 0 1 3) (0 0 0 1))
+          (rows 4 4 (series:○ geometric (list-&gt;poly (list y y)))))
+      (⊦≡ '((0 0 1) (0 2 0) (1 0 0))
+          (rows 3 3 (series:○ (list-&gt;poly '(0 0 1)) x+y)))
+      (⊦≡ '((0 0 1) (0 2 0) (1 0 0))
+          (rows 3 3 (series:○ (list-&gt;stream '(0 0 1)) x+y)))
+      (⊦≡ '((1 1 1/2) (1 1 1/2) (1/2 1/2 1/4))
+          (rows 3 3 (series:○ (series:exp y) x+y)))
+      (⊨ (condition-case
+           (begin
+             ((list○take 3) (series:○ geometric (list-&gt;poly (list 1 |1+y|))))
+             #f)
+           ((exn) #t)))
+      (⊨ (condition-case
+           (begin
+             ((list○take 3)
+              (series:○ geometric (list-&gt;poly (list (series:const 5) |1+y|))))
+             #f)
+           ((exn) #t))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3449040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/catalan><a href=#test/stream-series/catalan><code>test/stream-series/catalan</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/catalan _)
+  (⊦≡ '(1 1 2 5 14 42 132 429 1430 4862) ((list○take 10) taylor/catalan))
+  (⊦≡ '(0 1 1 2 5 14 42 132 429 1430)
+      ((list○take 10)
+       (series:/
+         (series:- stream:1 (series:√/∞ (list-&gt;poly '(1 -4))))
+         (list-&gt;poly '(2)))))
+  (letdelay
+    ((tree (stream:cons 0 forest))
+     (lst (stream:cons 1 lst))
+     (forest (series:○ lst tree)))
+    (⊦≡ '(0 1 1 2 5 14 42 132 429 1430) ((list○take 10) tree)))
+  (⊦≡ '((1)
+        (1 1)
+        (2 2 1)
+        (5 5 3 1)
+        (14 14 9 4 1)
+        (42 42 28 14 5 1)
+        (132 132 90 48 20 6 1)
+        (429 429 297 165 75 27 7 1)
+        (1430 1430 1001 572 275 110 35 8 1)
+        (4862 4862 3432 2002 1001 429 154 44 9 1))
+      ((list○take 10) (riordan-array taylor/catalan taylor/catalan))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3463808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/riordan-fibonacci-factorials><a href=#test/stream-series/riordan-fibonacci-factorials><code>test/stream-series/riordan-fibonacci-factorials</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/riordan-fibonacci-factorials _)
+  (⊦≡ '(1 1 2 3 5 8 13 21 34 55) ((list○take 10) taylor/fibonacci))
+  (⊦≡ '((1)
+        (1 1)
+        (2 2 1)
+        (3 5 3 1)
+        (5 12 9 4 1)
+        (8 31 26 14 5 1)
+        (13 85 77 46 20 6 1)
+        (21 248 235 150 73 27 7 1)
+        (34 762 741 493 258 108 35 8 1)
+        (55 2440 2406 1644 903 410 152 44 9 1))
+      ((list○take 10) (riordan-array taylor/fibonacci taylor/catalan)))
+  (⊦≡ '((1)
+        (1 1)
+        (2 2 1)
+        (3 5 3 1)
+        (5 10 9 4 1)
+        (8 20 22 14 5 1)
+        (13 38 51 40 20 6 1)
+        (21 71 111 105 65 27 7 1)
+        (34 130 233 256 190 98 35 8 1)
+        (55 235 474 594 511 315 140 44 9 1))
+      ((list○take 10) (riordan-array taylor/fibonacci taylor/fibonacci)))
+  (⊦≡ '((1)
+        (1 1)
+        (2 2 1)
+        (3 4 3 1)
+        (5 7 7 4 1)
+        (8 12 14 11 5 1)
+        (13 20 26 25 16 6 1)
+        (21 33 46 51 41 22 7 1)
+        (34 54 79 97 92 63 29 8 1)
+        (55 88 133 176 189 155 92 37 9 1))
+      ((list○take 10) (riordan-array taylor/fibonacci stream:1s)))
+  (⊦≡ '((1)
+        (1 1)
+        (2 2 1)
+        (6 5 3 1)
+        (24 15 9 4 1)
+        (120 53 29 14 5 1)
+        (720 222 102 49 20 6 1)
+        (5040 1120 400 178 76 27 7 1)
+        (40320 6849 1809 689 289 111 35 8 1)
+        (362880 50111 9791 2942 1133 444 155 44 9 1))
+      ((list○take 10) (riordan-array numbers/factorials/∞ taylor/catalan)))
+  (⊦≡ '((1)
+        (1 1)
+        (2 2 1)
+        (6 5 3 1)
+        (24 16 9 4 1)
+        (120 64 31 14 5 1)
+        (720 312 126 52 20 6 1)
+        (5040 1812 606 217 80 27 7 1)
+        (40320 12288 3428 1040 345 116 35 8 1)
+        (362880 95616 22572 5768 1661 519 161 44 9 1))
+      ((list○take 10)
+       (riordan-array numbers/factorials/∞ numbers/factorials/∞))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3456336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/sqrt-pi-euler-tableau-log2><a href=#test/stream-series/sqrt-pi-euler-tableau-log2><code>test/stream-series/sqrt-pi-euler-tableau-log2</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/sqrt-pi-euler-tableau-log2 _)
+  (⊦≡ '(1 3/2 17/12 577/408 665857/470832) ((list○take 5) (series:√ 2)))
+  (⊦≡ '(4
+        8/3
+        52/15
+        304/105
+        1052/315
+        10312/3465
+        147916/45045
+        135904/45045
+        2490548/765765
+        44257352/14549535)
+      ((list○take 10) taylor/π))
+  (⊦≡ '(19/6
+        47/15
+        1321/420
+        989/315
+        21779/6930
+        141481/45045
+        1132277/360360
+        801821/255255
+        91424611/29099070
+        45706007/14549535)
+      ((list○take 10) (series:Euler-transform taylor/π)))
+  (⊦≡ '(4
+        19/6
+        597/190
+        73480501/23389520
+        908158408158535624217/289075793976001466280
+        6122842329181964122242157261623055408836895066390212805633550889340420878203921614979/1948961244684053510230839929806362227580597549551747444462336644887607671758516827680)
+      ((list○take 6) ((stream:tableau series:Euler-transform) taylor/π)))
+  (⊦≡ '(1 1/2 5/6 7/12 47/60 37/60 319/420 533/840 1879/2520 1627/2520)
+      ((list○take 10) series:log₂))
+  (⊨ (&lt; (abs (- ((stream:ref 2000) taylor/π) (* 4 (atan 1)))) 1/1000))
+  (⊨ (&lt; (abs (- ((stream:ref 2000) series:log₂) (log 2))) 1/1000))
+  (⊦≡ '(7/10
+        29/42
+        25/36
+        457/660
+        541/780
+        97/140
+        9901/14280
+        33181/47880
+        1747/2520
+        441871/637560)
+      ((list○take 10) (series:Euler-transform series:log₂)))
+  (⊦≡ '(1
+        7/10
+        165/238
+        380522285/548976276
+        755849325680052062216639661/1090460049411856348776491380
+        318738655178511632543822227346530350595387994474669640697143248267438214457834012964733985868157066661175569469393/459842677096914359400941379802880332404679211833600390612039625007123278498884893986945137648853585966630779010940)
+      ((list○take 6) ((stream:tableau series:Euler-transform) series:log₂))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 6250840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/stream-series/integrators-and-ode><a href=#test/stream-series/integrators-and-ode><code>test/stream-series/integrators-and-ode</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/stream-series/integrators-and-ode _)
+  (let ((expected '(0 1/2 3/2 3 5 15/2 21/2 14 18 45/2)))
+    (⊦≡ expected ((list○take 10) ((series:integrator 0 1/2) numbers/nats&gt;0)))
+    (⊦≡ expected
+        ((list○take 10) ((series:integrator/∞ 0 1/2) numbers/nats&gt;0))))
+  (let ((expected
+          2716923932235892457383088121947577188964315018836572803722354774868894945523768158997885697298661429053421034015406256924859461187617653889457753593083386399572063538500432650176144488046171044844121805479607648086607018742077798375087855857012278053105042704758822511824867218226931719410407150364389665913091822576819072281835735365786202176167228686198158460724641052407506305826211156964723064441295969498221919251479211700941935114755531972677360157561485144237786816579422141378066423317811515462669946309306263409027388915931082226854264858661420878279983534424128672461206356847463821364630504359665171573635397346037274752410368174877433941234543153511100471651472869116068528478976916600585383497180172395573924789047989563714318957536493108041591460911612078698461739084741934442448701416575483263891529095158013233115648534154086009312190489168546024398834243847135102411661996020129557921444666343641039137906807591342742464200991933722791531063202677650581946360422027765645970182463780273161113009717582155489902677095053354207944772439271656447869921825959042801322775729022491402012084605367784456090892987682547811360481731795980637847551788259384243997341190753089343387201753821360405430310320564488741142120089460368986590136324737459372963666586532443570474179352656517635333744783401695951969936296323256525034685525470426185224036844803487442831639483152362831735350269624668701702424450940840884555271325190876102665277858154695092765613639718577127438538649414492678358762110235621776218781360881010654696273264706319088453035858355052988808507775439561385232652305316287705653436727647681405618323757201022946801118770148072424021385261829594248369890171583993147934044232792517118743393217276416179842097554494269012251329134783596037733973478306188255291484352384699871420472711423079586319041837563678498472779422282261024744394844558738378027105699691260086532632930941478779680554645850778168703661423819000515895232903243738763481571999080702098369316199601942246247887808385073821861517636839926907458184604648942036355256683219218129910422822177336785268627274482037476294341444562207197209503659518266210432791078248321015453218019586608696207295299183111963158564162419152742807437346241667671688466998244424726765837682151606230638111654756595917019206453978024157097042546937345673337179165242325399648121877178987723999503839197328183925340949191821443698275476295245249466361817367207248089144718808572152781037112209285944844021186534832159964297181970584453756163204297111185823467744743465840230098261424789313315093951766314459027947176701489215746884363426961577348384651887153140609616362927338107686794499974902581579897076172716541504294334300741444106749994715713419630688719451362658288812132056854807330827050505064714442618243101018812153563795539024370219967801515099970721926240625418512417940854760415566229746248973756297569452302821563467574313259066016089521122779204844875998864114930516063910324359331903843040069467324167490917499501000001/1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000))
+    (⊦≡ expected
+        ((stream:ref 1000)
+         ((series:ode-solver-1st (series:integrator/∞ 1 1/1000)) (λ (y) y))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.255) (memory #(12582912 6597952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
+</a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
 </a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Versions and implementation notes</span>
@@ -60,7 +1182,8 @@
 <span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
 </a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
 <span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
-</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
 </a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
 </a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
@@ -83,7 +1206,8 @@
 </a><a href=/post/1996-01-31-the-little-schemer/ class=see-also-item><span class=see-also-item-title>The Little Schemer</span>
 </a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
 </a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span></a></div></article><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class="nav-side-arrow nav-side-prev" title="The (aux unittest) module" aria-label="Previous Post: The (aux unittest) module"><i class="fas fa-chevron-left"></i>
-</a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class="nav-side-arrow nav-side-next" title="Learning tests for Scheme" aria-label="Next Post: Learning tests for Scheme"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux unittest) module"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-02-05-scm-testsuite-learning-suite/ data-bs-toggle=tooltip data-bs-placement=top title="Learning tests for Scheme">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+</a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class="nav-side-arrow nav-side-next" title="Learning tests for Scheme" aria-label="Next Post: Learning tests for Scheme"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux unittest) module"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-02-05-scm-testsuite-learning-suite/ data-bs-toggle=tooltip data-bs-placement=top title="Learning tests for Scheme">Next Post <i class="fas fa-chevron-right"></i></a></li></ul><div class="offcanvas offcanvas-start toc-panel" id=toc-panel tabindex=-1 aria-labelledby=toc-title data-toc-mode=headings><div class=offcanvas-header><span class="offcanvas-title toc-title" id=toc-title>Table of Contents</span>
+<button type=button class=btn-close data-bs-dismiss=offcanvas aria-label="Close table of contents"></button></div><nav class="offcanvas-body toc-body"><nav id=TableOfContents><ul><li><a href=#aux-stream-naturals-fibonacci-numbers-and-primes><code>(aux stream)</code>: naturals, Fibonacci numbers and primes</a></li><li><a href=#aux-stream-sicp-streams-after-sicp><code>(aux stream sicp)</code>: streams, after SICP</a></li><li><a href=#aux-stream-series-sequences-and-power-series-as-streams><code>(aux stream series)</code>: sequences and power series as streams</a></li></ul></nav></nav></div></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
@@ -92,5 +1216,5 @@
 &copy;
 2016 - 2026
 &nbsp;&bull;&nbsp;
-<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.166.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-&nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/a6fd4c641fdb2a8ce7dba5448210d3efc809dfa8>a6fd4c64</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+&nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/b4a2375c49b56e352fb6848632d6742806368d13>b4a2375c</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

@@ -1,0 +1,671 @@
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux category) modules - This site needs no title</title><meta name=description content="Monads: list, maybe, probability, ziplist, difference lists and state"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/","name":"The (aux category) modules","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux category) modules","url":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-10-21T10:13:00+02:00","dateModified":"2026-10-21T14:46:59+02:00","datePublished":"2026-10-21T10:13:00+02:00","description":"","headline":"The (aux category) modules","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT25M","wordCount":5210}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux category) modules"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-10-21T10:13:00+02:00"><meta property="article:modified_time" content="2026-10-21T14:46:59+02:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-category/><meta name=twitter:title content="The (aux category) modules"><meta name=twitter:description content="Monads: list, maybe, probability, ziplist, difference lists and state"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=toc-toggle aria-controls=toc-panel aria-expanded=false aria-label="Table of Contents" data-bs-toggle=tooltip data-bs-placement=bottom title="Table of Contents">
+<span class="fas fa-list"></span>
+</button>
+<button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<span class="fas fa-magnifying-glass"></span>
+</button>
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>content</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/about/>About</a></li><li><a class=dropdown-item href=/page/>Pages</a></li><li><a class=dropdown-item href=/tags>Tags</a></li><li><a class=dropdown-item href=/categories/>Categories</a></li><li><a class=dropdown-item href=/author/>Authors</a></li></ul></li></ul></div></div></nav><div id=navbar-search-overlay class=navbar-search-overlay aria-hidden=true role=search><div class="navbar-search-inner container-fluid"><span class="fas fa-magnifying-glass navbar-search-icon" aria-hidden=true></span>
+<input type=search id=navbar-search-input class=navbar-search-input placeholder="Search posts and pages…" aria-label=Search autocomplete=off>
+<button id=navbar-search-close class=theme-toggle aria-label="Close search">
+<span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux category) modules</h1><h2 class=post-subheading>Monads: list, maybe, probability, ziplist, difference lists and state</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 21, 2026
+&nbsp;|&nbsp;
+<i class="fas fa-clock"></i>&nbsp;25&nbsp;min
+&nbsp;|&nbsp;
+<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><h1 id=aux-category-list-the-list-monad><code>(aux category list)</code>: the list monad</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section715><header><h1>Introduction</h1></header></section><p>This section tests the list monad, which is a monad that represents non-deterministic computations. A value of type (list a) represents a non-deterministic computation that can produce any of the values in the list. The monad operations allow us to combine these computations in various ways, such as sequencing them with >>= or combining them with ⊕/monad.</p><section id=section716><header><h1>Implementation</h1></header></section><p>The list monad is implemented as follows, which defines the monad operations for lists. The return operation creates a singleton list, and the >>= operation uses append-map to apply a function to each element of the list and concatenate the results. The ⊕/monad operation is defined as append, which combines two lists of computations.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux category list)
+  *
+  (import scheme (chicken base) (only srfi-1 append-map) (aux base))
+  (define (return v) (list v))
+  (define (&gt;&gt;= m f) (append-map f m))
+  (define (fail . args) '())
+  (define mempty '())
+  (define (mappend l1 l2) (append l1 l2))
+  (define (mlog x) (list x))
+  (define map/functor map)
+  (define (map/applicative flst lst) (append-map (λ (f) (map f lst)) flst))
+  (define ⊕₀/monad '())
+  (define (⊕/monad m1 m2) (append m1 m2)))
+</code></pre></div><h2 id=test/empty><a href=#test/empty><code>test/empty</code>: <span class=w3-text-green>pass</span></a></h2>Empty list is the identity of list monad.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/empty _) (⊦= '() (do/monad)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2180256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/return><a href=#test/return><code>test/return</code>: <span class=w3-text-green>pass</span></a></h2>Return lifts a value into the list monad, which creates a singleton list.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/return _) (⊦= '(4) (do/monad ,4)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2181568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/two-returns><a href=#test/two-returns><code>test/two-returns</code>: <span class=w3-text-green>pass</span></a></h2>Multiple return statements in a do/monad block are implicitly combined with >>=, so the above is equivalent to <code>(return 1) >>= (λ x (let y x) (return (+ x y))).</code><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/two-returns _) (⊦= '(2) (do/monad (← x ,1) (let y x) ,(+ x y))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2183048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/let-pattern><a href=#test/let-pattern><code>test/let-pattern</code>: <span class=w3-text-green>pass</span></a></h2>A <code>let</code> clause may destructure a pure value with a pattern, binding its variables for the rest of the block.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/let-pattern _)
+  (⊦= '(3 12)
+      (do/monad
+        (← x (return/⊕ 1 4))
+        (let (,a unquote b) (cons x (* 2 x)))
+        ,(+ a b))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2184824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/let-unquote><a href=#test/let-unquote><code>test/let-unquote</code>: <span class=w3-text-green>pass</span></a></h2>As in <code>←</code> clauses, the right-hand side of a <code>let</code> clause may be written <code>,expr</code>; since <code>let</code> binds a pure value, <code>,expr</code> is the same as <code>expr</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/let-unquote _)
+  (⊦= '((3 1 2))
+      (do/monad (let a ,1) (let (,b unquote c) ,(cons 2 3)) ,(list c a b))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2186400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/trailing-binding><a href=#test/trailing-binding><code>test/trailing-binding</code>: <span class=w3-text-green>pass</span></a></h2>A <code>←</code> or <code>let</code> clause binds variables for the clauses that follow it, so ending a block with one is rejected when the block is expanded; a trailing ordinary <code>let</code> form is still just an expression.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/trailing-binding _)
+  (let ((rejected?
+          (λ (form)
+             (condition-case
+               (begin (eval form) #f)
+               (e (exn syntax)
+                  (and (substring-index
+                         &quot;do/monad: a binding clause cannot end the block&quot;
+                         ((condition-property-accessor 'exn 'message) e))
+                       #t))))))
+    (⊨ (rejected? '(do/monad (← x (list 1 2)))))
+    (⊨ (rejected? '(do/monad (← (,x) ,1))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let y x))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (,a unquote b) (cons x 2)))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (,a ,b) (list x 2)))))
+    (⊨ (rejected?
+         '(do/monad (← x ,1) (let ((,a ,b) unquote c) (list (list x 2) 3)))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (_ unquote b) (cons x 2)))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (a ,b) (list x 2)))))
+    (⊦= '(2) (do/monad (← x ,1) (let ((y x)) (list (+ x y)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2207936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/pattern-mismatch><a href=#test/pattern-mismatch><code>test/pattern-mismatch</code>: <span class=w3-text-green>pass</span></a></h2>A value that does not match the pattern of a <code>←</code> clause is handed to <code>fail</code>, which is the empty list in the list monad, so non-matching shapes are skipped instead of raising an error.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/pattern-mismatch _)
+  (⊦= '((1 2) (3 4))
+      (do/monad (← (,x unquote xs) '((1 2) () (3 4))) ,(cons x xs))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2186216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/return/⊕><a href=#test/return/⊕><code>test/return/⊕</code>: <span class=w3-text-green>pass</span></a></h2>The <code>return/⊕</code> function lifts a value into the list monad, but it also allows you to specify multiple values to lift, which are combined with ⊕/monad (which is append for lists). So the above is equivalent to <code>(return/⊕ 1 2 3) >>= (λ x (return/⊕ 4 5 6) >>= (λ y (return/⊕ (+ x y) (- x y)))).</code><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/return/⊕ _)
+  (⊦= '(((1 4) 5 -3)
+        ((1 5) 6 -4)
+        ((1 6) 7 -5)
+        ((2 4) 6 -2)
+        ((2 5) 7 -3)
+        ((2 6) 8 -4)
+        ((3 4) 7 -1)
+        ((3 5) 8 -2)
+        ((3 6) 9 -3))
+      (do/monad
+        (← x (return/⊕ 1 2 3))
+        (← y (return/⊕ 4 5 6))
+        (return/⊕ `((,x ,y) ,(+ x y) ,(- x y))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2187064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/fmap><a href=#test/fmap><code>test/fmap</code>: <span class=w3-text-green>pass</span></a></h2>The <code>map/monad</code> function is the functor operation for the list monad, which applies a function to each value in the list. So the above is equivalent to <code>(map add1 (return/⊕ 1 2 3)).</code><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/fmap _) (⊦= '(2 3 4) (map/monad add1 (return/⊕ 1 2 3))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2188528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/<$>"><a href="#test/<$>"><code>test/&lt;$></code>: <span class=w3-text-green>pass</span></a></h2>The <code><$></code> function is Haskell's name for <code>map/monad</code>, the functor operation, which maps over the monad with a single bind.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/&lt;$&gt; _)
+  (⊦= '(2 3 4) (&lt;$&gt; add1 (return/⊕ 1 2 3)))
+  (⊦= '() (&lt;$&gt; add1 '())))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2189960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/<*>"><a href="#test/<*>"><code>test/&lt;*></code>: <span class=w3-text-green>pass</span></a></h2>The <code><*></code> function is the applicative functor operation. It takes a list of functions and a list of values, and applies each function to each value, returning the combined results. So the above is equivalent to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/&lt;*&gt; _)
+  (⊦= '(2 3 4 0 1 2) (&lt;*&gt; (return/⊕ add1 sub1) (return/⊕ 1 2 3))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2191352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/kleisli><a href=#test/kleisli><code>test/kleisli</code>: <span class=w3-text-green>pass</span></a></h2>The <code>o/monad</code> function composes Kleisli arrows right to left, like function composition, while <code>◇</code> composes them left to right, so <code>(◇ f g)</code> runs <code>f</code> first; with no arrows both are <code>return</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/kleisli _)
+  (let ((f (λ (x) (list x (* 10 x)))) (g (λ (x) (list (add1 x)))))
+    (⊦= '(4 31) ((o/monad g f) 3))
+    (⊦= '(4 31) ((◇ f g) 3))
+    (⊦= '(3) ((◇) 3))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2190376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/list->monad"><a href="#test/list->monad"><code>test/list->monad</code>: <span class=w3-text-green>pass</span></a></h2>The <code>monoids->monad</code> function folds a list with a monoid inside the monad; <code>list->monad</code> is its instance at the list monoid <code>('() , cons)</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;monad _)
+  (⊦= '((1 2 3)) (list-&gt;monad '(1 2 3)))
+  (⊦= '(()) (list-&gt;monad '()))
+  (⊦= '(6) ((monoids-&gt;monad 0 +) '(1 2 3))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2192112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/lift/monad><a href=#test/lift/monad><code>test/lift/monad</code>: <span class=w3-text-green>pass</span></a></h2>The <code>lift/monad</code> function is a convenient way to lift a multi-argument function into the monad. It takes a function and multiple monadic values, and applies the function to the values inside the monad. So the above is equivalent to <code>(return/⊕ 1 2 3) >>= (λ x (return/⊕ 4 5 6) >>= (λ y (return (+ x y))))).</code><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/lift/monad _)
+  (⊦= '(5 6 7 6 7 8 7 8 9) (lift/monad + (return/⊕ 1 2 3) (return/⊕ 4 5 6))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2193904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/powerset><a href=#test/powerset><code>test/powerset</code>: <span class=w3-text-green>pass</span></a></h2>The <code>powerset/monad</code> function generates the powerset of a list, which is the set of all subsets of the list. It does this by using <code>filter/monad</code> to filter the list with a predicate that non-deterministically returns true or false for each element, effectively including or excluding each element in the subsets. So the above is equivalent to <code>(filterM (λ (_) (return/⊕ #f #t)) '(1 2 3 4 5)).</code><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/powerset _)
+  (⊦= '(()
+        (5)
+        (4)
+        (4 5)
+        (3)
+        (3 5)
+        (3 4)
+        (3 4 5)
+        (2)
+        (2 5)
+        (2 4)
+        (2 4 5)
+        (2 3)
+        (2 3 5)
+        (2 3 4)
+        (2 3 4 5)
+        (1)
+        (1 5)
+        (1 4)
+        (1 4 5)
+        (1 3)
+        (1 3 5)
+        (1 3 4)
+        (1 3 4 5)
+        (1 2)
+        (1 2 5)
+        (1 2 4)
+        (1 2 4 5)
+        (1 2 3)
+        (1 2 3 5)
+        (1 2 3 4)
+        (1 2 3 4 5))
+      (powerset/monad '(1 2 3 4 5))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2195344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-category-maybe-the-maybe-monad><code>(aux category maybe)</code>: the maybe monad</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section221><header><h1>Introduction</h1></header></section><p>This section tests the maybe monad, where <code>(just . v)</code> is a computation that succeeded with the value <code>v</code> and the empty list is a computation that failed, short-circuiting every later bind.</p><section id=section222><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux category maybe)
+  *
+  (import scheme (chicken base) (aux base))
+  (define (return v) `(just unquote v))
+  (define (&gt;&gt;= m f) (match/first m ((just unquote v) (f v)) (else '())))
+  (define (fail . args) '()))
+</code></pre></div><h2 id=test/bind><a href=#test/bind><code>test/bind</code>: <span class=w3-text-green>pass</span></a></h2>A failure anywhere in the block makes the whole block fail.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/bind _)
+  (⊦= '(just . 3) (do/monad (← x ,1) (← y (return 2)) ,(+ x y)))
+  (⊦= '() (do/monad (← x ,1) (← y (fail)) ,(+ x y))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1875416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/return><a href=#test/return><code>test/return</code>: <span class=w3-text-green>pass</span></a></h2><code>return</code> takes exactly one value, like in every other monad instance.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/return _)
+  (let ((arity-error?
+          (λ args
+             (condition-case
+               (begin (apply return args) #f)
+               (e (exn arity) #t)))))
+    (⊨ (arity-error? 1 2 3))
+    (⊨ (arity-error?))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1883056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-category-prob-the-probability-monad><code>(aux category prob)</code>: the probability monad</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section184><header><h1>Introduction</h1></header></section><p>This section tests the probability monad, where a value of type (Prob a) is a distribution: an association list of outcomes paired with their probabilities. Binding multiplies the probabilities along each path and consolidates outcomes that share the same value by summing their probabilities.</p><section id=section185><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux category prob)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken fixnum)
+    (only srfi-1 append-map find)
+    (only srfi-69
+          make-hash-table
+          equal?-hash
+          hash-table-ref/default
+          hash-table-set!)
+    (aux base))
+  (define (return v) (list (cons v 1)))
+  (define (&gt;&gt;= m f)
+    (consolidate
+      (append-map
+        (λ1-match/first
+          ((,v unquote p)
+           (map (λ1-match/first ((,v* unquote p*) (cons v* (* p p*)))) (f v))))
+        m)))
+  (define (fail . args) '())
+  (define (coin/tf p) (list (cons #t p) (cons #f (- 1 p))))
+  (define (consolidate m)
+    (let loop ((m m) (acc '()) (n 0) (cells #f))
+      (cond ((null? m) (reverse acc))
+            ((and (not cells) (fx&gt; n 60))
+             (let1 (cells (make-hash-table equal? equal?-hash))
+                   (for-each
+                     (λ (cell) (hash-table-set! cells (car cell) cell))
+                     acc)
+                   (loop m acc n cells)))
+            (else
+             (let* ((vp (car m))
+                    (v (car vp))
+                    (p (cdr vp))
+                    (cell (if cells
+                            (hash-table-ref/default cells v #f)
+                            (find (λ1-match/first ((,v* . _) (equal? v v*)))
+                                  acc))))
+               (cond (cell
+                      (set-cdr! cell (+ (cdr cell) p))
+                      (loop (cdr m) acc n cells))
+                     (else
+                      (let1 (cell (cons v p))
+                            (when cells (hash-table-set! cells v cell))
+                            (loop (cdr m) (cons cell acc) (fx+ n 1) cells))))))))))
+</code></pre></div><h2 id=test/return><a href=#test/return><code>test/return</code>: <span class=w3-text-green>pass</span></a></h2>Return is the certain distribution, with the exact probability 1 so that the right identity law <code>(>>= m return) = m</code> holds for exact distributions too.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/return _)
+  (⊨ (equal? '((a . 1)) (return 'a)))
+  (let ((d '((a . 1/2) (b . 1/2)))) (⊨ (equal? d (&gt;&gt;= d return)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1885648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/exact><a href=#test/exact><code>test/exact</code>: <span class=w3-text-green>pass</span></a></h2>Distributions built from exact rationals stay exact through binds, and their total probability is exactly 1.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/exact _)
+  (let ((d (do/monad (← x (coin/tf 1/3)) (← y (coin/tf 1/7)) ,(and x y))))
+    (⊨ (equal? '((#t . 1/21) (#f . 20/21)) d))
+    (⊨ (exact? (apply + (map cdr d))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1887264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/consolidate><a href=#test/consolidate><code>test/consolidate</code>: <span class=w3-text-green>pass</span></a></h2><code>consolidate</code> sums the probabilities of outcomes sharing a value, in first-occurrence order and without mutating its argument; past about 60 distinct values it finds the summed cells through a hash table instead of scanning them.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/consolidate _)
+  (let* ((up (map (λ (i) (cons i 1/300)) (iota 100)))
+         (down (map (λ (i) (cons (- 99 i) 1/150)) (iota 100)))
+         (m (append up down))
+         (m* (map (λ (vp) (cons (car vp) (cdr vp))) m)))
+    (⊨ (equal?
+         '((#f . 0.5) (#t . 0.5))
+         (consolidate '((#f . 0.25) (#t . 0.5) (#f . 0.25)))))
+    (⊨ (equal? (map (λ (i) (cons i 1/100)) (iota 100)) (consolidate m)))
+    (⊨ (equal? m* m))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1907856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-category-ziplist-the-ziplist-monad><code>(aux category ziplist)</code>: the ziplist monad</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section458><header><h1>Introduction</h1></header></section><p>This section tests the ziplist monad, whose bind zips rather than nests: the i-th element of <code>(>>= m g)</code> is the i-th element of <code>(g v)</code>, where <code>v</code> is the i-th element of <code>m</code>. A pure value is the circular list that repeats it, so it zips with lists of any length.</p><section id=section459><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux category ziplist)
+  *
+  (import scheme (chicken base) (only srfi-1 take every iota) (aux base))
+  (define (list-tail/or-false lst i)
+    (cond ((null? lst) #f)
+          ((zero? i) lst)
+          (else (list-tail/or-false (cdr lst) (sub1 i)))))
+  (define (list-rho lst)
+    (let meet ((t lst) (h lst))
+      (cond ((or (null? h) (null? (cdr h))) #f)
+            ((eq? (cdr t) (cddr h))
+             (let* ((t (cdr t))
+                    (start (let S ((a lst) (b t) (n 0))
+                             (if (eq? a b) n (S (cdr a) (cdr b) (add1 n)))))
+                    (period
+                      (let P ((b (cdr t)) (n 1))
+                        (if (eq? b t) n (P (cdr b) (add1 n))))))
+               (cons start period)))
+            (else (meet (cdr t) (cddr h))))))
+  (define (&gt;&gt;=/circular m start period g)
+    (let* ((images (list-&gt;vector (map g (take m (+ start period)))))
+           (at (λ (i)
+                  (vector-ref
+                    images
+                    (if (&lt; i start) i (+ start (modulo (- i start) period))))))
+           (rhos (map (λ (k) (list-rho (vector-ref images k)))
+                      (iota period start)))
+           (from (and (every pair? rhos) (apply max start (map car rhos))))
+           (cycle (and from (apply lcm period (map cdr rhos))))
+           (bound (and from (+ from cycle)))
+           (d (let D ((i 0) (acc '()))
+                (cond ((eqv? i bound) (reverse acc))
+                      ((list-tail/or-false (at i) i)
+                       =&gt;
+                       (λ (t) (D (add1 i) (cons (car t) acc))))
+                      (else (reverse acc))))))
+      (when (and bound (= (length d) bound))
+            (set-cdr! (list-tail d (sub1 bound)) (list-tail d from)))
+      d))
+  (define (return x) (list/circular x))
+  (define (&gt;&gt;= m g)
+    (match/first
+      m
+      ((,l unquote ,m) (g l))
+      (else (match/first
+              (list-rho m)
+              ((,start unquote period) (&gt;&gt;=/circular m start period g))
+              (else (let D ((m* m) (i 0) (acc '()))
+                      (cond ((null? m*) (reverse acc))
+                            ((list-tail/or-false (g (car m*)) i)
+                             =&gt;
+                             (λ (t) (D (cdr m*) (add1 i) (cons (car t) acc))))
+                            (else (reverse acc)))))))))
+  (define (fail . args) '()))
+</code></pre></div><h2 id=test/pure><a href=#test/pure><code>test/pure</code>: <span class=w3-text-green>pass</span></a></h2>A pure value repeats forever as a one-element circular list, so <code>write</code> never returns on it; zipping it with a finite list gives a finite result.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/pure _)
+  (let ((l (do/monad (← x ,3) (← y ,4) (← z ,5) ,(+ x y z))))
+    (⊨ (eq? l (cdr l)))
+    (⊦= 12 (car l))
+    (⊦= '(12 13 14) (do/monad (← x l) (← y '(0 1 2)) ,(+ x y)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1990504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/circular><a href=#test/circular><code>test/circular</code>: <span class=w3-text-green>pass</span></a></h2>A circular list of any period zips too: the diagonal is finite as soon as an inner list of the cycle is, otherwise it is circular again, so <code>(>>= m return)</code> gives back <code>m</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/circular _)
+  (⊦= '(1 2) (&gt;&gt;= (list/circular 1 2) (λ (x) (list x x))))
+  (⊦= '((1 a) (2 b) (1 c))
+      (do/monad (← x (list/circular 1 2)) (← y '(a b c)) ,(list x y)))
+  (let ((r (&gt;&gt;= (list/circular 1 2) return)))
+    (⊦= '(0 . 2) (list-rho r))
+    (⊦= '(1 2) (take r 2)))
+  (let ((r (do/monad
+             (← x (list/circular 1 2 3))
+             (← y (list/circular 'a 'b))
+             ,(list x y))))
+    (⊦= '(0 . 6) (list-rho r))
+    (⊦= '((1 a) (2 b) (3 a) (1 b) (2 a) (3 b) (1 a)) (take r 7)))
+  (let ((r (&gt;&gt;= (cons 0 (cons 9 (list/circular 1 2 3)))
+                (λ (x) (cons x (cons x (list/circular x 'y)))))))
+    (⊦= '(2 . 6) (list-rho r))
+    (⊦= '(0 9 1 y 3 y 2 y 1 y) (take r 10))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1992184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/diagonal><a href=#test/diagonal><code>test/diagonal</code>: <span class=w3-text-green>pass</span></a></h2>Binding zips the lists, truncating at the shortest one.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/diagonal _)
+  (⊦= '((1 a) (2 b)) (do/monad (← x '(1 2 3)) (← y '(a b)) ,(list x y)))
+  (⊦= '(2 1 2) (&lt;*&gt; (list add1 sub1 sub1) (list 1 2 3))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1993416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/false-elements><a href=#test/false-elements><code>test/false-elements</code>: <span class=w3-text-green>pass</span></a></h2>A <code>#f</code> element is a value like any other, so predicates zip too.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/false-elements _)
+  (⊦= '(#f #t #f) (do/monad (← x '(1 2 3)) ,(even? x)))
+  (⊦= '(#f #f) (&gt;&gt;= '(1 2) (λ (v) (list #f #f)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1994744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/truncation><a href=#test/truncation><code>test/truncation</code>: <span class=w3-text-green>pass</span></a></h2>The diagonal stops at the first inner list too short to reach it, rather than skipping it and sliding the later elements out of their index; a value that does not match the pattern of a <code>←</code> clause goes to <code>fail</code>, the empty list, so the diagonal stops there too.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/truncation _)
+  (⊦= '(x) (&gt;&gt;= '(1 2 3) (λ (v) (if (= v 2) '(a) '(x y z w)))))
+  (⊦= '((1 a c d) (2 b c* e))
+      (do/monad
+        (← x '(1 2 3))
+        (← y '(a b))
+        (← z '(c c*))
+        (← r '(d e f g))
+        ,(list x y z r)))
+  (⊦= '(1) (do/monad (← (,a unquote b) '((1 . 2) 3 (4 . 5))) ,a)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1996688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/associativity><a href=#test/associativity><code>test/associativity</code>: <span class=w3-text-green>pass</span></a></h2>Both sides of the associativity law agree index by index. On ragged inner lists one side may stop earlier: the inner bind on the right truncates at the first index any of its inner lists misses, even when the left side never looks at that index, which is why finite zip lists admit no lawful monad (Haskell's ZipList is only an Applicative).<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/associativity _)
+  (let* ((table '#((1 2 0) (2) (0 1 2 1) (3 0 3 2 1)))
+         (f (λ (v) (vector-ref table v)))
+         (g (λ (v) (reverse (vector-ref table v)))))
+    (for-each
+      (λ (m)
+         (let ((lhs (&gt;&gt;= (&gt;&gt;= m f) g)) (rhs (&gt;&gt;= m (λ (x) (&gt;&gt;= (f x) g)))))
+           (⊦= (map (λ (l r) l) lhs rhs) (map (λ (l r) r) lhs rhs))))
+      '((0 1 2 3) (2 0 1) (0 2 0 1) (1 0 2) (3 3 3 0) (2 2 2) (3 0)))
+    (⊦= '(1 2 3) (&gt;&gt;= (&gt;&gt;= '(3 3 3) f) g))
+    (⊦= '(1 2 3) (&gt;&gt;= '(3 3 3) (λ (x) (&gt;&gt;= (f x) g))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1996040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-category-difflist-difference-lists><code>(aux category difflist)</code>: difference lists</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section163><header><h1>Introduction</h1></header></section><p>This section tests difference lists: a difflist is a function that prepends its content to the list it receives, so appending two of them is function composition, in constant time, and <code>difflist->list</code> applies the result to <code>'()</code>.</p><section id=section164><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux category difflist)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken pretty-print)
+    (only srfi-1 append-map append-reverse)
+    (aux base))
+  (define-record category-difflist f)
+  (set-record-printer!
+    category-difflist
+    (λ (d port)
+       (let ((lst (difflist-&gt;list d)) (D (display/port port)))
+         (D &quot;⸨&quot;)
+         (for-each (μ v (D &quot; &quot;) (D v)) lst)
+         (D &quot; ⸩&quot;))))
+  (define (return x) (make-category-difflist (λ (x*) (cons x x*))))
+  (define (&gt;&gt;= m g)
+    (let* ((f (category-difflist-f m)) (xs (map g (f '()))))
+      (make-category-difflist
+        (λ (xs*) (foldr (λ (m* lst) ((category-difflist-f m*) lst)) xs* xs)))))
+  (define (fail . args) mempty)
+  (define mempty (make-category-difflist (λ (lst) lst)))
+  (define (mappend l1 l2)
+    (make-category-difflist
+      (o (category-difflist-f l1) (category-difflist-f l2))))
+  (define (mlog x) (make-category-difflist (λ (xs) (cons x xs))))
+  (define (list-&gt;difflist l1) (make-category-difflist (λ (l2) (append l1 l2))))
+  (define (difflist-&gt;list dl) ((category-difflist-f dl) '()))
+  (define (reverse/difflist dl)
+    (make-category-difflist
+      (λ (xs) (append-reverse ((category-difflist-f dl) '()) xs)))))
+</code></pre></div><h2 id=test/monoid><a href=#test/monoid><code>test/monoid</code>: <span class=w3-text-green>pass</span></a></h2>Appending is composition, and <code>mempty</code> is the identity.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/monoid _)
+  (⊦= '(1 2 3 4 5)
+      (difflist-&gt;list
+        (mappend (list-&gt;difflist '(1 2 3)) (list-&gt;difflist '(4 5)))))
+  (⊦= '(1 2) (difflist-&gt;list (mappend mempty (list-&gt;difflist '(1 2)))))
+  (⊦= '(1 2) (difflist-&gt;list (mappend (list-&gt;difflist '(1 2)) mempty))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1918504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/fail><a href=#test/fail><code>test/fail</code>: <span class=w3-text-green>pass</span></a></h2>A failure is the empty difflist, so it drops only its own branch, as <code>'()</code> does in the list monad.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/fail _)
+  (⊦= '() (difflist-&gt;list (fail)))
+  (⊦= '(1 2) (difflist-&gt;list (mappend (fail) (list-&gt;difflist '(1 2)))))
+  (⊦= '(1 3)
+      (difflist-&gt;list
+        (&gt;&gt;= (list-&gt;difflist '(1 2 3))
+             (λ (x) (if (= x 2) (fail) (return x))))))
+  (⊦= '(1 3 9 9)
+      (difflist-&gt;list
+        (mappend
+          (&gt;&gt;= (list-&gt;difflist '(1 2 3))
+               (λ (x) (if (= x 2) (fail) (return x))))
+          (list-&gt;difflist '(9 9))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1920024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/reverse><a href=#test/reverse><code>test/reverse</code>: <span class=w3-text-green>pass</span></a></h2>Reversing a difflist reverses its own content only, not the tail it is later given.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/reverse _)
+  (⊦= '(3 2 1) (difflist-&gt;list (reverse/difflist (list-&gt;difflist '(1 2 3)))))
+  (⊦= '(3 2 1 4 5)
+      (difflist-&gt;list
+        (mappend
+          (reverse/difflist (list-&gt;difflist '(1 2 3)))
+          (list-&gt;difflist '(4 5)))))
+  (⊦= '(4 5 3 2 1)
+      (difflist-&gt;list
+        (mappend
+          (list-&gt;difflist '(4 5))
+          (reverse/difflist (list-&gt;difflist '(1 2 3)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1921152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/mlog><a href=#test/mlog><code>test/mlog</code>: <span class=w3-text-green>pass</span></a></h2>Logging a value appends it as it is, as the list monoid does, so a writer logs the same over both.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/mlog _)
+  (⊦= '(a) (difflist-&gt;list (mlog 'a)))
+  (⊦= '(1 2)
+      (difflist-&gt;list
+        (W:category-writer-log (W:&gt;&gt;= (W:tell 1) (λ (_) (W:tell 2)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1922528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/printer><a href=#test/printer><code>test/printer</code>: <span class=w3-text-green>pass</span></a></h2>A difflist prints its content, left to right.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/printer _)
+  (⊦= &quot;⸨ 1 2 3 ⸩&quot;
+      (with-output-to-string (λ () (display (list-&gt;difflist '(1 2 3))))))
+  (⊦= &quot;⸨ ⸩&quot; (with-output-to-string (λ () (display mempty)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1923840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-category-state-the-state-monad><code>(aux category state)</code>: the state monad</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section920><header><h1>Introduction</h1></header></section><p>This section tests the state monad, Haskell's <code>State s a</code>, where a computation is a transition from a state to the pair of its result and the next state, Haskell's <code>(a, s)</code> tuple; binding threads the state from one computation to the next, strictly, as Haskell's <code>Control.Monad.State.Strict</code> does.</p><section id=section921><header><h1>Implementation</h1></header></section><p>A computation is a <code>category-state</code> record around its transition, the image of Haskell's <code>newtype</code>, so that a computation is a type of its own and not any procedure; <code>run-state</code> applies the transition to a state.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux category state)
+  *
+  (import scheme (chicken base) (aux base))
+  (define-record category-state run)
+  (set-record-printer! category-state (λ (m port) (display &quot;#&lt;state&gt;&quot; port)))
+  (define (run-state m s) ((category-state-run m) s))
+  (define (eval-state m s) (car (run-state m s)))
+  (define (exec-state m s) (cdr (run-state m s)))
+  (define (return v) (make-category-state (λ (s) (cons v s))))
+  (define (&gt;&gt;= m f)
+    (make-category-state
+      (λ (s) (let1 (r (run-state m s)) (run-state (f (car r)) (cdr r))))))
+  (define (fail . args)
+    (make-category-state
+      (λ (s)
+         (error &quot;State monad does not support failure&quot;
+                `((on ,s) (args unquote args))))))
+  (define get (make-category-state (λ (s) (cons s s))))
+  (define (put s) (make-category-state (λ (_) (cons (void) s))))
+  (define (modify f) (make-category-state (λ (s) (cons (void) (f s)))))
+  (define (gets f) (make-category-state (λ (s) (cons (f s) s))))
+  (define (state f) (make-category-state f))
+  (define (with-state f m) (make-category-state (λ (s) (run-state m (f s))))))
+</code></pre></div><h2 id=test/return><a href=#test/return><code>test/return</code>: <span class=w3-text-green>pass</span></a></h2><code>return</code> answers its value and leaves the state as it is.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/return _)
+  (⊦= '(4 . s) (run-state (return 4) 's))
+  (⊦= '(4 . s) (run-state (do/monad ,4) 's)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2230392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/get-put><a href=#test/get-put><code>test/get-put</code>: <span class=w3-text-green>pass</span></a></h2><code>get</code> answers the state, <code>put</code> replaces it, and a later <code>get</code> sees the new one; <code>with-state</code> transforms the state before running a computation.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/get-put _)
+  (⊦= '(3 . 3) (run-state get 3))
+  (⊦= (cons (void) 7) (run-state (put 7) 3))
+  (⊦= '((3 . 7) . 7)
+      (run-state (do/monad (← a get) (put 7) (← b get) ,(cons a b)) 3))
+  (⊦= '(10 . 10) (run-state (with-state (λ (s) (* 10 s)) get) 1)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2232216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/modify-gets><a href=#test/modify-gets><code>test/modify-gets</code>: <span class=w3-text-green>pass</span></a></h2><code>modify</code> applies a function to the state, <code>gets</code> answers a function of it.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/modify-gets _)
+  (⊦= (cons (void) 6) (run-state (modify (λ (s) (* 2 s))) 3))
+  (⊦= '(4 . 3) (run-state (gets add1) 3))
+  (⊦= '((a b) b)
+      (run-state
+        (do/monad
+          (modify cdr)
+          (← x (gets car))
+          (put (list x))
+          (gets (λ (s) (cons 'a s))))
+        '(z b c))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2233712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/state><a href=#test/state><code>test/state</code>: <span class=w3-text-green>pass</span></a></h2><code>state</code> embeds a transition that answers the pair of the result and the next state.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/state _)
+  (⊦= '(6 . 4) (run-state (state (λ (s) (cons (* 2 s) (add1 s)))) 3)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2235136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/run-eval-exec><a href=#test/run-eval-exec><code>test/run-eval-exec</code>: <span class=w3-text-green>pass</span></a></h2><code>run-state</code> answers the pair of the result and the final state, <code>eval-state</code> the result only and <code>exec-state</code> the final state only, as Haskell's <code>runState</code>, <code>evalState</code> and <code>execState</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/run-eval-exec _)
+  (⊦= '(0 . 1) (run-state tick 0))
+  (⊦= 0 (eval-state tick 0))
+  (⊦= 1 (exec-state tick 0))
+  (⊦= 10 (eval-state (with-state (λ (s) (* 10 s)) tick) 1))
+  (⊦= 11 (exec-state (with-state (λ (s) (* 10 s)) tick) 1)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2236944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/laws><a href=#test/laws><code>test/laws</code>: <span class=w3-text-green>pass</span></a></h2>The left identity, right identity and associativity laws hold on every state they are run on.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/laws _)
+  (let ((f (λ (x) (do/monad (modify (λ (s) (cons x s))) ,(* 2 x))))
+        (g (λ (y) (do/monad (← s get) (put (list y s)) ,(+ y 1))))
+        (m (do/monad (← s get) (put (cons 'm s)) ,(length s))))
+    (for-each
+      (λ (s0)
+         (⊦= (run-state (f 5) s0) (run-state (&gt;&gt;= (return 5) f) s0))
+         (⊦= (run-state m s0) (run-state (&gt;&gt;= m return) s0))
+         (⊦= (run-state (&gt;&gt;= (&gt;&gt;= m f) g) s0)
+             (run-state (&gt;&gt;= m (λ (x) (&gt;&gt;= (f x) g))) s0)))
+      '(() (a) (a b c)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2231432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/order><a href=#test/order><code>test/order</code>: <span class=w3-text-green>pass</span></a></h2>The clauses of a <code>do/monad</code> block run top to bottom, each on the state the previous one left.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/order _)
+  (⊦= '((0 1 2) . 3)
+      (run-state (do/monad (← a tick) (← b tick) (← c tick) ,(list a b c)) 0))
+  (⊦= '(c b a)
+      (exec-state
+        (do/monad
+          (modify (cut cons 'a &lt;&gt;))
+          (modify (cut cons 'b &lt;&gt;))
+          (modify (cut cons 'c &lt;&gt;)))
+        '())))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2232976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/when-unless><a href=#test/when-unless><code>test/when-unless</code>: <span class=w3-text-green>pass</span></a></h2><code>when/monad</code> and <code>unless/monad</code> run a computation only when a condition holds, or fails, as Haskell's <code>when</code> and <code>unless</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/when-unless _)
+  (⊦= 1 (exec-state (when/monad #t tick) 0))
+  (⊦= 0 (exec-state (when/monad #f tick) 0))
+  (⊦= 0 (exec-state (unless/monad #t tick) 0))
+  (⊦= 1 (exec-state (unless/monad #f tick) 0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2234352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/applicative><a href=#test/applicative><code>test/applicative</code>: <span class=w3-text-green>pass</span></a></h2><code><$></code>, <code><*></code> and <code>lift/monad</code> run their computations left to right too, so in <code>(&lt;*> mf mx)</code> the effects of <code>mf</code> come first.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/applicative _)
+  (⊦= '(10 . 2) (run-state (&lt;$&gt; (λ (n) (* 10 n)) tick) 1))
+  (⊦= '(1 . 2) (run-state (&lt;*&gt; (do/monad (← n tick) ,(λ (m) (- m n))) tick) 0))
+  (⊦= '((0 . 1) . 2) (run-state (lift/monad cons tick tick) 0))
+  (⊦= '((0 . 1) . 2) (run-state (zip/monad tick tick) 0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2236296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/strict><a href=#test/strict><code>test/strict</code>: <span class=w3-text-green>pass</span></a></h2>Building a computation runs nothing; running <code>(>>= m f)</code> runs <code>m</code> before <code>f</code> is applied to its result, as the strict state monad does.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/strict _)
+  (let* ((log '())
+         (m (do/monad
+              (← a (state (λ (s) (set! log (cons 'm log)) (cons 1 s))))
+              (let _ (set! log (cons 'f log)))
+              ,a)))
+    (⊦= '() log)
+    (⊦= '(1 . s) (run-state m 's))
+    (⊦= '(f m) log)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2238264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/rerun><a href=#test/rerun><code>test/rerun</code>: <span class=w3-text-green>pass</span></a></h2>A computation is a value: it may be run again, on any state, and it answers the same on the same state.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rerun _)
+  (let ((m (traverse/monad (λ (x) (do/monad (← n tick) ,(* n x))) '(1 2 3))))
+    (⊦= '((0 2 6) . 3) (run-state m 0))
+    (⊦= '((10 22 36) . 13) (run-state m 10))
+    (⊦= '((0 2 6) . 3) (run-state m 0))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2239440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/fail><a href=#test/fail><code>test/fail</code>: <span class=w3-text-green>pass</span></a></h2>A value that does not match the pattern of a <code>←</code> clause goes to <code>fail</code>, which raises an error when the computation runs, as Haskell's <code>fail msg = error msg</code> does, and not when it is built.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/fail _)
+  (let* ((m (do/monad (← (,a unquote b) ,'()) ,a))
+         (message
+           (condition-case
+             (begin (run-state m 's) #f)
+             (e (exn) ((condition-property-accessor 'exn 'message) e)))))
+    (⊨ (category-state? m))
+    (⊨ (and (string? message)
+            (substring-index &quot;State monad does not support failure&quot; message)
+            #t))
+    (⊨ (category-state? (fail 'x)))
+    (⊦raises (exn) (run-state (fail 'x) 's))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2247672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/long-chain><a href=#test/long-chain><code>test/long-chain</code>: <span class=w3-text-green>pass</span></a></h2>Chains of a hundred thousand binds run, nested to the right as the traversals build them and to the left as a fold over <code>>>=</code> does.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/long-chain _)
+  (let* ((n 100000)
+         (sum (quotient (* n (- n 1)) 2))
+         (left (fold (λ (i m) (&gt;&gt;= m (λ (_) (modify (λ (s) (+ s i))))))
+                     (return (void))
+                     (iota n))))
+    (⊦= sum
+        (exec-state
+          (for-each/monad (λ (i) (modify (λ (s) (+ s i)))) (iota n))
+          0))
+    (⊦= sum (exec-state left 0))
+    (⊦= n (length (eval-state (replicate/monad n tick) 0)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.393) (memory #(50331648 4642608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/representation><a href=#test/representation><code>test/representation</code>: <span class=w3-text-green>pass</span></a></h2>A computation is a <code>category-state</code> record, as Haskell's <code>newtype</code> makes <code>State s a</code> a type of its own: a procedure, even one shaped as a transition, is not a computation. <code>run-state</code> does not check its argument, so running a value that is not a computation raises CHICKEN's own error for a record of the wrong type, the cheapest outcome.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/representation _)
+  (⊨ (category-state? (do/monad (← x get) (return x))))
+  (⊨ (not (category-state? (λ (s) (cons 1 s)))))
+  (⊦raises (exn type) (run-state 42 0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4648312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/traversals><a href=#test/traversals><code>test/traversals</code>: <span class=w3-text-green>pass</span></a></h2>The traversals run their computations left to right, the head first, so effects on the state happen in list order, as Haskell's <code>mapM</code>, <code>sequence</code>, <code>replicateM</code>, <code>mapM_</code> and <code>foldM</code> do.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/traversals _)
+  (⊦= '(((a . 0) (b . 1) (c . 2)) . 3)
+      (run-state
+        (traverse/monad (λ (x) (&lt;$&gt; (cut cons x &lt;&gt;) tick)) '(a b c))
+        0))
+  (⊦= '(() . s) (run-state (traverse/monad (λ (x) tick) '()) 's))
+  (⊦= '((0 1 2) . 3) (run-state (replicate/monad 3 tick) 0))
+  (⊦= '(() . 0) (run-state (replicate/monad 0 tick) 0))
+  (⊦= (cons (list 0 (void) 10) 11)
+      (run-state
+        (sequence/monad (list tick (modify (λ (s) (* 10 s))) tick))
+        0))
+  (⊦= '(c b a)
+      (exec-state
+        (for-each/monad (λ (x) (modify (cut cons x &lt;&gt;))) '(a b c))
+        '()))
+  (⊦= '(((1 b) (0 a)) . 2)
+      (run-state
+        (fold/monad
+          (λ (acc x) (do/monad (← n tick) ,(cons (list n x) acc)))
+          '()
+          '(a b))
+        0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4646536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id="test/list->monad-is-not-sequence"><a href="#test/list->monad-is-not-sequence"><code>test/list->monad-is-not-sequence</code>: <span class=w3-text-green>pass</span></a></h2><code>list->monad</code> is <code>return</code> of the mconcat of a pure list, not Haskell's <code>sequence</code>: given a list of computations it answers that very list, unrun, and leaves the state as it is. To run a list of computations, use <code>sequence/monad</code>.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/list-&gt;monad-is-not-sequence _)
+  (⊦= '((1 2) . 0) (run-state (list-&gt;monad '(1 2)) 0))
+  (⊦= '(1 2) (eval-state (list-&gt;monad '(1 2)) 0))
+  (let1 (r (run-state (list-&gt;monad (list tick tick)) 0))
+        (⊦= 0 (cdr r))
+        (⊨ (and (= 2 (length (car r))) (every category-state? (car r)))))
+  (⊦= '((0 1) . 2) (run-state (sequence/monad (list tick tick)) 0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4648168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/label><a href=#test/label><code>test/label</code>: <span class=w3-text-green>pass</span></a></h2>The usage example of the module numbers the leaves of a tree left to right: the state is the next number, and the left subtree's effects come before the right one's.<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/label _)
+  (⊦= '((((0 . a) 1 . b) 2 . c) . 3) (run-state (label '((a . b) . c)) 0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4650656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
+</a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
+</a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Versions and implementation notes</span>
+</a><a href=/post/sbral/ class=see-also-item><span class=see-also-item-title>The SBRAL data structure</span>
+<span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
+</a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
+<span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
+</a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
+</a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
+<span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
+</a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
+<span class=see-also-item-subtitle>Some docs, refs and containers, respectively.</span>
+</a><a href=/post/the-reasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Reasoned Schemer</span>
+<span class=see-also-item-subtitle>miniKanren, microKanren and some implementations</span>
+</a><a href=/post/microkanren-aggregators/ class=see-also-item><span class=see-also-item-title>Aggregation predicates for µkanren</span>
+<span class=see-also-item-subtitle>Groups, window functions, sets and enumerations</span>
+</a><a href=/post/minikanren-live-and-untagged/ class=see-also-item><span class=see-also-item-title>miniKanren, live and untagged</span>
+<span class=see-also-item-subtitle>Quine generation via relational interpreters</span>
+</a><a href=/post/microkanren-arithmetic/ class=see-also-item><span class=see-also-item-title>Pure, declarative, and constructive arithmetic relations</span>
+<span class=see-also-item-subtitle>A declarative pearl</span>
+</a><a href=/post/2002-09-17-final-shift-for-callcc/ class=see-also-item><span class=see-also-item-title>Final shift for call/cc</span>
+<span class=see-also-item-subtitle>Direct implementation of shift and reset</span>
+</a><a href=/post/2001-02-01-callcc-patterns/ class=see-also-item><span class=see-also-item-title>Call with Current Continuation Patterns</span>
+</a><a href=/post/1996-06-15-sitaram-handling-control-copy/ class=see-also-item><span class=see-also-item-title>Cogen in six lines</span>
+</a><a href=/post/1996-01-31-the-seasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Seasoned Schemer</span>
+</a><a href=/post/1996-01-31-the-little-schemer/ class=see-also-item><span class=see-also-item-title>The Little Schemer</span>
+</a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
+</a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span></a></div></article><a href=/post/2026-10-21-scm-testsuite-timsort/ class="nav-side-arrow nav-side-prev" title="The (aux timsort) module" aria-label="Previous Post: The (aux timsort) module"><i class="fas fa-chevron-left"></i>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class="nav-side-arrow nav-side-next" title="The (aux continuation) modules" aria-label="Next Post: The (aux continuation) modules"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-10-21-scm-testsuite-timsort/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux timsort) module"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-10-21-scm-testsuite-continuation/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux continuation) modules">Next Post <i class="fas fa-chevron-right"></i></a></li></ul><div class="offcanvas offcanvas-start toc-panel" id=toc-panel tabindex=-1 aria-labelledby=toc-title data-toc-mode=headings><div class=offcanvas-header><span class="offcanvas-title toc-title" id=toc-title>Table of Contents</span>
+<button type=button class=btn-close data-bs-dismiss=offcanvas aria-label="Close table of contents"></button></div><nav class="offcanvas-body toc-body"><nav id=TableOfContents><ul><li><a href=#aux-category-list-the-list-monad><code>(aux category list)</code>: the list monad</a></li><li><a href=#aux-category-maybe-the-maybe-monad><code>(aux category maybe)</code>: the maybe monad</a></li><li><a href=#aux-category-prob-the-probability-monad><code>(aux category prob)</code>: the probability monad</a></li><li><a href=#aux-category-ziplist-the-ziplist-monad><code>(aux category ziplist)</code>: the ziplist monad</a></li><li><a href=#aux-category-difflist-difference-lists><code>(aux category difflist)</code>: difference lists</a></li><li><a href=#aux-category-state-the-state-monad><code>(aux category state)</code>: the state monad</a></li></ul></nav></nav></div></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
+2016 - 2026
+&nbsp;&bull;&nbsp;
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+&nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/b4a2375c49b56e352fb6848632d6742806368d13>b4a2375c</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

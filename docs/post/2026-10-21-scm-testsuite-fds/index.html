@@ -1,0 +1,290 @@
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux fds) modules - This site needs no title</title><meta name=description content="Functional queues and union-find"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/","name":"The (aux fds) modules","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux fds) modules","url":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-10-21T10:07:00+02:00","dateModified":"2026-10-21T14:46:59+02:00","datePublished":"2026-10-21T10:07:00+02:00","description":"","headline":"The (aux fds) modules","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT6M","wordCount":1152}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux fds) modules"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-10-21T10:07:00+02:00"><meta property="article:modified_time" content="2026-10-21T14:46:59+02:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-fds/><meta name=twitter:title content="The (aux fds) modules"><meta name=twitter:description content="Functional queues and union-find"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=toc-toggle aria-controls=toc-panel aria-expanded=false aria-label="Table of Contents" data-bs-toggle=tooltip data-bs-placement=bottom title="Table of Contents">
+<span class="fas fa-list"></span>
+</button>
+<button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<span class="fas fa-magnifying-glass"></span>
+</button>
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>content</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/about/>About</a></li><li><a class=dropdown-item href=/page/>Pages</a></li><li><a class=dropdown-item href=/tags>Tags</a></li><li><a class=dropdown-item href=/categories/>Categories</a></li><li><a class=dropdown-item href=/author/>Authors</a></li></ul></li></ul></div></div></nav><div id=navbar-search-overlay class=navbar-search-overlay aria-hidden=true role=search><div class="navbar-search-inner container-fluid"><span class="fas fa-magnifying-glass navbar-search-icon" aria-hidden=true></span>
+<input type=search id=navbar-search-input class=navbar-search-input placeholder="Search posts and pages…" aria-label=Search autocomplete=off>
+<button id=navbar-search-close class=theme-toggle aria-label="Close search">
+<span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux fds) modules</h1><h2 class=post-subheading>Functional queues and union-find</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 21, 2026
+&nbsp;|&nbsp;
+<i class="fas fa-clock"></i>&nbsp;6&nbsp;min
+&nbsp;|&nbsp;
+<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><h1 id=aux-fds-queue-functional-queues><code>(aux fds queue)</code>: functional queues</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test-letqueue><a href=#test-letqueue><code>test-letqueue</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-letqueue _)
+  (⊦= 2 (cadr '(1 2)))
+  (letqueue
+    ((q '()) (w '(a)) (e '(a b)) (r '(a b c)) (t '(a b c d)))
+    (⊦= '(0 ()) q)
+    (⊨ (fds-queue-empty? q))
+    (⊦= '(1 (a)) w)
+    (⊭ (fds-queue-empty? w))
+    (⊦= '(2 (a) b) e)
+    (⊭ (fds-queue-empty? e))
+    (⊦= '(3 (a) c b) r)
+    (⊭ (fds-queue-empty? r))
+    (⊦= '(4 (a) d c b) t)
+    (⊭ (fds-queue-empty? t))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1890928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-cons-cdr><a href=#test-cons-cdr><code>test-cons-cdr</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-cons-cdr _)
+  (letqueue
+    ((q '()))
+    (⊦= '(0 ()) q)
+    (set! q (fds-queue-cons 'a q))
+    (⊦= '(1 (a)) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'a (fds-queue-car q))
+    (set! q (fds-queue-cons 'b q))
+    (⊦= '(2 (a) b) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'a (fds-queue-car q))
+    (set! q (fds-queue-cons 'c q))
+    (⊦= '(3 (a) c b) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'a (fds-queue-car q))
+    (set! q (fds-queue-cdr q))
+    (⊦= '(2 (b c)) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'b (fds-queue-car q))
+    (set! q (fds-queue-cdr q))
+    (⊦= '(1 (c)) q)
+    (⊭ (fds-queue-empty? q))
+    (⊦= 'c (fds-queue-car q))
+    (set! q (fds-queue-cdr q))
+    (⊦= '(0 ()) q)
+    (⊨ (fds-queue-empty? q))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1891656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-empty-car><a href=#test-empty-car><code>test-empty-car</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-empty-car _)
+  (letqueue
+    ((q '()))
+    (⊦= &quot;fds-queue-car: empty queue&quot; (error-message (λ () (fds-queue-car q))))
+    (⊦= &quot;fds-queue-cdr: empty queue&quot; (error-message (λ () (fds-queue-cdr q))))
+    (⊦= &quot;fds-queue-car: empty queue&quot;
+        (error-message
+          (λ () (fds-queue-car (fds-queue-cdr (fds-queue-cons 'a q))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1901280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><h1 id=aux-fds-unionfind-union-find><code>(aux fds unionfind)</code>: union-find</h1><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test-find-and-union><a href=#test-find-and-union><code>test-find-and-union</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-find-and-union _)
+  (unionfind-new
+    (λ (U ↑ ↑! ≡ →)
+       (⊦= 'absent (↑ 'absent))
+       (⊦= '(a b) (↑ '(a b)))
+       (⊦= 0 (length (→)))
+       (≡ 3 4)
+       (⊦= 4 (↑ 3))
+       (⊦= 4 (↑ 4))
+       (let1 (edges (→))
+             (⊦= '(3 . 4) (assoc 3 edges))
+             (⊦= '(4 . 4) (assoc 4 edges)))
+       (let1 (s (with-output-to-string (λ () (display U))))
+             (⊨ (and (substring-index &quot;(4 -&gt; 4)\n&quot; s) #t))
+             (⊨ (and (substring-index &quot;(3 -&gt; 4)\n&quot; s) #t))
+             (⊦= (string-length &quot;(4 -&gt; 4)\n(3 -&gt; 4)\n&quot;) (string-length s))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2019520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-union-by-rank><a href=#test-union-by-rank><code>test-union-by-rank</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-union-by-rank _)
+  (unionfind-new
+    (λ (U ↑ ↑! ≡ →)
+       (⊦= 0 (length (→)))
+       (≡ 'A 'D)
+       (≡ 'B 'E)
+       (≡ 'C 'F)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((A . 0) (D . 1)) edges))
+             (⊨ (member? '((B . 0) (E . 1)) edges))
+             (⊨ (member? '((C . 0) (F . 1)) edges))
+             (⊨ (member? '((D . 1) (D . 1)) edges))
+             (⊨ (member? '((E . 1) (E . 1)) edges))
+             (⊨ (member? '((F . 1) (F . 1)) edges)))
+       (≡ 'C 'G)
+       (≡ 'E 'A)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((A . 0) (D . 2)) edges))
+             (⊨ (member? '((E . 1) (D . 2)) edges))
+             (⊨ (member? '((B . 0) (E . 1)) edges))
+             (⊨ (member? '((C . 0) (F . 1)) edges))
+             (⊨ (member? '((G . 0) (F . 1)) edges))
+             (⊨ (member? '((D . 2) (D . 2)) edges))
+             (⊨ (member? '((F . 1) (F . 1)) edges)))
+       (≡ 'B 'G)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((A . 0) (D . 2)) edges))
+             (⊨ (member? '((E . 1) (D . 2)) edges))
+             (⊨ (member? '((B . 0) (E . 1)) edges))
+             (⊨ (member? '((C . 0) (F . 1)) edges))
+             (⊨ (member? '((G . 0) (F . 1)) edges))
+             (⊨ (member? '((D . 2) (D . 2)) edges))
+             (⊨ (member? '((F . 1) (D . 2)) edges))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2027864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-path-compression><a href=#test-path-compression><code>test-path-compression</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-path-compression _)
+  (unionfind-new
+    (λ (U ↑ ↑! ≡ →)
+       (≡ 'B 'A)
+       (≡ 'D 'C)
+       (≡ 'C 'A)
+       (≡ 'I 'F)
+       (≡ 'J 'F)
+       (≡ 'K 'G)
+       (≡ 'H 'E)
+       (≡ 'F 'E)
+       (≡ 'G 'E)
+       (≡ 'E 'A)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((B . 0) (A . 3)) edges))
+             (⊨ (member? '((C . 1) (A . 3)) edges))
+             (⊨ (member? '((D . 0) (C . 1)) edges))
+             (⊨ (member? '((E . 2) (A . 3)) edges))
+             (⊨ (member? '((F . 1) (E . 2)) edges))
+             (⊨ (member? '((G . 1) (E . 2)) edges))
+             (⊨ (member? '((I . 0) (F . 1)) edges))
+             (⊨ (member? '((J . 0) (F . 1)) edges))
+             (⊨ (member? '((K . 0) (G . 1)) edges))
+             (⊨ (member? '((H . 0) (E . 2)) edges)))
+       (⊦= 'A (↑! 'I))
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((B . 0) (A . 3)) edges))
+             (⊨ (member? '((C . 1) (A . 3)) edges))
+             (⊨ (member? '((D . 0) (C . 1)) edges))
+             (⊨ (member? '((E . 2) (A . 3)) edges))
+             (⊨ (member? '((F . 1) (A . 3)) edges))
+             (⊨ (member? '((G . 1) (E . 2)) edges))
+             (⊨ (member? '((I . 0) (A . 3)) edges))
+             (⊨ (member? '((J . 0) (F . 1)) edges))
+             (⊨ (member? '((K . 0) (G . 1)) edges))
+             (⊨ (member? '((H . 0) (E . 2)) edges)))
+       (⊦= 'A (↑! 'K))
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((B . 0) (A . 3)) edges))
+             (⊨ (member? '((C . 1) (A . 3)) edges))
+             (⊨ (member? '((D . 0) (C . 1)) edges))
+             (⊨ (member? '((E . 2) (A . 3)) edges))
+             (⊨ (member? '((F . 1) (A . 3)) edges))
+             (⊨ (member? '((G . 1) (A . 3)) edges))
+             (⊨ (member? '((I . 0) (A . 3)) edges))
+             (⊨ (member? '((J . 0) (F . 1)) edges))
+             (⊨ (member? '((K . 0) (A . 3)) edges))
+             (⊨ (member? '((H . 0) (E . 2)) edges))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2024280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-edges-size-copy><a href=#test-edges-size-copy><code>test-edges-size-copy</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-edges-size-copy _)
+  (let* ((U (unionfind-empty)) (≡ (unionfind-≡ U)))
+    (⊨ (unionfind? U))
+    (⊦= 0 (unionfind-size U))
+    (⊦= 0 (unionfind-edges U))
+    (≡ 1 2)
+    (≡ 3 4)
+    (⊦= 4 (unionfind-size U))
+    (⊦= 2 (unionfind-edges U))
+    (⊦= '(1 2 3 4) (sort (unionfind-keys U) &lt;))
+    (let* ((W (unionfind-copy U)) (≡W (unionfind-≡ W)))
+      (≡W 2 4)
+      (≡W 5 6)
+      (⊦= 6 (unionfind-size W))
+      (⊦= 4 (unionfind-edges W))
+      (⊦= ((unionfind-↑ W) 1) ((unionfind-↑ W) 3))
+      (⊦= 4 (unionfind-size U))
+      (⊦= 2 (unionfind-edges U))
+      (⊦= 2 ((unionfind-↑ U) 1))
+      (⊦= 4 ((unionfind-↑ U) 3))
+      (⊦= 1 ((unionfind-★ U) 2)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2036352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-walk-and-accessors><a href=#test-walk-and-accessors><code>test-walk-and-accessors</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-walk-and-accessors _)
+  (let1 (U (unionfind-empty))
+        (unionfind-accessors
+          U
+          (λ (↑ ↑! ≡ →)
+             (≡ 'x 'y)
+             (≡ 'y 'z)
+             (⊦= (↑ 'x) (↑ 'z))
+             (⊦= 3 (length (→)))))
+        (⊦= 3 (unionfind-walk U (λ (k v) (void)) (λ () (unionfind-size U))))
+        (let1 (links '())
+              (unionfind-walk/without-loops
+                U
+                (λ (k v) (set! links (cons k links)))
+                (λ () (⊦= 2 (length links))))
+              (⊭ (member? ((unionfind-↑ U) 'x) links)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2023152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test-rank-absent><a href=#test-rank-absent><code>test-rank-absent</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-rank-absent _)
+  (let1 (U (unionfind-empty))
+        (⊨ (condition-case (begin ((unionfind-★ U) 'nope) #f) ((exn) #t)))
+        (⊦= 'nope ((unionfind-↑ U) 'nope))
+        (⊦= 'nope ((unionfind-↑! U) 'nope))
+        (⊦= '() (unionfind-&gt;→+★ U))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2033624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
+</a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
+</a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Versions and implementation notes</span>
+</a><a href=/post/sbral/ class=see-also-item><span class=see-also-item-title>The SBRAL data structure</span>
+<span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
+</a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
+<span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
+</a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
+</a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
+<span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
+</a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
+<span class=see-also-item-subtitle>Some docs, refs and containers, respectively.</span>
+</a><a href=/post/the-reasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Reasoned Schemer</span>
+<span class=see-also-item-subtitle>miniKanren, microKanren and some implementations</span>
+</a><a href=/post/microkanren-aggregators/ class=see-also-item><span class=see-also-item-title>Aggregation predicates for µkanren</span>
+<span class=see-also-item-subtitle>Groups, window functions, sets and enumerations</span>
+</a><a href=/post/minikanren-live-and-untagged/ class=see-also-item><span class=see-also-item-title>miniKanren, live and untagged</span>
+<span class=see-also-item-subtitle>Quine generation via relational interpreters</span>
+</a><a href=/post/microkanren-arithmetic/ class=see-also-item><span class=see-also-item-title>Pure, declarative, and constructive arithmetic relations</span>
+<span class=see-also-item-subtitle>A declarative pearl</span>
+</a><a href=/post/2002-09-17-final-shift-for-callcc/ class=see-also-item><span class=see-also-item-title>Final shift for call/cc</span>
+<span class=see-also-item-subtitle>Direct implementation of shift and reset</span>
+</a><a href=/post/2001-02-01-callcc-patterns/ class=see-also-item><span class=see-also-item-title>Call with Current Continuation Patterns</span>
+</a><a href=/post/1996-06-15-sitaram-handling-control-copy/ class=see-also-item><span class=see-also-item-title>Cogen in six lines</span>
+</a><a href=/post/1996-01-31-the-seasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Seasoned Schemer</span>
+</a><a href=/post/1996-01-31-the-little-schemer/ class=see-also-item><span class=see-also-item-title>The Little Schemer</span>
+</a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
+</a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span></a></div></article><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class="nav-side-arrow nav-side-prev" title="The (aux sxml) module" aria-label="Previous Post: The (aux sxml) module"><i class="fas fa-chevron-left"></i>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class="nav-side-arrow nav-side-next" title="The (aux timsort) module" aria-label="Next Post: The (aux timsort) module"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux sxml) module"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-10-21-scm-testsuite-timsort/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux timsort) module">Next Post <i class="fas fa-chevron-right"></i></a></li></ul><div class="offcanvas offcanvas-start toc-panel" id=toc-panel tabindex=-1 aria-labelledby=toc-title data-toc-mode=headings><div class=offcanvas-header><span class="offcanvas-title toc-title" id=toc-title>Table of Contents</span>
+<button type=button class=btn-close data-bs-dismiss=offcanvas aria-label="Close table of contents"></button></div><nav class="offcanvas-body toc-body"><nav id=TableOfContents><ul><li><a href=#aux-fds-queue-functional-queues><code>(aux fds queue)</code>: functional queues</a></li><li><a href=#aux-fds-unionfind-union-find><code>(aux fds unionfind)</code>: union-find</a></li></ul></nav></nav></div></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
+2016 - 2026
+&nbsp;&bull;&nbsp;
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+&nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/b4a2375c49b56e352fb6848632d6742806368d13>b4a2375c</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

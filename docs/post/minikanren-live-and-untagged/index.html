@@ -1,4 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>miniKanren, live and untagged - This site needs no title</title><meta name=description content="Quine generation via relational interpreters"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/","name":"miniKanren, live and untagged","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"miniKanren, live and untagged","url":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/"},{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd","@type":"Person","name":"William E. Byrd","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-eric-holk","@type":"Person","name":"Eric Holk","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman","@type":"Person","name":"Daniel P. Friedman","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd"},{"@id":"https://massimo-nocentini.github.io/#author-eric-holk"},{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman"}],"dateCreated":"2012-09-09T18:33:23+01:00","dateModified":"2026-07-10T11:17:01+02:00","datePublished":"2012-09-09T18:33:23+01:00","description":"","headline":"miniKanren, live and untagged","inLanguage":"en","keywords":["pattern matching"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT9M","wordCount":1776}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="miniKanren, live and untagged"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2012-09-09T18:33:23+01:00"><meta property="article:modified_time" content="2026-07-10T11:17:01+02:00"><meta property="article:tag" content="Pattern Matching"><link rel=canonical href=https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/><meta name=twitter:title content="miniKanren, live and untagged"><meta name=twitter:description content="Quine generation via relational interpreters"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.166.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>miniKanren, live and untagged - This site needs no title</title><meta name=description content="Quine generation via relational interpreters"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/","name":"miniKanren, live and untagged","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"miniKanren, live and untagged","url":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/"},{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd","@type":"Person","name":"William E. Byrd","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-eric-holk","@type":"Person","name":"Eric Holk","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman","@type":"Person","name":"Daniel P. Friedman","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-william-e.-byrd"},{"@id":"https://massimo-nocentini.github.io/#author-eric-holk"},{"@id":"https://massimo-nocentini.github.io/#author-daniel-p.-friedman"}],"dateCreated":"2012-09-09T18:33:23+01:00","dateModified":"2026-07-10T11:17:01+02:00","datePublished":"2012-09-09T18:33:23+01:00","description":"","headline":"miniKanren, live and untagged","inLanguage":"en","keywords":["pattern matching"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT30M","wordCount":6303}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="miniKanren, live and untagged"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2012-09-09T18:33:23+01:00"><meta property="article:modified_time" content="2026-07-10T11:17:01+02:00"><meta property="article:tag" content="Pattern Matching"><link rel=canonical href=https://massimo-nocentini.github.io/post/minikanren-live-and-untagged/><meta name=twitter:title content="miniKanren, live and untagged"><meta name=twitter:description content="Quine generation via relational interpreters"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
 <span class="fas fa-magnifying-glass"></span>
 </button>
 <button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
@@ -8,7 +8,7 @@
 <span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>miniKanren, live and untagged</h1><h2 class=post-subheading>Quine generation via relational interpreters</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 9, 2012
 &nbsp;(Last modified on July 10, 2026)
 &nbsp;|&nbsp;
-<i class="fas fa-clock"></i>&nbsp;9&nbsp;min
+<i class="fas fa-clock"></i>&nbsp;30&nbsp;min
 &nbsp;|&nbsp;
 <i class="fas fa-user"></i>&nbsp;William E. Byrd<i class="fas fa-user"></i>&nbsp;Eric Holk<i class="fas fa-user"></i>&nbsp;Daniel P. Friedman</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><blockquote cite=https://doi.org/10.1145/2661103.2661105>Byrd, William E. and Holk, Eric and Friedman, Daniel P.,
 2012.
@@ -17,331 +17,1210 @@ Scheme '12:
 In Proceedings of the 2012 Annual Workshop on Scheme and Functional Programming,
 Association for Computing Machinery,
 New York, NY, USA,
-pp. 8–29.<hr><p><strong>Abstract:</strong> <i>We present relational interpreters for several subsets of Scheme, written in the pure logic programming language miniKanren. We demonstrate these interpreters running "backwards"---that is, generating programs that evaluate to a specified value---and show how the interpreters can trivially generate quines (programs that evaluate to themselves). We demonstrate how to transform environment-passing interpreters written in Scheme into relational interpreters written in miniKanren. We show how constraint extensions to core miniKanren can be used to allow shadowing of the interpreter's primitive forms (using the absent° tree constraint), and to avoid having to tag expressions in the languages being interpreted (using disequality constraints and symbol/number type-constraints), simplifying the interpreters and eliminating the need for parsers/unparsers.We provide four appendices to make the code in the paper completely self-contained. Three of these appendices contain new code: the complete implementation of core miniKanren extended with the new constraints; an extended relational interpreter capable of running factorial and doing list processing; and a simple pattern matcher that uses Dijkstra guards. The other appendix presents our preferred version of code that has been presented elsewhere: the miniKanren relational arithmetic system used in the extended interpreter.</i></p></blockquote><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><h2 id=test-λ-calculus-interpreter><a href=#test-λ-calculus-interpreter><code>test-λ-calculus-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
-  (define (lookup x env)
-    (match/non-overlapping
-      env
-      (() (error 'lookup &quot;unbound variable&quot; x))
-      ((((,y unquote v) unquote rest) ⊣ (equal? x y)) v)
-      ((((,y unquote v) unquote rest) ⊣ (not (equal? x y)))
-       (lookup x rest))))
-  (define (not-in-env? x env)
-    (match/non-overlapping
-      env
-      (() #t)
-      ((((,y unquote v) unquote rest) ⊣ (equal? x y)) #f)
-      ((((,y unquote v) unquote rest) ⊣ (not (equal? x y)))
-       (not-in-env? x rest))))
-  (define rator?
-    (let1 (op-names '(lambda quote list))
-          (λ (x env)
-              (not (and (symbol? x) (memq x op-names) (not-in-env? x env))))))
-  (define (eval-exp exp env)
-    (match/non-overlapping
-      exp
-      (((,rator ,rand) ⊣ (rator? rator env))
-       (let ((proc (eval-exp rator env)) (arg (eval-exp rand env)))
-         (match/non-overlapping
-           proc
-           ((closure ,x ,body ,env2)
-            (eval-exp body `((,x unquote arg) unquote env2))))))
-      (((λ (,x) ,body) ⊣ (and (symbol? x) (not-in-env? 'λ env)))
-       `(closure ,x ,body ,env))
-      ((',v ⊣ (not-in-env? 'quote env)) v)
-      (((list unquote a*) ⊣ (not-in-env? 'list env))
-       (map (λ (e) (eval-exp e env)) a*))
-      ((,x ⊣ (symbol? x)) (lookup x env))))
+pp. 8–29.<hr><p><strong>Abstract:</strong> <i>We present relational interpreters for several subsets of Scheme, written in the pure logic programming language miniKanren. We demonstrate these interpreters running "backwards"---that is, generating programs that evaluate to a specified value---and show how the interpreters can trivially generate quines (programs that evaluate to themselves). We demonstrate how to transform environment-passing interpreters written in Scheme into relational interpreters written in miniKanren. We show how constraint extensions to core miniKanren can be used to allow shadowing of the interpreter's primitive forms (using the absent° tree constraint), and to avoid having to tag expressions in the languages being interpreted (using disequality constraints and symbol/number type-constraints), simplifying the interpreters and eliminating the need for parsers/unparsers.We provide four appendices to make the code in the paper completely self-contained. Three of these appendices contain new code: the complete implementation of core miniKanren extended with the new constraints; an extended relational interpreter capable of running factorial and doing list processing; and a simple pattern matcher that uses Dijkstra guards. The other appendix presents our preferred version of code that has been presented elsewhere: the miniKanren relational arithmetic system used in the extended interpreter.</i></p></blockquote><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><h2 id=test-λ-calculus-interpreter><a href=#test-λ-calculus-interpreter><code>test-λ-calculus-interpreter</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test-λ-calculus-interpreter _)
   (define-syntax-rule
     (eval/env0 body)
     (eval-exp 'body (interaction-environment/symbols '())))
   (⊦ equal?
-       `(closure z z ())
-       (eval/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a))))
+     `(closure z z ())
+     (eval/env0 (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a))))
   (⊦ equal?
-       `(closure y x ((x closure z z ())))
-       (eval/env0 ((λ (x) (λ (y) x)) (λ (z) z))))
+     `(closure y x ((x closure z z ())))
+     (eval/env0 ((λ (x) (λ (y) x)) (λ (z) z))))
   (⊦ equal? `(closure y y ()) (eval/env0 ((λ (x) x) (λ (y) y))))
   (⊦ equal? `(closure y y ()) (eval/env0 ('(closure x x ()) (λ (y) y)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2481144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4360144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/eval-exp°><a href=#test/eval-exp°><code>test/eval-exp°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp° _)
-  (define (proper-list° exp env val)
-    (cond°
-      ((=° '() exp) (=° '() val))
-      ((fresh°
-         (a d v-a v-d)
-         (=° `(,a unquote d) exp)
-         (=° `(,v-a unquote v-d) val)
-         (eval-exp° a env v-a)
-         (proper-list° d env v-d)))))
-  (define (not-in-env° x env)
-    (cond°
-      ((=° '() env))
-      ((fresh°
-         (y v rest)
-         (=° `((,y unquote v) unquote rest) env)
-         (≠° y x)
-         (not-in-env° x rest)))))
-  (define (lookup° x env t)
-    (fresh°
-      (y v rest)
-      (=° `((,y unquote v) unquote rest) env)
-      (cond° ((=° y x) (=° v t)) ((≠° y x) (lookup° x rest t)))))
-  (define (eval-exp° exp env val)
-    (cond°
-      ((fresh°
-         (v)
-         (=° `',v exp)
-         (not-in-env° 'quote env)
-         (absent° 'closure v)
-         (=° v val)))
-      ((fresh°
-         (a*)
-         (=° `(list unquote a*) exp)
-         (not-in-env° 'list env)
-         (absent° 'closure a*)
-         (proper-list° a* env val)))
-      ((symbol° exp) (lookup° exp env val))
-      ((fresh°
-         (rator rand x body envˆ a)
-         (=° `(,rator ,rand) exp)
-         (eval-exp° rator env `(closure ,x ,body ,envˆ))
-         (eval-exp° rand env a)
-         (eval-exp° body `((,x unquote a) unquote envˆ) val)))
-      ((fresh°
-         (x body)
-         (=° `(λ (,x) ,body) exp)
-         (symbol° x)
-         (not-in-env° 'λ env)
-         (=° `(closure ,x ,body ,env) val)))))
   (⊦= '(bar)
-        (°-&gt;list
-          #t
-          (fresh° (q) (lookup° 'y (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+      (°-&gt;list
+        #t
+        (fresh° (q) (lookup° 'y (list (cons 'x 'foo) (cons 'y 'bar)) q))))
   (⊦= '()
-        (°-&gt;list
-          #t
-          (fresh° (q) (lookup° 'w (list (cons 'x 'foo) (cons 'y 'bar)) q))))
+      (°-&gt;list
+        #t
+        (fresh° (q) (lookup° 'w (list (cons 'x 'foo) (cons 'y 'bar)) q))))
   (let* ((Q (car (°-&gt;list #f (take° 1 (fresh° (q) (eval-exp° q '() q))))))
          (λQ (eval Q))
          (quine (λQ 'α)))
     (⊦= '(λ (α)
-               (begin (deny (equal? α 'list)))
-               (begin (deny (equal? α 'quote)))
-               (assert (every (μ v (symbol? v)) (list α)))
-               (cons (cons 'λ
-                           (cons (cons α '())
-                                 (cons (cons 'list
-                                             (cons α
-                                                   (cons (cons 'list
-                                                               (cons (cons 'quote (cons 'quote '()))
-                                                                     (cons α '())))
-                                                         '())))
-                                       '())))
-                     (cons (cons 'quote
-                                 (cons (cons 'λ
-                                             (cons (cons α '())
-                                                   (cons (cons 'list
-                                                               (cons α
-                                                                     (cons (cons 'list
-                                                                                 (cons (cons 'quote (cons 'quote '()))
-                                                                                       (cons α '())))
-                                                                           '())))
-                                                         '())))
-                                       '()))
-                           '())))
-          Q)
-    (⊦= '((λ (α) (list α (list 'quote α)))
-            '(λ (α) (list α (list 'quote α))))
-          quine)
+            (begin (deny (equal? α 'closure)))
+            (begin (deny (equal? α 'list)))
+            (begin (deny (equal? α 'quote)))
+            (assert (every (μ v (symbol? v)) (list α)))
+            (cons (cons 'λ
+                        (cons (cons α '())
+                              (cons (cons 'list
+                                          (cons α
+                                                (cons (cons 'list
+                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                  (cons α '())))
+                                                      '())))
+                                    '())))
+                  (cons (cons 'quote
+                              (cons (cons 'λ
+                                          (cons (cons α '())
+                                                (cons (cons 'list
+                                                            (cons α
+                                                                  (cons (cons 'list
+                                                                              (cons (cons 'quote (cons 'quote '()))
+                                                                                    (cons α '())))
+                                                                        '())))
+                                                      '())))
+                                    '()))
+                        '())))
+        Q)
+    (⊦= '((λ (α) (list α (list 'quote α))) '(λ (α) (list α (list 'quote α))))
+        quine)
     (⊦= quine (eval quine)))
   (⊦= '((λ (α)
-              (assert (absent? 'closure α))
-              (cons (cons 'quote (cons α '())) (cons '→ (cons α '()))))
-          (λ () (cons (cons 'list '()) (cons '→ (cons '() '()))))
-          (λ (α β)
-              (assert (every (μ v (symbol? v)) (list α)))
-              (cons (cons 'λ (cons (cons α '()) (cons β '())))
-                    (cons '→
-                          (cons (cons 'closure
-                                      (cons α (cons β (cons '() '()))))
-                                '()))))
-          (λ (α)
-              (assert (absent? 'closure α))
-              (cons (cons 'list (cons (cons 'quote (cons α '())) '()))
-                    (cons '→ (cons (cons α '()) '()))))
-          (λ ()
-              (cons (cons 'list (cons (cons 'list '()) '()))
-                    (cons '→ (cons (cons '() '()) '()))))
-          (λ (α β)
-              (assert (absent? 'closure α))
-              (assert (absent? 'closure β))
-              (cons (cons 'list
-                          (cons (cons 'quote (cons α '()))
-                                (cons (cons 'quote (cons β '())) '())))
-                    (cons '→ (cons (cons α (cons β '())) '())))))
+           (assert (absent? 'closure α))
+           (cons (cons 'quote (cons α '())) (cons '→ (cons α '()))))
+        (λ () (cons (cons 'list '()) (cons '→ (cons '() '()))))
+        (λ (α β)
+           (assert (every (μ v (symbol? v)) (list α)))
+           (cons (cons 'λ (cons (cons α '()) (cons β '())))
+                 (cons '→
+                       (cons (cons 'closure (cons α (cons β (cons '() '()))))
+                             '()))))
+        (λ (α)
+           (assert (absent? 'closure α))
+           (cons (cons 'list (cons (cons 'quote (cons α '())) '()))
+                 (cons '→ (cons (cons α '()) '()))))
+        (λ ()
+           (cons (cons 'list (cons (cons 'list '()) '()))
+                 (cons '→ (cons (cons '() '()) '()))))
+        (λ (α β)
+           (assert (absent? 'closure α))
+           (assert (absent? 'closure β))
+           (cons (cons 'list
+                       (cons (cons 'quote (cons α '()))
+                             (cons (cons 'quote (cons β '())) '())))
+                 (cons '→ (cons (cons α (cons β '())) '())))))
+      (°-&gt;list
+        #f
+        (take° 6 (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.076) (memory #(12582912 4409264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/shadowing><a href=#test/eval-exp/shadowing><code>test/eval-exp/shadowing</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/shadowing _)
+  (⊦= '(closure x x ()) (eval-exp '((λ (λ) (λ λ)) (λ (x) x)) '()))
+  (⊦= '(closure y y ()) (eval-exp '((λ (quote) 'quote) (λ (y) y)) '()))
+  (⊦= 'a (eval-exp '((λ (list) (list 'a)) (λ (x) x)) '()))
+  (⊦= '(a) (eval-exp '((λ (y) (list 'a)) (λ (x) x)) '())))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4362248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/agrees-with-eval-exp><a href=#test/eval-exp°/agrees-with-eval-exp><code>test/eval-exp°/agrees-with-eval-exp</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/agrees-with-eval-exp _)
+  (let1 (programs
+          '(((λ (λ) (λ λ)) (λ (x) x))
+            ((λ (quote) 'quote) (λ (y) y))
+            ((λ (quote) '(λ (x) x)) (λ (y) y))
+            ((λ (list) (list 'a)) (λ (x) x))
+            ((λ (y) (list 'a)) (λ (x) x))
+            ((λ (list) (list list)) (λ (z) z))
+            (((λ (x) (λ (y) x)) (λ (z) z)) (λ (a) a))))
+        (⊦= (map (λ (p) (list (eval-exp p '()))) programs)
+            (map (λ (p) (°-&gt;list #t (fresh° (q) (eval-exp° p '() q))))
+                 programs))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(12582912 4365496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-λ°/forward-pairs><a href=#test/eval-λ°/forward-pairs><code>test/eval-λ°/forward-pairs</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-λ°/forward-pairs _)
+  (⊦= '((λ (α β)
+           (assert (every (μ v (symbol? v)) (list α)))
+           (cons (cons 'λ (cons (cons α '()) (cons β '())))
+                 (cons '→
+                       (cons (cons 'closure (cons α (cons β (cons '() '()))))
+                             '()))))
+        (λ (α β γ)
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (cons (cons (cons 'λ (cons (cons α '()) (cons α '())))
+                       (cons (cons 'λ (cons (cons β '()) (cons γ '()))) '()))
+                 (cons '→
+                       (cons (cons 'closure (cons β (cons γ (cons '() '()))))
+                             '()))))
+        (λ (α β γ δ ε)
+           (begin (deny (equal? α 'λ)))
+           (assert (every (μ v (symbol? v)) (list α β δ)))
+           (cons (cons (cons 'λ
+                             (cons (cons α '())
+                                   (cons (cons 'λ (cons (cons β '()) (cons γ '())))
+                                         '())))
+                       (cons (cons 'λ (cons (cons δ '()) (cons ε '()))) '()))
+                 (cons '→
+                       (cons (cons 'closure
+                                   (cons β
+                                         (cons γ
+                                               (cons (cons (cons α
+                                                                 (cons 'closure (cons δ (cons ε (cons '() '())))))
+                                                           '())
+                                                     '()))))
+                             '()))))
+        (λ (α β)
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (cons (cons (cons 'λ
+                             (cons (cons α '())
+                                   (cons (cons α (cons α '())) '())))
+                       (cons (cons 'λ (cons (cons β '()) (cons β '()))) '()))
+                 (cons '→
+                       (cons (cons 'closure (cons β (cons β (cons '() '()))))
+                             '()))))
+        (λ (α β γ δ)
+           (begin (deny (equal? β 'λ)))
+           (assert (every (μ v (symbol? v)) (list α β γ)))
+           (cons (cons (cons 'λ
+                             (cons (cons α '())
+                                   (cons (cons α (cons α '())) '())))
+                       (cons (cons 'λ
+                                   (cons (cons β '())
+                                         (cons (cons 'λ (cons (cons γ '()) (cons δ '())))
+                                               '())))
+                             '()))
+                 (cons '→
+                       (cons (cons 'closure
+                                   (cons γ
+                                         (cons δ
+                                               (cons (cons (cons β
+                                                                 (cons 'closure
+                                                                       (cons β
+                                                                             (cons (cons 'λ (cons (cons γ '()) (cons δ '())))
+                                                                                   (cons '() '())))))
+                                                           '())
+                                                     '()))))
+                             '())))))
+      (°-&gt;list
+        #f
+        (take° 5 (fresh° (q e v) (eval-λ° e '() v) (=° `(,e → ,v) q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 4386280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-λ°/backwards><a href=#test/eval-λ°/backwards><code>test/eval-λ°/backwards</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-λ°/backwards _)
+  (⊦= '(((λ (x) (λ (y) x)) (λ (z) z))
+        ((λ (x) (x (λ (y) x))) (λ (z) z))
+        ((λ (x) (λ (y) x)) ((λ (α) α) (λ (z) z)))
+        (((λ (α) α) (λ (x) (λ (y) x))) (λ (z) z))
+        ((λ (α) α) ((λ (x) (λ (y) x)) (λ (z) z))))
+      (°-&gt;list
+        #t
+        (take° 5
+               (fresh°
+                 (q)
+                 (eval-λ° q '() '(closure y x ((x closure z z ()))))))))
+  (⊦= '(()
+        ()
+        ((assert (every (μ v (symbol? v)) (list α))))
+        ((assert (every (μ v (symbol? v)) (list α))))
+        ((assert (every (μ v (symbol? v)) (list α)))))
+      (map reified-constraints
+           (°-&gt;list
+             #f
+             (take° 5
+                    (fresh°
+                      (q)
+                      (eval-λ° q '() '(closure y x ((x closure z z ())))))))))
+  (⊦= '(((λ (x) (λ (y) x)) (λ (z) z)) ((λ (x) (x (λ (y) x))) (λ (z) z)))
+      (°-&gt;list
+        #t
+        (take° 2
+               (fresh°
+                 (q)
+                 (eval-exp° q '() '(closure y x ((x closure z z ())))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.955) (memory #(25165824 4371216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/shadowed-λ><a href=#test/eval-exp°/shadowed-λ><code>test/eval-exp°/shadowed-λ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/shadowed-λ _)
+  (⊦= '((closure λ (λ λ) ()))
+      (°-&gt;list #t (fresh° (q) (eval-exp° '(λ (λ) (λ λ)) '() q))))
+  (⊦= '((closure x x ()))
+      (°-&gt;list #t (fresh° (q) (eval-exp° '((λ (λ) (λ λ)) (λ (x) x)) '() q))))
+  (⊦= '()
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '((λ (λ) (λ (x) x)) (λ (y) y)) '() q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(25165824 4371096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/shadowed-quote><a href=#test/eval-exp°/shadowed-quote><code>test/eval-exp°/shadowed-quote</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/shadowed-quote _)
+  (⊦= '((closure y y ()))
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '((λ (quote) 'quote) (λ (y) y)) '() q))))
+  (⊦= '((closure x x ((quote closure y y ()))))
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '((λ (quote) '(λ (x) x)) (λ (y) y)) '() q))))
+  (⊦= '((closure x x ((quote closure y y ()))))
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° ''(λ (x) x) '((quote closure y y ())) q))))
+  (⊦= '() (°-&gt;list #t (fresh° (q) (eval-exp° ''(λ (x) x) '((quote . foo)) q))))
+  (⊦= '((λ (x) x)) (°-&gt;list #t (fresh° (q) (eval-exp° ''(λ (x) x) '() q))))
+  (⊦= '(quote) (°-&gt;list #t (fresh° (q) (eval-exp° ''quote '() q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(25165824 4374368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/shadowed-list><a href=#test/eval-exp°/shadowed-list><code>test/eval-exp°/shadowed-list</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/shadowed-list _)
+  (⊦= '(a)
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '((λ (list) (list 'a)) (λ (x) x)) '() q))))
+  (⊦= '((a))
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '((λ (y) (list 'a)) (λ (x) x)) '() q))))
+  (⊦= '((closure z z ()))
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '((λ (list) (list list)) (λ (z) z)) '() q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(25165824 4370424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/unguarded-overlap><a href=#test/eval-exp°/unguarded-overlap><code>test/eval-exp°/unguarded-overlap</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/unguarded-overlap _)
+  (define (proper-list/unguarded° exp env val)
+    (cond° ((=° '() exp) (=° '() val))
+           ((fresh°
+              (a d v-a v-d)
+              (=° `(,a unquote d) exp)
+              (=° `(,v-a unquote v-d) val)
+              (eval-exp/unguarded° a env v-a)
+              (proper-list/unguarded° d env v-d)))))
+  (define (eval-exp/unguarded° exp env val)
+    (cond° ((fresh° (v) (=° `',v exp) (absent° 'closure v) (=° v val)))
+           ((fresh°
+              (a*)
+              (=° `(list unquote a*) exp)
+              (absent° 'closure a*)
+              (proper-list/unguarded° a* env val)))
+           ((symbol° exp) (lookup° exp env val))
+           ((fresh°
+              (rator rand x body envˆ a)
+              (=° `(,rator ,rand) exp)
+              (eval-exp/unguarded° rator env `(closure ,x ,body ,envˆ))
+              (eval-exp/unguarded° rand env a)
+              (eval-exp/unguarded° body `((,x unquote a) unquote envˆ) val)))
+           ((fresh°
+              (x body)
+              (=° `(λ (,x) ,body) exp)
+              (symbol° x)
+              (=° `(closure ,x ,body ,env) val)))))
+  (⊦= '((a) a)
+      (°-&gt;list
+        #t
+        (fresh°
+          (q)
+          (eval-exp/unguarded° '((λ (list) (list 'a)) (λ (x) x)) '() q))))
+  (⊦= (list 'quote '(closure y y ()))
+      (°-&gt;list
+        #t
+        (fresh°
+          (q)
+          (eval-exp/unguarded° '((λ (quote) 'quote) (λ (y) y)) '() q))))
+  (⊦= '((closure x x ((λ closure y y ()))))
+      (°-&gt;list
+        #t
+        (fresh°
+          (q)
+          (eval-exp/unguarded° '((λ (λ) (λ (x) x)) (λ (y) y)) '() q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(25165824 4373808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/absent°/closure-tag><a href=#test/absent°/closure-tag><code>test/absent°/closure-tag</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent°/closure-tag _)
+  (⊦= '()
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° '('(closure x x ()) (λ (y) y)) '() q))))
+  (⊦= '() (°-&gt;list #t (fresh° (q) (eval-exp° ''(closure x x ()) '() q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (eval-exp° `',q '() '(closure x x ())))))
+  (⊦= '((λ () (cons 'λ (cons (cons 'x '()) (cons 'x '()))))
+        (λ (α)
+           (begin (deny (equal? α 'closure)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           (cons (cons 'λ (cons (cons α '()) (cons α '())))
+                 (cons (cons 'λ (cons (cons 'x '()) (cons 'x '()))) '())))
+        (λ (α)
+           (begin (deny (equal? α 'closure)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           (cons (cons 'λ (cons (cons α '()) (cons (cons α (cons α '())) '())))
+                 (cons (cons 'λ (cons (cons 'x '()) (cons 'x '()))) '()))))
+      (°-&gt;list
+        #f
+        (take° 3
+               (fresh° (q) (eval-exp° `(list ,q) '() '((closure x x ()))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.17) (memory #(25165824 6684984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/backwards-shadowed-quote><a href=#test/eval-exp°/backwards-shadowed-quote><code>test/eval-exp°/backwards-shadowed-quote</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/backwards-shadowed-quote _)
+  (let1 (answers
+          (°-&gt;list
+            #f
+            (take° 6
+                   (fresh°
+                     (q)
+                     (eval-exp°
+                       `((λ (quote) ,q) (λ (x) x))
+                       '()
+                       '(closure x x ()))))))
+        (⊦= '(quote 'quote
+                    ((λ (α) α) quote)
+                    ((λ (α) quote) quote)
+                    ((λ (α) quote) (list))
+                    ((λ (α) (α α)) quote))
+            (map (λ (A) (apply (eval A) (cadr A))) answers))
+        (⊦= '(()
+              ()
+              ((assert (every (μ v (symbol? v)) (list α))))
+              ((begin (deny (equal? α 'quote)))
+               (assert (every (μ v (symbol? v)) (list α))))
+              ((begin (deny (equal? α 'quote)))
+               (assert (every (μ v (symbol? v)) (list α))))
+              ((assert (every (μ v (symbol? v)) (list α)))))
+            (map reified-constraints answers))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.025) (memory #(25165824 4382696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/backwards-shadowed-list><a href=#test/eval-exp°/backwards-shadowed-list><code>test/eval-exp°/backwards-shadowed-list</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/backwards-shadowed-list _)
+  (let1 (programs
+          (°-&gt;list
+            #t
+            (take° 10
+                   (fresh°
+                     (p q)
+                     (=° `((λ (list) ,q) (λ (x) x)) p)
+                     (eval-exp° p '() '(a))))))
+        (⊦= '(((λ (list) '(a)) (λ (x) x))
+              ((λ (list) (list '(a))) (λ (x) x))
+              ((λ (list) ((λ (α) '(a)) 'β)) (λ (x) x))
+              ((λ (list) ((λ (α) α) '(a))) (λ (x) x))
+              ((λ (list) ((λ (α) '(a)) list)) (λ (x) x))
+              ((λ (list) ((λ (α) (list '(a))) 'β)) (λ (x) x))
+              ((λ (list) ((λ (α) (list α)) '(a))) (λ (x) x))
+              ((λ (list) ((λ (α) '(a)) (λ (β) γ))) (λ (x) x))
+              ((λ (list) ((λ (α) ((λ (β) '(a)) 'γ)) 'δ)) (λ (x) x))
+              ((λ (list) ((λ (α) (α '(a))) list)) (λ (x) x)))
+            programs)
+        (⊦= (make-list 10 '(a)) (map eval programs))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.022) (memory #(25165824 4374624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp°/untagged-answers-run-in-scheme><a href=#test/eval-exp°/untagged-answers-run-in-scheme><code>test/eval-exp°/untagged-answers-run-in-scheme</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp°/untagged-answers-run-in-scheme _)
+  (let1 (programs
+          (°-&gt;list #t (take° 30 (fresh° (q) (eval-exp° q '() '(I love you))))))
+        (⊦= '('(I love you)
+              ((λ (α) '(I love you)) 'β)
+              ((λ (α) α) '(I love you))
+              (list 'I 'love 'you)
+              ((λ (α) '(I love you)) (list))
+              ((λ (α) '(I love you)) (λ (β) γ)))
+            (take programs 6))
+        (⊦= (make-list 30 '(I love you)) (map eval programs))
+        (⊦= (make-list 30 '(I love you))
+            (map (λ (p) (eval-exp p '())) programs))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.074) (memory #(25165824 4390944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quinec/scheme><a href=#test/quinec/scheme><code>test/quinec/scheme</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quinec/scheme _) (⊦= quinec (eval quinec)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 4376160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quinec/forward><a href=#test/quinec/forward><code>test/quinec/forward</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quinec/forward _)
+  (⊦= (list quinec) (μkanren-run (v -1 #t) (eval-exp° quinec '() v)))
+  (⊦= (list quinec) (μkanren-run (q -1 #t) (=° q quinec) (quine° q))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(25165824 4387760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/α-equivalent-to-quinec><a href=#test/quine°/α-equivalent-to-quinec><code>test/quine°/α-equivalent-to-quinec</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/α-equivalent-to-quinec _)
+  (let* ((Q (car (°-&gt;list #f (take° 1 (fresh° (q) (quine° q))))))
+         (λQ (eval Q)))
+    (⊦= quinec (λQ 'x))
+    (⊦= (λQ 'y) (eval (λQ 'y)))
+    (⊦= (list (λQ 'y)) (μkanren-run (v -1 #t) (eval-exp° (λQ 'y) '() v)))
+    (⊦raises (exn) (λQ 'closure))
+    (⊦raises (exn) (λQ 'list))
+    (⊦raises (exn) (λQ 'quote))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.066) (memory #(25165824 4410280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/disequalities-are-needed><a href=#test/quine°/disequalities-are-needed><code>test/quine°/disequalities-are-needed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/disequalities-are-needed _)
+  (let* ((Q (car (°-&gt;list #f (take° 1 (fresh° (q) (quine° q))))))
+         (λQ! (eval `(λ (α) ,(last Q)))))
+    (⊦= '() (μkanren-run (v -1 #t) (eval-exp° (λQ! 'closure) '() v)))
+    (⊦= '() (μkanren-run (v -1 #t) (eval-exp° (λQ! 'list) '() v)))
+    (⊦= '() (μkanren-run (v -1 #t) (eval-exp° (λQ! 'quote) '() v)))
+    (⊦= '((λ (λ) (list λ (list 'quote λ))) '(λ (λ) (list λ (list 'quote λ))))
+        (λQ! 'λ))
+    (⊦= (list (λQ! 'λ)) (μkanren-run (v -1 #t) (eval-exp° (λQ! 'λ) '() v)))
+    (⊦= (λQ! 'λ) (eval (λQ! 'λ)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.066) (memory #(25165824 4381344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/no-literal-quines><a href=#test/quine°/no-literal-quines><code>test/quine°/no-literal-quines</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/no-literal-quines _)
+  (⊦= 5 (eval 5))
+  (⊦= #t (eval #t))
+  (⊦= '() (μkanren-run (v -1 #t) (eval-exp° 5 '() v)))
+  (⊦= '() (μkanren-run (v -1 #t) (eval-exp° #t '() v)))
+  (⊦= '() (μkanren-run (q -1 #t) (symbol° q) (quine° q)))
+  (⊦= '() (μkanren-run (q -1 #t) (fresh° (v) (=° `',v q) (quine° q))))
+  (⊦= '()
+      (μkanren-run (q -1 #t) (fresh° (x b) (=° `(λ (,x) ,b) q) (quine° q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 4386792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/second><a href=#test/quine°/second><code>test/quine°/second</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/second _)
+  (⊦= '(λ (α β γ)
+          (begin (deny (equal? α 'closure)))
+          (begin (deny (equal? α 'list)))
+          (begin (deny (equal? α 'quote)))
+          (begin (deny (equal? α 'λ)))
+          (begin (deny (equal? β 'closure)))
+          (begin (deny (equal? β α)))
+          (assert (every (μ v (symbol? v)) (list α β)))
+          (assert (absent? 'closure γ))
+          (cons (cons 'λ
+                      (cons (cons α '())
+                            (cons (cons 'list
+                                        (cons (cons (cons 'λ (cons (cons β '()) (cons α '())))
+                                                    (cons (cons 'quote (cons γ '())) '()))
+                                              (cons (cons 'list
+                                                          (cons (cons 'quote (cons 'quote '()))
+                                                                (cons α '())))
+                                                    '())))
+                                  '())))
+                (cons (cons 'quote
+                            (cons (cons 'λ
+                                        (cons (cons α '())
+                                              (cons (cons 'list
+                                                          (cons (cons (cons 'λ (cons (cons β '()) (cons α '())))
+                                                                      (cons (cons 'quote (cons γ '())) '()))
+                                                                (cons (cons 'list
+                                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                                  (cons α '())))
+                                                                      '())))
+                                                    '())))
+                                  '()))
+                      '())))
+      (cadr (°-&gt;list #f (take° 2 (fresh° (q) (quine° q)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.27) (memory #(25165824 4410752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/ten><a href=#test/quine°/ten><code>test/quine°/ten</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/ten _)
+  (let1 (qs (μkanren-run (q 10 #t) (quine° q)))
+        (⊦= '(((λ (α) (list α (list 'quote α)))
+               '(λ (α) (list α (list 'quote α))))
+              ((λ (α) (list ((λ (β) α) 'γ) (list 'quote α)))
+               '(λ (α) (list ((λ (β) α) 'γ) (list 'quote α))))
+              ((λ (α) (list α (list ((λ (β) 'quote) 'γ) α)))
+               '(λ (α) (list α (list ((λ (β) 'quote) 'γ) α))))
+              ((λ (α) (list (list 'λ '(α) α) (list 'quote α)))
+               '(list (list 'λ '(α) α) (list 'quote α)))
+              ((λ (α) ((λ (β) (list α (list 'quote α))) 'γ))
+               '(λ (α) ((λ (β) (list α (list 'quote α))) 'γ)))
+              ((λ (α) (list α (list ((λ (β) β) 'quote) α)))
+               '(λ (α) (list α (list ((λ (β) β) 'quote) α))))
+              ((λ (α) (list α ((λ (β) (list 'quote α)) 'γ)))
+               '(λ (α) (list α ((λ (β) (list 'quote α)) 'γ))))
+              ((λ (α) (list α (list 'quote ((λ (β) α) 'γ))))
+               '(λ (α) (list α (list 'quote ((λ (β) α) 'γ)))))
+              ((λ (α) ((λ (β) (list β (list 'quote β))) α))
+               '(λ (α) ((λ (β) (list β (list 'quote β))) α)))
+              ((λ (α) (list α ((λ (β) (list 'quote β)) α)))
+               '(λ (α) (list α ((λ (β) (list 'quote β)) α)))))
+            qs)
+        (⊦= 10 (length (delete-duplicates qs)))
+        (⊦ every (λ (p) (equal? p (eval p))) qs)
+        (⊦ every
+           (λ (p)
+              (equal? (list p) (μkanren-run (v -1 #t) (eval-exp° p '() v))))
+           qs)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 1.048) (memory #(25165824 4406272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/fixed-variable><a href=#test/quine°/fixed-variable><code>test/quine°/fixed-variable</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/fixed-variable _)
+  (⊦= (list quinec)
+      (μkanren-run
+        (q 1 #t)
+        (fresh° (b r) (=° `((λ (x) ,b) ,r) q) (quine° q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.028) (memory #(25165824 4393056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/application-body><a href=#test/quine°/application-body><code>test/quine°/application-body</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/application-body _)
+  (⊦= '((λ (α β γ)
+           (begin (deny (equal? α 'closure)))
+           (begin (deny (equal? α 'list)))
+           (begin (deny (equal? α 'quote)))
+           (begin (deny (equal? α 'λ)))
+           (begin (deny (equal? β 'closure)))
+           (begin (deny (equal? β 'list)))
+           (begin (deny (equal? β 'quote)))
+           (begin (deny (equal? β α)))
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (assert (absent? 'closure γ))
+           (cons (cons 'λ
+                       (cons (cons α '())
+                             (cons (cons (cons 'λ
+                                               (cons (cons β '())
+                                                     (cons (cons 'list
+                                                                 (cons α
+                                                                       (cons (cons 'list
+                                                                                   (cons (cons 'quote (cons 'quote '()))
+                                                                                         (cons α '())))
+                                                                             '())))
+                                                           '())))
+                                         (cons (cons 'quote (cons γ '())) '()))
+                                   '())))
+                 (cons (cons 'quote
+                             (cons (cons 'λ
+                                         (cons (cons α '())
+                                               (cons (cons (cons 'λ
+                                                                 (cons (cons β '())
+                                                                       (cons (cons 'list
+                                                                                   (cons α
+                                                                                         (cons (cons 'list
+                                                                                                     (cons (cons 'quote (cons 'quote '()))
+                                                                                                           (cons α '())))
+                                                                                               '())))
+                                                                             '())))
+                                                           (cons (cons 'quote (cons γ '())) '()))
+                                                     '())))
+                                   '()))
+                       '()))))
+      (°-&gt;list
+        #f
+        (take° 1
+               (fresh°
+                 (q x f y r)
+                 (=° `((λ (,x) (,f ,y)) ,r) q)
+                 (quine° q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.238) (memory #(25165824 4414664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/operand-hole><a href=#test/quine°/operand-hole><code>test/quine°/operand-hole</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/operand-hole _)
+  (⊦= '('(λ (x) (list x (list 'quote x))))
+      (μkanren-run (r 1 #t) (quine° `((λ (x) (list x (list 'quote x))) ,r)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(25165824 4391464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/body-hole><a href=#test/quine°/body-hole><code>test/quine°/body-hole</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/body-hole _)
+  (⊦= '((λ ()
+           (cons 'list
+                 (cons 'x
+                       (cons (cons 'list
+                                   (cons (cons 'quote (cons 'quote '()))
+                                         (cons 'x '())))
+                             '()))))
+        (λ (α β)
+           (begin (deny (equal? α 'closure)))
+           (begin (deny (equal? α 'x)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           (assert (absent? 'closure β))
+           (cons 'list
+                 (cons (cons (cons 'λ (cons (cons α '()) (cons 'x '())))
+                             (cons (cons 'quote (cons β '())) '()))
+                       (cons (cons 'list
+                                   (cons (cons 'quote (cons 'quote '()))
+                                         (cons 'x '())))
+                             '()))))
+        (λ (α β)
+           (begin (deny (equal? α 'closure)))
+           (begin (deny (equal? α 'quote)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           (assert (absent? 'closure β))
+           (cons 'list
+                 (cons 'x
+                       (cons (cons 'list
+                                   (cons (cons (cons 'λ
+                                                     (cons (cons α '())
+                                                           (cons (cons 'quote (cons 'quote '())) '())))
+                                               (cons (cons 'quote (cons β '())) '()))
+                                         (cons 'x '())))
+                             '())))))
+      (°-&gt;list #f (take° 3 (fresh° (b) (quine° `((λ (x) ,b) '(λ (x) ,b))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.067) (memory #(25165824 4403160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/quine°/quote-hole><a href=#test/quine°/quote-hole><code>test/quine°/quote-hole</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/quine°/quote-hole _)
+  (⊦= '((λ () (cons 'quote (cons 'quote '())))
+        (λ (α β)
+           (begin (deny (equal? α 'closure)))
+           (begin (deny (equal? α 'quote)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           (assert (absent? 'closure β))
+           (cons (cons 'λ
+                       (cons (cons α '())
+                             (cons (cons 'quote (cons 'quote '())) '())))
+                 (cons (cons 'quote (cons β '())) '())))
+        (λ (α)
+           (begin (deny (equal? α 'closure)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           (cons (cons 'λ (cons (cons α '()) (cons α '())))
+                 (cons (cons 'quote (cons 'quote '())) '()))))
+      (°-&gt;list
+        #f
+        (take° 3
+               (fresh°
+                 (h)
+                 (quine°
+                   `((λ (x) (list x (list ,h x)))
+                     '(λ (x) (list x (list ,h x))))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(25165824 4399784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/twine°/run1><a href=#test/twine°/run1><code>test/twine°/run1</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/twine°/run1 _)
+  (let* ((X (car (°-&gt;list #f (take° 1 (fresh° (x) (twine° x))))))
+         (twine ((eval X) 'α))
+         (p (car twine))
+         (q (cadr twine)))
+    (⊦= '(λ (α)
+            (begin (deny (equal? α 'closure)))
+            (begin (deny (equal? α 'list)))
+            (begin (deny (equal? α 'quote)))
+            (assert (every (μ v (symbol? v)) (list α)))
+            (cons (cons 'quote
+                        (cons (cons (cons 'λ
+                                          (cons (cons α '())
+                                                (cons (cons 'list
+                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                  (cons (cons 'list
+                                                                              (cons α
+                                                                                    (cons (cons 'list
+                                                                                                (cons (cons 'quote (cons 'quote '()))
+                                                                                                      (cons α '())))
+                                                                                          '())))
+                                                                        '())))
+                                                      '())))
+                                    (cons (cons 'quote
+                                                (cons (cons 'λ
+                                                            (cons (cons α '())
+                                                                  (cons (cons 'list
+                                                                              (cons (cons 'quote (cons 'quote '()))
+                                                                                    (cons (cons 'list
+                                                                                                (cons α
+                                                                                                      (cons (cons 'list
+                                                                                                                  (cons (cons 'quote (cons 'quote '()))
+                                                                                                                        (cons α '())))
+                                                                                                            '())))
+                                                                                          '())))
+                                                                        '())))
+                                                      '()))
+                                          '()))
+                              '()))
+                  (cons (cons (cons 'λ
+                                    (cons (cons α '())
+                                          (cons (cons 'list
+                                                      (cons (cons 'quote (cons 'quote '()))
+                                                            (cons (cons 'list
+                                                                        (cons α
+                                                                              (cons (cons 'list
+                                                                                          (cons (cons 'quote (cons 'quote '()))
+                                                                                                (cons α '())))
+                                                                                    '())))
+                                                                  '())))
+                                                '())))
+                              (cons (cons 'quote
+                                          (cons (cons 'λ
+                                                      (cons (cons α '())
+                                                            (cons (cons 'list
+                                                                        (cons (cons 'quote (cons 'quote '()))
+                                                                              (cons (cons 'list
+                                                                                          (cons α
+                                                                                                (cons (cons 'list
+                                                                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                                                                  (cons α '())))
+                                                                                                      '())))
+                                                                                    '())))
+                                                                  '())))
+                                                '()))
+                                    '()))
+                        '())))
+        X)
+    (⊦= '('((λ (α) (list 'quote (list α (list 'quote α))))
+            '(λ (α) (list 'quote (list α (list 'quote α)))))
+          ((λ (α) (list 'quote (list α (list 'quote α))))
+           '(λ (α) (list 'quote (list α (list 'quote α))))))
+        twine)
+    (⊦ equal? q (eval p))
+    (⊦ equal? p (eval q))
+    (⊦≠ p q)
+    (⊦= `',q p)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.825) (memory #(25165824 4403144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/twine°/forwards><a href=#test/twine°/forwards><code>test/twine°/forwards</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/twine°/forwards _)
+  (define p
+    ''((λ (α) (list 'quote (list α (list 'quote α))))
+       '(λ (α) (list 'quote (list α (list 'quote α))))))
+  (define q
+    '((λ (α) (list 'quote (list α (list 'quote α))))
+      '(λ (α) (list 'quote (list α (list 'quote α))))))
+  (⊦= (list q) (°-&gt;list #t (fresh° (v) (eval-exp° p '() v))))
+  (⊦= (list p) (°-&gt;list #t (fresh° (v) (eval-exp° q '() v))))
+  (⊦= (list q)
+      (°-&gt;list #t (fresh° (r) (eval-exp° p '() r) (eval-exp° r '() p))))
+  (⊦= (list p) (°-&gt;list #t (take° 1 (fresh° (e) (eval-exp° e '() q))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(25165824 4404808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/twine°/quine><a href=#test/twine°/quine><code>test/twine°/quine</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/twine°/quine _)
+  (define quine
+    '((λ (α) (list α (list 'quote α))) '(λ (α) (list α (list 'quote α)))))
+  (⊦= (list quine)
+      (°-&gt;list
+        #t
+        (fresh° (q) (eval-exp° quine '() q) (eval-exp° q '() quine))))
+  (⊦= '()
+      (°-&gt;list
+        #t
+        (fresh°
+          (q)
+          (≠° quine q)
+          (eval-exp° quine '() q)
+          (eval-exp° q '() quine))))
+  (let* ((X (car (°-&gt;list
+                   #f
+                   (take° 1
+                          (fresh°
+                            (x p q)
+                            (=° p q)
+                            (eval-exp° p '() q)
+                            (eval-exp° q '() p)
+                            (=° `(,p ,q) x))))))
+         (twine ((eval X) 'α)))
+    (⊦= '((begin (deny (equal? α 'closure)))
+          (begin (deny (equal? α 'list)))
+          (begin (deny (equal? α 'quote)))
+          (assert (every (μ v (symbol? v)) (list α))))
+        (reified-constraints X))
+    (⊦= (list quine quine) twine)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.084) (memory #(25165824 4417200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/twine°/run2><a href=#test/twine°/run2><code>test/twine°/run2</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/twine°/run2 _)
+  (let* ((X (cadr (°-&gt;list #f (take° 2 (fresh° (x) (twine° x))))))
+         (twine ((eval X) 'α 'β 'γ))
+         (p (car twine))
+         (q (cadr twine)))
+    (⊦= '((begin (deny (equal? α 'closure)))
+          (begin (deny (equal? α 'list)))
+          (begin (deny (equal? α 'quote)))
+          (begin (deny (equal? α 'λ)))
+          (begin (deny (equal? β 'closure)))
+          (begin (deny (equal? β α)))
+          (assert (every (μ v (symbol? v)) (list α β)))
+          (assert (absent? 'closure γ)))
+        (reified-constraints X))
+    (⊦= '('((λ (α) (list 'quote (list ((λ (β) α) 'γ) (list 'quote α))))
+            '(λ (α) (list 'quote (list ((λ (β) α) 'γ) (list 'quote α)))))
+          ((λ (α) (list 'quote (list ((λ (β) α) 'γ) (list 'quote α))))
+           '(λ (α) (list 'quote (list ((λ (β) α) 'γ) (list 'quote α))))))
+        twine)
+    (⊦ equal? q (eval p))
+    (⊦ equal? p (eval q))
+    (⊦≠ p q)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 4.252) (memory #(50331648 4412168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/thrine°/search><a href=#test/thrine°/search><code>test/thrine°/search</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/thrine°/search _)
+  (let* ((Q (car (°-&gt;list
+                   #f
+                   (take° 1
+                          (fresh°
+                            (x p q r)
+                            (≠° p q)
+                            (≠° q r)
+                            (≠° r p)
+                            (eval-exp° p '() q)
+                            (eval-exp° q '() r)
+                            (eval-exp° r '() p)
+                            (=° `(,p ,q ,r) x))))))
+         (λQ (eval Q))
+         (thrine (λQ 'α))
+         (p (first thrine))
+         (q (second thrine))
+         (r (third thrine)))
+    (⊦= '(λ (α)
+            (begin (deny (equal? α 'closure)))
+            (begin (deny (equal? α 'list)))
+            (begin (deny (equal? α 'quote)))
+            (assert (every (μ v (symbol? v)) (list α))))
+        (drop-right Q 1))
+    (⊦= '(''((λ (α) (list 'quote (list 'quote (list α (list 'quote α)))))
+             '(λ (α) (list 'quote (list 'quote (list α (list 'quote α))))))
+          '((λ (α) (list 'quote (list 'quote (list α (list 'quote α)))))
+            '(λ (α) (list 'quote (list 'quote (list α (list 'quote α))))))
+          ((λ (α) (list 'quote (list 'quote (list α (list 'quote α)))))
+           '(λ (α) (list 'quote (list 'quote (list α (list 'quote α)))))))
+        thrine)
+    (⊦ equal? q (eval p))
+    (⊦ equal? r (eval q))
+    (⊦ equal? p (eval r))
+    (⊦= '(#f #f #f) (list (equal? p q) (equal? q r) (equal? r p)))
+    (⊦= '(#f #f #f) (map (λ (e) (equal? e (eval e))) thrine))
+    (⊦= '(#f #f #f) (map (λ (e) (equal? e (eval (eval e)))) thrine))
+    (let* ((thrine/x (λQ 'x))
+           (p/x (first thrine/x))
+           (q/x (second thrine/x))
+           (r/x (third thrine/x)))
+      (⊦= '((λ (x) (list 'quote (list 'quote (list x (list 'quote x)))))
+            '(λ (x) (list 'quote (list 'quote (list x (list 'quote x))))))
+          r/x)
+      (⊦= (list q/x r/x p/x) (map eval thrine/x)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 5.312) (memory #(50331648 4401016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/thrine°/ground><a href=#test/thrine°/ground><code>test/thrine°/ground</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/thrine°/ground _)
+  (let* ((R '(λ (α) (list 'quote (list 'quote (list α (list 'quote α))))))
+         (r `(,R ',R))
+         (q `',r)
+         (p `',q))
+    (⊦= (list q) (°-&gt;list #t (fresh° (v) (eval-exp° p '() v))))
+    (⊦= (list r) (°-&gt;list #t (fresh° (v) (eval-exp° q '() v))))
+    (⊦= (list p) (°-&gt;list #t (fresh° (v) (eval-exp° r '() v))))
+    (⊦= '() (°-&gt;list #t (fresh° (v) (eval-exp° p '() p))))
+    (⊦= '() (°-&gt;list #t (fresh° (v) (eval-exp° q '() q))))
+    (⊦= '() (°-&gt;list #t (fresh° (v) (eval-exp° r '() r))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(50331648 4403616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/fact5><a href=#test/eval-exp/extended°/fact5><code>test/eval-exp/extended°/fact5</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/fact5 _)
+  (define rel-fact5
+    `((λ (f) ((f f) (int-exp ,(build-num 5))))
+      (λ (f)
+         (λ (n)
+            (if (zero? n) (int-exp ,(build-num 1)) (* n ((f f) (sub1 n))))))))
+  (⊦= '((int-val (0 0 0 1 1 1 1)))
+      (μkanren-run (q -1 #t) (eval-exp/extended° rel-fact5 '() q))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.077) (memory #(50331648 4400112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/forward><a href=#test/eval-exp/extended°/forward><code>test/eval-exp/extended°/forward</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/forward _)
+  (⊦= '((closure (x y) x ()))
+      (μkanren-run (q -1 #t) (eval-exp/extended° '(λ (x y) x) '() q)))
+  (⊦= '((b . a))
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° '((λ (x y) (cons y x)) 'a 'b) '() q)))
+  (⊦= '((#t))
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° '(cdr (cons #f (cons #t '()))) '() q)))
+  (⊦= '(yes)
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended°
+          '(if (zero? (sub1 (int-exp (1)))) 'yes 'no)
+          '()
+          q)))
+  (⊦= '(#t)
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° '(not (zero? (int-exp (1)))) '() q)))
+  (⊦= '(((int-val (1)) #t))
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° '(list (int-exp (1)) #t) '() q))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.028) (memory #(50331648 4398400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/guards><a href=#test/eval-exp/extended°/guards><code>test/eval-exp/extended°/guards</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/guards _)
+  (⊦= '(#t)
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° '((λ (not) (not #t)) (λ (x) x)) '() q)))
+  (⊦= '() (μkanren-run (q -1 #t) (eval-exp/extended° ''(int-val (1)) '() q)))
+  (⊦= '()
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° '(cons (int-exp (1)) #t) '() q)))
+  (⊦= '()
+      (μkanren-run (q -1 #t) (eval-exp/extended° '(car (int-exp (1))) '() q)))
+  (⊦= '()
+      (μkanren-run (q -1 #t) (eval-exp/extended° '(sub1 (int-exp ())) '() q))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(50331648 4410432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/backward-arithmetic><a href=#test/eval-exp/extended°/backward-arithmetic><code>test/eval-exp/extended°/backward-arithmetic</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/backward-arithmetic _)
+  (⊦= '((0 1))
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended°
+          `(* (int-exp ,q) (int-exp (1 1)))
+          '()
+          '(int-val (0 1 1)))))
+  (⊦= '(((1) (0 1 1)) ((0 1 1) (1)) ((0 1) (1 1)) ((1 1) (0 1)))
+      (μkanren-run
+        (q -1 #t)
+        (fresh°
+          (a b)
+          (=° q (list a b))
+          (eval-exp/extended°
+            `(* (int-exp ,a) (int-exp ,b))
+            '()
+            '(int-val (0 1 1))))))
+  (⊦= '((1 1 1))
+      (μkanren-run
+        (q -1 #t)
+        (eval-exp/extended° `(sub1 (int-exp ,q)) '() '(int-val (0 1 1))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.02) (memory #(50331648 4399640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/six><a href=#test/eval-exp/extended°/six><code>test/eval-exp/extended°/six</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/six _)
+  (let1 (six (μkanren-run
+               (q 15 #t)
+               (eval-exp/extended° q '() `(int-val ,(build-num 6)))))
+        (⊦= '((int-exp (0 1 1))
+              ((λ () (int-exp (0 1 1))))
+              (sub1 (int-exp (1 1 1)))
+              ((λ (α) (int-exp (0 1 1))) 'β)
+              (* (int-exp (1)) (int-exp (0 1 1)))
+              (* (int-exp (0 1 1)) (int-exp (1)))
+              (* (int-exp (0 1)) (int-exp (1 1)))
+              ((λ (α) (int-exp (0 1 1))) (list))
+              (car (list (int-exp (0 1 1))))
+              ((λ () ((λ () (int-exp (0 1 1))))))
+              (sub1 ((λ () (int-exp (1 1 1)))))
+              (car (list (int-exp (0 1 1)) 'α)))
+            (take six 12))
+        (⊦= '(* (int-exp (0 1)) (int-exp (1 1))) (list-ref six 6))
+        (⊦= '((λ () (sub1 (int-exp (1 1 1))))) (list-ref six 14)))
+  (⊦= '(λ (α β)
+          (begin (deny (equal? α 'int-exp)))
+          (assert (absent? 'closure β))
+          (assert (absent? 'int-val β))
+          (cons (cons 'λ
+                      (cons (cons α '())
+                            (cons (cons 'int-exp
+                                        (cons (cons 0 (cons 1 (cons 1 '()))) '()))
+                                  '())))
+                (cons (cons 'quote (cons β '())) '())))
+      (list-ref
         (°-&gt;list
           #f
-          (take°
-            6
-            (fresh° (q e v) (eval-exp° e '() v) (=° `(,e → ,v) q))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.127) (memory #(12582912 2491304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+          (take° 4
+                 (fresh°
+                   (q)
+                   (eval-exp/extended° q '() `(int-val ,(build-num 6))))))
+        3)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.198) (memory #(50331648 4409992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/boolean-quines><a href=#test/eval-exp/extended°/boolean-quines><code>test/eval-exp/extended°/boolean-quines</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/boolean-quines _)
+  (⊦= '((λ () #t) (λ () #f))
+      (°-&gt;list #f (take° 2 (fresh° (q) (eval-exp/extended° q '() q)))))
+  (let1 (booleans (μkanren-run (q 2 #t) (eval-exp/extended° q '() q)))
+        (⊦= '(#t #f) booleans)
+        (⊦= booleans (map eval booleans))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4401040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/eval-exp/extended°/quines><a href=#test/eval-exp/extended°/quines><code>test/eval-exp/extended°/quines</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/eval-exp/extended°/quines _)
+  (let* ((Qs (°-&gt;list #f (take° 5 (fresh° (q) (eval-exp/extended° q '() q)))))
+         (quines
+           (map (λ (Q) (apply (eval Q) (take '(α β) (length (cadr Q))))) Qs)))
+    (⊦= '(λ (α)
+            (begin (deny (equal? α 'closure)))
+            (begin (deny (equal? α 'int-val)))
+            (begin (deny (equal? α 'list)))
+            (begin (deny (equal? α 'quote)))
+            (assert (every (μ v (symbol? v)) (list α)))
+            (cons (cons 'λ
+                        (cons (cons α '())
+                              (cons (cons 'list
+                                          (cons α
+                                                (cons (cons 'list
+                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                  (cons α '())))
+                                                      '())))
+                                    '())))
+                  (cons (cons 'quote
+                              (cons (cons 'λ
+                                          (cons (cons α '())
+                                                (cons (cons 'list
+                                                            (cons α
+                                                                  (cons (cons 'list
+                                                                              (cons (cons 'quote (cons 'quote '()))
+                                                                                    (cons α '())))
+                                                                        '())))
+                                                      '())))
+                                    '()))
+                        '())))
+        (list-ref Qs 2))
+    (⊦= '(λ (α β)
+            (begin (deny (equal? α 'car)))
+            (begin (deny (equal? α 'closure)))
+            (begin (deny (equal? α 'int-val)))
+            (begin (deny (equal? α 'list)))
+            (begin (deny (equal? α 'quote)))
+            (assert (every (μ v (symbol? v)) (list α)))
+            (assert (absent? 'closure β))
+            (assert (absent? 'int-val β))
+            (cons (cons 'λ
+                        (cons (cons α '())
+                              (cons (cons 'list
+                                          (cons α
+                                                (cons (cons 'list
+                                                            (cons (cons 'car
+                                                                        (cons (cons 'quote (cons (cons 'quote β) '()))
+                                                                              '()))
+                                                                  (cons α '())))
+                                                      '())))
+                                    '())))
+                  (cons (cons 'quote
+                              (cons (cons 'λ
+                                          (cons (cons α '())
+                                                (cons (cons 'list
+                                                            (cons α
+                                                                  (cons (cons 'list
+                                                                              (cons (cons 'car
+                                                                                          (cons (cons 'quote (cons (cons 'quote β) '()))
+                                                                                                '()))
+                                                                                    (cons α '())))
+                                                                        '())))
+                                                      '())))
+                                    '()))
+                        '())))
+        (list-ref Qs 3))
+    (⊦= '(λ (α)
+            (begin (deny (equal? α 'closure)))
+            (begin (deny (equal? α 'int-val)))
+            (begin (deny (equal? α 'list)))
+            (begin (deny (equal? α 'quote)))
+            (assert (every (μ v (symbol? v)) (list α)))
+            (cons (cons 'λ
+                        (cons (cons α '())
+                              (cons (cons 'list
+                                          (cons (cons 'list
+                                                      (cons (cons 'quote (cons 'λ '()))
+                                                            (cons (cons 'quote (cons (cons α '()) '()))
+                                                                  (cons α '()))))
+                                                (cons (cons 'list
+                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                  (cons α '())))
+                                                      '())))
+                                    '())))
+                  (cons (cons 'quote
+                              (cons (cons 'list
+                                          (cons (cons 'list
+                                                      (cons (cons 'quote (cons 'λ '()))
+                                                            (cons (cons 'quote (cons (cons α '()) '()))
+                                                                  (cons α '()))))
+                                                (cons (cons 'list
+                                                            (cons (cons 'quote (cons 'quote '()))
+                                                                  (cons α '())))
+                                                      '())))
+                                    '()))
+                        '())))
+        (list-ref Qs 4))
+    (⊦= '(#t
+          #f
+          ((λ (α) (list α (list 'quote α))) '(λ (α) (list α (list 'quote α))))
+          ((λ (α) (list α (list (car '(quote . β)) α)))
+           '(λ (α) (list α (list (car '(quote . β)) α))))
+          ((λ (α) (list (list 'λ '(α) α) (list 'quote α)))
+           '(list (list 'λ '(α) α) (list 'quote α))))
+        quines)
+    (⊦ every (λ (quine) (equal? quine (eval quine))) quines)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 3.017) (memory #(50331648 4421936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/symbol°><a href=#test/symbol°><code>test/symbol°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/symbol° _)
   (⊦= '((λ (α) (assert (every (μ v (symbol? v)) (list α))) α))
-        (°-&gt;list #f (fresh° (s) (symbol° s))))
+      (°-&gt;list #f (fresh° (s) (symbol° s))))
   (⊦= '((λ (α) α)) (°-&gt;list #f (fresh° (s r) (symbol° r)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2492320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4405328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/≠°><a href=#test/≠°><code>test/≠°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/≠° _)
   (⊦= '() (°-&gt;list #f (fresh° (s) (≠° (+ 2 3) 5))))
   (⊦= '((λ (α) α)) (°-&gt;list #f (fresh° (s) (≠° (* 2 3) 5))))
-  (⊦= '((λ (α)
-              (begin (deny (equal? α 5)))
-              (begin (deny (equal? α 6)))
-              α))
-        (°-&gt;list #f (fresh° (q x) (≠° 5 q) (=° x q) (≠° 6 x))))
+  (⊦= '((λ (α) (begin (deny (equal? α 5))) (begin (deny (equal? α 6))) α))
+      (°-&gt;list #f (fresh° (q x) (≠° 5 q) (=° x q) (≠° 6 x))))
   (⊦= '((λ (α) α)) (°-&gt;list #f (fresh° (q y z) (≠° (cons y z) q))))
   (⊦= '((λ (α β γ)
-              (begin (deny (equal? α (cons β γ))))
-              (cons α (cons β (cons γ '())))))
-        (°-&gt;list
-          #f
-          (fresh° (q x y z) (≠° (cons y z) x) (=° (list x y z) q))))
+           (begin (deny (equal? α (cons β γ))))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list #f (fresh° (q x y z) (≠° (cons y z) x) (=° (list x y z) q))))
   (⊦= '((λ (α)
-              (begin (deny (equal? α 6)))
-              (cons (cons 5 α) (cons 5 (cons α '())))))
-        (°-&gt;list
-          #f
-          (fresh°
-            (q x y z)
-            (=° (cons y z) x)
-            (≠° (cons 5 6) x)
-            (=° 5 y)
-            (=° (list x y z) q))))
+           (begin (deny (equal? α 6)))
+           (cons (cons 5 α) (cons 5 (cons α '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° (cons y z) x)
+          (≠° (cons 5 6) x)
+          (=° 5 y)
+          (=° (list x y z) q))))
   (⊦= '((λ (α) (cons (cons 6 α) (cons 6 (cons α '())))))
-        (°-&gt;list
-          #f
-          (fresh°
-            (q x y z)
-            (=° (cons y z) x)
-            (≠° (cons 5 6) x)
-            (=° 6 y)
-            (=° (list x y z) q))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° (cons y z) x)
+          (≠° (cons 5 6) x)
+          (=° 6 y)
+          (=° (list x y z) q))))
   (⊦= '((λ (α β γ)
-              (begin (deny (equal? α 5)))
-              (begin (deny (equal? α 6)))
-              (begin (deny (equal? β 2)) (deny (equal? γ 1)))
-              (cons α (cons β (cons γ '())))))
-        (°-&gt;list
-          #f
-          (fresh°
-            (q x y z)
-            (≠° 5 x)
-            (≠° 6 x)
-            (≠° (list y 1) (list 2 z))
-            (=° (list x y z) q))))
+           (begin (deny (equal? α 5)))
+           (begin (deny (equal? α 6)))
+           (begin (deny (and (equal? β 2) (equal? γ 1))))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (≠° 5 x)
+          (≠° 6 x)
+          (≠° (list y 1) (list 2 z))
+          (=° (list x y z) q))))
   (⊦= '((λ (α) (begin (deny (equal? α 1))) α))
-        (°-&gt;list #f (fresh° (s) (≠° s 1))))
+      (°-&gt;list #f (fresh° (s) (≠° s 1))))
   (⊦= '() (°-&gt;list #f (fresh° (s) (≠° s 1) (=° s 1))))
   (⊦= '((λ (α) (begin (deny (equal? α (cons 'a (cons 'b '()))))) α))
-        (°-&gt;list #f (fresh° (s) (≠° s '(a b)))))
+      (°-&gt;list #f (fresh° (s) (≠° s '(a b)))))
   (⊦= '((λ (α β)
-              (begin (deny (equal? α 1)) (deny (equal? β 2)))
-              (cons α (cons β '()))))
-        (°-&gt;list
-          #f
-          (fresh° (q p r) (≠° (list p r) '(1 2)) (=° q (list p r)))))
+           (begin (deny (and (equal? α 1) (equal? β 2))))
+           (cons α (cons β '()))))
+      (°-&gt;list #f (fresh° (q p r) (≠° (list p r) '(1 2)) (=° q (list p r)))))
   (⊦= '((λ (α) (begin (deny (equal? α 2))) (cons 1 (cons α '()))))
-        (°-&gt;list
-          #f
-          (fresh°
-            (q p r)
-            (≠° (list p r) '(1 2))
-            (=° p 1)
-            (=° q (list p r)))))
+      (°-&gt;list
+        #f
+        (fresh° (q p r) (≠° (list p r) '(1 2)) (=° p 1) (=° q (list p r)))))
   (⊦= '()
-        (°-&gt;list
-          #f
-          (fresh°
-            (q p r)
-            (≠° (list p r) '(1 2))
-            (=° p 1)
-            (=° r 2)
-            (=° q (list p r))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2484632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q p r)
+          (≠° (list p r) '(1 2))
+          (=° p 1)
+          (=° r 2)
+          (=° q (list p r))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 4405224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/rember°/naive><a href=#test/rember°/naive><code>test/rember°/naive</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rember°/naive _)
   (define-relation
     (rember° x ls out)
-    (cond°
-      ((=° '() ls) (=° '() out))
-      ((fresh° (a d) (=° `(,a unquote d) ls) (=° a x) (=° d out)))
-      ((fresh°
-         (a d res)
-         (=° `(,a unquote d) ls)
-         (=° `(,a unquote res) out)
-         (rember° x d res)))))
+    (cond° ((=° '() ls) (=° '() out))
+           ((fresh° (a d) (=° `(,a unquote d) ls) (=° a x) (=° d out)))
+           ((fresh°
+              (a d res)
+              (=° `(,a unquote d) ls)
+              (=° `(,a unquote res) out)
+              (rember° x d res)))))
   (⊦= '((a c b d)) (μkanren-run (q 1 #t) (rember° 'b '(a b c b d) q)))
   (⊦= '((a b c)) (μkanren-run (q 1 #t) (rember° 'd '(a b c) q)))
   (⊦= '((a c b d) (a b c d) (a b c b d))
-        (μkanren-run (q -1 #t) (rember° 'b '(a b c b d) q)))
+      (μkanren-run (q -1 #t) (rember° 'b '(a b c b d) q)))
   (⊦= '(α) (μkanren-run (q -1 #t) (rember° 'b '(b) '(b)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2484392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 4405832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/rember°/fixed><a href=#test/rember°/fixed><code>test/rember°/fixed</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rember°/fixed _)
   (define-relation
     (rember° x ls out)
-    (cond°
-      ((=° '() ls) (=° '() out))
-      ((fresh° (a d) (=° `(,a unquote d) ls) (=° a x) (=° d out)))
-      ((fresh°
-         (a d res)
-         (=° `(,a unquote d) ls)
-         (≠° a x)
-         (=° `(,a unquote res) out)
-         (rember° x d res)))))
+    (cond° ((=° '() ls) (=° '() out))
+           ((fresh° (a d) (=° `(,a unquote d) ls) (=° a x) (=° d out)))
+           ((fresh°
+              (a d res)
+              (=° `(,a unquote d) ls)
+              (≠° a x)
+              (=° `(,a unquote res) out)
+              (rember° x d res)))))
   (⊦= '((a c b d)) (μkanren-run (q -1 #t) (rember° 'b '(a b c b d) q)))
   (⊦= '() (μkanren-run (q -1 #t) (rember° 'b '(b) '(b))))
   (⊦= '((λ () (cons 'a (cons (cons 'b (cons 'c '())) '())))
-          (λ () (cons 'b (cons (cons 'a (cons 'c '())) '())))
-          (λ () (cons 'c (cons (cons 'a (cons 'b '())) '())))
-          (λ (α)
-              (begin (deny (equal? α 'a)))
-              (begin (deny (equal? α 'b)))
-              (begin (deny (equal? α 'c)))
-              (cons α (cons (cons 'a (cons 'b (cons 'c '()))) '()))))
-        (°-&gt;list
-          #f
-          (fresh° (q x out) (rember° x '(a b c) out) (=° (list x out) q)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2491048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+        (λ () (cons 'b (cons (cons 'a (cons 'c '())) '())))
+        (λ () (cons 'c (cons (cons 'a (cons 'b '())) '())))
+        (λ (α)
+           (begin (deny (equal? α 'a)))
+           (begin (deny (equal? α 'b)))
+           (begin (deny (equal? α 'c)))
+           (cons α (cons (cons 'a (cons 'b (cons 'c '()))) '()))))
+      (°-&gt;list
+        #f
+        (fresh° (q x out) (rember° x '(a b c) out) (=° (list x out) q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 4413872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/absent°><a href=#test/absent°><code>test/absent°</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/absent° _)
   (⊦= '((λ (α β)
-              (assert (absent? 'panda α))
-              (assert (absent? 'panda β))
-              (cons 'jackal
-                    (cons (cons α (cons 'leopard (cons β '()))) '()))))
-        (°-&gt;list
-          #f
-          (fresh°
-            (q x y)
-            (=° `(jackal (,y leopard ,x)) q)
-            (absent° 'panda q)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2492128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+           (assert (absent? 'panda α))
+           (assert (absent? 'panda β))
+           (cons 'jackal (cons (cons α (cons 'leopard (cons β '()))) '()))))
+      (°-&gt;list
+        #f
+        (fresh° (q x y) (=° `(jackal (,y leopard ,x)) q) (absent° 'panda q)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4411408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;
 <a href=/categories/logic-programming/>logic programming</a>&nbsp;</div><div class=blog-tags><span>Tags: </span><a href=/tags/pattern-matching/>pattern matching</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
 <span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
 </a><a href=/post/microkanren-aggregators/ class=see-also-item><span class=see-also-item-title>Aggregation predicates for µkanren</span>
 <span class=see-also-item-subtitle>Groups, window functions, sets and enumerations</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
 </a><a href=/post/the-reasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Reasoned Schemer</span>
 <span class=see-also-item-subtitle>miniKanren, microKanren and some implementations</span>
 </a><a href=/post/microkanren-arithmetic/ class=see-also-item><span class=see-also-item-title>Pure, declarative, and constructive arithmetic relations</span>
 <span class=see-also-item-subtitle>A declarative pearl</span>
+</a><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
 </a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
 </a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Versions and implementation notes</span>
 </a><a href=/post/sbral/ class=see-also-item><span class=see-also-item-title>The SBRAL data structure</span>
 <span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
-</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
-</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
 </a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
 <span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
 </a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
@@ -363,5 +1242,5 @@ pp. 8–29.<hr><p><strong>Abstract:</strong> <i>We present relational interprete
 &copy;
 2016 - 2026
 &nbsp;&bull;&nbsp;
-<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.166.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 &nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/987d5e94c8ab9ffa2397dc6953a35a9d8eb05738>987d5e94</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

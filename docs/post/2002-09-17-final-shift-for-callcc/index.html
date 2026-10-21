@@ -1,4 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Final shift for call/cc - This site needs no title</title><meta name=description content="Direct implementation of shift and reset"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/","name":"Final shift for call/cc","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"Final shift for call/cc","url":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"},{"@id":"https://massimo-nocentini.github.io/#author-martin-gasbichler","@type":"Person","name":"Martin Gasbichler","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-michael-sperber","@type":"Person","name":"Michael Sperber","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-martin-gasbichler"},{"@id":"https://massimo-nocentini.github.io/#author-michael-sperber"}],"dateCreated":"2002-09-17T18:33:23+01:00","dateModified":"2026-02-20T16:39:53+01:00","datePublished":"2002-09-17T18:33:23+01:00","description":"","headline":"Final shift for call/cc","inLanguage":"en","keywords":["monads","callcc","shift","reset"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT11M","wordCount":2197}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="Final shift for call/cc"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2002-09-17T18:33:23+01:00"><meta property="article:modified_time" content="2026-02-20T16:39:53+01:00"><meta property="article:tag" content="Monads"><meta property="article:tag" content="Callcc"><meta property="article:tag" content="Shift"><meta property="article:tag" content="Reset"><link rel=canonical href=https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/><meta name=twitter:title content="Final shift for call/cc"><meta name=twitter:description content="Direct implementation of shift and reset"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.166.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Final shift for call/cc - This site needs no title</title><meta name=description content="Direct implementation of shift and reset"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/","name":"Final shift for call/cc","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"Final shift for call/cc","url":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"},{"@id":"https://massimo-nocentini.github.io/#author-martin-gasbichler","@type":"Person","name":"Martin Gasbichler","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#author-michael-sperber","@type":"Person","name":"Michael Sperber","url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-martin-gasbichler"},{"@id":"https://massimo-nocentini.github.io/#author-michael-sperber"}],"dateCreated":"2002-09-17T18:33:23+01:00","dateModified":"2026-02-20T16:39:53+01:00","datePublished":"2002-09-17T18:33:23+01:00","description":"","headline":"Final shift for call/cc","inLanguage":"en","keywords":["monads","callcc","shift","reset"],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT23M","wordCount":4840}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="Final shift for call/cc"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2002-09-17T18:33:23+01:00"><meta property="article:modified_time" content="2026-02-20T16:39:53+01:00"><meta property="article:tag" content="Monads"><meta property="article:tag" content="Callcc"><meta property="article:tag" content="Shift"><meta property="article:tag" content="Reset"><link rel=canonical href=https://massimo-nocentini.github.io/post/2002-09-17-final-shift-for-callcc/><meta name=twitter:title content="Final shift for call/cc"><meta name=twitter:description content="Direct implementation of shift and reset"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
 <span class="fas fa-magnifying-glass"></span>
 </button>
 <button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
@@ -8,7 +8,7 @@
 <span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>Final shift for call/cc</h1><h2 class=post-subheading>Direct implementation of shift and reset</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 17, 2002
 &nbsp;(Last modified on February 20, 2026)
 &nbsp;|&nbsp;
-<i class="fas fa-clock"></i>&nbsp;11&nbsp;min
+<i class="fas fa-clock"></i>&nbsp;23&nbsp;min
 &nbsp;|&nbsp;
 <i class="fas fa-user"></i>&nbsp;Martin Gasbichler<i class="fas fa-user"></i>&nbsp;Michael Sperber</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><blockquote cite=https://doi.org/10.1145/583852.581504>Gasbichler, Martin and Sperber, Michael,
 2002.
@@ -17,14 +17,21 @@ In SIGPLAN Not.,
 Association for Computing Machinery,
 New York, NY, USA,
 vol. 37,
-pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications.</i></p></blockquote><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script>hljs.highlightAll()</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite><a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf>Introduction to Programming with Shift and Reset</a></cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite><a href=http://pllab.is.ocha.ac.jp/~asai/>Professor Kenichi Asai's home page</a></cite> recorded a talk <cite><a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></cite> that given in the workshop <cite><a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/>CW 2011 Tutorial: home page</a></cite>, slides <cite><a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf>CW 2011 Tutorial: slides</a></cite> are also available.</p><section id=section1464><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
+pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications.</i></p></blockquote><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><p>In this page we describe two fundamental macros, <code class=w3-codespan>resetcc</code> and <code class=w3-codespan>letcc/shift</code> respectively, that support all the other forms stressed in the tests that follows. Moreover, we show how to <i>discard</i>, <i>extract</i>, <i>preserve</i>, and <i>wrap</i> delimited continuations, accordingly to the tutorial <cite><a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/main-e.pdf>Introduction to Programming with Shift and Reset</a></cite> by Kenichi Asai and Oleg Kiselyov. The former author <cite><a href=http://pllab.is.ocha.ac.jp/~asai/>Professor Kenichi Asai's home page</a></cite> recorded a talk <cite><a href="https://www.youtube.com/watch?v=QNM-njddhIw">Delimited Continuations for Everyone by Kenichi Asai</a></cite> that given in the workshop <cite><a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/>CW 2011 Tutorial: home page</a></cite>, slides <cite><a href=http://pllab.is.ocha.ac.jp/~asai/cw2011tutorial/slides.pdf>CW 2011 Tutorial: slides</a></cite> are also available.</p><section id=section2125><header><h1>The <code class=w3-codespan>resetcc</code> macro</h1></header></section><p>Continuations are delimited by the <code class=w3-codespan>resetcc</code> syntax as in the following generic expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(resetcc body ...)
 </code></pre></div>where the expressions <code class=w3-codespan>body ...</code> execute in a delimited context; for the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(delimcc-reset (τ body ...))
-</code></pre></div></p><section id=section1467><header><h1>The <code class=w3-codespan>letcc/shift</code> macro</h1></header></section><p>The expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
+</code></pre></div></p><section id=section2128><header><h1>The <code class=w3-codespan>letcc/shift</code> macro</h1></header></section><p>The expression<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(letcc/shift k body ...)
 </code></pre></div>is explained by author's word:<blockquote class="w3-panel w3-leftbar w3-round w3-border" style=max-width:61.8%><span style=font-size:261%;opacity:.2>&#10077;</span><br><i><ol><li>clears the current continuation</li><li>binds the cleared continuation to <code class=w3-codespan>k</code></li><li>and executes <code class=w3-codespan>body ...</code></li></ol></i><footer><p class=w3-right-align>Kenichi Asai</p></footer></blockquote>For the sake of clarity, it expands to<div><pre class=w3-container><code class="w3-code w3-round language-scheme">(delimcc-shift (λ (k) body ...))
-</code></pre></div></p><section id=section1470><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+</code></pre></div></p><section id=section2131><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
   (aux continuation delimited)
   *
-  (import scheme (chicken base) srfi-1 (aux base) (aux continuation))
+  (import
+    scheme
+    (only (scheme base) make-parameter)
+    (chicken base)
+    (only (chicken fixnum) fx+ fx- fxmax)
+    srfi-1
+    (aux base)
+    (aux continuation))
   (define-syntax-rule (resetcc body ...) (delimcc-reset (τ body ...)))
   (define-syntax-rule (resetcc+null body ...) (resetcc body ... '()))
   (define-syntax
@@ -42,22 +49,219 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
     (λ-shift args body ...)
     (letcc/shift k (λ args (let1 (x (begin body ...)) (k x)))))
   (define-syntax-rule (τ-shift body ...) (λ-shift () body ...))
-  (define *meta-continuation*
-    (λ args
-        (warning &quot;Missing enclosing resetcc, called with args&quot; args)
-        (apply values args)))
+  (define (delimcc-missing-reset . args)
+    (warning &quot;Missing enclosing resetcc, called with args&quot; args)
+    (apply values args))
+  (define-record
+    delimcc-frame
+    k
+    parent
+    outer
+    winds
+    signalling
+    state
+    host
+    escaped)
+  (define delimcc-root-frame (make-delimcc-frame #f #f #f #f 0 'in #f #f))
+  (define (delimcc-handlers-push handler handlers)
+    (if (pair? handlers) (cons handler handlers) handler))
+  (define (delimcc-handlers-call handlers c)
+    (cond ((pair? handlers)
+           (let1 (saved #f)
+                 (##sys#dynamic-wind
+                   (τ (set! saved ##sys#current-exception-handler)
+                      (set! ##sys#current-exception-handler (cdr handlers)))
+                   (τ ((car handlers) c))
+                   (τ (set! ##sys#current-exception-handler saved)))))
+          (else (handlers c))))
+  (define delimcc-pop-exception-handler
+    (and (##sys#symbol-has-toplevel-binding? '##sys#pop-exception-handler!)
+         (##sys#slot '##sys#pop-exception-handler! 0)))
+  (define (delimcc-raise-winds)
+    (let1 (ws ##sys#dynamic-winds)
+          (if (and delimcc-pop-exception-handler
+                   (pair? ws)
+                   (eq? (caar ws) delimcc-pop-exception-handler))
+            (cdr ws)
+            ws)))
+  (define-inline (delimcc-frame-k/fast f) (##sys#slot f 1))
+  (define-inline (delimcc-frame-parent/fast f) (##sys#slot f 2))
+  (define-inline (delimcc-frame-winds/fast f) (##sys#slot f 4))
+  (define-inline (delimcc-frame-signalling/fast f) (##sys#slot f 5))
+  (define-inline (delimcc-frame-state/fast f) (##sys#slot f 6))
+  (define-inline (delimcc-frame-outer/fast f) (##sys#slot f 3))
+  (define-inline
+    (delimcc-frame-signalling-set!/fast f n)
+    (##sys#setislot f 5 n))
+  (define-inline (delimcc-frame-state-set!/fast f s) (##sys#setslot f 6 s))
+  (define-inline (delimcc-frame-host/fast f) (##sys#slot f 7))
+  (define-inline
+    (delimcc-frame-gone?/fast frame)
+    (or (eq? (delimcc-frame-state/fast frame) 'left)
+        (let1 (host (delimcc-frame-host/fast frame))
+              (and host
+                   (memq (delimcc-frame-state/fast host) '(left popped))
+                   #t))
+        (and (eq? (delimcc-frame-state/fast frame) 'escaping)
+             (delimcc-frame-escaped-away? frame))))
+  (define (delimcc-frame-escaped-away? frame)
+    (let1 (winds (delimcc-frame-escaped frame))
+          (and winds
+               (eq? 0 (delimcc-frame-signalling/fast frame))
+               (not (delimcc-within? winds)))))
+  (define (delimcc-within? base)
+    (let loop ((ws ##sys#dynamic-winds))
+      (cond ((eq? ws base) #t) ((pair? ws) (loop (cdr ws))) (else #f))))
+  (define delimcc-meta-continuation-thread-cell (make-parameter #f))
+  (define delimcc-meta-continuation-cml-cell #f)
+  (define (delimcc-settle! cell)
+    (let1 (frame (cdr cell))
+          (when (delimcc-frame-gone?/fast frame)
+                (delimcc-frame-state-set! frame 'popped)
+                (delimcc-frame-signalling-set! frame 0)
+                (set-cdr! cell (delimcc-frame-parent frame))
+                (delimcc-settle! cell)))
+    cell)
+  (define (delimcc-meta-continuation-cell)
+    (let1 (cell (delimcc-meta-continuation-cell/raw))
+          (if (delimcc-frame-gone?/fast (cdr cell))
+            (delimcc-settle! cell)
+            cell)))
+  (define (delimcc-meta-continuation-cell/raw)
+    (let1 (host 'aux.cml#%host-thread)
+          (cond ((and (##sys#symbol-has-toplevel-binding? host)
+                      (eq? (##sys#slot host 0) ##sys#current-thread))
+                 (unless
+                   delimcc-meta-continuation-cml-cell
+                   (receive
+                     (clear! get peek put!)
+                     ((##sys#slot 'aux.cml#make-thread-property 0)
+                      (τ (cons 'cml delimcc-root-frame)))
+                     (set! delimcc-meta-continuation-cml-cell get)))
+                 (delimcc-meta-continuation-cml-cell))
+                (else
+                 (let1 (cell (delimcc-meta-continuation-thread-cell))
+                       (if (and cell (eq? (car cell) ##sys#current-thread))
+                         cell
+                         (let1 (cell (cons ##sys#current-thread delimcc-root-frame))
+                               (delimcc-meta-continuation-thread-cell cell)
+                               cell)))))))
+  (define (delimcc-escape cell frame args)
+    (cond ((eq? frame delimcc-root-frame) (apply delimcc-missing-reset args))
+          (else
+           (set-cdr! cell (delimcc-frame-parent/fast frame))
+           (unless
+             (eq? 0 (delimcc-frame-signalling/fast frame))
+             (delimcc-frame-signalling-set! frame 0))
+           (apply (delimcc-frame-k/fast frame) args))))
+  (define (delimcc-return args)
+    (let1 (cell (delimcc-meta-continuation-cell))
+          (delimcc-escape cell (cdr cell) args)))
+  (define (delimcc-signal c outer)
+    (let loop ((frame (cdr (delimcc-meta-continuation-cell))))
+      (cond ((eq? frame delimcc-root-frame) (delimcc-handlers-call outer c))
+            ((not (eq? 0 (delimcc-frame-signalling/fast frame)))
+             (loop (delimcc-frame-parent/fast frame)))
+            (else
+             (when (eq? (delimcc-frame-state/fast frame) 'escaping)
+                   (delimcc-frame-state-set!/fast frame 'in))
+             (let1 (returned #f)
+                   (##sys#dynamic-wind
+                     (τ (set! returned #f)
+                        (delimcc-frame-escaped-set! frame #f)
+                        (delimcc-frame-signalling-set!/fast
+                          frame
+                          (fx+ (delimcc-frame-signalling/fast frame) 1)))
+                     (τ (receive
+                          vs
+                          (delimcc-handlers-call
+                            (delimcc-frame-outer/fast frame)
+                            c)
+                          (set! returned #t)
+                          (apply values vs)))
+                     (τ (delimcc-frame-signalling-set!/fast
+                          frame
+                          (fxmax 0
+                                 (fx- (delimcc-frame-signalling/fast frame) 1)))
+                        (unless
+                          (or returned
+                              (not (eq? (delimcc-frame-state/fast frame) 'in)))
+                          (delimcc-frame-state-set!/fast frame 'escaping)
+                          (unless
+                            (delimcc-within? (delimcc-frame-winds/fast frame))
+                            (delimcc-frame-escaped-set!
+                              frame
+                              (delimcc-raise-winds)))))))))))
   (define (delimcc-reset thunk)
-    (let1 (mc *meta-continuation*)
+    (let1 (cell (delimcc-meta-continuation-cell))
           (letcc k
-                 (set! *meta-continuation*
-                   (λ args (set! *meta-continuation* mc) (apply k args)))
-                 (receive args (thunk) (apply *meta-continuation* args)))))
+                 (let* ((parent (cdr cell))
+                        (outer ##sys#current-exception-handler)
+                        (host (if (eq? 0 (delimcc-frame-signalling/fast parent))
+                                (delimcc-frame-host/fast parent)
+                                parent))
+                        (frame (make-delimcc-frame
+                                 k
+                                 parent
+                                 outer
+                                 #f
+                                 0
+                                 'in
+                                 host
+                                 #f))
+                        (handler (λ (c) (delimcc-signal c outer))))
+                   (set-cdr! cell frame)
+                   (##sys#dynamic-wind
+                     (τ (set! ##sys#current-exception-handler
+                          (delimcc-handlers-push handler outer))
+                        (case (delimcc-frame-state/fast frame)
+                          ((left escaping)
+                           (delimcc-frame-state-set! frame 'in))
+                          ((popped)
+                           (delimcc-frame-state-set! frame 'in)
+                           (let1 (cell (delimcc-meta-continuation-cell))
+                                 (when (eq? (cdr cell) parent)
+                                       (set-cdr! cell frame))))))
+                     (τ (delimcc-frame-winds-set! frame ##sys#dynamic-winds)
+                        (receive args (thunk) (delimcc-return args)))
+                     (τ (set! ##sys#current-exception-handler outer)
+                        (when (or (not (eq? 0 (delimcc-frame-signalling/fast frame)))
+                                  (eq? (delimcc-frame-state/fast frame) 'escaping))
+                              (delimcc-frame-state-set! frame 'left))))))))
+  (define (delimcc-unwind! base)
+    (let loop ((segment '()))
+      (let1 (ws ##sys#dynamic-winds)
+            (cond ((eq? ws base) segment)
+                  (else
+                   (set! ##sys#dynamic-winds (cdr ws))
+                   ((cdar ws))
+                   (loop (cons (car ws) segment)))))))
+  (define (delimcc-rewind! segment)
+    (unless
+      (null? segment)
+      ((caar segment))
+      (set! ##sys#dynamic-winds (cons (car segment) ##sys#dynamic-winds))
+      (delimcc-rewind! (cdr segment))))
   (define (delimcc-shift f)
-    (letcc k
-           (receive
-             args*
-             (f (λ args (resetcc (apply k args))))
-             (apply *meta-continuation* args*))))
+    (let* ((cell (delimcc-meta-continuation-cell))
+           (base (delimcc-frame-winds/fast (cdr cell))))
+      (define (return vs)
+        (when (delimcc-frame-gone?/fast (cdr cell)) (delimcc-settle! cell))
+        (delimcc-escape cell (cdr cell) vs))
+      (if (delimcc-within? base)
+        (##sys#call-with-current-continuation
+          (λ (c)
+             (let1 (segment (delimcc-unwind! base))
+                   (receive
+                     vs
+                     (f (λ args
+                           (resetcc (delimcc-rewind! segment) (apply c args))))
+                     (return vs)))))
+        (letcc k
+               (receive
+                 vs
+                 (f (λ args (resetcc (apply k args))))
+                 (return vs))))))
   (define (delimcc-extract) (letcc/shift k k))
   (define (delimcc-discard . args) (letcc/shift _ (apply values args)))
   (define (delimcc-either lst) (letcc/shift k (map k lst)))
@@ -83,7 +287,7 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
     delimcc-foldr
     (syntax-rules
       ()
-      ((delimcc-fold bexpr ((each acc) fbody ...) body ...)
+      ((delimcc-foldr bexpr ((each acc) fbody ...) body ...)
        (let* ((witness (gensym)) (b bexpr) (f (λ (each acc) fbody ...)))
          (define (L r)
            (cond ((eq? r witness) b)
@@ -101,17 +305,16 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
   (⊦= '(10 2 3) (cons 10 (resetcc (cons 2 (letcc/shift k (k '(3)))))))
   (⊦= 115 (+ 10 (resetcc (+ 2 (letcc/shift k (+ 100 (k 3)))))))
   (⊦= '(10 100 2 3)
-        (cons 10 (resetcc (cons 2 (letcc/shift k (cons 100 (k '(3))))))))
+      (cons 10 (resetcc (cons 2 (letcc/shift k (cons 100 (k '(3))))))))
   (⊦= 117 (+ 10 (resetcc (+ 2 (letcc/shift k (+ 100 (k (k 3))))))))
   (⊦= '(10 100 2 2 3)
-        (cons 10 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))
+      (cons 10 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))
   (⊦= 117 (resetcc (+ 10 (resetcc (+ 2 (letcc/shift k (+ 100 (k (k 3)))))))))
   (⊦= '(10 100 2 2 3)
-        (resetcc
-          (cons 10
-                (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.006)
- (memory #(12582912 3134888 1048576))
+      (resetcc
+        (cons 10 (resetcc (cons 2 (letcc/shift k (cons 100 (k (k '(3)))))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0)
+ (memory #(12582912 3987240 1048576))
  (stdout &quot;&quot;)
  (stderr &quot;\nWarning: Missing enclosing resetcc, called with args: (10)\n&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/discard><a href=#test/delimcc/tutorial/discard><code>test/delimcc/tutorial/discard</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/discard _)
@@ -120,90 +323,378 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
   (⊦= 9 (sub1 (resetcc (+ 3 (letcc/shift k (* 5 2))))))
   (⊦= '() (cdr (resetcc (cons 3 (letcc/shift k (list (* 5 2)))))))
   (⊦= 'hello (resetcc (sub1 (+ 3 (letcc/shift k 'hello))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3137864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3989664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/discard/prod><a href=#test/delimcc/tutorial/discard/prod><code>test/delimcc/tutorial/discard/prod</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/discard/prod _)
   (define (prod lst)
     (cond ((null? lst) 1)
           ((zero? (car lst)) (delimcc-discard 'zero))
           (else (* (car lst) (prod (cdr lst))))))
   (⊦= 'zero (resetcc (prod '(2 3 0 5)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3136440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3987608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/extract><a href=#test/delimcc/tutorial/extract><code>test/delimcc/tutorial/extract</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/extract _)
   (define-resetcc f (sub1 (+ 3 (letcc/shift k k))))
   (⊦= (sub1 (+ 3 10)) (f 10))
   (define-resetcc g (sub1 (+ 3 (delimcc-extract))))
   (⊦= 12 (g 10)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3140152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3992304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/extract/appender><a href=#test/delimcc/tutorial/extract/appender><code>test/delimcc/tutorial/extract/appender</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/extract/appender _)
   (define (appender lst)
     (cond ((null? lst) (delimcc-extract))
           (else (cons (car lst) (appender (cdr lst))))))
   (define-resetcc A (appender '(1 2 3)))
   (⊦= '(1 2 3 4 5 6) (A '(4 5 6))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3140920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3992888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield><a href=#test/delimcc/yield><code>test/delimcc/yield</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield _)
   (⊦= '(1) (resetcc+null (yield 1)))
   (⊦= '(1 2) (resetcc+null (yield 1) (yield 2))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3142016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3994176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield/extract><a href=#test/delimcc/yield/extract><code>test/delimcc/yield/extract</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield/extract _)
   (⊦= '((a 1) (a 2))
-        (§-&gt;list
-          (map§/yielded
-            (λ (v) (list 'a v))
-            (resetcc+null (yield/extract 1) (yield/extract 2)))))
+      (§-&gt;list
+        (map§/yielded
+          (λ (v) (list 'a v))
+          (resetcc+null (yield/extract 1) (yield/extract 2)))))
   (⊦= 3
-        (foldr/yielded
-          +
-          (resetcc+null (yield/extract 1) (yield/extract 2))
-          0)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3140632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+      (foldr/yielded + (resetcc+null (yield/extract 1) (yield/extract 2)) 0)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3992504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/yield§><a href=#test/delimcc/yield§><code>test/delimcc/yield§</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/yield§ _)
   (⊦= '(1) (§-&gt;list (resetcc+null (yield§ 1))))
   (⊦= '(1) (§-&gt;list (take§ 1 (resetcc+null (yield§ 1) (yield§ 2)))))
   (⊦= '(1 2) (§-&gt;list (resetcc+null (yield§ 1) (yield§ 2)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3144040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3996504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/yield§/walk><a href=#test/delimcc/tutorial/yield§/walk><code>test/delimcc/tutorial/yield§/walk</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/yield§/walk _)
   (define (walk f tree)
     (cond ((null? tree) (void))
           (else (walk f (car tree)) (f (cadr tree)) (walk f (caddr tree)))))
   (⊦= '(1 2 3)
-        (§-&gt;list (resetcc+null (walk yield§ª '((() 1 ()) 2 (() 3 ()))))))
+      (§-&gt;list (resetcc+null (walk yield§ª '((() 1 ()) 2 (() 3 ()))))))
   (⊦= 600
-        (delimcc-foldr
-          100
-          ((each prod) (* each prod))
-          (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3145688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+      (delimcc-foldr
+        100
+        ((each prod) (* each prod))
+        (walk yield/extract '((() 1 ()) 2 (() 3 ()))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3998360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/either><a href=#test/delimcc/tutorial/either><code>test/delimcc/tutorial/either</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/either _)
   (⊦= '(1 3 3) (resetcc (delimcc-either `(1 ,(add1 2) 3)))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3146856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3999720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/either/tensor><a href=#test/delimcc/tutorial/either/tensor><code>test/delimcc/tutorial/either/tensor</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/either/tensor _)
   (⊦= '(((p #t) (q #f)))
-        (let1 (sols '())
-              (resetcc
-                (let ((p (delimcc-either '(#t #f)))
-                      (q (delimcc-either '(#t #f))))
-                  (when (and (or p q) (or p (not q)) (or (not p) (not q)))
-                        (push! `((p ,p) (q ,q)) sols))))
-              sols))
+      (let1 (sols '())
+            (resetcc
+              (let ((p (delimcc-either '(#t #f)))
+                    (q (delimcc-either '(#t #f))))
+                (when (and (or p q) (or p (not q)) (or (not p) (not q)))
+                      (push! `((p ,p) (q ,q)) sols))))
+            sols))
   (⊦= '((((p #t) (q #t) no) ((p #t) (q #f) yes))
-          (((p #f) (q #t) no) ((p #f) (q #f) no)))
-        (resetcc
-          (let ((p (delimcc-either '(#t #f))) (q (delimcc-either '(#t #f))))
-            `((p ,p)
-              (q ,q)
-              ,(if (and (or p q) (or p (not q)) (or (not p) (not q)))
-                 'yes
-                 'no))))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3145016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+        (((p #f) (q #t) no) ((p #f) (q #f) no)))
+      (resetcc
+        (let ((p (delimcc-either '(#t #f))) (q (delimcc-either '(#t #f))))
+          `((p ,p)
+            (q ,q)
+            ,(if (and (or p q) (or p (not q)) (or (not p) (not q)))
+               'yes
+               'no))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3999352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/τ><a href=#test/delimcc/tutorial/τ><code>test/delimcc/tutorial/τ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/τ _)
   (define-resetcc a (append (τ-shift '(hello)) '(world)))
   (⊦= '(hello world) (a)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3148472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4003504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/delimcc/tutorial/λ><a href=#test/delimcc/tutorial/λ><code>test/delimcc/tutorial/λ</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/tutorial/λ _)
   (define-resetcc p (append '(hello) (λ-shift (x) (list x)) '(world)))
   (⊦= '(hello 4 world) (p 4)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3151936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4007616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/delimcc/exception><a href=#test/delimcc/exception><code>test/delimcc/exception</code>: <span class=w3-text-green>pass</span></a></h2><p>A condition that leaves a <code class=w3-codespan>resetcc</code> for a handler outside of it leaves the enclosing <code class=w3-codespan>resetcc</code> as the target of the next shift, also when the handler escapes from within a <code class=w3-codespan>resetcc</code> of its own. A handler runs where the condition was raised, inside the <code class=w3-codespan>resetcc</code>: a shift there, as in a handler of a continuable signal that resumes the signalling code as an effect handler does, goes to that <code class=w3-codespan>resetcc</code>, which stays the current one also when the handler returns, when a <code class=w3-codespan>guard</code> re-raises in its context, and while the handler lets other CML threads run. A condition raised by a resumed shift continuation goes to the handler around the resume, not to the one around the <code class=w3-codespan>resetcc</code> that captured it, which has returned. A body that a continuation enters again after a handler escaped from it signals to the handler around it, as a body entered for the first time does. A condition also leaves the <code class=w3-codespan>resetcc</code> of a resume when a <code class=w3-codespan>handle-exceptions</code> or a <code class=w3-codespan>guard</code> in the resumed continuation has returned through its call/cc continuation, which brings back the context of the original <code class=w3-codespan>resetcc</code>: a generator, or a choice resumed once per alternative, that raises out of such a form does not stay the target of the next shift; a handler that escapes back into that context keeps it.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/exception _)
+  (define trace '())
+  (⊦= 'shifted
+      (resetcc
+        (push! 'start trace)
+        (push! (handle-exceptions e 'caught (resetcc (error &quot;boom&quot;))) trace)
+        (letcc/shift k 'shifted)))
+  (⊦= '(start caught) (reverse trace))
+  (set! trace '())
+  (⊦= 'shifted
+      (resetcc
+        (push! (letcc out
+                      (with-exception-handler
+                        (λ (c) (resetcc (list 'b (resetcc (out 'escaped)))))
+                        (τ (list 'a
+                                 (resetcc (list 'aa (raise-continuable 'boom)))))))
+               trace)
+        (letcc/shift k 'shifted)))
+  (⊦= '(escaped) trace)
+  (⊦= 111
+      (with-exception-handler
+        (λ (c) 10)
+        (τ (resetcc (+ 1 (signal 'x) (letcc/shift k (k 100)))))))
+  (define old-handler-calls 0)
+  (define r
+    (handle-exceptions
+      e
+      (begin (set! old-handler-calls (add1 old-handler-calls)) (λ (x) 'old))
+      (resetcc
+        (let1 (x (letcc/shift k k)) (if (= x 0) (error &quot;zero&quot;) (list x))))))
+  (⊦= '(1) (r 1))
+  (⊦= '(caught &quot;zero&quot;)
+      (handle-exceptions
+        e
+        (list 'caught (get-condition-property e 'exn 'message))
+        (r 0)))
+  (⊦= 0 old-handler-calls)
+  (⊦= '(h 6)
+      (with-exception-handler
+        (λ (c) (letcc/shift k (list 'h (k 5))))
+        (τ (resetcc (+ 1 (signal 'x))))))
+  (⊦= '(o (h 6 8))
+      (resetcc
+        (list 'o
+              (with-exception-handler
+                (λ (c) (letcc/shift k (list 'h (k 5) (k 7))))
+                (τ (resetcc (+ 1 (signal 'x))))))))
+  (⊦= 111
+      (with-exception-handler
+        (λ (c) 10)
+        (τ (guard (e ((string? e) 'string))
+                  (resetcc
+                    (+ 1 (raise-continuable 'sym) (letcc/shift k (k 100))))))))
+  (define r1 #f)
+  (define r2 #f)
+  (run-cml
+    (τ (let ((t1 (spawn (τ (set! r1
+                             (with-exception-handler
+                               (λ (c) (cml/yield) (cml/yield) 'handled)
+                               (τ (resetcc
+                                    (let1 (x (signal 'cont))
+                                          (list x (letcc/shift k 'shifted))))))))))
+             (t2 (spawn (τ (set! r2 (resetcc (cml/yield) 'b-normal))))))
+         (sync (join-evt t1))
+         (sync (join-evt t2)))))
+  (⊦= 'shifted r1)
+  (⊦= 'b-normal r2)
+  (define out #f)
+  (define re #f)
+  (define n 0)
+  (⊦= '(body-got (mid second))
+      (with-exception-handler
+        (λ (c) (list 'top c))
+        (τ (resetcc
+             (with-exception-handler
+               (λ (c) (if (eq? c 'first) (out 'escaped) (list 'mid c)))
+               (τ (let1 (v (letcc o
+                                  (set! out o)
+                                  (resetcc
+                                    (letcc k (set! re k))
+                                    (set! n (add1 n))
+                                    (if (= n 1)
+                                      (signal 'first)
+                                      (list 'body-got (signal 'second))))))
+                        (if (eq? v 'escaped) (re #f) v))))))))
+  (define (message e) (get-condition-property e 'exn 'message))
+  (set! trace '())
+  (⊦= 'shifted
+      (resetcc
+        (push! (handle-exceptions
+                 c
+                 (list 'top c)
+                 (resetcc
+                   (list (handle-exceptions
+                           c
+                           'caught
+                           (letcc/shift e (list 'hs (e 5))))
+                         (signal 'sg))))
+               trace)
+        (letcc/shift k 'shifted)))
+  (⊦= '((top sg)) trace)
+  (set! trace '())
+  (⊦= 'shifted
+      (resetcc
+        (push! (guard (e (#t (list 'top e)))
+                      (resetcc
+                        (list (guard (e ((string? e) 'caught))
+                                     (letcc/shift e (list 'hs (e 5))))
+                              (raise 'boom))))
+               trace)
+        (letcc/shift k 'shifted)))
+  (⊦= '((top boom)) trace)
+  (set! trace '())
+  (define g3
+    (resetcc
+      (handle-exceptions e 'caught (yield/extract 1))
+      (error &quot;gen-fail&quot;)
+      '()))
+  (⊦= 'shifted
+      (resetcc
+        (push! (handle-exceptions
+                 e
+                 (list 'caught (message e))
+                 ((cdr g3) (void)))
+               trace)
+        (letcc/shift k 'shifted)))
+  (⊦= '((caught &quot;gen-fail&quot;)) trace)
+  (set! trace '())
+  (⊦= 'shifted
+      (resetcc
+        (push! (handle-exceptions
+                 e
+                 (list 'caught (message e))
+                 (resetcc
+                   (let1 (x (handle-exceptions
+                              e
+                              'inner
+                              (delimcc-either '(1 2 3))))
+                         (if (= x 2) (error &quot;boom&quot;) x))))
+               trace)
+        (letcc/shift k 'shifted)))
+  (⊦= '((caught &quot;boom&quot;)) trace)
+  (⊦= '(hs (5 recover))
+      (with-exception-handler
+        (λ (c) ((car c) 'recover))
+        (τ (resetcc
+             (list (handle-exceptions
+                     c
+                     'caught
+                     (letcc/shift e (list 'hs (e 5))))
+                   (letcc j (signal (list j)))))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4012152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/delimcc/threads><a href=#test/delimcc/threads><code>test/delimcc/threads</code>: <span class=w3-text-green>pass</span></a></h2><p>Each srfi-18 thread has its own meta-continuation: a thread shifting while another one sits in its <code class=w3-codespan>resetcc</code> does not return to it, and a thread started inside a <code class=w3-codespan>resetcc</code> body is not inside it. A shift continuation captured in a thread returns to the <code class=w3-codespan>resetcc</code> of the thread that resumes it.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/threads _)
+  (define a
+    (make-thread
+      (τ (resetcc (thread-sleep! 0.05) (letcc/shift k 'a-shifted)))))
+  (define b (make-thread (τ (resetcc (thread-sleep! 0.2) 'b-normal))))
+  (thread-start! a)
+  (thread-sleep! 0.01)
+  (thread-start! b)
+  (⊦= 'a-shifted (thread-join! a))
+  (⊦= 'b-normal (thread-join! b))
+  (⊦= '(parent child-shifted)
+      (resetcc
+        (list 'parent
+              (thread-join!
+                (thread-start!
+                  (make-thread (τ (letcc/shift k 'child-shifted))))))))
+  (define g #f)
+  (thread-join!
+    (thread-start!
+      (make-thread (τ (set! g (resetcc (list 'a (letcc/shift k k))))))))
+  (⊦= '(a 1) (g 1))
+  (⊦= '(a 2) (thread-join! (thread-start! (make-thread (τ (g 2)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001)
+ (memory #(12582912 4014000 1048576))
+ (stdout &quot;&quot;)
+ (stderr
+   &quot;\nWarning: Missing enclosing resetcc, called with args: (child-shifted)\n&quot;))
+</code></pre></div><h2 id=test/delimcc/cml><a href=#test/delimcc/cml><code>test/delimcc/cml</code>: <span class=w3-text-green>pass</span></a></h2><p>Each thread of <code class=w3-codespan>(aux cml)</code>, although all of them run within one srfi-18 thread, has its own meta-continuation too, and another srfi-18 thread, running no CML while CML threads switch in the first one, keeps one for all its resets; the one of a CML thread goes with the thread, also when it dies inside a resetcc.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/cml _)
+  (define ra #f)
+  (define rb #f)
+  (run-cml
+    (τ (let ((a (spawn (τ (set! ra
+                            (resetcc
+                              (cml/yield)
+                              (cml/yield)
+                              (letcc/shift k 'a-shifted))))))
+             (b (spawn (τ (set! rb
+                            (resetcc
+                              (cml/yield)
+                              (cml/yield)
+                              (cml/yield)
+                              (cml/yield)
+                              'b-normal))))))
+         (sync (join-evt a))
+         (sync (join-evt b)))))
+  (⊦= 'a-shifted ra)
+  (⊦= 'b-normal rb)
+  (define results '())
+  (define worker
+    (make-thread
+      (τ (do ((i 0 (add1 i)))
+             ((= i 50))
+           (push! (resetcc (thread-yield!) (letcc/shift k 'shifted))
+                  results)))))
+  (thread-start! worker)
+  (run-cml
+    (τ (for-each
+         (λ (t) (sync (join-evt t)))
+         (map (λ (n)
+                 (spawn (τ (do ((i 0 (add1 i)))
+                               ((= i 200))
+                             (thread-yield!)
+                             (cml/yield)))))
+              '(1 2)))))
+  (thread-join! worker)
+  (⊦= 50 (length results))
+  (⊦= results (map (λ (r) 'shifted) results))
+  (define freed 0)
+  (define (dying i)
+    (let1 (v (make-vector 10 i))
+          (set-finalizer! v (λ (v) (set! freed (add1 freed))))
+          (list (resetcc
+                  (cml/yield)
+                  (if (even? i) (cml/exit) (error &quot;dying inside a resetcc&quot;)))
+                v)))
+  (run-cml
+    (τ (do ((i 0 (add1 i)))
+           ((= i 100))
+         (sync (join-evt (spawn (τ (dying i))))))
+       (gc #t)))
+  (gc #t)
+  (⊨ (&lt;= 90 freed)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.015)
+ (memory #(12582912 4023504 1048576))
+ (stdout &quot;&quot;)
+ (stderr
+   &quot;\ncml: thread [000004] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000006] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000008] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000010] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000012] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000014] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000016] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000018] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000020] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000022] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000024] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000026] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000028] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000030] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000032] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000034] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000036] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000038] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000040] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000042] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000044] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000046] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000048] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000050] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000052] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000054] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000056] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000058] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000060] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000062] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000064] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000066] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000068] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000070] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000072] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000074] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000076] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000078] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000080] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000082] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000084] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000086] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000088] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000090] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000092] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000094] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000096] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000098] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000100] died of an uncaught exception: dying inside a resetcc\n\ncml: thread [000102] died of an uncaught exception: dying inside a resetcc\n&quot;))
+</code></pre></div><h2 id=test/delimcc/dynamic-wind><a href=#test/delimcc/dynamic-wind><code>test/delimcc/dynamic-wind</code>: <span class=w3-text-green>pass</span></a></h2><p>Every resume of a delimited continuation re-enters the <code class=w3-codespan>dynamic-wind</code> frames, hence the <code class=w3-codespan>parameterize</code> forms, between the shift and its reset. A limitation: a resume from within a resumption of the same continuation enters those frames while they are still active, and there a <code class=w3-codespan>parameterize</code>, which swaps the parameter's value with a saved one, gives the value from where the first resumption entered it instead of its binding; sequential resumes, as here, are not affected.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/dynamic-wind _)
+  (define q (make-parameter 'outer))
+  (define-resetcc
+    r
+    (parameterize ((q 'inner)) (let1 (x (letcc/shift k k)) (list x (q)))))
+  (⊦= 'outer (q))
+  (⊦= '(1 inner) (r 1))
+  (⊦= '(2 inner) (r 2))
+  (⊦= 'outer (q))
+  (define depth 0)
+  (define-resetcc
+    w
+    (dynamic-wind
+      (τ (set! depth (add1 depth)))
+      (τ (let1 (x (letcc/shift k k)) (list x depth)))
+      (τ (set! depth (sub1 depth)))))
+  (⊦= 0 depth)
+  (⊦= '(1 1) (w 1))
+  (⊦= '(2 1) (w 2))
+  (⊦= 0 depth))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4017648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/delimcc/resume-site><a href=#test/delimcc/resume-site><code>test/delimcc/resume-site</code>: <span class=w3-text-green>pass</span></a></h2><p>A delimited continuation holds nothing of the context outside its reset: resumed, it sees the parameters and signals to the handlers in force around the resume.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/resume-site _)
+  (define p (make-parameter 'outer))
+  (define g
+    (resetcc (yield/extract 1) (yield/extract (p)) (error &quot;gen-fail&quot;) '()))
+  (define g2 (parameterize ((p 'consumer)) ((cdr g) (void))))
+  (⊦= 'consumer (car g2))
+  (⊦= 'outer (p))
+  (⊦= '(caught &quot;gen-fail&quot;)
+      (handle-exceptions
+        e
+        (list 'caught (get-condition-property e 'exn 'message))
+        ((cdr g2) (void)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4023848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/delimcc/resume-site/call/cc><a href=#test/delimcc/resume-site/call/cc><code>test/delimcc/resume-site/call/cc</code>: <span class=w3-text-green>pass</span></a></h2><p>Only the continuation of the shift is delimited: one captured by call/cc between the shift and its reset, as <code class=w3-codespan>handle-exceptions</code> does (it returns through it), brings back the whole context of its capture when the resumed continuation takes it. Here the generator resumed under a <code class=w3-codespan>parameterize</code> sees the parameter of its creation after its <code class=w3-codespan>handle-exceptions</code> returns, and resuming <code class=w3-codespan>h</code> runs the before and after thunks around the original reset again.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/delimcc/resume-site/call/cc _)
+  (define p (make-parameter 'outer))
+  (define g
+    (resetcc
+      (handle-exceptions e 'caught (yield/extract 1))
+      (yield/extract (p))
+      '()))
+  (⊦= 'outer (car (parameterize ((p 'consumer)) ((cdr g) (void)))))
+  (define winds '())
+  (define h
+    (dynamic-wind
+      (τ (push! 'in winds))
+      (τ (resetcc (handle-exceptions e 'caught (list (letcc/shift k k)))))
+      (τ (push! 'out winds))))
+  (set! winds '())
+  (⊦= '(1) (h 1))
+  (⊦= '(in out) (reverse winds)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4025400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/letcc/delimcc+monad><a href=#test/letcc/delimcc+monad><code>test/letcc/delimcc+monad</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/letcc/delimcc+monad _)
   (define (reflect meaning) (letcc/shift k (extend k meaning)))
   (define (reify* t) (resetcc (eta (t))))
@@ -216,10 +707,9 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
     amb
     (syntax-rules () ((amb v ...) (reflect (append (reify v) ...)))))
   (⊦= '(1 2 3) (reify (amb 1 2 3)))
-  (⊦= '((1 3 4) (1 3 5) (2 3 4) (2 3 5))
-        (reify (list (amb 1 2) 3 (amb 4 5))))
+  (⊦= '((1 3 4) (1 3 5) (2 3 4) (2 3 5)) (reify (list (amb 1 2) 3 (amb 4 5))))
   (⊦= '((1 10 3) (1 10 1 4))
-        (reify (cons 1 (letcc k (cons 10 (amb '(3) (k '(4))))))))
+      (reify (cons 1 (letcc k (cons 10 (amb '(3) (k '(4))))))))
   (define (www)
     (define (f x) (append x (list (amb 6 4 2 8) (amb 2 4 5 4 1))))
     (reify (f (f (amb '(0) '(2) '(3) '(4) '(5) '(32))))))
@@ -229,42 +719,42 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
     (define (f x) (+ x (amb 6 4 2 8) (amb 2 4 5 4 1)))
     (reify (f (f (f (amb 0 2 3 4 5 32))))))
   (⊦= 48000 (length (wwww))))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.092) (memory #(12582912 3151568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.176) (memory #(12582912 5371440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/asai-pwl-talk/take><a href=#test/asai-pwl-talk/take><code>test/asai-pwl-talk/take</code>: <span class=w3-text-green>pass</span></a></h2><p>Given a list <code>lst</code> and a number <code>n</code>, the function <code>T</code> returns a list that is the same as <code>lst</code> but with the <code>n</code>-th element moved to the front. The test cases show that if <code>n</code> is zero or greater than the length of the list, the result is the same as the input list.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/asai-pwl-talk/take _)
   (define (T lst n)
     (letrec ((L (λ (lst n)
-                    (match/first
-                      lst
-                      (() '())
-                      ((,a unquote d)
-                       (cond ((= n 0) (letcc/shift k (cons a (k d))))
-                             (else `(,a unquote (L d (sub1 n))))))))))
+                   (match/first
+                     lst
+                     (() '())
+                     ((,a unquote d)
+                      (cond ((= n 0) (letcc/shift k (cons a (k d))))
+                            (else `(,a unquote (L d (sub1 n))))))))))
       (resetcc (L lst n))))
   (⊦= '(0 1 2 3 4) (T '(0 1 2 3 4) 0))
   (⊦= '(0 1 2 3 4) (T '(0 1 2 3 4) 5))
   (⊦= '(3 0 1 2 4) (T '(0 1 2 3 4) 3))
   (⊦= '(1 0 2 3 4) (T '(0 1 2 3 4) 1)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3155536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5376128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div><h2 id=test/asai-pwl-talk/anf><a href=#test/asai-pwl-talk/anf><code>test/asai-pwl-talk/anf</code>: <span class=w3-text-green>pass</span></a></h2><p>Given an S-expression <code>expr</code> and a variable name <code>v</code>, the function <code>anf/let</code> transforms <code>expr</code> into an A-normal form, where all intermediate results are (uniquely) named by a let-binding. The test case shows that the expression <code><quote><->a
 <->bcd</quote></code> is transformed into an A-normal form where the intermediate result of <code><quote><->bcd</quote></code> is named by a let-binding with variable name <code><quote>α</quote></code>.</p><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/asai-pwl-talk/anf _)
   (define (anf/let expr w)
     (letrec ((count 0)
              (L (λ (e)
-                    (match/first
-                      e
-                      ((λ (,v) unquote d)
-                       `(λ (,v) unquote (map (λ (e) (resetcc (L e))) d)))
-                      ((,a unquote d)
-                       (letcc/shift
-                         k
-                         (let ((w (symbol-append
-                                    w
-                                    (string-&gt;symbol (number-&gt;string count))))
-                               (_ (add1! count))
-                               (a* (L a))
-                               (d* (map L d)))
-                           `(let1 (,w (,a* unquote d*)) ,(k w)))))
-                      (,v v)))))
+                   (match/first
+                     e
+                     ((λ (,v) unquote d)
+                      `(λ (,v) unquote (map (λ (e) (resetcc (L e))) d)))
+                     ((,a unquote d)
+                      (letcc/shift
+                        k
+                        (let ((w (symbol-append
+                                   w
+                                   (string-&gt;symbol (number-&gt;string count))))
+                              (_ (add1! count))
+                              (a* (L a))
+                              (d* (map L d)))
+                          `(let1 (,w (,a* unquote d*)) ,(k w)))))
+                     (,v v)))))
       (resetcc (L expr))))
   (define (anf/λ expr w)
     (letrec ((count 0)
@@ -284,59 +774,51 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
                   (,v v))))
       (resetcc (L expr))))
   (⊦= '(let1 (α1 (- b c d)) (let1 (α0 (- a α1)) α0))
-        (anf/let '(- a (- b c d)) 'α))
-  (⊦= '((λ (α1) ((λ (α0) α0) (- a α1))) (- b c d))
-        (anf/λ '(- a (- b c d)) 'α))
+      (anf/let '(- a (- b c d)) 'α))
+  (⊦= '((λ (α1) ((λ (α0) α0) (- a α1))) (- b c d)) (anf/λ '(- a (- b c d)) 'α))
   (⊦= '((λ (α2) ((λ (α1) ((λ (α0) α0) (- a α1))) (+ b α2))) (/ c d))
-        (anf/λ '(- a (+ b (/ c d))) 'α))
-  (⊦= '((λ (α1) ((λ (α2) ((λ (α0) α0) (if α1 0 α2))) (void)))
-          (null? l))
-        (anf/λ '(if (null? l) 0 (void)) 'α))
+      (anf/λ '(- a (+ b (/ c d))) 'α))
+  (⊦= '((λ (α1) ((λ (α2) ((λ (α0) α0) (if α1 0 α2))) (void))) (null? l))
+      (anf/λ '(if (null? l) 0 (void)) 'α))
   (⊦= '((λ (α1)
-              ((λ (α4)
-                   ((λ (α3)
-                        ((λ (α5)
-                             ((λ (α2) ((λ (α0) α0) (if α1 0 α2)))
-                              (if α3 1 α5)))
-                         (void)))
-                    (null? α4)))
-               (cdr l)))
-          (null? l))
-        (anf/λ '(if (null? l) 0 (if (null? (cdr l)) 1 (void))) 'α))
+           ((λ (α4)
+               ((λ (α3)
+                   ((λ (α5) ((λ (α2) ((λ (α0) α0) (if α1 0 α2))) (if α3 1 α5)))
+                    (void)))
+                (null? α4)))
+            (cdr l)))
+        (null? l))
+      (anf/λ '(if (null? l) 0 (if (null? (cdr l)) 1 (void))) 'α))
   (⊦= '((λ (α1)
-              ((λ (α4)
-                   ((λ (α3)
-                        ((λ (α7)
-                             ((λ (α6)
-                                  ((λ (α8)
-                                       ((λ (α5)
-                                            ((λ (α2) ((λ (α0) α0) (if α1 0 α2)))
-                                             (if α3 1 α5)))
-                                        (if α6 2 α8)))
-                                   (void)))
-                              (null? α7)))
-                         (cdr l)))
-                    (null? α4)))
-               (cdr l)))
-          (null? l))
-        (anf/λ
-          '(if (null? l)
-             0
-             (if (null? (cdr l)) 1 (if (null? (cdr l)) 2 (void))))
-          'α))
+           ((λ (α4)
+               ((λ (α3)
+                   ((λ (α7)
+                       ((λ (α6)
+                           ((λ (α8)
+                               ((λ (α5)
+                                   ((λ (α2) ((λ (α0) α0) (if α1 0 α2)))
+                                    (if α3 1 α5)))
+                                (if α6 2 α8)))
+                            (void)))
+                        (null? α7)))
+                    (cdr l)))
+                (null? α4)))
+            (cdr l)))
+        (null? l))
+      (anf/λ '(if (null? l)
+                0
+                (if (null? (cdr l)) 1 (if (null? (cdr l)) 2 (void))))
+             'α))
   (⊦= '(λ (x)
-             (λ (y)
-                 (λ (z)
-                     (let1 (α1 (x z))
-                           (let1 (α2 (y z)) (let1 (α0 (α1 α2)) α0))))))
-        (anf/let '(λ (x) (λ (y) (λ (z) ((x z) (y z))))) 'α))
+          (λ (y)
+             (λ (z)
+                (let1 (α1 (x z)) (let1 (α2 (y z)) (let1 (α0 (α1 α2)) α0))))))
+      (anf/let '(λ (x) (λ (y) (λ (z) ((x z) (y z))))) 'α))
   (⊦= '(λ (x)
-             (λ (y)
-                 (λ (z)
-                     ((λ (α1) ((λ (α2) ((λ (α0) α0) (α1 α2))) (y z)))
-                      (x z)))))
-        (anf/λ '(λ (x) (λ (y) (λ (z) ((x z) (y z))))) 'α)))
-</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3158904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+          (λ (y)
+             (λ (z) ((λ (α1) ((λ (α2) ((λ (α0) α0) (α1 α2))) (y z))) (x z)))))
+      (anf/λ '(λ (x) (λ (y) (λ (z) ((x z) (y z))))) 'α)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4031920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;
 <a href=/categories/papers/>papers</a>&nbsp;</div><div class=blog-tags><span>Tags: </span><a href=/tags/monads/>monads</a>&nbsp;
 <a href=/tags/callcc/>callcc</a>&nbsp;
@@ -347,6 +829,40 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
 </a><a href=/post/1996-06-15-sitaram-handling-control-copy/ class=see-also-item><span class=see-also-item-title>Cogen in six lines</span>
 </a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
 </a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span>
+</a><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/ class=see-also-item><span class=see-also-item-title>The (aux schemer seasoned) module</span>
+<span class=see-also-item-subtitle>The Seasoned Schemer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
 </a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
 <span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
 </a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
@@ -355,10 +871,12 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
 <span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
 </a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
 <span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
-</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
 </a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
 </a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
-</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
 </a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
 <span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
 </a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
@@ -387,5 +905,5 @@ pp. 271–282.<hr><p><strong>Abstract:</strong> <i>We present a direct implement
 &copy;
 2016 - 2026
 &nbsp;&bull;&nbsp;
-<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.166.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 &nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/b430a1f8be731337b9c94a10b9e6a64e855bc140>b430a1f8</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>

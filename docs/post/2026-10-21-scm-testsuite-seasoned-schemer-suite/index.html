@@ -1,0 +1,410 @@
+<!doctype html><html lang=en itemscope itemtype=https://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The (aux schemer seasoned) module - This site needs no title</title><meta name=description content="The Seasoned Schemer"><meta name=author content="Massimo Nocentini"><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@id":"https://massimo-nocentini.github.io/#website","@type":"WebSite","name":"Massimo Nocentini","publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/#organization","@type":"Organization","name":"Massimo Nocentini","sameAs":["https://github.com/massimo-nocentini","https://gitlab.com/massimo-nocentini"],"url":"https://massimo-nocentini.github.io/"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/#breadcrumb","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://massimo-nocentini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/","name":"post","position":2},{"@type":"ListItem","item":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/","name":"The (aux schemer seasoned) module","position":3}]},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/#webpage","@type":"WebPage","breadcrumb":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/#breadcrumb"},"isPartOf":{"@id":"https://massimo-nocentini.github.io/#website"},"name":"The (aux schemer seasoned) module","url":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/"},{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini","@type":"Person","name":"Massimo Nocentini","url":"https://massimo-nocentini.github.io"},{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/#article","@type":"Article","author":[{"@id":"https://massimo-nocentini.github.io/#author-massimo-nocentini"}],"dateCreated":"2026-10-21T10:23:00+02:00","dateModified":"2026-10-21T14:46:59+02:00","datePublished":"2026-10-21T10:23:00+02:00","description":"","headline":"The (aux schemer seasoned) module","inLanguage":"en","keywords":[],"mainEntityOfPage":{"@id":"https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/#webpage"},"publisher":{"@id":"https://massimo-nocentini.github.io/#organization"},"timeRequired":"PT7M","wordCount":1444}]}</script><meta property="og:url" content="https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/"><meta property="og:site_name" content="Massimo Nocentini"><meta property="og:title" content="The (aux schemer seasoned) module"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2026-10-21T10:23:00+02:00"><meta property="article:modified_time" content="2026-10-21T14:46:59+02:00"><link rel=canonical href=https://massimo-nocentini.github.io/post/2026-10-21-scm-testsuite-seasoned-schemer-suite/><meta name=twitter:title content="The (aux schemer seasoned) module"><meta name=twitter:description content="The Seasoned Schemer"><meta name=twitter:card content="summary_large_image"><link href=/samurai.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.168.0"><link rel=alternate href=/index.xml type=application/rss+xml title="Massimo Nocentini"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css integrity=sha384-UA8juhPf75SzzAMA/4fo3yOU7sBJ0om7SCD2GHq0fZqZco6tr1UCV7nUbk9J90JM crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v7.2.0/css/all.css integrity=sha384-EXatlQyrOJgDaM9/a74ArMzy7/2bTMSrZj8ID1IPeVmc3GncfCugefCFWSLj8JL/ crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css integrity=sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB crossorigin=anonymous><link rel=stylesheet href=/css/beautifulhugo-a87fcd5d.min.984f622426c7d8d512b7efd2002bb418a3c1de72e877a7c94aebba2095877e2e.css integrity="sha256-mE9iJCbH2NUSt+/SACu0GKPB3nLod6fJSuu6IJWHfi4=" crossorigin=anonymous><link rel=stylesheet media=print href=/css/print.min.71d8124cb89642daef97634878d5e9689e76153aaa0453dbbe00e81fdbfc590e.css integrity="sha256-cdgSTLiWQtrvl2NIeNXpaJ52FTqqBFPbvgDoH9v8WQ4=" crossorigin=anonymous><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css integrity=sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE crossorigin=anonymous></head><body><nav class="navbar navbar-expand-md navbar-light navbar-custom fixed-top"><div class=container-fluid><a class=navbar-brand href=/>This site needs no title</a><div class="d-flex align-items-center"><button class=theme-toggle id=search-toggle aria-label=Search data-bs-toggle=tooltip data-bs-placement=bottom title=Search>
+<span class="fas fa-magnifying-glass"></span>
+</button>
+<button type=button class=navbar-toggler data-bs-toggle=collapse data-bs-target=#main-navbar aria-controls=main-navbar aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div><div class="collapse navbar-collapse" id=main-navbar><ul class="navbar-nav ms-auto"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-bs-toggle=dropdown aria-expanded=false>content</a><ul class="dropdown-menu dropdown-menu-end"><li><a class=dropdown-item href=/about/>About</a></li><li><a class=dropdown-item href=/page/>Pages</a></li><li><a class=dropdown-item href=/tags>Tags</a></li><li><a class=dropdown-item href=/categories/>Categories</a></li><li><a class=dropdown-item href=/author/>Authors</a></li></ul></li></ul></div></div></nav><div id=navbar-search-overlay class=navbar-search-overlay aria-hidden=true role=search><div class="navbar-search-inner container-fluid"><span class="fas fa-magnifying-glass navbar-search-icon" aria-hidden=true></span>
+<input type=search id=navbar-search-input class=navbar-search-input placeholder="Search posts and pages…" aria-label=Search autocomplete=off>
+<button id=navbar-search-close class=theme-toggle aria-label="Close search">
+<span class="fas fa-xmark"></span></button></div><div id=navbar-search-results class="navbar-search-results container-fluid" aria-live=polite></div></div><script>window.searchProviderConfig={provider:"fuse",searchIndexURL:"/index.json",searchPageURL:"/search"},window.searchConfig={noResultsText:"No results found for ",untitledText:"Untitled"}</script><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 offset-md-1"><div class=post-heading><h1>The (aux schemer seasoned) module</h1><h2 class=post-subheading>The Seasoned Schemer</h2><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 21, 2026
+&nbsp;|&nbsp;
+<i class="fas fa-clock"></i>&nbsp;7&nbsp;min
+&nbsp;|&nbsp;
+<i class="fas fa-user"></i>&nbsp;<a href=https://massimo-nocentini.github.io class=text-reset>Massimo Nocentini</a></span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 offset-md-1"><article role=main class=blog-post><!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en><head><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css type=text/css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js></script><script>hljs.highlightAll()</script><script type=module>import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head><body><section id=section230><header><h1>The Seasoned Schemer</h1></header></section><p>Ported from on-scheme's <code class=w3-codespan>seasoned-schemer.scm</code>, after <cite><a href=https://mitpress.mit.edu/9780262561006/the-seasoned-schemer/>The Seasoned Schemer</a></cite>.</p><section id=section231><header><h1>Implementation</h1></header></section><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(module
+  (aux schemer seasoned)
+  *
+  (import
+    scheme
+    (chicken base)
+    (aux base)
+    (aux continuation)
+    (aux continuation classic))
+  (define multi-insert*&amp;co
+    (λ (new old_l old_r sexp coll)
+       (let M ((sexp sexp) (coll coll))
+         (cond ((null? sexp) (coll '() 0 0))
+               ((atom? (car sexp))
+                (cond ((equal? (car sexp) old_l)
+                       (M (cdr sexp)
+                          (λ (new_sexp L R)
+                             (coll (cons new (cons old_l new_sexp))
+                                   (add1 L)
+                                   R))))
+                      ((equal? (car sexp) old_r)
+                       (M (cdr sexp)
+                          (λ (new_sexp L R)
+                             (coll (cons old_r (cons new new_sexp))
+                                   L
+                                   (add1 R)))))
+                      (else
+                       (M (cdr sexp)
+                          (λ (new_sexp L R)
+                             (coll (cons (car sexp) new_sexp) L R))))))
+               (else
+                (M (car sexp)
+                   (λ (new_sexp_car L_car R_car)
+                      (M (cdr sexp)
+                         (λ (new_sexp_cdr L_cdr R_cdr)
+                            (coll (cons new_sexp_car new_sexp_cdr)
+                                  (+ L_car L_cdr)
+                                  (+ R_car R_cdr)))))))))))
+  (define two-in-a-row?
+    (λ (lat)
+       (cond ((null? lat) #f)
+             (else
+              (let T ((preceding (car lat)) (rest (cdr lat)))
+                (cond ((null? rest) #f)
+                      (else
+                       (or (equal? preceding (car rest))
+                           (T (car rest) (cdr rest))))))))))
+  (define two-in-a-row?&amp;hop
+    (λ (lat)
+       (cond ((null? lat) #f)
+             (else
+              (letcc hop
+                     (let T ((preceding (car lat)) (rest (cdr lat)))
+                       (cond ((null? rest) (hop #f))
+                             ((equal? preceding (car rest)) (hop #t))
+                             (else (T (car rest) (cdr rest))))))))))
+  (define intersect/letrec
+    (λ (this that)
+       (letrec ((I (λ (set)
+                      (cond ((null? set) '())
+                            ((member (car set) that)
+                             (cons (car set) (I (cdr set))))
+                            (else (I (cdr set)))))))
+         (I this))))
+  (define intersect
+    (λ (this that)
+       (letrec ((I (λ (l)
+                      (match/first
+                        l
+                        (() '())
+                        ((,i unquote is)
+                         (cond ((member i that) (cons i (I is)))
+                               (else (I is))))))))
+         (I this))))
+  (define intersect+all
+    (λ (sets)
+       (letcc hop
+              (letrec ((intersect
+                         (λ (this that)
+                            (cond ((null? that) (hop '()))
+                                  (else
+                                   (letrec ((I (λ (l)
+                                                  (match/first
+                                                    l
+                                                    (() '())
+                                                    ((,i unquote is)
+                                                     (if (member i that) (cons i (I is)) (I is)))))))
+                                     (I this))))))
+                       (all-null?
+                         (λ (l)
+                            (cond ((null? l) #t)
+                                  ((null? (car l)) (all-null? (cdr l)))
+                                  (else #f))))
+                       (A (λ (sets)
+                             (cond ((all-null? sets) (hop '()))
+                                   ((null? (cdr sets)) (car sets))
+                                   (else (intersect (car sets) (A (cdr sets))))))))
+                (cond ((null? sets) '()) (else (A sets)))))))
+  (define comb-upto-last
+    (λ (atom k lat)
+       (reverse
+         (letcc skip
+                (letrec ((R (λ (prefix k lat)
+                               (match/first
+                                 lat
+                                 (() prefix)
+                                 ((,a unquote as)
+                                  (cond ((equal? atom a)
+                                         (cond ((zero? k) prefix)
+                                               (else (skip (R '() (sub1 k) as)))))
+                                        (else (R (cons a prefix) k as))))))))
+                  (R '() (sub1 k) lat))))))
+  (define atom/book? (λ (x) (not (or (pair? x) (null? x)))))
+  (define leftmost/awkward
+    (λ (l)
+       (letrec ((L (λ (ll)
+                      (match/first
+                        ll
+                        (() '())
+                        ((,first unquote rest)
+                         (cond ((atom/book? first) first)
+                               (else
+                                (let1 (a (L first))
+                                      (cond ((atom/book? a) a) (else (L rest)))))))))))
+         (let1 (atom (L l)) (cond ((atom/book? atom) atom) (else l))))))
+  (define leftmost/awkward+letcc
+    (λ (l)
+       (letrec ((L (λ (ll hop)
+                      (match/first
+                        ll
+                        (() '())
+                        ((,first unquote rest)
+                         (cond ((atom/book? first) (hop first))
+                               (else
+                                (let1 (a (L first hop))
+                                      (cond ((atom/book? a) a) (else (L rest hop)))))))))))
+         (let1 (atom (letcc hop (L l hop)))
+               (cond ((atom/book? atom) atom) (else l))))))
+  (define leftmost/escape+explicit
+    (λ (l)
+       (letrec ((L (λ (ll out)
+                      (cond ((null? ll) '(no symbol here))
+                            ((atom/book? (car ll)) (out (car ll)))
+                            (else (begin (L (car ll) out) (L (cdr ll) out)))))))
+         (escapecc (hop (L l hop)) (else l)))))
+  (define leftmost/escape
+    (λ (l)
+       (escapecc
+         (hop (let L ((ll l))
+                (match/first
+                  ll
+                  (() '(no symbol here))
+                  ((,first unquote rest)
+                   (cond ((atom/book? first) (hop first))
+                         (else (begin (L first) (L rest))))))))
+         (else l))))
+  (define rember1*/letcc
+    (λ (atom sexp)
+       (letrec ((R (λ (sexp skip)
+                      (match/first
+                        sexp
+                        (() (skip 'no-present))
+                        ((,a unquote d)
+                         (cond ((atom/book? a)
+                                (cond ((equal? a atom) d)
+                                      (else (cons a (R d skip)))))
+                               (else
+                                (let1 (new-car (apply/cc R (list a)))
+                                      (cond ((symbol? new-car) (cons a (R d skip)))
+                                            (else (cons new-car d)))))))))))
+         (let1 (s (apply/cc R (list sexp)))
+               (cond ((symbol? s) sexp) (else s))))))
+  (define rember1*/try
+    (λ (atom sexp)
+       (letrec ((make-skipper
+                  (λ (skip sexp)
+                     (τ (let1 (reason `(,atom not present in ,sexp))
+                              (display reason)
+                              (skip reason)))))
+                (R (λ (sexp keep-searching)
+                      (match/first
+                        sexp
+                        (() (keep-searching))
+                        ((,a unquote d)
+                         (cond ((atom/book? a)
+                                (cond ((equal? a atom) d)
+                                      (else (cons a (R d keep-searching)))))
+                               (else
+                                (trycc/named
+                                  (skip (cons (R a (make-skipper skip a)) d))
+                                  (else (cons a (R d keep-searching)))))))))))
+         (trycc/named
+           (skip (R sexp (make-skipper skip sexp)))
+           (else =&gt; (λ (previous) (display previous) sexp)))))))
+</code></pre></div><h2 id=test/multi-insert*&amp;co><a href=#test/multi-insert*&amp;co><code>test/multi-insert*&amp;co</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/multi-insert*&amp;co _)
+  (let ((sexp '((((orange fish)) apple anchovy) apple (orange)))
+        (sexp-expected
+          '((((orange tuna fish)) apple tuna anchovy) apple (orange tuna)))
+        (identity-abridged (λ args args)))
+    (⊦= `(,sexp-expected 1 2)
+        (multi-insert*&amp;co 'tuna 'anchovy 'orange sexp identity-abridged))
+    (⊦= `(,sexp-expected 1 2)
+        (letcc hop
+               (multi-insert*&amp;co
+                 'tuna
+                 'anchovy
+                 'orange
+                 sexp
+                 (λ args (hop args)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2063584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/two-in-a-row?><a href=#test/two-in-a-row?><code>test/two-in-a-row?</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/two-in-a-row? _)
+  (⊦= #f (two-in-a-row? '()))
+  (⊦= #f (two-in-a-row? '(j f r e k s i)))
+  (⊦= #t (two-in-a-row? '(j f r e k s s)))
+  (⊦= #f (two-in-a-row?&amp;hop '()))
+  (⊦= #f (two-in-a-row?&amp;hop '(j f r e k s i)))
+  (⊦= #t (two-in-a-row?&amp;hop '(j f r e k s s))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2064896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/intersect><a href=#test/intersect><code>test/intersect</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/intersect _)
+  (⊦= '() (intersect '(1 2 3) '()))
+  (⊦= '(2 3) (intersect '(1 2 3) '(2 3 4))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2063152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/intersect+all><a href=#test/intersect+all><code>test/intersect+all</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/intersect+all _)
+  (⊦= '(3) (intersect+all '((3 mango and) (3 kiwis and) (3 hamburgers))))
+  (⊦= '()
+      (intersect+all '((3 steaks and) (no food and) () (3 diet hamburgers))))
+  (⊦= '()
+      (intersect+all '((3 steaks and) (no food and) (3 diet hamburgers) ())))
+  (⊦= '()
+      (intersect+all
+        '((3 steaks and)
+          (no food and)
+          (three baked potatoes)
+          (3 diet hamburgers)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2064384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/comb-upto-last><a href=#test/comb-upto-last><code>test/comb-upto-last</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/comb-upto-last _)
+  (⊦= '(e f) (comb-upto-last 'a -1 '(a b a d a e f)))
+  (⊦= '(a b c d a e f) (comb-upto-last 'r -1 '(a b c d a e f)))
+  (⊦= '() (comb-upto-last 'a 1 '(a b c d a e f a g h)))
+  (⊦= '(b c d) (comb-upto-last 'a 1 '(b c d a e f a g h)))
+  (⊦= '(e f) (comb-upto-last 'a 2 '(b c d a e f a g h)))
+  (⊦= '(g h) (comb-upto-last 'a 3 '(b c d a e f a g h)))
+  (⊦= '(g h) (comb-upto-last 'a 50 '(b c d a e f a g h))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2065472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/leftmost><a href=#test/leftmost><code>test/leftmost</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/leftmost _)
+  (let1 (leftmost leftmost/escape)
+        (⊦= 'a (leftmost '(((a)) b (c))))
+        (⊦= 'b (leftmost '((() ((() (())))) b (c))))
+        (let1 (sexp '((() ((() (())))) (((() ()))) ()))
+              (⊦= sexp (leftmost sexp)))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2066696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/rember1*><a href=#test/rember1*><code>test/rember1*</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rember1* _)
+  (let1 (R (λ args
+              (let1 (result #f)
+                    (with-output-to-string
+                      (τ (set! result (apply rember1*/try args))))
+                    result)))
+        (⊦= '((delicious) (food)) (R 'more '((delicious) more (food))))
+        (⊦= '((orange) more (fruits)) (R 'pizza '((orange) more (fruits))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2068344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/leftmost/variants><a href=#test/leftmost/variants><code>test/leftmost/variants</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/leftmost/variants _)
+  (let1 (sexp '((() ((() (())))) (((() ()))) ()))
+        (for-each
+          (λ (leftmost)
+             (⊦= 'a (leftmost '(((a)) b (c))))
+             (⊦= 'b (leftmost '((() ((() (())))) b (c))))
+             (⊦= sexp (leftmost sexp)))
+          (list leftmost/awkward
+                leftmost/awkward+letcc
+                leftmost/escape+explicit
+                leftmost/escape))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2069008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/leftmost/non-symbol-atoms><a href=#test/leftmost/non-symbol-atoms><code>test/leftmost/non-symbol-atoms</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/leftmost/non-symbol-atoms _)
+  (for-each
+    (λ (leftmost)
+       (⊦= 1 (leftmost '(1 a)))
+       (⊦= &quot;s&quot; (leftmost '((&quot;s&quot;) a)))
+       (⊦= #f (leftmost '((() #f) a)))
+       (⊦= 'a (leftmost '(() (a) 1))))
+    (list leftmost/awkward
+          leftmost/awkward+letcc
+          leftmost/escape+explicit
+          leftmost/escape)))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2070104 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/rember1*/non-symbol-atoms><a href=#test/rember1*/non-symbol-atoms><code>test/rember1*/non-symbol-atoms</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rember1*/non-symbol-atoms _)
+  (let1 (R (λ args
+              (let1 (result #f)
+                    (with-output-to-string
+                      (τ (set! result (apply rember1*/try args))))
+                    result)))
+        (for-each
+          (λ (rember1*)
+             (⊦= '(1 2) (rember1* 'x '(1 x 2)))
+             (⊦= '(1 (2)) (rember1* 3 '(1 (3 2))))
+             (⊦= '((1 &quot;t&quot;) &quot;s&quot;) (rember1* &quot;s&quot; '((1 &quot;s&quot; &quot;t&quot;) &quot;s&quot;)))
+             (⊦= '(1 (2) #t) (rember1* 'x '(1 (2) #t))))
+          (list rember1*/letcc R))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2072072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/rember1*/variants><a href=#test/rember1*/variants><code>test/rember1*/variants</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/rember1*/variants _)
+  (⊦= '((delicious) (food)) (rember1*/letcc 'more '((delicious) more (food))))
+  (⊦= '((orange) more (fruits))
+      (rember1*/letcc 'pizza '((orange) more (fruits))))
+  (⊦= '((a) x) (rember1*/letcc 'x '((a x) x)))
+  (⊦= '((a) x) (rember1*/try 'x '((a x) x)))
+  (⊦= &quot;(more not present in (delicious))&quot;
+      (with-output-to-string
+        (τ (rember1*/try 'more '((delicious) more (food))))))
+  (⊦= (string-append
+        &quot;(pizza not present in (orange))&quot;
+        &quot;(pizza not present in (fruits))&quot;
+        &quot;(pizza not present in ((orange) more (fruits)))&quot;
+        &quot;((pizza not present in ((orange) more (fruits))))&quot;)
+      (with-output-to-string
+        (τ (rember1*/try 'pizza '((orange) more (fruits)))))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2072632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div><h2 id=test/intersect/letrec><a href=#test/intersect/letrec><code>test/intersect/letrec</code>: <span class=w3-text-green>pass</span></a></h2><div><pre class=w3-container><code class="w3-code w3-round language-scheme">(define (test/intersect/letrec _)
+  (⊦= '() (intersect/letrec '(1 2 3) '()))
+  (⊦= '(2 3) (intersect/letrec '(1 2 3) '(2 3 4)))
+  (⊦= '() (intersect+all '()))
+  (⊦= '(a b) (intersect+all '((a b))))
+  (⊦= '() (intersect+all '(() ()))))
+</code></pre></div><div><pre class=w3-container><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2073640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html><div class=blog-categories><span>Categories: </span><a href=/categories/scheme/>scheme</a>&nbsp;</div><h4 class=see-also>See also</h4><div class=see-also-list><a href=/post/2026-10-21-scm-testsuite-anthropic-suite/ class=see-also-item><span class=see-also-item-title>The (aux anthropic) module</span>
+<span class=see-also-item-subtitle>The Anthropic Messages API, offline</span>
+</a><a href=/post/2026-10-21-scm-testsuite-cml/ class=see-also-item><span class=see-also-item-title>The (aux cml) module</span>
+<span class=see-also-item-subtitle>Events, threads, synchronous variables, the library and I/O</span>
+</a><a href=/post/2026-10-21-scm-testsuite-hakaru10/ class=see-also-item><span class=see-also-item-title>The (aux hakaru10) modules</span>
+<span class=see-also-item-subtitle>Random sources, distributions, the language, exact inference and examples</span>
+</a><a href=/post/2026-10-21-scm-testsuite-kanren/ class=see-also-item><span class=see-also-item-title>The (aux kanren) modules</span>
+<span class=see-also-item-subtitle>Arithmetic, dates, presentation of answers and a union-find miniKanren</span>
+</a><a href=/post/2026-10-21-scm-testsuite-dice-of-doom-suite/ class=see-also-item><span class=see-also-item-title>The (aux games dice-of-doom) module</span>
+<span class=see-also-item-subtitle>Dice of Doom</span>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class=see-also-item><span class=see-also-item-title>The (aux machine) modules</span>
+<span class=see-also-item-subtitle>Environments, the SC machine and the SECD machine</span>
+</a><a href=/post/2026-10-21-scm-testsuite-continuation/ class=see-also-item><span class=see-also-item-title>The (aux continuation) modules</span>
+<span class=see-also-item-subtitle>Classic operators, escapers, amb and Collatz sequences</span>
+</a><a href=/post/2026-10-21-scm-testsuite-category/ class=see-also-item><span class=see-also-item-title>The (aux category) modules</span>
+<span class=see-also-item-subtitle>Monads: list, maybe, probability, ziplist, difference lists and state</span>
+</a><a href=/post/2026-10-21-scm-testsuite-timsort/ class=see-also-item><span class=see-also-item-title>The (aux timsort) module</span>
+<span class=see-also-item-subtitle>Sorting and the trace buffer</span>
+</a><a href=/post/2026-10-21-scm-testsuite-fds/ class=see-also-item><span class=see-also-item-title>The (aux fds) modules</span>
+<span class=see-also-item-subtitle>Functional queues and union-find</span>
+</a><a href=/post/2026-10-21-scm-testsuite-sxml-suite/ class=see-also-item><span class=see-also-item-title>The (aux sxml) module</span>
+<span class=see-also-item-subtitle>Rendering SXML to HTML</span>
+</a><a href=/post/2026-10-21-scm-testsuite-variable-suite/ class=see-also-item><span class=see-also-item-title>The (aux variable) module</span>
+<span class=see-also-item-subtitle>Logic variables introduced by fresh</span>
+</a><a href=/post/2026-10-21-scm-testsuite-tabling-suite/ class=see-also-item><span class=see-also-item-title>The (aux tabling) module</span>
+<span class=see-also-item-subtitle>Memoization and tabled definitions</span>
+</a><a href=/post/2026-10-21-scm-testsuite-commons-suite/ class=see-also-item><span class=see-also-item-title>The (aux commons) module</span>
+</a><a href=/post/2026-10-21-scm-testsuite-learning-chicken-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for CHICKEN Scheme</span>
+</a><a href=/post/2026-10-21-scm-testsuite-promise-suite/ class=see-also-item><span class=see-also-item-title>Promises</span>
+<span class=see-also-item-subtitle>delay and make-promise</span>
+</a><a href=/post/2026-10-21-scm-testsuite-ackermann-suite/ class=see-also-item><span class=see-also-item-title>The Ackermann function</span>
+<span class=see-also-item-subtitle>On unary numbers, as lists</span>
+</a><a href=/post/cml/ class=see-also-item><span class=see-also-item-title>Concurrent ML for CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Porting SML/NJ CML as the (aux cml) library</span>
+</a><a href=/post/chicken-scheme-impl-notes/ class=see-also-item><span class=see-also-item-title>CHICKEN Scheme</span>
+<span class=see-also-item-subtitle>Versions and implementation notes</span>
+</a><a href=/post/sbral/ class=see-also-item><span class=see-also-item-title>The SBRAL data structure</span>
+<span class=see-also-item-subtitle>Skew Binary Random-Access Lists</span>
+</a><a href=/post/guarded-pattern-matching/ class=see-also-item><span class=see-also-item-title>Pattern matching</span>
+<span class=see-also-item-subtitle>Scheme macrology: a generalized pattern matcher</span>
+</a><a href=/post/2026-02-05-scm-testsuite-hanseitest/ class=see-also-item><span class=see-also-item-title>The (aux hansei) modules</span>
+<span class=see-also-item-subtitle>Inference, random sources, lazy lists, logic programming and example models</span>
+</a><a href=/post/2026-02-05-scm-testsuite-letnondeterministic-suite/ class=see-also-item><span class=see-also-item-title>The (aux nondeterministic) module</span>
+</a><a href=/post/2026-02-05-scm-testsuite-learning-suite/ class=see-also-item><span class=see-also-item-title>Learning tests for Scheme</span>
+</a><a href=/post/2026-02-05-scm-testsuite-stream-suite/ class=see-also-item><span class=see-also-item-title>The (aux stream) modules</span>
+<span class=see-also-item-subtitle>Streams, streams after SICP, and sequences and power series</span>
+</a><a href=/post/2026-02-05-scm-testsuite-bootstrap-sut/ class=see-also-item><span class=see-also-item-title>The (aux unittest) module</span>
+<span class=see-also-item-subtitle>Bootstrapping a unittest framework</span>
+</a><a href=/post/2026-01-22-chez-scheme/ class=see-also-item><span class=see-also-item-title>Scheme lang: Chez, 48 and Chicken</span>
+<span class=see-also-item-subtitle>Some docs, refs and containers, respectively.</span>
+</a><a href=/post/the-reasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Reasoned Schemer</span>
+<span class=see-also-item-subtitle>miniKanren, microKanren and some implementations</span>
+</a><a href=/post/microkanren-aggregators/ class=see-also-item><span class=see-also-item-title>Aggregation predicates for µkanren</span>
+<span class=see-also-item-subtitle>Groups, window functions, sets and enumerations</span>
+</a><a href=/post/minikanren-live-and-untagged/ class=see-also-item><span class=see-also-item-title>miniKanren, live and untagged</span>
+<span class=see-also-item-subtitle>Quine generation via relational interpreters</span>
+</a><a href=/post/microkanren-arithmetic/ class=see-also-item><span class=see-also-item-title>Pure, declarative, and constructive arithmetic relations</span>
+<span class=see-also-item-subtitle>A declarative pearl</span>
+</a><a href=/post/2002-09-17-final-shift-for-callcc/ class=see-also-item><span class=see-also-item-title>Final shift for call/cc</span>
+<span class=see-also-item-subtitle>Direct implementation of shift and reset</span>
+</a><a href=/post/2001-02-01-callcc-patterns/ class=see-also-item><span class=see-also-item-title>Call with Current Continuation Patterns</span>
+</a><a href=/post/1996-06-15-sitaram-handling-control-copy/ class=see-also-item><span class=see-also-item-title>Cogen in six lines</span>
+</a><a href=/post/1996-01-31-the-seasoned-schemer/ class=see-also-item><span class=see-also-item-title>The Seasoned Schemer</span>
+</a><a href=/post/1996-01-31-the-little-schemer/ class=see-also-item><span class=see-also-item-title>The Little Schemer</span>
+</a><a href=/post/1995-04-01-tessman-scheme-generic-functions/ class=see-also-item><span class=see-also-item-title>Adding generic functions to Scheme</span>
+</a><a href=/post/1993-06-01-sitaram-handling-control/ class=see-also-item><span class=see-also-item-title>Handling control</span></a></div></article><a href=/post/2026-10-21-scm-testsuite-continuation/ class="nav-side-arrow nav-side-prev" title="The (aux continuation) modules" aria-label="Previous Post: The (aux continuation) modules"><i class="fas fa-chevron-left"></i>
+</a><a href=/post/2026-10-21-scm-testsuite-machine/ class="nav-side-arrow nav-side-next" title="The (aux machine) modules" aria-label="Next Post: The (aux machine) modules"><i class="fas fa-chevron-right"></i></a><ul class="post-pager blog-post-pager"><li class=pager-prev><a href=/post/2026-10-21-scm-testsuite-continuation/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux continuation) modules"><i class="fas fa-chevron-left"></i> Previous Post</a></li><li class=pager-center></li><li class=pager-next><a href=/post/2026-10-21-scm-testsuite-machine/ data-bs-toggle=tooltip data-bs-placement=top title="The (aux machine) modules">Next Post <i class="fas fa-chevron-right"></i></a></li></ul></div></div></div><footer><div class=container><div class=row><div class="col-md-10 offset-md-1"><ul class="list-inline text-center footer-links"><li class=list-inline-item><a rel="noopener noreferrer" href=mailto:massimo.nocentini@gmail.com title="Email me" aria-label="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://github.com/massimo-nocentini title=GitHub aria-label=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a rel="noopener noreferrer" href=https://gitlab.com/massimo-nocentini title=GitLab aria-label=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse" aria-hidden=true></i></span></a></li><li class=list-inline-item><a href=/index.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://massimo-nocentini.github.io>Massimo Nocentini</a>
+&nbsp;&bull;&nbsp;
+&copy;
+2016 - 2026
+&nbsp;&bull;&nbsp;
+<a href=/>This site needs no title</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.168.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+&nbsp;&bull;&nbsp;[<a href=https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/b4a2375c49b56e352fb6848632d6742806368d13>b4a2375c</a>]</p></div></div></div></footer><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.js integrity=sha384-Tt7wBxLKwSzFVRET4O4U9H6v8MNaQ/CjN2FMP4xFm0ErrFu6aNqoonRVW5W40iGI crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js integrity=sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz crossorigin=anonymous onload=renderMathInElement(document.body)></script><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js integrity=sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js integrity=sha384-k8EKyYcONphQ7zH4cQ0888JapXwrLTXQl/Ue1/jYgjVYahln1NWpnt2S4IC56LNh crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js integrity=sha384-IiBVbUz6+U+Tbm/ijO2P0XRwcVzNfrMzloNLkrqHkbi6w5H0v6ie4fI9BIO4SwdK crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js integrity=sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt crossorigin=anonymous></script><script src=/js/beautifulhugo-cabff7a5.min.25b3f113fd79371537948c12196bdf101e4aca8f88491ecbd6b9bed037783aa9.js integrity="sha256-JbPxE/15NxU3lIwSGWvfEB5Kyo+ISR7L1rm+0Dd4Oqk=" crossorigin=anonymous></script></body></html>
