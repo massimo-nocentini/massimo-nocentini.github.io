@@ -1,0 +1,201 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test-find-and-union"><a href="#test-find-and-union"><code>test-find-and-union</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-find-and-union _)
+  (unionfind-new
+    (λ (U ↑ ↑! ≡ →)
+       (⊦= 'absent (↑ 'absent))
+       (⊦= '(a b) (↑ '(a b)))
+       (⊦= 0 (length (→)))
+       (≡ 3 4)
+       (⊦= 4 (↑ 3))
+       (⊦= 4 (↑ 4))
+       (let1 (edges (→))
+             (⊦= '(3 . 4) (assoc 3 edges))
+             (⊦= '(4 . 4) (assoc 4 edges)))
+       (let1 (s (with-output-to-string (λ () (display U))))
+             (⊨ (and (substring-index &quot;(4 -&gt; 4)\n&quot; s) #t))
+             (⊨ (and (substring-index &quot;(3 -&gt; 4)\n&quot; s) #t))
+             (⊦= (string-length &quot;(4 -&gt; 4)\n(3 -&gt; 4)\n&quot;) (string-length s))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2019520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-union-by-rank"><a href="#test-union-by-rank"><code>test-union-by-rank</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-union-by-rank _)
+  (unionfind-new
+    (λ (U ↑ ↑! ≡ →)
+       (⊦= 0 (length (→)))
+       (≡ 'A 'D)
+       (≡ 'B 'E)
+       (≡ 'C 'F)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((A . 0) (D . 1)) edges))
+             (⊨ (member? '((B . 0) (E . 1)) edges))
+             (⊨ (member? '((C . 0) (F . 1)) edges))
+             (⊨ (member? '((D . 1) (D . 1)) edges))
+             (⊨ (member? '((E . 1) (E . 1)) edges))
+             (⊨ (member? '((F . 1) (F . 1)) edges)))
+       (≡ 'C 'G)
+       (≡ 'E 'A)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((A . 0) (D . 2)) edges))
+             (⊨ (member? '((E . 1) (D . 2)) edges))
+             (⊨ (member? '((B . 0) (E . 1)) edges))
+             (⊨ (member? '((C . 0) (F . 1)) edges))
+             (⊨ (member? '((G . 0) (F . 1)) edges))
+             (⊨ (member? '((D . 2) (D . 2)) edges))
+             (⊨ (member? '((F . 1) (F . 1)) edges)))
+       (≡ 'B 'G)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((A . 0) (D . 2)) edges))
+             (⊨ (member? '((E . 1) (D . 2)) edges))
+             (⊨ (member? '((B . 0) (E . 1)) edges))
+             (⊨ (member? '((C . 0) (F . 1)) edges))
+             (⊨ (member? '((G . 0) (F . 1)) edges))
+             (⊨ (member? '((D . 2) (D . 2)) edges))
+             (⊨ (member? '((F . 1) (D . 2)) edges))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2027864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-path-compression"><a href="#test-path-compression"><code>test-path-compression</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-path-compression _)
+  (unionfind-new
+    (λ (U ↑ ↑! ≡ →)
+       (≡ 'B 'A)
+       (≡ 'D 'C)
+       (≡ 'C 'A)
+       (≡ 'I 'F)
+       (≡ 'J 'F)
+       (≡ 'K 'G)
+       (≡ 'H 'E)
+       (≡ 'F 'E)
+       (≡ 'G 'E)
+       (≡ 'E 'A)
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((B . 0) (A . 3)) edges))
+             (⊨ (member? '((C . 1) (A . 3)) edges))
+             (⊨ (member? '((D . 0) (C . 1)) edges))
+             (⊨ (member? '((E . 2) (A . 3)) edges))
+             (⊨ (member? '((F . 1) (E . 2)) edges))
+             (⊨ (member? '((G . 1) (E . 2)) edges))
+             (⊨ (member? '((I . 0) (F . 1)) edges))
+             (⊨ (member? '((J . 0) (F . 1)) edges))
+             (⊨ (member? '((K . 0) (G . 1)) edges))
+             (⊨ (member? '((H . 0) (E . 2)) edges)))
+       (⊦= 'A (↑! 'I))
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((B . 0) (A . 3)) edges))
+             (⊨ (member? '((C . 1) (A . 3)) edges))
+             (⊨ (member? '((D . 0) (C . 1)) edges))
+             (⊨ (member? '((E . 2) (A . 3)) edges))
+             (⊨ (member? '((F . 1) (A . 3)) edges))
+             (⊨ (member? '((G . 1) (E . 2)) edges))
+             (⊨ (member? '((I . 0) (A . 3)) edges))
+             (⊨ (member? '((J . 0) (F . 1)) edges))
+             (⊨ (member? '((K . 0) (G . 1)) edges))
+             (⊨ (member? '((H . 0) (E . 2)) edges)))
+       (⊦= 'A (↑! 'K))
+       (let1 (edges (unionfind-&gt;→+★ U))
+             (⊨ (member? '((B . 0) (A . 3)) edges))
+             (⊨ (member? '((C . 1) (A . 3)) edges))
+             (⊨ (member? '((D . 0) (C . 1)) edges))
+             (⊨ (member? '((E . 2) (A . 3)) edges))
+             (⊨ (member? '((F . 1) (A . 3)) edges))
+             (⊨ (member? '((G . 1) (A . 3)) edges))
+             (⊨ (member? '((I . 0) (A . 3)) edges))
+             (⊨ (member? '((J . 0) (F . 1)) edges))
+             (⊨ (member? '((K . 0) (A . 3)) edges))
+             (⊨ (member? '((H . 0) (E . 2)) edges))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2024280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-edges-size-copy"><a href="#test-edges-size-copy"><code>test-edges-size-copy</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-edges-size-copy _)
+  (let* ((U (unionfind-empty)) (≡ (unionfind-≡ U)))
+    (⊨ (unionfind? U))
+    (⊦= 0 (unionfind-size U))
+    (⊦= 0 (unionfind-edges U))
+    (≡ 1 2)
+    (≡ 3 4)
+    (⊦= 4 (unionfind-size U))
+    (⊦= 2 (unionfind-edges U))
+    (⊦= '(1 2 3 4) (sort (unionfind-keys U) &lt;))
+    (let* ((W (unionfind-copy U)) (≡W (unionfind-≡ W)))
+      (≡W 2 4)
+      (≡W 5 6)
+      (⊦= 6 (unionfind-size W))
+      (⊦= 4 (unionfind-edges W))
+      (⊦= ((unionfind-↑ W) 1) ((unionfind-↑ W) 3))
+      (⊦= 4 (unionfind-size U))
+      (⊦= 2 (unionfind-edges U))
+      (⊦= 2 ((unionfind-↑ U) 1))
+      (⊦= 4 ((unionfind-↑ U) 3))
+      (⊦= 1 ((unionfind-★ U) 2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2036352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-walk-and-accessors"><a href="#test-walk-and-accessors"><code>test-walk-and-accessors</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-walk-and-accessors _)
+  (let1 (U (unionfind-empty))
+        (unionfind-accessors
+          U
+          (λ (↑ ↑! ≡ →)
+             (≡ 'x 'y)
+             (≡ 'y 'z)
+             (⊦= (↑ 'x) (↑ 'z))
+             (⊦= 3 (length (→)))))
+        (⊦= 3 (unionfind-walk U (λ (k v) (void)) (λ () (unionfind-size U))))
+        (let1 (links '())
+              (unionfind-walk/without-loops
+                U
+                (λ (k v) (set! links (cons k links)))
+                (λ () (⊦= 2 (length links))))
+              (⊭ (member? ((unionfind-↑ U) 'x) links)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2023152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-rank-absent"><a href="#test-rank-absent"><code>test-rank-absent</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-rank-absent _)
+  (let1 (U (unionfind-empty))
+        (⊨ (condition-case (begin ((unionfind-★ U) 'nope) #f) ((exn) #t)))
+        (⊦= 'nope ((unionfind-↑ U) 'nope))
+        (⊦= 'nope ((unionfind-↑! U) 'nope))
+        (⊦= '() (unionfind-&gt;→+★ U))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2033624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -19,9 +19,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
-<section id="section280">
+<section id="section3476">
 <header>
 <h1>Introduction</h1></header></section>
 <p>Quoting from <cite><a href="https://okmij.org/ftp/kakuritu/kakuritu.html">Embedded domain-specific languages for probabilistic programming</a></cite>:
@@ -38,7 +40,7 @@
 <p>Here we focus on the dsl <i>Hansei</i> <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></cite> and the corresponding published paper <cite><a href="https://okmij.org/ftp/kakuritu/dsl-paper.pdf"><i>Embedded Probabilistic Programming</i>, In proceedings of the IFIP working conference on
 		       domain-specific languages, ed. Walid Taha. LNCS 5658,
 		       Springer, 2009, pp. 360-384.</a></cite>, by Oleg Kiselyov and Chung-chieh Shan; moreover, an application to logic can be found in <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></cite>.</p>
-<section id="section281">
+<section id="section3477">
 <header>
 <h1>Implementation</h1></header></section>
 <p>The first implementation of our language uses the probability
@@ -54,94 +56,188 @@
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
   (aux hansei)
-  *
+  (op/times
+    op/plus
+    op/subtract
+    op/divide
+    op/greater
+    probcc-map
+    probcc-verbose
+    probcc-τ
+    probcc-value
+    probcc-unit
+    probcc-mem-empty
+    probcc-thread-local
+    probcc-mem-new-loc
+    probcc-mem-ref
+    probcc-mem-set
+    probcc-mem-prompt
+    probcc-mem-resume
+    probcc-reify/0
+    probcc-distribution
+    probcc-impossible
+    probcc-reflect
+    probcc-bernoulli
+    probcc-coin
+    probcc-uniform
+    probcc-uniform/range
+    probcc-uniform/either
+    probcc-geometric
+    probcc-when
+    probcc-observe
+    probcc-geometric/count
+    probcc-geometric/bounded
+    probcc-letlazy
+    probcc-letlazy/nesting
+    probcc-memo
+    probcc-wref-new
+    probcc-wref-get
+    probcc-wref-set!
+    probcc-explore
+    probcc-normalize/total
+    probcc-normalize
+    probcc-reify
+    probcc-reify/exact/a
+    probcc-reify/exact
+    probcc-variable-elimination
+    λ-probcc-bucket
+    probcc-prob-of
+    probcc-at-least
+    probcc-map-dist
+    probcc-random-selector
+    probcc-dist-selector
+    probcc-nearly-one
+    probcc-explore/shallow
+    probcc-first-success
+    probcc-explore/bounded
+    probcc-sample-dist/rejection
+    probcc-sample-runner/times
+    probcc-sample-dist
+    probcc-sample-rejection/a
+    probcc-sample-rejection
+    probcc-sample-importance/a
+    probcc-sample-importance
+    probcc-statistics
+    probcc-timeit
+    probcc-reify/part
+    probcc-soft-cut
+    probcc-bind
+    probcc-leaves
+    probcc-dfs)
   (import
     scheme
+    (only (scheme base) make-parameter)
     (chicken base)
-    (chicken continuation)
-    (chicken pretty-print)
-    (chicken fixnum)
-    (chicken sort)
-    srfi-69
+    (only (chicken sort) sort)
+    (only (chicken time) cpu-time)
+    (only (chicken format) printf)
+    (only (chicken flonum) fpsqrt)
+    (only (chicken fixnum) fx= fx&lt; fx+)
+    (only (chicken condition)
+          make-property-condition
+          make-composite-condition
+          abort)
+    (only (chicken memory representation) record-instance? record-&gt;vector)
+    (only srfi-1 fold)
     (aux base)
-    (aux continuation)
-    (aux continuation delimited))
+    (aux continuation delimited)
+    (aux hansei pmap)
+    (only (aux hansei random)
+          ocaml-random-global
+          ocaml-random-init!
+          make-ocaml-random-source)
+    (only (aux hakaru10 random) rng-source? rng-double!))
   (define op/times (make-parameter *))
   (define op/plus (make-parameter +))
   (define op/subtract (make-parameter -))
-  (define op/divide (make-parameter (λ (m n) (exact-&gt;inexact (/ m n)))))
+  (define op/divide
+    (make-parameter
+      (λ (m n)
+         (if (zero? n)
+           (/ (exact-&gt;inexact m) (exact-&gt;inexact n))
+           (exact-&gt;inexact (/ m n))))))
   (define op/greater (make-parameter &gt;))
+  (define (probcc-ratio m n)
+    (if (zero? n) (/ (exact-&gt;inexact m) (exact-&gt;inexact n)) (/ m n)))
+  (define (probcc-signal kind loc msg . args)
+    (abort (make-composite-condition
+             (make-property-condition
+               'exn
+               'location
+               loc
+               'message
+               msg
+               'arguments
+               args)
+             (make-property-condition 'hansei 'kind kind))))
+  (define (probcc-map f lst)
+    (if (null? lst)
+      '()
+      (let* ((h (f (car lst))) (t (probcc-map f (cdr lst)))) (cons h t))))
+  (define probcc-verbose (make-parameter #f))
   (define-syntax-rule (probcc-τ p body ...) `((C ,(τ body ...)) ,p))
   (define-syntax-rule (probcc-value p body ...) `((V ,(begin body ...)) ,p))
-  (define (probcc-explore maxdepth choices)
-    (letrec ((times (op/times))
-             (plus (op/plus))
-             (loop (λ (p depth down choices ans susp)
-                       (match/first
-                         choices
-                         (() susp)
-                         (((,slot ,pt) unquote rest)
-                          (let* ((p*pt (times p pt)) (A (λ (w) (plus w p*pt))))
-                            (match/first
-                              slot
-                              ((V ,v)
-                               (hash-table-update!/default ans v A 0)
-                               (loop p depth down rest ans susp))
-                              ((C ,t)
-                               (cond (down
-                                      (loop p
-                                            depth
-                                            down
-                                            rest
-                                            ans
-                                            (loop p*pt
-                                                  (add1 depth)
-                                                  (&lt; depth maxdepth)
-                                                  (t)
-                                                  ans
-                                                  susp)))
-                                     (else
-                                      (let1 (s (cons (probcc-τ p*pt (t)) susp))
-                                            (loop p depth down rest ans s))))))))))))
-      (let* ((ans (make-hash-table))
-             (susp (loop 1 0 #t choices ans '()))
-             (f (λ (v p l) (cons (probcc-value p v) l)))
-             (folded (hash-table-fold ans f susp))
-             (greater (op/greater)))
-        (sort folded (λ (a b) (greater (cadr a) (cadr b)))))))
-  (define (probcc-normalize choices)
-    (let* ((divide (op/divide))
-           (plus (op/plus))
-           (tot (foldr (λ (each t) (plus t (cadr each))) 0 choices))
-           (N (λ (each) (list (car each) (divide (cadr each) tot)))))
-      (map N choices)))
-  (define (probcc-distribution pairs)
-    (letcc/shift
-      k
-      (map (λ1-match/non-overlapping ((,v ,p) (probcc-τ p (k v)))) pairs)))
-  (define (probcc-reflect choices)
-    (letcc/shift
-      k
-      (letrec ((make-choices (λ (pv) (map F pv)))
-               (F (λ1-match/non-overlapping
-                    (((V ,v) ,p) (probcc-τ p (k v)))
-                    (((C ,t) ,p) (probcc-τ p (make-choices (t)))))))
-        (make-choices choices))))
-  (define (probcc-impossible) (probcc-distribution '()))
   (define (probcc-unit v) (list (probcc-value 1 v)))
+  (define probcc-mem-empty (pmap-create fx-compare))
+  (define probcc-thread-local probcc-mem-empty)
+  (define probcc-mem-counter 0)
+  (define (probcc-mem-new-loc)
+    (let1 (loc probcc-mem-counter) (set! probcc-mem-counter (add1 loc)) loc))
+  (define (probcc-mem-ref loc mem #!optional default)
+    (pmap-find
+      loc
+      mem
+      (or default
+          (τ (probcc-signal 'memory 'probcc-mem-ref &quot;unbound location&quot; loc)))))
+  (define (probcc-mem-set loc v mem) (pmap-add loc v mem))
+  (define (probcc-mem-prompt thunk)
+    (let* ((mem probcc-thread-local) (v (thunk)))
+      (set! probcc-thread-local mem)
+      v))
+  (define (probcc-mem-resume curr k v)
+    (let1 (mem probcc-thread-local)
+          (set! probcc-thread-local curr)
+          (let1 (r (k v)) (set! probcc-thread-local mem) r)))
+  (define (probcc-reify/0 model)
+    (let* ((mem probcc-thread-local)
+           (tree (resetcc
+                   (set! probcc-thread-local probcc-mem-empty)
+                   (probcc-unit (model)))))
+      (set! probcc-thread-local mem)
+      tree))
+  (define (probcc-distribution pairs)
+    (let1 (curr probcc-thread-local)
+          (letcc/shift
+            k
+            (map (λ1-match/first
+                   ((,v ,p) (probcc-τ p (probcc-mem-resume curr k v))))
+                 pairs))))
+  (define (probcc-impossible) (probcc-distribution '()))
+  (define (probcc-reflect choices)
+    (let1 (curr probcc-thread-local)
+          (letcc/shift
+            k
+            (letrec ((make-choices (λ (pv) (map F pv)))
+                     (F (λ1-match/first
+                          (((V ,v) ,p)
+                           (probcc-τ p (probcc-mem-resume curr k v)))
+                          (((C ,t) ,p) (probcc-τ p (make-choices (t)))))))
+              (make-choices choices)))))
   (define (probcc-bernoulli t f p)
     (probcc-distribution `((,t ,p) (,f ,((op/subtract) 1 p)))))
   (define (probcc-coin p) (probcc-bernoulli #t #f p))
   (define (probcc-uniform n)
-    (cond ((&gt; n 0)
+    (cond ((not (integer? n))
+           (probcc-signal 'malformed 'probcc-uniform &quot;not an integer count&quot; n))
+          ((&gt; n 0)
            (letrec ((p (/ 1 n))
                     (plus (op/plus))
                     (subtract (op/subtract))
                     (loop (λ (pacc acc i)
-                              (if (zero? i)
-                                (probcc-distribution
-                                  (cons `(,i ,(subtract 1 pacc)) acc))
-                                (loop (plus pacc p) (cons `(,i ,p) acc) (sub1 i))))))
+                             (if (zero? i)
+                               (probcc-distribution
+                                 (cons `(,i ,(subtract 1 pacc)) acc))
+                               (loop (plus pacc p) (cons `(,i ,p) acc) (sub1 i))))))
              (loop 0 '() (sub1 n))))
           (else (probcc-impossible))))
   (define (probcc-uniform/range low high)
@@ -151,13 +247,146 @@
   (define (probcc-geometric p s f)
     (letrec ((subtract (op/subtract))
              (loop (λ (n)
-                       (list (probcc-τ p (probcc-unit (cons s n)))
-                             (probcc-τ (subtract 1 p) (loop (cons f n)))))))
+                      (list (probcc-τ p (probcc-unit (cons s n)))
+                            (probcc-τ (subtract 1 p) (loop (cons f n)))))))
       (probcc-reflect (loop '()))))
   (define-syntax-rule
     (probcc-when test body ...)
     (cond (test body ...) (else (probcc-impossible))))
-  (define (probcc-reify/0 model) (resetcc (probcc-unit (model))))
+  (define (probcc-observe test thunk)
+    (let1 (v (thunk)) (if (test v) v (probcc-impossible))))
+  (define (probcc-geometric/count p)
+    (letrec ((subtract (op/subtract))
+             (loop (λ (n)
+                      (list (probcc-τ p (probcc-unit n))
+                            (probcc-τ (subtract 1 p) (loop (add1 n)))))))
+      (probcc-reflect (loop 0))))
+  (define (probcc-geometric/bounded n p)
+    (letrec ((times (op/times))
+             (subtract (op/subtract))
+             (expi (λ (x n)
+                      (cond ((= n 0) 1)
+                            ((= n 1) x)
+                            (else (times x (expi x (sub1 n)))))))
+             (loop (λ (pp i)
+                      (if (&gt; i n)
+                        '()
+                        (cons (list i pp)
+                              (loop (times (subtract 1 p) pp) (add1 i)))))))
+      (let1 (norm (subtract 1 (expi (subtract 1 p) (add1 n))))
+            (probcc-distribution (loop (probcc-ratio p norm) 0)))))
+  (define (probcc-letlazy e)
+    (let1 (loc (probcc-mem-new-loc))
+          (τ (probcc-mem-ref
+               loc
+               probcc-thread-local
+               (τ (let1 (v (e))
+                        (set! probcc-thread-local
+                          (probcc-mem-set loc v probcc-thread-local))
+                        v))))))
+  (define (probcc-letlazy/nesting e)
+    (let1 (loc (probcc-mem-new-loc))
+          (set! probcc-thread-local
+            (probcc-mem-set loc `(MT ,e) probcc-thread-local))
+          (letrec ((deref (τ (match/first
+                               (probcc-mem-ref loc probcc-thread-local (τ #f))
+                               ((MV ,v) v)
+                               ((MT ,e)
+                                (let1 (v (e))
+                                      (set! probcc-thread-local
+                                        (probcc-mem-set loc `(MV ,v) probcc-thread-local))
+                                      v))
+                               (#f
+                                (let1 (mem probcc-thread-local)
+                                      (letcc/shift
+                                        k
+                                        (list (probcc-τ
+                                                1
+                                                (let1 (v (deref))
+                                                      (probcc-mem-prompt
+                                                        (τ (set! probcc-thread-local
+                                                             (probcc-mem-set loc `(MV ,v) mem))
+                                                           (k v)))))))))))))
+            deref)))
+  (define (probcc-memo f)
+    (let1 (loc (probcc-mem-new-loc))
+          (set! probcc-thread-local
+            (probcc-mem-set loc pmap-empty probcc-thread-local))
+          (letrec ((table (τ (probcc-mem-ref
+                               loc
+                               probcc-thread-local
+                               (τ (probcc-signal
+                                    'memory
+                                    'probcc-memo
+                                    &quot;memo table not in this world's memory&quot;
+                                    loc))))))
+            (λ (x)
+               (pmap-find
+                 x
+                 (table)
+                 (τ (let* ((v (f x)) (table* (pmap-add x v (table))))
+                      (set! probcc-thread-local
+                        (probcc-mem-set loc table* probcc-thread-local))
+                      v)))))))
+  (define (probcc-wref-new v)
+    (let1 (loc (probcc-mem-new-loc))
+          (set! probcc-thread-local (probcc-mem-set loc v probcc-thread-local))
+          loc))
+  (define (probcc-wref-get r) (probcc-mem-ref r probcc-thread-local))
+  (define (probcc-wref-set! r v)
+    (set! probcc-thread-local (probcc-mem-set r v probcc-thread-local)))
+  (define (probcc-pmap-&gt;pv ans mass tail)
+    (pmap-foldi (λ (v p a) (cons (probcc-value (mass p) v) a)) ans tail))
+  (define (probcc-sort/mass pv)
+    (let1 (greater (op/greater))
+          (sort pv (λ (a b) (greater (cadr a) (cadr b))))))
+  (define (probcc-total plus ch) (fold (λ (e pa) (plus pa (cadr e))) 0 ch))
+  (define (probcc-scale ch ptotal)
+    (probcc-map
+      (λ1-match/first ((,x ,p) (list x (probcc-ratio p ptotal))))
+      ch))
+  (define (probcc-explore maxdepth choices)
+    (letrec ((times (op/times))
+             (plus (op/plus))
+             (loop (λ (p depth down choices ans susp)
+                      (match/first
+                        choices
+                        (() (cons ans susp))
+                        ((((V ,v) ,pt) unquote rest)
+                         (loop p
+                               depth
+                               down
+                               rest
+                               (pmap-insert-with plus v (times pt p) ans)
+                               susp))
+                        ((((C ,t) ,pt) unquote rest)
+                         (cond (down
+                                (let1 (down* (or (not maxdepth) (&lt; depth maxdepth)))
+                                      (match/first
+                                        (loop (times pt p)
+                                              (add1 depth)
+                                              down*
+                                              (t)
+                                              ans
+                                              susp)
+                                        ((,ans* unquote susp*)
+                                         (loop p depth down rest ans* susp*)))))
+                               (else
+                                (let1 (susp* (cons `((C ,t) ,(times pt p)) susp))
+                                      (loop p depth down rest ans susp*)))))))))
+      (match/first
+        (loop 1 0 #t choices pmap-empty '())
+        ((,ans unquote susp)
+         (probcc-sort/mass (probcc-pmap-&gt;pv ans identity susp))))))
+  (define (probcc-normalize/total choices)
+    (let* ((plus (op/plus))
+           (divide (op/divide))
+           (total (fold (λ (e acc) (plus (cadr e) acc)) 0 choices)))
+      (list total
+            (probcc-map
+              (λ1-match/first ((,slot ,p) (list slot (divide p total))))
+              choices))))
+  (define (probcc-normalize choices) (cadr (probcc-normalize/total choices)))
   (define ((probcc-reify depth) model)
     (probcc-explore depth (probcc-reify/0 model)))
   (define probcc-reify/exact/a (probcc-reify +inf.0))
@@ -171,57 +400,635 @@
     (letrec ((F (λ args body ...))
              (B (λ-memo bargs (probcc-reify/exact (apply F bargs)))))
       (o probcc-reflect B)))
+  (define (probcc-nan-inside? x)
+    (cond ((number? x) (or (nan? (real-part x)) (nan? (imag-part x))))
+          ((pair? x)
+           (or (probcc-nan-inside? (car x)) (probcc-nan-inside? (cdr x))))
+          ((vector? x)
+           (let loop ((i 0))
+             (and (fx&lt; i (vector-length x))
+                  (or (probcc-nan-inside? (vector-ref x i))
+                      (loop (fx+ i 1))))))
+          ((record-instance? x) (probcc-nan-inside? (record-&gt;vector x)))
+          (else #f)))
+  (define (probcc-structural=? a b)
+    (and (fx= 0 (pmap-compare a b)) (not (probcc-nan-inside? a))))
+  (define (probcc-prob-of v pv)
+    (let loop ((pv* pv))
+      (match/first
+        pv*
+        (() 0)
+        ((((V ,w) ,p) unquote rest)
+         (if (probcc-structural=? w v) p (loop rest)))
+        ((,_ unquote rest) (loop rest)))))
+  (define (probcc-at-least prob v pv) (&gt;= (probcc-prob-of v pv) prob))
+  (define (probcc-map-dist f pv)
+    (let* ((plus (op/plus))
+           (pm (fold (λ (e pm)
+                        (match/first
+                          e
+                          (((V ,v) ,p) (pmap-insert-with plus (f v) p pm))
+                          (else (probcc-signal
+                                  'malformed
+                                  'probcc-map-dist
+                                  &quot;a branch not yet explored&quot;
+                                  e))))
+                     pmap-empty
+                     pv)))
+      (pmap-foldi (λ (v p a) (cons (probcc-value p v) a)) pm '())))
+  (define probcc-random-global-source
+    (make-ocaml-random-source ocaml-random-global))
+  (define (probcc-random-selector seed-or-source)
+    (let1 (src (cond ((rng-source? seed-or-source) seed-or-source)
+                     (else
+                      (ocaml-random-init! ocaml-random-global seed-or-source)
+                      probcc-random-global-source)))
+          (λ (choices)
+             (let* ((plus (op/plus))
+                    (ptotal (probcc-total plus choices))
+                    (r (rng-double! src 0.0 ptotal)))
+               (let loop ((pcum 0) (rest choices))
+                 (match/first
+                   rest
+                   (()
+                    (probcc-signal
+                      'selector
+                      'probcc-random-selector
+                      &quot;Choice selection: can't happen&quot;
+                      choices))
+                   (((,x ,p) unquote rest*)
+                    (let1 (pcum* (plus pcum p))
+                          (if (&lt; r pcum*)
+                            (list x ptotal)
+                            (loop pcum* rest*))))))))))
+  (define (probcc-dist-selector choices)
+    (let* ((ptotal (probcc-total (op/plus) choices))
+           (x (probcc-distribution (probcc-scale choices ptotal))))
+      (list x ptotal)))
+  (define probcc-nearly-one (- 1.0 9.9999999999999995e-08))
+  (define (probcc-explore/shallow maxdepth choices)
+    (letrec ((times (op/times))
+             (plus (op/plus))
+             (loop (λ (pc depth ans acc lst)
+                      (match/first
+                        lst
+                        (() (cons ans acc))
+                        ((((V ,v) ,p) unquote rest)
+                         (loop pc
+                               depth
+                               (pmap-insert-with plus v (times p pc) ans)
+                               acc
+                               rest))
+                        (((,c unquote rest) ⊣ (&gt;= depth maxdepth))
+                         (loop pc depth ans (cons c acc) rest))
+                        ((((C ,t) ,p) unquote rest)
+                         (match/first
+                           (loop (times pc p) (add1 depth) ans '() (t))
+                           ((,ans* unquote ch)
+                            (let* ((ptotal (probcc-total plus ch))
+                                   (acc* (cond ((zero? ptotal) acc)
+                                               ((&lt; ptotal probcc-nearly-one)
+                                                (let1 (ch* (probcc-scale ch ptotal))
+                                                      (cons `((C ,(τ ch*)) ,(times p ptotal)) acc)))
+                                               (else (cons `((C ,(τ ch)) ,p) acc)))))
+                              (loop pc depth ans* acc* rest)))))))))
+      (match/first
+        (loop 1 0 pmap-empty '() choices)
+        ((,ans unquote acc) (probcc-pmap-&gt;pv ans identity acc)))))
+  (define (probcc-first-success choices)
+    (let1 (times (op/times))
+          (let loop ((choices* choices))
+            (match/first
+              choices*
+              (() '())
+              ((((V ,_) ,_) unquote _) choices*)
+              ((((C ,t) ,pt) unquote rest)
+               (let1 (ch (probcc-map
+                           (λ1-match/first
+                             ((,slot ,p) (list slot (times pt p))))
+                           (t)))
+                     (loop (append rest ch))))))))
+  (define (probcc-explore/bounded maxsize choices)
+    (letrec ((times (op/times))
+             (plus (op/plus))
+             (loop (λ (explore? pc low high q qsize lst)
+                      (match/first
+                        lst
+                        (() (next low high q qsize))
+                        ((((V ,_) ,p) unquote rest)
+                         (let1 (pe (times pc p))
+                               (loop explore?
+                                     pc
+                                     (plus low pe)
+                                     (plus high pe)
+                                     q
+                                     qsize
+                                     rest)))
+                        ((((C ,t) ,p) unquote rest)
+                         (if explore?
+                           (let1 (q* (pmap-insert-with append (times pc p) (list t) q))
+                                 (loop explore? pc low high q* (add1 qsize) rest))
+                           (loop explore?
+                                 pc
+                                 low
+                                 (plus high (times pc p))
+                                 q
+                                 qsize
+                                 rest))))))
+             (next (λ (low high q qsize)
+                      (if (zero? qsize)
+                        (list low high)
+                        (let1 (explore? (&lt; qsize maxsize))
+                              (match/first
+                                ((if explore?
+                                   pmap-delete-find-max
+                                   pmap-delete-find-min)
+                                 q)
+                                (((,p ,t unquote ts) ,q*)
+                                 (loop explore?
+                                       p
+                                       low
+                                       high
+                                       (if (null? ts) q* (pmap-add p ts q*))
+                                       (sub1 qsize)
+                                       (t)))))))))
+      (loop #t 1 0 0 (pmap-create number-compare) 0 choices)))
+  (define (probcc-sample-dist/rejection selector n choices)
+    (letrec ((times (op/times))
+             (plus (op/plus))
+             (loop (λ (pcontrib ans ch)
+                      (match/first
+                        ch
+                        ((((V ,v) ,p))
+                         (pmap-insert-with plus v (times p pcontrib) ans))
+                        (() ans)
+                        ((((C ,t) ,p)) (loop (times p pcontrib) ans (t)))
+                        (else (match/first
+                                (selector ch)
+                                ((,th ,ptotal)
+                                 (loop (times pcontrib ptotal)
+                                       ans
+                                       (list (list th 1)))))))))
+             (driver
+               (λ (ans i)
+                  (if (zero? i) ans (driver (loop 1 ans choices) (sub1 i))))))
+      (let1 (ans (driver pmap-empty n))
+            (when (probcc-verbose)
+                  (printf &quot;rejection_sample: done ~a worlds\n&quot; n))
+            (probcc-sort/mass
+              (probcc-pmap-&gt;pv ans (λ (p) (probcc-ratio p n)) '())))))
+  (define ((probcc-sample-runner/times n) z step)
+    (let loop ((z* z) (i n))
+      (if (zero? i) (list z* n) (loop (step z*) (sub1 i)))))
+  (define (probcc-sample-dist selector runner choices)
+    (letrec ((times (op/times))
+             (plus (op/plus))
+             (add (λ (v p ans) (pmap-insert-with plus v p ans)))
+             (look-ahead
+               (λ (pcontrib)
+                  (λ (e answers)
+                     (let ((ans (car answers)) (acc (cdr answers)))
+                       (match/first
+                         e
+                         (((V ,v) ,p)
+                          (cons (add v (times p pcontrib) ans) acc))
+                         (((C ,t) ,p)
+                          (match/first
+                            (t)
+                            (() answers)
+                            ((((V ,v) ,p1))
+                             (cons (add v (times (times p p1) pcontrib) ans)
+                                   acc))
+                            (,ch
+                             (let1 (ptotal (probcc-total plus ch))
+                                   (cons ans
+                                         (cons (if (&lt; ptotal probcc-nearly-one)
+                                                 (list (probcc-scale ch ptotal) (times p ptotal))
+                                                 (list ch p))
+                                               acc)))))))))))
+             (loop (λ (pcontrib ans ch)
+                      (match/first
+                        ch
+                        ((((V ,v) ,p)) (add v (times p pcontrib) ans))
+                        (() ans)
+                        ((((C ,t) ,p)) (loop (times p pcontrib) ans (t)))
+                        (else (match/first
+                                (fold (look-ahead pcontrib) (list ans) ch)
+                                ((,ans*) ans*)
+                                ((,ans* unquote cch)
+                                 (match/first
+                                   (selector cch)
+                                   ((,th ,ptotal)
+                                    (loop (times pcontrib ptotal) ans* th)))))))))
+             (toploop
+               (λ (pcontrib ans cch)
+                  (match/first
+                    (selector cch)
+                    ((,th ,ptotal) (loop (times pcontrib ptotal) ans th)))))
+             (driver
+               (λ (pcontrib vals cch)
+                  (match/first
+                    (runner pmap-empty (λ (ans) (toploop pcontrib ans cch)))
+                    ((,ans ,ns)
+                     (let1 (ans* (pmap-foldi
+                                   (λ (v p ans) (add v (times ns p) ans))
+                                   vals
+                                   ans))
+                           (when (probcc-verbose)
+                                 (printf &quot;sample_importance: done ~a worlds\n&quot; ns))
+                           (probcc-sort/mass
+                             (probcc-pmap-&gt;pv
+                               ans*
+                               (λ (p) (probcc-ratio p ns))
+                               '())))))))
+             (make-threads
+               (λ (pcontrib ans ch)
+                  (match/first
+                    (fold (look-ahead pcontrib) (list ans) ch)
+                    ((,ans*)
+                     (probcc-sort/mass (probcc-pmap-&gt;pv ans* identity '())))
+                    ((,ans* (,ch1 ,p))
+                     (make-threads (times pcontrib p) ans* ch1))
+                    ((,ans* unquote cch)
+                     (driver pcontrib ans* (reverse cch)))))))
+      (make-threads 1 pmap-empty choices)))
+  (define (probcc-sample-rejection/a selector n thunk)
+    (probcc-sample-dist/rejection selector n (probcc-reify/0 thunk)))
+  (define-syntax-rule
+    (probcc-sample-rejection selector n body ...)
+    (probcc-sample-rejection/a selector n (τ body ...)))
+  (define (probcc-sample-importance/a selector n thunk)
+    (probcc-sample-dist
+      selector
+      (probcc-sample-runner/times n)
+      (probcc-explore/shallow 3 (probcc-reify/0 thunk))))
+  (define-syntax-rule
+    (probcc-sample-importance selector n body ...)
+    (probcc-sample-importance/a selector n (τ body ...)))
+  (define (probcc-statistics seed1 seed2 sampler)
+    (let* ((times (op/times))
+           (plus (op/plus))
+           (subtract (op/subtract))
+           (add (λ (new old)
+                   (list (plus (car old) (car new))
+                         (plus (cadr old) (cadr new)))))
+           (answers
+             (let loop ((seed seed1) (answers pmap-empty))
+               (if (&gt; seed seed2)
+                 answers
+                 (loop (add1 seed)
+                       (fold (λ (e answers)
+                                (match/first
+                                  e
+                                  (((V ,v) ,p)
+                                   (pmap-insert-with
+                                     add
+                                     v
+                                     (list p (times p p))
+                                     answers))
+                                  (else (probcc-signal
+                                          'malformed
+                                          'probcc-statistics
+                                          &quot;a branch not yet explored&quot;
+                                          e))))
+                             answers
+                             (sampler seed))))))
+           (n (add1 (- seed2 seed1)))
+           (stats (pmap-foldi
+                    (λ (v s a)
+                       (match/first
+                         s
+                         ((,p ,p2)
+                          (let* ((variance (/ (subtract p2 (/ (times p p) n)) n))
+                                 (std (fpsqrt (exact-&gt;inexact variance))))
+                            (cons (list v (/ p n) std) a)))))
+                    answers
+                    '())))
+      (sort stats
+            (let1 (greater (op/greater))
+                  (λ (a b) (greater (cadr a) (cadr b)))))))
+  (define (probcc-timeit thunk)
+    (let* ((seconds
+             (λ ()
+                (call-with-values
+                  cpu-time
+                  (λ (user system) (/ (+ user system) 1000.0)))))
+           (start (seconds))
+           (r (thunk)))
+      (printf &quot;\nTime spent: ~a sec\n&quot; (- (seconds) start))
+      r))
+  (define (probcc-bind m f)
+    (probcc-map
+      (λ1-match/first
+        (((V ,x) ,p) (probcc-τ p (f x)))
+        (((C ,t) ,p) (probcc-τ p (probcc-bind (t) f))))
+      m))
+  (define (probcc-reify/part bound model)
+    (foldr (λ (e acc)
+              (match/first e (((V ,v) ,p) (cons (list v p) acc)) (else acc)))
+           '()
+           (probcc-explore bound (probcc-reify/0 model))))
+  (define (probcc-soft-cut p q r)
+    (let1 (t (probcc-first-success (probcc-reify/0 p)))
+          (if (null? t) (r) (q (probcc-reflect t)))))
   (define (probcc-leaves choices)
     (let L ((choices* choices) (count 0))
       (let1 (F (λ (probpair acc)
-                   (match/first
-                     probpair
-                     (((V ,v) ,p) (add1 acc))
-                     (((C ,t) ,p) (L (t) acc)))))
+                  (match/first
+                    probpair
+                    (((V ,_) ,_) (add1 acc))
+                    (((C ,t) ,_) (L (t) acc)))))
             (foldr F count choices*))))
   (define (probcc-dfs choices)
-    (let1 (M (λ1-match/first
-               (((C ,t) ,p)
-                (apply append
-                       (probcc-dfs
-                         (map (λ1-match/first
-                                ((,slot ,pi) `(,slot ,((op/times) p pi))))
-                              (t)))))
-               (,probpair (list probpair))))
-          (map M choices))))
+    (letrec ((times (op/times))
+             (D (λ (choices) (apply append (probcc-map M choices))))
+             (M (λ1-match/first
+                  (((C ,t) ,p)
+                   (D (probcc-map
+                        (λ1-match/first ((,slot ,pi) `(,slot ,(times p pi))))
+                        (t))))
+                  (,probpair (list probpair)))))
+      (D choices))))
 </code></pre></div>
-<h2 id="test/procc/coin-model"><a href="#test/procc/coin-model"><code>test/procc/coin-model</code>: <span class="w3-text-green">pass</span></a></h2>
-<p>Joint distribution of tossing two <i>biased</i> coins, where head has probability <code class="w3-codespan">0.6</code> to appear.</p>
+<section id="section3478">
+<header>
+<h1>Reification and reflection</h1></header></section>
+<p>The model is ordinary Scheme code; a choice is a call to <code class="w3-codespan">probcc-distribution</code>, which captures its continuation up to the
+		nearest <code class="w3-codespan">resetcc</code> and answers a list of branches, one thunk per
+		value, each resuming the continuation with its value (DSL p.14 l.627-628). <code class="w3-codespan">probcc-reify/0</code> runs a model under <code class="w3-codespan">resetcc</code> and so turns it into a lazy search tree (DSL p.15 l.637):
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/coin-model _)
-  (⊦= '(((V ((x #t) (y #t))) 0.36)
-          ((V ((x #t) (y #f))) 0.24)
-          ((V ((x #f) (y #t))) 0.24)
-          ((V ((x #f) (y #f))) 0.16))
-        (probcc-normalize
-          (probcc-reify/exact
-            (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
-              `((x ,x) (y ,y)))))))
+<pre class="w3-container"><code class="w3-code w3-round language-ocaml">let reify0 m = reset (fun () -&gt; pv_unit (m ()))</code></pre></div>The paper's direct reifier is what this port keeps, on the single delimiter of <code class="w3-codespan">(aux continuation delimited)</code>, where <code class="w3-codespan">probM.ml</code> goes through a request type and its interpreter (deviation 2):
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>We pay the price of embedding stochastic computations only when calling the
+		  two stochastic operators dist and reify0. The deterministic parts of a stochastic
+		  program run at full speed, as if no randomness were present and no inference were
+		  in progress.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov and Chung-chieh Shan, DSL p.15 l.676-679</p></footer></blockquote></p>
+<p>The lawn model of DSL p.12 l.539-546, for example, is a function of no
+		arguments: rain and a sprinkler may wet the grass, which is observed wet, and <code class="w3-codespan">(probcc-reify/exact/a lawn)</code> answers rain at 0.2838 and no rain
+		at 0.3219999999999999, before normalization (<code class="w3-codespan">test/probcc/grass-model</code> reifies the same body):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (lawn)
+  (let* ((rain (probcc-coin 0.29999999999999999))
+         (sprinkler (probcc-coin 0.5))
+         (grass-is-wet
+           (or (and (probcc-coin 0.90000000000000002) rain)
+               (and (probcc-coin 0.80000000000000004) sprinkler)
+               (probcc-coin 0.10000000000000001))))
+    (probcc-when grass-is-wet rain)))
+</code></pre></div>
+<p><code class="w3-codespan">probcc-reflect</code> is the inverse of <code class="w3-codespan">probcc-reify/0</code> (DSL p.16 l.694-700): it chooses following a tree, so that reifying a reflected
+		tree gives an equivalent tree, and reflecting a reified model expresses the same
+		distribution (DSL p.17 l.728-730; <code class="w3-codespan">test/reflect/inverse</code>). Reifying
+		a sub-model, flattening its tree with <code class="w3-codespan">probcc-explore</code> and reflecting it is variable elimination (<code class="w3-codespan">probcc-variable-elimination</code>, DSL p.17 l.748-771): <code class="w3-codespan">flips_xor' 10</code> explores 9 trees of depth 2
+		instead of the 1024 leaves of <code class="w3-codespan">flips_xor 10</code>; memoizing the eliminated function on its arguments is bucket elimination (<code class="w3-codespan">λ-probcc-bucket</code>, DSL p.18 l.776-783; <code class="w3-codespan">test/variable-elimination</code>).</p>
+<section id="section3479">
+<header>
+<h1>Exploration and its order</h1></header></section>
+<p><code class="w3-codespan">probcc-explore</code> (I:11-28, DSL p.9 l.393-408) flattens a tree to a
+		given depth, or to the end when the depth is <code class="w3-codespan">#f</code> or <code class="w3-codespan">+inf.0</code> (OCaml's <code class="w3-codespan">None</code>): the values reached are
+		collated, their masses summed, and the branches below the depth are kept as
+		suspended entries. Upstream threads the answer, a persistent map, and the list of
+		suspensions through its loop, and so does this port: a thunk forced by the explorer
+		may choose in an enclosing model, whose every world then resumes the loop, so a
+		mutable table would be shared by all of them (<code class="w3-codespan">test/explore/persistent</code>).</p>
+<p>The answer is sorted by descending mass, with a stable sort of upstream's order
+		(deviation 5): equal masses keep the values in descending <code class="w3-codespan">pmap-compare</code> order, the stand-in for OCaml's <code class="w3-codespan">compare</code> (deviation 6), then the suspended branches in reverse
+		discovery order. So the order of the tables is deterministic (<code class="w3-codespan">test/explore/order</code>, <code class="w3-codespan">test/uniform/edges</code>).</p>
+<section id="section3480">
+<header>
+<h1>World-local memory</h1></header></section>
+<p>Every world of a model has its own memory, which the lazy variables, the memo
+		tables and the world-local references live in. It is probM's first-class store
+		(P:40-75):
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The first-class storage is immutable and pure functional. Only the pointer to
+		  it is mutable. This is critical as different threads may have different views of
+		  the same `memory' and one thread's updating its memory should not affect other
+		  threads that share it.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov, P:59-63</p></footer></blockquote>
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>We implement first-class stores as immutable maps, and associate one with each
+		  delimited continuation.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov and Chung-chieh Shan, ML p.1 l.82-83</p></footer></blockquote></p>
+<p><code class="w3-codespan">probcc-thread-local</code> is that pointer, a persistent map from
+		fixnum locations to values, changed only with <code class="w3-codespan">set!</code>: <code class="w3-codespan">probcc-reify/0</code> starts the model in an empty memory and
+		restores the caller's when the first segment returns (P:104-107); <code class="w3-codespan">probcc-distribution</code> and <code class="w3-codespan">probcc-reflect</code> read the memory before capturing the continuation, and every branch resumes in
+		it (P:118-148). A parameter or a <code class="w3-codespan">dynamic-wind</code> would not do:
+		aux's <code class="w3-codespan">shift</code> enters the <code class="w3-codespan">dynamic-wind</code> frames of the captured continuation again on every resume, so a value
+		cached in one world would show in another. A <code class="w3-codespan">parameterize</code> inside a model is independent of the memory (<code class="w3-codespan">test/parameterize/memory</code>).</p>
+<section id="section3481">
+<header>
+<h1>Laziness</h1></header></section>
+<p>Events take place in another order than they are observed, and a value drawn
+		long before it is looked at duplicates the search tree in between (DSL p.19-20
+		l.858-865). <code class="w3-codespan">probcc-letlazy</code> (P:321-330) answers a thunk that
+		evaluates its body at most once per world, when first called, keeping the value in
+		the world-local memory: &quot;lazy let insertion at the point of reification&quot;
+		(P:292-298). The built-in laziness cannot do it:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>It is incorrect to implement letlazy using OCaml's built-in laziness, because
+		  the latter uses the mutable state of the underlying hardware, which does not `snap
+		  back' when the inference procedure backtracks to an earlier point in the execution
+		  of the probabilistic program.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov and Chung-chieh Shan, DSL p.21 l.912-915</p></footer></blockquote>So <code class="w3-codespan">delay</code>, <code class="w3-codespan">force</code> and <code class="w3-codespan">δ</code> are never used for model values. <code class="w3-codespan">probcc-letlazy</code> is not nesting-safe, as upstream: an inner reification starts with an empty
+		memory, so a lazy variable of the outer world is evaluated again inside, and the
+		effects are reordered (N:65-81). <code class="w3-codespan">probcc-letlazy/nesting</code> (P:342-370) stores the unevaluated body where it is created and lets an inner
+		world ask its parent for it (<code class="w3-codespan">test/letlazy</code>, <code class="w3-codespan">test/nested</code>).</p>
+<section id="section3482">
+<header>
+<h1>Memoization</h1></header></section>
+<p><code class="w3-codespan">probcc-memo</code> (P:449-479) generalizes the lazy variables to
+		stochastic functions:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The function (memo f) :: a -&gt; Prob b is then a proper function: applied to an
+		  argument, it gives a sample from its output distribution. When applied to the
+		  argument again, it gives the same sample. The memo facility is the
+		  generalization of letlazy: indeed, letlazy is the particular case of memo when the
+		  function to memoize has the argument unit.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov, P:456-463</p></footer></blockquote>Its table lives in the world-local memory, so a memo must be made inside the
+		reification that uses it (deviation 16; <code class="w3-codespan">test/memo</code>). The table of <code class="w3-codespan">λ-probcc-bucket</code> is global instead, shared by
+		every inference, which is right only for a function that reads no world-local state
+		(deviation 11).</p>
+<section id="section3483">
+<header>
+<h1>Nested inference</h1></header></section>
+<p>An inference procedure is an ordinary function, so a model may call one, and the
+		choices it makes are choices of the enclosing model:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Because a random choice made by an inference algorithm is expressed with dist
+		  just like any other random choice, any inference procedure, such as the
+		  importance-sampling algorithm in §4, can reason about itself or any other
+		  inference procedure.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov and Chung-chieh Shan, EPP p.4 l.356-360</p></footer></blockquote>An inner <code class="w3-codespan">probcc-reify/0</code> pushes its own delimiter and an empty
+		memory; the inner explorer forces its thunks in the extent of the outer model, so a
+		choice directly inside them (<code class="w3-codespan">probcc-dist-selector</code>, a lazy variable asking its parent) captures the inner explorer's loop, which
+		therefore threads persistent state, as every inference loop of the core does (plan
+		§5.7; <code class="w3-codespan">test/nested</code>, <code class="w3-codespan">test/nested/thresholds</code>). EPP p.4 l.374-379 memoizes the outer <code class="w3-codespan">biased</code> &quot;as usual&quot; and uses it at the inner level; with probM's <code class="w3-codespan">memo</code> that raises <code class="w3-codespan">Not_found</code>, and only <code class="w3-codespan">letlazy_nesting</code> works, here as upstream.</p>
+<section id="section3484">
+<header>
+<h1>Inference about inference</h1></header></section>
+<p>PE:69-77 asks how likely an estimate made by sampling is to be at least 0.3:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Suppose we choose a coin as before, then estimate p by flipping the coin twice
+		  and dividing the count of true by 2 (that is, by using rejection sampling with
+		  count 2). What is the probability that our estimate is at least 0.3? It is 7/8,
+		  because the only way for us to estimate below 0.3 is to choose a fair coin and get
+		  false from it twice.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov and Chung-chieh Shan, PE:70-75</p></footer></blockquote>With <code class="w3-codespan">probcc-dist-selector</code>, the sampler's random choices are
+		choices of the outer model, which exact inference enumerates: the outer table is
+		exactly 7/8 and 1/8 (<code class="w3-codespan">test/nested/inference-about-inference</code>).</p>
+<section id="section3485">
+<header>
+<h1>Samplers and selectors</h1></header></section>
+<p>A selector chooses one entry of a list of <code class="w3-codespan">(x p)</code> entries and answers <code class="w3-codespan">(x ptotal)</code> (deviation 18). <code class="w3-codespan">probcc-random-selector</code> draws from OCaml's generator, which <code class="w3-codespan">(aux hansei random)</code> transcribes, and its seed re-initialises the
+		one global state, as <code class="w3-codespan">Random.init</code> does (P:221-222), so seeded
+		runs replay upstream's records bit for bit (see the suite of <code class="w3-codespan">(aux hansei random)</code>); <code class="w3-codespan">probcc-dist-selector</code> chooses through the enclosing model instead (P:238-241).</p>
+<p><code class="w3-codespan">probcc-sample-dist/rejection</code> (I:121-135) follows a path from the
+		root to a leaf per sample. <code class="w3-codespan">probcc-sample-dist</code> (I:137-198) is importance sampling with look-ahead:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The key is to explore the tree shallowly before committing to any random choice
+		  among its branches. Whenever this look-ahead comes across a branch that ends in
+		  failure, that branch is eliminated from the available choices. Similarly, whenever
+		  the look-ahead comes across a branch that ends in success, the successful result
+		  is registered as a sample, and that branch is again eliminated from the available
+		  choices.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov and Chung-chieh Shan, DSL p.19 l.837-842</p></footer></blockquote>On the drunk coin of DSL p.18-19, the and of ten tosses of a coin lost with
+		probability 0.9, rejection sampling never sees the ten heads, whereas importance
+		sampling estimates their probability, 9.77e-14 exactly (<code class="w3-codespan">test/drunk-coin</code>), at 7e-14 from 5000 samples with seed 1 (the replays of the random suite). EPP
+		p.6 l.547-590 gives the algorithm step by step.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (drunk-coin)
+  (let* ((x (probcc-coin 0.5)) (lost (probcc-coin 0.90000000000000002)))
+    (if lost (probcc-impossible) x)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(8478592 1975480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (dcoin-and n)
+  (if (= n 1) (drunk-coin) (and (drunk-coin) (dcoin-and (sub1 n)))))
 </code></pre></div>
-<h2 id="test/procc/coin-model/when"><a href="#test/procc/coin-model/when"><code>test/procc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></h2>
+<section id="section3486">
+<header>
+<h1>Two CHICKEN hazards</h1></header></section>
+<p>Two properties of CHICKEN break models that resume a continuation more than
+		once, which every model of these suites avoids (plan §5.6):</p>
+<ol>
+<li><code class="w3-codespan">map</code> builds its result destructively (srfi-1's too), so a
+		     continuation captured inside its procedure must not be resumed: <code class="w3-codespan">(probcc-reify/exact (map (λ (x) (probcc-coin 1/2)) '(1 2)))</code> answers the single entry <code class="w3-codespan">(#t #t #f #f #t #f)</code> at mass 1, the four worlds sharing one list built in place, instead of
+		     four lists at 1/4. Models use <code class="w3-codespan">probcc-map</code>, left to right as OCaml's <code class="w3-codespan">List.map</code> (deviation 20); <code class="w3-codespan">list-tabulate</code> and <code class="w3-codespan">filter-map</code> are re-entrant but call their procedure from the last element to the first
+		     (<code class="w3-codespan">test/map/reentrant</code>);</li>
+<li>under <code class="w3-codespan">csi</code>, a continuation captured while the operands of a
+		     call with five or more operands are evaluated accumulates them when resumed,
+		     even with plain <code class="w3-codespan">call/cc</code>: <code class="w3-codespan">(probcc-reify/exact (list 'a 'b 'c 'd (probcc-coin 1/2)))</code> answers <code class="w3-codespan">(a b c d #t)</code> and <code class="w3-codespan">(a b c d #t #f)</code>; quasiquote templates and constructors are calls too. Models bind every
+		     choice with <code class="w3-codespan">let*</code> first. Compiled code is not affected.</li></ol>
+<p>OCaml evaluates the components of a tuple and the arguments of a call from right
+		to left, <code class="w3-codespan">let x = e1 and y = e2 in</code> and the scrutinee of <code class="w3-codespan">match (e1, e2) with</code> from left to right; the ported models
+		sequence their choices with <code class="w3-codespan">let*</code> in that order, which the
+		depth-bounded and the replayed oracles depend on (plan D19).</p>
+<section id="section3487">
+<header>
+<h1>Deviations</h1></header></section>
+<p>The departures from upstream, each tagged in the source with its number as <code class="w3-codespan">deviation N</code> (plan §9):</p>
+<ol>
+<li>the representation: entries <code class="w3-codespan">((V v) p)</code> and <code class="w3-codespan">((C thunk) p)</code> and pairs <code class="w3-codespan">(v p)</code> put the probability second; weights may be exact, and the operations on
+		     them are the parameters <code class="w3-codespan">op/times</code> .. <code class="w3-codespan">op/greater</code> (T:4-15);</li>
+<li>the direct reifier: no <code class="w3-codespan">pReq</code>, <code class="w3-codespan">interp</code> or <code class="w3-codespan">read_answer</code>, the body of the reset answers the tree
+		     already interpreted (P:24, 97-108);</li>
+<li>a single untagged delimiter: a user's <code class="w3-codespan">resetcc</code> inside a model captures HANSEI's choices (P:26);</li>
+<li><code class="w3-codespan">shift</code>, not <code class="w3-codespan">shift0</code>, which coincide since no shift body shifts again (P:120, 142, 361);</li>
+<li>the output order of exploration: descending mass, stable over upstream's
+		     order; <code class="w3-codespan">+inf.0</code> or <code class="w3-codespan">#f</code> for <code class="w3-codespan">None</code>; <code class="w3-codespan">probcc-reify/part</code> keeps the explorer's order (I:28; LV:68-70);</li>
+<li><code class="w3-codespan">pmap-compare</code> for OCaml's <code class="w3-codespan">compare</code>: symbols are ordered by name, not by declaration, and unorderable values
+		     raise (PM:101);</li>
+<li><code class="w3-codespan">probcc-uniform 1</code> makes a choice node of one branch, <code class="w3-codespan">n &lt;= 0</code> fails instead of raising, a count that is not an
+		     integer raises <code class="w3-codespan">(exn hansei malformed)</code>, and the masses
+		     are the exact 1/n (P:156-165);</li>
+<li><code class="w3-codespan">probcc-uniform/range</code> is half open, low .. high - 1
+		     (P:173-174);</li>
+<li><code class="w3-codespan">probcc-geometric</code> answers the trace of the trials; <code class="w3-codespan">probcc-geometric/count</code> is upstream's (P:181-185);</li>
+<li>normalization turns exact weights into flonums with one rounding (I:299-301);</li>
+<li>the bucket of <code class="w3-codespan">λ-probcc-bucket</code> is the global <code class="w3-codespan">λ-memo</code>, wrong when the function reads world-local state
+		     (DSL p.18 l.776-783);</li>
+<li><code class="w3-codespan">probcc-variable-elimination</code> is variadic (P:267-268);</li>
+<li><code class="w3-codespan">probcc-letlazy/nesting</code> prints no debugging output
+		     (P:347-363);</li>
+<li>the samplers print their <code class="w3-codespan">done</code> lines only under <code class="w3-codespan">probcc-verbose</code> (I:131, 186);</li>
+<li>the memory stores values directly in a map of fixnum locations, with one
+		     global pointer, single-threaded (P:40-64);</li>
+<li>a missing memory location or memo table raises <code class="w3-codespan">(exn hansei memory)</code> instead of <code class="w3-codespan">Not_found</code>, and memo tables are ordered by <code class="w3-codespan">pmap-compare</code> (P:471);</li>
+<li>the world-local references are reconstructed, since <code class="w3-codespan">WorldLocalMem</code> is not shipped, and <code class="w3-codespan">probcc-wref-set!</code> takes the reference first (TI:121-126);</li>
+<li>a selector answers the list <code class="w3-codespan">(x ptotal)</code>; a seed re-initialises the global OCaml-compatible state, and an rng-source
+		     may be given instead (P:221-233; T:20);</li>
+<li>the ratios <code class="w3-codespan">p /. ptotal</code> keep exact weights exact, and a zero
+		     total gives NaN or an infinity as upstream (P:205, 240; I:47, 132, 160, 187);</li>
+<li><code class="w3-codespan">probcc-map</code> must replace <code class="w3-codespan">map</code> around stochastic code (new);</li>
+<li><code class="w3-codespan">probcc-statistics</code> is sorted, not in hash order (I:292);</li>
+<li>the parser combinators are prefixed <code class="w3-codespan">parsec-</code>; <code class="w3-codespan">parsec-or</code> is binary, <code class="w3-codespan">parsec-alt</code> and <code class="w3-codespan">parsec-stream-over</code> take lists, and the unit value
+		     is <code class="w3-codespan">(void)</code> (PS:59-66, 106-113);</li>
+<li><code class="w3-codespan">probcc-prob-of</code> skips branches not yet explored (N:292-293);</li>
+<li>lazy lists are <code class="w3-codespan">'()</code> and <code class="w3-codespan">(head-thunk . tail)</code>, promoted to a library, and <code class="w3-codespan">probcc-lobserve</code> compares heads with <code class="w3-codespan">equal?</code> (SL:325-326; M2:116);</li>
+<li>OCaml's tuples are lists (D18);</li>
+<li>the exact <code class="w3-codespan">1</code> and <code class="w3-codespan">0</code> stand for upstream's <code class="w3-codespan">1.0</code> and <code class="w3-codespan">0.0</code> in deterministic branches, folds and missing values (P:100, 182, 198, 361;
+		     I:108, 128, 300; N:293);</li>
+<li>the standard deviation of <code class="w3-codespan">probcc-statistics</code> is <code class="w3-codespan">fpsqrt</code> of a flonum, so a negative rounded variance
+		     gives <code class="w3-codespan">+nan.0</code> as OCaml (I:289-292);</li>
+<li><code class="w3-codespan">probcc-timeit</code> prints the seconds with <code class="w3-codespan">~a</code>, not <code class="w3-codespan">%g</code> (I:307);</li>
+<li><code class="w3-codespan">probcc-map-dist</code> is promoted from example code, and a branch
+		     not yet explored raises <code class="w3-codespan">(exn hansei malformed)</code> (BL:456-460);</li>
+<li>the errors of <code class="w3-codespan">(aux hansei pmap)</code> are <code class="w3-codespan">(exn pmap)</code> conditions raised with <code class="w3-codespan">abort</code>, and <code class="w3-codespan">pmap-find</code> takes a default thunk (PM:66, 76, 85, 141);</li>
+<li>the errors of <code class="w3-codespan">(aux hansei random)</code> are <code class="w3-codespan">(exn hansei)</code> conditions of kind <code class="w3-codespan">random</code> (OR:91-94);</li>
+<li><code class="w3-codespan">ocaml-random-float!</code> draws three words, as the OCaml that
+		     made HANSEI's records did, where OCaml 4.14 draws two (OR:167-172);</li>
+<li>a count of <code class="w3-codespan">probcc-lazy-permutation/ins</code> that is not a non-negative exact integer raises <code class="w3-codespan">(exn hansei malformed)</code> (LP:281-286).</li></ol>
+<p>Kept as upstream, with a comment: one global RNG state, re-seeded by every <code class="w3-codespan">random_selector seed</code>; <code class="w3-codespan">letlazy</code> is not nesting-safe; a memo must be created inside the reification that uses
+		it; <code class="w3-codespan">bounded_explore</code> counts every leaf, whatever its value; <code class="w3-codespan">random_selector</code> raises &quot;can't happen&quot; past the last entry; <code class="w3-codespan">first_success</code> is breadth-first through <code class="w3-codespan">append</code>.</p>
+<p>Upstream discrepancies: EPP p.4 says <code class="w3-codespan">biased</code> can be memoized as usual and used at the inner level, which raises with P's <code class="w3-codespan">memo</code> (only <code class="w3-codespan">letlazy_nesting</code> works); M1:203-205 re-sums the exact <code class="w3-codespan">r</code>, not the sample; PD:122 has a syntax typo; TI depends on the unreleased <code class="w3-codespan">WorldLocalMem</code>; DSL p.5's normalized lawn differs in the last
+		digits from what today's code computes; and the sampling records of <code class="w3-codespan">sorted.ml</code>, <code class="w3-codespan">incite.ml</code>, <code class="w3-codespan">hmm.ml</code>, <code class="w3-codespan">colored_balls.ml</code>, <code class="w3-codespan">bloodtype.ml</code>, <code class="w3-codespan">blip_naive.ml</code> and <code class="w3-codespan">blip_ailog.ml</code> do not replay under the three-draw generator, which replays those of <code class="w3-codespan">samplingM.ml</code>, <code class="w3-codespan">nested.ml</code>, <code class="w3-codespan">slazy.ml</code>, <code class="w3-codespan">parsec.ml</code> and <code class="w3-codespan">music1a.ml</code>: they come from earlier code or generators, and the
+		suites check those models exactly, against today's upstream under OCaml, or
+		statistically in the long suite.</p>
+<h2 id="test/probcc/coin-model"><a href="#test/probcc/coin-model"><code>test/probcc/coin-model</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Joint distribution of tossing two <i>biased</i> coins, where head has probability <code class="w3-codespan">0.59999999999999998</code> to appear.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/probcc/coin-model _)
+  (⊦= '(((V ((x #t) (y #t))) 0.35999999999999999)
+        ((V ((x #t) (y #f))) 0.23999999999999999)
+        ((V ((x #f) (y #t))) 0.23999999999999999)
+        ((V ((x #f) (y #f))) 0.16))
+      (probcc-normalize
+        (probcc-reify/exact
+          (let* ((p 0.59999999999999998)
+                 (x (probcc-coin p))
+                 (y (probcc-coin p)))
+            `((x ,x) (y ,y)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4125944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/probcc/coin-model/when"><a href="#test/probcc/coin-model/when"><code>test/probcc/coin-model/when</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Slightly variation of the previous test, here it has been <b>observed</b> that <i>at least one head</i> appeared.</p>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/coin-model/when _)
-  (⊦= '(((V (#t #t)) 0.428571428571429)
-          ((V (#t #f)) 0.285714285714286)
-          ((V (#f #t)) 0.285714285714286))
-        (probcc-normalize
-          (probcc-reify/exact
-            (let* ((p 0.6) (x (probcc-coin p)) (y (probcc-coin p)))
-              (probcc-when (or x y) (list x y)))))))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/probcc/coin-model/when _)
+  (⊦= '(((V (#t #t)) 0.42857142857142899)
+        ((V (#t #f)) 0.28571428571428598)
+        ((V (#f #t)) 0.28571428571428598))
+      (probcc-normalize
+        (probcc-reify/exact
+          (let* ((p 0.59999999999999998)
+                 (x (probcc-coin p))
+                 (y (probcc-coin p)))
+            (probcc-when (or x y) (list x y)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8478592 1976888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4127744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test/procc/grass-model"><a href="#test/procc/grass-model"><code>test/procc/grass-model</code>: <span class="w3-text-green">pass</span></a></h2>
+<h2 id="test/probcc/grass-model"><a href="#test/probcc/grass-model"><code>test/probcc/grass-model</code>: <span class="w3-text-green">pass</span></a></h2>
 <blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
 <br /><i>The canonical example is the grass model, with three random variables
 	representing the events of rain, of a switched-on sprinkler and wet
@@ -251,85 +1058,1336 @@
 <p>The solution to this problem shows the probability distribution of raining,
 	   provided that <i>has been observed a wet grass:</i>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(((V (rain #f)) 0.53152855727963) ((V (rain #t)) 0.46847144272037))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(((V (rain #f)) 0.53152855727963011) ((V (rain #t)) 0.46847144272036984))
 </code></pre></div>as required. The following test defines and captures this problem.</p>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/grass-model _)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/probcc/grass-model _)
   (define result
     (probcc-reify/exact
-      (let* ((rain (probcc-coin 0.3))
+      (let* ((rain (probcc-coin 0.29999999999999999))
              (sprinkler (probcc-coin 0.5))
              (grass-is-wet
-               (or (and (probcc-coin 0.9) rain)
-                   (and (probcc-coin 0.8) sprinkler)
-                   (probcc-coin 0.1))))
+               (or (and (probcc-coin 0.90000000000000002) rain)
+                   (and (probcc-coin 0.80000000000000004) sprinkler)
+                   (probcc-coin 0.10000000000000001))))
         (probcc-when grass-is-wet `(rain ,rain)))))
-  (⊦= (list (probcc-value 0.322 '(rain #f)) (probcc-value 0.2838 '(rain #t)))
-        result))
+  (⊦= (list (probcc-value 0.32200000000000001 '(rain #f))
+            (probcc-value 0.2838 '(rain #t)))
+      result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8478592 1976088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4129952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test/procc/grass-model/complete"><a href="#test/procc/grass-model/complete"><code>test/procc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></h2>
+<h2 id="test/probcc/grass-model/complete"><a href="#test/probcc/grass-model/complete"><code>test/probcc/grass-model/complete</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>If we remove the assumption that <i>has been observed a wet grass</i>, then we have the joint probability distribution of <i>all</i> variables:</p>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/procc/grass-model/complete _)
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/probcc/grass-model/complete _)
   (define result
     (probcc-reify/exact
-      (let* ((rain (probcc-coin 0.3))
+      (let* ((rain (probcc-coin 0.29999999999999999))
              (sprinkler (probcc-coin 0.5))
              (grass-is-wet
-               (or (and (probcc-coin 0.9) rain)
-                   (and (probcc-coin 0.8) sprinkler)
-                   (probcc-coin 0.1))))
+               (or (and (probcc-coin 0.90000000000000002) rain)
+                   (and (probcc-coin 0.80000000000000004) sprinkler)
+                   (probcc-coin 0.10000000000000001))))
         `((rain ,rain) (sprinkler ,sprinkler) (grass-is-wet ,grass-is-wet)))))
   (⊦= '(((V ((rain #f) (sprinkler #f) (grass-is-wet #f))) 0.315)
-          ((V ((rain #f) (sprinkler #t) (grass-is-wet #t))) 0.287)
-          ((V ((rain #t) (sprinkler #t) (grass-is-wet #t))) 0.1473)
-          ((V ((rain #t) (sprinkler #f) (grass-is-wet #t))) 0.1365)
-          ((V ((rain #f) (sprinkler #t) (grass-is-wet #f))) 0.063)
-          ((V ((rain #f) (sprinkler #f) (grass-is-wet #t))) 0.035)
-          ((V ((rain #t) (sprinkler #f) (grass-is-wet #f))) 0.0135)
-          ((V ((rain #t) (sprinkler #t) (grass-is-wet #f))) 0.0027))
-        result)
+        ((V ((rain #f) (sprinkler #t) (grass-is-wet #t))) 0.28699999999999998)
+        ((V ((rain #t) (sprinkler #t) (grass-is-wet #t))) 0.14729999999999999)
+        ((V ((rain #t) (sprinkler #f) (grass-is-wet #t))) 0.13650000000000001)
+        ((V ((rain #f) (sprinkler #t) (grass-is-wet #f))) 0.063)
+        ((V ((rain #f) (sprinkler #f) (grass-is-wet #t))) 0.035000000000000003)
+        ((V ((rain #t) (sprinkler #f) (grass-is-wet #f))) 0.0135)
+        ((V ((rain #t) (sprinkler #t) (grass-is-wet #f)))
+         0.0027000000000000001))
+      result)
   (⊦= (probcc-normalize result) result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8478592 1980448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4134120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/uniform/range"><a href="#test/uniform/range"><code>test/uniform/range</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uniform/range _)
   (⊦= '(((V 1) 1/7)
-          ((V 2) 1/7)
-          ((V 3) 1/7)
-          ((V 4) 1/7)
-          ((V 5) 1/7)
-          ((V 6) 1/7)
-          ((V 7) 1/7))
-        (sort (probcc-reify/exact (probcc-uniform/range 1 8))
-              (λ (a b) (&lt; (cadr (car a)) (cadr (car b)))))))
+        ((V 2) 1/7)
+        ((V 3) 1/7)
+        ((V 4) 1/7)
+        ((V 5) 1/7)
+        ((V 6) 1/7)
+        ((V 7) 1/7))
+      (sort (probcc-reify/exact (probcc-uniform/range 1 8))
+            (λ (a b) (&lt; (cadr (car a)) (cadr (car b)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8478592 1979024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4135920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dfs"><a href="#test/dfs"><code>test/dfs</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dfs _)
+  (⊦= '(((V #t) 1/2) ((V #f) 1/2))
+      (probcc-dfs (probcc-reify/0 (τ (probcc-coin 1/2)))))
+  (⊦= '(((V (#t #t)) 1/6)
+        ((V (#t #f)) 1/3)
+        ((V (#f #t)) 1/6)
+        ((V (#f #f)) 1/3))
+      (probcc-dfs
+        (probcc-reify/0
+          (τ (let* ((a (probcc-coin 1/2)) (b (probcc-coin 1/3)))
+               (list a b)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4137120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parameterize"><a href="#test/parameterize"><code>test/parameterize</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parameterize _)
+  (define q (make-parameter 'outer))
+  (⊦= '(((V (#f inner)) 2/3) ((V (#t inner)) 1/3))
+      (probcc-reify/exact
+        (parameterize ((q 'inner)) (let1 (x (probcc-coin 1/3)) (list x (q))))))
+  (⊦= 'outer (q)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4139400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/geometric"><a href="#test/geometric"><code>test/geometric</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/geometric _)
-  (define result ((probcc-reify 5) (τ (probcc-geometric 0.85 's 'f))))
+  (define result
+    ((probcc-reify 5) (τ (probcc-geometric 0.84999999999999998 's 'f))))
   (define t6 (cadr (car (sixth result))))
   (define t7 (cadr (car (seventh result))))
   (define t8 (cadr (car (eighth result))))
-  (⊦= `(((V (s)) 0.85)
-          ((V (s f)) 0.1275)
-          ((V (s f f)) 0.019125)
-          ((V (s f f f)) 0.00286875)
-          ((V (s f f f f)) 0.0004303125)
-          ((C ,t6) 6.4546875e-05)
-          ((C ,t7) 9.68203125000001e-06)
-          ((C ,t8) 1.70859375e-06))
-        result))
+  (⊦= `(((V (s)) 0.84999999999999998)
+        ((V (s f)) 0.1275)
+        ((V (s f f)) 0.019125)
+        ((V (s f f f)) 0.0028687500000000002)
+        ((V (s f f f f)) 0.00043031249999999998)
+        ((C ,t6) 6.4546875000000002e-05)
+        ((C ,t7) 9.6820312500000105e-06)
+        ((C ,t8) 1.70859375e-06))
+      result))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(8478592 1983848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4144376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pmap"><a href="#test/pmap"><code>test/pmap</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The persistent AVL maps of <code class="w3-codespan">(aux hansei pmap)</code>, ExtLib's <code class="w3-codespan">PMap</code> as augmented by HANSEI with <code class="w3-codespan">insert_with</code> (cf. PM:106-199): 200 insertions in a scrambled order list their keys in
+	    ascending order, adding to or removing from a map leaves it unchanged, <code class="w3-codespan">pmap-insert-with</code> stores <code class="w3-codespan">(f new old)</code>, and every node keeps the AVL invariant with upstream's tolerance 2.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pmap _)
+  (define (avl? m)
+    (letrec ((H (λ (t)
+                   (cond ((null? t) 0)
+                         (else
+                          (let ((hl (H (vector-ref t 0)))
+                                (hr (H (vector-ref t 3))))
+                            (and hl
+                                 hr
+                                 (&lt;= (abs (- hl hr)) 2)
+                                 (= (vector-ref t 4) (add1 (max hl hr)))
+                                 (vector-ref t 4))))))))
+      (and (pmap? m) (H (vector-ref (record-&gt;vector m) 2)) #t)))
+  (define squares (map (λ (k) (cons k (* k k))) (iota 200)))
+  (define m200
+    (let loop ((i 0) (m pmap-empty))
+      (if (= i 200)
+        m
+        (let1 (k (remainder (* 37 i) 200))
+              (loop (add1 i) (pmap-add k (* k k) m))))))
+  (define m201 (pmap-add 200 'x m200))
+  (define m199 (pmap-remove 100 m201))
+  (define m3 (alist-&gt;pmap '((5 . b) (1 . a) (9 . c))))
+  (⊦ equal? squares (pmap-&gt;alist m200))
+  (⊦ equal? #t (avl? m200))
+  (⊦ equal? #t (avl? m201))
+  (⊦ equal? #t (avl? m199))
+  (⊦ equal? 200 (length (pmap-&gt;alist m200)))
+  (⊦ equal? 201 (length (pmap-&gt;alist m201)))
+  (⊦ equal? 200 (length (pmap-&gt;alist m199)))
+  (⊦ equal? #f (pmap-member? 100 m199))
+  (⊦ equal? #t (pmap-member? 100 m201))
+  (⊦ equal? #f (pmap-member? 200 m200))
+  (⊦ equal? 'x (pmap-find 200 m199))
+  (⊦ equal?
+     '(n . o)
+     (pmap-find 'k (pmap-insert-with cons 'k 'n (pmap-add 'k 'o pmap-empty))))
+  (⊦ equal? 'n (pmap-find 'k (pmap-insert-with cons 'k 'n pmap-empty)))
+  (⊦ equal?
+     '((1 . a) ((5 . b) (9 . c)))
+     (match/first
+       (pmap-delete-find-min m3)
+       ((,b ,m) (list b (pmap-&gt;alist m)))))
+  (⊦ equal?
+     '((9 . c) ((1 . a) (5 . b)))
+     (match/first
+       (pmap-delete-find-max m3)
+       ((,b ,m) (list b (pmap-&gt;alist m)))))
+  (⊦ equal? '((1 . a) (5 . b) (9 . c)) (pmap-&gt;alist m3)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4156320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pmap/api"><a href="#test/pmap/api"><code>test/pmap/api</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The rest of the interface of <code class="w3-codespan">(aux hansei pmap)</code> (cf. PMI): <code class="w3-codespan">pmap-find</code> with and without a default thunk, the traversals in
+	    ascending key order, the round trip through association lists, a map ordered by a
+	    custom comparison, and the <code class="w3-codespan">(exn pmap)</code> conditions raised on a
+	    missing key or an empty map.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pmap/api _)
+  (define m (alist-&gt;pmap '((b . 2) (a . 1) (c . 3))))
+  (define (collect-for-each m)
+    (let1 (acc '())
+          (pmap-for-each (λ (k v) (set! acc (cons (list k v) acc))) m)
+          (reverse acc)))
+  (⊦ equal? 2 (pmap-find 'b m))
+  (⊦ equal? 'none (pmap-find 'z m (τ 'none)))
+  (⊦raises (exn pmap) (pmap-find 'z m))
+  (⊦raises (exn) (with-exception-handler (λ (e) 'x) (τ (pmap-find 'z m))))
+  (⊦ equal? '(a . 1) (pmap-find-min m))
+  (⊦raises (exn pmap) (pmap-find-min pmap-empty))
+  (⊦ equal? #t (pmap-member? 'c m))
+  (⊦ equal? #f (pmap-member? 'd m))
+  (⊦ equal? '((a 1) (b 2) (c 3)) (collect-for-each m))
+  (⊦ equal?
+     '((a . 10) (b . 20) (c . 30))
+     (pmap-&gt;alist (pmap-map (λ (v) (* 10 v)) m)))
+  (⊦ equal? '((a a 1) (b b 2) (c c 3)) (pmap-&gt;alist (pmap-map/key list m)))
+  (⊦ equal? '(3 2 1) (pmap-fold cons m '()))
+  (⊦ equal?
+     '(c 3 b 2 a 1)
+     (pmap-foldi (λ (k v acc) (cons k (cons v acc))) m '()))
+  (⊦ equal?
+     '((a . 1) (b . 2) (c . 3))
+     (pmap-&gt;alist (alist-&gt;pmap (pmap-&gt;alist m))))
+  (⊦ equal? '((a . 9)) (pmap-&gt;alist (alist-&gt;pmap '((a . 1) (a . 9)))))
+  (⊦ equal? #t (pmap-empty? pmap-empty))
+  (⊦ equal? #f (pmap-empty? (pmap-add 1 1 pmap-empty)))
+  (⊦ equal? #t (pmap? m))
+  (⊦ equal? #f (pmap? '()))
+  (⊦ equal?
+     '(-1 0 1)
+     (list (fx-compare 1 2) (fx-compare 2 2) (fx-compare 3 2)))
+  (⊦ equal?
+     '(-1 0 1)
+     (list (number-compare 0.5 1)
+           (number-compare 1/2 0.5)
+           (number-compare 2 1.5)))
+  (⊦ equal?
+     '((3 . c) (2 . b) (1 . a))
+     (pmap-&gt;alist
+       (alist-&gt;pmap '((1 . a) (3 . c) (2 . b)) (λ (a b) (fx-compare b a)))))
+  (⊦raises (exn pmap) (pmap-delete-find-min pmap-empty))
+  (⊦raises (exn pmap) (pmap-delete-find-max pmap-empty)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4161288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pmap/compare"><a href="#test/pmap/compare"><code>test/pmap/compare</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">pmap-compare</code> stands in for OCaml's polymorphic <code class="w3-codespan">compare</code>, the default order of <code class="w3-codespan">PMap.empty</code> (cf. PM:101): types are ranked, numbers compare by value with an exact number
+	    before an equal inexact one, <code class="w3-codespan">-0.</code> equals <code class="w3-codespan">0.</code>, symbols compare by name, and procedures cannot be compared, as OCaml's <code class="w3-codespan">compare: functional value</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pmap/compare _)
+  (⊦ equal?
+     '(#t 1 1.0 2 #\c &quot;b&quot; a (1) #(0))
+     (sort (list &quot;b&quot; 'a 2 #t #\c '(1) #(0) 1.0 1)
+           (λ (a b) (negative? (pmap-compare a b)))))
+  (⊦ equal? 0 (pmap-compare -0.0 0.0))
+  (⊦raises (exn pmap) (pmap-compare car cdr)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4163000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/explore/persistent"><a href="#test/explore/persistent"><code>test/explore/persistent</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The explorer threads its answer through its loop in a persistent map, as <code class="w3-codespan">explore</code> threads <code class="w3-codespan">(ans, susp)</code> (cf. I:16-28):
+	    a thunk it forces may choose in the enclosing model, here the coin of the second
+	    branch, so every world of that model resumes the same loop.  With a mutable table
+	    shared by the worlds, the <code class="w3-codespan">#t</code> of the first world leaked into the
+	    second one, whose inner table read <code class="w3-codespan">(((V a) 1/2) ((V #f) 1/2) ((V #t) 1/2))</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/explore/persistent _)
+  (⊦ equal?
+     '(((V (((V a) 1/2) ((V #t) 1/2))) 1/2)
+       ((V (((V a) 1/2) ((V #f) 1/2))) 1/2))
+     (probcc-reify/exact
+       (probcc-explore
+         #f
+         (list (probcc-value 1/2 'a)
+               (probcc-τ 1/2 (probcc-unit (probcc-coin 1/2))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4161976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/explore/order"><a href="#test/explore/order"><code>test/explore/order</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The order of the explorer's output (deviation 5): descending mass, and equal masses
+	    in the order of upstream's <code class="w3-codespan">PMap.foldi</code> (I:28), descending <code class="w3-codespan">pmap-compare</code> order of the values, by a stable sort.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/explore/order _)
+  (⊦ equal?
+     '(((V (#t #t)) 1/4) ((V (#t #f)) 1/4) ((V (#f #t)) 1/4) ((V (#f #f)) 1/4))
+     (probcc-reify/exact
+       (let* ((a (probcc-coin 1/2)) (b (probcc-coin 1/2))) (list a b)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4163912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/explore/depth"><a href="#test/explore/depth"><code>test/explore/depth</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Exploring the lawn model to a depth (cf. DSL p.12 l.539-546, p.16 l.712-719,
+	    I:16-28): its tree starts with the choice of rain; explored to depth 1, the
+	    choices of rain and of the sprinkler are made, and the eight branches of the next
+	    choice, the coin of 0.9, are left unexplored with their masses; from depth 4 on, as
+	    with no bound (<code class="w3-codespan">#f</code>, OCaml's <code class="w3-codespan">None</code>), the tree is explored completely.  A branch left unexplored keeps its thunk (<code class="w3-codespan">eq?</code>, I:26), and is not wrapped in a new one.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/explore/depth _)
+  (define tree (probcc-reify/0 lawn))
+  (define depth1 (probcc-explore 1 tree))
+  (define t0 (τ '()))
+  (define inner `(((C ,t0) 1/2)))
+  (⊦= '(0.29999999999999999 0.69999999999999996) (probcc-map cadr tree))
+  (⊦ equal? 8 (length depth1))
+  (⊦ equal? #t (every (λ1-match/first (((C ,_) ,_) #t) (else #f)) depth1))
+  (⊦= '(0.014999999999999999
+        0.014999999999999999
+        0.035000000000000003
+        0.035000000000000003
+        0.13500000000000001
+        0.13500000000000001
+        0.315
+        0.315)
+      (sort (probcc-map cadr depth1) &lt;))
+  (⊦= '(((V #f) 0.32200000000000001) ((V #t) 0.2838)) (probcc-explore 4 tree))
+  (⊦= '(((V #f) 0.32200000000000001) ((V #t) 0.2838)) (probcc-explore #f tree))
+  (⊦ eq? t0 (car (cdr (car (car (probcc-explore 0 `(((C ,(τ inner)) 1)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4149696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/explore/trees"><a href="#test/explore/trees"><code>test/explore/trees</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The five trees of DSL p.8-9 l.364-374 represent the same distribution: the first
+	    is a flat probability table, the others have unexplored branches, the last one a
+	    failure node <code class="w3-codespan">'()</code>; exploring each of them completely gives the
+	    table.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/explore/trees _)
+  (define trees
+    (list '(((V #t) 0.59999999999999998) ((V #f) 0.40000000000000002))
+          '(((V #t) 0.40000000000000002)
+            ((V #f) 0.40000000000000002)
+            ((V #t) 0.20000000000000001))
+          `(((V #t) 0.40000000000000002)
+            ((C ,(τ '(((V #f) 0.40000000000000002)
+                      ((V #t) 0.20000000000000001))))
+             1.0))
+          `(((V #t) 0.40000000000000002)
+            ((C ,(τ '(((V #f) 0.5) ((V #t) 0.25)))) 0.80000000000000004))
+          `(((V #t) 0.40000000000000002)
+            ((C ,(τ `(((V #f) 0.5) ((V #t) 0.25) ((C ,(τ '())) 0.25))))
+             0.80000000000000004))))
+  (⊦= (make-list
+        5
+        '(((V #t) 0.59999999999999998) ((V #f) 0.40000000000000002)))
+      (map (λ (tree) (probcc-explore #f tree)) trees)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4152344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/reflect/inverse"><a href="#test/reflect/inverse"><code>test/reflect/inverse</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-reflect</code> is the inverse of <code class="w3-codespan">probcc-reify/0</code> (cf. P:136-148, DSL p.16 l.694-700, p.17 l.728-733, NIPS l.65-67): reifying the
+	    reflection of a table, or of the lazy tree of the lawn model, gives the
+	    distribution they denote.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/reflect/inverse _)
+  (define table
+    '(((V a) 0.20000000000000001) ((V b) 0.5) ((V c) 0.29999999999999999)))
+  (define tree (probcc-reify/0 lawn))
+  (⊦= (probcc-explore #f table) (probcc-reify/exact (probcc-reflect table)))
+  (⊦= (probcc-explore #f tree) (probcc-reify/exact (probcc-reflect tree)))
+  (⊦= '(((V b) 0.5) ((V c) 0.29999999999999999) ((V a) 0.20000000000000001))
+      (probcc-reify/exact (probcc-reflect table))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4151576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/normalize"><a href="#test/normalize"><code>test/normalize</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-normalize/total</code> is <code class="w3-codespan">normalize</code> (cf. I:296-301): the total mass, summed from the left, and the distribution
+	    divided by it; <code class="w3-codespan">probcc-normalize</code> is the list alone, as the <code class="w3-codespan">normalize</code> of PE:22-24, here on the extended grass model of
+	    PE:8-28.  Exact masses are divided exactly and rounded once, and a total of zero
+	    gives NaN masses, as upstream, instead of raising.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/normalize _)
+  (define (grass-cloudy)
+    (let* ((cloudy (probcc-coin 0.5))
+           (rain (probcc-coin
+                   (if cloudy 0.80000000000000004 0.20000000000000001)))
+           (sprinkler (probcc-coin (if cloudy 0.10000000000000001 0.5)))
+           (wet-roof (and (probcc-coin 0.69999999999999996) rain))
+           (wet-grass
+             (or (and (probcc-coin 0.90000000000000002) rain)
+                 (and (probcc-coin 0.90000000000000002) sprinkler))))
+      (probcc-when wet-grass rain)))
+  (define posterior (probcc-reify/exact/a grass-cloudy))
+  (⊦= '(((V #t) 0.45810000000000001) ((V #f) 0.189)) posterior)
+  (⊦= '(0.64710000000000001
+        (((V #t) 0.70792767732962447) ((V #f) 0.29207232267037547)))
+      (probcc-normalize/total posterior))
+  (⊦= (cadr (probcc-normalize/total posterior)) (probcc-normalize posterior))
+  (⊦ equal?
+     `(3/10 (((V a) ,(exact-&gt;inexact 1/3)) ((V b) ,(exact-&gt;inexact 2/3))))
+     (probcc-normalize/total '(((V a) 1/10) ((V b) 1/5))))
+  (⊦ equal? #t (nan? (cadr (car (probcc-normalize '(((V a) 0))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4151600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/uniform/edges"><a href="#test/uniform/edges"><code>test/uniform/edges</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-uniform</code> (cf. P:156-165) gives the value 0 the mass <code class="w3-codespan">1 - (n - 1)/n</code>, the exact <code class="w3-codespan">1/n</code> here, so the masses tie and the values come in descending order.  Deviation 7: <code class="w3-codespan">(probcc-uniform 1)</code> is a choice of one branch, where upstream
+	    answers 0 without choosing, a count of zero fails, where upstream raises, and a
+	    count that is not an integer raises <code class="w3-codespan">(exn hansei)</code> of kind <code class="w3-codespan">malformed</code>, where OCaml's type rules it out.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uniform/edges _)
+  (⊦ equal?
+     '(((V 2) 1/3) ((V 1) 1/3) ((V 0) 1/3))
+     (probcc-reify/exact (probcc-uniform 3)))
+  (⊦ equal?
+     #t
+     (match/first
+       (probcc-reify/0 (τ (probcc-uniform 1)))
+       ((((C ,_) 1)) #t)
+       (else #f)))
+  (⊦ equal? '(((V 0) 1)) (probcc-reify/exact (probcc-uniform 1)))
+  (⊦ equal? '() (probcc-reify/exact (probcc-uniform 0)))
+  (⊦ equal? '() (probcc-reify/exact (probcc-uniform/either '())))
+  (⊦raises (exn hansei) (probcc-reify/exact (probcc-uniform 5/2)))
+  (⊦raises (exn hansei) (probcc-reify/exact (probcc-uniform 2.5)))
+  (⊦raises (exn hansei) (probcc-reify/exact (probcc-uniform/range 0 2.5)))
+  (⊦ equal?
+     '(((V 1.0) 0.5) ((V 0.0) 0.5))
+     (probcc-reify/exact (probcc-uniform 2.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4156624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/map/reentrant"><a href="#test/map/reentrant"><code>test/map/reentrant</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-map</code> is OCaml's <code class="w3-codespan">List.map</code>, left to right, and a continuation captured inside its procedure may be resumed:
+	    CHICKEN's <code class="w3-codespan">map</code> builds its result destructively, and <code class="w3-codespan">(probcc-reify/exact (map (λ (x) (probcc-coin 1/2)) '(1 2)))</code> gives the single entry <code class="w3-codespan">(#t #t #f #f #t #f)</code> at mass 1, the four worlds sharing one list built in place (plan §5.6).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/map/reentrant _)
+  (⊦ equal?
+     '(((V (#t #t)) 1/4) ((V (#t #f)) 1/4) ((V (#f #t)) 1/4) ((V (#f #f)) 1/4))
+     (probcc-reify/exact (probcc-map (λ (_) (probcc-coin 1/2)) '(1 2))))
+  (⊦ equal?
+     '(((V (#t #t #f #f #t #f)) 1))
+     (probcc-reify/exact (map (λ (_) (probcc-coin 1/2)) '(1 2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4155960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/geometric/count"><a href="#test/geometric/count"><code>test/geometric/count</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-geometric/count</code> is upstream's <code class="w3-codespan">geometric</code> (cf. P:181-185), the number of failures before the first success; explored to
+	    depth 4 (cf. X:63-66), the values 0 to 3 come with upstream's masses, bit for bit,
+	    and three branches are left unexplored.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/geometric/count _)
+  (define result
+    (probcc-explore
+      4
+      (probcc-reify/0 (τ (probcc-geometric/count 0.84999999999999998)))))
+  (⊦ equal?
+     '(((V 0) 0.84999999999999998)
+       ((V 1) 0.1275)
+       ((V 2) 0.019125000000000003)
+       ((V 3) 0.0028687500000000011))
+     (take result 4))
+  (⊦ equal?
+     #t
+     (every (λ1-match/first (((C ,_) ,_) #t) (else #f)) (drop result 4)))
+  (⊦ equal?
+     '(1.1390625000000009e-05 6.4546875000000043e-05 0.00043031250000000025)
+     (sort (probcc-map cadr (drop result 4)) &lt;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4161864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/geometric/bounded"><a href="#test/geometric/bounded"><code>test/geometric/bounded</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-geometric/bounded</code> (cf. P:187-206) restricts the geometric
+	    distribution to <code class="w3-codespan">0 .. n</code> and normalizes it; with upstream's
+	    operations in upstream's order, the masses are bit for bit those of X:72-77,
+	    BN:189-190 and BL:332-334 (listed here by descending mass), and exact masses stay
+	    exact.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/geometric/bounded _)
+  (⊦ equal?
+     '(((V 0) 0.85000021784575897)
+       ((V 1) 0.12750003267686386)
+       ((V 2) 0.019125004901529581)
+       ((V 3) 0.0028687507352294374)
+       ((V 4) 0.00043031261028441569)
+       ((V 5) 6.454689154266237e-05)
+       ((V 6) 9.6820337313993568e-06)
+       ((V 7) 1.4523050597099037e-06))
+     (probcc-reify/exact (probcc-geometric/bounded 7 0.84999999999999998)))
+  (⊦ equal?
+     '(((V 0) 0.86956521739130432) ((V 1) 0.13043478260869568))
+     (probcc-reify/exact (probcc-geometric/bounded 1 0.84999999999999998)))
+  (⊦ equal?
+     '(((V 0) 0.85043053045604333)
+       ((V 1) 0.12756457956840653)
+       ((V 2) 0.019134686935260981)
+       ((V 3) 0.0028702030402891474))
+     (probcc-reify/exact (probcc-geometric/bounded 3 0.84999999999999998)))
+  (⊦ equal?
+     '(((V 0) 8/15) ((V 1) 4/15) ((V 2) 2/15) ((V 3) 1/15))
+     (probcc-reify/exact (probcc-geometric/bounded 3 1/2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4158968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/observe"><a href="#test/observe"><code>test/observe</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-observe</code> (cf. P:213-214) asserts the evidence that the value
+	    of a thunk passes a test, here the wet grass of the lawn model of X:48-56, whose
+	    masses it gives bit for bit.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/observe _)
+  (define (grass-model)
+    (let* ((rain (probcc-coin 0.29999999999999999))
+           (sprinkler (probcc-coin 0.5)))
+      (probcc-observe
+        (λ (wet) wet)
+        (τ (or (and (probcc-coin 0.90000000000000002) rain)
+               (and (probcc-coin 0.80000000000000004) sprinkler)
+               (probcc-coin 0.10000000000000001))))
+      rain))
+  (⊦ equal?
+     '(((V #f) 0.3219999999999999) ((V #t) 0.2838))
+     (probcc-reify/exact/a grass-model))
+  (⊦ equal?
+     '(((V 2) 1/4) ((V 0) 1/4))
+     (probcc-reify/exact (probcc-observe even? (τ (probcc-uniform 4))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4160096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/letlazy"><a href="#test/letlazy"><code>test/letlazy</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-letlazy</code> (cf. P:321-330) evaluates its thunk at most once
+	    per world, when it is first needed: a lazy coin gives the same value twice in a
+	    world; in <code class="w3-codespan">tests4</code> (cf. SL:73-93) the expensive function is never
+	    called in the world <code class="w3-codespan">u = 0</code>, and four times in the world <code class="w3-codespan">u = 1</code>, split by the coin before <code class="w3-codespan">x</code> is forced.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letlazy _)
+  (define calls '())
+  (define (expensive x) (set! calls (cons x calls)) x)
+  (define (tests4)
+    (let* ((u (probcc-distribution '((0 1/2) (1 1/2))))
+           (x (probcc-letlazy
+                (τ (expensive
+                     (probcc-distribution
+                       `((,(+ u 10) 1/2) (,(+ u 20) 1/2))))))))
+      (cond ((= u 0) #f)
+            (else
+             (let* ((c (probcc-coin 1/2)) (b (x)) (a (x))) (list a b c))))))
+  (⊦ equal?
+     '(((V (#f #t #t)) 1/3)
+       ((V (#f #f #f)) 1/3)
+       ((V (#t #t #t)) 1/6)
+       ((V (#t #f #f)) 1/6))
+     (probcc-reify/exact
+       (let* ((x (probcc-letlazy (τ (probcc-coin 1/2)))) (c (probcc-coin 1/3)))
+         (list c (x) (x)))))
+  (⊦ equal?
+     '(((V #f) 1/2)
+       ((V (21 21 #t)) 1/8)
+       ((V (21 21 #f)) 1/8)
+       ((V (11 11 #t)) 1/8)
+       ((V (11 11 #f)) 1/8))
+     (probcc-reify/exact/a tests4))
+  (⊦ equal? 4 (length calls))
+  (⊦ equal? #t (every (λ (x) (and (memv x '(11 21)) #t)) calls)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4162520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/memo"><a href="#test/memo"><code>test/memo</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-memo</code> (cf. P:449-479) makes a stochastic function a proper
+	    function in every world: <code class="w3-codespan">test2m</code> and <code class="w3-codespan">test3m</code> (cf. SL:694-729) give the same value for the same argument in a world, also
+	    through another memoized function, and the grass model of PE:33-45, all of whose
+	    variables are memoized, gives upstream's masses bit for bit.  The table lives in the
+	    world-local memory, which a reification starts empty (P:106): a memo created outside
+	    the reification it is used in raises (deviation 16).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/memo _)
+  (define (f* x) (probcc-distribution `((,x 1/2) (,(add1 x) 1/2))))
+  (define (test2m)
+    (let* ((f (probcc-memo f*)) (c (probcc-coin 1/2)))
+      (if c
+        (let* ((e (f 2)) (d (f 2)) (b (f 1)) (a (f 1))) (list c a b d e))
+        (let* ((e (f 1)) (d (f 1)) (b (f 2)) (a (f 2))) (list c a b d e)))))
+  (define (test3m)
+    (let* ((f (probcc-memo f*))
+           (g (probcc-memo
+                (λ (x)
+                   (let1 (u (f x))
+                         ((probcc-distribution
+                            `((,(τ u) 1/2) (,(τ (f x)) 1/2))))))))
+           (c (probcc-coin 1/2)))
+      (if c
+        (let* ((e (g 1)) (d (f 1)) (b (g 1)) (a (f 1))) (list c a b d e))
+        (let* ((e (f 1)) (d (g 1)) (b (f 1)) (a (g 1))) (list c a b d e)))))
+  (define (grass-model-memo)
+    (let* ((cloudy (probcc-memo (λ (_) (probcc-coin 0.5))))
+           (rain (probcc-memo
+                   (λ (_)
+                      (probcc-coin
+                        (if (cloudy '())
+                          0.80000000000000004
+                          0.20000000000000001)))))
+           (sprinkler
+             (probcc-memo
+               (λ (_)
+                  (probcc-coin (if (cloudy '()) 0.10000000000000001 0.5)))))
+           (wet-roof
+             (probcc-memo
+               (λ (_) (and (probcc-coin 0.69999999999999996) (rain '())))))
+           (wet-grass
+             (probcc-memo
+               (λ (_)
+                  (or (and (probcc-coin 0.90000000000000002) (rain '()))
+                      (and (probcc-coin 0.90000000000000002)
+                           (sprinkler '())))))))
+      (if (wet-grass '()) (rain '()) (probcc-impossible))))
+  (⊦ equal?
+     '(((V (#t 2 2 3 3)) 1/8)
+       ((V (#t 2 2 2 2)) 1/8)
+       ((V (#t 1 1 3 3)) 1/8)
+       ((V (#t 1 1 2 2)) 1/8)
+       ((V (#f 3 3 2 2)) 1/8)
+       ((V (#f 3 3 1 1)) 1/8)
+       ((V (#f 2 2 2 2)) 1/8)
+       ((V (#f 2 2 1 1)) 1/8))
+     (probcc-reify/exact/a test2m))
+  (⊦ equal?
+     '(((V (#t 2 2 2 2)) 1/4)
+       ((V (#t 1 1 1 1)) 1/4)
+       ((V (#f 2 2 2 2)) 1/4)
+       ((V (#f 1 1 1 1)) 1/4))
+     (probcc-reify/exact/a test3m))
+  (⊦ equal?
+     '(((V #t) 0.45810000000000006) ((V #f) 0.18900000000000003))
+     (probcc-reify/exact/a grass-model-memo))
+  (⊦raises
+    (exn hansei)
+    (probcc-reify/exact
+      (let1 (f (probcc-memo f*)) (probcc-reify/exact (f 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4168248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nested"><a href="#test/nested"><code>test/nested</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Nested inference (cf. N:15-130): the distribution of the distribution of a coin
+	    that is fair or always true, <code class="w3-codespan">testn11</code>, <code class="w3-codespan">testn21</code> and <code class="w3-codespan">testn21'</code>; with a lazy variable of the outer world, <code class="w3-codespan">probcc-letlazy</code> is evaluated again inside, where the inner
+	    reification starts with an empty memory, and the answer is wrong, as upstream's <code class="w3-codespan">testnl10</code> (N:65-81); <code class="w3-codespan">probcc-letlazy/nesting</code> asks the parent world instead, and <code class="w3-codespan">testnl11</code>, <code class="w3-codespan">testnl12</code> and <code class="w3-codespan">testnl13</code> are right, also through two levels of nesting.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nested _)
+  (⊦ equal?
+     '(((V (((V #t) 1))) 1/2) ((V (((V #t) 1/2) ((V #f) 1/2))) 1/2))
+     (probcc-reify/exact
+       (let1 (coin (probcc-distribution
+                     `((,(τ (probcc-coin 1/2)) 1/2) (,(τ #t) 1/2))))
+             (probcc-reify/exact/a coin))))
+  (⊦ equal?
+     '(((V (((V #t) 1))) 1/2) ((V (((V #t) 1/2) ((V #f) 1/2))) 1/2))
+     (probcc-reify/exact
+       (let1 (coin-choice (probcc-coin 1/2))
+             (probcc-reify/exact (or (probcc-coin 1/2) coin-choice)))))
+  (⊦ equal?
+     '(((V (((V #t) 1))) 1/2) ((V (((V #t) 1/2) ((V #f) 1/2))) 1/2))
+     (probcc-reify/exact
+       (let1 (coin-choice (probcc-coin 1/2))
+             (probcc-reify/exact (or coin-choice (probcc-coin 1/2))))))
+  (⊦ equal?
+     '(((V (((V #t) 3/4) ((V #f) 1/4))) 1))
+     (probcc-reify/exact
+       (let1 (coin-choice (probcc-letlazy (τ (probcc-coin 1/2))))
+             (probcc-reify/exact (or (coin-choice) (probcc-coin 1/2))))))
+  (⊦ equal?
+     '(((V (((V #t) 1))) 1/2) ((V (((V #t) 1/2) ((V #f) 1/2))) 1/2))
+     (probcc-reify/exact
+       (let1 (coin-choice (probcc-letlazy/nesting (τ (probcc-coin 1/2))))
+             (probcc-reify/exact (or (coin-choice) (probcc-coin 1/2))))))
+  (⊦ equal?
+     '(((V (((V #t) 1))) 1/2) ((V (((V #t) 1/2) ((V #f) 1/2))) 1/2))
+     (probcc-reify/exact
+       (let1 (coin-choice (probcc-letlazy/nesting (τ (probcc-coin 1/2))))
+             (probcc-reify/exact (or (probcc-coin 1/2) (coin-choice))))))
+  (⊦ equal?
+     '(((V (#t #t (((V (#t #t #t)) 1/2) ((V (#f #t #t)) 1/2)))) 1/2)
+       ((V (#f #f (((V (#t #f #f)) 1/2) ((V (#f #f #f)) 1/2)))) 1/2))
+     (probcc-reify/exact
+       (let* ((coin-choice (probcc-letlazy/nesting (τ (probcc-coin 1/2))))
+              (v1 (probcc-reify/exact
+                    (let* ((v (probcc-coin 1/2))
+                           (c (coin-choice))
+                           (b (coin-choice)))
+                      (list v b c))))
+              (b (coin-choice))
+              (a (coin-choice)))
+         (list a b v1))))
+  (⊦ equal?
+     '(((V (#t
+            (((V (#t (((V #t) 1)) #t)) 1/2) ((V (#f (((V #t) 1)) #t)) 1/2))))
+        1/2)
+       ((V (#f
+            (((V (#t (((V #f) 3/4) ((V #t) 1/4)) #f)) 1/2)
+             ((V (#f (((V #f) 3/4) ((V #t) 1/4)) #f)) 1/2))))
+        1/2))
+     (probcc-reify/exact
+       (let* ((coin-choice (probcc-letlazy/nesting (τ (probcc-coin 1/2))))
+              (v (probcc-reify/exact
+                   (let* ((w (probcc-coin 1/2))
+                          (inner (probcc-reify/exact
+                                   (or (coin-choice) (probcc-coin 1/4))))
+                          (c (coin-choice)))
+                     (list w inner c))))
+              (a (coin-choice)))
+         (list a v)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4169776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/wref"><a href="#test/wref"><code>test/wref</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>World-local references (cf. TI:121-126, whose <code class="w3-codespan">WorldLocalMem</code> is not shipped, deviation 17): a reference set in a world holds its value in that
+	    world only.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/wref _)
+  (⊦ equal?
+     '(((V (#t 1)) 1/2) ((V (#f 2)) 1/2))
+     (probcc-reify/exact
+       (let* ((r (probcc-wref-new 0)) (c (probcc-coin 1/2)))
+         (probcc-wref-set! r (if c 1 2))
+         (list c (probcc-wref-get r)))))
+  (⊦raises
+    (exn hansei)
+    (probcc-reify/exact
+      (let1 (r (probcc-wref-new 0))
+            (probcc-reify/exact (probcc-wref-get r))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4174184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parameterize/memory"><a href="#test/parameterize/memory"><code>test/parameterize/memory</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The world-local memory is a variable changed with <code class="w3-codespan">set!</code>, not a parameter, so it is not affected by the <code class="w3-codespan">dynamic-wind</code> frames that a resume enters again: a lazy variable forced inside a <code class="w3-codespan">parameterize</code> keeps its value outside, a nested reification inside
+	    a <code class="w3-codespan">parameterize</code> sees the binding, and a memo called inside a <code class="w3-codespan">parameterize</code> answers the same value outside.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parameterize/memory _)
+  (define q (make-parameter 'outer))
+  (⊦ equal?
+     '(((V (#f #t #t outer)) 1/3)
+       ((V (#f #f #f outer)) 1/3)
+       ((V (#t #t #t inner)) 1/6)
+       ((V (#t #f #f inner)) 1/6))
+     (probcc-reify/exact
+       (let* ((x (probcc-letlazy (τ (probcc-coin 1/2))))
+              (c (probcc-coin 1/3))
+              (a (if c
+                   (parameterize ((q 'inner)) (list (x) (q)))
+                   (list (x) (q))))
+              (b (x)))
+         (list c (car a) b (cadr a)))))
+  (⊦ equal?
+     '(((V (#t (((V (#t #t)) 1/2) ((V (#t #f)) 1/2)))) 1/2)
+       ((V (#f (((V (#f #t)) 1/2) ((V (#f #f)) 1/2)))) 1/2))
+     (probcc-reify/exact
+       (let1 (c (probcc-coin 1/2))
+             (parameterize
+               ((q c))
+               (list c
+                     (probcc-reify/exact
+                       (let1 (d (probcc-coin 1/2)) (list (q) d))))))))
+  (⊦ equal?
+     '(((V (#t #t outer)) 1/2) ((V (#f #f outer)) 1/2))
+     (probcc-reify/exact
+       (let* ((f (probcc-memo (λ (_) (probcc-coin 1/2))))
+              (a (parameterize ((q 'inner)) (f 'k)))
+              (b (f 'k)))
+         (list a b (q)))))
+  (⊦ equal? 'outer (q)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4170280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/map-dist"><a href="#test/map-dist"><code>test/map-dist</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-map-dist</code> (cf. BL:456-460) maps the values of a flat table
+	    and collates the equal results, in upstream's order, the results descending.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/map-dist _)
+  (⊦ equal?
+     '(((V 2) 0.25) ((V 1) 0.75))
+     (probcc-map-dist length '(((V (a)) 0.25) ((V (b)) 0.5) ((V (a b)) 0.25))))
+  (⊦raises (exn hansei) (probcc-map-dist length `(((C ,(τ '())) 1/2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4174184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/prob-of"><a href="#test/prob-of"><code>test/prob-of</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-prob-of</code> and <code class="w3-codespan">probcc-at-least</code> (cf. N:292-304, PE:49-61): the mass of a value in a table, 0 when it is missing,
+	    values compared as OCaml's = (-0. is 0., NaN is never found), and a branch not yet
+	    explored is skipped (deviation 23); a coin that is fair or
+	    always true gives true with probability at least 0.3 in every world (PE:62-66).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/prob-of _)
+  (define table `(((C ,(τ '())) 1/2) ((V #f) 1/4) ((V #t) 1/4)))
+  (⊦ equal? 1/4 (probcc-prob-of #t table))
+  (⊦ equal? 0 (probcc-prob-of 'x table))
+  (⊦ equal? 1/2 (probcc-prob-of -0.0 '(((V 0.0) 1/2))))
+  (⊦ equal?
+     1
+     (probcc-prob-of
+       -0.0
+       (probcc-reify/exact (if (probcc-coin 1/2) -0.0 0.0))))
+  (⊦ equal? 0 (probcc-prob-of +nan.0 '(((V +nan.0) 1/2))))
+  (⊦ equal? 0 (probcc-prob-of '(1 +nan.0) '(((V (1 +nan.0)) 1/2))))
+  (⊦ equal? 1/2 (probcc-prob-of '#(a (0.0 b)) '(((V #(a (-0.0 b))) 1/2))))
+  (⊦ equal? #t (probcc-at-least 1/4 #f table))
+  (⊦ equal? #f (probcc-at-least 1/3 #f table))
+  (⊦ equal?
+     '(((V #t) 1))
+     (probcc-reify/exact
+       (let* ((biased (probcc-coin 1/2))
+              (coin (τ (or (probcc-coin 1/2) biased))))
+         (probcc-at-least
+           0.29999999999999999
+           #t
+           (probcc-reify/exact/a coin))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4173848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nested/inference-about-inference"><a href="#test/nested/inference-about-inference"><code>test/nested/inference-about-inference</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Inference about inference (cf. PE:69-89; EPP p.4 l.345-379): a coin is fair or
+	    always true; its probability of true, estimated by two rejection samples drawn with <code class="w3-codespan">probcc-dist-selector</code>, that is through the non-determinism of the
+	    outer reification, is at least 0.3 with probability 7/8, whether the bias is chosen
+	    before or lazily, with <code class="w3-codespan">probcc-letlazy/nesting</code>; the exact
+	    estimate is in <code class="w3-codespan">test/prob-of</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nested/inference-about-inference _)
+  (define (coin-at-least biased)
+    (let1 (coin (τ (or (probcc-coin 1/2) (biased))))
+          (probcc-at-least
+            0.29999999999999999
+            #t
+            (probcc-sample-rejection/a probcc-dist-selector 2 coin))))
+  (⊦ equal?
+     '(((V #t) 7/8) ((V #f) 1/8))
+     (probcc-reify/exact
+       (let1 (biased (probcc-coin 1/2)) (coin-at-least (τ biased)))))
+  (⊦ equal?
+     '(((V #t) 7/8) ((V #f) 1/8))
+     (probcc-reify/exact
+       (coin-at-least (probcc-letlazy/nesting (τ (probcc-coin 1/2)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4175272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nested/thresholds"><a href="#test/nested/thresholds"><code>test/nested/thresholds</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The thresholds of N:307-345, with exact tenths from -0.5 to 1.5: the probability
+	    that the estimate of a coin, fair or always true, gives true a mass of at least p, by
+	    exact inference (1, 1/2, 0) and by two rejection samples (1, 7/8, 5/8, 0), the bias
+	    chosen before or lazily.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nested/thresholds _)
+  (define ((test-nest p inferencer))
+    (let1 (x (probcc-coin 1/2))
+          (probcc-at-least p #t (inferencer (τ (or (probcc-coin 1/2) x))))))
+  (define ((test-nest-lazy p inferencer))
+    (let1 (x (probcc-letlazy/nesting (τ (probcc-coin 1/2))))
+          (probcc-at-least p #t (inferencer (τ (or (probcc-coin 1/2) (x)))))))
+  (define (sampler m) (probcc-sample-rejection/a probcc-dist-selector 2 m))
+  (define (true-mass model) (probcc-prob-of #t (probcc-reify/exact/a model)))
+  (define thresholds (probcc-map (λ (n) (/ n 10)) (iota 21 -5)))
+  (⊦ equal?
+     (probcc-map
+       (λ (p)
+          (let ((expected-exact (cond ((&lt;= p 1/2) 1) ((&lt;= p 1) 1/2) (else 0)))
+                (expected-sample
+                  (cond ((&lt;= p 0) 1)
+                        ((&lt;= p 1/2) 7/8)
+                        ((&lt;= p 1) 5/8)
+                        (else 0))))
+            (list p
+                  expected-exact
+                  expected-exact
+                  expected-sample
+                  expected-sample)))
+       thresholds)
+     (probcc-map
+       (λ (p)
+          (let* ((a (true-mass (test-nest p probcc-reify/exact/a)))
+                 (b (true-mass (test-nest-lazy p probcc-reify/exact/a)))
+                 (c (true-mass (test-nest p sampler)))
+                 (d (true-mass (test-nest-lazy p sampler))))
+            (list p a b c d)))
+       thresholds)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4185680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dist-selector"><a href="#test/dist-selector"><code>test/dist-selector</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-dist-selector</code> (cf. P:238-241) chooses through the
+	    non-determinism of the enclosing reification, so a nested rejection sampler of n
+	    samples answers the distribution of its estimates (N:145-160): one sample is the
+	    identity, two give three tables; it answers the chosen entry and the total mass of
+	    the entries, here as a distribution.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dist-selector _)
+  (define (tflip2-noshared) (and (probcc-coin 1/2) (probcc-coin 1/2)))
+  (⊦ equal?
+     '(((V (((V #f) 1))) 3/4) ((V (((V #t) 1))) 1/4))
+     (probcc-reify/exact
+       (probcc-sample-rejection/a probcc-dist-selector 1 tflip2-noshared)))
+  (⊦ equal?
+     '(((V (((V #f) 1))) 9/16)
+       ((V (((V #t) 1/2) ((V #f) 1/2))) 3/8)
+       ((V (((V #t) 1))) 1/16))
+     (probcc-reify/exact
+       (probcc-sample-rejection/a probcc-dist-selector 2 tflip2-noshared)))
+  (⊦ equal?
+     '(((V (#t 4)) 3/4) ((V (#f 4)) 1/4))
+     (probcc-reify/exact (probcc-dist-selector '((#t 3) (#f 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4179256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/first-success"><a href="#test/first-success"><code>test/first-success</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-first-success</code> (cf. I:55-64) opens the branches of a tree
+	    breadth first, the masses multiplied along the way, until its first entry is a leaf,
+	    and answers that tree; a tree without leaves gives the empty tree.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/first-success _)
+  (⊦ equal?
+     '(((V a) 1/2) ((V b) 1/2))
+     (probcc-first-success `(((C ,(τ '(((V b) 1)))) 1/2) ((V a) 1/2))))
+  (⊦ equal? '() (probcc-first-success '()))
+  (⊦ equal?
+     '()
+     (probcc-first-success
+       (probcc-reify/0 (τ (probcc-coin 1/2) (probcc-impossible)))))
+  (⊦ equal?
+     '(((V #t) 1/6) ((V #f) 1/2))
+     (probcc-first-success
+       (probcc-reify/0
+         (τ (if (probcc-coin 1/3) (probcc-impossible) (probcc-coin 1/4)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4180864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/soft-cut"><a href="#test/soft-cut"><code>test/soft-cut</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-soft-cut p q r</code> (cf. LV:386-391, PS:156-161) is Prolog's
+	    soft cut <code class="w3-codespan">p *-&gt; q ; r</code>: <code class="w3-codespan">q</code> gets every value of <code class="w3-codespan">p</code> when <code class="w3-codespan">p</code> has one, <code class="w3-codespan">r</code> runs otherwise.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/soft-cut _)
+  (⊦ equal?
+     '(((V (q #t)) 1/2) ((V (q #f)) 1/2))
+     (probcc-reify/exact
+       (probcc-soft-cut (τ (probcc-coin 1/2)) (λ (x) (list 'q x)) (τ 'r))))
+  (⊦ equal?
+     '(((V r) 1))
+     (probcc-reify/exact
+       (probcc-soft-cut (τ (probcc-impossible)) (λ (x) (list 'q x)) (τ 'r)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4182912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/explore/shallow"><a href="#test/explore/shallow"><code>test/explore/shallow</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-explore/shallow</code> (cf. I:35-53) explores a tree to a depth
+	    without flattening it: exploring the result fully gives the exact distribution of
+	    the lawn model, of <code class="w3-codespan">geometric_bounded 7 0.85</code> and of <code class="w3-codespan">dcoin_and 5</code>, whatever the depth, up to rounding; the entries are
+	    upstream's, in its order, which the importance sampler's selections follow.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/explore/shallow _)
+  (define (dcoin-and-5) (dcoin-and 5))
+  (define (geometric-7) (probcc-geometric/bounded 7 0.84999999999999998))
+  (define (shallow-then-explore k model)
+    (probcc-explore #f (probcc-explore/shallow k (probcc-reify/0 model))))
+  (⊦ equal?
+     '((#t #t #t) (#t #t #t) (#t #t #t))
+     (probcc-map
+       (λ (model)
+          (let1 (exact (probcc-explore #f (probcc-reify/0 model)))
+                (probcc-map
+                  (λ (k)
+                     (let1 (got (shallow-then-explore k model))
+                           (and (equal? (map car exact) (map car got))
+                                (every (λ (a b)
+                                          (&lt; (abs (- (cadr a) (cadr b)))
+                                             1.0000000000000001e-15))
+                                       exact
+                                       got))))
+                  '(0 1 3))))
+       (list lawn geometric-7 dcoin-and-5)))
+  (define t (τ '(((V b) 1/4) ((V c) 1/4))))
+  (⊦ equal?
+     `(((V b) 1/2) ((V a) 1/4) ((C ,t) 1/2))
+     (probcc-explore/shallow
+       0
+       `(((V a) 1/8) ((V b) 1/2) ((C ,t) 1/2) ((V a) 1/8))))
+  (define u (τ `(((V c) 1/4) ((V b) 1/4) ((C ,t) 1/2))))
+  (⊦ equal?
+     `(((C ,t) 1))
+     (match/first
+       (probcc-explore/shallow 1 `(((C ,u) 1)))
+       ((((V c) 1/4) ((V b) 1/4) ((C ,t*) 1/2)) (t*)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4185504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/explore/bounded"><a href="#test/explore/bounded"><code>test/explore/bounded</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-explore/bounded</code> (cf. I:71-109) bounds the probability of
+	    evidence, bit for bit as SM:80-82 and SM:469-480: <code class="w3-codespan">geometric_bounded</code> is solved with a queue of one branch; for <code class="w3-codespan">dcoin_and 10</code> the bounds close as the queue grows, and the lower bound is the exact 0 while no
+	    leaf is reached (deviation 26).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/explore/bounded _)
+  (define (u) (probcc-reify/0 (τ (unless (dcoin-and 10) (probcc-impossible)))))
+  (⊦ equal?
+     '(0.99949400615938178 0.99949400615938178)
+     (probcc-explore/bounded
+       1
+       (probcc-reify/0
+         (τ (when (&gt; (probcc-geometric/bounded 7 0.84999999999999998) 3)
+                  (probcc-impossible))))))
+  (⊦ equal? '(0 1.0) (probcc-explore/bounded 1 (u)))
+  (⊦ equal? '(0 0.049999999999999989) (probcc-explore/bounded 3 (u)))
+  (⊦ equal?
+     '(9.7656249999999776e-14 9.7656249999999776e-14)
+     (probcc-explore/bounded 5 (u))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4186224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sample/look-ahead-exact"><a href="#test/sample/look-ahead-exact"><code>test/sample/look-ahead-exact</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>With lazy flips (DSL p.20 l.866-909), each flip is observed right after it is
+	    made, so the look-ahead of importance sampling finds the probability 2^-20 of 20
+	    true flips exactly, with one sample; eager flips are produced before any is observed,
+	    and exact inference explores the whole tree.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sample/look-ahead-exact _)
+  (define (flips/lazy p n)
+    (if (zero? n)
+      '()
+      (let* ((x (probcc-letlazy (τ (probcc-coin p))))
+             (xs (probcc-letlazy (τ (flips/lazy p (sub1 n))))))
+        (cons x xs))))
+  (define (trues/lazy n xs)
+    (match/first
+      xs
+      (() (zero? n))
+      ((,x unquote xs*) (and (x) (trues/lazy (sub1 n) (xs*))))))
+  (define (flips p n)
+    (if (zero? n)
+      '()
+      (let* ((x (probcc-coin p)) (xs (flips p (sub1 n)))) (cons x xs))))
+  (⊦ equal?
+     '(((V ok) 9.5367431640625e-07))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       1
+       (probcc-when (trues/lazy 20 (flips/lazy 0.5 20)) 'ok)))
+  (⊦ equal?
+     '(((V ok) 1/4096))
+     (probcc-reify/exact (probcc-when (every identity (flips 1/2 12)) 'ok))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.016) (memory #(12582912 4189344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sample/pre-explored"><a href="#test/sample/pre-explored"><code>test/sample/pre-explored</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The importance sampler first explores the tree to depth 3 and looks one step
+	    ahead (cf. I:188-197): these models of SM:13-206 are solved before any sample is
+	    drawn, so their results are exact, bit for bit as upstream's, and the selector,
+	    which here raises, is never called.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sample/pre-explored _)
+  (define (no-selector choices) (error &quot;a pre-explored tree draws&quot; choices))
+  (define (tflip2-shared) (let1 (v (probcc-coin 0.5)) (and v v)))
+  (define (tflip2-noshared) (and (probcc-coin 0.5) (probcc-coin 0.5)))
+  (define (talarm)
+    (let* ((earthquake (probcc-coin 0.01))
+           (burglary (probcc-coin 0.10000000000000001)))
+      (if earthquake
+        (if burglary
+          (probcc-coin 0.98999999999999999)
+          (probcc-coin 0.20000000000000001))
+        (if burglary (probcc-coin 0.97999999999999998) (probcc-coin 0.01)))))
+  (define (tiblt2)
+    (let* ((x (probcc-observe
+                (λ (r) (eq? (car r) 'a))
+                (τ (probcc-distribution
+                     '(((a b) 0.01)
+                       ((a c) 0.02)
+                       ((d e) 0.96999999999999997))))))
+           (y (case (cadr x)
+                ((b)
+                 (probcc-distribution
+                   '((#t 0.90000000000000002) (#f 0.10000000000000001))))
+                ((c)
+                 (probcc-distribution
+                   '((#t 0.59999999999999998) (#f 0.40000000000000002))))
+                (else
+                 (probcc-distribution
+                   '((#t 0.20000000000000001) (#f 0.80000000000000004)))))))
+      y))
+  (define (tfooibl3)
+    (probcc-observe
+      (λ (x) (eq? x #t))
+      (τ (eq? 'a
+              (if (probcc-distribution
+                    '((#t 0.10000000000000001) (#f 0.90000000000000002)))
+                (probcc-distribution
+                  '((a 0.69999999999999996) (b 0.29999999999999999)))
+                (probcc-distribution
+                  '((a 0.20000000000000001) (b 0.80000000000000004))))))))
+  (define (tmusictr42)
+    (cadr (probcc-observe
+            (λ (r) (eq? (car r) 'a))
+            (τ (if (probcc-coin 0.01)
+                 (let1 (q (probcc-coin 0.29999999999999999)) (list 'a q))
+                 (list 'b #t))))))
+  (⊦ equal?
+     '(((V #t) 0.5) ((V #f) 0.5))
+     (probcc-sample-importance/a no-selector 100 tflip2-shared))
+  (⊦ equal?
+     '(((V #f) 0.75) ((V #t) 0.25))
+     (probcc-sample-importance/a no-selector 100 tflip2-noshared))
+  (⊦ equal?
+     '(((V #f) 0.89128000000000007) ((V #t) 0.10872000000000001))
+     (probcc-sample-importance/a no-selector 100 talarm))
+  (⊦ equal?
+     '(((V #t) 0.021000000000000001) ((V #f) 0.0090000000000000011))
+     (probcc-sample-importance/a no-selector 100 tiblt2))
+  (⊦ equal?
+     '(((V #t) 0.25))
+     (probcc-sample-importance/a no-selector 100 tfooibl3))
+  (⊦ equal?
+     '(((V #f) 0.0069999999999999993) ((V #t) 0.0030000000000000001))
+     (probcc-sample-importance/a no-selector 1 tmusictr42)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4184912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sample/dist-selector-importance"><a href="#test/sample/dist-selector-importance"><code>test/sample/dist-selector-importance</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Bounded-rational theory of mind (cf. IN:344-426): agent S chooses what to say,
+	    knowing that agent A estimates the state of the world by importance sampling of two
+	    samples, through <code class="w3-codespan">probcc-dist-selector</code>; saying only <i>not all</i> gives the maximal expected utility, -0.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((agent-A-model form))
+  (let* ((s0 (probcc-letlazy (τ (probcc-coin 1/2))))
+         (s1 (probcc-letlazy (τ (probcc-coin 1/2))))
+         (sc (probcc-letlazy (τ (probcc-coin 1/2))))
+         (state (λ (s) (case s ((S_b0) (s0)) ((S_b1) (s1)) ((S_conj) (sc))))))
+    (probcc-when
+      (language form state)
+      (let* ((action (probcc-distribution '((0 1) (1 1) (2 1) (3 1))))
+             (u (utility state action)))
+        (list u action)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((agent-S-model inferencer))
+  (let* ((formvs
+           (probcc-distribution (probcc-map (λ (v) (list v 1)) all-forms)))
+         (form (λ (fv) (and (memq fv formvs) #t)))
+         (action-A
+           (match/first
+             (argmax (inferencer (agent-A-model form)))
+             (((,_ ,x)) x)
+             (() (probcc-uniform 4))
+             (,lst
+              (let1 (p (/ 1 (length lst)))
+                    (probcc-distribution
+                      (probcc-map
+                        (λ1-match/first ((,_ ,x) (list x p)))
+                        lst))))))
+         (u (utility (λ (s) (eq? s 'S_b1)) action-A)))
+    (list u formvs)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sample/dist-selector-importance _)
+  (define (inferencer m) (probcc-sample-importance/a probcc-dist-selector 2 m))
+  (⊦ equal?
+     '((#t (F_notall)))
+     (probcc-map
+       (λ1-match/first ((,u ,a) (list (= u 0) a)))
+       (argmax (probcc-reify/exact/a (agent-S-model inferencer))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 4197240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics"><a href="#test/statistics"><code>test/statistics</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-statistics</code> (cf. I:279-294) gives the mean and the
+	    standard deviation of the mass of each value over the samplers of a range of seeds,
+	    by descending mean (deviation 21); the deviation is a flonum, NaN when rounding makes
+	    the variance negative, as upstream (deviation 27).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics _)
+  (⊦ equal?
+     '((a 1/5 0.081649658092772609))
+     (probcc-statistics 1 3 (λ (s) (list (probcc-value (/ s 10) 'a)))))
+  (⊦ equal?
+     #t
+     (flonum?
+       (caddr (car (probcc-statistics
+                     1
+                     3
+                     (λ (s) (list (probcc-value 0.10000000000000001 'a))))))))
+  (⊦ equal?
+     '((b 3/4 0.0) (a 1/4 0.0))
+     (probcc-statistics 1 2 (λ (s) '(((V a) 1/4) ((V b) 3/4)))))
+  (⊦raises (exn hansei) (probcc-statistics 1 1 (λ (s) `(((C ,(τ '())) 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4201320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/verbose"><a href="#test/verbose"><code>test/verbose</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The samplers print their <code class="w3-codespan">done</code> lines (I:131, 186) only when <code class="w3-codespan">probcc-verbose</code> is true (deviation 14).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/verbose _)
+  (⊦ equal?
+     &quot;&quot;
+     (with-output-to-string
+       (τ (probcc-sample-rejection
+            (probcc-random-selector 1)
+            10
+            (probcc-coin 1/2)))))
+  (⊦ equal?
+     &quot;rejection_sample: done 10 worlds\n&quot;
+     (with-output-to-string
+       (τ (parameterize
+            ((probcc-verbose #t))
+            (probcc-sample-rejection
+              (probcc-random-selector 1)
+              10
+              (probcc-coin 1/2))))))
+  (⊦ equal?
+     &quot;sample_importance: done 10 worlds\n&quot;
+     (with-output-to-string
+       (τ (parameterize
+            ((probcc-verbose #t))
+            (probcc-sample-importance
+              (probcc-random-selector 1)
+              10
+              (dcoin-and 10)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4193128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/variable-elimination"><a href="#test/variable-elimination"><code>test/variable-elimination</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Variable elimination (DSL p.17 l.751-771; X:305-329): the xor of 10 flips explores
+	    the 1024 leaves of a full binary tree, while reifying and reflecting the recursive
+	    call leaves 4 at the top; the bucket elimination of DSL p.18 l.776-783 memoizes the
+	    reified calls.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/variable-elimination _)
+  (define (flips-xor n)
+    (if (= n 1)
+      (probcc-coin 1/2)
+      (let* ((r (flips-xor (sub1 n))) (f (probcc-coin 1/2))) (not (eq? f r)))))
+  (define (flips-xor* n)
+    (if (= n 1)
+      (probcc-coin 1/2)
+      (let* ((r (probcc-reflect (probcc-reify/exact (flips-xor* (sub1 n)))))
+             (f (probcc-coin 1/2)))
+        (not (eq? f r)))))
+  (define xor-bucket
+    (λ-probcc-bucket
+      (n)
+      (if (= n 1)
+        (probcc-coin 1/2)
+        (let* ((r (xor-bucket (sub1 n))) (f (probcc-coin 1/2)))
+          (not (eq? f r))))))
+  (⊦ equal? '(((V #t) 1/2) ((V #f) 1/2)) (probcc-reify/exact (flips-xor 10)))
+  (⊦ equal? 1024 (probcc-leaves (probcc-reify/0 (τ (flips-xor 10)))))
+  (⊦ equal? '(((V #t) 1/2) ((V #f) 1/2)) (probcc-reify/exact (flips-xor* 10)))
+  (⊦ equal? 4 (probcc-leaves (probcc-reify/0 (τ (flips-xor* 10)))))
+  (⊦ equal? '(((V #t) 1/2) ((V #f) 1/2)) (probcc-reify/exact (xor-bucket 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0050000000000000001)
+ (memory #(12582912 4201000 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/drunk-coin"><a href="#test/drunk-coin"><code>test/drunk-coin</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The drunk coin of SM:224-238 and DSL p.19 l.814-817: the exact distribution of
+	    the conjunction of 10 tosses, bit for bit as upstream.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (drunk-coin)
+  (let* ((x (probcc-coin 0.5)) (lost (probcc-coin 0.90000000000000002)))
+    (if lost (probcc-impossible) x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (dcoin-and n)
+  (if (= n 1) (drunk-coin) (and (drunk-coin) (dcoin-and (sub1 n)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/drunk-coin _)
+  (⊦ equal?
+     '(((V #f) 0.052631578947363269) ((V #t) 9.7656249999999776e-14))
+     (probcc-reify/exact (dcoin-and 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4198176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/reify/part"><a href="#test/reify/part"><code>test/reify/part</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-reify/part</code> (cf. LV:68-70) runs a model to a depth and
+	    keeps its values, as (v p) pairs: the boolean lists of RT p.5 l.340-365, of which
+	    depth 3 reaches the empty list and the lists of one element.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/reify/part _)
+  (define (a-list)
+    (if (probcc-coin 1/2)
+      '()
+      (let* ((t (a-list)) (h (probcc-coin 1/2))) (cons h t))))
+  (⊦ equal? '((() 1/2) ((#t) 1/8) ((#f) 1/8)) (probcc-reify/part 3 a-list))
+  (⊦ equal? '((#t 1/2) (#f 1/2)) (probcc-reify/part #f (τ (probcc-coin 1/2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4199800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bind"><a href="#test/bind"><code>test/bind</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-bind</code> (cf. DSL p.10 l.415-425 <code class="w3-codespan">pv_bind</code>) with <code class="w3-codespan">probcc-unit</code> is the search-tree monad, whose laws hold up
+	    to the equivalence of trees explored fully.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bind _)
+  (define (f x) (probcc-reify/0 (τ (let1 (c (probcc-coin 1/3)) (list x c)))))
+  (define (m1) (probcc-coin 1/2))
+  (define (m2) (let* ((a (probcc-coin 1/2)) (b (probcc-coin 1/4))) (and a b)))
+  (⊦ equal?
+     (probcc-reify/exact (probcc-reflect (f (m1))))
+     (probcc-explore #f (probcc-bind (probcc-reify/0 m1) f)))
+  (⊦ equal?
+     (probcc-reify/exact (probcc-reflect (f (m2))))
+     (probcc-explore #f (probcc-bind (probcc-reify/0 m2) f)))
+  (⊦ equal?
+     (probcc-explore #f (f 'x))
+     (probcc-explore #f (probcc-bind (probcc-unit 'x) f))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4201448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeit-runner-memory"><a href="#test/timeit-runner-memory"><code>test/timeit-runner-memory</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-timeit</code> (cf. I:303-308) prints the processor time a thunk
+	    takes and answers its value; <code class="w3-codespan">probcc-sample-runner/times</code> (cf. I:142-146) applies a step n times; <code class="w3-codespan">probcc-mem-ref</code> (cf. P:52-54) calls its default thunk on a missing location, and raises without
+	    one.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeit-runner-memory _)
+  (define v #f)
+  (define out (with-output-to-string (τ (set! v (probcc-timeit (τ 42))))))
+  (⊦ equal? 42 v)
+  (⊦ equal? &quot;\nTime spent: &quot; (substring out 0 13))
+  (⊦ equal? &quot; sec\n&quot; (substring out (- (string-length out) 5)))
+  (⊦ equal? '(3 3) ((probcc-sample-runner/times 3) 0 add1))
+  (⊦ equal? 'd (probcc-mem-ref (probcc-mem-new-loc) probcc-mem-empty (τ 'd)))
+  (⊦raises
+    (exn hansei)
+    (probcc-mem-ref (probcc-mem-new-loc) probcc-mem-empty)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 4197824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

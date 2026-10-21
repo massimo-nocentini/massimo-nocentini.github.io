@@ -1,0 +1,410 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/round-trip"><a href="#test/round-trip"><code>test/round-trip</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/round-trip _)
+  (⊦= '((&quot;hello&quot; &quot;world&quot; &quot;!&quot; #!eof #!eof) (&quot;hello\nworld&quot; &quot;\n!&quot; #!eof))
+      (begin
+        (list (log-of
+                (τ (let* ((ch (make-channel))
+                          (out (open-channel-output-port ch))
+                          (in (open-channel-input-port ch)))
+                     (spawn (τ (display &quot;hello\nworld&quot; out)
+                               (flush-output out)
+                               (display &quot;\n!&quot; out)
+                               (close-output-port out)))
+                     (note! (read-line in))
+                     (note! (read-line in))
+                     (note! (read-line in))
+                     (note! (read-line in))
+                     (note! (read-char in)))))
+              (log-of
+                (τ (let* ((ch (make-channel))
+                          (out (open-channel-output-port ch)))
+                     (spawn (τ (display &quot;hello\nworld&quot; out)
+                               (flush-output out)
+                               (display &quot;\n!&quot; out)
+                               (close-output-port out)))
+                     (note! (recv ch))
+                     (note! (recv ch))
+                     (note! (recv ch)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4104584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/blocked-channel-port-reader-is-a-deadlock"><a href="#test/blocked-channel-port-reader-is-a-deadlock"><code>test/blocked-channel-port-reader-is-a-deadlock</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/blocked-channel-port-reader-is-a-deadlock _)
+  (define (status-in-a-child thunk)
+    (let1 (pid (process-fork
+                 (τ (emergency-exit (if (eq? 'failure (run-cml thunk)) 0 1)))))
+          (let loop ((i 0))
+            (receive
+              (p normal? code)
+              (process-wait pid #t)
+              (cond ((not (zero? p))
+                     (if (and normal? (zero? code))
+                       'failure
+                       (list 'exited code)))
+                    ((&lt; i 1000) (sleep-ms 10) (loop (add1 i)))
+                    (else (process-signal pid) (process-wait pid) 'hung))))))
+  (⊦= 'failure
+      (status-in-a-child
+        (τ (read-line (open-channel-input-port (make-channel))))))
+  (⊦= 'failure
+      (status-in-a-child
+        (τ (sync (input-line-evt (open-channel-input-port (make-channel)))))))
+  (⊦= 'failure
+      (status-in-a-child
+        (τ (let1 (in (open-channel-input-port (make-channel)))
+                 (spawn (τ (sync (input-char-evt in))))
+                 (sync (input-all-evt in)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(13631492 4105448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/events-on-channel-ports"><a href="#test/events-on-channel-ports"><code>test/events-on-channel-ports</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/events-on-channel-ports _)
+  (⊦= '(timeout &quot;abcd&quot; #\e &quot;fg&quot; #!eof)
+      (log-of
+        (τ (let* ((ch (make-channel)) (in (open-channel-input-port ch)))
+             (spawn (τ (send ch &quot;ab&quot;)
+                       (cml/sleep 0.03)
+                       (send ch &quot;&quot;)
+                       (send ch #\c)
+                       (send ch &quot;d\ne&quot;)
+                       (send ch &quot;fg&quot;)
+                       (send ch #!eof)))
+             (note! (sync/timeout (input-line-evt in) 0.01 'timeout))
+             (note! (sync (input-line-evt in)))
+             (note! (sync (input-char-evt in)))
+             (note! (sync (input-all-evt in)))
+             (note! (sync (input-line-evt in))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4111664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/write-string-evt-is-a-rendezvous"><a href="#test/write-string-evt-is-a-rendezvous"><code>test/write-string-evt-is-a-rendezvous</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/write-string-evt-is-a-rendezvous _)
+  (⊦= '(timeout &quot;buffered+now&quot; sent)
+      (log-of
+        (τ (let* ((ch (make-channel)) (out (open-channel-output-port ch)))
+             (display &quot;buffered+&quot; out)
+             (note! (sync/timeout (write-string-evt out &quot;now&quot;) 0.01 'timeout))
+             (spawn (τ (note! (recv ch))))
+             (sync (write-string-evt out &quot;now&quot;))
+             (note! 'sent))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4113936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/write-string-evt-and-a-flush"><a href="#test/write-string-evt-and-a-flush"><code>test/write-string-evt-and-a-flush</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/write-string-evt-and-a-flush _)
+  (⊦= '(&quot;abcqX&quot; ok flushed nothing)
+      (log-of
+        (τ (let* ((ch (make-channel)) (out (open-channel-output-port ch)))
+             (display &quot;abc&quot; out)
+             (let ((f (spawn (τ (cml/yield)
+                                (display &quot;q&quot; out)
+                                (flush-output out))))
+                   (a (spawn (τ (note! (condition-case
+                                         (begin (sync (write-string-evt out &quot;X&quot;)) 'ok)
+                                         (e () 'raised)))))))
+               (note! (recv ch))
+               (note! (sync/timeout
+                        (wrap (join-evt f) (λ ignored 'flushed))
+                        0.5
+                        'flush-stuck))
+               (sync (join-evt a))
+               (note! (sync/timeout (recv-evt ch) 0.05 'nothing))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4110648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/channel-output-port-never-sends-empty-strings"><a href="#test/channel-output-port-never-sends-empty-strings"><code>test/channel-output-port-never-sends-empty-strings</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/channel-output-port-never-sends-empty-strings _)
+  (⊦= '(done done &quot;ab&quot; &quot;c&quot; #!eof nothing)
+      (log-of
+        (τ (let* ((ch (make-channel)) (out (open-channel-output-port ch)))
+             (note! (sync/timeout
+                      (wrap (write-string-evt out &quot;&quot;) (λ ignored 'done))
+                      0.2
+                      'blocked))
+             (spawn (τ (sync (write-string-evt out &quot;&quot;))
+                       (display &quot;&quot; out)
+                       (flush-output out)
+                       (sync (write-string-evt out &quot;ab&quot;))
+                       (sync (write-string-evt out &quot;&quot;))
+                       (display &quot;c&quot; out)
+                       (sync (write-string-evt out &quot;&quot;))
+                       (flush-output out)
+                       (close-output-port out)))
+             (note! (sync/timeout
+                      (wrap (write-string-evt out &quot;&quot;) (λ ignored 'done))
+                      0.2
+                      'blocked))
+             (let loop ()
+               (let1 (v (sync/timeout (recv-evt ch) 0.2 'nothing))
+                     (note! v)
+                     (unless (symbol? v) (loop)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4117888 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/flush-keeps-a-threads-output-in-order"><a href="#test/flush-keeps-a-threads-output-in-order"><code>test/flush-keeps-a-threads-output-in-order</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/flush-keeps-a-threads-output-in-order _)
+  (⊦= '((&quot;Xs&quot; nothing) &quot;Xsyz&quot;)
+      (log-of
+        (τ (let* ((ch (make-channel)) (out (open-channel-output-port ch)))
+             (spawn (τ (display &quot;X&quot; out) (sync (write-string-evt out &quot;s&quot;))))
+             (cml/yield)
+             (spawn (τ (flush-output out)))
+             (cml/yield)
+             (note! (let* ((a (recv ch))
+                           (b (sync/timeout (recv-evt ch) 0.05 'nothing)))
+                      (list a b)))
+             (let* ((ch (make-channel))
+                    (out (open-channel-output-port ch))
+                    (in (open-channel-input-port ch)))
+               (spawn (τ (display &quot;X&quot; out)
+                         (sync (write-string-evt out &quot;s&quot;))
+                         (display &quot;yz&quot; out)
+                         (close-output-port out)))
+               (cml/yield)
+               (spawn (τ (flush-output out)))
+               (cml/yield)
+               (note! (sync (input-all-evt in)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4118448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/output-events-on-a-closed-port"><a href="#test/output-events-on-a-closed-port"><code>test/output-events-on-a-closed-port</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/output-events-on-a-closed-port _)
+  (⊦= '(&quot;a&quot; #!eof raised raised raised nothing-sent)
+      (log-of
+        (τ (let* ((ch (make-channel)) (o (open-channel-output-port ch)))
+             (spawn (τ (display &quot;a&quot; o) (close-output-port o)))
+             (note! (recv ch))
+             (note! (recv ch))
+             (note! (condition-case
+                      (begin (display &quot;b&quot; o) 'ok)
+                      (e () 'raised)))
+             (note! (condition-case
+                      (begin (sync (write-string-evt o &quot;late&quot;)) 'ok)
+                      (e () 'raised)))
+             (note! (condition-case
+                      (begin (sync (output-evt o)) 'ok)
+                      (e () 'raised)))
+             (note! (sync/timeout (recv-evt ch) 0.02 'nothing-sent)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4127800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/peek-char-then-events"><a href="#test/peek-char-then-events"><code>test/peek-char-then-events</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/peek-char-then-events _)
+  (⊦= '(#\a #t #\a #\b)
+      (log-of
+        (τ (let* ((ch (make-channel)) (in (open-channel-input-port ch)))
+             (spawn (τ (send ch &quot;a&quot;) (cml/sleep 0.1) (send ch &quot;b&quot;)))
+             (note! (peek-char in))
+             (note! (char-ready? in))
+             (note! (sync/timeout (input-char-evt in) 0.02 'stuck))
+             (note! (read-char in)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4119096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bad-value-reaches-the-syncing-thread"><a href="#test/bad-value-reaches-the-syncing-thread"><code>test/bad-value-reaches-the-syncing-thread</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bad-value-reaches-the-syncing-thread _)
+  (⊦= '(raised #\g)
+      (log-of
+        (τ (let* ((ch (make-channel)) (in (open-channel-input-port ch)))
+             (spawn (τ (cml/sleep 0.01)
+                       (send ch 'not-a-string)
+                       (send ch &quot;good&quot;)))
+             (note! (condition-case
+                      (sync/timeout (input-char-evt in) 1 'stuck)
+                      (e (exn) 'raised)))
+             (note! (sync/timeout (input-char-evt in) 1 'stuck)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4115408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bad-value-keeps-the-chars-before-it"><a href="#test/bad-value-keeps-the-chars-before-it"><code>test/bad-value-keeps-the-chars-before-it</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bad-value-keeps-the-chars-before-it _)
+  (define (run mk n)
+    (log-of
+      (τ (let* ((ch (make-channel)) (in (open-channel-input-port ch)))
+           (spawn (τ (send ch &quot;hello &quot;)))
+           (spawn (τ (send ch 42)))
+           (spawn (τ (send ch &quot;world\n&quot;)))
+           (cml/sleep 0.05)
+           (for-each
+             (λ (i)
+                (note! (condition-case
+                         (sync/timeout (mk in) 1 'stuck)
+                         (e (exn) 'raised))))
+             (iota n))))))
+  (⊦= '(raised &quot;hello world&quot;) (run input-line-evt 2))
+  (⊦= '(#\h #\e #\l #\l #\o #\space raised #\w) (run input-char-evt 8)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4118064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dropped-ports-are-collected"><a href="#test/dropped-ports-are-collected"><code>test/dropped-ports-are-collected</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dropped-ports-are-collected _)
+  (define (collected? make)
+    (let1 (ws (map (λ (i) (weak-cons (make) #f)) (iota 100)))
+          (gc #t)
+          (&gt;= (count (λ (w) (bwp-object? (car w))) ws) 90)))
+  (define (custom-port) (make-input-port (τ #\a) (τ #t) void))
+  (⊨ (collected? (τ (open-channel-input-port (make-channel)))))
+  (⊨ (collected? (τ (open-channel-output-port (make-channel)))))
+  (⊨ (collected? (τ (let1 (p (custom-port)) (%port-driver p) p))))
+  (⊨ (collected?
+       (τ (let1 (p (open-channel-input-port (make-channel)))
+                (run-cml (τ (sync/timeout (input-char-evt p) 0 #f)))
+                p))))
+  (let1 (most (let loop ((i 0) (most 0))
+                (if (= i 2000)
+                  most
+                  (begin
+                    (%port-driver
+                      (let1 (p (custom-port))
+                            (##sys#set-port-data! p (list 'its-own))
+                            p))
+                    (when (zero? (remainder i 50)) (gc #t))
+                    (loop (add1 i)
+                          (max most
+                               (length (%port-table-others %pdrivers))))))))
+        (⊨ (&lt; most 200)))
+  (receive
+    (in out)
+    (create-pipe)
+    (let1 (p (open-input-file* in))
+          (%port-driver p)
+          (close-input-port p)
+          (file-close out)))
+  (receive
+    (in out)
+    (create-pipe)
+    (let1 (p (open-input-file* in))
+          (%port-driver p)
+          (⊦= 1 (length (vector-ref (%port-table-fds %pdrivers) in)))
+          (close-input-port p)
+          (file-close out))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.168) (memory #(13631492 4120192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ports-without-a-descriptor-carry-their-state"><a href="#test/ports-without-a-descriptor-carry-their-state"><code>test/ports-without-a-descriptor-carry-their-state</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ports-without-a-descriptor-carry-their-state _)
+  (define (custom-port)
+    (make-input-port
+      (let1 (s (open-input-string &quot;b\n&quot;)) (τ (read-char s)))
+      (τ #t)
+      void))
+  (let ((s (open-input-string &quot;a\n&quot;)) (c (custom-port)) (o (custom-port)))
+    (##sys#set-port-data! o (list 'its-own))
+    (⊦= '(&quot;a&quot; &quot;b&quot; &quot;b&quot;)
+        (run/value (τ (map (λ (p) (sync (input-line-evt p))) (list s c o)))))
+    (⊨ (%pdriver? (%own-port-state s)))
+    (⊨ (%pdriver? (%own-port-state c)))
+    (⊦= '(its-own) (##sys#slot o 9))
+    (⊭ (%own-port-state o))
+    (⊭ (memq s (map car (%port-table-others %pdrivers))))
+    (⊭ (memq c (map car (%port-table-others %pdrivers))))
+    (⊨ (and (memq o (map car (%port-table-others %pdrivers))) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4125008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/many-open-ports-in-linear-time"><a href="#test/many-open-ports-in-linear-time"><code>test/many-open-ports-in-linear-time</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/many-open-ports-in-linear-time _)
+  (define (cost n)
+    (let1 (t0 (current-process-milliseconds))
+          (⊦= n
+              (run/value
+                (τ (let1 (ports (map (λ (i)
+                                        (let1 (ch (make-channel))
+                                              (cons (open-channel-input-port ch)
+                                                    (open-channel-output-port ch))))
+                                     (iota n)))
+                         (for-each
+                           (λ (p)
+                              (sync (output-evt (cdr p)))
+                              (sync/timeout (input-char-evt (car p)) 0 #f))
+                           ports)
+                         (length ports)))))
+          (- (current-process-milliseconds) t0)))
+  (let* ((small (max 20 (cost 400))) (large (cost 4000)))
+    (⊨ (&lt; large (* 30 small)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.062) (memory #(27262984 10709472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pipe-to-channel-bridge"><a href="#test/pipe-to-channel-bridge"><code>test/pipe-to-channel-bridge</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pipe-to-channel-bridge _)
+  (⊦= '(&quot;one&quot; &quot;two&quot; #!eof)
+      (with-pipe
+        (λ (p out)
+           (log-of
+             (τ (let* ((ch (make-channel))
+                       (cin (open-channel-input-port ch))
+                       (cout (open-channel-output-port ch)))
+                  (spawn (τ (let loop ()
+                              (let1 (l (sync (input-line-evt p)))
+                                    (if (eof-object? l)
+                                      (close-output-port cout)
+                                      (begin
+                                        (display l cout)
+                                        (newline cout)
+                                        (flush-output cout)
+                                        (loop)))))))
+                  (spawn (τ (fd-write! out &quot;one\ntw&quot;)
+                            (cml/sleep 0.01)
+                            (fd-write! out &quot;o\n&quot;)
+                            (file-close out)))
+                  (note! (sync (input-line-evt cin)))
+                  (note! (sync (input-line-evt cin)))
+                  (note! (sync (input-line-evt cin))))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(27262984 4111320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

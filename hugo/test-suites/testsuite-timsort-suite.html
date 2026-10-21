@@ -19,7 +19,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
 <p>Here is a test suite for the <code class="w3-codespan">timsort</code> function, which implements the Timsort algorithm, a hybrid sorting algorithm derived from merge sort and insertion sort. It is designed to perform well on many kinds of real-world data. The implementation follows the specifications outlined in <cite><a href="https://github.com/python/cpython/blob/main/Objects/listobject.c">CPython: listobject.c</a></cite><cite><a href="https://github.com/python/cpython/blob/main/Objects/listsort.txt">CPython: listsort.txt</a></cite> that we extracted in <cite><a href="https://github.com/massimo-nocentini/timsort.c">Github: timsort.c</a></cite> and we compare it against the built-in <code class="w3-codespan">sort</code> function <cite><a href="https://srfi.schemers.org/srfi-95/srfi-95.html">SRFI 95</a></cite><cite><a href="https://en.wikipedia.org/wiki/Sorting_algorithm">Wikipedia: Sorting algorithm</a></cite>. For the sake of completeness, we report their implementation of the <code class="w3-codespan">sort!</code> function, which is a wrapper around the <code class="w3-codespan">merge!</code> function, which merges two sorted sequences. The <code class="w3-codespan">sort!</code> function sorts a sequence in place using a provided comparison function <code class="w3-codespan">less?</code>.
 <div>
@@ -71,7 +73,7 @@
   (⊦= '() (timsort '())))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(50331648 25786096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 26306464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/iota"><a href="#test/iota"><code>test/iota</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>Here we test the timsort function with a large list of integers from 0 to 1000000 elements long. The list is sorted in descending order, and we expect the result to be a list sorted in ascending order.</p>
@@ -79,56 +81,484 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/iota _) (⊦= r (timsort (iota n (sub1 n) -1))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.274) (memory #(100663296 49783120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.146) (memory #(100663296 50309296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/iota/sort"><a href="#test/iota/sort"><code>test/iota/sort</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/iota/sort _) (⊦= r (sort (iota n (sub1 n) -1) &lt;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.385) (memory #(201326592 49784320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.44) (memory #(201326592 50310624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/timtros/iota"><a href="#test/timtros/iota"><code>test/timtros/iota</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timtros/iota _) (⊦= (iota n (sub1 n) -1) (timtros r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.228) (memory #(201326592 73784920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.089) (memory #(201326592 74311384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/tros/iota"><a href="#test/tros/iota"><code>test/tros/iota</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tros/iota _) (⊦= (iota n (sub1 n) -1) (reverse (sort r &lt;))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.301) (memory #(201326592 73786128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.323) (memory #(201326592 74312816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/already-sorted"><a href="#test/already-sorted"><code>test/already-sorted</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted _) (⊦= r (timsort r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.202) (memory #(201326592 49786904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.068) (memory #(201326592 50313688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/already-sorted/sort"><a href="#test/already-sorted/sort"><code>test/already-sorted/sort</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted/sort _) (⊦= r (sort r &lt;)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.266) (memory #(201326592 49787952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.288) (memory #(201326592 50314984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/already-sorted/primitive"><a href="#test/already-sorted/primitive"><code>test/already-sorted/primitive</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/already-sorted/primitive _) (⊦= r (timsort/primitive r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.107) (memory #(201326592 49788832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.063) (memory #(201326592 50316040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/primitive"><a href="#test/primitive"><code>test/primitive</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/primitive _)
   (⊦= (sort '(5 4 3 2 1) &lt;) (timsort/primitive '(5 4 3 2 1)))
+  (⊦= '(1.1 2.1 3.1 4.1 5.1) (timsort/primitive '(5.1 4.1 3.1 2.1 1.1)))
   (⊦= '(hello world) (timsort/primitive '(world hello))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 49790064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 50317424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/vector"><a href="#test/vector"><code>test/vector</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The vector entry points sort a vector without going through a list: <code class="w3-codespan">timsort/vector</code> returns a fresh vector and leaves its argument untouched, while <code class="w3-codespan">timsort/vector!</code> sorts in place and returns the vector it was given.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/vector _)
+  (⊦= '#(1 2 3 4 5) (timsort/vector '#(5 4 3 2 1)))
+  (⊦= '#(5 4 3 2 1) (timtros/vector '#(1 2 3 4 5)))
+  (⊦= '#(1) (timsort/vector '#(1)))
+  (⊦= '#() (timsort/vector '#()))
+  (let ((v (vector 3 1 2))) (⊦= '#(1 2 3) (timsort/vector v)) (⊦= '#(3 1 2) v))
+  (let ((v (vector 3 1 2)))
+    (⊨ (eq? v (begin (timsort/vector! v) v)))
+    (⊦= '#(1 2 3) v)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 50319440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/vector/primitive"><a href="#test/vector/primitive"><code>test/vector/primitive</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/vector/primitive _)
+  (⊦= '#(&quot;apple&quot; &quot;fig&quot; &quot;pear&quot;)
+      (timsort/primitive/vector '#(&quot;pear&quot; &quot;apple&quot; &quot;fig&quot;)))
+  (⊦= '#(a m z) (timsort/primitive/vector '#(z a m)))
+  (⊦= '#(#\a #\b #\z) (timsort/primitive/vector '#(#\z #\b #\a)))
+  (⊦= '#(#f #t) (timsort/primitive/vector '#(#t #f))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 50320344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/key"><a href="#test/key"><code>test/key</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A key is applied exactly once per element rather than twice per comparison, so the ordering is decided entirely in C and the sort makes no call back into Scheme at all. A key can only express a total preorder; an arbitrary comparator still needs <code class="w3-codespan">timsort/gen</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/key _)
+  (let ((recs (list (cons 1 'a) (cons 0 'b) (cons 1 'c) (cons 0 'd))))
+    (⊦= (list (cons 0 'b) (cons 0 'd) (cons 1 'a) (cons 1 'c))
+        (timsort/key recs car))
+    (⊦= (list (cons 1 'a) (cons 1 'c) (cons 0 'b) (cons 0 'd))
+        (timtros/key recs car)))
+  (let* ((seen '())
+         (recs (list (cons 3 'x) (cons 1 'y) (cons 2 'z)))
+         (spy (lambda (r) (set! seen (cons r seen)) (car r))))
+    (timsort/key recs spy)
+    (⊦= recs (reverse seen))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 26322544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/vector/key"><a href="#test/vector/key"><code>test/vector/key</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/vector/key _)
+  (let ((v (vector (cons 1 'a) (cons 0 'b) (cons 1 'c))))
+    (⊦= (vector (cons 0 'b) (cons 1 'a) (cons 1 'c))
+        (timsort/vector/key v car))
+    (⊦= (vector (cons 1 'a) (cons 0 'b) (cons 1 'c)) v)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 26324024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nested-raise"><a href="#test/nested-raise"><code>test/nested-raise</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nested-raise _)
+  (let* ((seen '())
+         (inner (timsort/gen
+                  (lambda (a b) (error &quot;boom&quot;))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (handle-exceptions
+                      e
+                      (set! seen
+                        (cons (get-condition-property e 'exn 'message) seen))
+                      (inner '(3 1 2)))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7)))
+    (⊨ (and (pair? seen) (every (lambda (m) (equal? m &quot;boom&quot;)) seen)))
+    (⊦= (length seen)
+        (let ((n 0))
+          ((timsort/gen
+             (lambda (a b) (set! n (add1 n)) (&lt; a b))
+             #f
+             #f
+             #f
+             #t
+             TIMSORT_USE_COMPARATOR)
+           '(5 2 9 1 7))
+          n)))
+  (let* ((count 0)
+         (inner (timsort/gen
+                  (lambda (a b)
+                    (set! count (add1 count))
+                    (if (= count 1) (abort 'once) (&lt; a b)))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (handle-exceptions e e (inner '(3 1 2)))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7))))
+  (let* ((inner (timsort/vector/gen
+                  (lambda (a b) (abort 'inner))
+                  #t
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (v (vector 3 1 2))
+         (outer (timsort/vector/gen
+                  (lambda (a b) (handle-exceptions e e (inner v)) (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '#(1 2 5 7 9) (outer (vector 5 2 9 1 7)))
+    (⊦= '#(3 1 2) v))
+  (let* ((inner (timsort/gen
+                  (lambda (a b) (abort 'inner))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (outer (timsort/gen
+                  (lambda (a b) (inner '(3 1 2)) (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= 'inner (handle-exceptions e e (outer '(5 2 9 1 7)))))
+  (let* ((got '())
+         (sorted '())
+         (inner (timsort/gen
+                  (lambda (a b)
+                    (set! got (cons (raise-continuable 'c) got))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (set! sorted
+                      (cons (with-exception-handler
+                              (lambda (e) 'resumed)
+                              (lambda () (inner '(3 1 2))))
+                            sorted))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7)))
+    (⊨ (and (pair? sorted) (every (lambda (l) (equal? l '(1 2 3))) sorted)))
+    (⊨ (and (pair? got) (every (lambda (x) (eq? x 'resumed)) got))))
+  (let* ((inner (timsort/vector/gen
+                  (lambda (a b) (+ 1 (signal 'c)) (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (with-exception-handler
+                      (lambda (e) 0)
+                      (lambda () (inner (vector 3 1 2))))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7))))
+  (let* ((seen '())
+         (inner (timsort/gen
+                  (lambda (a b) (raise 'x))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR))
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (set! seen
+                      (cons (guard (e (#t (list 'outer e)))
+                                   (guard (e ((eq? e 'never) 'no)) (inner '(3 1 2))))
+                            seen))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7)))
+    (⊨ (and (pair? seen) (every (lambda (x) (equal? x '(outer x))) seen))))
+  (let* ((cmp (lambda (lt?)
+                (timsort/gen lt? #f #f #f #t TIMSORT_USE_COMPARATOR)))
+         (nested
+           (lambda (thunk)
+             (let ((res 'unset))
+               ((cmp (lambda (a b)
+                       (when (eq? res 'unset) (set! res (thunk)))
+                       (&lt; a b)))
+                '(3 1 2))
+               res)))
+         (message
+           (lambda (e)
+             (if (condition? e) (get-condition-property e 'exn 'message) e)))
+         (escaping
+           (lambda ()
+             (let ((calls 0))
+               (list (call-with-current-continuation
+                       (lambda (k)
+                         (with-exception-handler
+                           (lambda (e)
+                             (set! calls (add1 calls))
+                             (k (message e)))
+                           (lambda ()
+                             ((cmp (lambda (a b) (error &quot;x&quot;))) '(3 1 2))))))
+                     calls))))
+         (wrapping
+           (lambda ()
+             (let ((calls 0))
+               (guard (e (#t (list e calls)))
+                      (r7rs-with-exception-handler
+                        (lambda (e)
+                          (set! calls (add1 calls))
+                          (if (&gt; calls 5)
+                            (raise 'gave-up)
+                            (raise (list 'wrapped e))))
+                        (lambda ()
+                          ((cmp (lambda (a b) (raise 'x))) '(3 1 2))))))))
+         (returning
+           (lambda ()
+             (guard (e (#t (list 'outer (message e))))
+                    (r7rs-with-exception-handler
+                      (lambda (e) 'ret)
+                      (lambda ()
+                        ((cmp (lambda (a b) (raise 'x))) '(3 1 2)))))))
+         (expected
+           (list '(&quot;x&quot; 1)
+                 '((wrapped x) 1)
+                 '(outer &quot;exception handler returned&quot;)))
+         (scenarios (list escaping wrapping returning)))
+    (⊦= expected (map (lambda (s) (s)) scenarios))
+    (⊦= expected (map nested scenarios))
+    (⊦= 'caught
+        (handle-exceptions
+          e
+          'caught
+          ((cmp (lambda (a b) (error &quot;boom&quot;))) '(2 1))))
+    (⊦= expected (map (lambda (s) (s)) scenarios))
+    (⊦= expected (map nested scenarios)))
+  (let* ((msgs '())
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (set! msgs
+                      (cons (handle-exceptions
+                              e
+                              (get-condition-property e 'exn 'message)
+                              (let* ((saved #f)
+                                     (l ((timsort/gen
+                                           (lambda (x y)
+                                             (call-with-current-continuation
+                                               (lambda (k) (unless saved (set! saved k))))
+                                             (&lt; x y))
+                                           #f
+                                           #f
+                                           #f
+                                           #t
+                                           TIMSORT_USE_COMPARATOR)
+                                         '(3 1 2))))
+                                (if (procedure? saved)
+                                  (let ((k saved)) (set! saved 'done) (k #f))
+                                  l)))
+                            msgs))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7)))
+    (⊨ (and (pair? msgs)
+            (every (lambda (m)
+                     (equal?
+                       m
+                       &quot;a comparator was resumed after it had answered or its nested sort had failed&quot;))
+                   msgs))))
+  (⊦= 0 (timsort-depth))
+  (⊦= '(1 2 3) ((timsort/gen &lt; #f #f #f #t TIMSORT_USE_COMPARATOR) '(3 1 2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(201326592 26333632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nested-escape"><a href="#test/nested-escape"><code>test/nested-escape</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nested-escape _)
+  (let* ((got '())
+         (winds '())
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (set! got
+                      (cons (call-with-current-continuation
+                              (lambda (k)
+                                (dynamic-wind
+                                  (lambda () (set! winds (cons 'in winds)))
+                                  (lambda ()
+                                    ((timsort/gen
+                                       (lambda (x y)
+                                         (dynamic-wind
+                                           (lambda () (set! winds (cons 'cin winds)))
+                                           (lambda () (k 'esc))
+                                           (lambda () (set! winds (cons 'cout winds)))))
+                                       #f
+                                       #f
+                                       #f
+                                       #t
+                                       TIMSORT_USE_COMPARATOR)
+                                     '(3 1 2)))
+                                  (lambda () (set! winds (cons 'out winds))))))
+                            got))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7)))
+    (⊨ (and (pair? got) (every (lambda (x) (eq? x 'esc)) got)))
+    (⊦= (map (lambda (w) (length got)) '(in cin cout out))
+        (map (lambda (w) (count (lambda (x) (eq? x w)) winds))
+             '(in cin cout out))))
+  (let ((outer (timsort/gen
+                 (lambda (a b)
+                   (call-with-current-continuation
+                     (lambda (k)
+                       ((timsort/gen
+                          (lambda (c d)
+                            ((timsort/gen
+                               (lambda (e f) (k 'deep))
+                               #f
+                               #f
+                               #f
+                               #t
+                               TIMSORT_USE_COMPARATOR)
+                             '(3 1 2))
+                            (&lt; c d))
+                          #f
+                          #f
+                          #f
+                          #t
+                          TIMSORT_USE_COMPARATOR)
+                        '(9 8 7))))
+                   (&lt; a b))
+                 #f
+                 #f
+                 #f
+                 #t
+                 TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7))))
+  (let* ((v (vector 3 1 2))
+         (outer (timsort/gen
+                  (lambda (a b)
+                    (call-with-current-continuation
+                      (lambda (k)
+                        ((timsort/vector/gen
+                           (lambda (x y) (k 0))
+                           #t
+                           #f
+                           #f
+                           #t
+                           TIMSORT_USE_COMPARATOR)
+                         v)))
+                    (&lt; a b))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)))
+    (⊦= '(1 2 5 7 9) (outer '(5 2 9 1 7)))
+    (⊦= '#(3 1 2) v))
+  (⊦= 'out
+      (call-with-current-continuation
+        (lambda (k)
+          ((timsort/gen
+             (lambda (a b)
+               ((timsort/gen
+                  (lambda (x y) (k 'out))
+                  #f
+                  #f
+                  #f
+                  #t
+                  TIMSORT_USE_COMPARATOR)
+                '(3 1 2))
+               (&lt; a b))
+             #f
+             #f
+             #f
+             #t
+             TIMSORT_USE_COMPARATOR)
+           '(5 2 9 1 7)))))
+  (⊦= 0 (timsort-depth))
+  (⊦= '(1 2 3) ((timsort/gen &lt; #f #f #f #t TIMSORT_USE_COMPARATOR) '(3 1 2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(201326592 26335400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

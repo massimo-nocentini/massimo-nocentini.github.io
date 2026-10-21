@@ -1,0 +1,1413 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section3851">
+<header>
+<h1>Exact oracles</h1></header></section>
+<p>Hakaru10 infers by Markov chain Monte Carlo, so its answers are estimates.  To
+                test them we need exact answers, and oracles that share as little code as
+                possible with the engine they check.  This page is about the oracles of <code class="w3-codespan">(aux hakaru10 exact)</code>: exact enumeration, a reference
+                evaluator, and the exact kernel of the 'extended semantics.  None of them is in
+                upstream: they are new in the port.</p>
+<p>A model is a value of the State monad that threads the chain
+                (Syntax.hs:82), written with <code class="w3-codespan">do/monad</code>: <code class="w3-codespan">dist</code> (an observation is the <code class="w3-codespan">dist</code> of a <code class="w3-codespan">condition</code>ed distribution), <code class="w3-codespan">diracN</code> and <code class="w3-codespan">if_</code> are models, and running
+                the model creates upstream's trace graph, node by node in bind order.  The
+                oracles do not run a model in a semantics of their own: they build it once, in
+                'extended mode, and walk the graph of that build (plan §6.10, C37).  One build
+                is the whole graph, because SExp is applicative, not a monad (Syntax.hs:118),
+                and <code class="w3-codespan">if_</code> builds both of its branches
+                (Metropolis.hs:650-661).  Exact enumeration visits the nodes in address order,
+                which is their creation order, and builds a lazy search tree in the format of <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></cite>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-ocaml">type 'a vc = V of 'a | C of (unit -&gt; 'a pV) and 'a pV = (prob * 'a vc) list</code></pre></div>
+<p>in Scheme the list <code class="w3-codespan">(((V v) p) ...)</code> and <code class="w3-codespan">(((C thunk) p) ...)</code>.  A choice becomes one <code class="w3-codespan">C</code> entry per support point <code class="w3-codespan">(x . p)</code> with <code class="w3-codespan">p &gt; 0</code>, whose thunk continues the walk with <code class="w3-codespan">x</code>.  An observation becomes one entry weighted by its
+                likelihood, or no entry at all when that likelihood is 0 or its LL is not
+                finite (NaN, +inf; E6).  The nodes of a
+                branch that the values on the path leave inactive are skipped.  A thunk may be
+                forced in any order, so it first restores the node states of its own path.  <code class="w3-codespan">probcc-explore</code> and <code class="w3-codespan">probcc-normalize</code> of <code class="w3-codespan">(aux hansei)</code> then explore and normalize the tree.  Only
+                Hansei's data-level tools are used: no oracle uses delimited control.</p>
+<p>Enumeration and forward sampling share the graph and the node functions with
+                the engine, but none of its incremental machinery: propagation, the update
+                queue, the switch of branches, the delayed and pending updates, the journal
+                and the acceptance ratio.  So an exact posterior against an MH chain tests the
+                kernel and the incremental update.  The build checks the static discipline as
+                it goes, such as observations external to the model or no node escaping its
+                branch (H5).  Continuous observations weigh by their density, which is right
+                for posteriors over discrete choices.  A continuous <i>choice</i> on a path the enumeration takes is a <code class="w3-codespan">support</code> error, and so are more paths than <code class="w3-codespan">#:max-paths</code>.</p>
+<p>A model runs several times: once per oracle call, and once more for the
+                rebuild of <code class="w3-codespan">construction-check</code>.  So a Scheme effect that must happen once per run goes inside a bind (plan
+                §15, C35).  Pre-allocation with <code class="w3-codespan">replicate/monad</code> (H8), folds and traversals are all safe.  One build stands for every build
+                only if the model does not branch in plain Scheme on a node or on a value drawn
+                while it is built.  Nothing enforces that, and nothing catches a model that
+                breaks it: the rebuild of <code class="w3-codespan">construction-check</code> (H2) draws the same values from a copy of the same source, so it takes the
+                same branch.  The rebuild catches only a construction that depends on state
+                outliving a run, such as a counter (hakaru10.scm, case B4′).</p>
+<p>The <b>kernel residual</b> (E10) checks the MH kernel itself, not one of
+                its chains.  In 'extended mode the inactive resampleable nodes are auxiliary
+                variables with their prior.  Over every assignment 
+<mtext>x</mtext> of all resampleable nodes, inactive ones included, the target is 
+<mtext>π(x) ∝ exp L(x)</mtext>, where 
+<mtext>L</mtext> sums the LLs of every resampleable node and of every active observed node.
+                The one-step kernel 
+<mtext>T</mtext> is computed exactly from the engine's own
+                propagation and acceptance code: each active resampleable node is picked with
+                probability 
+<mtext>1/N(x)</mtext>, each support point 
+<mtext>v</mtext> of its distribution is proposed with its probability 
+<mtext>q</mtext>, and the forced step is accepted with probability 
+<mtext>min(1, eᵅ)</mtext> and then rolled back.  The residual is 
+<mtext>maxₓ |(πT)(x) − π(x)|</mtext>, which is below 
+<mtext>10⁻¹²</mtext> when 
+<mtext>π</mtext> is stationary for 
+<mtext>T</mtext>.  This is upstream's merged-node argument made exact (Metropolis.hs:1145-1168):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">So, when it comes to computing the acceptance ratio for a program
+with branches, we take
+
+p4 = do
+     c &lt;- bernN (Val 0.5)
+     if_ c (do e1 e2 ...)
+           (do e3 e4 e5 ...)
+
+to be
+
+p4' = do
+      c &lt;- bernN (Val 0.5)
+      if_ c e_then e_else
+
+That is, we merge (at least for the purpose of presentation) e1, e2 ...
+into one node e_then, whose ll is the sum of ll of constituents. Ditto
+for e_else.
+
+When we switch the branches, we remove the ll of one branch from
+llcum and add ll of the other branch. In our terms, we remove the ll
+of the deactivated nodes and add ll of the activated nodes.
+
+This algorithm is resilient with respect to adding replacing a node e
+with e &gt;&gt;= diracN -- the desired behavior.</code></pre></div>
+<p>In 'upstream mode the argument does not hold for resampleable nodes whose
+                parameters change while they are inactive, as <code class="w3-codespan">pswitch</code> shows (E8; the main suite's hakaru10-semantics).  'extended mode is the fix,
+                and E10 shows that it leaves the target invariant.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux hakaru10 exact)
+  *
+  (import
+    scheme
+    (chicken base)
+    (only (chicken memory representation) record-instance? record-&gt;vector)
+    (only srfi-1 filter-map count fold iota any)
+    srfi-69
+    (aux base)
+    (only (aux hansei) probcc-τ probcc-unit probcc-explore probcc-normalize)
+    (only (aux hakaru10 random) make-stdgen-source rng-source-copy)
+    (aux hakaru10 distribution)
+    (only (aux hakaru10 util) histogram-sort)
+    (aux hakaru10 engine))
+  (define (ll-close? a b #!optional (scale (abs a)))
+    (or (= a b)
+        (and (nan? a) (nan? b))
+        (and (finite? a)
+             (finite? b)
+             (&lt;= (abs (- a b)) (* 1e-09 (max 1.0 scale))))))
+  (define (same-value? a b)
+    (let1 (budget 100000)
+          (define (spent?) (set! budget (sub1 budget)) (negative? budget))
+          (let walk ((a a) (b b))
+            (cond ((eq? a b) #t)
+                  ((and (flonum? a) (flonum? b))
+                   (or (eqv? a b) (and (nan? a) (nan? b))))
+                  ((and (procedure? a) (procedure? b)) #t)
+                  ((and (promise? a) (promise? b)) #t)
+                  ((and (pair? a) (pair? b))
+                   (or (spent?)
+                       (and (walk (car a) (car b)) (walk (cdr a) (cdr b)))))
+                  ((and (vector? a) (vector? b))
+                   (and (= (vector-length a) (vector-length b))
+                        (let loop ((i 0))
+                          (or (= i (vector-length a))
+                              (spent?)
+                              (and (walk (vector-ref a i) (vector-ref b i))
+                                   (loop (add1 i)))))))
+                  ((or (deferred? a) (deferred? b)) (equal? a b))
+                  ((and (record-instance? a) (record-instance? b))
+                   (walk (record-&gt;vector a) (record-&gt;vector b)))
+                  (else (equal? a b))))))
+  (define (choice-support dk who)
+    (or (distribution-support dk)
+        (hakaru10-error
+          'support
+          who
+          &quot;a random choice without a finite support&quot;
+          dk)))
+  (define (build model src semantics who)
+    (build-chain (model-&gt;trace model who) src semantics))
+  (define (static-graph model who)
+    (let1 (src (make-stdgen-source 17))
+          (let retry ((builds 1000))
+            (if (zero? builds)
+              (hakaru10-error
+                'construction
+                who
+                &quot;no complete build of the model in 1000 tries&quot;
+                model)
+              (receive
+                (ch result)
+                (build model src 'extended who)
+                (if result (values ch result) (retry (sub1 builds))))))))
+  (define (walk-active! n)
+    (let1 (k (scope-inactivity n)) (node-inactive-set! n k) (zero? k)))
+  (define (branch-starts ch)
+    (let1 (starts (make-vector (add1 (chain-count ch)) '()))
+          (chain-fold
+            (λ (n _)
+               (when (eq? (node-role n) 'exit)
+                     (let1 (b (node-branch n))
+                           (for-each
+                             (Λ ((,lo unquote hi) ,polarity)
+                                (when (&lt; lo hi)
+                                      (vector-set!
+                                        starts
+                                        (add1 lo)
+                                        (cons (list hi (branch-entry b) polarity)
+                                              (vector-ref starts (add1 lo))))))
+                             (list (branch-then-range b) (branch-else-range b))
+                             '(#t #f)))))
+            (void)
+            ch)
+          starts))
+  (define (past-inactive-branches starts a)
+    (let1 (hi (and (&lt; a (vector-length starts))
+                   (any (Λ ((,hi ,entry ,polarity))
+                           (and (not (eq? (node-value entry) polarity)) hi))
+                        (vector-ref starts a))))
+          (if hi (past-inactive-branches starts (add1 hi)) a)))
+  (define (graph-&gt;search-tree
+           ch
+           result
+           #!key
+           (max-paths #f)
+           (who 'exact-posterior))
+    (let ((last (chain-count ch))
+          (now (chain-now ch))
+          (starts (branch-starts ch))
+          (paths 0))
+      (define (restore! frame)
+        (for-each
+          (Λ ((,n unquote s)) (node-inactive-set! n 0) (node-state-set! n s))
+          frame))
+      (let walk ((a (past-inactive-branches starts 1)) (frame '()))
+        (define (enter n s)
+          (node-state-set! n s)
+          (walk (past-inactive-branches starts (add1 a))
+                (cons (cons n s) frame)))
+        (if (&gt; a last)
+          (begin
+            (add1! paths)
+            (when (and max-paths (&gt; paths max-paths))
+                  (hakaru10-error
+                    'support
+                    who
+                    &quot;more paths than max-paths&quot;
+                    max-paths))
+            (probcc-unit (force-value (node-value result))))
+          (let1 (n (chain-node ch a))
+                (cond ((not (walk-active! n))
+                       (walk (past-inactive-branches starts (add1 a)) frame))
+                      ((resampleable? n)
+                       (filter-map
+                         (Λ ((,x unquote p))
+                            (and (positive? p)
+                                 (probcc-τ
+                                   p
+                                   (restore! frame)
+                                   (enter n (recomputed-state n now x)))))
+                         (choice-support (node-distk n) who)))
+                      ((eq? (node-kind n) 'observed)
+                       (let* ((s (recomputed-state n now))
+                              (w (exp (nstate-ll s))))
+                         (if (or (not (finite? (nstate-ll s))) (zero? w))
+                           '()
+                           (list (probcc-τ w (restore! frame) (enter n s))))))
+                      (else (enter n (recomputed-state n now)))))))))
+  (define (model-&gt;search-tree model #!key (max-paths #f))
+    (receive
+      (ch result)
+      (static-graph model 'model-&gt;search-tree)
+      (graph-&gt;search-tree
+        ch
+        result
+        #:max-paths
+        max-paths
+        #:who
+        'model-&gt;search-tree)))
+  (define (exact-posterior model #!key (max-paths #f))
+    (receive
+      (ch result)
+      (static-graph model 'exact-posterior)
+      (histogram-sort
+        (map (Λ (((V ,v) ,p)) (cons v p))
+             (probcc-normalize
+               (probcc-explore
+                 +inf.0
+                 (graph-&gt;search-tree ch result #:max-paths max-paths)))))))
+  (define (graph-forward ch result src #!optional (starts (branch-starts ch)))
+    (let ((last (chain-count ch)) (now (chain-now ch)))
+      (let walk ((a (past-inactive-branches starts 1)) (ll 0.0))
+        (define (next) (past-inactive-branches starts (add1 a)))
+        (if (&gt; a last)
+          (values (force-value (node-value result)) ll)
+          (let1 (n (chain-node ch a))
+                (cond ((not (walk-active! n)) (walk (next) ll))
+                      ((memq (node-kind n) '(resampleable observed))
+                       (receive
+                         (x llx)
+                         (distk-sample (node-distk n) src)
+                         (node-state-set! n (recomputed-state n now x))
+                         (walk (next) (if (resampleable? n) ll (+ ll llx)))))
+                      (else
+                       (node-state-set! n (recomputed-state n now))
+                       (walk (next) ll))))))))
+  (define (weighted-samples n model #!key (seed 17) (rng #f))
+    (receive
+      (ch result)
+      (static-graph model 'weighted-samples)
+      (let ((src (or rng (make-stdgen-source seed)))
+            (starts (branch-starts ch)))
+        (let loop ((i 0) (samples '()))
+          (if (&gt;= i n)
+            (reverse samples)
+            (receive
+              (v ll)
+              (graph-forward ch result src starts)
+              (loop (add1 i) (cons (cons v ll) samples))))))))
+  (define (likelihood-weighting n model #!key (seed 17) (rng #f))
+    (let* ((samples
+             (filter-map
+               (Λ ((,v unquote ll)) (and (finite? ll) (cons v ll)))
+               (weighted-samples n model #:seed seed #:rng rng)))
+           (top (fold (λ (s m) (max (cdr s) m)) -inf.0 samples))
+           (table (make-hash-table equal?)))
+      (for-each
+        (Λ ((,v unquote ll))
+           (hash-table-update!/default
+             table
+             v
+             (λ (w) (+ w (exp (- ll top))))
+             0.0))
+        samples)
+      (let1 (total (hash-table-fold table (λ (v w acc) (+ acc w)) 0.0))
+            (histogram-sort
+              (map (Λ ((,v unquote w)) (cons v (/ w total)))
+                   (hash-table-&gt;alist table))))))
+  (define (node-signature n)
+    (list (node-addr n)
+          (node-kind n)
+          (node-role n)
+          (map node-addr (vector-&gt;list (node-parents n)))
+          (map (Λ ((,entry unquote polarity))
+                  (cons (node-addr entry) polarity))
+               (node-scope n))))
+  (define (same-built-value? a b)
+    (cond ((and (deferred? a) (deferred? b))
+           (same-value? (deferred-args a) (deferred-args b)))
+          ((or (deferred? a) (deferred? b)) #f)
+          (else (same-value? a b))))
+  (define (first-mismatch same? ch ch*)
+    (let loop ((a 1))
+      (and (&lt;= a (chain-count ch))
+           (if (same? (chain-node ch a) (chain-node ch* a))
+             (loop (add1 a))
+             a))))
+  (define (construction-check
+           model
+           #!key
+           (seed 17)
+           (rng #f)
+           (semantics 'upstream))
+    (let1 (src (or rng (make-stdgen-source seed)))
+          (receive
+            (ch result)
+            (build model (rng-source-copy src) semantics 'check)
+            (if (or (not result) (rejected-ll? (chain-llcum ch)))
+              'skipped
+              (receive
+                (ch* result*)
+                (build model (rng-source-copy src) semantics 'check)
+                (rebuild-check ch result ch* result*)
+                (redraw-check ch (rng-source-copy src))
+                #t)))))
+  (define (rebuild-check ch result ch* result*)
+    (define (differ what . args)
+      (apply hakaru10-error
+             'internal
+             'check
+             (string-append &quot;a rebuild and the initial trace differ in &quot; what)
+             args))
+    (unless
+      (and result*
+           (= (chain-count ch) (chain-count ch*))
+           (= (node-addr result) (node-addr result*)))
+      (differ &quot;graph&quot; (chain-count ch) (and result* (chain-count ch*))))
+    (cond ((first-mismatch
+             (λ (n n*) (equal? (node-signature n) (node-signature n*)))
+             ch
+             ch*)
+           =&gt;
+           (λ (a) (differ &quot;graph&quot; a)))
+          ((first-mismatch
+             (λ (n n*) (same-built-value? (node-value n) (node-value n*)))
+             ch
+             ch*)
+           =&gt;
+           (λ (a)
+              (differ
+                &quot;value&quot;
+                a
+                (node-value (chain-node ch a))
+                (node-value (chain-node ch* a)))))
+          ((first-mismatch
+             (λ (n n*)
+                (ll-close?
+                  (nstate-ll (node-state n))
+                  (nstate-ll (node-state n*))))
+             ch
+             ch*)
+           =&gt;
+           (λ (a) (differ &quot;LL&quot; a)))
+          ((not (ll-close? (chain-llcum ch) (chain-llcum ch*)))
+           (differ &quot;LL&quot; (chain-llcum ch) (chain-llcum ch*)))))
+  (define (redraw-check ch src)
+    (define (differ what . args)
+      (apply hakaru10-error
+             'internal
+             'check
+             (string-append
+               &quot;an address-order redraw and the initial trace differ in &quot;
+               what)
+             args))
+    (match/first
+      (chain-fold
+        (Λ (,n (,ll unquote scale))
+           (cond ((resampleable? n)
+                  (receive
+                    (x llx)
+                    (distk-sample (node-distk n) src)
+                    (unless
+                      (same-value? x (node-value n))
+                      (differ &quot;value&quot; (node-addr n) x (node-value n)))
+                    (cons (+ ll llx) (+ scale (abs llx)))))
+                 ((eq? (node-kind n) 'observed)
+                  (let ((llo (nstate-ll (node-state n)))
+                        (inactive? (node-inactive? n)))
+                    (cons (if inactive? ll (+ ll llo))
+                          (if (and inactive? (extended? ch))
+                            scale
+                            (+ scale (abs llo))))))
+                 (else (cons ll scale))))
+        '(0.0 . 0.0)
+        ch)
+      ((,ll unquote scale)
+       (let1 (llcum (chain-llcum ch))
+             (unless
+               (or (nan? llcum) (ll-close? ll llcum scale))
+               (differ &quot;LL&quot; ll llcum))))))
+  (define (resampleable? n) (eq? (node-kind n) 'resampleable))
+  (define (node-distk n)
+    (let1 (fn (node-fn n))
+          (if (distk? fn) fn (fn (leaf-values (node-parents n))))))
+  (define (recomputed-state n ts #!optional (v (node-value n)))
+    (if (eq? (node-role n) 'exit)
+      (make-nstate
+        (let1 (v (node-value (branch-active-result (node-branch n))))
+              (if (node-inactive? n) v (force-value v)))
+        0.0
+        #f
+        ts)
+      (let* ((dk (node-distk n)) (kind (distk-kind dk)) (rd (distk-rd dk)))
+        (unless
+          (eq? kind (node-kind n))
+          (hakaru10-error
+            'construction
+            'check
+            &quot;a distribution constructor changed the kind of its node&quot;
+            n
+            (node-kind n)
+            kind))
+        (case kind
+          ((dirac)
+           (make-nstate
+             (let1 (x (distk-value dk))
+                   (if (node-inactive? n) x (force-value x)))
+             0.0
+             #f
+             ts))
+          ((observed)
+           (let1 (obs (distk-value dk))
+                 (check-observation n obs)
+                 (make-nstate obs ((rdistr-log-density rd) obs) rd ts)))
+          (else (make-nstate v ((rdistr-log-density rd) v) rd ts))))))
+  (define (scope-inactivity n)
+    (count (Λ ((,entry unquote polarity))
+              (not (eq? (node-value entry) polarity)))
+           (node-scope n)))
+  (define (same-rdistr? a b)
+    (if (and a b)
+      (and (eq? (rdistr-name a) (rdistr-name b))
+           (same-value? (rdistr-params a) (rdistr-params b)))
+      (eq? a b)))
+  (define (reference-check ch)
+    (define (fail msg n . args)
+      (apply hakaru10-error 'internal 'check msg (node-addr n) args))
+    (define (check-state n s)
+      (let1 (s* (recomputed-state n (nstate-tstamp s) (nstate-val s)))
+            (unless
+              (same-value? (nstate-val s) (nstate-val s*))
+              (fail &quot;a value differs from its recomputation&quot;
+                    n
+                    (nstate-val s)
+                    (nstate-val s*)))
+            (unless
+              (same-rdistr? (nstate-dst s) (nstate-dst s*))
+              (fail &quot;a distribution differs from its recomputation&quot;
+                    n
+                    (nstate-dst s)
+                    (nstate-dst s*)))
+            (unless
+              (ll-close? (nstate-ll s) (nstate-ll s*))
+              (fail &quot;an LL differs from its recomputation&quot;
+                    n
+                    (nstate-ll s)
+                    (nstate-ll s*)))))
+    (let ((now (chain-now ch)) (every-node? (extended? ch)))
+      (chain-fold
+        (λ (n _)
+           (let ((s (node-state n)) (inactive (node-inactive n)))
+             (unless
+               (= inactive (scope-inactivity n))
+               (fail &quot;a deactivation count differs from its recomputation&quot;
+                     n
+                     inactive
+                     (scope-inactivity n)))
+             (when (and (node-delayed n) (or every-node? (zero? inactive)))
+                   (fail &quot;an update is delayed on an active node or in 'extended mode&quot;
+                         n))
+             (when (or (node-pending n) (node-queued n))
+                   (fail &quot;a node is still pending or queued after the step&quot; n))
+             (when (&gt; (nstate-tstamp s) now)
+                   (fail &quot;a tstamp is after now&quot; n (nstate-tstamp s) now))
+             (when (or every-node? (zero? inactive)) (check-state n s))))
+        (void)
+        ch)
+      (let1 (card (- (count node-inactive? (chain-sampleable ch))))
+            (unless
+              (= (chain-card-change ch) card)
+              (hakaru10-error
+                'internal
+                'check
+                &quot;the card change differs from its recomputation&quot;
+                (chain-card-change ch)
+                card)))
+      #t))
+  (define (resampleable-nodes ch) (reverse (chain-sampleable ch)))
+  (define (load-state! ch xs)
+    (let* ((now (chain-now ch))
+           (rest (chain-fold
+                   (λ (n xs)
+                      (node-inactive-set! n (scope-inactivity n))
+                      (node-state-set!
+                        n
+                        (if (resampleable? n)
+                          (if (pair? xs)
+                            (recomputed-state n now (car xs))
+                            (hakaru10-error
+                              'construction
+                              'load-state!
+                              &quot;too few values&quot;
+                              n))
+                          (recomputed-state n now)))
+                      (node-delayed-set! n #f)
+                      (node-pending-set! n #f)
+                      (if (resampleable? n) (cdr xs) xs))
+                   xs
+                   ch)))
+      (unless
+        (null? rest)
+        (hakaru10-error 'construction 'load-state! &quot;too many values&quot; rest))
+      (chain-card-change-set!
+        ch
+        (- (count node-inactive? (chain-sampleable ch))))))
+  (define (ext-states ch #!key (max-states 100000))
+    (let ((now (chain-now ch)) (last (chain-count ch)) (found 0))
+      (reverse
+        (let walk ((a 1) (prefix '()) (states '()))
+          (if (&gt; a last)
+            (begin
+              (add1! found)
+              (when (&gt; found max-states)
+                    (hakaru10-error
+                      'support
+                      'ext-states
+                      &quot;more states than max-states&quot;
+                      max-states))
+              (cons (reverse prefix) states))
+            (let1 (n (chain-node ch a))
+                  (node-inactive-set! n (scope-inactivity n))
+                  (if (resampleable? n)
+                    (fold (Λ ((,x unquote p) ,states)
+                             (if (positive? p)
+                               (begin
+                                 (node-state-set! n (recomputed-state n now x))
+                                 (walk (add1 a) (cons x prefix) states))
+                               states))
+                          states
+                          (choice-support (node-distk n) 'ext-states))
+                    (begin
+                      (node-state-set! n (recomputed-state n now))
+                      (walk (add1 a) prefix states)))))))))
+  (define (forced-step-log-alpha ch n x)
+    (when (or (not (resampleable? n)) (node-inactive? n))
+          (hakaru10-error
+            'internal
+            'forced-step-log-alpha
+            &quot;an active resampleable node is expected&quot;
+            n))
+    (journal-begin! ch)
+    (chain-now-set! ch (add1 (chain-now ch)))
+    (chain-llcum-set! ch 0.0)
+    (let* ((card-old (chain-card-change ch))
+           (s (node-state n))
+           (ll ((rdistr-log-density (nstate-dst s)) x))
+           (fb (apply-proposal! n x ll (- ll (nstate-ll s))))
+           (delta (begin (propagate! ch) (chain-llcum ch)))
+           (ratio (if (rejected-ll? delta)
+                    -inf.0
+                    (log-acceptance-ratio
+                      ch
+                      (vector-length (chain-samp ch))
+                      card-old
+                      fb))))
+      (journal-rollback! ch)
+      ratio))
+  (define (kernel-residual
+           model
+           #!key
+           (seed 17)
+           (max-states 100000)
+           (semantics 'extended))
+    (receive
+      (ch result)
+      (build model (make-stdgen-source seed) semantics 'kernel-residual)
+      (unless
+        result
+        (hakaru10-error
+          'construction
+          'kernel-residual
+          &quot;the model's first build was rejected&quot;))
+      (let* ((nodes (resampleable-nodes ch))
+             (states (ext-states ch #:max-states max-states))
+             (log-weights
+               (map (λ (xs) (load-state! ch xs) (chain-extended-ll ch))
+                    states))
+             (top (let1 (top (fold (λ (l top) (if (finite? l) (max l top) top))
+                                   -inf.0
+                                   log-weights))
+                        (if (finite? top)
+                          top
+                          (hakaru10-error
+                            'construction
+                            'kernel-residual
+                            &quot;no state of the model has a positive finite weight&quot;
+                            top))))
+             (weights
+               (map (λ (l) (if (finite? l) (exp (- l top)) 0.0)) log-weights))
+             (z (fold + 0.0 weights))
+             (π (make-hash-table equal?))
+             (πT (make-hash-table equal?)))
+        (define (flow! xs mass)
+          (hash-table-update!/default πT xs (λ (m) (+ m mass)) 0.0))
+        (for-each
+          (λ (xs w)
+             (hash-table-update!/default π xs (λ (p) (+ p (/ w z))) 0.0))
+          states
+          weights)
+        (hash-table-walk
+          π
+          (λ (xs p)
+             (when (positive? p)
+                   (load-state! ch xs)
+                   (let* ((active
+                            (filter-map
+                              (λ (n i)
+                                 (and (not (node-inactive? n)) (cons n i)))
+                              nodes
+                              (iota (length nodes))))
+                          (pick (if (null? active) 0.0 (/ p (length active)))))
+                     (when (null? active) (flow! xs p))
+                     (for-each
+                       (Λ ((,n unquote i))
+                          (for-each
+                            (Λ ((,x unquote q))
+                               (when (positive? q)
+                                     (let* ((ratio (forced-step-log-alpha ch n x))
+                                            (accept
+                                              (if (nan? ratio) 0.0 (min 1.0 (exp ratio))))
+                                            (mass (* pick q)))
+                                       (flow! (list-replace xs i x) (* mass accept))
+                                       (flow! xs (* mass (- 1.0 accept))))))
+                            (proposal-support n)))
+                       active)))))
+        (fold (λ (xs m)
+                 (max m
+                      (abs (- (hash-table-ref/default πT xs 0.0)
+                              (hash-table-ref/default π xs 0.0)))))
+              0.0
+              (append (hash-table-keys π) (hash-table-keys πT))))))
+  (define (proposal-support n)
+    (let1 (dk (node-distk n))
+          (unless
+            (rdistr-independence? (distk-rd dk))
+            (hakaru10-error
+              'support
+              'kernel-residual
+              &quot;a random choice whose proposal is not the independence one&quot;
+              dk))
+          (choice-support dk 'kernel-residual)))
+  (define (list-replace xs i x)
+    (if (zero? i)
+      (cons x (cdr xs))
+      (cons (car xs) (list-replace (cdr xs) (sub1 i) x)))))
+</code></pre></div>
+<h2 id="test/grass"><a href="#test/grass"><code>test/grass</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E1.  The grass model: rain and a sprinkler may wet the grass, and the grass is
+            observed wet.  The exact posterior of rain is upstream's 'theoretical' value.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (nnot p x) (if x p 1.0))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((nor strength-x strength-y noise) x y)
+  (bern (- 1.0
+           (* (nnot (- 1.0 strength-x) x)
+              (nnot (- 1.0 strength-y) y)
+              (- 1.0 noise)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define grass
+  (do/monad
+    (← rain (dist bern 0.3))
+    (← sprinkler (dist bern 0.5))
+    (dist (condition #t (nor 0.9 0.8 0.1)) rain sprinkler)
+    (return rain)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">grass = do
+  rain        &lt;- dist bern 0.3
+  sprinkler   &lt;- dist bern 0.5
+  --  dist (nor 0.9 0.8 0.1) rain sprinkler
+  grass_is_wet &lt;- dist (True `condition` nor 0.9 0.8 0.1) rain sprinkler
+  return rain
+
+-- noisy-or function
+nor :: Double -&gt; Double -&gt; Double -&gt; Bool -&gt; Bool -&gt; Distribution Bool
+nor strengthX strengthY noise x y =
+  bern $ 1 - nnot (1-strengthX) x * nnot (1-strengthY) y * (1-noise)
+
+-- noisy not function
+nnot :: Num a =&gt; a -&gt; Bool -&gt; a
+nnot p True  = p
+nnot p False = 1</code></pre></div>
+<p>cf. Examples1.hs:299-314; the expected value is the comment at
+            Examples1.hs:321-322:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- 0.46815 for 20000 -- with old resampling
+-- 0.4684714427203697  -- theoretical</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/grass _)
+  (⊦ (equal-approx? 1e-12)
+     '((#f . 0.53152855727963) (#t . 0.46847144272037))
+     (exact-posterior grass)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3852176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/girl"><a href="#test/girl"><code>test/girl</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E2.  The eldest daughter puzzle: a family has two kids, one of them a girl
+            (observed through a fuzzy or that errs with probability .01); what is the chance
+            the older is a girl?  Exactly 
+<mtext>0.495/0.745 = 0.6644295302013423</mtext>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define girl
+  (let ()
+    (define ((fuzzy2 pfuzz op) x y)
+      (let1 (v (op x y))
+            (categorical
+              `((,v unquote (- 1.0 pfuzz)) (,(not v) unquote pfuzz)))))
+    (do/monad
+      (← girl1 (dist bern 0.5))
+      (← girl2 (dist bern 0.5))
+      (dist (condition #t (fuzzy2 0.01 (λ (x y) (or x y)))) girl1 girl2)
+      (return girl1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">girl = do
+  girl1 &lt;- dist bern 0.5
+  girl2 &lt;- dist bern 0.5
+  dist (True `condition` fuzzy2 0.01 (||)) girl1 girl2
+  return girl1
+ where
+   -- Creating a custom distribution
+   fuzzy2 pfuzz op x y = let v = op x y in
+     categorical [(v,1-pfuzz),(not v,pfuzz)]</code></pre></div>
+<p>cf. Examples1.hs:340-355 (upstream records 77 <code class="w3-codespan">True</code> in 100 samples).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/girl _)
+  (⊦ (equal-approx? 1e-12)
+     '((#f . 0.335570469798658) (#t . 0.664429530201342))
+     (exact-posterior girl)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3857088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pcorr"><a href="#test/pcorr"><code>test/pcorr</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E3.  Yufei Cai's example of correlated booleans: <code class="w3-codespan">x</code> and <code class="w3-codespan">y</code> agree with probability .9 a posteriori, and <code class="w3-codespan">y</code> alone is a fair coin.  The model returns the pair, where
+            upstream returns <code class="w3-codespan">y</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (pcorr/pair pfuzz)
+  (define (xor y x) (not (eq? x y)))
+  (define ((fuzzy2 pfuzz op) x y)
+    (let1 (v (op x y))
+          (categorical
+            `((,v unquote pfuzz) (,(not v) unquote (- 1.0 pfuzz))))))
+  (do/monad
+    (← x (dist bern 0.5))
+    (← y (dist bern 0.5))
+    (dist (condition #t (fuzzy2 pfuzz xor)) x y)
+    (return (pair x y))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcorr pfuzz = do
+  x &lt;- dist bern 0.5
+  y &lt;- dist bern 0.5
+  dist (True `condition` fuzzy2 pfuzz xor) x y
+  return y
+ where
+   -- Creating a custom distribution
+   fuzzy2 pfuzz op x y = let v = op x y in
+     categorical [(v,pfuzz),(not v,1-pfuzz)]
+   xor y x = not (x == y)</code></pre></div>
+<p>cf. Examples1.hs:223-238.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pcorr _)
+  (let1 (posterior (exact-posterior (pcorr/pair 0.1)))
+        (⊦ (equal-approx? 1e-12)
+           0.9
+           (probability-of (Λ ((,x unquote y)) (eq? x y)) posterior))
+        (⊦ (equal-approx? 1e-12) 0.5 (probability-of cdr posterior))
+        (⊦ (equal-approx? 1e-12)
+           '(((#f . #f) . 0.45)
+             ((#f . #t) . 0.05)
+             ((#t . #f) . 0.05)
+             ((#t . #t) . 0.45))
+           posterior)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3853560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ph2"><a href="#test/ph2"><code>test/ph2</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E4.  A dependent coin: 
+<mtext>0.2 · 0.1 + 0.8 · 0.7 = 0.58</mtext>, and its parent, with no observation, keeps its prior .2.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ph2
+  (do/monad
+    (← x (dist bern 0.2))
+    (dist bern (lift (λ (xv) (if xv 0.1 0.7)) x))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ph21
+  (do/monad
+    (← x (dist bern 0.2))
+    (dist bern (lift (λ (xv) (if xv 0.1 0.7)) x))
+    (return x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">ph2 = do
+  x &lt;- dist bern 0.2
+  dist bern ((\xv -&gt; if xv then 0.1 else 0.7) &lt;$&gt; x)
+-- 0.2 * 0.1 + 0.8*0.7 = 0.58
+
+ph21 = do
+  x &lt;- dist bern 0.2
+  y &lt;- dist bern ((\xv -&gt; if xv then 0.1 else 0.7) &lt;$&gt; x)
+  return x</code></pre></div>
+<p>cf. Examples1.hs:88-102 (upstream records 5809 and 2026 in 10000 samples).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ph2 _)
+  (⊦ (equal-approx? 1e-12) 0.58 (probability #t (exact-posterior ph2)))
+  (⊦ (equal-approx? 1e-12) 0.2 (probability #t (exact-posterior ph21))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3858080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pcond"><a href="#test/pcond"><code>test/pcond</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E5.  Mixtures by <code class="w3-codespan">if_</code>: in <code class="w3-codespan">pcond2</code> a branch returns the test's own node, and in <code class="w3-codespan">pcond4</code> the else branch observes a fair coin <code class="w3-codespan">True</code>, halving its weight.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (one? x) (lift (cut = &lt;&gt; 1) x))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond1
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (one? x)
+         (dist categorical '((10 . 0.5) (11 . 0.5)))
+         (dist categorical '((20 . 0.5) (21 . 0.5))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond2
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (one? x) (return x) (dist categorical '((20 . 0.5) (21 . 0.5))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond4
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (one? x)
+         (return x)
+         (&gt;&gt; (dist (condition #t bern) 0.5)
+             (dist categorical '((20 . 0.5) (21 . 0.5)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcond1 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (dist categorical (pure [(10,0.5), (11,0.5)]))
+     (dist categorical (pure [(20,0.5), (21,0.5)]))
+
+pcond2 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (return x)
+     (dist categorical (pure [(20,0.5), (21,0.5)]))
+
+pcond4 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (return x)
+     (do
+       dist (True `condition` bern) 0.5
+       dist categorical (pure [(20,0.5), (21,0.5)]))</code></pre></div>
+<p>cf. Examples1.hs:104-124 and 265-282, where upstream records the exact answer
+            of <code class="w3-codespan">pcond4</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Exact:
+--      [(0.166666666666666657, V 21); (0.166666666666666657, V 20);
+--       (0.66666666666666663, V 1)])</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pcond _)
+  (⊦ (equal-approx? 1e-12)
+     '((10 . 0.25) (11 . 0.25) (20 . 0.25) (21 . 0.25))
+     (exact-posterior pcond1))
+  (⊦ (equal-approx? 1e-12)
+     '((1 . 0.5) (20 . 0.25) (21 . 0.25))
+     (exact-posterior pcond2))
+  (⊦ (equal-approx? 1e-12)
+     `((1 unquote (/ 2.0 3.0))
+       (20 unquote (/ 1.0 6.0))
+       (21 unquote (/ 1.0 6.0)))
+     (exact-posterior pcond4)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3862472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pcond3-support"><a href="#test/pcond3-support"><code>test/pcond3-support</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E5b.  <code class="w3-codespan">pcond3</code> draws a normal in its else branch, so exact
+            enumeration raises a <code class="w3-codespan">support</code> error when it takes that
+            branch.  The build of the graph completes without complaint, so the error comes
+            from the enumeration, not from the build.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond3
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (one? x)
+         (return x)
+         (&gt;&gt; (dist normal 0.0 1.0)
+             (dist categorical '((20 . 0.5) (21 . 0.5)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcond3 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (return x)
+     (do
+       dist normal 0 1
+       dist categorical (pure [(20,0.5), (21,0.5)]))</code></pre></div>
+<p>cf. Examples1.hs:126-136.  Likelihood weighting gives its answer (H7).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pcond3-support _)
+  (⊦= 'support (hakaru10-kind (τ (exact-posterior pcond3))))
+  (⊦= 'none (hakaru10-kind (τ (mcmC 10 pcond3)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8396592 3870880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/post-bias"><a href="#test/post-bias"><code>test/post-bias</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E6.  A coin selects which of two normals, centered at 0 and 100, the observation
+            1 comes from.  The likelihood of the observation under N(100, 1) is 
+<mtext>e⁻⁴⁹⁰⁰·⁵/√(2π)</mtext>, which underflows to 0, so the posterior of the
+            coin is <code class="w3-codespan">#t</code>, with probability 1.: an observation of weight 0
+            prunes its path from the search tree, so <code class="w3-codespan">#f</code> is not in the histogram at all.  A model whose every path has weight 0, here 5
+            observed from the uniform on [0, 1], has the empty posterior <code class="w3-codespan">'()</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (post-bias c)
+  (do/monad
+    (← coin (dist bern 0.5))
+    (if_ coin
+         (dist (condition c normal) 0.0 1.0)
+         (dist (condition c normal) 100.0 1.0))
+    (return coin)))
+</code></pre></div>
+<p>An observation whose LL is not finite weighs nothing either, as likelihood
+            weighting drops such a run: in <code class="w3-codespan">nan-path</code> the normal of standard deviation 0 gives 0 the LL NaN,
+            so k = 0 is pruned and the posterior is the 2 : 1 of the densities at k = 1 and 2,
+            which likelihood weighting visits alone.  MH rejects a step to k = 0, whose ratio
+            is NaN and fails both acceptance tests (Metropolis.hs:939-944), but keeps an
+            initial trace of LL NaN, since only an infinite LL makes it rebuild
+            (Metropolis.hs:853-854, 882-891), and then never leaves it: at seed 17 the build
+            draws k = 2, so the chain visits 1 and 2 alone (a regression value), while at seed
+            110866 it draws k = 0 and the chain stays there, where the oracles and the chain
+            disagree, as upstream's would.  In <code class="w3-codespan">infinite-path</code> the observation's LL is +inf when b is true and
+            -inf when it is false, so no path has a positive finite weight and enumeration,
+            likelihood weighting and the chain all answer <code class="w3-codespan">'()</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define nan-path
+  (do/monad
+    (← k (dist uniformly '(0 1 2)))
+    (dist (condition 0.0 normal) 0.0 (lift exact-&gt;inexact k))
+    (return k)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define infinite-path
+  (do/monad
+    (← b (dist bern 0.5))
+    (dist (condition 0.0 beta) (lift (λ (bv) (if bv 0.5 2.0)) b) 1.0)
+    (return b)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">post_bias c = do
+  coin &lt;- dist bern 0.5
+  if_ coin (dist (c `condition` normal) 0 1)
+           (dist (c `condition` normal) 100 1)
+  return coin
+
+_ = mcmC 10 (post_bias 1)
+-- All true</code></pre></div>
+<p>cf. Examples1.hs:256-263; P l.427-437.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/post-bias _)
+  (⊦ equal? '((#t . 1.0)) (exact-posterior (post-bias 1.0)))
+  (⊦ equal? '() (exact-posterior (dist (condition 5.0 uniform) 0.0 1.0)))
+  (⊦ (equal-approx? 1e-12)
+     `((1 unquote (/ 2.0 3.0)) (2 unquote (/ 1.0 3.0)))
+     (exact-posterior nan-path))
+  (⊦ equal?
+     '((1 2) (1 2) ((0 . 30)))
+     (list (map car (likelihood-weighting 1000 nan-path))
+           (map car (hist (mcmC 1000 nan-path)))
+           (hist (mcmC 30 nan-path #:seed 110866))))
+  (⊦ equal?
+     '(() () ())
+     (list (exact-posterior infinite-path)
+           (likelihood-weighting 100 infinite-path)
+           (mcmC 5 infinite-path))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(8396592 3870664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/colored-balls"><a href="#test/colored-balls"><code>test/colored-balls</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E7.  The colored balls of BLOG (Milch et al., <cite><a href="http://people.csail.mit.edu/milch/papers/blog-chapter.pdf">BLOG: Probabilistic Models with Unknown Objects</a></cite>, example 1.1), quoted at ColoredBalls.hs:6-11:</p>
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>An urn contains an unknown number of balls--say, a number chosen from
+                     a Poisson or a uniform distributions. Balls are equally likely to be blue
+                     or green. We draw some balls from the urn, observing the color of each
+                     and replacing it. We cannot tell two identically colored balls apart;
+                     furthermore, observed colors are wrong with probability 0.2.  How many
+                     balls are in the urn? Was the same ball drawn twice?</i>
+<footer>
+<p class="w3-right-align">Brian Milch et al.</p></footer></blockquote>
+<p>With at most 3 balls and 4 draws, all seen blue, the exact posterior of the
+            number of balls agrees with its closed form: given 
+<mtext>m</mtext> balls of which 
+<mtext>k</mtext> are blue, a draw is seen blue with probability 
+<mtext>pₖ = (0.8k + 0.2(m − k))/m</mtext>, so 
+<mtext>P(m | n blues) ∝ Σₖ C(m, k) 2⁻ᵐ pₖⁿ</mtext>.  The 8-ball, 10-draw model of upstream has a trace of 2114 nodes and is out of
+            reach of enumeration; its closed form is</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 . 0.41196368095257)
+ (2 . 0.209728624754566)
+ (3 . 0.120691976674053)
+ (4 . 0.0801847685132436)
+ (5 . 0.0590318166419537)
+ (6 . 0.046603790739908)
+ (7 . 0.0386298621005105)
+ (8 . 0.0331654796231948))
+</code></pre></div>
+<p>next to Hansei's importance sampling, <code class="w3-codespan">t1</code> and the average <code class="w3-codespan">t2</code> (ColoredBalls.hs:110-147):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-ocaml">let
+    [(0.031942788306915014, V 8); (0.0422088248548995876, V 7);
+     (0.0481489259210673634, V 6); (0.0611501366775565255, V 5);
+     (0.0843776503618006435, V 4); (0.123159075103266638, V 3);
+     (0.203898291338526577, V 2); (0.405114307435967658, V 1)] =
+ snd (Inference.normalize t1);;
+
+let
+  [(0.0318386565368576138, V 8); (0.0384083436381660176, V 7);
+   (0.0445344709122082669, V 6); (0.055953476873295431, V 5);
+   (0.0777907061915841, V 4); (0.123751456856916756, V 3);
+   (0.211354336837841883, V 2); (0.416368552153129956, V 1)]
+ = t2;;</code></pre></div>
+<p>The model, with the number of balls a parameter and the balls' colors
+            pre-allocated by <code class="w3-codespan">replicate/monad</code>, as upstream's <code class="w3-codespan">sequence . replicate</code> does:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (opposite-color color) (if (eq? color 'blue) 'green 'blue))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (observed-color color)
+  (categorical `((,color . 0.8) (,(opposite-color color) . 0.2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (balls-prior max-balls)
+  (do/monad
+    (← balls (replicate/monad max-balls (dist uniformly '(blue green))))
+    (return (map cons (iota max-balls 1) balls))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (balls-observe max-balls balls obs nballs)
+  (&gt;&gt; (for-each/monad
+        (λ (color)
+           (do/monad
+             (← b (dist uniformly (iota nballs 1)))
+             (fold-right
+               (λ (i rest)
+                  (if_ (lift (cut = &lt;&gt; i) b)
+                       (dist (condition color observed-color)
+                             (alist-ref i balls))
+                       rest))
+               (return color)
+               (iota max-balls 1))))
+        obs)
+      (return (void))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (cballs-model max-balls obs)
+  (do/monad
+    (← balls (balls-prior max-balls))
+    (← nballs (dist uniformly (iota max-balls 1)))
+    (fold-right
+      (λ (i rest)
+         (if_ (lift (cut = &lt;&gt; i) nballs)
+              (balls-observe max-balls balls obs i)
+              rest))
+      (return (void))
+      (iota max-balls 1))
+    (return nballs)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (cballs-closed-form max-balls n)
+  (define (binomial m k)
+    (if (zero? k) 1 (/ (* m (binomial (sub1 m) (sub1 k))) k)))
+  (define (likelihood m)
+    (fold (λ (k acc)
+             (+ acc
+                (* (binomial m k)
+                   (expt 2.0 (- m))
+                   (expt (/ (+ (* 0.8 k) (* 0.2 (- m k))) m) n))))
+          0.0
+          (iota (add1 m))))
+  (let* ((ls (map likelihood (iota max-balls 1))) (z (fold + 0.0 ls)))
+    (map (cut / &lt;&gt; z) ls)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Distribution for the observing of a ball, with the failure rate 20%
+observed_color color =
+  categorical [(color,0.8),(opposite_color color,0.2)]
+
+maxBalls :: Int
+maxBalls = 8
+
+-- Create the prior for the max amount of balls that may be in the urn
+balls_prior n = do
+  balls &lt;- sequence . replicate n $ dist uniformly (pure [Blue,Green])
+  return $ M.fromList $ zip [1..] balls
+
+-- Submodel: Given balls color and the observations, perform conditioning
+balls_observe :: M.IntMap (SExp Color) -&gt; [Color] -&gt; Int -&gt; Model ()
+balls_observe balls obs nballs = mapM_ observe_ball obs &gt;&gt; return (pure ())
+ where
+  -- The same ball can be drawn twice as we return the drawn balls
+  -- into the urn. A ball keeps its true color, no matter how many
+  -- times it is drawn.
+   observe_ball color = do
+        b &lt;- dist uniformly (pure [1..nballs])
+        -- It is more efficient to create if statements, rather than
+        -- create an SExp(IntMap Color).
+        let observe i =
+              let true_color = balls ! i in
+              if_ ((== i) &lt;$&gt; b) $
+                dist (color `condition` observed_color) true_color
+        foldr observe (return (pure color)) [1..maxBalls]
+
+-- The model takes a list of observations as an argument
+cballs_model :: [Color] -&gt; Model Int
+cballs_model obs = do
+  balls  &lt;- balls_prior maxBalls
+  nballs &lt;- dist uniformly (pure [1..maxBalls])
+  let obs_number i =
+        if_ ((== i) &lt;$&gt; nballs) $ balls_observe balls obs i
+  foldr obs_number (return (pure())) [1..maxBalls]
+  return nballs</code></pre></div>
+<p>cf. ColoredBalls.hs:34-44, 74-99, without the first model that lines 46-72
+            comment out; W <code class="w3-codespan">#colored-balls</code> (l.110-119).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/colored-balls _)
+  (let1 (expected '(0.45765164162493 0.298386199220924 0.243962159154146))
+        (⊦ (equal-approx? 1e-12)
+           (map cons '(1 2 3) expected)
+           (exact-posterior (cballs-model 3 (make-list 4 'blue))))
+        (⊦ (equal-approx? 1e-12) expected (cballs-closed-form 3 4)))
+  (⊦ (equal-approx? 1e-12)
+     '(0.41196368095257
+       0.209728624754566
+       0.120691976674053
+       0.0801847685132436
+       0.0590318166419537
+       0.046603790739908
+       0.0386298621005105
+       0.0331654796231948)
+     (cballs-closed-form 8 10)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.013) (memory #(8396592 3867096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pswitch"><a href="#test/pswitch"><code>test/pswitch</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E8.  <code class="w3-codespan">pswitch</code> is the counterexample to upstream's
+            reactivation of branches (plan §6.8).  The branch-local <code class="w3-codespan">y</code> depends on <code class="w3-codespan">m</code>, which keeps changing while <code class="w3-codespan">y</code> is inactive.  The answer is 
+<mtext>P(c) = 1/2</mtext>, but the stationary distribution of upstream's kernel gives 
+<mtext>P(c) = 0.377286</mtext>.  Upstream's argument is at Metropolis.hs:1145-1168.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pswitch
+  (do/monad
+    (← c (dist bern 0.5))
+    (← m (dist uniformly '(0 1)))
+    (if_ c
+         (dist categorical (lift (λ (mv) `((,mv . 0.9) (,(- 1 mv) . 0.1))) m))
+         (diracN (lift identity m)))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- (new, plan §6.8; no upstream source)
+c ~ bern 0.5
+m ~ uniformly [0,1]
+if_ c (y ~ categorical [(m,.9),(1-m,.1)])
+      (diracN (id &lt;$&gt; m))
+return c</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pswitch _)
+  (⊦ (equal-approx? 1e-12) '((#f . 0.5) (#t . 0.5)) (exact-posterior pswitch)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3869328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/hansei"><a href="#test/hansei"><code>test/hansei</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E9.  The same posteriors from programs written in Hansei itself (<code class="w3-codespan">(aux hansei)</code>, which runs on aux's own delimited control, <code class="w3-codespan">resetcc</code>).  Hansei's grass is its canonical formulation, with the
+            noisy-or spelled out as coin flips (test/hansei.scm:87-100).  The soft observation
+            of <code class="w3-codespan">girl</code> is a coin of the observation's likelihood, and <code class="w3-codespan">pcond4</code> is a transcription.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (hansei-grass)
+  (let* ((rain (probcc-coin 0.3))
+         (sprinkler (probcc-coin 0.5))
+         (grass-is-wet
+           (or (and (probcc-coin 0.9) rain)
+               (and (probcc-coin 0.8) sprinkler)
+               (probcc-coin 0.1))))
+    (probcc-when grass-is-wet rain)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (hansei-girl)
+  (let* ((girl1 (probcc-coin 0.5)) (girl2 (probcc-coin 0.5)))
+    (probcc-when (probcc-coin (if (or girl1 girl2) 0.99 0.01)) girl1)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (hansei-pcond4)
+  (let1 (x (probcc-distribution '((1 0.5) (2 0.5))))
+        (if (= x 1)
+          x
+          (probcc-when
+            (probcc-coin 0.5)
+            (probcc-distribution '((20 0.5) (21 0.5)))))))
+</code></pre></div>
+<p>Hansei is described in <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></cite> and in Kiselyov and Shan, <i>Embedded Probabilistic Programming</i>, DSL 2009, LNCS 5658; W:111 cites Hansei's implementation of the colored balls.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/hansei _)
+  (⊦ (equal-approx? 1e-12)
+     (exact-posterior grass)
+     (hansei-&gt;histogram (probcc-reify/exact/a hansei-grass)))
+  (⊦ (equal-approx? 1e-12)
+     (exact-posterior girl)
+     (hansei-&gt;histogram (probcc-reify/exact/a hansei-girl)))
+  (⊦ (equal-approx? 1e-12)
+     (exact-posterior pcond4)
+     (hansei-&gt;histogram (probcc-reify/exact/a hansei-pcond4))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3871216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/kernel-residual"><a href="#test/kernel-residual"><code>test/kernel-residual</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>E10.  The 'extended semantics leaves its target invariant: the kernel residual 
+<mtext>maxₓ |(πT)(x) − π(x)|</mtext> is below 
+<mtext>10⁻¹²</mtext> on the finite models below.  The colored balls are cut to at most 3 balls and 2
+            draws, whose extended space has 864 states.</p>
+<p><code class="w3-codespan">nested-dispatch</code> reaches the deactivation of an observation that
+            the same step activated (deviation 8): subtracting its stale LL there would bias
+            the kernel, with a residual of about .078.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define nested-dispatch
+  (do/monad
+    (← x (dist uniformly '(1 2 3)))
+    (if_ (lift (cut &gt; &lt;&gt; 1) x)
+         (if_ (lift (cut &gt; &lt;&gt; 2) x)
+              (dist (condition #t bern) 0.1)
+              (dist (condition #t bern) 0.3))
+         (dist (condition #t bern) 0.6))
+    (return x)))
+</code></pre></div>
+<p>hakaru10.scm runs the kernel residual on five more models, next to their other
+            checks: <code class="w3-codespan">act-update</code> and <code class="w3-codespan">act-update/finite</code> (case B4), whose step activates an observation and updates its parameters at
+            once, and <code class="w3-codespan">guarded-car</code>, <code class="w3-codespan">guarded-car/reversed</code> and <code class="w3-codespan">nested-guarded-car</code> (case B6), whose inactive branches hold a deferred Dirac value.</p>
+<p>A state with no active resampleable node stays put (deviation 6): the residual
+            is 0 on a model whose only choice sits in a branch never taken.  A support with
+            duplicate points gives a value the weight of all its points, as the sampler
+            does: the residual of <code class="w3-codespan">uniformly '(1 1 2)</code>, whose 1 weighs 2/3,
+            is below 
+<mtext>10⁻¹²</mtext>.</p>
+<p>As a positive control, the residual exceeds 
+<mtext>10⁻³</mtext> (it is about .063)
+            on a model whose <code class="w3-codespan">liar</code> declares a support that disagrees with
+            its density, so that its proposal is not the one the acceptance ratio assumes.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (liar)
+  (make-distribution
+    'liar
+    #:log-density
+    (λ (x) (log (if x 0.9 0.1)))
+    #:sample
+    (λ (src)
+       (let1 (x (&lt; (rng-double! src 0.0 1.0) 0.9))
+             (values x (log (if x 0.9 0.1)))))
+    #:support
+    (τ '((#t . 0.5) (#f . 0.5)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define liar-or
+  (do/monad
+    (← a (dist liar))
+    (← b (dist bern 0.3))
+    (dist (condition #t bern) (lift (λ (av bv) (if (or av bv) 0.8 0.2)) a b))
+    (return a)))
+</code></pre></div>
+<p>A state whose extended LL is NaN or +inf weighs nothing, as exact enumeration
+            prunes it (E6) and no step enters it: the residual is that of the other states.  It
+            is still positive on <code class="w3-codespan">liar-or/nan</code>, the liar next to <code class="w3-codespan">nan-path</code>'s choice, and below 
+<mtext>10⁻¹²</mtext> on <code class="w3-codespan">nan-path</code> and on <code class="w3-codespan">plus-inf-state</code>, whose b = 1 has LL +inf and whose posterior is 2/3 and 1/3 on b = 2 and 3.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define liar-or/nan
+  (do/monad
+    (← a (dist liar))
+    (← b (dist bern 0.3))
+    (dist (condition #t bern) (lift (λ (av bv) (if (or av bv) 0.8 0.2)) a b))
+    (← k (dist uniformly '(0 1 2)))
+    (dist (condition 0.0 normal) 0.0 (lift exact-&gt;inexact k))
+    (return a)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define plus-inf-state
+  (do/monad
+    (← b (dist uniformly '(1 2 3)))
+    (dist (condition 0.0 uniform)
+          0.0
+          (lift (λ (bv) (case bv ((1) 0.0) ((2) 1.0) (else 2.0))) b))
+    (return b)))
+</code></pre></div>
+<p>With <code class="w3-codespan">#:semantics 'upstream</code> the kernel is upstream's, whose
+            step delays the updates of inactive nodes (Metropolis.hs:298-303), run from the
+            states where no update is delayed.  On <code class="w3-codespan">pswitch</code> its residual is .05, while the extended kernel's is below 
+<mtext>10⁻¹²</mtext>: the reactivation bias of E8, seen in one step.</p>
+<p>T is the independence proposal's (Distribution.hs:29-32), the default kernel: a
+            choice whose distribution has another kernel, such as <code class="w3-codespan">bern/flip</code>'s flip (Distribution.hs:64-70), is a <code class="w3-codespan">support</code> error, since T would not describe the engine's step.  A
+            model where no state has a positive weight, here one that observes <code class="w3-codespan">#t</code> from <code class="w3-codespan">bern 0</code>, has no target π: a <code class="w3-codespan">construction</code> error.</p>
+<p>cf. plan §6.11; Design 3 §5.9.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/kernel-residual _)
+  (define models
+    `((grass unquote grass)
+      (girl unquote girl)
+      (pcorr unquote (pcorr/pair 0.1))
+      (pcond1 unquote pcond1)
+      (pcond2 unquote pcond2)
+      (pcond4 unquote pcond4)
+      (post-bias unquote (post-bias 1.0))
+      (colored-balls-3x2 unquote (cballs-model 3 '(blue blue)))
+      (pswitch unquote pswitch)
+      (nested-dispatch unquote nested-dispatch)))
+  (⊦ equal?
+     '()
+     (filter-map
+       (Λ ((,name unquote model))
+          (let1 (residual (kernel-residual model))
+                (and (not (&lt; residual 1e-12)) (cons name residual))))
+       models))
+  (⊦ = 0.0 (kernel-residual (if_ #f (dist bern 0.5) (return 0))))
+  (⊦ &gt; 1e-12 (kernel-residual (dist (uniformly '(1 1 2)))))
+  (⊦ &lt; 0.001 (kernel-residual liar-or))
+  (⊦ &lt; 0.001 (kernel-residual liar-or/nan))
+  (⊦ &gt; 1e-12 (kernel-residual nan-path))
+  (⊦ &gt; 1e-12 (kernel-residual plus-inf-state))
+  (⊦ (equal-approx? 1e-12)
+     `((2 unquote (/ 2.0 3.0)) (3 unquote (/ 1.0 3.0)))
+     (exact-posterior plus-inf-state))
+  (⊦ &lt; 0.01 (kernel-residual pswitch #:semantics 'upstream))
+  (⊦ &gt; 1e-12 (kernel-residual pswitch #:semantics 'extended))
+  (⊦= 'support (hakaru10-kind (τ (kernel-residual (dist bern/flip 0.5)))))
+  (⊦= 'construction
+      (hakaru10-kind
+        (τ (kernel-residual
+             (do/monad
+               (← b (dist bern 0.5))
+               (dist (condition #t bern) 0.0)
+               (return b)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.448) (memory #(16793184 3888576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

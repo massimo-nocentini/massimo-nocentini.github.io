@@ -1,0 +1,976 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section3684">
+<header>
+<h1>Logic programming</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html">HANSEI as a Declarative Logic Programming Language</a></cite>, the logic programs of the page, of its files and of the parser combinators <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#parsec">`Reversible' parser combinators</a></cite>.</p>
+<section id="section3685">
+<header>
+<h1>Re-thinking Prolog</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#vs-prolog">Re-thinking Prolog</a></cite> (LG l.33-75) and its paper (RT):
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>One lesson is that guessing-- non-determinism-- is fundamental, but should not be the
+	  default mode of execution. One should guess, but guess lazily.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov, Yukiyoshi Kameyama</p></footer></blockquote>The library interface the paper relies on (RT Figure 1, l.285-308) is <code class="w3-codespan">dist</code>, <code class="w3-codespan">fail</code>, <code class="w3-codespan">reify0</code>, <code class="w3-codespan">letlazy</code>, <code class="w3-codespan">flip</code>, <code class="w3-codespan">uniformly</code>, <code class="w3-codespan">exact_reify</code> and <code class="w3-codespan">reify_part</code>, here <code class="w3-codespan">probcc-distribution</code>, <code class="w3-codespan">probcc-impossible</code>, <code class="w3-codespan">probcc-reify/0</code>, <code class="w3-codespan">probcc-letlazy</code> (and <code class="w3-codespan">probcc-letlazy/nesting</code>), <code class="w3-codespan">probcc-coin</code>, <code class="w3-codespan">probcc-uniform/either</code>, <code class="w3-codespan">probcc-reify/exact</code> and <code class="w3-codespan">probcc-reify/part</code>. The cheap non-determinism of RT §3.1, a generator
+	that guesses whole lists before testing them, finds the splits of a list only within a
+	bound, and diverges past it.</p>
+<section id="section3686">
+<header>
+<h1>No logic variables? No unification?</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#logic-var">No logic variables? No unification?</a></cite> (LG l.230-327): a logic variable is a generator of its domain, the sharing of the
+	generator expresses its repeated occurrences, and lazy evaluation delays the
+	generation as unification would:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>It appears that lazy evaluation can make up for logic variables, rendering Herbrand's
+	  original approach practical.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<section id="section3687">
+<header>
+<h1>The append relation</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#append">The append relation</a></cite> (LG l.328-624) and <code class="w3-codespan">logic_vars.ml</code>: the Prolog relation
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">&quot;append([],L,L).\nappend([H|T],L,[H|R]) :- append(T,L,R).&quot;
+</code></pre></div>becomes a function over lists with a non-deterministic spine, which runs forwards,
+	backwards and sideways once its arguments are logic variables. Prolog's committed
+	choice, needed in practice, breaks running backwards (PD:187-217):
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">&quot;del([H|T],H,T).\ndel([H|T],D,[H|R]) :- del(T,D,R).\nprog3(L,S) :- del(L,true,LRem) -&gt; S=deleted(LRem); S=failed.\n%% ?- prog3(L,S).\n%% L = [true|_G16],\n%% S = deleted(_G16).&quot;
+</code></pre></div>where HANSEI's soft-cut, a nested inference, keeps every answer.</p>
+<section id="section3688">
+<header>
+<h1>Solving scheduling problems</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#daily-schedule">Solving scheduling problems</a></cite> (LG l.625-757): state the constraints as evidence and ask for the worlds consistent
+	with them; a world is rejected as soon as one fact contradicts the evidence, so only a
+	part of the 8957952 worlds is generated.</p>
+<section id="section3689">
+<header>
+<h1>Zebra puzzle</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#zebra">Zebra puzzle</a></cite> (LG l.758-792): the all-different constraint of the five attributes is a lazy
+	permutation of <code class="w3-codespan">(aux hansei lazy)</code>, and the puzzle a naive
+	generate-and-test; its unique solution, at weight 1/199065600000, is in the long suite <code class="w3-codespan">hansei-long.scm</code>. The U2 bridge puzzle (<code class="w3-codespan">puzzle.ml</code>) and type inference run backwards (<code class="w3-codespan">type_inference.ml</code>) are two more programs that guess.</p>
+<section id="section3690">
+<header>
+<h1>Reversible parser combinators</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#parsec">`Reversible' parser combinators</a></cite> (LG l.793-996) and <code class="w3-codespan">parsec.ml</code>, the parser combinators of <code class="w3-codespan">(aux hansei parsec)</code> work over a non-deterministic stream:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>They can emulate not only parsing of a stream (that is, parsing forwards) but also
+	  determining a stream for the given parse (parsing backwards).</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<p>A stream is a thunk answering <code class="w3-codespan">'()</code> or a pair <code class="w3-codespan">(char . stream)</code>, and a parser maps a stream to the pair <code class="w3-codespan">(v . stream)</code> of its value and the rest. Alternation is a uniform
+	choice, so a parse comes with the probability of the choices that led to it. <code class="w3-codespan">parsec-run/backward</code> generates streams with <code class="w3-codespan">parsec-stream-over</code>, lazily, each cell a <code class="w3-codespan">probcc-letlazy/nesting</code>, and keeps those the parser accepts whole.</p>
+<section id="section3691">
+<header>
+<h1>Maximal munch, committed choice and nested inference</h1></header></section>
+<p>After <cite><a href="https://okmij.org/ftp/kakuritu/logic-programming.html#many">Maximal munch, committed choice and nested inference</a></cite> (LG l.997-1230): <code class="w3-codespan">parsec-many</code> is Prolog's
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">&quot;many(P,S,Rest) :- call(P,S,Srem) *-&gt; many(P,Srem,Rest) ; S = Rest.&quot;
+</code></pre></div>with the soft-cut <code class="w3-codespan">probcc-soft-cut</code>, a nested inference: <code class="w3-codespan">probcc-first-success</code> over the reified parser. Unlike Prolog's, it
+	keeps parsing backwards complete, since an inner reification lets the stream's choices
+	take effect in the outer world:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>many p (s1 | s2) = many p s1 | many p s2</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<h2 id="test/append"><a href="#test/append"><code>test/append</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The append relation run forwards (LV:39-163, LG <code class="w3-codespan">#append</code>): a logic variable is a generator of its domain, <code class="w3-codespan">a-boolean</code> or <code class="w3-codespan">a-blist</code>, made a variable by <code class="w3-codespan">probcc-letlazy/nesting</code>: once its value is asked for, it stays
+	    the same in its world. Without it the list <code class="w3-codespan">[X]</code> is drawn anew each time it is forced, and <code class="w3-codespan">?- bool(X), append([X],[f,f],R)</code> has four answers where Prolog
+	    has two. Explored to depth 5 the generators give both kinds of answers that Prolog's
+	    depth-first search misses, lists with an <code class="w3-codespan">f</code> after the three <code class="w3-codespan">t</code>'s among them.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/append _)
+  (⊦ equal?
+     '(((#t #t #t #f #f) 1))
+     (probcc-reify/part #f (τ (blist-&gt;list (bl-append bl-t3 bl-f2)))))
+  (⊦ equal?
+     '((((#t) (#t #f #f)) 1/4)
+       (((#t) (#f #f #f)) 1/4)
+       (((#f) (#t #f #f)) 1/4)
+       (((#f) (#f #f #f)) 1/4))
+     (probcc-reify/part
+       #f
+       (τ (let* ((l (τ (let1 (h (probcc-coin 1/2)) (cons h bl-nil))))
+                 (r (blist-&gt;list (bl-append l bl-f2)))
+                 (x (blist-&gt;list l)))
+            (list x r)))))
+  (⊦ equal?
+     '((() 1/2)
+       ((#t) 1/8)
+       ((#f) 1/8)
+       ((#t #t) 1/32)
+       ((#t #f) 1/32)
+       ((#f #t) 1/32)
+       ((#f #f) 1/32))
+     (probcc-reify/part 5 (τ (blist-&gt;list (a-blist)))))
+  (⊦ equal?
+     '((((#t) (#t #f #f)) 1/2) (((#f) (#f #f #f)) 1/2))
+     (probcc-reify/part
+       #f
+       (τ (let* ((l (probcc-letlazy/nesting
+                      (τ (let1 (h (probcc-coin 1/2)) (cons h bl-nil)))))
+                 (r (blist-&gt;list (bl-append l bl-f2)))
+                 (x (blist-&gt;list l)))
+            (list x r)))))
+  (⊦ equal?
+     '(((#t #t #t) 1/2)
+       ((#t #t #t #t) 1/8)
+       ((#t #t #t #f) 1/8)
+       ((#t #t #t #t #t) 1/32)
+       ((#t #t #t #t #f) 1/32)
+       ((#t #t #t #f #t) 1/32)
+       ((#t #t #t #f #f) 1/32))
+     (probcc-reify/part 5 (τ (blist-&gt;list (bl-append bl-t3 (a-blist))))))
+  (⊦ equal?
+     '(((#f #f) 1/2)
+       ((#t #f #f) 1/8)
+       ((#f #f #f) 1/8)
+       ((#t #t #f #f) 1/32)
+       ((#t #f #f #f) 1/32)
+       ((#f #t #f #f) 1/32)
+       ((#f #f #f #f) 1/32))
+     (probcc-reify/part 5 (τ (blist-&gt;list (bl-append (a-blist) bl-f2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3460688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/append/backwards"><a href="#test/append/backwards"><code>test/append/backwards</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The append relation run backwards (LV:165-268): the prefix, the suffix, all the
+	    splits of <code class="w3-codespan">[t,t,t,f,f]</code> and its last element are found by
+	    generate-and-test, <code class="w3-codespan">bl-compare</code> forcing the variables only as far as
+	    the comparison needs, so the search is finite and exhaustive; the weights estimate
+	    the size of the search space (e.g. 2^-12 for each of the six splits, 2^-22 for two
+	    variables equal to the five-element list). With the comparisons swapped, <code class="w3-codespan">x = y</code> is asked first, over two unbounded lists, and the search
+	    must be bounded (depth 30).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/append/backwards _)
+  (define (unappend x r)
+    (unless (bl-compare r bl-t3f2) (probcc-impossible))
+    (blist-&gt;list x))
+  (⊦ equal?
+     '(((#t #f #f) 1/128))
+     (probcc-reify/part
+       #f
+       (τ (let1 (x (a-blist))
+                (unappend x (bl-append (bl-cons #t (bl-cons #t bl-nil)) x))))))
+  (⊦ equal?
+     '(((#t #t #t) 1/128))
+     (probcc-reify/part
+       #f
+       (τ (let1 (x (a-blist))
+                (unappend x (bl-append x (bl-cons #f (bl-cons #f bl-nil))))))))
+  (⊦ equal?
+     (probcc-map
+       (λ (e) (list e 1/4096))
+       '(((#t #t #t #f #f) ())
+         ((#t #t #t #f) (#f))
+         ((#t #t #t) (#f #f))
+         ((#t #t) (#t #f #f))
+         ((#t) (#t #t #f #f))
+         (() (#t #t #t #f #f))))
+     (probcc-reify/part
+       #f
+       (τ (let* ((x (a-blist)) (y (a-blist)))
+            (unless (bl-compare (bl-append x y) bl-t3f2) (probcc-impossible))
+            (let* ((ly (blist-&gt;list y)) (lx (blist-&gt;list x))) (list lx ly))))))
+  (⊦ equal? '((#f 1/1024)) (probcc-reify/part #f (τ ((bl-last bl-t3f2)))))
+  (⊦ equal?
+     '(((#t #t #t #f #f) 1/4194304))
+     (probcc-reify/part
+       #f
+       (τ (let* ((x (a-blist)) (y (a-blist)))
+            (unless (bl-compare x bl-t3f2) (probcc-impossible))
+            (unless (bl-compare x y) (probcc-impossible))
+            (blist-&gt;list y)))))
+  (⊦ equal?
+     '(((#t #t #t #f #f) 1/4194304))
+     (probcc-reify/part
+       30
+       (τ (let* ((x (a-blist)) (y (a-blist)))
+            (unless (bl-compare x y) (probcc-impossible))
+            (unless (bl-compare x bl-t3f2) (probcc-impossible))
+            (blist-&gt;list y))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.023) (memory #(12582912 3935776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/committed-choice"><a href="#test/committed-choice"><code>test/committed-choice</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Deletion and committed choice (LV:270-444): <code class="w3-codespan">bl-del</code> deletes the first <code class="w3-codespan">#t</code> of a list, failing on a list without
+	    one; run backwards over <code class="w3-codespan">a-blist</code> it generates the lists that have
+	    one. Prolog's committed choice
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">&quot;prog3(L,S) :- del(L,true,LRem) -&gt; S=deleted(LRem) ; S=failed.&quot;
+</code></pre></div>loses the answers of <code class="w3-codespan">?- prog3(L,S).</code> but the first (PD:202-217);
+	    with the soft-cut <code class="w3-codespan">probcc-soft-cut</code>, a nested inference, <code class="w3-codespan">bl-prog3</code> keeps them all, <code class="w3-codespan">S=failed</code> (#f) for the lists without <code class="w3-codespan">#t</code>, and terminates with no bound
+	    over the lists of three elements.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/committed-choice _)
+  (define (with-remainder l)
+    (let* ((r (blist-&gt;list (bl-del l #t))) (x (blist-&gt;list l))) (list x r)))
+  (⊦ equal?
+     '(((#t #t #f #f) 1))
+     (probcc-reify/part #f (τ (blist-&gt;list (bl-del bl-t3f2 #t)))))
+  (⊦ equal?
+     '(((#t #t #t #f) 1))
+     (probcc-reify/part #f (τ (blist-&gt;list (bl-del bl-t3f2 #f)))))
+  (⊦ equal?
+     '((((#t) ()) 1/4) (((#f) ()) 1/4))
+     (probcc-reify/part
+       #f
+       (τ (with-remainder (τ (let1 (h (probcc-coin 1/2)) (cons h bl-nil)))))))
+  (⊦ equal?
+     '((((#t) ()) 1/2))
+     (probcc-reify/part
+       #f
+       (τ (with-remainder
+            (probcc-letlazy/nesting
+              (τ (let1 (h (probcc-coin 1/2)) (cons h bl-nil))))))))
+  (⊦ equal?
+     '((((#t) ()) 1/8)
+       (((#t #t) (#t)) 1/32)
+       (((#t #f) (#f)) 1/32)
+       (((#f #t) (#f)) 1/32))
+     (probcc-reify/part 5 (τ (with-remainder (a-blist)))))
+  (⊦ equal?
+     '((((#t #t #t) (#t #t)) 1/128)
+       (((#t #t #f) (#t #f)) 1/128)
+       (((#t #f #t) (#f #t)) 1/128)
+       (((#t #f #f) (#f #f)) 1/128)
+       (((#f #t #t) (#f #t)) 1/128)
+       (((#f #t #f) (#f #f)) 1/128)
+       (((#f #f #t) (#f #f)) 1/128))
+     (probcc-reify/part
+       #f
+       (τ (let1 (l (a-blist)) (bl-haslen l 3) (with-remainder l)))))
+  (⊦ equal?
+     '((((#f #f)) 1))
+     (probcc-reify/part
+       #f
+       (τ (bl-prog3/value (bl-cons #f (bl-cons #t (bl-cons #f bl-nil)))))))
+  (⊦ equal?
+     '(((() #f) 1/2)
+       (((#t) (())) 1/8)
+       (((#f) #f) 1/8)
+       (((#t #t) ((#t))) 1/32)
+       (((#t #f) ((#f))) 1/32)
+       (((#f #t) ((#f))) 1/32)
+       (((#f #f) #f) 1/32)
+       (((#t #t #t) ((#t #t))) 1/128)
+       (((#t #t #f) ((#t #f))) 1/128)
+       (((#t #f #t) ((#f #t))) 1/128)
+       (((#t #f #f) ((#f #f))) 1/128)
+       (((#f #t #t) ((#f #t))) 1/128)
+       (((#f #t #f) ((#f #f))) 1/128)
+       (((#f #f #t) ((#f #f))) 1/128)
+       (((#f #f #f) #f) 1/128)
+       (((#f #f #f #f) #f) 1/512))
+     (probcc-reify/part
+       9
+       (τ (let* ((l (a-blist)) (r (bl-prog3/value l)))
+            (list (blist-&gt;list l) r)))))
+  (⊦ equal?
+     '((((#t #t #t) ((#t #t))) 1/128)
+       (((#t #t #f) ((#t #f))) 1/128)
+       (((#t #f #t) ((#f #t))) 1/128)
+       (((#t #f #f) ((#f #f))) 1/128)
+       (((#f #t #t) ((#f #t))) 1/128)
+       (((#f #t #f) ((#f #f))) 1/128)
+       (((#f #f #t) ((#f #f))) 1/128)
+       (((#f #f #f) #f) 1/128))
+     (probcc-reify/part
+       #f
+       (τ (let1 (l (a-blist))
+                (bl-haslen l 3)
+                (let1 (r (bl-prog3/value l)) (list (blist-&gt;list l) r)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3461752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/committed-choice/letlazy"><a href="#test/committed-choice/letlazy"><code>test/committed-choice/letlazy</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Why LV:19 makes <code class="w3-codespan">letlazy</code> <code class="w3-codespan">letlazy_nesting</code>: the soft-cut of <code class="w3-codespan">bl-prog3</code> reifies <code class="w3-codespan">bl-del</code> in an inner world, which starts with an empty memory (N:75-81); with the plain <code class="w3-codespan">probcc-letlazy</code> the list is drawn anew inside, unrelated to the
+	    outer one, and the answers are wrong, e.g. the empty list has a remainder. The table
+	    is upstream's under the same change.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/committed-choice/letlazy _)
+  (⊦ equal?
+     '(((() (())) 1/16)
+       ((() ((#f))) 1/32)
+       (((#t) (())) 1/64)
+       (((#f) (())) 1/64)
+       ((() ((#t))) 1/64)
+       ((() ((#f #f))) 3/256)
+       (((#t) ((#f))) 1/128)
+       (((#f) ((#f))) 1/128)
+       ((() ((#f #t))) 1/128)
+       (((#t #t) (())) 1/256)
+       (((#t #f) (())) 1/256)
+       (((#t) ((#t))) 1/256)
+       (((#f #t) (())) 1/256)
+       (((#f #f) (())) 1/256)
+       (((#f) ((#t))) 1/256)
+       ((() ((#t #t))) 1/256)
+       ((() ((#t #f))) 1/256))
+     (probcc-reify/part
+       9
+       (τ (let* ((l (a-blist/with probcc-letlazy)) (r (bl-prog3/value l)))
+            (list (blist-&gt;list l) r))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3672920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/cheap-nondeterminism"><a href="#test/cheap-nondeterminism"><code>test/cheap-nondeterminism</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Cheap non-determinism (RT §3.1, p.4-5 l.318-392): append run backwards by
+	    generate-and-test over ordinary lists, <code class="w3-codespan">rt-a-list</code> drawing a
+	    whole list before <code class="w3-codespan">append</code> looks at it; the six splits of <code class="w3-codespan">[t,t,t,f,f]</code>, at 2^-12 each (the paper's rounded 0.0002), are
+	    found at depth 15 and at the paper's 25, where the generator has made many more
+	    candidates to reject; at depth 35 the search practically diverges (RT l.390-392).
+	    Compare the lazy <code class="w3-codespan">a-blist</code> above, which needs no bound.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/cheap-nondeterminism _)
+  (define (split bound)
+    (probcc-reify/part
+      bound
+      (τ (let* ((x (rt-a-list)) (y (rt-a-list)))
+           (unless (equal? (append x y) '(#t #t #t #f #f)) (probcc-impossible))
+           (list x y)))))
+  (define splits
+    (probcc-map
+      (λ (e) (list e 1/4096))
+      '(((#t #t #t #f #f) ())
+        ((#t #t #t #f) (#f))
+        ((#t #t #t) (#f #f))
+        ((#t #t) (#t #f #f))
+        ((#t) (#t #t #f #f))
+        (() (#t #t #t #f #f)))))
+  (⊦ equal? splits (split 15))
+  (⊦ equal? splits (split 25)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.73599999999999999)
+ (memory #(50331648 5019768 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/daily-schedule"><a href="#test/daily-schedule"><code>test/daily-schedule</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Mikael More's scheduling problem (DS, LG <code class="w3-codespan">#daily-schedule</code>): the actions of each day are a memoized subset of the four, a logic variable,
+	    and every constraint a fact about a uniformly chosen day. The schedule is unique: on
+	    Monday the supermarket and the shop, on Tuesday the walk and the barber; its weight,
+	    1/8957952 (upstream <code class="w3-codespan">1.11632658893461385e-07</code>), estimates the search space, of which only a part is visited, since a world
+	    is rejected as soon as one of its facts contradicts the evidence.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/daily-schedule _)
+  (⊦ equal?
+     (probcc-map
+       (λ (s) `((V ,s) 1/8))
+       '((3 2 1) (3 2) (3 1) (3) (2 1) (2) (1) ()))
+     (probcc-reify/exact (ds-powerset '(1 2 3))))
+  (⊦ equal?
+     '(((V #((Supermarket Shop) (Barber Walk) ())) 1/8957952))
+     (probcc-reify/exact (ds-schedule-model))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.056000000000000001)
+ (memory #(50331648 3466632 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bridge"><a href="#test/bridge"><code>test/bridge</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The U2 bridge puzzle (PZ:1-185): four people, one flashlight, at most two on
+	    the bridge, 17 minutes. With HANSEI's <code class="w3-codespan">SimpleNonDet</code> (<code class="w3-codespan">choose</code> a uniform choice, failing on the empty list) the
+	    exhaustive search finds the two known solutions, each crossing a pair <code class="w3-codespan">(party forward)</code>: Bono and Edge cross, one of them returns, Adam and Larry cross, the other
+	    returns, Bono and Edge cross. The weights, upstream's under OCaml (1/6912 and
+	    1/13824), are those of the choices that led to each trace.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bridge _)
+  (⊦ equal?
+     '(((V (((Bono Edge) #t)
+            ((Edge) #f)
+            ((Adam Larry) #t)
+            ((Bono) #f)
+            ((Bono Edge) #t)))
+        1/6912)
+       ((V (((Bono Edge) #t)
+            ((Bono) #f)
+            ((Adam Larry) #t)
+            ((Edge) #f)
+            ((Bono Edge) #t)))
+        1/13824))
+     (probcc-reify/exact (pz-loop '() #t 17 (list pz-u2 '())))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.222) (memory #(50331648 3467816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/type-inference/types"><a href="#test/type-inference/types"><code>test/type-inference/types</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Types read on demand (TI:81-199): a type is a procedure asked either for its value
+	    or to equal a given value, and a type variable, <code class="w3-codespan">ti-tp-memo</code>, keeps in a world-local reference (<code class="w3-codespan">probcc-wref-new</code>, deviation 17) the type it has become, so that it
+	    is the same whenever it is asked. Equating two types determines the first only as
+	    far as the second needs. <code class="w3-codespan">WorldLocalMem</code> is not shipped upstream; these tables are TI's, and are also what TI gives under
+	    OCaml with <code class="w3-codespan">wref_new</code>, <code class="w3-codespan">wref_get</code> and <code class="w3-codespan">wref_set</code> written over ProbM's memory.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/type-inference/types _)
+  (define (tp-and-arrow both?)
+    (let* ((tp (ti-tp-memo ti-a-tp))
+           (t2 (ti-tp-memo ti-a-tp))
+           (t1 (ti-tp-memo ti-a-tp))
+           (tpa (ti-arr t1 t2)))
+      (ti-tp-same tp tpa)
+      (when both? (ti-tp-same tpa tp))
+      (let* ((b (ti-string-of-tp tpa)) (a (ti-string-of-tp tp))) (list a b))))
+  (⊦ equal?
+     '((&quot;int&quot; 1/2) (&quot;int -&gt; int&quot; 1/8))
+     (probcc-reify/part 3 (τ (ti-string-of-tp ti-a-tp))))
+  (⊦ equal?
+     `(((V ,(void)) 1/2))
+     (probcc-explore 3 (probcc-reify/0 (τ (ti-tp-same ti-a-tp ti-int)))))
+  (⊦ equal?
+     `(((V ,(void)) 1/2))
+     (probcc-explore
+       3
+       (probcc-reify/0 (τ (ti-tp-same ti-a-tp (ti-arr ti-int ti-int))))))
+  (⊦ equal?
+     '((#t 11/16))
+     (probcc-reify/part
+       5
+       (τ (let1 (tp (ti-tp-memo ti-a-tp))
+                (let* ((b (ti-string-of-tp tp)) (a (ti-string-of-tp tp)))
+                  (equal? a b))))))
+  (⊦ equal?
+     '(((&quot;int -&gt; int&quot; &quot;int -&gt; int&quot;) 1/8)
+       ((&quot;int -&gt; int -&gt; int&quot; &quot;int -&gt; int -&gt; int&quot;) 1/32)
+       ((&quot;(int -&gt; int) -&gt; int&quot; &quot;(int -&gt; int) -&gt; int&quot;) 1/32))
+     (probcc-reify/part 5 (τ (tp-and-arrow #f))))
+  (⊦ equal?
+     '((#t 3/16))
+     (probcc-reify/part
+       5
+       (τ (match/first (tp-and-arrow #t) ((,a ,b) (equal? a b))))))
+  (⊦ equal?
+     '((#t 1/2))
+     (probcc-reify/part
+       5
+       (τ (let* ((tpa (ti-arr ti-int (ti-tp-memo ti-a-tp)))
+                 (int-&gt;int (ti-arr ti-int ti-int))
+                 (tpb (ti-arr (ti-tp-memo ti-a-tp) int-&gt;int)))
+            (ti-tp-same tpa tpb)
+            (let* ((b (ti-string-of-tp tpb)) (a (ti-string-of-tp tpa)))
+              (equal? a b))))))
+  (⊦ equal?
+     `((,(void) 1/2))
+     (probcc-reify/part
+       5
+       (τ (let* ((tpa (ti-tp-memo ti-a-tp)) (tpb (ti-arr tpa ti-int)))
+            (ti-tp-same tpa tpb)))))
+  (⊦ equal?
+     '()
+     (probcc-reify/part
+       #f
+       (τ (let* ((tpa (ti-tp-memo ti-a-tp)) (tpb (ti-arr tpa ti-int)))
+            (ti-tp-same tpa tpb)
+            (ti-tp-same ti-int tpa))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(50331648 3466768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/type-inference"><a href="#test/type-inference"><code>test/type-inference</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Type inference for the simply-typed lambda calculus (TI:209-263), forwards: <code class="w3-codespan">ti-typeof</code> gives every subterm a fresh type variable and equates
+	    types as the rules ask; an ill-typed term has no type, with no bound, and a
+	    polymorphic one has a stream of candidates, its instances, of which a bounded
+	    search shows the first. There is no occurs check, so <code class="w3-codespan">Lx. x x</code> gets cyclic types, printed up to depth 10.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/type-inference _)
+  (⊦ equal?
+     '((&quot;int -&gt; int&quot; 1/2)
+       (&quot;(int -&gt; int) -&gt; int&quot; 1/8)
+       (&quot;(int -&gt; int -&gt; int) -&gt; int&quot; 1/32)
+       (&quot;((int -&gt; int) -&gt; int) -&gt; int&quot; 1/32))
+     (ti-infer 4 (ti-lam &quot;f&quot; (ti-num 1))))
+  (⊦ equal? '() (ti-infer #f (ti-lam &quot;f&quot; ti-vx)))
+  (⊦ equal?
+     '((&quot;int -&gt; int&quot; 1/2)
+       (&quot;(int -&gt; int) -&gt; int -&gt; int&quot; 1/8)
+       (&quot;(int -&gt; int -&gt; int) -&gt; int -&gt; int -&gt; int&quot; 1/32)
+       (&quot;((int -&gt; int) -&gt; int) -&gt; (int -&gt; int) -&gt; int&quot; 1/32))
+     (ti-infer 4 (ti-lam &quot;f&quot; ti-vf)))
+  (⊦ equal?
+     '((&quot;int&quot; 1/2))
+     (ti-infer #f (ti-app (ti-lam &quot;f&quot; ti-vf) (ti-num 1))))
+  (⊦ equal?
+     '((&quot;(int -&gt; int) -&gt; int&quot; 1/4)
+       (&quot;(int -&gt; int -&gt; int) -&gt; int -&gt; int&quot; 1/16)
+       (&quot;(int -&gt; int -&gt; int -&gt; int) -&gt; int -&gt; int -&gt; int&quot; 1/64)
+       (&quot;(int -&gt; (int -&gt; int) -&gt; int) -&gt; (int -&gt; int) -&gt; int&quot; 1/64))
+     (ti-infer 5 (ti-lam &quot;f&quot; (ti-app ti-vf (ti-num 1)))))
+  (⊦ equal?
+     '((&quot;((((((((((... -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; int&quot;
+        1/4)
+       (&quot;((((((((((... -&gt; ...) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; int -&gt; int&quot;
+        1/16))
+     (ti-infer 3 (ti-lam &quot;x&quot; (ti-app ti-vx ti-vx))))
+  (⊦ equal?
+     (append
+       '((&quot;(int -&gt; int) -&gt; (int -&gt; int) -&gt; int&quot; 1/16)
+         (&quot;(int -&gt; int -&gt; int) -&gt; (int -&gt; int) -&gt; int -&gt; int&quot; 1/64)
+         (&quot;((int -&gt; int) -&gt; int) -&gt; (int -&gt; int -&gt; int) -&gt; int&quot; 1/64))
+       (probcc-map
+         (λ (s) (list s 1/256))
+         '(&quot;(int -&gt; int -&gt; int -&gt; int) -&gt; (int -&gt; int) -&gt; int -&gt; int -&gt; int&quot;
+           &quot;(int -&gt; (int -&gt; int) -&gt; int) -&gt; (int -&gt; int) -&gt; (int -&gt; int) -&gt; int&quot;
+           &quot;((int -&gt; int) -&gt; int -&gt; int) -&gt; (int -&gt; int -&gt; int) -&gt; int -&gt; int&quot;
+           &quot;((int -&gt; int -&gt; int) -&gt; int) -&gt; (int -&gt; int -&gt; int -&gt; int) -&gt; int&quot;
+           &quot;(((int -&gt; int) -&gt; int) -&gt; int) -&gt; (int -&gt; (int -&gt; int) -&gt; int) -&gt; int&quot;))
+       (probcc-map
+         (λ (s) (list s 1/1024))
+         '(&quot;(int -&gt; int -&gt; int -&gt; int -&gt; int) -&gt; (int -&gt; int) -&gt; int -&gt; int -&gt; int -&gt; int&quot;
+           &quot;(int -&gt; int -&gt; (int -&gt; int) -&gt; int) -&gt; (int -&gt; int) -&gt; int -&gt; (int -&gt; int) -&gt; int&quot;
+           &quot;(int -&gt; (int -&gt; int) -&gt; int -&gt; int) -&gt; (int -&gt; int) -&gt; (int -&gt; int) -&gt; int -&gt; int&quot;
+           &quot;(int -&gt; (int -&gt; int -&gt; int) -&gt; int) -&gt; (int -&gt; int) -&gt; (int -&gt; int -&gt; int) -&gt; int&quot;
+           &quot;(int -&gt; ((int -&gt; int) -&gt; int) -&gt; int) -&gt; (int -&gt; int) -&gt; ((int -&gt; int) -&gt; int) -&gt; int&quot;
+           &quot;((int -&gt; int) -&gt; int -&gt; int -&gt; int) -&gt; (int -&gt; int -&gt; int) -&gt; int -&gt; int -&gt; int&quot;
+           &quot;((int -&gt; int) -&gt; (int -&gt; int) -&gt; int) -&gt; (int -&gt; int -&gt; int) -&gt; (int -&gt; int) -&gt; int&quot;
+           &quot;((int -&gt; int -&gt; int) -&gt; int -&gt; int) -&gt; (int -&gt; int -&gt; int -&gt; int) -&gt; int -&gt; int&quot;
+           &quot;((int -&gt; int -&gt; int -&gt; int) -&gt; int) -&gt; (int -&gt; int -&gt; int -&gt; int -&gt; int) -&gt; int&quot;
+           &quot;((int -&gt; (int -&gt; int) -&gt; int) -&gt; int) -&gt; (int -&gt; int -&gt; (int -&gt; int) -&gt; int) -&gt; int&quot;
+           &quot;(((int -&gt; int) -&gt; int) -&gt; int -&gt; int) -&gt; (int -&gt; (int -&gt; int) -&gt; int) -&gt; int -&gt; int&quot;
+           &quot;(((int -&gt; int) -&gt; int -&gt; int) -&gt; int) -&gt; (int -&gt; (int -&gt; int) -&gt; int -&gt; int) -&gt; int&quot;
+           &quot;(((int -&gt; int -&gt; int) -&gt; int) -&gt; int) -&gt; (int -&gt; (int -&gt; int -&gt; int) -&gt; int) -&gt; int&quot;
+           &quot;((((int -&gt; int) -&gt; int) -&gt; int) -&gt; int) -&gt; (int -&gt; ((int -&gt; int) -&gt; int) -&gt; int) -&gt; int&quot;)))
+     (ti-infer
+       10
+       (ti-lam &quot;f&quot; (ti-lam &quot;x&quot; (ti-app ti-vf (ti-app ti-vx (ti-num 1)))))))
+  (⊦ equal?
+     '()
+     (ti-infer
+       #f
+       (ti-lam
+         &quot;f&quot;
+         (ti-lam
+           &quot;x&quot;
+           (ti-app
+             (ti-app ti-vf (ti-app ti-vx (ti-num 1)))
+             (ti-app ti-vx (ti-lam &quot;z&quot; ti-vz))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0080000000000000002)
+ (memory #(50331648 3476424 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/type-inference/backwards"><a href="#test/type-inference/backwards"><code>test/type-inference/backwards</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Type inference backwards (TI:265-310): <code class="w3-codespan">ti-a-term</code> generates terms read on demand, and asking for their types, or for the type <code class="w3-codespan">int -&gt; int</code>, keeps the well-typed ones: a type checker run as a
+	    generator of programs of a given type. The masses are the exact rationals of
+	    upstream's (e.g. 1/500 for <code class="w3-codespan">0.00200000000000000048</code>).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/type-inference/backwards _)
+  (define (generate bound)
+    (probcc-reify/part
+      bound
+      (τ (let* ((term (ti-a-term))
+                (tp (ti-string-of-tp (ti-typeof '() term)))
+                (s (ti-string-of-term term)))
+           (list s tp)))))
+  (⊦ equal?
+     '((&quot;1&quot; 1/10)
+       (&quot;x0&quot; 1/100)
+       (&quot;x1&quot; 9/1000)
+       (&quot;x2&quot; 81/10000)
+       (&quot;x3&quot; 729/100000)
+       (&quot;Lx0. 1&quot; 1/250)
+       (&quot;1 1&quot; 1/250)
+       (&quot;Lx1. 1&quot; 9/2500)
+       (&quot;Lx2. 1&quot; 81/25000)
+       (&quot;x0 1&quot; 1/2500)
+       (&quot;Lx0. x0&quot; 1/2500)
+       (&quot;1 x0&quot; 1/2500)
+       (&quot;x1 1&quot; 9/25000)
+       (&quot;1 x1&quot; 9/25000)
+       (&quot;Lx0. 1 1&quot; 1/6250)
+       (&quot;1 1 1&quot; 1/6250)
+       (&quot;1 (Lx0. 1)&quot; 1/6250)
+       (&quot;1 (1 1)&quot; 1/6250)
+       (&quot;(Lx0. 1) 1&quot; 1/6250))
+     (probcc-reify/part 5 (τ (ti-string-of-term (ti-a-term)))))
+  (⊦ equal? '(((&quot;1&quot; &quot;int&quot;) 1/10) ((&quot;Lx0. 1&quot; &quot;int -&gt; int&quot;) 1/500)) (generate 4))
+  (⊦ equal?
+     '(((&quot;1&quot; &quot;int&quot;) 1/10)
+       ((&quot;Lx0. 1&quot; &quot;int -&gt; int&quot;) 1/500)
+       ((&quot;Lx1. 1&quot; &quot;int -&gt; int&quot;) 9/5000))
+     (generate 5))
+  (⊦ equal?
+     '(((&quot;1&quot; &quot;int&quot;) 1/10)
+       ((&quot;Lx0. 1&quot; &quot;int -&gt; int&quot;) 1/500)
+       ((&quot;Lx1. 1&quot; &quot;int -&gt; int&quot;) 9/5000)
+       ((&quot;Lx2. 1&quot; &quot;int -&gt; int&quot;) 81/50000)
+       ((&quot;Lx3. 1&quot; &quot;int -&gt; int&quot;) 729/500000)
+       ((&quot;Lx0. 1&quot; &quot;(int -&gt; int) -&gt; int&quot;) 1/2000)
+       ((&quot;Lx1. 1&quot; &quot;(int -&gt; int) -&gt; int&quot;) 9/20000)
+       ((&quot;Lx0. x0&quot; &quot;int -&gt; int&quot;) 1/5000)
+       ((&quot;(Lx0. 1) 1&quot; &quot;int&quot;) 1/12500)
+       ((&quot;(Lx1. 1) 1&quot; &quot;int&quot;) 9/125000))
+     (generate 7))
+  (⊦ equal?
+     `(((&quot;Lx0. 1&quot; ,(void)) 1/500)
+       ((&quot;Lx1. 1&quot; ,(void)) 9/5000)
+       ((&quot;Lx2. 1&quot; ,(void)) 81/50000)
+       ((&quot;Lx3. 1&quot; ,(void)) 729/500000)
+       ((&quot;Lx4. 1&quot; ,(void)) 6561/5000000)
+       ((&quot;Lx5. 1&quot; ,(void)) 59049/50000000)
+       ((&quot;Lx6. 1&quot; ,(void)) 531441/500000000)
+       ((&quot;Lx0. x0&quot; ,(void)) 1/5000)
+       ((&quot;Lx1. x1&quot; ,(void)) 81/500000)
+       ((&quot;Lx2. x2&quot; ,(void)) 6561/50000000)
+       ((&quot;Lx0. (Lx0. 1) 1&quot; ,(void)) 1/625000)
+       ((&quot;(Lx0. Lx0. 1) 1&quot; ,(void)) 1/625000))
+     (probcc-reify/part
+       10
+       (τ (let* ((term (ti-a-term))
+                 (u (ti-tp-same (ti-arr ti-int ti-int) (ti-typeof '() term)))
+                 (s (ti-string-of-term term)))
+            (list s u))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.073999999999999996)
+ (memory #(50331648 4916688 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/kit"><a href="#test/parsec/kit"><code>test/parsec/kit</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The streams and the primitive parsers (PS:24-144, 278-290): <code class="w3-codespan">parsec-or</code> is a uniform choice of two parsers, nested to the left
+	    for more, <code class="w3-codespan">parsec-alt</code> of a list of them; a parse that leaves some
+	    input, or fails, gives no world. Explored to depth 5, <code class="w3-codespan">parsec-stream-over</code> gives upstream's table of PS:272-273, a fair
+	    coin and a uniform character per cell (deviation 22: the unit value is <code class="w3-codespan">(void)</code>, the alphabet a list).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/kit _)
+  (define abc (parsec-stream-of-string &quot;abc&quot;))
+  (⊦ equal? &quot;abc&quot; (parsec-string-of-stream abc))
+  (⊦ equal? &quot;&quot; (parsec-string-of-stream (parsec-stream-of-string &quot;&quot;)))
+  (⊦ equal? #\a (car (abc)))
+  (⊦ equal? &quot;bc&quot; (parsec-string-of-stream (cdr (abc))))
+  (⊦ equal? `(((V ,(void)) 1)) (parsec-run/forward parsec-eof &quot;&quot;))
+  (⊦ equal? '() (parsec-run/forward parsec-eof &quot;a&quot;))
+  (⊦ equal? `(((V ,(void)) 1)) (parsec-run/forward parsec-empty &quot;&quot;))
+  (⊦ equal? '(((V x) 1)) (parsec-run/forward (parsec-pure 'x) &quot;&quot;))
+  (⊦ equal? '() (parsec-run/forward (parsec-pure 'x) &quot;a&quot;))
+  (⊦ equal? '(((V #\a) 1)) (parsec-run/forward p-a &quot;a&quot;))
+  (⊦ equal? '() (parsec-run/forward p-a &quot;b&quot;))
+  (⊦ equal? '() (parsec-run/forward p-a &quot;&quot;))
+  (⊦ equal? '() (parsec-run/forward p-a &quot;ab&quot;))
+  (⊦ equal? '(((V #\7) 1)) (parsec-run/forward (parsec-sat char-numeric?) &quot;7&quot;))
+  (⊦ equal? '(((V 7) 1)) (parsec-run/forward digit &quot;7&quot;))
+  (⊦ equal?
+     '(((V (#\a #\b)) 1))
+     (parsec-run/forward (parsec-ap (parsec-fmap pair p-a) p-b) &quot;ab&quot;))
+  (⊦ equal? '(((V #\b) 1)) (parsec-run/forward (parsec-right p-a p-b) &quot;ab&quot;))
+  (⊦ equal? '(((V #\a) 1)) (parsec-run/forward (parsec-left p-a p-b) &quot;ab&quot;))
+  (⊦ equal?
+     '(((V #\a) 1/2))
+     (probcc-reify/exact
+       (car ((parsec-or p-a p-b) (parsec-stream-of-string &quot;ab&quot;)))))
+  (⊦ equal?
+     '(((V #\a) 1/4))
+     (parsec-run/forward (parsec-or (parsec-or p-a p-b) p-b) &quot;a&quot;))
+  (⊦ equal?
+     '(((V #\a) 1/3))
+     (parsec-run/forward (parsec-alt (list p-a p-b p-b)) &quot;a&quot;))
+  (⊦ equal? '() (parsec-run/forward (parsec-alt '()) &quot;&quot;))
+  (⊦ equal?
+     '(((V 3) 1/16))
+     (parsec-run/forward
+       (parsec-fix
+         (λ (p)
+            (parsec-or
+              (parsec-fmap (λ (_) 0) parsec-eof)
+              (parsec-right p-a (parsec-fmap add1 p)))))
+       &quot;aaa&quot;))
+  (⊦ equal? `(((V ,(void)) 1)) (probcc-reify/exact (parsec-stream-len abc 3)))
+  (⊦ equal? '() (probcc-reify/exact (parsec-stream-len abc 2)))
+  (⊦ equal? '() (probcc-reify/exact (parsec-stream-len abc 4)))
+  (⊦ equal?
+     `(((V ,(void)) 1))
+     (probcc-reify/exact (parsec-stream-at-most-len abc 3)))
+  (⊦ equal?
+     `(((V ,(void)) 1))
+     (probcc-reify/exact (parsec-stream-at-most-len abc 4)))
+  (⊦ equal? '() (probcc-reify/exact (parsec-stream-at-most-len abc 2)))
+  (⊦ equal?
+     `(((V &quot;&quot;) 1/2)
+       ((V &quot;b&quot;) 1/8)
+       ((V &quot;a&quot;) 1/8)
+       ((V &quot;bb&quot;) 1/32)
+       ((V &quot;ba&quot;) 1/32)
+       ((V &quot;ab&quot;) 1/32)
+       ((V &quot;aa&quot;) 1/32)
+       ,@(make-list 16 '(C 1/128)))
+     (shape (probcc-explore
+              5
+              (probcc-reify/0
+                (τ (parsec-string-of-stream
+                     (parsec-stream-over '(#\a #\b)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 3482112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/palindromes"><a href="#test/parsec/palindromes"><code>test/parsec/palindromes</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Recognizing palindromes forwards (PS:188-251), with the left-nested binary <code class="w3-codespan">parsec-or</code> and with <code class="w3-codespan">parsec-alt</code> of the five alternatives; the probabilities are the exact rationals of upstream's
+	    floats, e.g. 1/25 for <code class="w3-codespan">0.0399999999999999939</code> (PS:241).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/palindromes _)
+  (⊦ equal? '() (parsec-run/forward pali &quot;ab&quot;))
+  (⊦ equal? `(((V ,(void)) 1/64)) (parsec-run/forward pali &quot;aa&quot;))
+  (⊦ equal? `(((V ,(void)) 1/256)) (parsec-run/forward pali &quot;aaaa&quot;))
+  (⊦ equal? `(((V ,(void)) 1/32)) (parsec-run/forward pali &quot;aba&quot;))
+  (⊦ equal? `(((V ,(void)) 1/512)) (parsec-run/forward pali &quot;abaaba&quot;))
+  (⊦ equal? '() (parsec-run/forward pali/alt &quot;ab&quot;))
+  (⊦ equal? `(((V ,(void)) 1/25)) (parsec-run/forward pali/alt &quot;aa&quot;))
+  (⊦ equal? `(((V ,(void)) 1/125)) (parsec-run/forward pali/alt &quot;aaaa&quot;))
+  (⊦ equal? `(((V ,(void)) 1/25)) (parsec-run/forward pali/alt &quot;aba&quot;))
+  (⊦ equal? `(((V ,(void)) 1/625)) (parsec-run/forward pali/alt &quot;abaaba&quot;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 3473696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/backward"><a href="#test/parsec/backward"><code>test/parsec/backward</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Parsing backwards (PS:253-310): <code class="w3-codespan">parsec-run/backward</code> generates the streams of <code class="w3-codespan">parsec-stream-over</code> and keeps those the parser accepts whole; bounded to depth 10 it finds the
+	    palindromes of at most three characters, and with streams of exactly five
+	    characters (<code class="w3-codespan">parsec-stream-len</code>) the exploration is exhaustive:
+	    the eight palindromes, each at 1/256000 (upstream <code class="w3-codespan">3.90625000000000093e-06</code>). The Curry counterpart is <code class="w3-codespan">findall (\[x1,x2,x3,x4,x5] -&gt; pali [x1,x2,x3,x4,x5] =:= [])</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/backward _)
+  (⊦ equal?
+     `(((V (,(void) &quot;&quot;)) 1/10)
+       ((V (,(void) &quot;b&quot;)) 1/40)
+       ((V (,(void) &quot;a&quot;)) 1/40)
+       ((V (,(void) &quot;bb&quot;)) 1/800)
+       ((V (,(void) &quot;aa&quot;)) 1/800)
+       ((V (,(void) &quot;bbb&quot;)) 1/3200)
+       ((V (,(void) &quot;bab&quot;)) 1/3200)
+       ((V (,(void) &quot;aba&quot;)) 1/3200)
+       ((V (,(void) &quot;aaa&quot;)) 1/3200))
+     (let1 (pv (parsec-run/backward
+                 10
+                 pali/alt
+                 (τ (parsec-stream-over '(#\a #\b)))))
+           (filter (λ1-match/first (((V ,_) ,_) #t) (else #f)) pv)))
+  (⊦ equal?
+     (probcc-map
+       (λ (s) `((V (,(void) ,s)) 1/256000))
+       '(&quot;bbbbb&quot; &quot;bbabb&quot; &quot;babab&quot; &quot;baaab&quot; &quot;abbba&quot; &quot;ababa&quot; &quot;aabaa&quot; &quot;aaaaa&quot;))
+     (parsec-run/backward
+       #f
+       pali/alt
+       (τ (let1 (st (parsec-stream-over '(#\a #\b)))
+                (parsec-stream-len st 5)
+                st)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(50331648 3483328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/many"><a href="#test/parsec/many"><code>test/parsec/many</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The tests of <code class="w3-codespan">parsec-many</code> (PS:316-395; the table of LG
+	    l.1104-1146): it munches maximally, so it has one parse where a Kleene star has
+	    several, and fails where a shorter munch would let the rest parse, e.g. <code class="w3-codespan">many (p_char 'a') &lt;* p_char 'a'</code> on <code class="w3-codespan">&quot;aaa&quot;</code>; <code class="w3-codespan">many/no-munch</code>, upstream's commented-out <code class="w3-codespan">many</code> (PS:146-151), gives the parses of every munch instead. Parsed
+	    backwards, <code class="w3-codespan">parsec-many</code> still generates its whole language.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/many _)
+  (define many-a (parsec-many p-a))
+  (⊦ equal? '(((V ()) 1)) (parsec-run/forward (parsec-left many-a p-b) &quot;b&quot;))
+  (⊦ equal? '(((V (#\a #\a #\a)) 1)) (parsec-run/forward many-a &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V ((#\a #\a #\a) ())) 1))
+     (parsec-run/forward (parsec-ap (parsec-fmap pair many-a) many-a) &quot;aaa&quot;))
+  (⊦ equal? '() (parsec-run/forward (parsec-left many-a p-a) &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V (#\a #\b #\a #\b #\b)) 1/32))
+     (parsec-run/forward (parsec-many (parsec-or p-a p-b)) &quot;ababb&quot;))
+  (⊦ equal?
+     '(((V ((#\a #\a #\a))) 1))
+     (parsec-run/forward (parsec-many (parsec-many1 p-a)) &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V ((#\a #\a #\a) (#\b) (#\a) (#\b))) 1/16))
+     (parsec-run/forward
+       (parsec-many (parsec-or (parsec-many1 p-a) (parsec-many1 p-b)))
+       &quot;aaabab&quot;))
+  (⊦ equal?
+     '(((V (&quot;aa&quot; &quot;a&quot;)) 1/4) ((V (&quot;a&quot; &quot;aa&quot;)) 1/4) ((V (&quot;a&quot; &quot;a&quot; &quot;a&quot;)) 1/8))
+     (parsec-run/forward
+       (parsec-left
+         (parsec-many
+           (parsec-or
+             (parsec-left (parsec-left (parsec-pure &quot;aa&quot;) p-a) p-a)
+             (parsec-left (parsec-pure &quot;a&quot;) p-a)))
+         p-b)
+       &quot;aaab&quot;))
+  (⊦ equal?
+     '()
+     (parsec-run/forward
+       (parsec-left (parsec-many (parsec-or (parsec-left p-a p-a) p-a)) p-a)
+       &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V (#\a)) 1/8) ((V (#\a #\a)) 1/32))
+     (parsec-run/forward
+       (parsec-left (many/no-munch (parsec-or (parsec-left p-a p-a) p-a)) p-a)
+       &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V (#\a #\a)) 1/8))
+     (parsec-run/forward (parsec-left (many/no-munch p-a) p-a) &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V (#\a #\a #\a)) 1/16))
+     (parsec-run/forward (many/no-munch p-a) &quot;aaa&quot;))
+  (⊦ equal?
+     '(((V ((() #\b) &quot;b&quot;)) 1/8)
+       ((V (((#\a) #\b) &quot;ab&quot;)) 1/32)
+       ((V (((#\a #\a) #\b) &quot;aab&quot;)) 1/128))
+     (parsec-run/backward
+       #f
+       (parsec-ap (parsec-fmap pair many-a) p-b)
+       (τ (let1 (st (parsec-stream-over '(#\a #\b)))
+                (parsec-stream-at-most-len st 3)
+                st))))
+  (⊦ equal?
+     '(((V (() &quot;&quot;)) 1/2)
+       ((V ((#\a) &quot;a&quot;)) 1/8)
+       ((V ((#\a #\a) &quot;aa&quot;)) 1/32)
+       ((V ((#\a #\a #\a) &quot;aaa&quot;)) 1/128)
+       (C 1/256)
+       (C 1/256))
+     (shape (parsec-run/backward
+              9
+              many-a
+              (τ (parsec-stream-over '(#\a #\b)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(50331648 3492088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/expression"><a href="#test/parsec/expression"><code>test/parsec/expression</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The arithmetic expressions of the Curry example (PS:397-466): <code class="w3-codespan">num &quot;123&quot;</code> is 123 for sure, <code class="w3-codespan">expression &quot;10&quot;</code> is 10 at 1/8 (three binary alternatives on the way to <code class="w3-codespan">num</code>), and <code class="w3-codespan">&quot;(10+5*2)/4&quot;</code> is 5 at 2^-16 (upstream <code class="w3-codespan">1.52587890625e-05</code>).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/expression _)
+  (⊦ equal? '(((V 123) 1)) (parsec-run/forward num &quot;123&quot;))
+  (⊦ equal? '(((V 10) 1/8)) (parsec-run/forward expression &quot;10&quot;))
+  (⊦ equal? '(((V 5) 1/65536)) (parsec-run/forward expression &quot;(10+5*2)/4&quot;))
+  (⊦ equal? '(((V 1) 1/64)) (parsec-run/forward expression &quot;7/4&quot;))
+  (⊦ equal? '() (parsec-run/forward expression &quot;1+&quot;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 3479096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/factor"><a href="#test/parsec/factor"><code>test/parsec/factor</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Generating expressions (PS:514-529): <code class="w3-codespan">factor</code> explored to depth 14 over the four-character streams of the balanced <code class="w3-codespan">exp_stream</code> (a digit with probability 3/10) has 17768 entries, 10100
+	    of them values, as under OCaml; among them <code class="w3-codespan">(9999 &quot;9999&quot;)</code> and <code class="w3-codespan">(9998 &quot;9998&quot;)</code> at 81/200000000 (upstream <code class="w3-codespan">4.05000000000000305e-07</code>).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/factor _)
+  (define pv
+    (parsec-run/backward
+      14
+      factor
+      (exp-stream/balanced 7/10 probcc-uniform/either)))
+  (define leaves (filter (λ1-match/first (((V ,_) ,_) #t) (else #f)) pv))
+  (⊦ equal? '(17768 10100) (list (length pv) (length leaves)))
+  (⊦ equal?
+     '(((V (9999 &quot;9999&quot;)) 81/200000000) ((V (9998 &quot;9998&quot;)) 81/200000000))
+     (filter
+       (λ1-match/first
+         (((V (,_ ,s)) ,_) (member s '(&quot;9999&quot; &quot;9998&quot;)))
+         (else #f))
+       leaves)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.26500000000000001)
+ (memory #(25165824 9629000 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/parsec/nested"><a href="#test/parsec/nested"><code>test/parsec/nested</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The nested-inference law of LG l.1212-1215: <code class="w3-codespan">many p (s1 | s2) = many p s1 | many p s2</code>. With <code class="w3-codespan">s1</code> a random stream and <code class="w3-codespan">s2</code> the stream of <code class="w3-codespan">&quot;aab&quot;</code>, a stream chosen lazily inside the soft-cut of <code class="w3-codespan">parsec-many</code> (<code class="w3-codespan">probcc-letlazy/nesting</code>) gives the same tree, to depth 6, as a stream chosen before parsing: the inner
+	    reification lets the stream's choice take effect in the outer world, as under
+	    OCaml.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/parsec/nested _)
+  (define (many-over choose)
+    (probcc-explore
+      6
+      (probcc-reify/0
+        (τ (let* ((s1 (parsec-stream-over '(#\a #\b)))
+                  (s2 (parsec-stream-of-string &quot;aab&quot;))
+                  (x (choose s1 s2)))
+             (car ((parsec-many p-a) x)))))))
+  (define left
+    (many-over
+      (λ (s1 s2)
+         (probcc-letlazy/nesting (τ ((probcc-uniform/either (list s1 s2))))))))
+  (define right (many-over (λ (s1 s2) (probcc-uniform/either (list s1 s2)))))
+  (⊦ equal?
+     '(((V (#\a #\a)) 1/2) ((V ()) 3/8) ((V (#\a)) 3/32) (C 1/64) (C 1/64))
+     (shape left))
+  (⊦ equal? (shape left) (shape right)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 9652640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/parsec"><a href="#test/replay/parsec"><code>test/replay/parsec</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The sampling records of PS:492-501 and PS:531-546, importance sampling of 80
+	    expressions of four characters and of 2000 over the more balanced streams, with <code class="w3-codespan">(probcc-random-selector 17)</code>, replayed bit for bit: the characters are drawn with a transcription of upstream's <code class="w3-codespan">uniform</code> (P:156-165), since <code class="w3-codespan">probcc-uniform</code>'s masses are exact (deviation 7), and the parsers are the module's. With <code class="w3-codespan">parsec-stream-over</code>, whose masses are exact, the draws are the same
+	    and the two expressions come with the exact 1/2560. The runs of 30000 samples,
+	    PS:504-512 and PS:549-557, are in the long suite.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/parsec _)
+  (⊦ equal?
+     '(((V (7139 &quot;7139&quot;)) 0.00039062499999999997)
+       ((V (5164 &quot;5164&quot;)) 0.00039062499999999997))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       80
+       (expression-model (exp-stream ml-stream-over))))
+  (⊦ equal?
+     '(((V (7139 &quot;7139&quot;)) 1/2560) ((V (5164 &quot;5164&quot;)) 1/2560))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       80
+       (expression-model (exp-stream parsec-stream-over))))
+  (⊦ equal?
+     (append
+       '(((V (3403 &quot;3403&quot;)) 0.00050000000000000001)
+         ((V (1396 &quot;1396&quot;)) 0.00050000000000000001)
+         ((V (55 &quot;55+0&quot;)) 2.5000000000000022e-05))
+       (probcc-map
+         (λ (n)
+            `((V (,n ,(string-append &quot;55+&quot; (number-&gt;string (- n 55)))))
+              2.5000000000000001e-05))
+         '(64 63 62 61 60 59 58 57 56))
+       '(((V (92 &quot;(92)&quot;)) 2.0000000000000005e-05)
+         ((V (66 &quot;(66)&quot;)) 2.0000000000000005e-05)))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       2000
+       (expression-model
+         (exp-stream/balanced 0.69999999999999996 ml-uniformly)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.17199999999999999)
+ (memory #(25165824 3529944 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -1,0 +1,203 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section697">
+<header>
+<h1>McCarthy's <code class="w3-codespan">amb</code> and a SAT solver</h1></header></section>
+<p>Ported from on-scheme's <code class="w3-codespan">continuations.scm</code>.</p>
+<section id="section698">
+<header>
+<h1>Implementation</h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux continuation classic)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken continuation)
+    (only (chicken fixnum) fx+ fx- fx&lt;)
+    (only srfi-1 last)
+    (aux base)
+    (aux continuation))
+  (define (continuation-rewind! winds n)
+    (cond ((eq? ##sys#dynamic-winds winds) (void))
+          ((fx&lt; n 0)
+           (continuation-rewind! (cdr winds) (fx+ n 1))
+           ((car (car winds)))
+           (set! ##sys#dynamic-winds winds))
+          (else
+           (let1 (after (cdr (car ##sys#dynamic-winds)))
+                 (set! ##sys#dynamic-winds (cdr ##sys#dynamic-winds))
+                 (after)
+                 (continuation-rewind! winds (fx- n 1))))))
+  (define continuation-&gt;λ
+    (λ (raw)
+       (##sys#check-structure raw 'continuation 'continuation-&gt;λ)
+       (let1 (winds (##sys#slot raw 2))
+             (λ args
+                (unless
+                  (eq? ##sys#dynamic-winds winds)
+                  (continuation-rewind!
+                    winds
+                    (fx- (length ##sys#dynamic-winds) (length winds))))
+                (apply continuation-return raw args)))))
+  (define-syntax-rule
+    (letcc/raw (raw hop) body ...)
+    (continuation-capture
+      (λ (raw) (let1 (hop (continuation-&gt;λ raw)) body ...))))
+  (define (apply/cc f . args)
+    (letcc k (apply f (append (butlast args) (last args) (list k)))))
+  (define-syntax
+    escapecc
+    (syntax-rules
+      (else =&gt;)
+      ((escapecc (out α) (else β)) (letcc out α β))
+      ((escapecc (out α) (=&gt; f)) (letcc out (let1 (result α) (f result))))))
+  (define-syntax
+    trycc/named
+    (syntax-rules
+      (else =&gt;)
+      ((trycc/named (skip α) ... (else β))
+       (letcc success (letcc skip (success α)) ... β))
+      ((trycc/named (skip α) ... (else =&gt; f))
+       (letcc success
+              (let1 (outputs (list (letcc skip (success α)) ...))
+                    (f outputs))))))
+  (define-syntax-rule (set/cc! v) (set! v (letcc/raw (raw hop) hop)))
+  (define-syntax
+    cond/cc
+    (syntax-rules
+      (else)
+      ((cond/cc (pred? handling) ... (else recv))
+       (letcc/raw
+         (cont hop)
+         (cond ((continuation? cont) (recv hop))
+               ((pred? cont) (handling cont))
+               ...
+               (else (error &quot;Contract violation&quot;)))))))
+  (define current-continuation/cont
+    (τ (continuation-capture (λ (cont) ((continuation-&gt;λ cont) cont)))))
+  (define current-continuation/λ
+    (τ (continuation-capture (compose Φ continuation-&gt;λ))))
+  (define-syntax-rule
+    (letcc/escaper escaper body ...)
+    ((letcc top
+            (let1 (escaper (λ (proc) (λ args (top (τ (apply proc args))))))
+                  (τ body ...))))))
+</code></pre></div>
+<h2 id="test/amb/pythagorean"><a href="#test/amb/pythagorean"><code>test/amb/pythagorean</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/amb/pythagorean _)
+  (⊦= '((3 4 5) (4 3 5))
+      (amb (λ (ε ? ✗ ✓)
+              (let ((a (ε (list 1 2 3 4 5 6 7)))
+                    (b (ε (list 1 2 3 4 5 6 7)))
+                    (c (ε (list 1 2 3 4 5 6 7))))
+                (? (= (* c c) (+ (* a a) (* b b))))
+                (✓ (list a b c))
+                (✗))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2056688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/amb/ordered"><a href="#test/amb/ordered"><code>test/amb/ordered</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/amb/ordered _)
+  (⊦= '((4 3 5))
+      (amb (λ (ε ? ✗ ✓)
+              (let* ((a (ε (list 1 2 3 4 5 6 7)))
+                     (b (ε (list 1 2 3 4 5 6 7)))
+                     (c (ε (list 1 2 3 4 5 6 7))))
+                (? (= (* c c) (+ (* a a) (* b b))))
+                (? (&lt; b a))
+                (✓ (list a b c))
+                (✗)))))
+  (⊦= '() (amb (λ (ε ? ✗ ✓) (✗))))
+  (⊦= '() (amb (λ (ε ? ✗ ✓) (ε '())))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2058648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/amb/parameterize"><a href="#test/amb/parameterize"><code>test/amb/parameterize</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/amb/parameterize _)
+  (define q (make-parameter 'outer))
+  (⊦= '((1 inner outer) (2 inner outer) (3 inner outer))
+      (amb (λ (ε ? ✗ ✓)
+              (let* ((inside #f)
+                     (a (parameterize
+                          ((q 'inner))
+                          (let1 (a (ε '(1 2 3))) (set! inside (q)) a))))
+                (✓ (list a inside (q)))
+                (✗)))))
+  (⊦= 'outer (q)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2063472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/amb/dynamic-wind"><a href="#test/amb/dynamic-wind"><code>test/amb/dynamic-wind</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/amb/dynamic-wind _)
+  (define wlog '())
+  (⊦= '(1 2 3)
+      (amb (λ (ε ? ✗ ✓)
+              (let1 (a (dynamic-wind
+                         (τ (push! 'in wlog))
+                         (τ (ε '(1 2 3)))
+                         (τ (push! 'out wlog))))
+                    (✓ a)
+                    (✗)))))
+  (⊦= '(in out in out in out in out) (reverse wlog)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2064032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sat-solve"><a href="#test/sat-solve"><code>test/sat-solve</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sat-solve _)
+  (⊦= (list (list #t) (list #f)) (sat-solve (x) (or #t x)))
+  (⊦= '((#t #t) (#t #f)) (sat-solve (x y) (or x y)))
+  (⊦= (list (list #f #f #t))
+      (sat-solve (a b c) (and (implies a (not b)) (not a) c)))
+  (⊦= (list (list #f #t #t #t) (list #f #t #t #t))
+      (sat-solve
+        (x1 x3 x4 x5)
+        (and (or x1 (not x5) x4) (or (not x1) x5 x3 x4)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2065312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/implies"><a href="#test/implies"><code>test/implies</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/implies _)
+  (⊨ (implies #f #f))
+  (⊨ (implies #f #t))
+  (⊭ (implies #t #f))
+  (⊨ (implies #t #t)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2066576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

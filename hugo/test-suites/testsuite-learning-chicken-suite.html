@@ -1,0 +1,115 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/booleans"><a href="#test/booleans"><code>test/booleans</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/booleans _)
+  (⊦= 'fail (if #f 'succeed 'fail))
+  (⊦= 'succeed (if '() 'succeed 'fail))
+  (⊦= 'succeed (if `(,#f ,#f) 'succeed 'fail))
+  (⊦= 'else (cond ((and #t #f) =&gt; (λ (y) #t)) (else 'else))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1960280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/hash-table"><a href="#test/hash-table"><code>test/hash-table</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/hash-table _)
+  (let1 (H (make-hash-table))
+        (hash-table-set! H 'hello 'world)
+        (⊦= #t (hash-table-exists? H 'hello)))
+  (let1 (H (make-hash-table))
+        (hash-table-set! H 'hello 'world)
+        (hash-table-set! H 'hello 'new-world)
+        (⊦= 'new-world (hash-table-ref H 'hello)))
+  (⊦= '(3 4 5)
+      (sort (hash-table-fold
+              (alist-&gt;hash-table '((a . 3) (b . 4) (c . 5)))
+              (λ (k v acc) (cons v acc))
+              '())
+            &lt;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1967072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/output-ports"><a href="#test/output-ports"><code>test/output-ports</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/output-ports _)
+  (let* ((str-port (open-output-string))
+         (result
+           (with-output-to-port
+             str-port
+             (λ () (display &quot;hello world&quot;) &quot;succeed&quot;))))
+    (⊦= &quot;hello world&quot; (get-output-string str-port))
+    (⊦= &quot;succeed&quot; result))
+  (call+stdout
+    (λ () (display &quot;hello world&quot;) '(hello world))
+    (λ (r s) (⊨ (and (equal? '(hello world) r) (equal? &quot;hello world&quot; s)))))
+  (⊦= &quot;succeed&quot; (with-output-to-string (λ () (display 'succeed) #t)))
+  (⊦= &quot;hello-world&quot;
+      (call-with-output-string (λ (port) (display 'hello-world port) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1963760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/multiple-values"><a href="#test/multiple-values"><code>test/multiple-values</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/multiple-values _)
+  (⊦= '(hello world)
+      (call-with-values (λ () (values 'hello 'world)) identity*))
+  (⊦= 'succeed (values 'succeed))
+  (⊦= 'fail (values 'fail 'succeed)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1964456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/keyword-arguments"><a href="#test/keyword-arguments"><code>test/keyword-arguments</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/keyword-arguments _)
+  (define-syntax
+    add-key-args
+    (syntax-rules
+      ()
+      ((_ name) (define name (lambda (#!key (hello 0)) (add1 hello))))))
+  (add-key-args f)
+  (define g (lambda (#!key (hello 0)) (add1 hello)))
+  (⊦= 1 (f))
+  (⊦= 4 (f #:hello 3))
+  (⊦= 1 (f #:hello₁ 3))
+  (⊦error (identity 0 #:hello 3))
+  (⊦= 1 (g))
+  (⊦= 4 (g #:hello 3))
+  (⊦= 1 (g #:hello₁ 3)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1970256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/eval-ignores-lexical-scope"><a href="#test/eval-ignores-lexical-scope"><code>test/eval-ignores-lexical-scope</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/eval-ignores-lexical-scope _) (let1 (x 4) (⊦error (eval 'x))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1970504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

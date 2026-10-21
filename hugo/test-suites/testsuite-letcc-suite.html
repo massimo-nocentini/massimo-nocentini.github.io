@@ -19,9 +19,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
-<section id="section772">
+<section id="section437">
 <header>
 <h1>Call with current continuation: the <code class="w3-codespan">letcc</code> macro</h1></header></section>
 <p>The fundamental macro <code class="w3-codespan">letcc</code> in the form 
@@ -29,31 +31,20 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(letcc k body ...)
 </code></pre></div> binds <code class="w3-codespan">k</code> to the <i>current continuation </i><cite><a href="https://docs.scheme.org/schintro/schintro_141.html"></a></cite><cite><a href="https://en.wikipedia.org/wiki/Call-with-current-continuation"></a></cite><cite><a href="https://ds26gte.github.io/tyscheme/index-Z-H-15.html"></a></cite><cite><a href="https://matt.might.net/articles/programming-with-continuations--exceptions-backtracking-search-threads-generators-coroutines/">Continuations by example</a></cite> in <code class="w3-codespan">body...</code> expressions; for the sake of clarity, it expands to
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(continuation-capture
-  (λ (cont)
-      (let1 (k (λ args (continuation-graft cont (τ (apply values args)))))
-            body
-            ...)))
-</code></pre></div>where <code class="w3-codespan">continuation-capture</code> and <code class="w3-codespan">continuation-return</code> are defined in <cite><a href="https://wiki.call-cc.org/man/5/Module%20(chicken%20continuation)">Module <code class="w3-codespan">(chicken continuation)</code></a></cite> and based on <cite><a href="http://www.iro.umontreal.ca/~feeley/papers/FeeleySW01.pdf">A Better API for First-Class Continuations</a></cite> by Marc Feeley, respectively.</p>
-<section id="section782">
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(call-with-current-continuation (λ (k) body ...))
+</code></pre></div>that is, to plain <code class="w3-codespan">call/cc</code>, which leaves and enters again the <code class="w3-codespan">dynamic-wind</code> frames, hence the <code class="w3-codespan">parameterize</code> forms, between the capture and the resume.  It used to be built on <code class="w3-codespan">continuation-capture</code> and <code class="w3-codespan">continuation-graft</code> of <cite><a href="https://wiki.call-cc.org/man/5/Module%20(chicken%20continuation)">Module <code class="w3-codespan">(chicken continuation)</code></a></cite>, after <cite><a href="http://www.iro.umontreal.ca/~feeley/papers/FeeleySW01.pdf">A Better API for First-Class Continuations</a></cite> by Marc Feeley, but a graft does not unwind nor rewind those frames: a continuation resumed across a <code class="w3-codespan">parameterize</code> left the runtime's winds stale, and a second resume crashed it.</p>
+<section id="section441">
 <header>
 <h1>Implementation</h1></header></section>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
   (aux continuation)
   *
-  (import scheme (chicken base) (chicken continuation) (aux base))
+  (import scheme (chicken base) (aux base))
   (define-syntax-rule
     (letcc/call hop body ...)
     (call-with-current-continuation (λ (hop) body ...)))
-  (define-syntax-rule
-    (letcc hop body ...)
-    (continuation-capture
-      (λ (cont)
-          (let1 (hop (λ args
-                         (continuation-graft cont (τ (apply values args)))))
-                body
-                ...))))
+  (define-syntax-rule (letcc hop body ...) (letcc/call hop body ...))
   (define (callcc f) (letcc k (f k)))
   (define-syntax-rule
     (letcc* next ((v exp) ...) body ...)
@@ -71,35 +62,30 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcc/multiarg _) (⊦= 'a (letcc k (k 'a))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 2075064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2054040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/letcc*"><a href="#test/letcc*"><code>test/letcc*</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>The frame in <cite><a href="https://mitpress.mit.edu/9780262561006/the-seasoned-schemer/">The Seasoned Schemer: page 89, see <code class="w3-codespan">rember1*</code> definition.</a></cite> is of inspiration of the <code class="w3-codespan">letcc*</code> macro.</p>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(continuation-capture
-  (λ (cont)
-      (let1 (success
-              (λ args (continuation-graft cont (τ (apply values args)))))
-            (let* ((v (letcc ⤶ (success vexpr))) (⤶ success)) body ...))))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(call-with-current-continuation
+  (λ (success) (let* ((v (letcc ⤶ (success vexpr))) (⤶ success)) body ...)))
 </code></pre></div>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/letcc* _)
   (⊦= '(1) (letcc* ⤶ ((v (cons 1 '())) (w (cons 2 v))) (cons 4 w)))
-  (⊦= '(2 1)
-        (letcc* ⤶ ((v (cons 1 (⤶ '(1)))) (w (cons 2 v))) (cons 4 w)))
+  (⊦= '(2 1) (letcc* ⤶ ((v (cons 1 (⤶ '(1)))) (w (cons 2 v))) (cons 4 w)))
   (⊦= '(4 3 1)
-        (letcc*
-          ⤶
-          ((v (cons 1 (⤶ '(1)))) (w (cons 2 (⤶ (cons 3 v)))))
-          (cons 4 w)))
+      (letcc*
+        ⤶
+        ((v (cons 1 (⤶ '(1)))) (w (cons 2 (⤶ (cons 3 v)))))
+        (cons 4 w)))
   (⊦= '(1 2) (letcc* ⤶ ((v (cons 3 (⤶ '(2))))) (cons 1 v)))
   (⊦= '(3 2) (letcc* ⤶ ((v (cons 1 (⤶ '(2))))) (⤶ (cons 3 v))))
   (⊦= '(2) (letcc* ⤶ ((v (cons 3 (⤶ '(2))))) (cons 1 (⤶ v))))
-  (⊦= '(4 2)
-        (letcc* ⤶ ((v (cons 3 (⤶ '(2))))) (cons 1 (⤶ (cons 4 v))))))
+  (⊦= '(4 2) (letcc* ⤶ ((v (cons 3 (⤶ '(2))))) (cons 1 (⤶ (cons 4 v))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2077416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2050176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/trycc"><a href="#test/trycc"><code>test/trycc</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -109,7 +95,7 @@
   (⊦= '(3) (trycc (✗ (+ 1 (✗)) (+ 2 (✗))) (else (cons 3 '())))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2078912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2054456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/letcc/dfs"><a href="#test/letcc/dfs"><code>test/letcc/dfs</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -129,8 +115,8 @@
                              (dft-node (car tree)))))))
            (restart
              (τ (if (null? *saved*)
-                   witness
-                   (let1 (cont (pop! *saved*)) (cont)))))
+                  witness
+                  (let1 (cont (pop! *saved*)) (cont)))))
            (dft-comb
              (lambda (another)
                (lambda (tree)
@@ -145,70 +131,70 @@
     (⊦= '(a b d h c e f i g) (dft2 (dft-node t1)))
     (set! col '())
     (⊦= '((a 1)
-            (a 2)
-            (a 3)
-            (a 6)
-            (a 7)
-            (a 4)
-            (a 5)
-            (b 1)
-            (b 2)
-            (b 3)
-            (b 6)
-            (b 7)
-            (b 4)
-            (b 5)
-            (d 1)
-            (d 2)
-            (d 3)
-            (d 6)
-            (d 7)
-            (d 4)
-            (d 5)
-            (h 1)
-            (h 2)
-            (h 3)
-            (h 6)
-            (h 7)
-            (h 4)
-            (h 5)
-            (c 1)
-            (c 2)
-            (c 3)
-            (c 6)
-            (c 7)
-            (c 4)
-            (c 5)
-            (e 1)
-            (e 2)
-            (e 3)
-            (e 6)
-            (e 7)
-            (e 4)
-            (e 5)
-            (f 1)
-            (f 2)
-            (f 3)
-            (f 6)
-            (f 7)
-            (f 4)
-            (f 5)
-            (i 1)
-            (i 2)
-            (i 3)
-            (i 6)
-            (i 7)
-            (i 4)
-            (i 5)
-            (g 1)
-            (g 2)
-            (g 3)
-            (g 6)
-            (g 7)
-            (g 4)
-            (g 5))
-          (dft2 ((dft-comb t2) t1)))))
+          (a 2)
+          (a 3)
+          (a 6)
+          (a 7)
+          (a 4)
+          (a 5)
+          (b 1)
+          (b 2)
+          (b 3)
+          (b 6)
+          (b 7)
+          (b 4)
+          (b 5)
+          (d 1)
+          (d 2)
+          (d 3)
+          (d 6)
+          (d 7)
+          (d 4)
+          (d 5)
+          (h 1)
+          (h 2)
+          (h 3)
+          (h 6)
+          (h 7)
+          (h 4)
+          (h 5)
+          (c 1)
+          (c 2)
+          (c 3)
+          (c 6)
+          (c 7)
+          (c 4)
+          (c 5)
+          (e 1)
+          (e 2)
+          (e 3)
+          (e 6)
+          (e 7)
+          (e 4)
+          (e 5)
+          (f 1)
+          (f 2)
+          (f 3)
+          (f 6)
+          (f 7)
+          (f 4)
+          (f 5)
+          (i 1)
+          (i 2)
+          (i 3)
+          (i 6)
+          (i 7)
+          (i 4)
+          (i 5)
+          (g 1)
+          (g 2)
+          (g 3)
+          (g 6)
+          (g 7)
+          (g 4)
+          (g 5))
+        (dft2 ((dft-comb t2) t1)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 2089688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2067520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

@@ -1,0 +1,208 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/timeouts/order"><a href="#test/timeouts/order"><code>test/timeouts/order</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/order _)
+  (⊦= '(b c a)
+      (cdr (run/log
+             (τ (for-each
+                  (λ (tag secs) (spawn (τ (cml/sleep secs) (note! tag))))
+                  '(a b c)
+                  '(0.06 0.02 0.04))
+                (cml/sleep 0.1)
+                (cml/shutdown))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5524088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/duration"><a href="#test/timeouts/duration"><code>test/timeouts/duration</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/duration _)
+  (let1 (dt (run/value
+              (τ (let1 (t0 (cml/now)) (cml/sleep 0.05) (- (cml/now) t0)))))
+        (⊨ (&gt;= dt 0.049))
+        (⊨ (&lt; dt 1.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5525280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/zero-and-past"><a href="#test/timeouts/zero-and-past"><code>test/timeouts/zero-and-past</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/zero-and-past _)
+  (⊦= '(zero past later)
+      (cdr (run/log
+             (τ (sync (timeout-evt 0))
+                (note! 'zero)
+                (sync (at-time-evt (- (cml/now) 10)))
+                (note! 'past)
+                (sync (at-time-evt (+ (cml/now) 0.02)))
+                (note! 'later)
+                (cml/shutdown))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5526208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/lifo-ties"><a href="#test/timeouts/lifo-ties"><code>test/timeouts/lifo-ties</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/lifo-ties _)
+  (⊦= '(second first)
+      (cdr (run/log
+             (τ (let1 (t (+ (cml/now) 0.03))
+                      (spawn (τ (sync (at-time-evt t)) (note! 'first)))
+                      (spawn (τ (sync (at-time-evt t)) (note! 'second)))
+                      (cml/sleep 0.06)
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5530176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sync/timeout"><a href="#test/sync/timeout"><code>test/sync/timeout</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sync/timeout _)
+  (⊦= '(none (got 7) timeout #f)
+      (cdr (run/log
+             (τ (let1 (c (make-channel))
+                      (note! (sync/timeout (recv-evt c) 0.01 'none))
+                      (spawn (τ (send c 7)))
+                      (note! (list 'got (sync/timeout (recv-evt c) 1)))
+                      (note! (select
+                               (wrap (timeout-evt 0.01) (λ (x) 'timeout))
+                               (recv-evt c)))
+                      (note! (sync/timeout never-evt 0.01))
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5536944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sync/timeout/zero-is-a-poll"><a href="#test/sync/timeout/zero-is-a-poll"><code>test/sync/timeout/zero-is-a-poll</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sync/timeout/zero-is-a-poll _)
+  (⊦= '(42 (1 1 1 1) (7 7 7) (x x) none none d)
+      (cdr (run/log
+             (τ (let ((ch (make-channel)) (iv (make-ivar)))
+                  (spawn (τ (send ch 42)))
+                  (cml/yield)
+                  (note! (sync/timeout (recv-evt ch) 0 'none))
+                  (note! (map (λ (i) (sync/timeout (always-evt 1) 0 'd))
+                              (iota 4)))
+                  (ivar-put! iv 7)
+                  (note! (map (λ (i) (sync/timeout (ivar-get-evt iv) 0 'd))
+                              (iota 3)))
+                  (note! (map (λ (i)
+                                 (sync/timeout
+                                   (choose (recv-evt ch) (always-evt 'x))
+                                   -1
+                                   'd))
+                              (iota 2)))
+                  (note! (sync/timeout (recv-evt ch) 0 'none))
+                  (note! (sync/timeout
+                           (choose (recv-evt ch) never-evt)
+                           0
+                           'none))
+                  (note! (sync/timeout (timeout-evt 0.5) 0 'd))
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5533376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/yield-loop"><a href="#test/timeouts/yield-loop"><code>test/timeouts/yield-loop</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/yield-loop _)
+  (⊦= 'timer-fired
+      (run-cml
+        (τ (spawn (τ (let loop ((n 0))
+                       (if (&lt; n 1000000)
+                         (begin (cml/yield) (loop (add1 n)))
+                         (cml/shutdown 'starved)))))
+           (cml/sleep 0.02)
+           (cml/shutdown 'timer-fired))))
+  (⊦= 'filled
+      (run/value
+        (τ (let1 (iv (make-ivar))
+                 (spawn (τ (cml/sleep 0.02) (ivar-put! iv 'filled)))
+                 (let loop ((n 0))
+                   (cond ((pair? (ivar-get-poll iv)) (car (ivar-get-poll iv)))
+                         ((&lt; n 1000000) (cml/yield) (loop (add1 n)))
+                         (else 'starved))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.039) (memory #(12582912 5534264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/many-sleepers"><a href="#test/timeouts/many-sleepers"><code>test/timeouts/many-sleepers</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/many-sleepers _)
+  (define (cost n)
+    (let1 (t0 (current-process-milliseconds))
+          (⊦= 'ok
+              (run/value
+                (τ (for-each
+                     (λ (i) (spawn (τ (cml/sleep (+ 3600 i)))))
+                     (iota n))
+                   (let1 (ch (make-channel))
+                         (spawn (τ (let loop () (send ch 1) (loop))))
+                         (do ((i 0 (add1 i)))
+                             ((= i (* 4 n)) 'ok)
+                           (recv ch))))))
+          (- (current-process-milliseconds) t0)))
+  (let* ((small (max 20 (cost 300))) (large (cost 3000)))
+    (⊨ (&lt; large (* 30 small)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.037) (memory #(12582912 5536144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/losing-timeouts-are-dropped"><a href="#test/timeouts/losing-timeouts-are-dropped"><code>test/timeouts/losing-timeouts-are-dropped</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/losing-timeouts-are-dropped _)
+  (let1 (n (run/value
+             (τ (let1 (ch (make-channel))
+                      (spawn (τ (let loop () (cml/yield) (send ch 1) (loop))))
+                      (do ((i 0 (add1 i)))
+                          ((= i 500))
+                        (select (recv-evt ch) (timeout-evt 1000)))
+                      %time-n))))
+        (⊨ (&lt;= n (+ (* 2 %clean-budget-min) 2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 5536920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/timeouts/cancelled-wait-not-woken"><a href="#test/timeouts/cancelled-wait-not-woken"><code>test/timeouts/cancelled-wait-not-woken</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/timeouts/cancelled-wait-not-woken _)
+  (⊦= '(got after)
+      (cdr (run/log
+             (τ (let1 (c (make-channel))
+                      (spawn (τ (sync (choose
+                                        (wrap (timeout-evt 0.02)
+                                              (λ (x) (note! 'timed-out)))
+                                        (wrap (recv-evt c) (λ (x) (note! 'got)))))))
+                      (send c 'x)
+                      (cml/sleep 0.05)
+                      (note! 'after)
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5536208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

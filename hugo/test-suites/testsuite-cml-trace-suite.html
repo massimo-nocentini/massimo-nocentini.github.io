@@ -1,0 +1,412 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section1404">
+<header>
+<h1>Concurrent ML library: TraceCML</h1></header></section>
+<p>Trace modules, thread watching and uncaught exception handlers, a port of <code class="w3-codespan">TraceCML</code> with its bugs fixed.</p>
+<h2 id="test/modules"><a href="#test/modules"><code>test/modules</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/modules _)
+  (let* ((a (trace-module trace-module/root &quot;lib-a&quot;))
+         (b (trace-module a &quot;b&quot;))
+         (c (trace-module b &quot;c&quot;)))
+    (⊨ (trace-module? a))
+    (⊭ (trace-module? &quot;/lib-a/&quot;))
+    (⊭ (trace-module? (make-channel)))
+    (⊦= &quot;/&quot; (trace-module-name trace-module/root))
+    (⊦= &quot;/lib-a/&quot; (trace-module-name a))
+    (⊦= &quot;/lib-a/b/c/&quot; (trace-module-name c))
+    (⊦= &quot;#&lt;trace-module /lib-a/b/&gt;&quot; (-&gt;string b))
+    (⊦= &quot;/ThreadWatcher/&quot; (trace-module-name trace-watcher))
+    (⊨ (eq? b (trace-module a &quot;b&quot;)))
+    (⊨ (eq? b (trace-module &quot;/lib-a/&quot; &quot;b&quot;)))
+    (⊨ (eq? c (trace-module-of &quot;/lib-a/b/c/&quot;)))
+    (⊨ (eq? c (trace-module-of &quot;lib-a//b/c&quot;)))
+    (⊨ (eq? trace-module/root (trace-module-of &quot;/&quot;)))
+    (⊨ (eq? trace-module/root (trace-module-of &quot;&quot;)))
+    (⊦raises (exn cml no-such-module) (trace-module-of &quot;/lib-a/nope/&quot;))
+    (⊦raises (exn cml trace) (trace-module a &quot;x/y&quot;))
+    (⊦raises (exn cml trace) (trace-module a &quot;&quot;))
+    (⊦= '(raised ok)
+        (run/value
+          (τ (list (raised-or
+                     (exn cml no-such-module)
+                     (trace-module-of &quot;/nope/&quot;))
+                   (and (eq? c (trace-module-of &quot;/lib-a/b/c&quot;)) 'ok)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3193096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/on-off-hierarchy"><a href="#test/on-off-hierarchy"><code>test/on-off-hierarchy</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/on-off-hierarchy _)
+  (let* ((a (trace-module trace-module/root &quot;lib-h&quot;))
+         (b (trace-module a &quot;b&quot;))
+         (c (trace-module b &quot;c&quot;))
+         (d (trace-module a &quot;d&quot;))
+         (flags (τ (map tracing? (list a b c d)))))
+    (⊦= '(#f #f #f #f) (flags))
+    (trace-on! b)
+    (⊦= '(#f #t #t #f) (flags))
+    (⊨ (tracing? (trace-module c &quot;new&quot;)))
+    (⊭ (tracing? (trace-module d &quot;new&quot;)))
+    (trace-on! a)
+    (⊦= '(#t #t #t #t) (flags))
+    (trace-off! b)
+    (⊦= '(#t #f #f #t) (flags))
+    (trace-off! &quot;/lib-h/&quot;)
+    (trace-on-only! b)
+    (⊦= '(#f #t #f #f) (flags))
+    (⊦= '((&quot;/lib-h/&quot; . #f)
+          (&quot;/lib-h/d/&quot; . #f)
+          (&quot;/lib-h/d/new/&quot; . #f)
+          (&quot;/lib-h/b/&quot; . #t)
+          (&quot;/lib-h/b/c/&quot; . #f)
+          (&quot;/lib-h/b/c/new/&quot; . #f))
+        (map (λ (p) (cons (trace-module-name (car p)) (cdr p)))
+             (trace-status a)))
+    (⊨ (tracing? trace-watcher))
+    (trace-off! a)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3191240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/trace-output"><a href="#test/trace-output"><code>test/trace-output</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/trace-output _)
+  (let* ((m (trace-module trace-module/root &quot;lib-out&quot;))
+         (calls 0)
+         (msg (τ (set! calls (add1 calls)) (list &quot;x=&quot; 1 &quot; &quot; 'y &quot;\n&quot;))))
+    (⊦= &quot;&quot; (with-output-to-string (τ (trace m msg))))
+    (⊦= 0 calls)
+    (dynamic-wind
+      (τ (trace-on! m))
+      (τ (⊦= &quot;x=1 y\n&quot; (with-output-to-string (τ (trace m msg))))
+         (⊦= &quot;x=1 y\n&quot;
+             (with-error-output-to-string
+               (τ (parameterize ((trace-to 'err)) (trace m msg)))))
+         (⊦= &quot;&quot;
+             (with-output-to-string
+               (τ (parameterize ((trace-to 'null)) (trace m msg)))))
+         (⊦= &quot;plain&quot;
+             (call-with-output-string
+               (λ (port)
+                  (parameterize ((trace-to port)) (trace m (τ &quot;plain&quot;))))))
+         (⊦= 50000
+             (string-length
+               (call-with-output-string
+                 (λ (port)
+                    (parameterize
+                      ((trace-to port))
+                      (trace m (τ (make-list 50000 &quot;a&quot;))))))))
+         (⊦= 3 calls)
+         (⊦raises (exn cml trace) (trace-to 42))
+         (⊦= &quot;t1\nt2\nmain\n&quot;
+             (with-output-to-string
+               (τ (run-cml
+                    (τ (join-all
+                         (map (λ (s) (spawn (τ (trace m (τ (list s &quot;\n&quot;))))))
+                              '(&quot;t1&quot; &quot;t2&quot;)))
+                       (trace m (τ '(&quot;main\n&quot;)))
+                       (cml/shutdown))))))
+         (⊦= '(&quot;to-ch 1&quot; &quot;to-mb 2&quot;)
+             (run/value
+               (τ (let ((ch (make-channel)) (mb (make-mailbox)))
+                    (spawn (τ (parameterize
+                                ((trace-to ch))
+                                (trace m (τ '(&quot;to-ch &quot; 1))))))
+                    (parameterize ((trace-to mb)) (trace m (τ '(&quot;to-mb &quot; 2))))
+                    (list (recv ch) (mailbox-recv mb))))))
+         (let1 (mb (make-mailbox))
+               (parameterize ((trace-to mb)) (trace m msg))))
+      (τ (trace-off! m)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(12582912 3293232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/trace-file"><a href="#test/trace-file"><code>test/trace-file</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/trace-file _)
+  (let* ((m (trace-module trace-module/root &quot;lib-file&quot;))
+         (file (create-temporary-file &quot;.txt&quot;)))
+    (dynamic-wind
+      void
+      (τ (trace-on! m)
+         (parameterize
+           ((trace-to file))
+           (run-cml
+             (τ (trace m (τ '(&quot;one\n&quot;)))
+                (trace m (τ '(&quot;two\n&quot;)))
+                (cml/shutdown)))
+           (run-cml (τ (trace m (τ '(&quot;three\n&quot;))) (cml/shutdown))))
+         (⊦= &quot;one\ntwo\nthree\n&quot;
+             (with-input-from-file file (τ (read-string #f))))
+         (let* ((err #f)
+                (out (with-output-to-string
+                       (τ (set! err
+                            (with-error-output-to-string
+                              (τ (parameterize
+                                   ((trace-to &quot;/nonexistent-dir/x/trace.txt&quot;))
+                                   (trace m (τ '(&quot;lost\n&quot;)))
+                                   (trace m (τ '(&quot;found\n&quot;)))))))))))
+           (⊦= &quot;lost\nfound\n&quot; out)
+           (⊨ (and (substring-index &quot;unable to open&quot; err) #t))))
+      (τ (trace-close-files!) (trace-off! m) (delete-file* file)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3294608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/trace-file-closed-after-the-servers"><a href="#test/trace-file-closed-after-the-servers"><code>test/trace-file-closed-after-the-servers</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/trace-file-closed-after-the-servers _)
+  (let* ((m (trace-module trace-module/root &quot;lib-file-servers&quot;))
+         (file (create-temporary-file &quot;.txt&quot;)))
+    (dynamic-wind
+      void
+      (τ (trace-on! m)
+         (cml/log-server!
+           &quot;trace-test-server&quot;
+           void
+           (τ (trace m (τ '(&quot;server shut\n&quot;)))))
+         (parameterize
+           ((trace-to file))
+           (run-cml (τ (trace m (τ '(&quot;in run\n&quot;))) (cml/shutdown))))
+         (⊦= '() %trace-files)
+         (⊦= &quot;in run\nserver shut\n&quot;
+             (with-input-from-file file (τ (read-string #f)))))
+      (τ (cml/unlog-server! &quot;trace-test-server&quot;)
+         (trace-close-files!)
+         (trace-off! m)
+         (delete-file* file)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3158400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/watch"><a href="#test/watch"><code>test/watch</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/watch _)
+  (let1 (out (with-output-to-string
+               (τ (⊦= '(#t #f done)
+                      (cdr (run/log
+                             (τ (let* ((c (make-channel)) (t (spawn (τ (recv c)))))
+                                  (watch &quot;worker&quot; t)
+                                  (note! (watched? t))
+                                  (send c 'die)
+                                  (cml/yield)
+                                  (note! (watched? t))
+                                  (note! 'done)
+                                  (cml/shutdown)))))))))
+        (⊦= &quot;WARNING!  Watched thread worker [000003] has died.\n&quot; out)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3160304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/watch/many-threads"><a href="#test/watch/many-threads"><code>test/watch/many-threads</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/watch/many-threads _)
+  (define (cost n)
+    (let1 (t0 (current-process-milliseconds))
+          (⊦= &quot;&quot;
+              (with-output-to-string
+                (τ (run-cml
+                     (τ (let* ((iv (make-ivar))
+                               (ts (map (λ (i) (spawn (τ (ivar-get iv)))) (iota n))))
+                          (for-each (λ (t) (watch &quot;w&quot; t)) ts)
+                          (unless (every watched? ts) (print &quot;not watched&quot;))
+                          (ivar-put! iv #t)
+                          (join-all ts)
+                          (cml/yield)
+                          (when (any watched? ts) (print &quot;still watched&quot;))
+                          (cml/shutdown)))))))
+          (- (current-process-milliseconds) t0)))
+  (dynamic-wind
+    (τ (trace-off! trace-watcher))
+    (τ (let* ((small (max 20 (cost 400))) (large (cost 4000)))
+         (⊨ (&lt; large (* 30 small)))))
+    (τ (trace-on! trace-watcher))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.069) (memory #(25165824 3897616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/unwatch"><a href="#test/unwatch"><code>test/unwatch</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/unwatch _)
+  (⊦= &quot;&quot;
+      (with-output-to-string
+        (τ (run-cml
+             (τ (let* ((c (make-channel))
+                       (t1 (spawn (τ (recv c))))
+                       (t2 (spawn (τ (recv c)))))
+                  (watch &quot;t1&quot; t1)
+                  (cml/yield)
+                  (unwatch t1)
+                  (watch &quot;t2&quot; t2)
+                  (unwatch t2)
+                  (unwatch t2)
+                  (send c 1)
+                  (send c 2)
+                  (cml/sleep 0)
+                  (cml/yield)
+                  (cml/shutdown)))))))
+  (dynamic-wind
+    (τ (trace-off! trace-watcher))
+    (τ (⊦= &quot;&quot;
+           (with-output-to-string
+             (τ (run-cml
+                  (τ (watch &quot;quiet&quot; (spawn void))
+                     (cml/yield)
+                     (cml/shutdown)))))))
+    (τ (trace-on! trace-watcher))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 3163160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/watch/after-death"><a href="#test/watch/after-death"><code>test/watch/after-death</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/watch/after-death _)
+  (let1 (out (with-output-to-string
+               (τ (⊦= '(#f #f #f)
+                      (run/value
+                        (τ (let* ((ts (map (λ (i) (spawn (τ (cml/yield)))) '(1 2 3)))
+                                  (c (make-channel))
+                                  (u (spawn (τ (recv c)))))
+                             (for-each (λ (t n) (watch n t)) ts '(&quot;a&quot; &quot;b&quot; &quot;c&quot;))
+                             (watch &quot;u&quot; u)
+                             (watch &quot;u-again&quot; u)
+                             (join-all ts)
+                             (cml/yield)
+                             (unwatch (car ts))
+                             (send c 'go)
+                             (sync (join-evt u))
+                             (cml/yield)
+                             (map watched? (list (car ts) u (cadr ts))))))))))
+        (⊦= '(&quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;u-again&quot;)
+            (map (λ (l) (cadddr (string-split l &quot; &quot;)))
+                 (filter
+                   (λ (l) (substring-index &quot;WARNING&quot; l))
+                   (string-split out &quot;\n&quot;))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 3164112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/watch/exception"><a href="#test/watch/exception"><code>test/watch/exception</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/watch/exception _)
+  (let* ((err #f)
+         (out (with-output-to-string
+                (τ (set! err
+                     (with-error-output-to-string
+                       (τ (run-cml
+                            (τ (let1 (t (spawn (τ (cml/yield) (error &quot;crash&quot;))))
+                                     (watch &quot;crasher&quot; t)
+                                     (sync (join-evt t))
+                                     (cml/yield)
+                                     (cml/shutdown)))))))))))
+    (⊨ (and (substring-index &quot;Watched thread crasher&quot; out) #t))
+    (⊨ (and (substring-index &quot;crash&quot; err) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 3165464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/uncaught/default"><a href="#test/uncaught/default"><code>test/uncaught/default</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uncaught/default _)
+  (⊨ (eq? trace-exn-handler (default-exn-handler)))
+  (let1 (err (with-error-output-to-string
+               (τ (⊦= '(joined)
+                      (cdr (run/log
+                             (τ (sync (join-evt (spawn (τ (error &quot;kaboom&quot; 7)))))
+                                (note! 'joined)
+                                (cml/shutdown))))))))
+        (⊨ (and (substring-index &quot;kaboom&quot; err) #t))
+        (⊨ (and (substring-index &quot;[000003]&quot; err) #t)))
+  (let1 (err (with-error-output-to-string
+               (τ (uncaught-default-handler
+                    (current-tid)
+                    (make-property-condition 'exn 'message &quot;direct&quot;)))))
+        (⊨ (and (substring-index &quot;[-000001] died of an uncaught exception&quot; err)
+                #t))
+        (⊨ (and (substring-index &quot;direct&quot; err) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 3166168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/uncaught/handlers"><a href="#test/uncaught/handlers"><code>test/uncaught/handlers</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uncaught/handlers _)
+  (dynamic-wind
+    void
+    (τ (add-uncaught-handler!
+         (λ (tid e)
+            (and (condition? e)
+                 ((condition-predicate 'type) e)
+                 (note! (list 'h1 (tid-&gt;string tid)))
+                 #t)))
+       (add-uncaught-handler!
+         (λ (tid e) (and (symbol? e) (note! (list 'h2 e)) #t)))
+       (add-uncaught-handler!
+         (λ (tid e) (and (eq? e 'bad-handler) (error &quot;handler fails&quot;))))
+       (set-uncaught-handler!
+         (λ (tid e) (note! (list 'default (if (symbol? e) e (message-of e))))))
+       (⊦= '((h2 sym)
+             j1
+             (h1 &quot;[000004]&quot;)
+             j2
+             (default &quot;other&quot;)
+             j3
+             (default bad-handler)
+             j4)
+           (cdr (run/log
+                  (τ (let1 (die (λ (thunk j)
+                                   (sync (join-evt (spawn thunk)))
+                                   (note! j)))
+                           (die (τ (abort 'sym)) 'j1)
+                           (die (τ (car 1)) 'j2)
+                           (die (τ (error &quot;other&quot;)) 'j3)
+                           (die (τ (abort 'bad-handler)) 'j4)
+                           (cml/shutdown))))))
+       (set-uncaught-handler! (λ (tid e) (error &quot;default fails&quot;)))
+       (⊦= '(alive)
+           (cdr (run/log
+                  (τ (sync (join-evt (spawn (τ (error &quot;x&quot;)))))
+                     (note! 'alive)
+                     (cml/shutdown)))))
+       (⊦= '(own)
+           (cdr (run/log
+                  (τ (parameterize
+                       ((default-exn-handler (λ (e) (note! 'own))))
+                       (sync (join-evt (spawn (τ (abort 'sym))))))
+                     (cml/shutdown))))))
+    reset-uncaught-handlers!)
+  (let1 (err (with-error-output-to-string
+               (τ (run-cml
+                    (τ (sync (join-evt (spawn (τ (error &quot;after reset&quot;)))))
+                       (cml/shutdown))))))
+        (⊨ (and (substring-index &quot;after reset&quot; err) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 3167296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -1,0 +1,722 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section422">
+<header>
+<h1>Random numbers</h1></header></section>
+<p>Hakaru10 <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/index.html">Embedded probabilistic domain-specific language Hakaru10</a></cite> draws its random numbers from the <code class="w3-codespan">StdGen</code> of the Haskell package <cite><a href="https://hackage-content.haskell.org/package/random-1.0.1.1/src/System/Random.hs">random-1.0.1.1</a></cite>, seeded with <code class="w3-codespan">mkStdGen 17</code> (Metropolis.hs:858) and threaded through the chain state (Metropolis.hs:166,
+                204-210). Porting that generator, bit for bit, lets the tests of (aux hakaru10)
+                replay upstream's chains exactly: the samples recorded in the Haskell sources are
+                regression oracles, not merely statistical targets.</p>
+<p>The generator is Lennart Augustsson's transliteration of L'Ecuyer's portable
+                combined generator for 32-bit computers: two multiplicative congruential
+                generators with moduli 
+<mtext>2147483563</mtext> and 
+<mtext>2147483399</mtext>, computed with
+                Schrage's method so that no product exceeds 
+<mtext>2³¹</mtext>.  Each <code class="w3-codespan">next</code> answers 
+<mtext>z ∈ [1, 2147483562]</mtext>.  An <code class="w3-codespan">Int</code> in a range of size 
+<mtext>k</mtext> folds 
+<mtext>n = ⌈log k / log b⌉</mtext> of them, 
+<mtext>b = 2147483561</mtext>, as</p>
+<math display="block">
+<mtext>acc₀ = 1,   accᵢ₊₁ = zᵢ₊₁ + b · accᵢ,   x = l + (accₙ mod k)</mtext></math>
+<p>and a <code class="w3-codespan">Double</code> is an <code class="w3-codespan">Int64</code> drawn this way over
+                the whole 64-bit range, 
+<mtext>n = 3</mtext>, masked to its 53 low bits and divided by 
+<mtext>2⁵³</mtext>.  Upstream's <code class="w3-codespan">Integer</code> arithmetic makes 
+<mtext>acc₃</mtext> a number of about 93 bits; since 
+<mtext>2⁶³</mtext> and 
+<mtext>2⁶⁴</mtext> are multiples of 
+<mtext>2⁵³</mtext>, only</p>
+<math display="block">
+<mtext>acc₃ mod 2⁵³,   (z + b · acc) mod 2⁵³</mtext>
+<mtext> = (z + ((h b) mod 2²⁶) · 2²⁷ + ℓ b) mod 2⁵³,   acc = h · 2²⁷ + ℓ</mtext></math>
+<p>matters, and the port keeps every intermediate below 
+<mtext>2⁵⁹</mtext>, a fixnum on a 64-bit CHICKEN, instead of allocating bignums at each draw.  The
+                bignum reading of the Haskell code is kept as the oracle <code class="w3-codespan">stdgen-double/reference</code>.</p>
+<p>The engine never threads a generator: it draws from an <i>rng source</i>, a
+                record holding a mutable state and the procedures <code class="w3-codespan">rng-double!</code> (Haskell's <code class="w3-codespan">randomR (lo,hi) :: Double</code>, a closed interval) and <code class="w3-codespan">rng-integer!</code> (<code class="w3-codespan">randomR (lo,hi) :: Int</code>, inclusive).  Upstream never rolls the generator back when a proposal is
+                rejected (Metropolis.hs:904-906), so a source that only moves forward is
+                faithful; <code class="w3-codespan">rng-source-copy</code> replays one.</p>
+<p>Two optional sources replay nothing upstream: L'Ecuyer's MRG32k3a <cite><a href="https://pubsonline.informs.org/doi/10.1287/opre.47.1.159">Good parameters and implementations for combined multiple recursive
+                        random number generators, Operations Research 47(1), 1999</a></cite>, period 
+<mtext>≈ 2¹⁹¹</mtext>, and an adapter over CHICKEN's <code class="w3-codespan">(chicken random)</code>.  The latter has caveats: its WELL512 state is
+                global to the process, so the adapter cannot be copied; an all-zero seed is a
+                fixed point of the generator and <code class="w3-codespan">pseudo-random-integer</code> then never returns (the retry loop of <code class="w3-codespan">random_uniform</code> in runtime.c, chicken-core main rev 55615603), so the adapter rejects it; a
+                seed is read in whole 8-byte words only (<code class="w3-codespan">C_set_random_seed</code>, same file and revision), so the adapter pads it; <code class="w3-codespan">pseudo-random-real</code> can answer <code class="w3-codespan">1.0</code>, which the adapter redraws; and the startup seed comes from the clock.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux hakaru10 random)
+  *
+  (import
+    scheme
+    (only (scheme base) exact-integer?)
+    (chicken base)
+    (chicken fixnum)
+    (chicken flonum)
+    (chicken bitwise)
+    (only (chicken format) fprintf)
+    (only (chicken condition)
+          make-property-condition
+          make-composite-condition
+          signal
+          condition-predicate
+          condition-property-accessor)
+    (only (chicken bytevector)
+          bytevector?
+          bytevector-length
+          make-bytevector
+          bytevector-copy!)
+    (only (chicken random)
+          set-pseudo-random-seed!
+          pseudo-random-integer
+          pseudo-random-real)
+    (only srfi-1 every split-at append-map)
+    srfi-4
+    (aux base))
+  (declare (local))
+  (define (hakaru10-error kind loc msg . args)
+    (signal
+      (make-composite-condition
+        (make-property-condition
+          'exn
+          'location
+          loc
+          'message
+          msg
+          'arguments
+          args)
+        (make-property-condition 'hakaru10 'kind kind))))
+  (define hakaru10-error? (condition-predicate 'hakaru10))
+  (define hakaru10-error-kind (condition-property-accessor 'hakaru10 'kind))
+  (define (check-integer-bounds who lo hi)
+    (unless
+      (and (exact-integer? lo) (exact-integer? hi))
+      (hakaru10-error 'parameter who &quot;bounds must be exact integers&quot; lo hi)))
+  (define-syntax-rule
+    (define-binary-syntax (name op) ...)
+    (begin (define-syntax-rule (name a b) (op a b)) ...))
+  (cond-expand
+    (|64bit| (define-binary-syntax
+               (stdgen+ fx+)
+               (stdgen- fx-)
+               (stdgen* fx*)
+               (stdgen-quot fx/)
+               (stdgen-mod fxmod)
+               (stdgen&lt; fx&lt;)))
+    (else (define-binary-syntax
+            (stdgen+ +)
+            (stdgen- -)
+            (stdgen* *)
+            (stdgen-quot quotient)
+            (stdgen-mod modulo)
+            (stdgen&lt; &lt;))))
+  (define-record stdgen s1 s2)
+  (set-record-printer!
+    stdgen
+    (λ (g port) (fprintf port &quot;#&lt;stdgen ~a ~a&gt;&quot; (stdgen-s1 g) (stdgen-s2 g))))
+  (define (stdgen-copy g) (make-stdgen (stdgen-s1 g) (stdgen-s2 g)))
+  (define-syntax-rule
+    (define-stdgen/pure (name arg ...) name!)
+    (define (name arg ... g)
+      (let1 (g* (stdgen-copy g)) (let1 (x (name! arg ... g*)) (values x g*)))))
+  (define stdgen-b 2147483561)
+  (define (seed-&gt;stdgen n)
+    (unless
+      (exact-integer? n)
+      (hakaru10-error
+        'parameter
+        'seed-&gt;stdgen
+        &quot;seed must be an exact integer&quot;
+        n))
+    (let* ((s (bitwise-and n 2147483647))
+           (q (quotient s 2147483562))
+           (s1 (remainder s 2147483562))
+           (s2 (remainder q 2147483398)))
+      (make-stdgen (+ s1 1) (+ s2 1))))
+  (define-syntax-rule
+    (let-stdnext ((z next1 next2) (seed1 seed2)) body ...)
+    (let* ((s1 seed1)
+           (s2 seed2)
+           (k (stdgen-quot s1 53668))
+           (s1* (stdgen-
+                  (stdgen* 40014 (stdgen- s1 (stdgen* k 53668)))
+                  (stdgen* k 12211)))
+           (next1 (if (stdgen&lt; s1* 0) (stdgen+ s1* 2147483563) s1*))
+           (k* (stdgen-quot s2 52774))
+           (s2* (stdgen-
+                  (stdgen* 40692 (stdgen- s2 (stdgen* k* 52774)))
+                  (stdgen* k* 3791)))
+           (next2 (if (stdgen&lt; s2* 0) (stdgen+ s2* 2147483399) s2*))
+           (z* (stdgen- next1 next2))
+           (z (if (stdgen&lt; z* 1) (stdgen+ z* 2147483562) z*)))
+      body
+      ...))
+  (define-syntax-rule
+    (stdgen-fold! g n (z acc) step init)
+    (let1 (gen g)
+          (let loop ((i n)
+                     (acc init)
+                     (s1 (stdgen-s1 gen))
+                     (s2 (stdgen-s2 gen)))
+            (if (eq? i 0)
+              (begin (stdgen-s1-set! gen s1) (stdgen-s2-set! gen s2) acc)
+              (let-stdnext
+                ((z next1 next2) (s1 s2))
+                (loop (sub1 i) step next1 next2))))))
+  (define-syntax-rule (stdnext! g) (stdgen-fold! g 1 (z _) z #f))
+  (define (stdgen-next! g) (stdnext! g))
+  (define-stdgen/pure (stdgen-next) stdgen-next!)
+  (define (ilog-base b i) (if (&lt; i b) 1 (add1 (ilog-base b (quotient i b)))))
+  (define (stdgen-ival-integer! l h g)
+    (check-integer-bounds 'stdgen-ival-integer l h)
+    (if (&gt; l h)
+      (stdgen-ival-integer! h l g)
+      (let1 (k (add1 (- h l)))
+            (+ l
+               (if (&lt; k stdgen-b)
+                 (stdgen-mod (stdgen+ (stdnext! g) stdgen-b) k)
+                 (modulo
+                   (stdgen-fold!
+                     g
+                     (ilog-base stdgen-b k)
+                     (z acc)
+                     (+ z (* acc stdgen-b))
+                     1)
+                   k))))))
+  (define-stdgen/pure (stdgen-ival-integer l h) stdgen-ival-integer!)
+  (cond-expand
+    (|64bit| (define-inline
+               (stdgen-acc53 x acc)
+               (let* ((hi (fxshr acc 27))
+                      (lo (fxand acc 134217727))
+                      (hib (fxshl (fxand (fx* hi stdgen-b) 67108863) 27)))
+                 (fxand (fx+ x (fx+ hib (fx* lo stdgen-b)))
+                        9007199254740991))))
+    (else (define-inline
+            (stdgen-acc53 x acc)
+            (bitwise-and (+ x (* acc stdgen-b)) 9007199254740991))))
+  (define (stdgen-double! g)
+    (fp/ (exact-&gt;inexact (stdgen-fold! g 3 (z acc) (stdgen-acc53 z acc) 1))
+         9007199254740992.0))
+  (define-stdgen/pure (stdgen-double) stdgen-double!)
+  (define (stdgen-double/reference g)
+    (let*-values
+      (((twoto53) (expt 2 53))
+       ((x g*) (stdgen-ival-integer (- (expt 2 63)) (sub1 (expt 2 63)) g)))
+      (values
+        (/ (exact-&gt;inexact (bitwise-and x (sub1 twoto53)))
+           (exact-&gt;inexact twoto53))
+        g*)))
+  (define (stdgen-range-double! lo hi g)
+    (if (fp&gt; lo hi)
+      (stdgen-range-double! hi lo g)
+      (let1 (coef (stdgen-double! g))
+            (fp* 2.0
+                 (fp+ (fp* 0.5 lo)
+                      (fp* coef (fp- (fp* 0.5 hi) (fp* 0.5 lo))))))))
+  (define-stdgen/pure (stdgen-range-double lo hi) stdgen-range-double!)
+  (define-record rng-source name state draw-double draw-integer copier)
+  (set-record-printer!
+    rng-source
+    (λ (src port)
+       (fprintf
+         port
+         &quot;#&lt;rng-source ~a ~s&gt;&quot;
+         (rng-source-name src)
+         (rng-source-state src))))
+  (define (rng-double! src lo hi)
+    ((rng-source-draw-double src)
+     (rng-source-state src)
+     (exact-&gt;inexact lo)
+     (exact-&gt;inexact hi)))
+  (define (rng-integer! src lo hi)
+    ((rng-source-draw-integer src) (rng-source-state src) lo hi))
+  (define (rng-source-copy src)
+    (make-rng-source
+      (rng-source-name src)
+      ((rng-source-copier src) (rng-source-state src))
+      (rng-source-draw-double src)
+      (rng-source-draw-integer src)
+      (rng-source-copier src)))
+  (define (make-stdgen-source #!optional (seed 17))
+    (make-rng-source
+      'stdgen
+      (if (stdgen? seed) (stdgen-copy seed) (seed-&gt;stdgen seed))
+      (λ (g lo hi) (stdgen-range-double! lo hi g))
+      (λ (g lo hi) (stdgen-ival-integer! lo hi g))
+      stdgen-copy))
+  (define (unit-&gt;range u lo hi)
+    (if (fp&gt; lo hi) (unit-&gt;range u hi lo) (fp+ lo (fp* u (fp- hi lo)))))
+  (define (unit-&gt;integer u lo hi)
+    (if (&gt; lo hi)
+      (unit-&gt;integer u hi lo)
+      (min hi
+           (+ lo
+              (inexact-&gt;exact
+                (fpfloor (fp* u (exact-&gt;inexact (add1 (- hi lo))))))))))
+  (define mrg32k3a-m1 4294967087.0)
+  (define mrg32k3a-m2 4294944443.0)
+  (define mrg32k3a-norm 2.32830654929573e-10)
+  (define-inline
+    (mrg32k3a-component a x b y m)
+    (let* ((p (fp- (fp* a x) (fp* b y)))
+           (p (fp- p (fp* (fptruncate (fp/ p m)) m))))
+      (if (fp&lt; p 0.0) (fp+ p m) p)))
+  (define (mrg32k3a-next! s)
+    (let ((p1 (mrg32k3a-component
+                1403580.0
+                (f64vector-ref s 1)
+                810728.0
+                (f64vector-ref s 0)
+                mrg32k3a-m1))
+          (p2 (mrg32k3a-component
+                527612.0
+                (f64vector-ref s 5)
+                1370589.0
+                (f64vector-ref s 3)
+                mrg32k3a-m2)))
+      (f64vector-set! s 0 (f64vector-ref s 1))
+      (f64vector-set! s 1 (f64vector-ref s 2))
+      (f64vector-set! s 2 p1)
+      (f64vector-set! s 3 (f64vector-ref s 4))
+      (f64vector-set! s 4 (f64vector-ref s 5))
+      (f64vector-set! s 5 p2)
+      (fp* (if (fp&lt;= p1 p2) (fp+ (fp- p1 p2) mrg32k3a-m1) (fp- p1 p2))
+           mrg32k3a-norm)))
+  (define (mrg32k3a-seed-&gt;state seed)
+    (define moduli
+      '(4294967087 4294967087 4294967087 4294944443 4294944443 4294944443))
+    (define (all-zero? triple) (every zero? triple))
+    (define (component? x m) (and (real? x) (integer? x) (&lt;= 0 x) (&lt; x m)))
+    (define (spread seed)
+      (let loop ((moduli moduli) (x (modulo seed 4294967296)))
+        (if (null? moduli)
+          '()
+          (let1 (x* (modulo (add1 (* 69069 x)) 4294967296))
+                (cons (modulo x* (car moduli)) (loop (cdr moduli) x*))))))
+    (define (-&gt;state words) (list-&gt;f64vector (map exact-&gt;inexact words)))
+    (define seed-words
+      (cond ((list? seed) seed)
+            ((vector? seed) (vector-&gt;list seed))
+            ((f64vector? seed) (f64vector-&gt;list seed))
+            (else #f)))
+    (cond ((exact-integer? seed)
+           (let-values
+             (((t1 t2) (split-at (spread seed) 3)))
+             (-&gt;state
+               (append-map
+                 (λ (t) (if (all-zero? t) '(12345 12345 12345) t))
+                 (list t1 t2)))))
+          ((and seed-words
+                (= (length seed-words) 6)
+                (every component? seed-words moduli))
+           (let-values
+             (((t1 t2) (split-at seed-words 3)))
+             (when (or (all-zero? t1) (all-zero? t2))
+                   (hakaru10-error
+                     'parameter
+                     'make-mrg32k3a-source
+                     &quot;a seed triple is all zero&quot;
+                     seed))
+             (-&gt;state seed-words)))
+          (else
+           (hakaru10-error
+             'parameter
+             'make-mrg32k3a-source
+             &quot;seed must be an exact integer or six integers in [0,m1)^3 x [0,m2)^3&quot;
+             seed))))
+  (define (make-mrg32k3a-source #!optional (seed 17))
+    (make-rng-source
+      'mrg32k3a
+      (mrg32k3a-seed-&gt;state seed)
+      (λ (s lo hi) (unit-&gt;range (mrg32k3a-next! s) lo hi))
+      (λ (s lo hi)
+         (check-integer-bounds 'rng-integer! lo hi)
+         (unit-&gt;integer (mrg32k3a-next! s) lo hi))
+      (λ (s) (list-&gt;f64vector (f64vector-&gt;list s)))))
+  (define (chicken-random-seed seed)
+    (unless
+      (bytevector? seed)
+      (hakaru10-error
+        'parameter
+        'make-chicken-random-source
+        &quot;seed must be a bytevector&quot;
+        seed))
+    (when (every zero? (u8vector-&gt;list seed))
+          (hakaru10-error
+            'parameter
+            'make-chicken-random-source
+            &quot;an all-zero seed would hang (chicken random)&quot;
+            seed))
+    (let* ((n (bytevector-length seed))
+           (padded (make-bytevector (* 8 (max 1 (quotient (+ n 7) 8))) 0)))
+      (bytevector-copy! padded 0 seed)
+      padded))
+  (define (chicken-random-unit)
+    (let1 (u (pseudo-random-real))
+          (if (and (fp&lt; 0.0 u) (fp&lt; u 1.0)) u (chicken-random-unit))))
+  (define (make-chicken-random-source #!optional seed)
+    (when seed (set-pseudo-random-seed! (chicken-random-seed seed)))
+    (make-rng-source
+      'chicken-random
+      'global
+      (λ (_ lo hi) (unit-&gt;range (chicken-random-unit) lo hi))
+      (λ (_ lo hi)
+         (check-integer-bounds 'rng-integer! lo hi)
+         (let1 (l (min lo hi))
+               (+ l (pseudo-random-integer (add1 (- (max lo hi) l))))))
+      (λ (_)
+         (hakaru10-error
+           'parameter
+           'rng-source-copy
+           &quot;the global state of (chicken random) cannot be copied&quot;)))))
+</code></pre></div>
+<h2 id="test/seed-&gt;stdgen"><a href="#test/seed-&gt;stdgen"><code>test/seed-&gt;stdgen</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R1.  <code class="w3-codespan">(seed-&gt;stdgen 17)</code>, upstream's <code class="w3-codespan">mkStdGen 17</code>, is the generator <code class="w3-codespan">18 1</code>.  The seed is cut to 32 bits and masked to 31, as the conversion to <code class="w3-codespan">Int32</code> does; so 
+<mtext>2⁴⁰ + 17</mtext> seeds like 17 and 
+<mtext>−5</mtext> like 
+<mtext>2³¹ − 5</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">mkStdGen :: Int -&gt; StdGen -- why not Integer ?
+mkStdGen s = mkStdGen32 $ fromIntegral s
+
+mkStdGen32 :: Int32 -&gt; StdGen
+mkStdGen32 sMaybeNegative = StdGen (s1+1) (s2+1)
+      where
+	-- We want a non-negative number, but we can't just take the abs
+	-- of sMaybeNegative as -minBound == minBound.
+	s       = sMaybeNegative .&amp;. maxBound
+	(q, s1) = s `divMod` 2147483562
+	s2      = q `mod` 2147483398</code></pre></div>
+<p>cf. R:235-245.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/seed-&gt;stdgen _)
+  (let1 (g (seed-&gt;stdgen 17))
+        (⊦ equal? '(18 1) (list (stdgen-s1 g) (stdgen-s2 g))))
+  (⊦ equal?
+     '((1 1) (2 1) (86 2) (82 2) (18 1))
+     (map (λ (n)
+             (let1 (g (seed-&gt;stdgen n)) (list (stdgen-s1 g) (stdgen-s2 g))))
+          (list 0 1 2147483647 -5 (+ (expt 2 40) 17))))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (seed-&gt;stdgen 1.5)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2241544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stdNext"><a href="#test/stdNext"><code>test/stdNext</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R2.  The first three outputs of <code class="w3-codespan">mkStdGen 17</code> and the generator
+            they leave, <code class="w3-codespan">612660577 2103410263</code>; <code class="w3-codespan">stdgen-next</code> is pure and leaves its argument untouched, while its in-place twin <code class="w3-codespan">stdgen-next!</code>, the one the sources use, steps it:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">stdNext :: StdGen -&gt; (Int, StdGen)
+-- Returns values in the range stdRange
+stdNext (StdGen s1 s2) = (fromIntegral z', StdGen s1'' s2'')
+	where	z'   = if z &lt; 1 then z + 2147483562 else z
+		z    = s1'' - s2''
+
+		k    = s1 `quot` 53668
+		s1'  = 40014 * (s1 - k * 53668) - k * 12211
+		s1'' = if s1' &lt; 0 then s1' + 2147483563 else s1'
+
+		k'   = s2 `quot` 52774
+		s2'  = 40692 * (s2 - k' * 52774) - k' * 3791
+		s2'' = if s2' &lt; 0 then s2' + 2147483399 else s2'</code></pre></div>
+<p>cf. R:474-486.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stdNext _)
+  (let*-values
+    (((a g) (stdgen-next (seed-&gt;stdgen 17)))
+     ((b g) (stdgen-next g))
+     ((c g) (stdgen-next g)))
+    (⊦ equal? '(679560 1394521907 656733876) (list a b c))
+    (⊦ equal? '(612660577 2103410263) (list (stdgen-s1 g) (stdgen-s2 g))))
+  (let1 (g (seed-&gt;stdgen 17))
+        (stdgen-next g)
+        (⊦ equal? '(18 1) (list (stdgen-s1 g) (stdgen-s2 g)))
+        (⊦ equal?
+           '(679560 1394521907 656733876)
+           (let* ((a (stdgen-next! g))
+                  (b (stdgen-next! g))
+                  (c (stdgen-next! g)))
+             (list a b c)))
+        (⊦ equal? '(612660577 2103410263) (list (stdgen-s1 g) (stdgen-s2 g)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2240736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/randomR-double"><a href="#test/randomR-double"><code>test/randomR-double</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R3.  The first <code class="w3-codespan">randomR (0,1) :: Double</code> of seed 17 is <code class="w3-codespan">0.2938995850243806</code>, after three <code class="w3-codespan">next</code>s; the scaling keeps Haskell's association, <code class="w3-codespan">-1.8100773861098114</code> for the range 
+<mtext>[−3.5, 2.25]</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">randomRFloating (l,h) g
+    | l&gt;h       = randomRFloating (h,l) g
+    | otherwise = let (coef,g') = random g in
+		  (2.0 * (0.5*l + coef * (0.5*h - 0.5*l)), g')  -- avoid overflow
+
+instance Random Double where
+  randomR = randomRFloating
+  random rng     =
+    case random rng of
+      (x,rng') -&gt;
+          -- We use 53 bits of randomness corresponding to the 53 bit significand:
+          ((fromIntegral (mask53 .&amp;. (x::Int64)) :: Double)
+	   /  fromIntegral twoto53, rng')
+   where
+    twoto53 = (2::Int64) ^ (53::Int64)
+    mask53 = twoto53 - 1</code></pre></div>
+<p>cf. R:361-378; the values are those of the Python transcription that replayed
+            upstream's records.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/randomR-double _)
+  (⊦ = 0.293899585024381 (rng-double! (make-stdgen-source 17) 0.0 1.0))
+  (⊦ = 0.293899585024381 (rng-double! (make-stdgen-source) 0 1))
+  (⊦ = -1.81007738610981 (rng-double! (make-stdgen-source 17) -3.5 2.25))
+  (let*-values
+    (((d g) (stdgen-double (seed-&gt;stdgen 17))))
+    (⊦ = 0.293899585024381 d)
+    (⊦ equal? '(612660577 2103410263) (list (stdgen-s1 g) (stdgen-s2 g)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2242736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/randomR-int"><a href="#test/randomR-int"><code>test/randomR-int</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R4.  The first <code class="w3-codespan">randomR (0,9) :: Int</code> of seed 17 is <code class="w3-codespan">1</code>, that is 
+<mtext>(679560 + b) mod 10</mtext>; a range wider than 
+<mtext>b</mtext> folds several outputs through exact integers (here 
+<mtext>2 · 10³⁰ + 1</mtext>, four outputs), and the one-point range 
+<mtext>[5,5]</mtext> still consumes one:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">randomIvalInteger :: (RandomGen g, Num a) =&gt; (Integer, Integer) -&gt; g -&gt; (a, g)
+randomIvalInteger (l,h) rng
+ | l &gt; h     = randomIvalInteger (h,l) rng
+ | otherwise = case (f n 1 rng) of (v, rng') -&gt; (fromInteger (l + v `mod` k), rng')
+     where
+       k = h - l + 1
+       -- ERROR: b here (2^31-87) represents a baked-in assumption about genRange:
+       b = 2147483561
+       n = iLogBase b k
+
+       -- Here we loop until we've generated enough randomness to cover the range:
+       f 0 acc g = (acc, g)
+       f n' acc g =
+          let
+	   (x,g')   = next g
+	  in
+          -- We shift over the random bits generated thusfar (* b) and add in the new ones.
+	  f (n' - 1) (fromIntegral x + acc * b) g'</code></pre></div>
+<p>cf. R:424-441, used by uniformly (D:82) and by the choice of the node to resample
+            (M:962).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/randomR-int _)
+  (⊦ = 1 (rng-integer! (make-stdgen-source 17) 0 9))
+  (⊦ = 1 (rng-integer! (make-stdgen-source 17) 9 0))
+  (let*-values
+    (((v g)
+      (stdgen-ival-integer (- (expt 10 30)) (expt 10 30) (seed-&gt;stdgen 17))))
+    (⊦ = -471988287518935644257797793060 v)
+    (⊦ equal? '(1475456433 1872071452) (list (stdgen-s1 g) (stdgen-s2 g))))
+  (let1 (src (make-stdgen-source 17))
+        (⊦ = 5 (rng-integer! src 5 5))
+        (let1 (g (rng-source-state src))
+              (⊦ equal? '(720252 40692) (list (stdgen-s1 g) (stdgen-s2 g)))))
+  (⊦ eq?
+     'parameter
+     (hakaru10-kind (τ (rng-integer! (make-stdgen-source) 0.0 9)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2247624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fixnum-double-vs-reference"><a href="#test/fixnum-double-vs-reference"><code>test/fixnum-double-vs-reference</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R5.  The fixnum <code class="w3-codespan">stdgen-double</code>, which keeps 
+<mtext>acc</mtext> modulo 
+<mtext>2⁵³</mtext> at each step, agrees with the bignum reading of the Haskell
+            code, value and generator, on 
+<mtext>10⁵</mtext> successive draws from each of the seeds
+            17, 0, 1, 
+<mtext>2³¹ − 1</mtext> and 
+<mtext>−5</mtext>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fixnum-double-vs-reference _)
+  (⊦ equal?
+     '(0 0 0 0 0)
+     (map (λ (seed) (stdgen-double-mismatches seed 100000))
+          '(17 0 1 2147483647 -5))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 2.393) (memory #(12582912 2242632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/copy-replays"><a href="#test/copy-replays"><code>test/copy-replays</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R6.  A copy of a source replays its next 1000 draws (500 doubles and 500
+            integers, interleaved), and the copy is independent of the original.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/copy-replays _)
+  (let* ((src (make-stdgen-source 17))
+         (_ (draws src 10))
+         (copy (rng-source-copy src))
+         (a (draws src 500))
+         (b (draws copy 500)))
+    (⊦ equal? a b)
+    (⊦ equal?
+       (draws (make-stdgen-source 17) 10)
+       (draws (make-stdgen-source (seed-&gt;stdgen 17)) 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2309016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bounds"><a href="#test/bounds"><code>test/bounds</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R7.  
+<mtext>10⁵</mtext> doubles stay in the closed interval 
+<mtext>[lo, hi]</mtext>; swapped bounds give the same draw as ordered ones, for doubles and integers alike,
+            as the first guard of <code class="w3-codespan">randomRFloating</code> and <code class="w3-codespan">randomIvalInteger</code> does.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bounds _)
+  (let1 (src (make-stdgen-source 17))
+        (⊨ (all-draws?
+             100000
+             (τ (rng-double! src -2.5 4.0))
+             (λ (x) (and (&lt;= -2.5 x) (&lt;= x 4.0)))))
+        (⊨ (all-draws?
+             1000
+             (τ (rng-double! src 4.0 -2.5))
+             (λ (x) (and (&lt;= -2.5 x) (&lt;= x 4.0)))))
+        (⊨ (all-draws?
+             1000
+             (τ (rng-integer! src 9 -3))
+             (λ (k) (and (&lt;= -3 k) (&lt;= k 9)))))
+        (⊦ = 1.0 (rng-double! src 1.0 1.0)))
+  (let*-values
+    (((a _) (stdgen-range-double -2.5 4.0 (seed-&gt;stdgen 17)))
+     ((b _) (stdgen-range-double 4.0 -2.5 (seed-&gt;stdgen 17))))
+    (⊦ = a b)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.06) (memory #(12582912 2245328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ilog-base"><a href="#test/ilog-base"><code>test/ilog-base</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R8.  The number of outputs a range needs: one for 
+<mtext>k = 10</mtext>, three for the 
+<mtext>2⁶⁴</mtext> of an <code class="w3-codespan">Int64</code>; the comment upstream notes the
+            off-by-one at 
+<mtext>k = b</mtext>, where a range of exactly 
+<mtext>b</mtext> values consumes two outputs, folded as 
+<mtext>acc₂ = z₂ + b (z₁ + b)</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Perform an expensive logarithm on arbitrary-size integers by repeated division.
+--
+-- (NOTE: This actually returns ceiling(log(i) base b) except with an
+--  incorrect result at iLogBase b b = 2.)
+iLogBase :: Integer -&gt; Integer -&gt; Integer
+iLogBase b i = if i &lt; b then 1 else 1 + iLogBase b (i `div` b)</code></pre></div>
+<p>cf. R:464-469.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ilog-base _)
+  (⊦ equal?
+     '(1 2 3 3)
+     (map (λ (k) (ilog-base 2147483561 k))
+          (list 10 2147483561 (expt 2147483561 2) (expt 2 64))))
+  (let*-values
+    (((x g) (stdgen-ival-integer 0 2147483560 (seed-&gt;stdgen 17)))
+     ((z1 g1) (stdgen-next (seed-&gt;stdgen 17)))
+     ((z2 g2) (stdgen-next g1)))
+    (⊦ = (modulo (+ z2 (* (+ z1 (* 1 2147483561)) 2147483561)) 2147483561) x)
+    (⊦ equal?
+       (list (stdgen-s1 g2) (stdgen-s2 g2))
+       (list (stdgen-s1 g) (stdgen-s2 g)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2247576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mrg32k3a"><a href="#test/mrg32k3a"><code>test/mrg32k3a</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R9 (optional source).  MRG32k3a from L'Ecuyer's default state, all components <code class="w3-codespan">12345</code>: the first three outputs and the state after 1000 of them
+            are those of the C code of the paper (Fig. 1), compiled here, bit for bit; a copy
+            replays, and integers and swapped bounds stay in range.  A seed with an all-zero
+            triple, a component out of range, or of the wrong type is a <code class="w3-codespan">parameter</code> error.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mrg32k3a _)
+  (let1 (src (make-mrg32k3a-source '(12345 12345 12345 12345 12345 12345)))
+        (⊦ equal?
+           '(0.127011122046577 0.318527565396794 0.30918601558327)
+           (let* ((a (rng-double! src 0.0 1.0))
+                  (b (rng-double! src 0.0 1.0))
+                  (c (rng-double! src 0.0 1.0)))
+             (list a b c)))
+        (⊨ (all-draws?
+             997
+             (τ (rng-double! src 0.0 1.0))
+             (λ (u) (and (&lt; 0.0 u) (&lt; u 1.0)))))
+        (⊦ equal?
+           (f64vector
+             4239718941.0
+             899640195.0
+             1411745448.0
+             2768972929.0
+             343921931.0
+             1471537888.0)
+           (rng-source-state src)))
+  (let* ((src (make-mrg32k3a-source 17)) (copy (rng-source-copy src)))
+    (⊦ equal? (draws src 100) (draws copy 100))
+    (⊨ (all-draws?
+         10000
+         (τ (rng-integer! src 9 0))
+         (λ (k) (and (&lt;= 0 k) (&lt;= k 9)))))
+    (⊨ (all-draws?
+         10000
+         (τ (rng-double! src 3.0 -1.0))
+         (λ (x) (and (&lt;= -1.0 x) (&lt;= x 3.0))))))
+  (⊦ equal?
+     '(parameter parameter parameter)
+     (map (λ (seed) (hakaru10-kind (τ (make-mrg32k3a-source seed))))
+          (list '(0 0 0 1 1 1) '(1 1 4294967087 1 1 1) 'seventeen))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(12582912 2250112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/chicken-random"><a href="#test/chicken-random"><code>test/chicken-random</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>R10 (optional source).  The adapter over <code class="w3-codespan">(chicken random)</code> rejects an all-zero seed, which would make <code class="w3-codespan">pseudo-random-integer</code> loop forever, whatever its length; it pads a short seed to whole words, so <code class="w3-codespan">#u8(17)</code> and <code class="w3-codespan">#u8(17 0 0 0 0 0 0 0)</code> give the same stream; and it cannot be copied, its state being global.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/chicken-random _)
+  (⊦ equal?
+     '(parameter parameter parameter)
+     (map (λ (seed) (hakaru10-kind (τ (make-chicken-random-source seed))))
+          (list (make-bytevector 16 0) (bytevector 0) &quot;17&quot;)))
+  (let* ((a (draws (make-chicken-random-source (bytevector 17)) 5))
+         (b (draws (make-chicken-random-source (bytevector 17 0 0 0 0 0 0 0))
+                   5))
+         (src (make-chicken-random-source (bytevector 1 2 3 4 5 6 7 8 9))))
+    (⊦ equal? a b)
+    (⊨ (all-draws?
+         1000
+         (τ (rng-double! src 2.0 0.0))
+         (λ (x) (and (&lt; 0.0 x) (&lt; x 2.0)))))
+    (⊨ (all-draws?
+         1000
+         (τ (rng-integer! src (expt 2 70) (+ (expt 2 70) 3)))
+         (λ (k) (and (&lt;= (expt 2 70) k) (&lt;= k (+ (expt 2 70) 3))))))
+    (⊦ eq? 'parameter (hakaru10-kind (τ (rng-source-copy src))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2251976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

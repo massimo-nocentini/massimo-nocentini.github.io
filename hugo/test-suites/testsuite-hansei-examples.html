@@ -1,0 +1,959 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section6384">
+<header>
+<h1>Introductory examples and regression tests</h1></header></section>
+<p>The example models of <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#examples-tests">Embedded probabilistic domain-specific language HANSEI</a></cite>, one section per example of the page, with upstream's own expected values: the lawn
+	model of the papers, the regression tests of <code class="w3-codespan">exactInfM.ml</code>, which
+	liken HANSEI's syntax to IBAL's, and the early collapse of worlds:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Naively, we would have thought we needed to evaluate 2^10 of possible worlds: each
+	  (nested) flip splits the world. But as the result shows, we managed with only 10+1
+	  worlds. The reason is that the algorithm is NOT tail recursive, and &amp;&amp; is a _special_
+	  form rather than a function.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<p>The models keep upstream's flonum probabilities, so that their tables are upstream's
+	bit for bit where the masses are summed in upstream's order; where a model draws with <code class="w3-codespan">uniform</code>, whose masses are the exact <code class="w3-codespan">1/n</code> here (deviation 7), or reflects a table that <code class="w3-codespan">probcc-explore</code> has sorted by mass (deviation 5), the masses agree to a relative 1e-9.</p>
+<section id="section6385">
+<header>
+<h1>Colored balls</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#colored-balls">Example: colored balls</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>This is an elegant example of a model with indefinite number of objects whose `real'
+	  identity is unobservable. The example is a simplified version of population
+	  estimation. HANSEI's implementation of the example makes the case for memoization of
+	  stochastic functions.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<section id="section6386">
+<header>
+<h1>Blood types</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#blood-type">Example: blood types</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The hidden variables are the presence of genes A and B in the chromosomes inherited
+	  from the mother and the father. The observed variable is the blood type, which is a
+	  stochastic function of the genotype. A typical query asks for the distribution of
+	  blood types for a particular individual, possibly conditioned on the known genotype of
+	  some of the ancestors.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<section id="section6387">
+<header>
+<h1>Hidden Markov Model</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#hmm">Example: Hidden Markov Model (HMM)</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>A simple HMM model with a single hidden 8-state variable. Our implementation
+	  demonstrates the investigation of time complexity of the inference -- in an
+	  interactive session at the OCaml top level -- and changing the model by introducing
+	  variable elimination, which speeds up inference exponentially.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<section id="section6388">
+<header>
+<h1>Noisy OR</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#noisy-or">Example: Noisy OR</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Although the graph does not have directed cycles, it does have many undirected ones.
+	  As we work backwards, we may encounter a given node several times. Each time the value
+	  of node's random attribute must be the same. We have to use memoization.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<section id="section6389">
+<header>
+<h1>Motivic development in classical music</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#music">Realistic Example: Motivic development in classical music</a></cite>, the warm-up of <code class="w3-codespan">music1a.ml</code>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Crucially this simplified model does not recursively subdivide and transform the
+	  sequence. Therefore, the state space remains sufficiently small even for exact
+	  inference. The lazy evaluation was essential.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<section id="section6390">
+<header>
+<h1>Multitarget tracking</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#blip">Realistic Example: Multitarget tracking</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>We found it crucial to sample the state of an aircraft and the location of a false
+	  alarm lazily. If the x-coordinate of the detected aircraft does not match the
+	  x-coordinate of any observed blip, we immediately report the contradiction (of the
+	  possible world with the evidence). We do not need to compute the y-coordinate of the
+	  aircraft, let alone the locations of other aircrafts and false alarms.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<p>The ported models are the AILog one (<code class="w3-codespan">blip_ailog.ml</code>, memoized), the naive one without laziness (<code class="w3-codespan">blip_naive.ml</code>) and the lazy one with sequential Monte-Carlo (<code class="w3-codespan">blip.ml</code>).</p>
+<section id="section6391">
+<header>
+<h1>Bounded-rational theory of mind</h1></header></section>
+<p><cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#bounded-rationality">Bounded-Rational Theory of Mind for Conversational Implicature</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The payoff is that the same cognitive machinery that the hearer uses to decide what
+	  to do, by interpreting utterances, can also be used by the speaker to decide what to
+	  say, by predicting how potential utterances would be interpreted or misinterpreted by
+	  the hearer.</i>
+<footer>
+<p class="w3-right-align">Chung-chieh Shan</p></footer></blockquote></p>
+<p>The speaker's model reifies the hearer's, exactly or by sampling, inside its own
+	worlds (<code class="w3-codespan">incite.ml</code>); the weights of the plans are 1, so the masses
+	of the tables are expected utilities, not probabilities.</p>
+<h2 id="test/paper/grass-cloudy"><a href="#test/paper/grass-cloudy"><code>test/paper/grass-cloudy</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The extended lawn model of PE:9-28: whether it rained, given that the grass is wet,
+	    with a cloudy sky as the common cause of rain and sprinkler; the flip of the wet
+	    roof, whose value is not used, splits the worlds all the same.  The table and its
+	    normalization are upstream's bit for bit.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/paper/grass-cloudy _)
+  (define table (probcc-reify/exact/a grass-model/cloudy))
+  (⊦ equal? '(((V #t) 0.45810000000000001) ((V #f) 0.18899999999999997)) table)
+  (⊦ equal?
+     '(((V #t) 0.70792767732962447) ((V #f) 0.29207232267037547))
+     (probcc-normalize table)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3994768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/exact/basic"><a href="#test/exact/basic"><code>test/exact/basic</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The basic tests of X:13-63: a shared flip and two independent ones, the alarm
+	    network (whose <code class="w3-codespan">let … and …</code> draws the earthquake first, D19),
+	    the lawn model and <code class="w3-codespan">uniform_range 1 8</code>, which is <code class="w3-codespan">(probcc-uniform/range 1 9)</code> (deviation 8).  The tables are
+	    upstream's bit for bit, and the number of leaves of each tree is the number of
+	    worlds upstream's comments report as accepted.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/exact/basic _)
+  (⊦ equal? '(((V #t) 0.5) ((V #f) 0.5)) (probcc-reify/exact/a tflip2-shared))
+  (⊦ equal? 2 (accepted tflip2-shared))
+  (⊦ equal?
+     '(((V #f) 0.75) ((V #t) 0.25))
+     (probcc-reify/exact/a tflip2-noshared))
+  (⊦ equal? 3 (accepted tflip2-noshared))
+  (⊦ equal?
+     '(((V #f) 0.89128000000000007) ((V #t) 0.10872000000000001))
+     (probcc-reify/exact/a talarm))
+  (⊦ equal? 8 (accepted talarm))
+  (⊦ equal?
+     '(((V #f) 0.3219999999999999) ((V #t) 0.2838))
+     (probcc-reify/exact/a grass-model))
+  (⊦ equal? 14 (accepted grass-model))
+  (⊦ equal?
+     '(((V 8) 1/8)
+       ((V 7) 1/8)
+       ((V 6) 1/8)
+       ((V 5) 1/8)
+       ((V 4) 1/8)
+       ((V 3) 1/8)
+       ((V 2) 1/8)
+       ((V 1) 1/8))
+     (probcc-reify/exact (probcc-uniform/range 1 9))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3994840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/exact/ibal"><a href="#test/exact/ibal"><code>test/exact/ibal</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The tests of IBAL (X:81-231), whose syntax HANSEI likens: observations through <code class="w3-codespan">probcc-observe</code>, records and objects as lists, the methods of an
+	    object run when they are called; upstream's tables bit for bit.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/exact/ibal _)
+  (⊦ equal?
+     '(((V (#t #t)) 0.59999999999999998))
+     (probcc-reify/exact/a tfooibl1))
+  (⊦ equal?
+     '(((V (#\c #\e)) 0.47999999999999998)
+       ((V (#\b #\e)) 0.32000000000000006)
+       ((V (#\d #\e)) 0.20000000000000001))
+     (probcc-reify/exact/a tfooibl2))
+  (⊦ equal? '(((V #t) 0.25)) (probcc-reify/exact/a tfooibl3))
+  (⊦ equal?
+     '(((V #t) 0.021000000000000001) ((V #f) 0.0090000000000000011))
+     (probcc-reify/exact/a tiblt2))
+  (⊦ equal? '(((V #t) 0.14000000000000001)) (probcc-reify/exact/a tmusictr41))
+  (⊦ equal?
+     '(((V #f) 0.0069999999999999993) ((V #t) 0.0030000000000000001))
+     (probcc-reify/exact/a tmusictr42)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3996560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/exact/flips"><a href="#test/exact/flips"><code>test/exact/flips</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Early collapse of worlds (X:236-347): the and of ten flips needs 11 worlds, not
+	    2^10, because <code class="w3-codespan">and</code> does not evaluate its second operand when the
+	    first is false; the xor of ten flips needs all 1024, unless the xor of the others is
+	    reified and reflected, collapsing its worlds into two, so that each level explores
+	    4.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((flips-xor n))
+  (let loop ((n n))
+    (if (= n 1)
+      (probcc-coin 0.5)
+      (let* ((r (loop (sub1 n))) (x (probcc-coin 0.5))) (not (eq? x r))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((flips-xor* n))
+  (let loop ((n n))
+    (if (= n 1)
+      (probcc-coin 0.5)
+      (let* ((r (probcc-reflect (probcc-reify/exact (loop (sub1 n)))))
+             (x (probcc-coin 0.5)))
+        (not (eq? x r))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/exact/flips _)
+  (⊦ equal?
+     '(((V #f) 1023/1024) ((V #t) 1/1024))
+     (probcc-reify/exact/a (flips-and 1/2 10)))
+  (⊦ equal?
+     '(((V #f) 0.9990234375) ((V #t) 0.0009765625))
+     (probcc-reify/exact/a (flips-and 0.5 10)))
+  (⊦ equal? 11 (accepted (flips-and 1/2 10)))
+  (⊦ equal? '(((V #t) 0.5) ((V #f) 0.5)) (probcc-reify/exact/a (flips-xor 10)))
+  (⊦ equal? 1024 (accepted (flips-xor 10)))
+  (⊦ equal?
+     '(((V #t) 0.5) ((V #f) 0.5))
+     (probcc-reify/exact/a (flips-xor* 10)))
+  (⊦ equal? 4 (accepted (flips-xor* 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0040000000000000001)
+ (memory #(12582912 4001992 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/paper/lawn"><a href="#test/paper/lawn"><code>test/paper/lawn</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The lawn model of the DSL paper (DSL p.4 l.160-166), normalized as on p.5
+	    l.194-197, whose 14 accepted worlds are those of <code class="w3-codespan">test/exact/basic</code>; the paper's normalized masses were printed by an earlier version and differ
+	    from today's upstream, which this port gives bit for bit, in the last two digits.
+	    The two coins of the NIPS abstract (NIPS l.24-27, 63), at least one of them true,
+	    with exact halves.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (grass-model)
+  (let* ((rain (probcc-coin 0.29999999999999999))
+         (sprinkler (probcc-coin 0.5))
+         (grass-is-wet
+           (or (and (probcc-coin 0.90000000000000002) rain)
+               (and (probcc-coin 0.80000000000000004) sprinkler)
+               (probcc-coin 0.10000000000000001))))
+    (probcc-when grass-is-wet rain)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/paper/lawn _)
+  (define normalized (probcc-normalize (probcc-reify/exact/a grass-model)))
+  (⊦= '(((V #f) 0.53152855727963022) ((V #t) 0.46847144272036972)) normalized)
+  (⊦ equal?
+     '(((V #f) 0.53152855727963011) ((V #t) 0.46847144272036984))
+     normalized)
+  (⊦ equal?
+     '(((V (#t #t)) 1/4) ((V (#t #f)) 1/4) ((V (#f #t)) 1/4))
+     (probcc-reify/exact/a two-coins)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 4004104 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/noisy-or"><a href="#test/noisy-or"><code>test/noisy-or</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Noisy-or networks (NO): the attribute of a vertex propagated from the roots,
+	    forwards with the graph built in, or backwards from the vertex asked, where a vertex
+	    reached by several paths must have one value per world: memoized with <code class="w3-codespan">fixm</code> over <code class="w3-codespan">probcc-memo</code>, or with the evidence
+	    threaded as the memo table, which also holds the observations (<code class="w3-codespan">tq2</code>, vertex 0 off).  The large graph has 20 vertices, 0 to 19 (NO:187 says 19);
+	    every table is upstream's bit for bit.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/noisy-or _)
+  (define preds (no-predecessors no-edges))
+  (define on3 '(((V #t) 0.81441875000000008) ((V #f) 0.18558125000000003)))
+  (⊦ equal? '(4 2 1) (pmap-find 3 preds))
+  (⊦ equal? on3 (probcc-reify/exact/a no-model-fwd))
+  (⊦ equal?
+     on3
+     (probcc-reify/exact (no-model/memo no-roots preds 3 (λ (_) #f))))
+  (⊦ equal? on3 (probcc-reify/exact (no-model no-roots preds 3 pmap-empty)))
+  (⊦ equal?
+     '(((V #t) 0.68646750000000001) ((V #f) 0.31353250000000005))
+     (probcc-reify/exact
+       (no-model no-roots preds 3 (pmap-add 0 #f pmap-empty))))
+  (⊦ equal?
+     '(((V #t) 0.90144617982013708) ((V #f) 0.098553820179875601))
+     (probcc-reify/exact
+       (no-model
+         no-roots/large
+         (no-predecessors no-edges/large)
+         15
+         pmap-empty))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.22600000000000001)
+ (memory #(12582912 4011768 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bloodtype"><a href="#test/bloodtype"><code>test/bloodtype</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Blood types in a pedigree (BT:224-275), exactly, with variable elimination of the
+	    parents' chromosomes: unconditionally, and given that Uwe's chromosomes are both A.
+	    With the reflected tables in upstream's order the masses are upstream's bit for
+	    bit; <code class="w3-codespan">probcc-variable-elimination</code> reflects them sorted by mass
+	    (deviation 5), so they are summed in another order and agree to a relative
+	    1e-9.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bloodtype _)
+  (define test1exact
+    '(((V A) 0.32180904495702678)
+      ((V B) 0.32085269277525014)
+      ((V AB) 0.19786055151667717)
+      ((V O) 0.15947771075104664)))
+  (define test2exact
+    '(((V A) 0.43868996766624768)
+      ((V AB) 0.23650376976933171)
+      ((V B) 0.21308545732967843)
+      ((V O) 0.1117208052347424)))
+  (define uwe '(((Uwe GA)) ((Uwe GA))))
+  (⊦ equal?
+     test1exact
+     (probcc-reify/exact/a
+       (bt-bldtype variable-elimination/upstream '(() ()) 'Linus)))
+  (⊦ equal?
+     test2exact
+     (probcc-reify/exact/a
+       (bt-bldtype variable-elimination/upstream uwe 'Linus)))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     test1exact
+     (probcc-reify/exact/a
+       (bt-bldtype probcc-variable-elimination '(() ()) 'Linus)))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     test2exact
+     (probcc-reify/exact/a
+       (bt-bldtype probcc-variable-elimination uwe 'Linus))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.23100000000000001)
+ (memory #(12582912 4004792 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/hmm"><a href="#test/hmm"><code>test/hmm</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The hidden Markov model of HM, a random walk on 8 states observed at time 5,
+	    exactly at time 10: without variable elimination (HM:147-167) the table is
+	    upstream's bit for bit (<code class="w3-codespan">State i</code> is <code class="w3-codespan">i</code>); with it (HM:274-296), the model runs backwards and the previous state is
+	    reified and reflected at each step, which makes the inference linear in the
+	    number of steps; bit for bit when the reflected tables are in upstream's order, to
+	    a relative 1e-9 with <code class="w3-codespan">probcc-variable-elimination</code>.  The
+	    normalized tables are computed in upstream's order, the order of the sum.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/hmm _)
+  (define forward (probcc-reify/exact/a (hm-query/forward 10)))
+  (define ve
+    (probcc-reify/exact/a (hm-query/ve variable-elimination/upstream 10)))
+  (define ve/sorted
+    (probcc-reify/exact/a (hm-query/ve probcc-variable-elimination 10)))
+  (⊦ equal?
+     '(((V 1) 0.10542819045498758)
+       ((V 2) 0.098555483416225692)
+       ((V 3) 0.086272791068737309)
+       ((V 4) 0.070768449664987229)
+       ((V 5) 0.054230446809986121)
+       ((V 6) 0.038726200851251925)
+       ((V 7) 0.026443647103752445)
+       ((V 8) 0.019571040630000598))
+     forward)
+  (⊦ equal?
+     '(((V 8) 0.039142374827817968)
+       ((V 7) 0.052887690865193897)
+       ((V 6) 0.077452982599884354)
+       ((V 5) 0.10846170708279078)
+       ((V 4) 0.14153796086470105)
+       ((V 3) 0.17254687623907095)
+       ((V 2) 0.19711244517581822)
+       ((V 1) 0.21085796234472273))
+     (probcc-normalize (upstream-order forward)))
+  (⊦ equal?
+     '(((V 1) 0.10765110792499999)
+       ((V 2) 0.10024138302499999)
+       ((V 3) 0.08721199276250001)
+       ((V 4) 0.071051930187500001)
+       ((V 5) 0.053946932537500006)
+       ((V 6) 0.037786982462500007)
+       ((V 7) 0.024757760350000001)
+       ((V 8) 0.017348160749999997))
+     ve)
+  (⊦ equal?
+     '(((V 8) 0.034696581724362928)
+       ((V 7) 0.04951589206919052)
+       ((V 6) 0.07557453173398801)
+       ((V 5) 0.10789467428505714)
+       ((V 4) 0.1421049261619462)
+       ((V 3) 0.17442529371470286)
+       ((V 2) 0.2004842696820226)
+       ((V 1) 0.21530383062872968))
+     (probcc-normalize (upstream-order ve)))
+  (⊦ (rel-approx? 1.0000000000000001e-09) ve ve/sorted))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.628) (memory #(12582912 4009368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/hmm/counters"><a href="#test/hmm/counters"><code>test/hmm/counters</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The investigation of complexity of HM:170-279, by counting the calls of the
+	    worker at each step: the forward and the backward model grow by a factor of 3 per
+	    step; with variable elimination the counts stay flat.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/hmm/counters _)
+  (⊦ equal? '#(0 8 22 62 176 502 0 0 0 0 0 0) (hm-count (hm-query/forward 4)))
+  (⊦ equal? '#(0 8 22 62 176 0 0 0 0 0 0 0) (hm-count (hm-query/backward 4)))
+  (⊦ equal?
+     '#(0 8 22 22 22 0 0 0 0 0 0 0)
+     (hm-count (hm-query/ve probcc-variable-elimination 4)))
+  (⊦ equal?
+     '#(0 8 22 22 22 20 20 22 22 22 22 0)
+     (hm-count (hm-query/ve probcc-variable-elimination 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 4008488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/blip/naive"><a href="#test/blip/naive"><code>test/blip/naive</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Airplanes without laziness (BN:183-252): a plane at (3,3) has probability 1/100,
+	    exact here; a blip at (3,3) is a false alarm or the detection of the one plane of
+	    the bounded geometric prior (BN:192: <code class="w3-codespan">0.02 +. 0.98 *. 0.00130434782608695684 *. 0.9</code>); one plane cannot
+	    make two blips, two planes make them with probability 1/5000 (either may be at
+	    either blip; upstream <code class="w3-codespan">0.000199999999999999901</code>), and two blips come from two planes of the prior with <code class="w3-codespan">0.0191897654584221797 · 2/10000</code>; and the two blips of a moving
+	    plane, with variable elimination of the previous state.  Without laziness the two
+	    planes are drawn whole, 160000 worlds, which is as far as exact inference goes
+	    (BN:238-245).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/blip/naive _)
+  (define ((evidence0 check blips) ps t) (when (= t 0) (check blips ps)))
+  (define (unit _) (void))
+  (⊦ equal?
+     `(((V ,(void)) 1/100))
+     (probcc-reify/exact
+       (if (equal? (cadr (bn-plane-state-0 1)) '(3 3))
+         (void)
+         (probcc-impossible))))
+  (⊦ equal?
+     '(((V 0) 0.85287846481876328)
+       ((V 1) 0.1279317697228145)
+       ((V 2) 0.01918976545842218))
+     (probcc-reify/exact (probcc-geometric/bounded 2 0.84999999999999998)))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     `(((V ,(void)) 0.02115043478260931))
+     (probcc-reify/exact/a
+       (bn-model 1 0 (evidence0 bn-blips-at-least '((3 3))) unit)))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     `(((V ,(void)) 0.0013043478260869568))
+     (probcc-reify/exact/a
+       (bn-model 1 0 (evidence0 bn-blips-at-least/ideal '((3 3))) unit)))
+  (⊦ equal?
+     '()
+     (probcc-reify/exact/a
+       (bn-model 1 0 (evidence0 bn-blips-at-least/ideal '((3 3) (3 5))) unit)))
+  (⊦ equal?
+     `(((V ,(void)) 1/5000))
+     (probcc-reify/exact
+       (let* ((p2 (bn-plane-state-0 2)) (p1 (bn-plane-state-0 1)))
+         (bn-blips-at-least/ideal '((3 3) (3 5)) (list p1 p2)))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V 2) 3.8379530916844328e-06))
+     (probcc-reify/exact/a
+       (bn-model
+         2
+         0
+         (evidence0 bn-blips-at-least/ideal '((3 3) (3 5)))
+         length)))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     `(((V ,(void)) 0.00059257469565211177))
+     (probcc-reify/exact/a (bn-model 1 1 bn-two-blips unit))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.7410000000000001)
+ (memory #(12582912 4010624 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/music"><a href="#test/music"><code>test/music</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Motivic development, the warm-up (M1:147-191): the motive A B C is split at a
+	    random place and each part transformed by an operation chosen at random; given that
+	    the result has three notes, the first A sharp, the distribution of the second note.
+	    The notes are lazy lists of <code class="w3-codespan">(aux hansei lazy)</code>, forced only as far as the evidence asks; the table, the evidence 0.054 and the
+	    normalized table are upstream's bit for bit, from 29 accepted worlds, and so is
+	    importance sampling of 1000 worlds with <code class="w3-codespan">(probcc-random-selector 17)</code> (M1:195-201; &quot;1000 samples is quite good, actually&quot;).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/music _)
+  (define table (probcc-reify/exact/a m1-main))
+  (define table/upstream (upstream-order table))
+  (define evidence (total table/upstream))
+  (⊦ equal?
+     '(((V C) 0.027000000000000003)
+       ((V Csharp) 0.017999999999999999)
+       ((V B) 0.0074999999999999997)
+       ((V Fsharp) 0.00045000000000000004)
+       ((V F) 0.00045000000000000004)
+       ((V E) 0.00045000000000000004)
+       ((V G) 0.00015000000000000004))
+     table)
+  (⊦ equal? 0.053999999999999999 evidence)
+  (⊦ equal?
+     '(((V G) 0.0027777777777777788)
+       ((V Fsharp) 0.008333333333333335)
+       ((V F) 0.008333333333333335)
+       ((V E) 0.008333333333333335)
+       ((V Csharp) 0.33333333333333331)
+       ((V C) 0.50000000000000011)
+       ((V B) 0.1388888888888889))
+     (probcc-map
+       (λ1-match/first ((,v ,p) (list v (/ p evidence))))
+       table/upstream))
+  (⊦ equal? 29 (accepted m1-main))
+  (⊦ equal?
+     '(((V C) 0.026973000000000195)
+       ((V Csharp) 0.017982000000000154)
+       ((V B) 0.0078570000000000185)
+       ((V Fsharp) 0.00060749999999999986)
+       ((V F) 0.00060749999999999986)
+       ((V E) 0.00060749999999999986)
+       ((V G) 0.00020249999999999996))
+     (probcc-sample-importance/a (probcc-random-selector 17) 1000 m1-main)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(12582912 4080920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/colored-balls"><a href="#test/colored-balls"><code>test/colored-balls</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Colored balls (CB:32-48), exactly, for three draws that all look blue: the number
+	    of balls in the urn, 1 to 8 a priori, with the color of every ball memoized.  With
+	    the exact 4/5 the table is the analytic one, <code class="w3-codespan">1/8 · 1/2^n · Σ_colorings (Σ_b q(color b) / n)^3</code>; with upstream's 0.8 it agrees to 1e-6.  Upstream only samples this model; the
+	    sampling of ten draws is planned for the long suite.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (cb-observed-color q c)
+  (if (probcc-coin q) c (case c ((Blue) 'Green) ((Green) 'Blue))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((cb-model-nballs q obs))
+  (let* ((nballs (probcc-uniform/range 1 9))
+         (ball-color
+           (probcc-memo (λ (b) (probcc-uniform/either '(Blue Green))))))
+    (let loop ((obs obs))
+      (unless
+        (null? obs)
+        (let1 (b (probcc-uniform/range 1 (add1 nballs)))
+              (unless
+                (eq? (cb-observed-color q (ball-color b)) (car obs))
+                (probcc-impossible)))
+        (loop (cdr obs))))
+    nballs))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/colored-balls _)
+  (⊦ equal?
+     '(((V 1) 13/400)
+       ((V 2) 77/3200)
+       ((V 3) 17/800)
+       ((V 4) 127/6400)
+       ((V 5) 19/1000)
+       ((V 6) 59/3200)
+       ((V 7) 101/5600)
+       ((V 8) 227/12800))
+     (probcc-reify/exact/a (cb-model-nballs 4/5 '(Blue Blue Blue))))
+  (⊦= '(((V 1) 0.032500000000000001)
+        ((V 2) 0.024062500000000001)
+        ((V 3) 0.021250000000000002)
+        ((V 4) 0.01984375)
+        ((V 5) 0.019)
+        ((V 6) 0.018437499999999999)
+        ((V 7) 0.018035714285714287)
+        ((V 8) 0.017734375))
+      (probcc-reify/exact/a
+        (cb-model-nballs 0.80000000000000004 '(Blue Blue Blue)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.090999999999999998)
+ (memory #(12582912 4013864 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/incite/two-bit"><a href="#test/incite/two-bit"><code>test/incite/two-bit</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The two-bit game (IN:78-207): the hearer interprets the form F_b1 as two people
+	    coming and buys two pieces of food; the speaker, who knows that two come, best says
+	    F_b1 when the hearer infers exactly; if the hearer only draws one sample, what the
+	    speaker says does not matter, with two samples it pays, by 1%, to tell the truth.
+	    The utilities are <code class="w3-codespan">-0.</code> where nothing is lost, as upstream's; the
+	    tables are upstream's bit for bit, in the Scheme order (the order of the form
+	    variables F_b0, F_b1 is the same in OCaml and by name).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/incite/two-bit _)
+  (define (ut1 fv) (eq? fv 'F_b1))
+  (define (speaker inferencer)
+    (in-agent-S-model in-forms in-agent-A-model in-utility inferencer))
+  (⊦ equal?
+     '(((V (-0.0 (A 2))) 0.25)
+       ((V (-10.0 (A 3))) 0.25)
+       ((V (-10.0 (A 1))) 0.25)
+       ((V (-20.0 (A 0))) 0.25))
+     (probcc-reify/exact/a (in-agent-A-model ut1)))
+  (⊦ equal?
+     '((-0.0 (A 2)))
+     (in-argmax (probcc-reify/exact/a (in-agent-A-model ut1))))
+  (⊦ equal?
+     '(((V (-0.0 (F_b1))) 1.0)
+       ((V (-10.0 (F_b1 F_b0))) 1.0)
+       ((V (-10.0 (F_b0))) 1.0)
+       ((V (-20.0 ())) 1.0))
+     (probcc-reify/exact/a (speaker in-exact)))
+  (⊦ equal?
+     '(((V (-10.0 (F_b1 F_b0))) 0.5)
+       ((V (-10.0 (F_b1))) 0.5)
+       ((V (-10.0 (F_b0))) 0.5)
+       ((V (-10.0 ())) 0.5)
+       ((V (-0.0 (F_b1 F_b0))) 0.25)
+       ((V (-0.0 (F_b1))) 0.25)
+       ((V (-0.0 (F_b0))) 0.25)
+       ((V (-0.0 ())) 0.25)
+       ((V (-20.0 (F_b1 F_b0))) 0.25)
+       ((V (-20.0 (F_b1))) 0.25)
+       ((V (-20.0 (F_b0))) 0.25)
+       ((V (-20.0 ())) 0.25))
+     (probcc-reify/exact/a (speaker (in-rejection 1))))
+  (⊦ equal?
+     '(((V (-10.0 (F_b1 F_b0))) 0.5078125)
+       ((V (-10.0 (F_b1))) 0.5)
+       ((V (-10.0 (F_b0))) 0.5)
+       ((V (-10.0 ())) 0.4921875)
+       ((V (-0.0 (F_b1))) 0.26171875)
+       ((V (-20.0 ())) 0.26171875)
+       ((V (-0.0 (F_b1 F_b0))) 0.25390625)
+       ((V (-0.0 (F_b0))) 0.25)
+       ((V (-20.0 (F_b0))) 0.25)
+       ((V (-0.0 ())) 0.24609375)
+       ((V (-20.0 (F_b1 F_b0))) 0.23828125)
+       ((V (-20.0 (F_b1))) 0.23828125))
+     (probcc-reify/exact/a (speaker (in-rejection 2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0050000000000000001)
+ (memory #(12582912 4019944 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/incite/some-all"><a href="#test/incite/some-all"><code>test/incite/some-all</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The some/all game (IN:210-426): the forms are the sixteen subsets of all, some,
+	    not all and none, and a conjunction is understood only when the hearer also guesses
+	    the conjunction state.  With the symmetric utility the speaker best says some; with
+	    the asymmetric one, where buying too little costs ten times more, not all, or some
+	    and not all, when the hearer infers exactly, and some, or nothing, when the hearer
+	    draws two samples.  OCaml orders the form variables by declaration, pmap-compare by
+	    name (deviation 6), so the tables and maxima keyed by forms are compared as sets.
+	    IN:416-422 sample the speaker with <code class="w3-codespan">random_selector</code>: the records do not replay (plan D20), but what upstream gives under OCaml today
+	    does, bit for bit.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/incite/some-all _)
+  (define (ut1 fv) (eq? fv 'F_some))
+  (define (ut2 fv) (and (memq fv '(F_some F_notall)) #t))
+  (define agent-A (in-agent-A-model/some-all in-utility))
+  (define agent-A/asymmetric (in-agent-A-model/some-all in-utility/asymmetric))
+  (define (speaker agent-A utility inferencer)
+    (in-agent-S-model in-all-forms agent-A utility inferencer))
+  (⊦ equal?
+     '(((V (-10.0 (A 2))) 0.5)
+       ((V (-0.0 (A 3))) 0.25)
+       ((V (-0.0 (A 2))) 0.25)
+       ((V (-0.0 (A 1))) 0.25)
+       ((V (-10.0 (A 3))) 0.25)
+       ((V (-10.0 (A 1))) 0.25)
+       ((V (-10.0 (A 0))) 0.25)
+       ((V (-20.0 (A 3))) 0.25)
+       ((V (-20.0 (A 1))) 0.25)
+       ((V (-20.0 (A 0))) 0.25)
+       ((V (-30.0 (A 0))) 0.25))
+     (probcc-reify/exact/a (agent-A ut1)))
+  (⊦ equal?
+     '((-6.666666666666667 (A 2)))
+     (in-argmax (probcc-reify/exact/a (agent-A ut1))))
+  (⊦ equal?
+     '(((V (-0.0 (A 2))) 0.125)
+       ((V (-0.0 (A 1))) 0.125)
+       ((V (-10.0 (A 3))) 0.125)
+       ((V (-10.0 (A 2))) 0.125)
+       ((V (-10.0 (A 1))) 0.125)
+       ((V (-10.0 (A 0))) 0.125)
+       ((V (-20.0 (A 3))) 0.125)
+       ((V (-20.0 (A 0))) 0.125))
+     (probcc-reify/exact/a (agent-A ut2)))
+  (⊦ equal?
+     '((-5.0 (A 2)) (-5.0 (A 1)))
+     (in-argmax (probcc-reify/exact/a (agent-A ut2))))
+  (let1 (table (probcc-reify/exact/a (speaker agent-A in-utility in-exact)))
+        (⊦ equal?
+           (canon '(((V (-0.0 (F_some F_none))) 0.25)
+                    ((V (-0.0 (F_some F_notall F_none))) 0.25)
+                    ((V (-0.0 (F_some F_notall))) 0.5)
+                    ((V (-0.0 (F_some))) 1.0)
+                    ((V (-0.0 (F_all F_none))) 0.25)
+                    ((V (-0.0 (F_all F_notall F_none))) 0.25)
+                    ((V (-0.0 (F_all F_notall))) 0.25)
+                    ((V (-0.0 (F_all F_some F_none))) 0.25)
+                    ((V (-0.0 (F_all F_some F_notall F_none))) 0.25)
+                    ((V (-0.0 (F_all F_some F_notall))) 0.25)
+                    ((V (-0.0 ())) 0.5)
+                    ((V (-10.0 (F_notall))) 1.0)
+                    ((V (-10.0 (F_some F_none))) 0.5)
+                    ((V (-10.0 (F_some F_notall F_none))) 0.5)
+                    ((V (-10.0 (F_some F_notall))) 0.5)
+                    ((V (-10.0 (F_all F_none))) 0.5)
+                    ((V (-10.0 (F_all F_notall F_none))) 0.5)
+                    ((V (-10.0 (F_all F_notall))) 0.5)
+                    ((V (-10.0 (F_all F_some F_none))) 0.5)
+                    ((V (-10.0 (F_all F_some F_notall F_none))) 0.5)
+                    ((V (-10.0 (F_all F_some F_notall))) 0.5)
+                    ((V (-10.0 (F_all F_some))) 1.0)
+                    ((V (-10.0 (F_all))) 1.0)
+                    ((V (-10.0 ())) 0.5)
+                    ((V (-20.0 (F_none))) 1.0)
+                    ((V (-20.0 (F_notall F_none))) 1.0)
+                    ((V (-20.0 (F_some F_none))) 0.25)
+                    ((V (-20.0 (F_some F_notall F_none))) 0.25)
+                    ((V (-20.0 (F_all F_none))) 0.25)
+                    ((V (-20.0 (F_all F_notall F_none))) 0.25)
+                    ((V (-20.0 (F_all F_notall))) 0.25)
+                    ((V (-20.0 (F_all F_some F_none))) 0.25)
+                    ((V (-20.0 (F_all F_some F_notall F_none))) 0.25)
+                    ((V (-20.0 (F_all F_some F_notall))) 0.25)))
+           (canon table))
+        (⊦ equal? '((-0.0 (F_some))) (in-argmax table)))
+  (⊦ equal?
+     '((-8.90625 (F_some)))
+     (in-argmax
+       (probcc-reify/exact/a (speaker agent-A in-utility (in-rejection 2)))))
+  (⊦ equal?
+     '(((V (-0.0 (A 3))) 0.25)
+       ((V (-0.0 (A 2))) 0.25)
+       ((V (-0.0 (A 1))) 0.25)
+       ((V (-10.0 (A 3))) 0.25)
+       ((V (-10.0 (A 2))) 0.25)
+       ((V (-20.0 (A 3))) 0.25)
+       ((V (-100.0 (A 2))) 0.25)
+       ((V (-100.0 (A 1))) 0.25)
+       ((V (-100.0 (A 0))) 0.25)
+       ((V (-200.0 (A 1))) 0.25)
+       ((V (-200.0 (A 0))) 0.25)
+       ((V (-300.0 (A 0))) 0.25))
+     (probcc-reify/exact/a (agent-A/asymmetric ut1)))
+  (⊦ equal?
+     '((-10.0 (A 3)))
+     (in-argmax (probcc-reify/exact/a (agent-A/asymmetric ut1))))
+  (⊦ equal?
+     '(((V (-0.0 (A 2))) 0.125)
+       ((V (-0.0 (A 1))) 0.125)
+       ((V (-10.0 (A 3))) 0.125)
+       ((V (-10.0 (A 2))) 0.125)
+       ((V (-20.0 (A 3))) 0.125)
+       ((V (-100.0 (A 1))) 0.125)
+       ((V (-100.0 (A 0))) 0.125)
+       ((V (-200.0 (A 0))) 0.125))
+     (probcc-reify/exact/a (agent-A/asymmetric ut2)))
+  (⊦ equal?
+     '((-5.0 (A 2)))
+     (in-argmax (probcc-reify/exact/a (agent-A/asymmetric ut2))))
+  (⊦ equal?
+     (canon '((-0.0 (F_notall)) (-0.0 (F_some F_notall))))
+     (canon (in-argmax
+              (probcc-reify/exact/a
+                (speaker agent-A/asymmetric in-utility/asymmetric in-exact)))))
+  (⊦ equal?
+     (canon '((-60.078125 (F_some)) (-60.078125 ())))
+     (canon (in-argmax
+              (probcc-reify/exact/a
+                (speaker
+                  agent-A/asymmetric
+                  in-utility/asymmetric
+                  (in-rejection 2))))))
+  (⊦ equal?
+     '((-0.0 (F_notall)))
+     (in-argmax
+       (probcc-reify/exact/a
+         (speaker
+           agent-A/asymmetric
+           in-utility/asymmetric
+           (in-importance 2)))))
+  (let1 (speaker
+          (speaker agent-A/asymmetric in-utility/asymmetric (in-rejection 10)))
+        (⊦ equal?
+           '((-25.694444444444443 (F_some)))
+           (in-argmax
+             (probcc-sample-importance/a
+               (probcc-random-selector 17)
+               100
+               speaker)))
+        (⊦ equal?
+           '((-19.003472222222221 (F_some)))
+           (in-argmax
+             (probcc-sample-importance/a
+               (probcc-random-selector 17)
+               1000
+               speaker)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.40600000000000003)
+ (memory #(12582912 4031208 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/blip/ailog"><a href="#test/blip/ailog"><code>test/blip/ailog</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The AILog model of the blips (BA:181-216), where every prior and every step of
+	    the dynamics is memoized, so that a fact observed once stays the same: the position
+	    of a plane asked twice, at one and at two times, and the blips at one and two
+	    times.  The memo tables live in the world-local memory, so the model is
+	    instantiated inside the reification, as upstream's functor is.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/blip/ailog _)
+  (define (query q)
+    (probcc-reify/exact
+      (match/first (ba-blip-model) ((,pos ,anyblip1 ,_) (q pos anyblip1)))))
+  (⊦ equal?
+     `(((V ,(void)) 1/100))
+     (query (λ (pos _)
+               (if (and (equal? (pos '(1 0)) '(3 3))
+                        (equal? (pos '(1 0)) '(3 3)))
+                 (void)
+                 (probcc-impossible)))))
+  (⊦ equal?
+     '()
+     (query (λ (pos _)
+               (if (and (equal? (pos '(1 0)) '(3 3))
+                        (equal? (pos '(1 0)) '(3 4)))
+                 (void)
+                 (probcc-impossible)))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     `(((V ,(void)) 0.0015))
+     (query (λ (pos _)
+               (if (and (equal? (pos '(1 0)) '(3 3))
+                        (equal? (pos '(1 1)) '(3 4)))
+                 (void)
+                 (probcc-impossible)))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V #f) 0.97118000000000115) ((V #t) 0.028820000000000002))
+     (query (λ (_ anyblip1) (anyblip1 '((3 3) 0)))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V #f) 0.97118000000000115) ((V #t) 0.028820000000000002))
+     (query (λ (_ anyblip1)
+               (and (anyblip1 '((3 3) 0)) (anyblip1 '((3 3) 0))))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V #f) 0.99595959400000089) ((V #t) 0.0019196860000000003))
+     (query (λ (_ anyblip1)
+               (and (anyblip1 '((3 3) 0)) (anyblip1 '((3 4) 1)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.02) (memory #(12582912 4020648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/blip/lazy"><a href="#test/blip/lazy"><code>test/blip/lazy</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Lazy planes and the whole screen observed (BL:263-428): a coordinate is drawn
+	    only when an observation compares it, so two and three planes are within reach of
+	    exact inference: two blips may come from two planes, or from three when two are
+	    in one cell, and three blips from three planes with probability <code class="w3-codespan">6 · 0.01^3 · 0.00287020304028914744</code>.  The motion of one plane over
+	    two steps is inferred in one query, and step by step, by reflecting the exact
+	    state of the first step into the second (sequential Monte-Carlo, BL:419-428), with
+	    the same result; so are three moving planes over three steps (BL:430-493), whose
+	    number of worlds stays 384, since one motion only is consistent with the blips.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/blip/lazy _)
+  (define ((evidence0 blips) ps t) (when (= t 0) (bl-blips-ideal blips ps)))
+  (define (count blips n)
+    (probcc-reify/exact
+      (car (bl-step (bl-parm-n n) bl-state0 0 (evidence0 blips)))))
+  (⊦ equal?
+     `(((V ,(void)) 1/100))
+     (probcc-reify/exact
+       (match/first
+         (bl-lplane-state-0 1)
+         ((,_ (,x ,y) ,_)
+          (if (and (= (x) 3) (= (y) 3)) (void) (probcc-impossible))))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     `(((V ,(void)) 0.0013043478260869568))
+     (probcc-reify/exact
+       (begin
+         (bl-step (bl-parm-n 1) bl-state0 0 (evidence0 '((3 3))))
+         (void))))
+  (⊦ equal?
+     `(((V ,(void)) 1/5000))
+     (probcc-reify/exact
+       (let* ((p2 (probcc-letlazy (τ (bl-lplane-state-0 2))))
+              (p1 (probcc-letlazy (τ (bl-lplane-state-0 1)))))
+         (bl-blips-ideal '((3 3) (3 5)) (list p1 p2)))))
+  (⊦ equal?
+     '()
+     (probcc-reify/exact
+       (begin
+         (bl-step (bl-parm-n 1) bl-state0 0 (evidence0 '((3 3) (3 5))))
+         (void))))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V 2) 3.8379530916844328e-06))
+     (count '((3 3) (3 5)) 2))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V 2) 3.8269373870522e-06) ((V 3) 1.7221218241734858e-08))
+     (count '((3 3) (3 5)) 3))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     '(((V 3) 1.7221218241734858e-08))
+     (count '((3 3) (3 5) (3 7)) 3))
+  (⊦ (rel-approx? 1.0000000000000001e-09)
+     `(((V ,(void)) 0.00019565217391304352))
+     (probcc-reify/exact
+       (let1 (st (bl-step (bl-parm-n 1) bl-state0 0 bl-two-blips-ideal))
+             (bl-step bl-parm-no (bl-lazy-state st) 1 bl-two-blips-ideal)
+             (void))))
+  (let1 (q2b-s0
+          (probcc-reify/exact
+            (bl-step (bl-parm-n 1) bl-state0 0 bl-two-blips-ideal)))
+        (⊦ (rel-approx? 1.0000000000000001e-09)
+           `(((V ,(void)) 0.00019565217391304352))
+           (probcc-reify/exact
+             (let1 (st (bl-lazy-state (probcc-reflect q2b-s0)))
+                   (bl-step bl-parm-no st 1 bl-two-blips-ideal)
+                   (void)))))
+  (let* ((q3b-s0
+           (probcc-reify/exact
+             (bl-step (bl-parm-n 3) bl-state0 0 blip333-ideal)))
+         (q3b-s1
+           (probcc-reify/exact
+             (bl-step
+               bl-parm-no
+               (bl-lazy-state (probcc-reflect q3b-s0))
+               1
+               blip333-ideal)))
+         (q3b-s2
+           (probcc-reify/exact
+             (bl-step
+               bl-parm-no
+               (bl-lazy-state (probcc-reflect q3b-s1))
+               2
+               blip333-ideal)))
+         (nplanes (λ (st) (length (cadr st)))))
+    (⊦ equal? '(384 384 384) (probcc-map length (list q3b-s0 q3b-s1 q3b-s2)))
+    (⊦ (rel-approx? 1.0000000000000001e-09)
+       '(((V 3) 1.7221218241734858e-08))
+       (probcc-map-dist nplanes q3b-s0))
+    (⊦ (rel-approx? 1.0000000000000001e-09)
+       '(((V 3) 5.8121611565855201e-11))
+       (probcc-map-dist nplanes q3b-s1))
+    (⊦ (rel-approx? 1.0000000000000001e-09)
+       '(((V 3) 2.0760830241309679e-12))
+       (probcc-map-dist nplanes q3b-s2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.26600000000000001)
+ (memory #(12582912 4533888 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div></body></html>

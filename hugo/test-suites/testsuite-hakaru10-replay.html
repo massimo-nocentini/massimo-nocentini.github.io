@@ -1,0 +1,660 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section7450">
+<header>
+<h1>Replays</h1></header></section>
+<p>Chains replayed bit-exactly against upstream's recorded runs (the comments of
+        Examples1.hs, Syntax.hs and ColoredBalls.hs) and against the Python transcription of
+        the engine (prototype regression values), with the random-1.0.1.1 <code class="w3-codespan">StdGen</code> of <code class="w3-codespan">mkStdGen 17</code> (M:858).  A replay
+        holds only if the port draws exactly where upstream draws, in the same order,
+        computes every Double expression in Haskell's association, and creates the nodes
+        in the same order (plan §6.1, C18).  The triage order for a failing replay: the
+        generator, the samplers' draw order, the order of the resampleable nodes (M:239,
+        M:962), floating-point order, node creation order, (de)activation sums.</p>
+<h2 id="test/replay/pdep"><a href="#test/replay/pdep"><code>test/replay/pdep</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X1, <code class="w3-codespan">pdep_run</code>: literally the same samples (E:16-22; P
+            l.248-249).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pnorm (dist normal 10.0 0.5))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pdep1 (do/monad (← x pnorm) (diracN (sexp+ x 1.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pnorm = dist normal 10 0.5
+
+pdep1 = do
+  x &lt;- pnorm
+  diracN (x+1)
+
+-- Literally the same samples
+pdep_run = mcmC 100 (dist normal 11 0.5) == mcmC 100 pdep1
+-- True</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pdep _)
+  (⊦ equal? (mcmC 100 (dist normal 11.0 0.5)) (mcmC 100 pdep1)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6205976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/pdepR"><a href="#test/replay/pdepR"><code>test/replay/pdepR</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X2: the right unit law, sample for sample (E:24-32, P l.254-258): &quot;Even the
+            sequences of samples for the two programs are identical.&quot;</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pdepR (do/monad (← x pnorm) (diracN x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pdepR′ (do/monad (← x pnorm) (return x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pdepR = do
+  x &lt;- pnorm
+  diracN x
+
+pdepR_run = mcmC 100 pdepR
+
+pdepR' = do
+  x &lt;- pnorm
+  return x</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pdepR _)
+  (let1 (reference (mcmC 100 pnorm))
+        (⊦ equal? reference (mcmC 100 pdepR))
+        (⊦ equal? reference (mcmC 100 pdepR′))
+        (⊦ &lt; 10 (length (delete-duplicates reference)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6207360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/grass"><a href="#test/replay/grass"><code>test/replay/grass</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X3: 9363 rainy samples of 20000, 0.46815, upstream's &quot;0.46815 for 20000 -- with
+            old resampling&quot; (E:321).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (nnot p b) (if b p 1.0))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ((nor strength-x strength-y noise) x y)
+  (bern (- 1.0
+           (* (* (nnot (- 1.0 strength-x) x) (nnot (- 1.0 strength-y) y))
+              (- 1.0 noise)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define grass
+  (do/monad
+    (← rain (dist bern 0.3))
+    (← sprinkler (dist bern 0.5))
+    (← grass-is-wet (dist (condition #t (nor 0.9 0.8 0.1)) rain sprinkler))
+    (return rain)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">grass = do
+  rain        &lt;- dist bern 0.3
+  sprinkler   &lt;- dist bern 0.5
+  --  dist (nor 0.9 0.8 0.1) rain sprinkler
+  grass_is_wet &lt;- dist (True `condition` nor 0.9 0.8 0.1) rain sprinkler
+  return rain
+
+-- noisy-or function
+nor :: Double -&gt; Double -&gt; Double -&gt; Bool -&gt; Bool -&gt; Distribution Bool
+nor strengthX strengthY noise x y =
+  bern $ 1 - nnot (1-strengthX) x * nnot (1-strengthY) y * (1-noise)
+  
+-- noisy not function
+nnot :: Num a =&gt; a -&gt; Bool -&gt; a
+nnot p True  = p
+nnot p False = 1
+
+grass_run = let ns = 20000
+                r  = mcmC ns grass
+            in
+             ((fromIntegral . length . filter id $ r) /
+              (fromIntegral ns :: Double))
+-- 0.46815 for 20000 -- with old resampling
+-- 0.4684714427203697  -- theoretical</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/grass _) (⊦ = 9363 (count-true (mcmC 20000 grass))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.069) (memory #(12582912 7162792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/pcond1"><a href="#test/replay/pcond1"><code>test/replay/pcond1</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X4: both of upstream's records (E:112-114), of 1000 and 10000 samples (the
+            first sums to 1000, though the code reads <code class="w3-codespan">mcmC 10000</code>).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (is1 x) (lift (λ (xv) (= xv 1)) x))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond1
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (is1 x)
+         (dist categorical '((10 . 0.5) (11 . 0.5)))
+         (dist categorical '((20 . 0.5) (21 . 0.5))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcond1 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (dist categorical (pure [(10,0.5), (11,0.5)]))
+     (dist categorical (pure [(20,0.5), (21,0.5)]))
+
+pcond1r = hist $ mcmC 10000 pcond1
+-- fromList [(10,246),(11,222),(20,240),(21,292)]
+-- fromList [(10,2481),(11,2394),(20,2565),(21,2560)]</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pcond1 _)
+  (⊦ equal?
+     '((10 . 246) (11 . 222) (20 . 240) (21 . 292))
+     (hist (mcmC 1000 pcond1)))
+  (⊦ equal?
+     '((10 . 2481) (11 . 2394) (20 . 2565) (21 . 2560))
+     (hist (mcmC 10000 pcond1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.031) (memory #(12582912 6216672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/pcond2"><a href="#test/replay/pcond2"><code>test/replay/pcond2</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X5: both of upstream's records (E:122-124), of 1000 and 10000 samples (the
+            first sums to 1000, though the code reads <code class="w3-codespan">mcmC 10000</code>).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond2
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (is1 x) (return x) (dist categorical '((20 . 0.5) (21 . 0.5))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcond2 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (return x)
+     (dist categorical (pure [(20,0.5), (21,0.5)]))
+
+pcond2r = hist $ mcmC 10000 pcond2
+-- fromList [(1,500),(20,214),(21,286)]
+-- fromList [(1,5000),(20,2321),(21,2679)]</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pcond2 _)
+  (⊦ equal? '((1 . 500) (20 . 214) (21 . 286)) (hist (mcmC 1000 pcond2)))
+  (⊦ equal? '((1 . 5000) (20 . 2321) (21 . 2679)) (hist (mcmC 10000 pcond2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.037) (memory #(12582912 6213776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/pcond3"><a href="#test/replay/pcond3"><code>test/replay/pcond3</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X6: upstream's &quot;new&quot; record (E:134-136).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond3
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (is1 x)
+         (return x)
+         (&gt;&gt; (dist normal 0.0 1.0)
+             (dist categorical '((20 . 0.5) (21 . 0.5)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcond3 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (return x)
+     (do
+       dist normal 0 1
+       dist categorical (pure [(20,0.5), (21,0.5)]))
+
+pcond3r = hist $ mcmC 10000 pcond3
+-- fromList [(1,5011),(20,2507),(21,2482)]
+-- fromList [(1,5040),(20,2509),(21,2451)] -- new</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pcond3 _)
+  (⊦ equal? '((1 . 5040) (20 . 2509) (21 . 2451)) (hist (mcmC 10000 pcond3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.034) (memory #(12582912 6220784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/pcond4"><a href="#test/replay/pcond4"><code>test/replay/pcond4</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X7: both of upstream's records (E:273-279), conditioning inside a branch.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pcond4
+  (do/monad
+    (← x (dist categorical '((1 . 0.5) (2 . 0.5))))
+    (if_ (is1 x)
+         (return x)
+         (&gt;&gt; (dist (condition #t bern) 0.5)
+             (dist categorical '((20 . 0.5) (21 . 0.5)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcond4 = do
+  x &lt;- dist categorical (pure [(1,0.5), (2,0.5)])
+  if_ ((==1) &lt;$&gt; x)
+     (return x)
+     (do
+       dist (True `condition` bern) 0.5
+       dist categorical (pure [(20,0.5), (21,0.5)]))
+
+_ = hist $ mcmC 1000 pcond4
+{-
+*Examples1&gt; hist $ mcmC 1000 pcond4
+fromList [(1,648),(20,174),(21,178)]
+*Examples1&gt; hist $ mcmC 10000 pcond4
+fromList [(1,6697),(20,1641),(21,1662)]
+-}
+-- Exact:
+--      [(0.166666666666666657, V 21); (0.166666666666666657, V 20);
+--       (0.66666666666666663, V 1)])</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pcond4 _)
+  (⊦ equal? '((1 . 648) (20 . 174) (21 . 178)) (hist (mcmC 1000 pcond4)))
+  (⊦ equal? '((1 . 6697) (20 . 1641) (21 . 1662)) (hist (mcmC 10000 pcond4))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.04) (memory #(12582912 6218096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/pcorr"><a href="#test/replay/pcorr"><code>test/replay/pcorr</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X8: Yufei Cai's example (E:223-238; Figaro issue 548), a custom distribution
+            conditioned on two random choices.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (pcorr* pfuzz result)
+  (define ((fuzzy2 pfuzz op) x y)
+    (let1 (v (op x y))
+          (categorical
+            `((,v unquote pfuzz) (,(not v) unquote (- 1.0 pfuzz))))))
+  (define (xor y x) (not (eq? x y)))
+  (do/monad
+    (← x (dist bern 0.5))
+    (← y (dist bern 0.5))
+    (dist (condition #t (fuzzy2 pfuzz xor)) x y)
+    (return (result x y))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pcorr pfuzz = do
+  x &lt;- dist bern 0.5
+  y &lt;- dist bern 0.5
+  dist (True `condition` fuzzy2 pfuzz xor) x y
+  return y
+ where
+   -- Creating a custom distribution
+   fuzzy2 pfuzz op x y = let v = op x y in
+     categorical [(v,pfuzz),(not v,1-pfuzz)]
+   xor y x = not (x == y)
+
+_ = hist $ mcmC 1000 (pcorr 0.1)
+-- fromList [(False,419),(True,581)]</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/pcorr _)
+  (⊦ equal? '((#f . 419) (#t . 581)) (hist (mcmC 1000 (pcorr 0.1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 6214952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/girl"><a href="#test/replay/girl"><code>test/replay/girl</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X9: the eldest daughter puzzle, &quot;77, without the bias&quot; (E:354-355).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define girl
+  (let ()
+    (define ((fuzzy2 pfuzz op) x y)
+      (let1 (v (op x y))
+            (categorical
+              `((,v unquote (- 1.0 pfuzz)) (,(not v) unquote pfuzz)))))
+    (do/monad
+      (← girl1 (dist bern 0.5))
+      (← girl2 (dist bern 0.5))
+      (dist (condition #t (fuzzy2 0.01 (λ (a b) (or a b)))) girl1 girl2)
+      (return girl1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">girl = do
+  girl1 &lt;- dist bern 0.5
+  girl2 &lt;- dist bern 0.5
+  dist (True `condition` fuzzy2 0.01 (||)) girl1 girl2
+  return girl1
+ where
+   -- Creating a custom distribution
+   fuzzy2 pfuzz op x y = let v = op x y in
+     categorical [(v,1-pfuzz),(not v,pfuzz)]
+
+_ = length . filter id $ mcmC 100 girl
+-- 77, without the bias</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/girl _) (⊦ = 77 (count-true (mcmC 100 girl))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 6217896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/post-bias"><a href="#test/replay/post-bias"><code>test/replay/post-bias</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X10: &quot;All true&quot; of <code class="w3-codespan">mcmC 10</code> (E:262-263) and &quot;all True
+            samples&quot; of <code class="w3-codespan">mcmC 100</code> (P l.435-437), both replayed: the
+            observation in the branch not returned still weighs the coin.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (post-bias c)
+  (do/monad
+    (← coin (dist bern 0.5))
+    (if_ coin
+         (dist (condition c normal) 0.0 1.0)
+         (dist (condition c normal) 100.0 1.0))
+    (return coin)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">post_bias c = do
+  coin &lt;- dist bern 0.5
+  if_ coin (dist (c `condition` normal) 0 1)
+           (dist (c `condition` normal) 100 1)
+  return coin
+
+_ = mcmC 10 (post_bias 1)
+-- All true</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/post-bias _)
+  (⊦ equal? (make-list 10 #t) (mcmC 10 (post-bias 1.0)))
+  (⊦ equal? (make-list 100 #t) (mcmC 100 (post-bias 1.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 6218880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/biased-coin"><a href="#test/replay/biased-coin"><code>test/replay/biased-coin</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X11: upstream's &quot;incremental&quot; record (E:203-210; P l.389-392: &quot;we estimate
+            the average as 0.499&quot;), the posterior being beta 2 2 of mean 0.5 and variance
+            0.05.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (biased-coin c1 c2)
+  (do/monad
+    (← b (dist beta 1.0 1.0))
+    (dist (condition c1 bern) b)
+    (dist (condition c2 bern) b)
+    (return b)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">biased_coin c1 c2 = do
+  b &lt;- dist beta 1 1
+  dist (c1 `condition` bern) b
+  dist (c2 `condition` bern) b
+  return b</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">biased_coin22 =
+  momenta . drop 1000 $
+   mcmC 10000 (biased_coin True False)
+-- beta 2 2, av = 0.5, sigma2 = 5e-2
+-- original Metropolis
+-- (0.49433040918945736,5.013851472980666e-2)
+-- incremental
+-- (0.49910027237934973,4.97358737659099e-2)</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/biased-coin _)
+  (⊦ equal?
+     '(0.49910027237935 . 0.0497358737659099)
+     (momenta (drop (mcmC 10000 (biased-coin #t #f)) 1000))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.052) (memory #(12582912 6357056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/mixng-interleaved"><a href="#test/replay/mixng-interleaved"><code>test/replay/mixng-interleaved</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X12: the KL divergence of mixng against the two components' samples, upstream's
+            &quot;now&quot; record (E:159-164; P l.361-364).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define mixng
+  (do/monad
+    (← x (dist normal 0.0 1.0))
+    (if_ (lift (λ (xv) (&gt; xv 0.0)) x)
+         (dist normal 10.0 2.0)
+         (dist gamma 3.0 (/ 1.0 3.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">mixng = do
+  x &lt;- dist normal 0 1
+  if_ ((&gt;0) &lt;$&gt; x)
+           (dist normal 10 2)
+           (dist gamma 3 (1/3))</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">_  =
+ let n = 5000 in kl (tabulate 0.5 (mcmC n mixng)) (tabulate 0.5 $ mcmC (n `div` 2) (dist normal 10 2) ++ mcmC (n `div` 2) (dist gamma 3 (1/3)))
+{-
+5000 samples 1.3563495645465825e-2
+1.3896442111895212e-2 now
+-}</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/mixng-interleaved _)
+  (⊦ =
+     0.0138964421118952
+     (kl (tabulate 0.5 (mcmC 5000 mixng))
+         (tabulate
+           0.5
+           (append
+             (mcmC 2500 (dist normal 10.0 2.0))
+             (mcmC 2500 (dist gamma 3.0 (/ 1.0 3.0))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.031) (memory #(12582912 6222736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/phier"><a href="#test/replay/phier"><code>test/replay/phier</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X13: Bench.hs's record for n = 10 and 1000 samples (BE:23-25).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (deeper m) (do/monad (← x m) (dist normal x 3.0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (phierN n) (fold (λ (_ m) (deeper m)) (dist normal 0.0 1.0) (iota n)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">phier n = 
+  (iterate (\m -&gt; do {x&lt;-m; dist normal x 3}) $ dist normal 0 1) !! n
+
+main = do
+  [n',nchain'] &lt;- getArgs
+  let n = read n' :: Int
+  let nchain = read nchain' :: Integer
+  print . momenta $ mcmC nchain (phier n)
+
+{-
+1000
+(3.4117556376053577,32.27027981263249)</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/phier _)
+  (⊦ equal?
+     '(3.41175563760536 . 32.2702798126325)
+     (momenta (mcmC 1000 (phierN 10)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 6284280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/colored-balls"><a href="#test/replay/colored-balls"><code>test/replay/colored-balls</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X14: <code class="w3-codespan">cbr</code>, upstream's record &quot;Good agreement&quot; (CB:101-104),
+            10000 samples of a model of 2114 nodes, most of them in branches.  Its
+            listing is with case <code class="w3-codespan">test/language/graph/colored-balls</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">cbr = hist $ mcmC 10000 (cballs_model (replicate 10 Blue))
+
+-- fromList [(1,4265),(2,2203),(3,1244),(4,805),(5,486),(6,291),(7,565),(8,141)]
+-- Good agreement</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/colored-balls _)
+  (⊦ equal?
+     '((1 . 4265)
+       (2 . 2203)
+       (3 . 1244)
+       (4 . 805)
+       (5 . 486)
+       (6 . 291)
+       (7 . 565)
+       (8 . 141))
+     (hist (mcmC 10000 (cballs-model (make-list 10 'blue))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.696) (memory #(25165824 6220976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/always-flip"><a href="#test/replay/always-flip"><code>test/replay/always-flip</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X15: records made with the always-flip kernel of the Bernoulli distribution
+            (D:64-70, commented out upstream and kept as <code class="w3-codespan">bern/flip</code>): pbern's 4 True of 10 (P l.217-218), ph2's 5809 and ph21's 2026 (E:94, E:102)
+            and the KL of mixng against mixng' (E:153-157).  The general forms of the models
+            take the coin; <code class="w3-codespan">(let1 (bern bern/flip) ...)</code> runs them as
+            upstream did.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (pbern* bern) (dist bern 0.4))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (ph2* bern)
+  (do/monad
+    (← x (dist bern 0.2))
+    (dist bern (lift (λ (xv) (if xv 0.1 0.7)) x))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (ph21* bern)
+  (do/monad
+    (← x (dist bern 0.2))
+    (← y (dist bern (lift (λ (xv) (if xv 0.1 0.7)) x)))
+    (return x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (mixng′* bern)
+  (do/monad
+    (← x (dist bern 0.5))
+    (if_ x (dist normal 10.0 2.0) (dist gamma 3.0 (/ 1.0 3.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Simple models
+pbern = dist bern 0.4
+
+pbern_run = mcmC 10 pbern</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">ph2 = do
+  x &lt;- dist bern 0.2
+  dist bern ((\xv -&gt; if xv then 0.1 else 0.7) &lt;$&gt; x)
+-- 0.2 * 0.1 + 0.8*0.7 = 0.58
+
+ph2r = length . filter id $ mcmC 10000 ph2
+-- 5809
+
+ph21 = do
+  x &lt;- dist bern 0.2
+  y &lt;- dist bern ((\xv -&gt; if xv then 0.1 else 0.7) &lt;$&gt; x)
+  return x
+
+ph21r = length . filter id $ mcmC 10000 ph21
+-- 2026</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">mixng' = do
+  x &lt;- dist bern 0.5
+  if_ x
+           (dist normal 10 2)
+           (dist gamma 3 (1/3))
+
+_  =
+ let n = 5000 in kl (tabulate 0.5 (mcmC n mixng)) (tabulate 0.5 (mcmC n mixng'))
+{-
+5000 samples 2.275866271810348e-2
+5000 samples 1.1301558326703463e-2 now</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- resampling always flips, so fwd and bwd steps are 0
+instance RDistribution Bern Bool where
+{-
+  resample d x _ g =
+    let x' = not x in
+    ((x', logDensity d x', g),0)
+-}</code></pre></div>
+<p>(Distribution.hs:64-70.)</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/always-flip _)
+  (let1 (bern bern/flip)
+        (⊦ = 4 (count-true (mcmC 10 (pbern* bern))))
+        (⊦ = 5809 (count-true (mcmC 10000 (ph2* bern))))
+        (⊦ = 2026 (count-true (mcmC 10000 (ph21* bern))))
+        (⊦ =
+           0.0113015583267035
+           (kl (tabulate 0.5 (mcmC 5000 mixng))
+               (tabulate 0.5 (mcmC 5000 (mixng′* bern)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.071) (memory #(25165824 6227456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/tac"><a href="#test/replay/tac"><code>test/replay/tac</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>X16: &quot;tac2 and tac3 produce identical results, as expected: since diracN is
+            unit, e &gt;&gt;= diracN is indeed the same as diracN&quot; (S:370-371); here tac1 too,
+            since a constant Dirac node in a branch draws nothing.  Upstream's 620, 523 and
+            532 (S:346-368) come from an older revision of the engine; 505 is the
+            prototype's value.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define tac1
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ c (dist normal 0.0 1.0) (dist uniform 10.0 20.0))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define tac2
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ c (&gt;&gt; (diracN #t) (dist normal 0.0 1.0)) (dist uniform 10.0 20.0))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define tac3
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ c
+         (&gt;&gt; (diracN #t) (dist normal 0.0 1.0))
+         (&gt;&gt;= (dist uniform 10.0 20.0) diracN))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Programs from my messages about the problem with conditionals
+tac1 = do
+  c &lt;- dist bern 0.5
+  if_ c
+    (dist normal 0 1)
+    (dist uniform 10 20)
+  return c
+
+tac1_run = length . filter id $ mcmC 1000 tac1
+-- 620 True
+
+tac2 = do
+  c &lt;- dist bern 0.5
+  if_ c
+    (diracN (Val True) &gt;&gt; dist normal 0 1)
+    (dist uniform 10 20)
+  return c
+
+tac2_run = length . filter id $ mcmC 1000 tac2
+-- 523 True
+
+tac3 = do
+  c &lt;- dist bern 0.5
+  if_ c
+    (diracN (Val True) &gt;&gt; dist normal 0 1)
+    (dist uniform 10 20 &gt;&gt;= diracN)
+  return c
+
+tac3_run = length . filter id $ mcmC 1000 tac3
+-- 532 True
+
+-- tac2 and tac3 produce identical results, as expected:
+-- since diracN is unit, e &gt;&gt;= diracN is indeed the same as diracN</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/tac _)
+  (let ((t1 (mcmC 1000 tac1)) (t2 (mcmC 1000 tac2)) (t3 (mcmC 1000 tac3)))
+    (⊦ equal? t1 t2)
+    (⊦ equal? t2 t3)
+    (⊦ = 505 (count-true t1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(25165824 6320328 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

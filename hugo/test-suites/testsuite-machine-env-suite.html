@@ -1,0 +1,169 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section155">
+<header>
+<h1>Tabled environments</h1></header></section>
+<p>Ported from on-scheme's <code class="w3-codespan">commons.scm</code>; the checks come from <code class="w3-codespan">SC-machine-test.scm</code>.</p>
+<section id="section156">
+<header>
+<h1>Implementation</h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux machine env)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken condition)
+    (only (chicken memory representation) extend-procedure procedure-data)
+    srfi-69
+    (aux base)
+    (aux commons)
+    (aux tabling))
+  (define extend
+    (λ (E #!key (same? equal?))
+       (let* ((lookup
+                (λ (p E z)
+                   (letcar&amp;cdr
+                     (((x y) p))
+                     (cond ((same? x z) y) (else (E z))))))
+              (extend₁
+                (cond ((and (eq? same? equal?)
+                            (not (eq? (procedure-data E) 'untabled)))
+                       (λ (p E)
+                          (letrec-tabled
+                            ((E₁ H
+                                 (lambda (z)
+                                   (cond ((eq? tabled/get-hidden-hash-table z)
+                                          (hash-table-merge
+                                            (H)
+                                            (E z #:fresh #t #:store #f)))
+                                         (else (lookup p E z))))))
+                            E₁)))
+                      (else
+                       (λ (p E)
+                          (extend-procedure
+                            (λ (z #!key (fresh (void)) (store (void)))
+                               (cond ((eq? tabled/get-hidden-hash-table z)
+                                      (E z #:fresh #t #:store #f))
+                                     (else (lookup p E z))))
+                            'untabled))))))
+         (λ assocs (foldr extend₁ E assocs)))))
+  (define E₀
+    (λ (z #!key (fresh (void)) (store (void)))
+       (cond ((eq? tabled/get-hidden-hash-table z) (make-hash-table))
+             (else (void)))))
+  (define E⁺
+    (λ (z #!key (fresh (void)) (store (void)))
+       (cond ((eq? tabled/get-hidden-hash-table z) (make-hash-table))
+             ((atom? z) (handle-exceptions _ (void) (eval z)))
+             (else (void)))))
+  (define E-&gt;alist
+    (λ (E)
+       (hash-table-fold
+         (E tabled/get-hidden-hash-table #:fresh #t #:store #f)
+         (λ (k v acc) (cons `(,k unquote v) acc))
+         '())))
+  (define E-null? (=to? E₀ #:same? eq?)))
+</code></pre></div>
+<h2 id="test/extend-lookup"><a href="#test/extend-lookup"><code>test/extend-lookup</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/extend-lookup _)
+  (define E₁ ((extend E₀) '(a . 3)))
+  (define E₂ ((extend E₁) '(b . 4)))
+  (⊦= 3 (E₂ 'a))
+  (⊦= 4 (E₂ 'b))
+  (⊨ (void? (E₂ 'c)))
+  (⊦= 3 (E₂ 'a))
+  (⊦=/alist `(((c) unquote (void)) ((a) . 3) ((b) . 4)) (E-&gt;alist E₂))
+  (define E₃ ((extend E₂) '(b . 0)))
+  (⊦=/alist `(((c) unquote (void)) ((a) . 3) ((b) . 4)) (E-&gt;alist E₃))
+  (⊦= 0 (E₃ 'b))
+  (⊦=/alist `(((c) unquote (void)) ((a) . 3) ((b) . 0)) (E-&gt;alist E₃)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1916480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/E-null?"><a href="#test/E-null?"><code>test/E-null?</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/E-null? _)
+  (define E₁ ((extend E₀) '(a . 3)))
+  (⊨ (E-null? E₀))
+  (⊭ (E-null? E₁)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1920144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/E⁺"><a href="#test/E⁺"><code>test/E⁺</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/E⁺ _)
+  (define E ((extend E⁺) '(a . 3)))
+  (⊦= 3 (E 'a))
+  (⊦= 7 (E 7))
+  (⊦= car (E 'car))
+  (⊨ (void? (E 'an-unbound-identifier)))
+  (⊨ (void? (E '(car x)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1923832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/extend-many"><a href="#test/extend-many"><code>test/extend-many</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/extend-many _)
+  (define E ((extend E₀) '(a . 1) '(b . 2) '(a . 3)))
+  (⊦= 1 (E 'a))
+  (⊦= 2 (E 'b))
+  (define E/eq ((extend E₀ #:same? eq?) (cons &quot;s&quot; 1)))
+  (⊨ (void? (E/eq (string #\s))))
+  (define E/equal ((extend E₀) (cons &quot;s&quot; 1)))
+  (⊦= 1 (E/equal (string #\s))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1930584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/extend-same?-untabled"><a href="#test/extend-same?-untabled"><code>test/extend-same?-untabled</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/extend-same?-untabled _)
+  (define s &quot;s&quot;)
+  (define E/miss-first ((extend E₀ #:same? eq?) (cons s 1)))
+  (⊨ (void? (E/miss-first (string #\s))))
+  (⊦= 1 (E/miss-first s))
+  (define E/hit-first ((extend E₀ #:same? eq?) (cons s 1)))
+  (⊦= 1 (E/hit-first s))
+  (⊨ (void? (E/hit-first (string #\s))))
+  (define E/child ((extend ((extend E₀ #:same? eq?) (cons s 1))) '(a . 2)))
+  (⊨ (void? (E/child (string #\s))))
+  (⊦= 1 (E/child s))
+  (⊦= 2 (E/child 'a))
+  (⊦=/alist '() (E-&gt;alist E/child))
+  (define E/tabled ((extend E₀) '(b . 3)))
+  (define E/over ((extend E/tabled #:same? eq?) (cons s 1)))
+  (⊦= 3 (E/over 'b))
+  (⊦=/alist '(((b) . 3)) (E-&gt;alist E/over)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1909600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

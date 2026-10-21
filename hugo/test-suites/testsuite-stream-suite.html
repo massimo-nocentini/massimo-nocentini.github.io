@@ -19,46 +19,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
 <h2 id="test/stream/nats"><a href="#test/stream/nats"><code>test/stream/nats</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream/nats _)
   (let1 (nats (take§ 20 (nats§ 0)))
         (⊦= '(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
-              (§-&gt;list nats))))
+            (§-&gt;list nats))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(6291456 1863376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1944752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/fibs"><a href="#test/stream/fibs"><code>test/stream/fibs</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream/fibs _)
   (let1 (fibs (take§ 20 (fibs§ 0 1)))
-        (⊦= '(0
-                1
-                1
-                2
-                3
-                5
-                8
-                13
-                21
-                34
-                55
-                89
-                144
-                233
-                377
-                610
-                987
-                1597
-                2584
-                4181)
-              (§-&gt;list fibs))))
+        (⊦= '(0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181)
+            (§-&gt;list fibs))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1878472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1957576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/ones"><a href="#test/stream/ones"><code>test/stream/ones</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -67,17 +50,26 @@
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1882032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1961248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/primes"><a href="#test/stream/primes"><code>test/stream/primes</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream/primes _)
   (let1 (primes (take§ 20 primes§))
         (⊦= '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71)
-              (§-&gt;list primes))))
+            (§-&gt;list primes))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(6291456 2083056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2003384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream/long-prefixes"><a href="#test/stream/long-prefixes"><code>test/stream/long-prefixes</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream/long-prefixes _)
+  (⊦= 9999 (list-ref (§-&gt;list (take§ 10000 (nats§ 0))) 9999))
+  (⊦= 541 (list-ref (§-&gt;list (take§ 100 primes§)) 99)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.111) (memory #(12582912 2336512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/stream/ones+τ"><a href="#test/stream/ones+τ"><code>test/stream/ones+τ</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -86,5 +78,5 @@
         (⊦= '(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1) (§-&gt;list ones))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2086576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2337760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

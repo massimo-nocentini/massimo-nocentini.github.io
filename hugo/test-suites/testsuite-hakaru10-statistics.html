@@ -1,0 +1,680 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section7479">
+<header>
+<h1>Statistics</h1></header></section>
+<p>Posterior estimates of the examples, checked against exact or analytic values.
+        Each tolerance is at least about 4 standard deviations of the estimate across the
+        seeds 1 to 40, measured on this port, and more where a looser plan value is kept (the chains are autocorrelated, so the iid
+        standard error underestimates the spread two- to fourfold); the averages over those
+        seeds agree with the exact values, with no sign of bias.  The suite runs at seed 17
+        by default; <code class="w3-codespan">HAKARU10_SEEDS=17,1,2,3,4</code> (<code class="w3-codespan">make test-hakaru10-long</code>) runs every case over the listed seeds,
+        a failure reporting its seed.  Seeds this run: <code>(17)</code>.</p>
+<h2 id="test/statistics/pbern"><a href="#test/statistics/pbern"><code>test/statistics/pbern</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S1: pbern under the default kernel, an independence proposal (D:29-32).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/pbern _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed 0.025 0.4 (frequency identity (mcmC 10000 pbern #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.012) (memory #(25165824 6437536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/pnorm"><a href="#test/statistics/pnorm"><code>test/statistics/pnorm</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S2: pnorm, N(10, 0.5²) (E:14).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/pnorm _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed 0.03 '(10.0 . 0.25) (momenta (mcmC 10000 pnorm #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.02) (memory #(25165824 6347008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/ph1"><a href="#test/statistics/ph1"><code>test/statistics/ph1</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S3: ph1, x ~ N(0, 1) and N(x, 3²): mean 0, variance 1 + 9 (E:65-67).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ph1 (do/monad (← x (dist normal 0.0 1.0)) (dist normal x 3.0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/ph1 _)
+  (for-each
+    (λ (seed)
+       (let1 (m (momenta (mcmC 20000 ph1 #:seed seed)))
+             (⊦≈ seed 0.3 0.0 (car m))
+             (⊦≈ seed 1.5 10.0 (cdr m))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.056) (memory #(25165824 6295680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/phier3"><a href="#test/statistics/phier3"><code>test/statistics/phier3</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S4: phier with 3 steps: mean 0, variance 1 + 3 × 9 (BE:14-15).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/phier3 _)
+  (for-each
+    (λ (seed)
+       (let1 (m (momenta (mcmC 20000 (phierN 3) #:seed seed)))
+             (⊦≈ seed 1.5 0.0 (car m))
+             (⊦≈ seed 8.0 28.0 (cdr m))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.065) (memory #(25165824 6297192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/phier-kl"><a href="#test/statistics/phier-kl"><code>test/statistics/phier-kl</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S5: phier, Hur et al.'s Fig. 3, has the distribution N(0, √91) (P l.313-318),
+            on which STAN goes wrong.  The KL divergence of 40000 samples, tabulated in bins
+            of 0.5, from the exact bin masses is below 0.25 (over the seeds 1 to 40: mean
+            0.080, standard deviation 0.038, at most 0.207; at 10000 samples the mean is 0.29
+            but the spread reaches 0.98, too wide for a test).  Upstream's estimates, sample
+            against sample (E:76-85):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">phier_kl n =
+  kl (tabulate 0.5 (mcmC n phier))
+     (tabulate 0.5 (mcmC n (dist normal 0 (sqrt &lt;$&gt; 91))))
+     
+
+_ =  phier_kl 10
+
+{-
+*Examples1&gt; phier_kl 1000
+0.7862745014080637
+*Examples1&gt; phier_kl 10000
+0.23618257021796316
+*Examples1&gt; phier_kl 100000
+3.441636543766045e-2
+*Examples1&gt; phier_kl 1000000
+2.1573977909591603e-3
+-}</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((kl (tabulate 0.5 (mcmC 40000 (phierN 10)))
+     (normal-bins 0.5 (sqrt 91.0) bins))
+ 0.0770140470263418)
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/phier-kl _)
+  (for-each
+    (λ (seed)
+       (let1 (p (tabulate 0.5 (mcmC 40000 (phierN 10) #:seed seed)))
+             (⊦&lt; seed (kl p (normal-bins 0.5 (sqrt 91.0) (map car p))) 0.25)))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.297) (memory #(25165824 6223368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/ph2"><a href="#test/statistics/ph2"><code>test/statistics/ph2</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S6: ph2 and ph21 under the default kernel: 0.2 × 0.1 + 0.8 × 0.7 = 0.58
+            (E:91) and the prior 0.2 of x, since y is not observed.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/ph2 _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed 0.05 0.58 (frequency identity (mcmC 10000 ph2 #:seed seed)))
+       (⊦≈ seed 0.05 0.2 (frequency identity (mcmC 10000 ph21 #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.038) (memory #(25165824 6446432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/pcond"><a href="#test/statistics/pcond"><code>test/statistics/pcond</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S7: the branching models pcond1-4 (E:104-282): the exact posteriors, pcond4's
+            given upstream as &quot;Exact: [(0.166666666666666657, V 21); (0.166666666666666657,
+            V 20); (0.66666666666666663, V 1)]&quot; (E:280-282).  The tolerances are per model,
+            at 4 to 5 standard deviations of P(10), P(1), P(1) and P(1) across the seeds 1 to
+            40 (0.0066, 0.0079, 0.0121 and 0.0097): .03 (plan §9.4), .04, .05 and .05.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/pcond _)
+  (for-each
+    (λ (seed)
+       (let1 (run (λ (m) (proportions (mcmC 10000 m #:seed seed))))
+             (⊦≈ seed
+                 0.03
+                 '((10 . 0.25) (11 . 0.25) (20 . 0.25) (21 . 0.25))
+                 (run pcond1))
+             (⊦≈ seed 0.04 '((1 . 0.5) (20 . 0.25) (21 . 0.25)) (run pcond2))
+             (⊦≈ seed 0.05 '((1 . 0.5) (20 . 0.25) (21 . 0.25)) (run pcond3))
+             (⊦≈ seed
+                 0.05
+                 `((1 unquote (/ 2.0 3.0))
+                   (20 unquote (/ 1.0 6.0))
+                   (21 unquote (/ 1.0 6.0)))
+                 (run pcond4))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.132) (memory #(25165824 6449016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/mixng"><a href="#test/statistics/mixng"><code>test/statistics/mixng</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S8: the mixture of N(10, 2²) and gamma(3, 1/3), whose means are 10 and 1, in
+            equal parts: mean 5.5, half the samples above 5 (E:139-151; P §2.2).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/mixng _)
+  (for-each
+    (λ (seed)
+       (for-each
+         (λ (m)
+            (let1 (xs (mcmC 10000 m #:seed seed))
+                  (⊦≈ seed 0.4 5.5 (mean xs))
+                  (⊦≈ seed 0.05 0.5 (frequency (λ (x) (&gt; x 5.0)) xs))))
+         (list mixng mixng′)))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.069) (memory #(25165824 6526144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/biased-coin"><a href="#test/statistics/biased-coin"><code>test/statistics/biased-coin</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S9: the posteriors beta(2, 2), of mean 0.5 and variance 0.05 (E:206), and
+            beta(1, 3), of mean 0.25 and variance 0.0375 (E:216), after 1000 samples of
+            burn-in.  The &quot;incremental&quot; record of the commented-out
+            test_multiple_conditions13 below is not reproduced: at seed 17 this chain gives
+            (0.251523121569678 . 0.0379368207086475); see the findings of the language suite.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">{-
+test_multiple_conditions13 =
+  momenta . drop 1000 $
+   mcmC 10000 (prog_multiple_conditions False False)
+-- beta 1 3: 0.25, sigma2 = 3.75e-2
+-- original Metropolis
+-- (0.25144728141545775,3.782788408489756e-2)
+-- incremental
+-- (0.2445212550806874,3.651432172401049e-2)
+-}</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/biased-coin _)
+  (for-each
+    (λ (seed)
+       (let ((tf (momenta
+                   (drop (mcmC 10000 (biased-coin #t #f) #:seed seed) 1000)))
+             (ff (momenta
+                   (drop (mcmC 10000 (biased-coin #f #f) #:seed seed) 1000))))
+         (⊦≈ seed 0.02 0.5 (car tf))
+         (⊦≈ seed 0.008 0.05 (cdr tf))
+         (⊦≈ seed 0.02 0.25 (car ff))
+         (⊦≈ seed 0.008 0.0375 (cdr ff))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.104) (memory #(25165824 6377440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/nice-prog-mult-conditions"><a href="#test/statistics/nice-prog-mult-conditions"><code>test/statistics/nice-prog-mult-conditions</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S10: the biased coin of Syntax.hs, ending in <code class="w3-codespan">diracN b</code>;
+            upstream's sums of 1000 samples, 499.8 and 257.29 (S:297-301), come from an older
+            revision of the engine: at seed 17 they are 502.706370138924 and
+            252.485601387305 here, and are not asserted (see the findings of the language
+            suite).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (nice-prog-mult-conditions c1 c2)
+  (do/monad
+    (← b (dist beta 1.0 1.0))
+    (dist (condition c1 bern) b)
+    (dist (condition c2 bern) b)
+    (diracN b)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">nice_prog_mult_conditions c1 c2 = do
+  b &lt;- dist beta 1 1
+  dist (c1 `condition` bern) b
+  dist (c2 `condition` bern) b
+  diracN b
+
+niceexmcr11 = sum $ mcmC 1000 (nice_prog_mult_conditions True False)
+-- 499.799988743311
+
+niceexmcr12 = sum $ mcmC 1000 (nice_prog_mult_conditions False False)
+-- 257.2928205920028</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/nice-prog-mult-conditions _)
+  (for-each
+    (λ (seed)
+       (let1 (average
+               (λ (c1 c2)
+                  (/ (fold +
+                           0.0
+                           (mcmC 1000
+                                 (nice-prog-mult-conditions c1 c2)
+                                 #:seed
+                                 seed))
+                     1000.0)))
+             (⊦≈ seed 0.05 0.5 (average #t #f))
+             (⊦≈ seed 0.05 0.25 (average #f #f))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(25165824 6244456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/niceex1"><a href="#test/statistics/niceex1"><code>test/statistics/niceex1</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S11: P(e and d) = E[c] × 0.5 = 0.25 (S:282-289).  Upstream's 7 samples are &quot;All
+            True&quot;, presumably from an older revision of the engine: at seed 17 they are (#t
+            #t #t #t #f #f #f) here, and are not asserted (see the findings of the language
+            suite).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define niceex1
+  (do/monad
+    (← c (dist uniform 0.0 1.0))
+    (← d (dist bern 0.5))
+    (← e (dist bern c))
+    (diracN (lift (λ (ev dv) (and ev dv)) e d))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">niceex1 = do
+  c &lt;- dist uniform 0 1
+  d &lt;- dist bern 0.5
+  e &lt;- dist bern c
+  diracN ((&amp;&amp;) &lt;$&gt; e &lt;*&gt; d)
+
+niceex1r = mcmC 7 niceex1
+-- All True</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/niceex1 _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed
+           0.05
+           0.25
+           (frequency identity (mcmC 10000 niceex1 #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.025) (memory #(25165824 6454392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/impossible-branches"><a href="#test/statistics/impossible-branches"><code>test/statistics/impossible-branches</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S12: the else branches observe values outside the uniform's support (log
+            likelihood -inf): an initial trace taking them is built again (M:882-891), and no
+            step can switch to them (rejectedLL, M:853-854, M:927).  Exact enumeration
+            prunes the paths of weight 0, so the three posteriors are exactly <code class="w3-codespan">((#t . 1.))</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (prog-mixture1 cv)
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ c
+         (dist (condition cv normal) 1.0 1.0)
+         (dist (condition cv uniform) 0.0 3.0))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define tac10
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ c
+         (dist (condition 0.0 normal) 0.0 1.0)
+         (dist (condition 0.0 uniform) 10.0 20.0))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define tac11
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ c
+         (dist (condition 0.0 normal) 0.0 1.0)
+         (do/monad (← d (diracN 10.0)) (dist (condition 0.0 uniform) d 20.0)))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">prog_mixture1 cv = do
+  c &lt;- dist bern 0.5
+  if_ c (dist (cv `condition` normal)  1 1)
+        (dist (cv `condition` uniform) 0 3)
+  return c
+
+prog_mixture1_run = mcmC 20 (prog_mixture1 (-2))
+-- all true</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">tac10 = do
+  c &lt;- dist bern 0.5
+  if_ c
+    -- then
+    (dist (0 `condition` normal) 0 1)
+    -- else
+    (dist (0 `condition` uniform) 10 20)
+  return c
+
+tac10_run = length . filter id $ mcmC 100 tac10
+-- 100  -- all True
+
+tac11 = do
+  c &lt;- dist bern 0.5
+  if_ c
+    -- then
+    (dist (0 `condition` normal) 0 1)
+    -- else
+    (do
+        d &lt;- diracN 10
+        dist (0 `condition` uniform) d 20)
+  return c
+
+tac11_run = length . filter id $ mcmC 100 tac11
+-- 100  -- all True</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/impossible-branches _)
+  (for-each
+    (λ (seed)
+       (⊦ equal?
+          (list seed (make-list 100 #t))
+          (list seed (mcmC 100 (prog-mixture1 -2.0) #:seed seed)))
+       (⊦ equal?
+          (list seed (make-list 100 #t))
+          (list seed (mcmC 100 tac10 #:seed seed)))
+       (⊦ equal?
+          (list seed (make-list 100 #t))
+          (list seed (mcmC 100 tac11 #:seed seed))))
+    seeds)
+  (⊦ equal?
+     (make-list 3 '((#t . 1.0)))
+     (map exact-posterior (list (prog-mixture1 -2.0) tac10 tac11))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(25165824 6218208 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/tac1"><a href="#test/statistics/tac1"><code>test/statistics/tac1</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S13: tac1's branch does not influence c, so P(c) = 0.5 (S:340-348).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/tac1 _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed 0.05 0.5 (frequency identity (mcmC 20000 tac1 #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.054) (memory #(25165824 6697184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/exif"><a href="#test/statistics/exif"><code>test/statistics/exif</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S14: exif1 is 2d with d ~ N(1, 1) when c holds, else 5 + N(20, 1): mean 13.5,
+            half above 10; exif2 is 10 or 20 a quarter of the time each, else the sum of two
+            uniforms (S:314-337).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define exif1
+  (do/monad
+    (← c (dist bern 0.5))
+    (← d
+       (if_ c
+            (dist normal (lift (λ (cv) (if cv 1.0 0.0)) c) 1.0)
+            (diracN 5.0)))
+    (← e (if_ (lift not c) (dist normal 20.0 1.0) (diracN d)))
+    (diracN (sexp+ d e))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define exif2
+  (let ()
+    (define (cl1 x) (do/monad (← d (dist bern 0.5)) (if_ d cl3 (diracN x))))
+    (define cl3
+      (do/monad
+        (← a (dist uniform 0.0 1.0))
+        (← b (dist uniform 0.0 1.0))
+        (diracN (sexp+ a b))))
+    (do/monad (← c (dist bern 0.5)) (if_ c (cl1 10.0) (cl1 20.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">exif1 = do
+  c &lt;- dist bern 0.5
+  d &lt;- if_ c (dist normal ((fromIntegral . fromEnum) &lt;$&gt; c) 1)
+             (diracN 5)
+  e &lt;- if_ (not &lt;$&gt; c) (dist normal 20 1) (diracN d)
+  diracN (d + e)
+
+exif1r = mcmC 7 exif1
+
+exif2 = do
+  c &lt;- dist bern 0.5
+  if_ c (cl1 10) (cl1 20)
+ where
+   cl1 x = do
+     d &lt;- dist bern 0.5
+     if_ d cl3 (diracN x)
+     
+   cl3 = do
+     a &lt;- dist uniform 0 1
+     b &lt;- dist uniform 0 1
+     diracN (a + b)
+     
+
+exif2r = mcmC 17 exif2</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/exif _)
+  (for-each
+    (λ (seed)
+       (let1 (xs (mcmC 20000 exif1 #:seed seed))
+             (⊦≈ seed 0.8 13.5 (mean xs))
+             (⊦≈ seed 0.05 0.5 (frequency (λ (x) (&gt; x 10.0)) xs)))
+       (let1 (xs (mcmC 20000 exif2 #:seed seed))
+             (⊦≈ seed 0.04 0.25 (frequency (λ (x) (eqv? x 10.0)) xs))
+             (⊦≈ seed 0.04 0.25 (frequency (λ (x) (eqv? x 20.0)) xs))
+             (⊦≈ seed 0.04 0.5 (frequency (λ (x) (&lt;= x 2.0)) xs))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.199) (memory #(25165824 6772096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/pcorr"><a href="#test/statistics/pcorr"><code>test/statistics/pcorr</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S15: pcorr returning <code class="w3-codespan">(pair x y)</code>: the observation makes x and
+            y equal with probability 0.9, and y stays fair (E:223-238).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/pcorr _)
+  (for-each
+    (λ (seed)
+       (let1 (xys (mcmC 20000 (pcorr* 0.1 pair) #:seed seed))
+             (⊦≈ seed 0.03 0.9 (frequency (Λ ((,x unquote y)) (eq? x y)) xys))
+             (⊦≈ seed 0.1 0.5 (frequency cdr xys))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.116) (memory #(25165824 6984120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/condhier"><a href="#test/statistics/condhier"><code>test/statistics/condhier</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S16: the conditioned hierarchical model (E:240-251): x ~ N(0, 1) observed as 1
+            through nine steps of variance 9, so the posterior of x is N(1/82, 81/82).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (phierN′ n start obs)
+  (fold/monad
+    (λ (x k) (k x))
+    start
+    (append
+      (make-list (sub1 n) (λ (x) (dist normal x 3.0)))
+      (list (λ (x) (dist (condition obs normal) x 3.0))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define condhier
+  (do/monad (← x (dist normal 0.0 1.0)) (phierN′ 9 x 1.0) (return x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">phierN' :: Int -&gt; SExp Double -&gt; Double -&gt; Model Double
+phierN' n start obs =
+  foldl (&gt;&gt;=) (pure start) $
+  replicate (n-1) (\x -&gt; dist normal x 3) ++
+  [(\x -&gt; dist (obs `condition` normal) x 3)]
+
+condhier = do
+  x &lt;- dist normal 0 1
+  phierN' 9 x 1
+  return x</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/condhier _)
+  (for-each
+    (λ (seed)
+       (let1 (m (momenta (mcmC 20000 condhier #:seed seed)))
+             (⊦≈ seed 0.2 (/ 1.0 82.0) (car m))
+             (⊦≈ seed 0.25 (/ 81.0 82.0) (cdr m))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.073) (memory #(25165824 6261240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/grass-girl"><a href="#test/statistics/grass-girl"><code>test/statistics/grass-girl</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S17: grass against &quot;0.4684714427203697 -- theoretical&quot; (E:322) and girl
+            against its exact posterior 0.6644295302013423 (hakaru10-exact.scm).  The
+            grass of E:284-296, commented out upstream, conditions in the leaves of nested
+            branches; its posterior P(rain | wet) is 0.3 × 0.9 / (0.3 × 0.9 + 0.7 × (0.5 ×
+            0.8 + 0.5 × 0.1)) = 6/13 = 0.4615, which exact enumeration gives and the chain
+            approaches (standard deviation 0.0084 across the seeds 1 to 40).  Without the
+            observation (E:302, commented out upstream), Fig. 1 gives &quot;the probability of
+            the grass being wet is 60.6%&quot; (P l.60-62): <code class="w3-codespan">grass/wet</code> returns the wet node, whose exact probability is 0.3 × 0.5 × 0.982 + 0.3 × 0.5
+            × 0.91 + 0.7 × 0.5 × 0.82 + 0.7 × 0.5 × 0.1 = 0.6058.  A step redraws one of the
+            three nodes, so the chain of the wet node is strongly autocorrelated: 40000
+            samples are within 0.05 (0.5935 at seed 17, from 0.5928 to 0.6471 over the seeds
+            1 to 10).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define grass/if
+  (do/monad
+    (← rain (dist bern 0.3))
+    (← sprinkler (dist bern 0.5))
+    (let obs (λ (p) (dist (condition #t bern) p)))
+    (if_ rain (obs 0.9) (if_ sprinkler (obs 0.8) (obs 0.1)))
+    (return rain)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define grass/wet
+  (do/monad
+    (← rain (dist bern 0.3))
+    (← sprinkler (dist bern 0.5))
+    (dist (nor 0.9 0.8 0.1) rain sprinkler)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">{-
+grass = do
+  rain        &lt;- dist bern 0.3
+  sprinkler   &lt;- dist bern 0.5
+  let obs = dist (True `condition` bern)
+  if_ rain
+    (obs 0.9)
+    (if_ sprinkler
+        (obs 0.8)
+        (obs 0.1))
+  return rain
+-}</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/grass-girl _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed
+           0.04
+           0.4684714
+           (frequency identity (mcmC 20000 grass #:seed seed)))
+       (⊦≈ seed
+           0.05
+           0.6644295
+           (frequency identity (mcmC 10000 girl #:seed seed)))
+       (⊦≈ seed
+           0.04
+           (/ 6.0 13.0)
+           (frequency identity (mcmC 20000 grass/if #:seed seed)))
+       (⊦≈ seed
+           0.05
+           0.6058
+           (frequency identity (mcmC 40000 grass/wet #:seed seed))))
+    seeds)
+  (⊦ (equal-approx? 1e-12)
+     `((#f unquote (/ 7.0 13.0)) (#t unquote (/ 6.0 13.0)))
+     (exact-posterior grass/if))
+  (⊦ (equal-approx? 1e-12)
+     '((#f . 0.3942) (#t . 0.6058))
+     (exact-posterior grass/wet)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.276) (memory #(25165824 6224024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/mhex"><a href="#test/statistics/mhex"><code>test/statistics/mhex</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S18: the example of P §4 (l.677-720) explaining MH; its mean is 0.345731 by
+            numerical integration.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define mhex
+  (do/monad
+    (← x (dist normal 0.0 1.0))
+    (← y (dist normal x 2.0))
+    (if_ (lift (λ (xv) (&gt; xv 0.5)) x)
+         (return x)
+         (do/monad (← z (dist beta 1.0 1.0)) (return (sexp+ y z))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">mhex = do
+  x &lt;- dist normal 0 1
+  y &lt;- dist normal x 2
+  if_ ((&gt;0.5) &lt;$&gt; x)
+        (return x)
+        (do {z &lt;- dist beta 1 1; return (y + z)})</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/mhex _)
+  (for-each
+    (λ (seed) (⊦≈ seed 0.1 0.345731 (mean (mcmC 20000 mhex #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.093) (memory #(25165824 6917160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/post-bias"><a href="#test/statistics/post-bias"><code>test/statistics/post-bias</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S19: post_bias with 20 samples of burn-in: the else branch's observation, at 99
+            standard deviations, makes c = #f a trap the chain leaves at its first accepted
+            proposal and never enters again (E:256-263).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/post-bias _)
+  (for-each
+    (λ (seed)
+       (⊦ equal?
+          (list seed (make-list 80 #t))
+          (list seed (drop (mcmC 100 (post-bias 1.0) #:seed seed) 20))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 6230600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/statistics/if/shared-inactive"><a href="#test/statistics/if/shared-inactive"><code>test/statistics/if/shared-inactive</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>S20, deviation 1: d belongs to the rest of the model and is the then branch's
+            result; when c is false, resampling d enqueues the exit through the inactive
+            result (M:673), yet neither the entry nor the active result changed, and
+            upstream fails:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">     -- the parent nodes must have been updated
+     when (tstamp (Mem.dref entry) &lt;= tstamp self &amp;&amp;
+           tstamp nd &lt;= tstamp self) $
+       fail $ unwords [&quot;the parents of the exit node&quot;, show (Mem.addr ns),
+                       &quot;namely&quot;, show [Mem.addr entry, Mem.addr ndr],
+                       &quot;must have been updated&quot;]</code></pre></div>
+<p>(Metropolis.hs:787-792.)  Here the exit keeps its state, and the chain samples
+            the mixture of N(0, 1) and N(5, 1), half below 2.5.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define shared-inactive
+  (do/monad
+    (← c (dist bern 0.5))
+    (← d (dist normal 0.0 1.0))
+    (if_ c (return d) (dist normal 5.0 1.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/statistics/if/shared-inactive _)
+  (for-each
+    (λ (seed)
+       (⊦≈ seed
+           0.06
+           0.5
+           (frequency
+             (λ (x) (&lt; x 2.5))
+             (mcmC 10000 shared-inactive #:seed seed))))
+    seeds))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.029) (memory #(25165824 6539568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

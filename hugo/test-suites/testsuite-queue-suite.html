@@ -19,7 +19,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
 <h2 id="test-letqueue"><a href="#test-letqueue"><code>test-letqueue</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -39,7 +41,7 @@
     (⊭ (fds-queue-empty? t))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1813280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1890928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-cons-cdr"><a href="#test-cons-cdr"><code>test-cons-cdr</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -72,16 +74,19 @@
     (⊨ (fds-queue-empty? q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1813832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1891656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-empty-car"><a href="#test-empty-car"><code>test-empty-car</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-empty-car _)
   (letqueue
     ((q '()))
-    (⊦⧳ ((exn)) (fds-queue-car q))
-    (⊦⧳ ((exn)) (fds-queue-cdr q))))
+    (⊦= &quot;fds-queue-car: empty queue&quot; (error-message (λ () (fds-queue-car q))))
+    (⊦= &quot;fds-queue-cdr: empty queue&quot; (error-message (λ () (fds-queue-cdr q))))
+    (⊦= &quot;fds-queue-car: empty queue&quot;
+        (error-message
+          (λ () (fds-queue-car (fds-queue-cdr (fds-queue-cons 'a q))))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1820416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1901280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

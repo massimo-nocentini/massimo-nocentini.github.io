@@ -1,0 +1,211 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/map-values"><a href="#test/map-values"><code>test/map-values</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/map-values _)
+  (⊦= '(1 2 3) (map (λ (i) (values (add1 i) i)) '(0 1 2)))
+  (⊦= '(1 2 3)
+      ((map/call-with-values (λ (i) (values (add1 i) i)) (λ (more less) more))
+       '(0 1 2)))
+  (⊦= '((1 1) (3 3))
+      ((map/values (λ (p) (values (add1 (car p)) (cadr p)))) '((0 1) (2 3)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2028552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/tuple-pred"><a href="#test/tuple-pred"><code>test/tuple-pred</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tuple-pred _)
+  (⊦= #t ((tuple/pred? &lt;) '(1 2) '(2 3) '(3 4)))
+  (⊦= #f ((tuple/pred? &lt;) '(1 5) '(2 3) '(3 4)))
+  (⊦= #f ((tuple/pred? &lt;) '(1 5) '(2) '(3 4)))
+  (⊦= #t ((tuple/pred? =) '() '()))
+  (⊦= #f ((tuple/pred? =) '() '(1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2029616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/remove-duplicates/last"><a href="#test/remove-duplicates/last"><code>test/remove-duplicates/last</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/remove-duplicates/last _)
+  (⊦= '(a b c d e) (remove-duplicates/last (reverse '(a b c d e))))
+  (⊦= '(e c d a b) (remove-duplicates/last '(a b a a c d c e e)))
+  (⊦= '(a b c d e) (remove-duplicates '(a b a a c d c e e))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2030752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/identity*-collect-values"><a href="#test/identity*-collect-values"><code>test/identity*-collect-values</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/identity*-collect-values _)
+  (⊦= '(hello world) (call-with-values (τ (values 'hello 'world)) identity*))
+  (⊦= 'hello (identity* 'hello))
+  (⊦= '() (identity*))
+  (⊦= '(1 2) (collect-values (τ (values 1 2))))
+  (⊦= 1 (collect-values (τ (values 1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2032000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/symbol∼subscripts"><a href="#test/symbol∼subscripts"><code>test/symbol∼subscripts</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/symbol∼subscripts _)
+  (⊦= 'g₁₂₃ (symbol∼subscripts 'g123))
+  (⊦= 'x₀₉ (symbol∼subscripts 'x09))
+  (⊦= 'hello (symbol∼subscripts 'hello))
+  (⊦= 'α₁ (symbol∼subscripts 'α1))
+  (⊦= &quot;₇&quot; (hash-table-ref subscripts #\7)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2033152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rtc"><a href="#test/rtc"><code>test/rtc</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rtc _)
+  (let1 (→ (λ (n) (if (&lt; n 5) (add1 n) n)))
+        (⊦= '(0 1 2 3 4 5) ((rtc →) 0))
+        (⊦= '(5) ((rtc →) 5))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2034552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/group"><a href="#test/group"><code>test/group</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/group _)
+  (⊦= '((#f 5 3 1) (#t 4 2))
+      (sort/lex&lt;=?
+        ((group even? (λ (p) (cons (car p) (cdr p)))) '(1 2 3 4 5)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2035856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/foldl1"><a href="#test/foldl1"><code>test/foldl1</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/foldl1 _)
+  (⊦= '() ((foldl1 +) '()))
+  (⊦= 10 ((foldl1 +) '(1 2 3 4)))
+  (⊦= 20 ((foldl1 + #:H₀ (λ (x) (* 11 x))) '(1 2 3 4)))
+  (⊦= 8 ((foldl1/lshift + #:H₀ (λ (x) (values x cddr))) '(1 2 3 4)))
+  (⊦= 10 ((foldl1/lshift +) '(1 2 3 4)))
+  (⊦= '((1 . 2) . 3) ((foldl1/lshift cons) '(1 2 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2036544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/within?"><a href="#test/within?"><code>test/within?</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/within? _)
+  (⊨ ((within? 1 3) 1))
+  (⊨ ((within? 1 3) 2))
+  (⊨ ((within? 1 3) 3))
+  (⊭ ((within? 1 3) 4))
+  (⊭ ((within? 1 3) 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2037680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/map/tree"><a href="#test/map/tree"><code>test/map/tree</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/map/tree _)
+  (⊦= '(2 (3 4) ((5)) 6) ((map/tree add1) '(1 (2 3) ((4)) 5)))
+  (⊦= '((2) () 3 (())) ((map/tree add1) '((1) () 2 (()))))
+  (⊦= '(() (1 1)) ((map/tree (λ (x) (list x x))) '(() 1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2038864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/map/with-index"><a href="#test/map/with-index"><code>test/map/with-index</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/map/with-index _)
+  (⊦= '((10 a) (11 b) (12 c))
+      ((map/with-index (λ (i) (λ (x) (list i x))) 10) '(a b c))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2040264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/accumulator"><a href="#test/accumulator"><code>test/accumulator</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/accumulator _)
+  (let1 (A (accumulator + 0)) (⊦= 1 (A 1)) (⊦= 3 (A 2)) (⊦= 6 (A 3)))
+  (let1 (A (accumulator cons '())) (A 'a) (⊦= '(b a) (A 'b))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2041624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/curried-helpers"><a href="#test/curried-helpers"><code>test/curried-helpers</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/curried-helpers _)
+  (⊦= '(2 3) ((fmap add1) '(1 2)))
+  (⊦= 6 ((fapply +) '(1 2 3)))
+  (⊦= '(2 4) ((ffilter even?) '(1 2 3 4)))
+  (⊦= '((c . 1) (a . 2) (b . 3)) ((fsort cdr &lt;) '((a . 2) (b . 3) (c . 1))))
+  (⊦= 'b ((flist-ref '(a b c)) 1))
+  (⊦= 'c ((fvector-ref #(a b c)) 2))
+  (⊨ ((equals-to? '(a)) '(a)))
+  (⊨ ((=to? '(a)) '(a)))
+  (⊭ ((=to? (list 'a) #:same? eq?) (list 'a)))
+  (⊦= 'num (cond/λ 3 (symbol? (K 'sym)) (number? (K 'num)) (else identity)))
+  (⊦= &quot;s&quot; (cond/λ &quot;s&quot; (symbol? (K 'sym)) (number? (K 'num)) (else identity))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2042312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/cond/λ/single-evaluation"><a href="#test/cond/λ/single-evaluation"><code>test/cond/λ/single-evaluation</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/cond/λ/single-evaluation _)
+  (define c 0)
+  (define (v) (set! c (add1 c)) 5)
+  (⊦= 6
+      (cond/λ
+        (v)
+        (symbol? identity)
+        (string? identity)
+        (number? add1)
+        (else identity)))
+  (⊦= 1 c)
+  (⊦= 5 (cond/λ (v) (symbol? identity) (else identity)))
+  (⊦= 2 c))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2043752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/numeric-and-strings"><a href="#test/numeric-and-strings"><code>test/numeric-and-strings</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/numeric-and-strings _)
+  (⊦= 3 (sub2 5))
+  (⊨ (≠ 'a 'b))
+  (⊭ (≠ '(a) '(a)))
+  (⊦= 1/4 (⁻¹ 4))
+  (⊦= 16 (² 4))
+  (⊦= '|42| (number-&gt;symbol 42))
+  (⊦= &quot;(1 a)&quot; (to-string '(1 &quot;a&quot;)))
+  (call+stdout
+    (τ (display &quot;hello&quot;) 'result)
+    (λ (r s) (⊦= 'result r) (⊦= &quot;hello&quot; s))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2044712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

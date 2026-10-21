@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/mailbox/ordering"><a href="#test/mailbox/ordering"><code>test/mailbox/ordering</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mailbox/ordering _)
+  (⊦= (append (iota 50) '(()))
+      (cdr (run/log
+             (τ (let1 (mb (make-mailbox))
+                      (for-each (λ (i) (mailbox-send! mb i)) (iota 50))
+                      (for-each (λ (i) (note! (mailbox-recv mb))) (iota 25))
+                      (for-each
+                        (λ (i) (note! (sync (mailbox-recv-evt mb))))
+                        (iota 25))
+                      (note! (mailbox-recv-poll mb))
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 5529640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mailbox/blocking-recv"><a href="#test/mailbox/blocking-recv"><code>test/mailbox/blocking-recv</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mailbox/blocking-recv _)
+  (⊦= '((r1 a) (r2 b) sent (1) timeout)
+      (cdr (run/log
+             (τ (let1 (mb (make-mailbox))
+                      (spawn (τ (note! (list 'r1 (mailbox-recv mb)))))
+                      (spawn (τ (note! (list 'r2 (sync (mailbox-recv-evt mb))))))
+                      (mailbox-send! mb 'a)
+                      (mailbox-send! mb 'b)
+                      (note! 'sent)
+                      (cml/sleep 0.01)
+                      (mailbox-send! mb 1)
+                      (note! (mailbox-recv-poll mb))
+                      (note! (sync/timeout
+                               (mailbox-recv-evt mb)
+                               0.01
+                               'timeout))
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 5534672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mailbox/predicates"><a href="#test/mailbox/predicates"><code>test/mailbox/predicates</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mailbox/predicates _)
+  (let1 (mb (make-mailbox))
+        (⊨ (mailbox? mb))
+        (⊭ (mailbox? (make-channel)))
+        (⊨ (mailbox=? mb mb))
+        (⊭ (mailbox=? mb (make-mailbox)))
+        (⊨ (channel? (make-channel)))
+        (⊭ (channel=? (make-channel) (make-channel)))
+        (let1 (c (make-channel)) (⊨ (channel=? c c)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 5531152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

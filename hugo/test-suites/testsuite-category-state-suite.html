@@ -1,0 +1,294 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section920">
+<header>
+<h1>Introduction</h1></header></section>
+<p>This section tests the state monad, Haskell's <code>State s a</code>, where a computation is a transition from a state to the pair of its result and the next state, Haskell's <code>(a, s)</code> tuple; binding threads the state from one computation to the next, strictly, as Haskell's <code>Control.Monad.State.Strict</code> does.</p>
+<section id="section921">
+<header>
+<h1>Implementation</h1></header></section>
+<p>A computation is a <code>category-state</code> record around its transition, the image of Haskell's <code>newtype</code>, so that a computation is a type of its own and not any procedure; <code>run-state</code> applies the transition to a state.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux category state)
+  *
+  (import scheme (chicken base) (aux base))
+  (define-record category-state run)
+  (set-record-printer! category-state (λ (m port) (display &quot;#&lt;state&gt;&quot; port)))
+  (define (run-state m s) ((category-state-run m) s))
+  (define (eval-state m s) (car (run-state m s)))
+  (define (exec-state m s) (cdr (run-state m s)))
+  (define (return v) (make-category-state (λ (s) (cons v s))))
+  (define (&gt;&gt;= m f)
+    (make-category-state
+      (λ (s) (let1 (r (run-state m s)) (run-state (f (car r)) (cdr r))))))
+  (define (fail . args)
+    (make-category-state
+      (λ (s)
+         (error &quot;State monad does not support failure&quot;
+                `((on ,s) (args unquote args))))))
+  (define get (make-category-state (λ (s) (cons s s))))
+  (define (put s) (make-category-state (λ (_) (cons (void) s))))
+  (define (modify f) (make-category-state (λ (s) (cons (void) (f s)))))
+  (define (gets f) (make-category-state (λ (s) (cons (f s) s))))
+  (define (state f) (make-category-state f))
+  (define (with-state f m) (make-category-state (λ (s) (run-state m (f s))))))
+</code></pre></div>
+<h2 id="test/return"><a href="#test/return"><code>test/return</code>: <span class="w3-text-green">pass</span></a></h2><code>return</code> answers its value and leaves the state as it is.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/return _)
+  (⊦= '(4 . s) (run-state (return 4) 's))
+  (⊦= '(4 . s) (run-state (do/monad ,4) 's)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2230392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/get-put"><a href="#test/get-put"><code>test/get-put</code>: <span class="w3-text-green">pass</span></a></h2><code>get</code> answers the state, <code>put</code> replaces it, and a later <code>get</code> sees the new one; <code>with-state</code> transforms the state before running a computation.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/get-put _)
+  (⊦= '(3 . 3) (run-state get 3))
+  (⊦= (cons (void) 7) (run-state (put 7) 3))
+  (⊦= '((3 . 7) . 7)
+      (run-state (do/monad (← a get) (put 7) (← b get) ,(cons a b)) 3))
+  (⊦= '(10 . 10) (run-state (with-state (λ (s) (* 10 s)) get) 1)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2232216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/modify-gets"><a href="#test/modify-gets"><code>test/modify-gets</code>: <span class="w3-text-green">pass</span></a></h2><code>modify</code> applies a function to the state, <code>gets</code> answers a function of it.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/modify-gets _)
+  (⊦= (cons (void) 6) (run-state (modify (λ (s) (* 2 s))) 3))
+  (⊦= '(4 . 3) (run-state (gets add1) 3))
+  (⊦= '((a b) b)
+      (run-state
+        (do/monad
+          (modify cdr)
+          (← x (gets car))
+          (put (list x))
+          (gets (λ (s) (cons 'a s))))
+        '(z b c))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2233712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/state"><a href="#test/state"><code>test/state</code>: <span class="w3-text-green">pass</span></a></h2><code>state</code> embeds a transition that answers the pair of the result and the next state.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/state _)
+  (⊦= '(6 . 4) (run-state (state (λ (s) (cons (* 2 s) (add1 s)))) 3)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2235136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/run-eval-exec"><a href="#test/run-eval-exec"><code>test/run-eval-exec</code>: <span class="w3-text-green">pass</span></a></h2><code>run-state</code> answers the pair of the result and the final state, <code>eval-state</code> the result only and <code>exec-state</code> the final state only, as Haskell's <code>runState</code>, <code>evalState</code> and <code>execState</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/run-eval-exec _)
+  (⊦= '(0 . 1) (run-state tick 0))
+  (⊦= 0 (eval-state tick 0))
+  (⊦= 1 (exec-state tick 0))
+  (⊦= 10 (eval-state (with-state (λ (s) (* 10 s)) tick) 1))
+  (⊦= 11 (exec-state (with-state (λ (s) (* 10 s)) tick) 1)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2236944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws"><a href="#test/laws"><code>test/laws</code>: <span class="w3-text-green">pass</span></a></h2>The left identity, right identity and associativity laws hold on every state they are run on.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws _)
+  (let ((f (λ (x) (do/monad (modify (λ (s) (cons x s))) ,(* 2 x))))
+        (g (λ (y) (do/monad (← s get) (put (list y s)) ,(+ y 1))))
+        (m (do/monad (← s get) (put (cons 'm s)) ,(length s))))
+    (for-each
+      (λ (s0)
+         (⊦= (run-state (f 5) s0) (run-state (&gt;&gt;= (return 5) f) s0))
+         (⊦= (run-state m s0) (run-state (&gt;&gt;= m return) s0))
+         (⊦= (run-state (&gt;&gt;= (&gt;&gt;= m f) g) s0)
+             (run-state (&gt;&gt;= m (λ (x) (&gt;&gt;= (f x) g))) s0)))
+      '(() (a) (a b c)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2231432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/order"><a href="#test/order"><code>test/order</code>: <span class="w3-text-green">pass</span></a></h2>The clauses of a <code>do/monad</code> block run top to bottom, each on the state the previous one left.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/order _)
+  (⊦= '((0 1 2) . 3)
+      (run-state (do/monad (← a tick) (← b tick) (← c tick) ,(list a b c)) 0))
+  (⊦= '(c b a)
+      (exec-state
+        (do/monad
+          (modify (cut cons 'a &lt;&gt;))
+          (modify (cut cons 'b &lt;&gt;))
+          (modify (cut cons 'c &lt;&gt;)))
+        '())))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2232976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/when-unless"><a href="#test/when-unless"><code>test/when-unless</code>: <span class="w3-text-green">pass</span></a></h2><code>when/monad</code> and <code>unless/monad</code> run a computation only when a condition holds, or fails, as Haskell's <code>when</code> and <code>unless</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/when-unless _)
+  (⊦= 1 (exec-state (when/monad #t tick) 0))
+  (⊦= 0 (exec-state (when/monad #f tick) 0))
+  (⊦= 0 (exec-state (unless/monad #t tick) 0))
+  (⊦= 1 (exec-state (unless/monad #f tick) 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2234352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/applicative"><a href="#test/applicative"><code>test/applicative</code>: <span class="w3-text-green">pass</span></a></h2><code><$></code>, <code><*></code> and <code>lift/monad</code> run their computations left to right too, so in <code>(&lt;*&gt; mf mx)</code> the effects of <code>mf</code> come first.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/applicative _)
+  (⊦= '(10 . 2) (run-state (&lt;$&gt; (λ (n) (* 10 n)) tick) 1))
+  (⊦= '(1 . 2) (run-state (&lt;*&gt; (do/monad (← n tick) ,(λ (m) (- m n))) tick) 0))
+  (⊦= '((0 . 1) . 2) (run-state (lift/monad cons tick tick) 0))
+  (⊦= '((0 . 1) . 2) (run-state (zip/monad tick tick) 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2236296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/strict"><a href="#test/strict"><code>test/strict</code>: <span class="w3-text-green">pass</span></a></h2>Building a computation runs nothing; running <code>(&gt;&gt;= m f)</code> runs <code>m</code> before <code>f</code> is applied to its result, as the strict state monad does.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/strict _)
+  (let* ((log '())
+         (m (do/monad
+              (← a (state (λ (s) (set! log (cons 'm log)) (cons 1 s))))
+              (let _ (set! log (cons 'f log)))
+              ,a)))
+    (⊦= '() log)
+    (⊦= '(1 . s) (run-state m 's))
+    (⊦= '(f m) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2238264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rerun"><a href="#test/rerun"><code>test/rerun</code>: <span class="w3-text-green">pass</span></a></h2>A computation is a value: it may be run again, on any state, and it answers the same on the same state.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rerun _)
+  (let ((m (traverse/monad (λ (x) (do/monad (← n tick) ,(* n x))) '(1 2 3))))
+    (⊦= '((0 2 6) . 3) (run-state m 0))
+    (⊦= '((10 22 36) . 13) (run-state m 10))
+    (⊦= '((0 2 6) . 3) (run-state m 0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2239440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fail"><a href="#test/fail"><code>test/fail</code>: <span class="w3-text-green">pass</span></a></h2>A value that does not match the pattern of a <code>←</code> clause goes to <code>fail</code>, which raises an error when the computation runs, as Haskell's <code>fail msg = error msg</code> does, and not when it is built.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fail _)
+  (let* ((m (do/monad (← (,a unquote b) ,'()) ,a))
+         (message
+           (condition-case
+             (begin (run-state m 's) #f)
+             (e (exn) ((condition-property-accessor 'exn 'message) e)))))
+    (⊨ (category-state? m))
+    (⊨ (and (string? message)
+            (substring-index &quot;State monad does not support failure&quot; message)
+            #t))
+    (⊨ (category-state? (fail 'x)))
+    (⊦raises (exn) (run-state (fail 'x) 's))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2247672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/long-chain"><a href="#test/long-chain"><code>test/long-chain</code>: <span class="w3-text-green">pass</span></a></h2>Chains of a hundred thousand binds run, nested to the right as the traversals build them and to the left as a fold over <code>>>=</code> does.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/long-chain _)
+  (let* ((n 100000)
+         (sum (quotient (* n (- n 1)) 2))
+         (left (fold (λ (i m) (&gt;&gt;= m (λ (_) (modify (λ (s) (+ s i))))))
+                     (return (void))
+                     (iota n))))
+    (⊦= sum
+        (exec-state
+          (for-each/monad (λ (i) (modify (λ (s) (+ s i)))) (iota n))
+          0))
+    (⊦= sum (exec-state left 0))
+    (⊦= n (length (eval-state (replicate/monad n tick) 0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.393) (memory #(50331648 4642608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/representation"><a href="#test/representation"><code>test/representation</code>: <span class="w3-text-green">pass</span></a></h2>A computation is a <code>category-state</code> record, as Haskell's <code>newtype</code> makes <code>State s a</code> a type of its own: a procedure, even one shaped as a transition, is not a computation.  <code>run-state</code> does not check its argument, so running a value that is not a computation raises CHICKEN's own error for a record of the wrong type, the cheapest outcome.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/representation _)
+  (⊨ (category-state? (do/monad (← x get) (return x))))
+  (⊨ (not (category-state? (λ (s) (cons 1 s)))))
+  (⊦raises (exn type) (run-state 42 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4648312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/traversals"><a href="#test/traversals"><code>test/traversals</code>: <span class="w3-text-green">pass</span></a></h2>The traversals run their computations left to right, the head first, so effects on the state happen in list order, as Haskell's <code>mapM</code>, <code>sequence</code>, <code>replicateM</code>, <code>mapM_</code> and <code>foldM</code> do.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/traversals _)
+  (⊦= '(((a . 0) (b . 1) (c . 2)) . 3)
+      (run-state
+        (traverse/monad (λ (x) (&lt;$&gt; (cut cons x &lt;&gt;) tick)) '(a b c))
+        0))
+  (⊦= '(() . s) (run-state (traverse/monad (λ (x) tick) '()) 's))
+  (⊦= '((0 1 2) . 3) (run-state (replicate/monad 3 tick) 0))
+  (⊦= '(() . 0) (run-state (replicate/monad 0 tick) 0))
+  (⊦= (cons (list 0 (void) 10) 11)
+      (run-state
+        (sequence/monad (list tick (modify (λ (s) (* 10 s))) tick))
+        0))
+  (⊦= '(c b a)
+      (exec-state
+        (for-each/monad (λ (x) (modify (cut cons x &lt;&gt;))) '(a b c))
+        '()))
+  (⊦= '(((1 b) (0 a)) . 2)
+      (run-state
+        (fold/monad
+          (λ (acc x) (do/monad (← n tick) ,(cons (list n x) acc)))
+          '()
+          '(a b))
+        0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4646536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/list-&gt;monad-is-not-sequence"><a href="#test/list-&gt;monad-is-not-sequence"><code>test/list-&gt;monad-is-not-sequence</code>: <span class="w3-text-green">pass</span></a></h2><code>list->monad</code> is <code>return</code> of the mconcat of a pure list, not Haskell's <code>sequence</code>: given a list of computations it answers that very list, unrun, and leaves the state as it is.  To run a list of computations, use <code>sequence/monad</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/list-&gt;monad-is-not-sequence _)
+  (⊦= '((1 2) . 0) (run-state (list-&gt;monad '(1 2)) 0))
+  (⊦= '(1 2) (eval-state (list-&gt;monad '(1 2)) 0))
+  (let1 (r (run-state (list-&gt;monad (list tick tick)) 0))
+        (⊦= 0 (cdr r))
+        (⊨ (and (= 2 (length (car r))) (every category-state? (car r)))))
+  (⊦= '((0 1) . 2) (run-state (sequence/monad (list tick tick)) 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4648168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/label"><a href="#test/label"><code>test/label</code>: <span class="w3-text-green">pass</span></a></h2>The usage example of the module numbers the leaves of a tree left to right: the state is the next number, and the left subtree's effects come before the right one's.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/label _)
+  (⊦= '((((0 . a) 1 . b) 2 . c) . 3) (run-state (label '((a . b) . c)) 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(50331648 4650656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

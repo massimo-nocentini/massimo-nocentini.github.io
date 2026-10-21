@@ -1,0 +1,60 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/math-numbers"><a href="#test/math-numbers"><code>test/math-numbers</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/math-numbers _)
+  (⊦= &quot;&lt;math display=\&quot;block\&quot;&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/math&gt;&quot;
+      (SXML-&gt;HTML-&gt;string '((displaymath (m 3)))))
+  (⊦= &quot;&lt;math display=\&quot;block\&quot;&gt;&lt;mn&gt;3.14&lt;/mn&gt;&lt;/math&gt;&quot;
+      (SXML-&gt;HTML-&gt;string '((displaymath (m 3.14)))))
+  (⊦= &quot;&lt;math display=\&quot;block\&quot;&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt;&quot;
+      (SXML-&gt;HTML-&gt;string '((displaymath (m 1/2)))))
+  (⊦= &quot;&lt;math display=\&quot;block\&quot;&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt;&quot;
+      (SXML-&gt;HTML-&gt;string '((displaymath (frac 1 2)))))
+  (⊦= &quot;&lt;math display=\&quot;block\&quot;&gt;&lt;mfrac&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt;&quot;
+      (SXML-&gt;HTML-&gt;string '((displaymath (frac (m x) 2)))))
+  (⊦= &quot;&lt;math display=\&quot;block\&quot;&gt;&lt;mrow&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mi&gt;+&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;/math&gt;&quot;
+      (SXML-&gt;HTML-&gt;string '((displaymath (m (x + 1)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 1891848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/define-vhost"><a href="#test/define-vhost"><code>test/define-vhost</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/define-vhost _)
+  (⊦= '(/ &quot;foo&quot;) (uri-path (uri-reference &quot;http://example.org/foo&quot;)))
+  (⊦= 'root (vhost-dispatch vhost 'GET &quot;/&quot;))
+  (⊦= '(foo GET) (vhost-dispatch vhost 'GET &quot;/foo&quot;))
+  (⊦= '(bar &quot;baz&quot; &quot;1&quot;) (vhost-dispatch vhost 'GET &quot;/bar/baz?q=1&quot;))
+  (⊦= 'posted (vhost-dispatch vhost 'POST &quot;/foo&quot;))
+  (⊦= 'unrouted (vhost-dispatch vhost 'PUT &quot;/foo&quot;))
+  (⊦= 'unrouted (vhost-dispatch vhost 'GET &quot;/nope&quot;))
+  (⊦= 'unrouted (vhost-dispatch vhost 'GET &quot;/bar/baz/qux&quot;))
+  (⊦= 'unrouted (vhost-dispatch vhost 'POST &quot;/&quot;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 1894392 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

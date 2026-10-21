@@ -1,0 +1,553 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section3860">
+<header>
+<h1>One model, three interpretations</h1></header></section>
+<p>A Hakaru10 model is a value of the State monad of <code class="w3-codespan">(aux category state)</code>, whose state is the chain: <code class="w3-codespan">Model a = MCMCM (SExp a)</code> (Syntax.hs:82) and <code class="w3-codespan">MCMCM a = State MCState a</code> (Metropolis.hs:200).  <code class="w3-codespan">dist</code>, <code class="w3-codespan">diracN</code> and <code class="w3-codespan">if_</code> are models, and <code class="w3-codespan">do/monad</code>, <code class="w3-codespan">←</code> and <code class="w3-codespan">return</code> combine them as Haskell's <code class="w3-codespan">do</code> does:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(do/monad
+  (← x (dist d args))
+  (diracN e)
+  (if_ test then-model else-model)
+  (return x))
+</code></pre></div>
+<p>Running a model creates its nodes in bind order, and <code class="w3-codespan">if_</code> builds both branches, the inactive one first, as upstream's <code class="w3-codespan">ifnode</code> does (Metropolis.hs:641-686).  <code class="w3-codespan">condition</code> and <code class="w3-codespan">lift</code> are not models: conditioning makes an observed distribution
+                (Syntax.hs:174-193), and lifting is pure (Syntax.hs:99-116).</p>
+<p>The three interpretations are:</p>
+<ul>
+<li><b>the build</b> of <code class="w3-codespan">mcmC</code>: the model runs once on a fresh chain, as upstream's <code class="w3-codespan">initial_step'</code> runs it (Metropolis.hs:872-880), and
+                     incremental Metropolis-Hastings then updates the graph it built;</li>
+<li><b>exact enumeration</b>: a walk of the graph of one build into a lazy
+                     Hansei search tree (page hakaru10-exact);</li>
+<li><b>the forward sampler</b>: walks of the same graph that draw its
+                     active choices in address order and weigh its active observations, for
+                     likelihood weighting.</li></ul>
+<p>The last two share the graph and the node functions with the engine, but none
+                of its incremental machinery, so each is an oracle of the kernel and of the
+                incremental update (plan §6.10, C37).  The tests below run the same models
+                under all three.</p>
+<h2 id="test/three-interpretations"><a href="#test/three-interpretations"><code>test/three-interpretations</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H1.  The same models under the three interpretations: exact enumeration, 20000
+            runs of likelihood weighting, and an MCMC chain.  Likelihood weighting draws
+            independent samples and lands within .016 of the exact posterior over the seeds
+            17 and 1-40; the tolerance is .02.  The MCMC samples are autocorrelated, and the
+            chain tolerance is .03.  Over the same seeds, 20000 samples land within .021 on
+            all but two models, which mix slowly.  On <code class="w3-codespan">pcorr</code> the observation favours 
+<mtext>x = y</mtext> nine to one, so a single-site proposal from one likely state to the other must
+            pass through an unlikely one.  On the colored
+            balls the number of balls and the balls drawn are strongly correlated
+            (ColoredBalls.hs:46-50).  At 20000 samples their distances average .019 and .021
+            (standard deviations .014 and .010) and reach .070 and .045.  Both therefore run
+            80000 samples, which land within .023 and .025 (means .010 and .011, standard
+            deviations .006 and .005).  <code class="w3-codespan">pswitch</code> runs under 'extended only, since upstream's semantics
+            is biased on it (plan §6.8).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/three-interpretations _)
+  (define models
+    `((grass ,grass)
+      (girl ,girl)
+      (pcorr ,(pcorr/pair 0.1) #:chain-samples 80000)
+      (ph2 ,ph2)
+      (ph21 ,ph21)
+      (pcond1 ,pcond1)
+      (pcond2 ,pcond2)
+      (pcond4 ,pcond4)
+      (post-bias ,(post-bias 1.0))
+      (colored-balls-3x4
+        ,(cballs-model 3 (make-list 4 'blue))
+        #:chain-samples
+        80000)
+      (pswitch ,pswitch #:semantics extended)))
+  (define (disagreement
+           name
+           model
+           #!key
+           (semantics 'upstream)
+           (chain-samples 20000))
+    (let ((exact (exact-posterior model))
+          (weighted (likelihood-weighting 20000 model))
+          (chain (mcmc-posterior chain-samples model #:semantics semantics)))
+      (and (not (and ((histograms-within 0.02) exact weighted)
+                     ((histograms-within 0.03) exact chain)))
+           (list name exact weighted chain))))
+  (⊦ equal? '() (filter-map (cut apply disagreement &lt;&gt;) models)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 3.154) (memory #(16793184 3865240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/construction-order"><a href="#test/construction-order"><code>test/construction-order</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H2.  <code class="w3-codespan">construction-check</code>, the first check of <code class="w3-codespan">#:check</code>, builds the model, rebuilds it and redraws it, each from
+            its own copy of one rng source.  The rebuild must give the same graph (the kind,
+            role, parents and scope of every node), the same values and the same LLs: a model
+            that is not the same each time it runs fails it (plan §15, C35).  The redraw draws
+            every resampleable node in address order, from its distribution and its stored
+            parents, and must give back every stored value, and the drawn LLs plus those of
+            the active observations must give the trace's LL within 
+<mtext>10⁻⁹</mtext>.  In address order an <code class="w3-codespan">if_</code> first has the branch it does not take, whose choices are drawn and whose
+            observations are not weighed, as <code class="w3-codespan">ifnode</code> builds it (Metropolis.hs:650-661).  In 'upstream mode the LL is not
+            bit-identical, because deactivation adds and then subtracts the inactive
+            observations' LL; in 'extended mode the build recomputes it from the redraw's
+            terms, in the redraw's order.  So the redraw checks the draw order against the
+            graph and the LL accounting.  It runs the engine's construction code, so with the
+            replays of hakaru10.scm it stands for an oracle of the node creation order (plan
+            C18) that would not.  <code class="w3-codespan">#:check</code> runs this check once per
+            chain.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define nested
+  (do/monad
+    (← c (dist bern 0.5))
+    (← d (dist bern 0.4))
+    (← z (dist normal 0.0 1.0))
+    (if_ c
+         (do/monad
+           (← e (dist bern (lift (λ (zv) (if (&gt; zv 0.0) 0.7 0.2)) z)))
+           (if_ (lift (λ (ev dv) (and ev dv)) e d)
+                (dist (condition 0.5 normal) z 1.0)
+                (&gt;&gt; (dist (condition #t bern) 0.3)
+                    (diracN (lift (cut * 2.0 &lt;&gt;) z)))))
+         (if_ d (dist normal z 2.0) (dist gamma 2.0 1.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (phier n)
+  (fold (λ (_ m) (do/monad (← x m) (dist normal x 3.0)))
+        (dist normal 0.0 1.0)
+        (iota n)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (normals means sd) (traverse/monad (cut dist normal &lt;&gt; sd) means))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (dot xs ws)
+  (reduce-right sexp+ 0.0 (map (λ (x w) (lift (cut * &lt;&gt; x) w)) xs ws)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (regression k data)
+  (do/monad
+    (← w-mean (normals (make-list k 0.0) 2.0))
+    (← w (normals w-mean 1.0))
+    (← noise-sd (&lt;$&gt; (cut lift (cut / 1.0 &lt;&gt;) &lt;&gt;) (dist gamma 0.5 0.5)))
+    (traverse/monad
+      (Λ ((,xs unquote y)) (dist (condition y normal) (dot xs w) noise-sd))
+      data)
+    (return (collect w))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">phier n =
+  (iterate (\m -&gt; do {x&lt;-m; dist normal x 3}) $ dist normal 0 1) !! n</code></pre></div>
+<p>cf. Bench.hs:14-15; the regression model of P §3 l.461-504 with Birds1.hs:100-111:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">normals :: [SExp Double] -&gt; SExp Double -&gt; MCMCM [SExp Double]
+normals means std = mapM (\m -&gt; dist normal m std) means
+
+
+dot :: [Double] -&gt; [SExp Double] -&gt; SExp Double
+dot xs ays = foldr1 (+) $ zipWith (\x ay -&gt; (*x) &lt;$&gt; ay) xs ays</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/construction-order _)
+  (define models
+    `((grass unquote grass)
+      (pcond3 unquote pcond3)
+      (pcond4 unquote pcond4)
+      (pswitch unquote pswitch)
+      (nested unquote nested)
+      (colored-balls-8x10 unquote (cballs-model 8 (make-list 10 'blue)))
+      (phier-10 unquote (phier 10))
+      (regression-5x500 unquote (regression 5 (regression-data 5 500)))))
+  (⊦ equal?
+     (map (λ (entry) (list (car entry) #t #t)) models)
+     (map (Λ ((,name unquote model))
+             (list name
+                   (construction-check model #:semantics 'upstream)
+                   (construction-check model #:semantics 'extended)))
+          models)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.132) (memory #(16793184 5489272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/hansei-format"><a href="#test/hansei-format"><code>test/hansei-format</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H3.  <code class="w3-codespan">model-&gt;search-tree</code> answers a genuine Hansei search tree.
+            Explored to depth 0 it still has suspended <code class="w3-codespan">C</code> entries, and explored fully and normalized it is the exact posterior:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(((C #&lt;procedure (a3773)&gt;) 0.35)
+ ((C #&lt;procedure (a3773)&gt;) 0.35)
+ ((C #&lt;procedure (a3773)&gt;) 0.15)
+ ((C #&lt;procedure (a3773)&gt;) 0.15))
+</code></pre></div>
+<p>Its thunks may be forced in any order: each first restores the states of its
+            path's nodes.  Explored level by level, the thunks of each level forced in
+            reverse order, the trees of <code class="w3-codespan">grass</code> and of <code class="w3-codespan">pcond4</code>, whose observation is a thunk of its own, give the exact
+            posterior too.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/hansei-format _)
+  (let1 (shallow (probcc-explore 0 (model-&gt;search-tree grass)))
+        (⊨ (any (λ (entry) (eq? 'C (caar entry))) shallow)))
+  (⊦ (equal-approx? 1e-12)
+     (exact-posterior grass)
+     (hansei-&gt;histogram (probcc-explore +inf.0 (model-&gt;search-tree grass))))
+  (for-each
+    (Λ ((,name unquote m))
+       (⊦ (equal-approx? 1e-12)
+          (list name (exact-posterior m))
+          (list name
+                (hansei-&gt;histogram
+                  (probcc-explore
+                    0
+                    (explore/reversed-levels (model-&gt;search-tree m)))))))
+    `((grass unquote grass) (pcond4 unquote pcond4))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 3865928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/errors"><a href="#test/errors"><code>test/errors</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H4.  The run-time checks that replace Haskell's types (plan §7) hold under every
+            interpretation.  A model answered by a lifted function (the function of a node,
+            run when the node is built or updated) is a <code class="w3-codespan">construction</code> error (deviation 9).  A non-boolean
+            test is a <code class="w3-codespan">branch</code> error (<code class="w3-codespan">SExp Bool</code>, Syntax.hs:275).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/errors _)
+  (⊦ equal?
+     '((builder . construction)
+       (exact . construction)
+       (forward . construction))
+     (kinds-under-interpretations
+       (do/monad
+         (← x (dist bern 0.5))
+         (return (lift (λ (xv) (dist bern 0.5)) x)))))
+  (⊦ equal?
+     '((builder . branch) (exact . branch) (forward . branch))
+     (kinds-under-interpretations
+       (do/monad
+         (← x (dist uniformly '(0 1)))
+         (if_ x (return 1) (return 2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(16793184 3873232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/static-graph"><a href="#test/static-graph"><code>test/static-graph</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H5.  Conditioning on a random choice is ill-typed upstream: observations are
+            external to the model (Syntax.hs:38-42, P §2.3 l.412-421).  <code class="w3-codespan">exact-posterior</code> walks the graph of a build, and the build raises <code class="w3-codespan">conditioning</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">{-
+biased_coin_ill_typed_too c1 c2 = do
+  b &lt;- dist bern 0.5
+  dist (b  `condition` bern) 0.4
+  return b
+-}</code></pre></div>
+<p>cf. Examples1.hs:196-201.  Upstream's types accept a distribution constructor
+            that observes its argument, and its update keeps the observation the node was
+            built with (Syntax.hs:251-252, Metropolis.hs:487-488), so its chain silently
+            observes the first value (deviation 9).  Here the engine's update raises <code class="w3-codespan">conditioning</code> when the observation changes, and so do the
+            oracles, which recompute every node: enumeration, likelihood weighting, the
+            reference evaluator of <code class="w3-codespan">#:check</code> and the kernel residual all
+            agree with the chain.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define observes-its-argument
+  (do/monad
+    (← x (dist bern 0.5))
+    (dist (λ (xv) (condition xv (bern 0.8))) x)
+    (return x)))
+</code></pre></div>
+<p>The graph is that of a build, which builds both branches of an <code class="w3-codespan">if_</code>, so a branch the drawn values leave inactive may raise a
+            parameter error that enumeration, which skips the inactive branches, never meets.
+            It is a dynamic condition, not a breach of the discipline: the build runs in
+            'extended mode, where it rejects the build (plan C22), and is retried until one
+            completes.  So the answer does not depend on what seed 17 draws first, for an
+            error that rejects the build; another error of the build is raised, as in
+            hakaru10.scm's <code class="w3-codespan">invalid-inactive/branch</code> (case B5).  In <code class="w3-codespan">nested-uniformly</code>, when xs is the empty list, the inactive then
+            branch draws from <code class="w3-codespan">uniformly '()</code>, an error; with the support
+            of xs in either order the posterior is the same:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (nested-uniformly choices)
+  (do/monad
+    (← xs (dist uniformly choices))
+    (if_ (lift pair? xs) (dist uniformly xs) (return 'none))))
+</code></pre></div>
+<p>and the retry still finds a breach that follows: <code class="w3-codespan">nested-uniformly/ill-typed</code> observes a choice after the branch, and raises <code class="w3-codespan">conditioning</code> with the support in either order, also when the
+            first build is rejected.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (nested-uniformly/ill-typed choices)
+  (do/monad
+    (← xs (dist uniformly choices))
+    (if_ (lift pair? xs) (dist uniformly xs) (return 'none))
+    (← y (dist bern 0.5))
+    (dist (condition y bern) 0.5)
+    (return xs)))
+</code></pre></div>
+<p>A model that every build rejects has no graph, so the oracles raise <code class="w3-codespan">construction</code> after 1000 builds (plan §6.10).  Below, the else
+            branch is never taken, but in 'extended mode its normal is drawn as an inactive
+            choice, from a mean that needs <code class="w3-codespan">(car '())</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define always-rejected
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ #t
+         (return c)
+         (do/monad
+           (← h (diracN (lift car '())))
+           (← mu (diracN (lift cdr (pair h 1.0))))
+           (dist normal mu 1.0)))))
+</code></pre></div>
+<p>Enumeration stops at <code class="w3-codespan">#:max-paths</code> leaves, with a <code class="w3-codespan">support</code> error: <code class="w3-codespan">grass</code> has 4 paths, more than 3, and as many as 4.  A tree that <code class="w3-codespan">model-&gt;search-tree</code> builds with <code class="w3-codespan">#:max-paths</code> counts the leaves of all its explorations, so it can be explored once: the
+            second exploration of grass's tree of 4 paths raises.</p>
+<p>A walk of the graph forces the value of an active exit or Dirac node, as the
+            engine's step does (deviation 11), so the oracles fail where <code class="w3-codespan">mcmC</code> does, whichever branch the graph's build took: in <code class="w3-codespan">guarded-result</code> the step that makes c false forces the deferred <code class="w3-codespan">(car '())</code> of the else branch, which the graph's build leaves
+            inactive, and the walks that take that branch raise the same Scheme error; <code class="w3-codespan">guarded-result/mirror</code>'s build takes it, and raises there.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-result
+  (do/monad
+    (← c (dist bern 0.5))
+    (← r (if_ c (return 'ok) (diracN (lift car '()))))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-result/mirror
+  (do/monad
+    (← c (dist bern 0.5))
+    (← r (if_ (lift not c) (return 'ok) (diracN (lift car '()))))
+    (return c)))
+</code></pre></div>
+<p>A walk also writes each node's deactivation count before it recomputes the
+            node, which reads it: in <code class="w3-codespan">guarded-head</code> the then branch's Dirac node, which is not the branch's result, applies <code class="w3-codespan">car</code> to <code class="w3-codespan">'()</code> whenever that branch is active,
+            and the walks that take it raise, though the graph's build left it inactive; <code class="w3-codespan">guarded-head/mirror</code>'s build takes it, and raises there.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-head
+  (do/monad
+    (← c (dist bern 0.5))
+    (let xs (lift (λ (cv) (if cv '(1) '())) c))
+    (if_ (lift not c)
+         (&gt;&gt; (diracN (lift car xs)) (return 'then))
+         (return 'else))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-head/mirror
+  (do/monad
+    (← c (dist bern 0.5))
+    (let xs (lift (λ (cv) (if cv '() '(1))) c))
+    (if_ c (&gt;&gt; (diracN (lift car xs)) (return 'then)) (return 'else))))
+</code></pre></div>
+<p>A node that a switch activates may also keep the deferred value it got while
+            inactive, when no update of the step recomputes it: the Dirac node of <code class="w3-codespan">guarded-head/constant</code> reads a constant, the inner exit of <code class="w3-codespan">guarded-exit/constant</code> an inner result that does not change, the
+            root of <code class="w3-codespan">guarded-root/constant</code> has no update.  The step forces such a value when its propagation ends, so it
+            raises as the build of that branch active does, and as the walks that take the
+            branch do, in both semantics, with or without <code class="w3-codespan">#:check</code>, and under the kernel residual: the chain's first sample is <code class="w3-codespan">'else</code>, and a later step raises <code class="w3-codespan">car</code>'s error.  Upstream, which never reads these nodes, samples <code class="w3-codespan">'then</code> and <code class="w3-codespan">'else</code> about half the time each.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-head/constant
+  (do/monad
+    (← c (dist bern 0.5))
+    (← xs (diracN '()))
+    (if_ (lift not c)
+         (&gt;&gt; (diracN (lift car xs)) (return 'then))
+         (return 'else))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-exit/constant
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ (lift not c)
+         (do/monad
+           (← inner (if_ #t (diracN (lift car '())) (return 'x)))
+           (return 'then))
+         (return 'else))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-root/constant
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ (lift not c)
+         (&gt;&gt; (diracN (lift car '())) (return 'then))
+         (return 'else))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/static-graph _)
+  (define observes-a-choice
+    (do/monad (← x (dist bern 0.5)) (dist (condition x bern) 0.5)))
+  (⊦= 'conditioning (hakaru10-kind (τ (exact-posterior observes-a-choice))))
+  (⊦ equal?
+     (make-list 4 'conditioning)
+     (map (λ (run) (hakaru10-kind (τ (run observes-its-argument))))
+          (list exact-posterior
+                (cut likelihood-weighting 100 &lt;&gt;)
+                (cut mcmC 50 &lt;&gt; #:check #t)
+                kernel-residual)))
+  (for-each
+    (λ (choices)
+       (⊦ (equal-approx? 1e-12)
+          (list choices '((1 . 0.25) (2 . 0.25) (none . 0.5)))
+          (list choices (exact-posterior (nested-uniformly choices))))
+       (⊦ equal?
+          (list choices 'conditioning)
+          (list choices
+                (hakaru10-kind
+                  (τ (exact-posterior
+                       (nested-uniformly/ill-typed choices)))))))
+    '(((1 2) ()) (() (1 2))))
+  (⊦= 'construction (hakaru10-kind (τ (exact-posterior always-rejected))))
+  (⊦= 'support (hakaru10-kind (τ (exact-posterior grass #:max-paths 3))))
+  (⊦ (equal-approx? 1e-12)
+     (exact-posterior grass)
+     (exact-posterior grass #:max-paths 4))
+  (let1 (tree (model-&gt;search-tree grass #:max-paths 4))
+        (⊦ (equal-approx? 1e-12)
+           (exact-posterior grass)
+           (hansei-&gt;histogram (probcc-explore +inf.0 tree)))
+        (⊦= 'support (hakaru10-kind (τ (probcc-explore +inf.0 tree)))))
+  (for-each
+    (Λ ((,name unquote m))
+       (⊦ equal?
+          (list name 'exn 'exn 'exn)
+          (list name
+                (error-kind (τ (exact-posterior m)))
+                (error-kind (τ (likelihood-weighting 100 m)))
+                (error-kind (τ (mcmC 100 m))))))
+    `((guarded-result unquote guarded-result)
+      (guarded-result/mirror unquote guarded-result/mirror)
+      (guarded-head unquote guarded-head)
+      (guarded-head/mirror unquote guarded-head/mirror)
+      (guarded-head/constant unquote guarded-head/constant)
+      (guarded-exit/constant unquote guarded-exit/constant)
+      (guarded-root/constant unquote guarded-root/constant)))
+  (for-each
+    (Λ ((,name unquote m))
+       (⊦ equal?
+          (list name 'else 'exn 'exn 'exn)
+          (list name
+                (car (mcmC 1 m))
+                (error-kind (τ (mcmC 100 m #:semantics 'extended)))
+                (error-kind (τ (mcmC 100 m #:check #t)))
+                (error-kind (τ (kernel-residual m))))))
+    `((guarded-head/constant unquote guarded-head/constant)
+      (guarded-exit/constant unquote guarded-exit/constant)
+      (guarded-root/constant unquote guarded-root/constant))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.022) (memory #(16793184 3873704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nested-branches"><a href="#test/nested-branches"><code>test/nested-branches</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H6.  Nested <code class="w3-codespan">if_</code>s under the oracles.  A branch answers <code class="w3-codespan">(diracN d)</code> of a node of the enclosing scope, which the build
+            shares and does not copy (Syntax.hs:164-169), or the <code class="w3-codespan">diracN</code> of a lifted expression.  The else branch observes a coin
+            whose parameter depends on an outer node.  The MCMC chains, in both semantics,
+            and likelihood weighting each run 20000 samples and agree with exact enumeration
+            within .02:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define two-levels
+  (do/monad
+    (← c (dist bern 0.4))
+    (← d (dist uniformly '(0 1 2)))
+    (if_ c
+         (do/monad
+           (← e (dist bern 0.7))
+           (if_ e (diracN d) (diracN (lift (cut + 10 &lt;&gt;) d))))
+         (do/monad
+           (← y (dist categorical '((5 . 0.5) (6 . 0.5))))
+           (dist (condition #t bern)
+                 (lift (λ (yv dv) (if (= yv 5) 0.8 (/ (+ dv 1.0) 4.0))) y d))
+           (return y)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((0 . 0.118143459915612)
+ (1 . 0.118143459915612)
+ (2 . 0.118143459915612)
+ (5 . 0.30379746835443)
+ (6 . 0.189873417721519)
+ (10 . 0.0506329113924051)
+ (11 . 0.0506329113924051)
+ (12 . 0.0506329113924051))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nested-branches _)
+  (let1 (exact (exact-posterior two-levels))
+        (⊦ (histograms-within 0.02) exact (mcmc-posterior 20000 two-levels))
+        (⊦ (histograms-within 0.02)
+           exact
+           (mcmc-posterior 20000 two-levels #:semantics 'extended))
+        (⊦ (histograms-within 0.02)
+           exact
+           (likelihood-weighting 20000 two-levels))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.289) (memory #(16793184 3877088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/continuous"><a href="#test/continuous"><code>test/continuous</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H7.  Likelihood weighting needs no finite support.  <code class="w3-codespan">pcond3</code> (E5b) gets its exact answer within .02, and the mean of <code class="w3-codespan">mixng</code> is 
+<mtext>0.5 · 10 + 0.5 · 1 = 5.5</mtext> within .4.  A run of zero likelihood counts for nothing, so a model whose every
+            run has one, an observation of 5 from <code class="w3-codespan">uniform 0 1</code>, gives the empty histogram, as <code class="w3-codespan">exact-posterior</code> does (E6).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define mixng
+  (do/monad
+    (← x (dist normal 0.0 1.0))
+    (if_ (lift (cut &gt; &lt;&gt; 0.0) x)
+         (dist normal 10.0 2.0)
+         (dist gamma 3.0 (/ 1.0 3.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">mixng = do
+  x &lt;- dist normal 0 1
+  if_ ((&gt;0) &lt;$&gt; x)
+           (dist normal 10 2)
+           (dist gamma 3 (1/3))</code></pre></div>
+<p>cf. Examples1.hs:139-144; P §2.2 l.331-366.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/continuous _)
+  (⊦ (histograms-within 0.02)
+     '((1 . 0.5) (20 . 0.25) (21 . 0.25))
+     (likelihood-weighting 20000 pcond3))
+  (⊦ (equal-approx? 0.4)
+     5.5
+     (fold (Λ ((,x unquote p) ,mean) (+ mean (* x p)))
+           0.0
+           (likelihood-weighting 20000 mixng)))
+  (⊦ equal?
+     '()
+     (likelihood-weighting 100 (dist (condition 5.0 uniform) 0.0 1.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.291) (memory #(16793184 3876320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pre-allocation"><a href="#test/pre-allocation"><code>test/pre-allocation</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>H8.  Pre-allocation, upstream's way to stand for stochastic memoization
+            (ColoredBalls.hs:41-44): <code class="w3-codespan">replicate/monad</code> creates one coin per key, in order, and a table maps the keys to them.  The
+            table is built inside a bind, so each run of the model has its own (plan §15,
+            C35).  Enumeration gives each coin its own value on each path, so two
+            pre-allocated coins are independent, and so are the colors of E7's balls.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pre-allocation _)
+  (⊦ (equal-approx? 1e-12)
+     '(((#f . #f) . 0.25)
+       ((#f . #t) . 0.25)
+       ((#t . #f) . 0.25)
+       ((#t . #t) . 0.25))
+     (exact-posterior
+       (do/monad
+         (← coins (replicate/monad 2 (dist bern 0.5)))
+         (let table (map cons '(a b) coins))
+         (return (pair (alist-ref 'a table) (alist-ref 'b table))))))
+  (⊦ (equal-approx? 1e-12)
+     (map cons '(1 2 3) (cballs-closed-form 3 4))
+     (exact-posterior (cballs-model 3 (make-list 4 'blue)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(16793184 3992488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

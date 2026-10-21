@@ -1,0 +1,522 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/stream-sicp/list-roundtrip"><a href="#test/stream-sicp/list-roundtrip"><code>test/stream-sicp/list-roundtrip</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/list-roundtrip _)
+  (⊦≡ '(a b c d) ((compose stream:-&gt;list list-&gt;stream) '(a b c d))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3107776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/dest-car+cdr"><a href="#test/stream-sicp/dest-car+cdr"><code>test/stream-sicp/dest-car+cdr</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/dest-car+cdr _)
+  (let* ((n 0)
+         (s (λ () (set! n (add1 n)) (δ (δ (|:\x207a;| 1 2 stream:empty))))))
+    (⊦≡ '(1 1) (stream:dest/car+cdr (s) ((a d) (list a n)) (else 'empty))))
+  (⊦≡ 'empty (stream:dest/car+cdr (δ stream:empty) ((a d) a) (else 'empty)))
+  (⊦≡ '(7 7) (stream:dest/car+cdr (δ 7) ((a d) (list a d)) (else 'empty))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3109168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/ref"><a href="#test/stream-sicp/ref"><code>test/stream-sicp/ref</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/ref _)
+  (⊦≡ 0 ((stream:ref 0) series:range/0-9))
+  (⊦≡ 5 ((stream:ref 5) series:range/0-9))
+  (⊦≡ 9 ((stream:ref 9) series:range/0-9))
+  (⊨ (condition-case (begin ((stream:ref 10) series:range/0-9) #f) ((exn) #t)))
+  (⊨ (condition-case
+       (begin ((stream:ref 101) series:range/0-9) #f)
+       ((exn) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3116312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/take-basics"><a href="#test/stream-sicp/take-basics"><code>test/stream-sicp/take-basics</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/take-basics _)
+  (⊦≡ '(3 4 5 6 7) ((list○take 5) (series:from 3)))
+  (⊦≡ '(1 1 1 1 1 1 1 1 1 1) ((list○take 10) stream:1s))
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9) ((list○take 10) numbers/nats))
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9)
+      ((list○take 10) ((stream:append-map list) numbers/nats)))
+  (⊦≡ 117 ((stream:ref 100) ((not-multiples-of 7) numbers/nats)))
+  (⊦≡ '(0 1 3 6 10 15 21 28 36 45 55 66 78 91 105 120 136 153 171 190)
+      ((list○take 20) numbers/triangular))
+  (⊦≡ '(0 1 3 6 10 15 21 28 36 45 55 66 78 91 105 120 136 153 171 190)
+      ((list○take 20) numbers/triangular/∞))
+  (⊦≡ 78 ((stream:ref 6) (evens numbers/triangular)))
+  (⊦≡ '(0 10 15 45 55 105 120 190)
+      ((list○take 8) ((multiples-of 5) numbers/triangular))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3120056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/zip"><a href="#test/stream-sicp/zip"><code>test/stream-sicp/zip</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/zip _)
+  (⊦≡ '((0 0 0)
+        (1 1 1)
+        (2 1 3)
+        (3 2 6)
+        (4 3 10)
+        (5 5 15)
+        (6 8 21)
+        (7 13 28)
+        (8 21 36)
+        (9 34 45))
+      ((list○take 10)
+       (stream:zip numbers/nats numbers/fibonacci numbers/triangular)))
+  (⊦≡ '(11 22)
+      ((list○take 5)
+       ((stream:zip-with +) (list-&gt;stream '(1 2)) (list-&gt;stream '(10 20)))))
+  (⊦≡ '(101 102 103)
+      ((list○take 5)
+       ((stream:zip-with +) (list-&gt;stream '(1 2 3)) (stream:repeat 100))))
+  (⊦≡ '() (stream:-&gt;list (stream:zip (list-&gt;stream '(1 2 3)) stream:empty)))
+  (⊦≡ '(11 2 3)
+      (stream:-&gt;list
+        ((stream:zip-with + #:pad 0)
+         (list-&gt;stream '(1 2 3))
+         (list-&gt;stream '(10)))))
+  (⊦≡ '((1 a) (#f b))
+      (stream:-&gt;list
+        ((stream:zip-with list #:pad #f)
+         (list-&gt;stream '(1))
+         (list-&gt;stream '(a b)))))
+  (⊦≡ '()
+      (stream:-&gt;list ((stream:zip-with + #:pad 0) stream:empty stream:empty))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-series/finite-polynomials"><a href="#test/stream-series/finite-polynomials"><code>test/stream-series/finite-polynomials</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-series/finite-polynomials _)
+  (⊦≡ '(2 2 3)
+      (stream:-&gt;list (series:+ (list-&gt;stream '(1 2 3)) (list-&gt;stream '(1)))))
+  (⊦≡ '(0 1 2 -1 -1)
+      (stream:-&gt;list
+        (series:- (list-&gt;stream '(1 2 3)) (list-&gt;stream '(1 1 1 1 1)))))
+  (⊦≡ '(1 2 1)
+      (stream:-&gt;list (series:× (list-&gt;stream '(1 1)) (list-&gt;stream '(1 1)))))
+  (⊦≡ '(1 2 2 1)
+      (stream:-&gt;list (series:× (list-&gt;stream '(1 1 1)) (list-&gt;stream '(1 1)))))
+  (⊦≡ '(1 3 3 1 0 0) ((list○take 6) ((series:expt 3) (list-&gt;stream '(1 1)))))
+  (⊦≡ '(1 2 2 2 2 2)
+      ((list○take 6) (series:× (list-&gt;stream '(1 1)) stream:1s)))
+  (⊦≡ '(1 1 1 1 1 1)
+      ((list○take 6) (series:/ (list-&gt;stream '(1)) (list-&gt;stream '(1 -1)))))
+  (⊦≡ '(1 1 1 1 1 1) ((list○take 6) (series:⁻¹ (list-&gt;stream '(1 -1)))))
+  (⊦≡ '(1 1 1/2 1/6 1/24 1/120)
+      ((list○take 6) (series:exp (list-&gt;stream '(0 1)))))
+  (⊦≡ '(1 0 0 0) ((list○take 4) (series:exp stream:empty)))
+  (⊦≡ '(2 1/4 -1/64 1/512 -5/16384)
+      ((list○take 5) (series:√/∞ (list-&gt;stream '(4 1)))))
+  (⊦≡ '(0 0 0 0) ((list○take 4) (series:√/∞ stream:empty)))
+  (⊦≡ '(0 0 0 0) ((list○take 4) (series:√/∞ (list-&gt;stream '(0)))))
+  (⊦≡ '(0 0 0 0) ((list○take 4) (series:√/∞ (list-&gt;stream '(0 0)))))
+  (⊦≡ '(0 1 0 0) ((list○take 4) (series:√/∞ (list-&gt;stream '(0 0 1)))))
+  (⊦≡ '(1 1/2 1/8 0 -1/128 0)
+      (letdelay
+        ((S (series:√/∞ (series:+ stream:1 (stream:cons 0 S)))))
+        ((list○take 6) S)))
+  (⊦≡ '(1 -1 1/2 0 -1/8 0)
+      (letdelay
+        ((T (series:√/∞ (series:- stream:1 (stream:cons 0 ((series:* 2) T))))))
+        ((list○take 6) T)))
+  (⊦≡ '((1) (1 1) (0 2 1) (0 2 3 1) (0 2 5 4 1))
+      ((list○take 5) (riordan-array (list-&gt;stream '(1 1)) stream:1s)))
+  (⊦≡ ((list○take 5) (riordan-array (list-&gt;poly '(1 1)) stream:1s))
+      ((list○take 5) (riordan-array (list-&gt;stream '(1 1)) stream:1s)))
+  (⊦≡ ((list○take 6) (riordan-array (list-&gt;poly '(1)) (list-&gt;poly '(0 1 1))))
+      ((list○take 6)
+       (riordan-array (list-&gt;stream '(1)) (list-&gt;stream '(0 1 1)))))
+  (⊦≡ '((1) (1 0) (1 0 0) (1 0 0 0))
+      ((list○take 4) (riordan-array stream:1s stream:empty)))
+  (⊦≡ '((0) (0 0) (0 0 0) (0 0 0 0))
+      ((list○take 4) (riordan-array stream:empty stream:1s))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3120928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/foldr-laziness"><a href="#test/stream-sicp/foldr-laziness"><code>test/stream-sicp/foldr-laziness</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/foldr-laziness _)
+  (⊦≡ 'hello
+      ((stream:foldr (λ (a rest) (and a (force rest))) (λ () 'hello))
+       (|:\x207a;| #t #t #t stream:empty)))
+  (⊦≡ #f
+      ((stream:foldr (λ (a rest) (and a (force rest))) (λ () (list (/ 1 0))))
+       (|:\x207a;| #t #t #t #f #t stream:0s))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/mplus-and-iterator"><a href="#test/stream-sicp/mplus-and-iterator"><code>test/stream-sicp/mplus-and-iterator</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/mplus-and-iterator _)
+  (⊦≡ '(0 1 2 0 1 2 0 1 2 0)
+      ((list○take 10)
+       (stream:§ (stream:repeat 0) (stream:repeat 1) (stream:repeat 2))))
+  (let ((next (stream:iterator numbers/nats)))
+    (⊦≡ '(0 1 2 3)
+        (collect-values (λ () (values (next) (next) (next) (next)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3122408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/merge-hamming"><a href="#test/stream-sicp/merge-hamming"><code>test/stream-sicp/merge-hamming</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/merge-hamming _)
+  (let* ((C (○ eval car))
+         (L (λ (p q) `((* ,(C p) ,(C q)) ,(list (cadr p) (cadr q))))))
+    (letdelay
+      ((α (stream:cons
+            '(1 i)
+            ((stream:merge (λ (p q) (&lt; (C p) (C q))))
+             ((stream:zip-with L) α (stream:repeat '(2 a)))
+             ((stream:zip-with L) α (stream:repeat '(3 b)))
+             ((stream:zip-with L) α (stream:repeat '(5 c)))))))
+      (⊦≡ '((1 i)
+            ((* 1 2) (i a))
+            ((* 1 3) (i b))
+            ((* 2 2) ((i a) a))
+            ((* 1 5) (i c))
+            ((* 2 3) ((i a) b))
+            ((* 3 2) ((i b) a))
+            ((* 4 2) (((i a) a) a))
+            ((* 3 3) ((i b) b))
+            ((* 2 5) ((i a) c))
+            ((* 5 2) ((i c) a))
+            ((* 4 3) (((i a) a) b))
+            ((* 6 2) (((i a) b) a))
+            ((* 6 2) (((i b) a) a))
+            ((* 3 5) ((i b) c))
+            ((* 5 3) ((i c) b))
+            ((* 8 2) ((((i a) a) a) a))
+            ((* 6 3) (((i a) b) b))
+            ((* 6 3) (((i b) a) b))
+            ((* 9 2) (((i b) b) a))
+            ((* 4 5) (((i a) a) c))
+            ((* 10 2) (((i a) c) a))
+            ((* 10 2) (((i c) a) a))
+            ((* 8 3) ((((i a) a) a) b))
+            ((* 12 2) ((((i a) a) b) a))
+            ((* 12 2) ((((i a) b) a) a))
+            ((* 12 2) ((((i b) a) a) a))
+            ((* 5 5) ((i c) c))
+            ((* 9 3) (((i b) b) b))
+            ((* 6 5) (((i a) b) c))
+            ((* 6 5) (((i b) a) c))
+            ((* 10 3) (((i a) c) b))
+            ((* 10 3) (((i c) a) b))
+            ((* 15 2) (((i b) c) a))
+            ((* 15 2) (((i c) b) a))
+            ((* 16 2) (((((i a) a) a) a) a))
+            ((* 12 3) ((((i a) a) b) b))
+            ((* 12 3) ((((i a) b) a) b))
+            ((* 12 3) ((((i b) a) a) b))
+            ((* 18 2) ((((i a) b) b) a))
+            ((* 18 2) ((((i b) a) b) a))
+            ((* 18 2) ((((i b) b) a) a))
+            ((* 8 5) ((((i a) a) a) c))
+            ((* 20 2) ((((i a) a) c) a))
+            ((* 20 2) ((((i a) c) a) a))
+            ((* 20 2) ((((i c) a) a) a))
+            ((* 9 5) (((i b) b) c))
+            ((* 15 3) (((i b) c) b))
+            ((* 15 3) (((i c) b) b))
+            ((* 16 3) (((((i a) a) a) a) b)))
+          ((list○take 50) α)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3140480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/enumerations"><a href="#test/stream-sicp/enumerations"><code>test/stream-sicp/enumerations</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/enumerations _)
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9)
+      ((list○take 10) (stream:enumerate-upper numbers/nats/∞)))
+  (⊦≡ '(0 1 2 3 4 5 6 7 8 9)
+      ((list○take 10) (stream:enumerate-lower numbers/nats/∞)))
+  (⊦≡ '((0 0) (0 1) (1 1) (0 2) (1 2) (0 3) (2 2) (0 4) (1 3) (0 5))
+      ((list○take 10) (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0)
+        (0 0 1)
+        (1 0 1)
+        (0 1 1)
+        (1 1 1)
+        (0 0 2)
+        (2 1 1)
+        (0 1 2)
+        (1 0 2)
+        (0 0 3))
+      ((list○take 10)
+       (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0 0)
+        (0 0 0 1)
+        (1 0 0 1)
+        (0 1 0 1)
+        (1 1 0 1)
+        (0 0 1 1)
+        (2 1 0 1)
+        (0 1 1 1)
+        (1 0 1 1)
+        (0 0 0 2))
+      ((list○take 10)
+       (stream:enumerate-upper
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞)))
+  (⊦≡ '((0 0) (1 0) (1 1) (2 0) (2 1) (3 0) (2 2) (4 0) (3 1) (5 0))
+      ((list○take 10) (stream:enumerate-lower numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0)
+        (1 0 0)
+        (1 1 0)
+        (2 0 0)
+        (2 1 0)
+        (3 0 0)
+        (2 1 1)
+        (4 0 0)
+        (3 1 0)
+        (5 0 0))
+      ((list○take 10)
+       (stream:enumerate-lower numbers/nats/∞ numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ '((0 0 0 0)
+        (1 0 0 0)
+        (1 1 0 0)
+        (2 0 0 0)
+        (2 1 0 0)
+        (3 0 0 0)
+        (2 1 1 0)
+        (4 0 0 0)
+        (3 1 0 0)
+        (5 0 0 0))
+      ((list○take 10)
+       (stream:enumerate-lower
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞
+         numbers/nats/∞)))
+  (⊦≡ '((0 0) (0 1) (1 0) (1 1) (2 0) (0 2) (3 0) (1 2) (4 0) (0 3))
+      ((list○take 10) (stream:enumerate-all numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ 397
+      ((compose
+         length
+         stream:-&gt;list
+         (stream:take-while (λ (pair) ((compose not equal?) pair '(1 100)))))
+       (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞)))
+  (⊦≡ 1559
+      ((compose
+         length
+         stream:-&gt;list
+         (stream:take-while (λ (pair) (not (equal? pair '(3 100))))))
+       (stream:enumerate-upper numbers/nats/∞ numbers/nats/∞)))
+  (let ((five (list-&gt;stream '(1 2 3 4 5))) (two (list-&gt;stream '(1 2))))
+    (⊦≡ '((1 1) (1 2) (2 2)) (stream:-&gt;list (stream:enumerate-upper five two)))
+    (⊦≡ '((1 1) (1 2) (2 2) (1 3) (2 3) (1 4) (2 4) (1 5) (2 5))
+        (stream:-&gt;list (stream:enumerate-upper two five)))
+    (⊦≡ '((1 1) (2 1) (2 2)) (stream:-&gt;list (stream:enumerate-lower two five)))
+    (⊦≡ '((1 1) (2 1) (2 2) (3 1) (3 2) (4 1) (4 2) (5 1) (5 2))
+        (stream:-&gt;list (stream:enumerate-lower five two)))
+    (⊦≡ 10 (length (stream:-&gt;list (stream:enumerate-all five two))))
+    (⊦≡ '((1 1) (1 2) (2 2))
+        (stream:-&gt;list ((stream:enumerate-weighted +) five two)))
+    (⊦≡ '(1 2) (stream:-&gt;list (stream:enumerate-upper two)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3310776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/map-pairs"><a href="#test/stream-sicp/map-pairs"><code>test/stream-sicp/map-pairs</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/map-pairs _)
+  (⊦≡ '(3 7)
+      (stream:-&gt;list
+        ((stream:map-consecutive-pairs +) (list-&gt;stream '(1 2 3 4)))))
+  (⊦≡ '(3 7)
+      (stream:-&gt;list
+        ((stream:map-consecutive-pairs +) (list-&gt;stream '(1 2 3 4 5)))))
+  (⊦≡ '(3 5 7)
+      (stream:-&gt;list
+        ((stream:map-overlapping-pairs +) (list-&gt;stream '(1 2 3 4)))))
+  (⊦≡ '()
+      (stream:-&gt;list ((stream:map-overlapping-pairs +) (list-&gt;stream '(1)))))
+  (⊦≡ '(1 5 9 13 17)
+      ((list○take 5) ((stream:map-consecutive-pairs +) numbers/nats)))
+  (⊦≡ '(1 3 5 7 9)
+      ((list○take 5) ((stream:map-overlapping-pairs +) numbers/nats))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3311440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/weighted-enumerations"><a href="#test/stream-sicp/weighted-enumerations"><code>test/stream-sicp/weighted-enumerations</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/weighted-enumerations _)
+  (⊦≡ '((4 3 5)
+        (3 4 5)
+        (8 6 10)
+        (6 8 10)
+        (12 5 13)
+        (12 9 15)
+        (15 8 17)
+        (5 12 13)
+        (16 12 20)
+        (9 12 15))
+      ((list○take 10) (Pythagorean-triples 2)))
+  (⊦≡ '((0 0) (0 1) (1 1) (0 2) (1 2) (0 3) (2 2) (1 3) (0 4) (2 3))
+      ((list○take 10)
+       ((stream:enumerate-weighted +) numbers/nats/∞ numbers/nats/∞)))
+  (let* ((F (λ (x)
+               (not (or ((divisable-by? 2) x)
+                        ((divisable-by? 3) x)
+                        ((divisable-by? 5) x)))))
+         (O (λ (i j) (+ (* i 2) (* j 3) (* 5 i j))))
+         (pairs ((stream:enumerate-weighted O)
+                 ((stream:filter F) numbers/nats&gt;0)
+                 ((stream:filter F) numbers/nats&gt;0))))
+    (⊦≡ '((1 1)
+          (1 7)
+          (1 11)
+          (1 13)
+          (1 17)
+          (1 19)
+          (1 23)
+          (1 29)
+          (1 31)
+          (7 7)
+          (1 37)
+          (1 41)
+          (1 43)
+          (1 47)
+          (1 49)
+          (1 53)
+          (7 11)
+          (1 59)
+          (1 61)
+          (7 13))
+        ((list○take 20) pairs))
+    (⊦≡ '(10
+          58
+          90
+          106
+          138
+          154
+          186
+          234
+          250
+          280
+          298
+          330
+          346
+          378
+          394
+          426
+          432
+          474
+          490
+          508)
+        ((list○take 20) ((stream:map (λ (p) (apply O p))) pairs)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.028) (memory #(12582912 3192168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/ramanujan-cubes"><a href="#test/stream-sicp/ramanujan-cubes"><code>test/stream-sicp/ramanujan-cubes</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/ramanujan-cubes _)
+  (let* ((W (λ (i j) (+ (expt i 3) (expt j 3))))
+         (sums-of-cubes
+           ((stream:enumerate-weighted W) numbers/nats&gt;0 numbers/nats&gt;0)))
+    (letrec ((F (λ (s)
+                   (let ((c (stream:car s)) (o (stream:cadr s)))
+                     (delay-force
+                       (cond ((equal? (apply W c) (apply W o))
+                              (stream:cons
+                                (list (apply W c) c o)
+                                (F (stream:cdr s))))
+                             (else (F (stream:cdr s)))))))))
+      (⊦≡ '((1729 (9 10) (1 12))
+            (4104 (9 15) (2 16))
+            (13832 (18 20) (2 24))
+            (20683 (19 24) (10 27))
+            (32832 (18 30) (4 32))
+            (39312 (15 33) (2 34))
+            (40033 (16 33) (9 34))
+            (46683 (27 30) (3 36))
+            (64232 (26 36) (17 39))
+            (65728 (31 33) (12 40)))
+          ((list○take 10) (F sums-of-cubes))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 3289480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/sums-of-three-squares"><a href="#test/stream-sicp/sums-of-three-squares"><code>test/stream-sicp/sums-of-three-squares</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/sums-of-three-squares _)
+  (let* ((W (λ (i j) (+ (expt i 2) (expt j 2))))
+         (sums-of-squares
+           ((stream:enumerate-weighted W) numbers/nats&gt;0 numbers/nats&gt;0)))
+    (letrec ((F (λ (s)
+                   (let ((c (stream:car s))
+                         (o (stream:cadr s))
+                         (p (stream:caddr s)))
+                     (delay-force
+                       (cond ((and (equal? (apply W c) (apply W o))
+                                   (equal? (apply W o) (apply W p)))
+                              (stream:cons
+                                (list (apply W c) c o p)
+                                (F (stream:cdr s))))
+                             (else (F (stream:cdr s)))))))))
+      (⊦≡ '((325 (10 15) (6 17) (1 18))
+            (425 (13 16) (8 19) (5 20))
+            (650 (17 19) (11 23) (5 25))
+            (725 (14 23) (10 25) (7 26))
+            (845 (19 22) (13 26) (2 29))
+            (850 (15 25) (11 27) (3 29))
+            (925 (21 22) (14 27) (5 30))
+            (1025 (20 25) (8 31) (1 32))
+            (1105 (23 24) (12 31) (9 32))
+            (1105 (12 31) (9 32) (4 33)))
+          ((list○take 10) (F sums-of-squares))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(12582912 3250648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stream-sicp/interop-with-aux-streams"><a href="#test/stream-sicp/interop-with-aux-streams"><code>test/stream-sicp/interop-with-aux-streams</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stream-sicp/interop-with-aux-streams _)
+  (⊦≡ '(0 1 2 3 4) ((list○take 5) ℕ))
+  (⊦≡ '(0 1 3 6 10) ((list○take 5) (series:× ℕ stream:1s)))
+  (⊦≡ '(0 1 1 2 3) (§-&gt;list (take§ 5 numbers/fibs/∞)))
+  (⊦≡ '(1 1 2 5 14) (§-&gt;list (take§ 5 taylor/catalan)))
+  (⊦≡ '(0 1) ((list○take 3) (take§ 2 ℕ))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3254904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

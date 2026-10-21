@@ -1,0 +1,703 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<p>The engine answers a query with a <i>reified</i> λ-expression: faithful, but the cons spine hides the shape of the term and the constraint store shows up as executable assertions. <code class="w3-codespan">(aux kanren micro show)</code> splits that answer in a <i>datum</i> and a list of <i>constraints</i>, then renders both as a table, as a Mermaid graph of the term (where hash-consing makes sharing visible) and, optionally, as a profile of how many suspensions the engine had to force before each answer showed up.</p>
+<h2 id="test/repr-&gt;datum"><a href="#test/repr-&gt;datum"><code>test/repr-&gt;datum</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/repr-&gt;datum _)
+  (⊦= '(α z) (μkanren-repr-&gt;datum '(cons α (cons 'z '()))))
+  (⊦= 42 (μkanren-repr-&gt;datum 42))
+  (⊦= '#(α 3) (μkanren-repr-&gt;datum '(vector α 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2496368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/form-&gt;constraint"><a href="#test/form-&gt;constraint"><code>test/form-&gt;constraint</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/form-&gt;constraint _)
+  (⊦= '(≠ α list) (μkanren-form-&gt;constraint '(begin (deny (equal? α 'list)))))
+  (⊦= '(≠ (α β) (list quote))
+      (μkanren-form-&gt;constraint
+        '(begin (deny (and (equal? α 'list) (equal? β 'quote))))))
+  (⊦= '(symbol? α)
+      (μkanren-form-&gt;constraint '(assert (every (μ v (symbol? v)) (list α)))))
+  (⊦= '(absento closure α)
+      (μkanren-form-&gt;constraint '(assert (absent? 'closure α))))
+  (⊦= '(absento (1 2) (1 . α))
+      (μkanren-form-&gt;constraint '(assert (absent? '(1 2) (cons 1 α))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2497592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/string/short"><a href="#test/string/short"><code>test/string/short</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/string/short _)
+  (⊦= &quot;(\&quot;a  b\&quot; sym)&quot; (-&gt;string/short (list &quot;a  b&quot; 'sym)))
+  (⊦= &quot;(#\\\&quot; \&quot;a  b\&quot; |x   y| \&quot;q\\\&quot;  \&quot;)&quot;
+      (-&gt;string/short (list #\&quot; &quot;a  b&quot; (string-&gt;symbol &quot;x   y&quot;) &quot;q\&quot;  &quot;)))
+  (⊦= &quot;'quote&quot; (-&gt;string/short ''quote))
+  (⊨ (and (substring-index
+            &quot;| 1 | `\&quot;a  \\|  b\&quot;` |&quot;
+            (μkanren-run/markdown (q 3) (=° q &quot;a  |  b&quot;)))
+          #t)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2491248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/occurrences"><a href="#test/occurrences"><code>test/occurrences</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/occurrences _)
+  (⊦= 2 (μkanren-datum-occurrences '((α z) z (α β)) 'α))
+  (⊦= 1 (μkanren-datum-occurrences '((α z) z (α β)) 'β))
+  (⊦= 0 (μkanren-datum-occurrences '((α z) z (α β)) 'γ)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2492496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/answer"><a href="#test/answer"><code>test/answer</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/answer _)
+  (let1 (a (car (°-&gt;answers (fresh° (q) (=° q (list 'z 'z))))))
+        (⊦= '(z z) (μkanren-answer-&gt;datum a))
+        (⊦= '() (μkanren-answer-&gt;constraints a))
+        (⊨ (μkanren-answer-ground? a))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2494136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/append°"><a href="#test/append°"><code>test/append°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Two altitudes, from the same answers. The <code class="w3-codespan">variables</code> view keeps a value whole and hangs the unknowns it is still free in off it, labelling each edge with how many times that unknown occurs; the <code class="w3-codespan">cells</code> view opens the term up into the DAG it really is, where equal subterms are hash-consed so that <i>sharing is visible</i>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(μkanren-run (l 5 #f) (fresh° (a d) (append° a d l)))
+</code></pre></div>
+<p><b>5</b> answers.</p>
+<table class="w3-table w3-bordered w3-small">
+<tr>
+<th>#</th>
+<th>answer</th></tr>
+<tr>
+<td>1</td>
+<td><code class="w3-codespan">α</code></td></tr>
+<tr>
+<td>2</td>
+<td><code class="w3-codespan">(α . β)</code></td></tr>
+<tr>
+<td>3</td>
+<td><code class="w3-codespan">(α β . γ)</code></td></tr>
+<tr>
+<td>4</td>
+<td><code class="w3-codespan">(α β γ . δ)</code></td></tr>
+<tr>
+<td>5</td>
+<td><code class="w3-codespan">(α β γ δ . ε)</code></td></tr></table>
+<pre class="mermaid">flowchart LR
+    n0((&quot;l&quot;))
+    n1[&quot;α&quot;]
+    n2((&quot;α&quot;))
+    n3[&quot;(α . β)&quot;]
+    n4((&quot;α&quot;))
+    n5((&quot;β&quot;))
+    n6[&quot;(α β . γ)&quot;]
+    n7((&quot;α&quot;))
+    n8((&quot;β&quot;))
+    n9((&quot;γ&quot;))
+    n10[&quot;(α β γ . δ)&quot;]
+    n11((&quot;α&quot;))
+    n12((&quot;β&quot;))
+    n13((&quot;γ&quot;))
+    n14((&quot;δ&quot;))
+    n15[&quot;(α β γ δ . ε)&quot;]
+    n16((&quot;α&quot;))
+    n17((&quot;β&quot;))
+    n18((&quot;γ&quot;))
+    n19((&quot;δ&quot;))
+    n20((&quot;ε&quot;))
+    n0 --&gt;|1| n1
+    n1 --&gt;|×1| n2
+    n0 --&gt;|2| n3
+    n3 --&gt;|×1| n4
+    n3 --&gt;|×1| n5
+    n0 --&gt;|3| n6
+    n6 --&gt;|×1| n7
+    n6 --&gt;|×1| n8
+    n6 --&gt;|×1| n9
+    n0 --&gt;|4| n10
+    n10 --&gt;|×1| n11
+    n10 --&gt;|×1| n12
+    n10 --&gt;|×1| n13
+    n10 --&gt;|×1| n14
+    n0 --&gt;|5| n15
+    n15 --&gt;|×1| n16
+    n15 --&gt;|×1| n17
+    n15 --&gt;|×1| n18
+    n15 --&gt;|×1| n19
+    n15 --&gt;|×1| n20
+  class n0 query
+  class n15,n10,n6,n3,n1 value
+  class n20,n19,n18,n17,n16,n14,n13,n12,n11,n9,n8,n7,n5,n4,n2 var
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<pre class="mermaid">flowchart LR
+  subgraph a1[&quot;answer 1&quot;]
+    direction LR
+    n0((&quot;α&quot;))
+  end
+  subgraph a2[&quot;answer 2&quot;]
+    direction LR
+    n1[[&quot;cons&quot;]]
+    n2((&quot;α&quot;))
+    n3((&quot;β&quot;))
+    n1 --&gt;|car| n2
+    n1 --&gt;|cdr| n3
+  end
+  subgraph a3[&quot;answer 3&quot;]
+    direction LR
+    n4[[&quot;cons&quot;]]
+    n5((&quot;α&quot;))
+    n6[[&quot;cons&quot;]]
+    n7((&quot;β&quot;))
+    n8((&quot;γ&quot;))
+    n4 --&gt;|car| n5
+    n6 --&gt;|car| n7
+    n6 --&gt;|cdr| n8
+    n4 --&gt;|cdr| n6
+  end
+  subgraph a4[&quot;answer 4&quot;]
+    direction LR
+    n9[[&quot;cons&quot;]]
+    n10((&quot;α&quot;))
+    n11[[&quot;cons&quot;]]
+    n12((&quot;β&quot;))
+    n13[[&quot;cons&quot;]]
+    n14((&quot;γ&quot;))
+    n15((&quot;δ&quot;))
+    n9 --&gt;|car| n10
+    n11 --&gt;|car| n12
+    n13 --&gt;|car| n14
+    n13 --&gt;|cdr| n15
+    n11 --&gt;|cdr| n13
+    n9 --&gt;|cdr| n11
+  end
+  subgraph a5[&quot;answer 5&quot;]
+    direction LR
+    n16[[&quot;cons&quot;]]
+    n17((&quot;α&quot;))
+    n18[[&quot;cons&quot;]]
+    n19((&quot;β&quot;))
+    n20[[&quot;cons&quot;]]
+    n21((&quot;γ&quot;))
+    n22[[&quot;cons&quot;]]
+    n23((&quot;δ&quot;))
+    n24((&quot;ε&quot;))
+    n16 --&gt;|car| n17
+    n18 --&gt;|car| n19
+    n20 --&gt;|car| n21
+    n22 --&gt;|car| n23
+    n22 --&gt;|cdr| n24
+    n20 --&gt;|cdr| n22
+    n18 --&gt;|cdr| n20
+    n16 --&gt;|cdr| n18
+  end
+  class n24,n23,n21,n19,n17,n15,n14,n12,n10,n8,n7,n5,n3,n2,n0 var
+  class n22,n20,n18,n16,n13,n11,n9,n6,n4,n1 cell
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/append° _)
+  (let1 (answers
+          (°-&gt;answers (take° 5 (fresh° (l) (fresh° (a d) (append° a d l))))))
+        (⊦= '(α (α . β) (α β . γ) (α β γ . δ) (α β γ δ . ε))
+            (map μkanren-answer-&gt;datum answers))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2509000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/peano°/shared"><a href="#test/peano°/shared"><code>test/peano°/shared</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>With <code class="w3-codespan">share: 'all</code> every <i>ground</i> subterm is shared by the whole answer set, so a family such as the Peano numerals collapses into a single spine that each answer points into: the diagram grows linearly, not quadratically.</p>
+<p><b>6</b> answers.</p>
+<table class="w3-table w3-bordered w3-small">
+<tr>
+<th>#</th>
+<th>answer</th></tr>
+<tr>
+<td>1</td>
+<td><code class="w3-codespan">z</code></td></tr>
+<tr>
+<td>2</td>
+<td><code class="w3-codespan">(s z)</code></td></tr>
+<tr>
+<td>3</td>
+<td><code class="w3-codespan">(s (s z))</code></td></tr>
+<tr>
+<td>4</td>
+<td><code class="w3-codespan">(s (s (s z)))</code></td></tr>
+<tr>
+<td>5</td>
+<td><code class="w3-codespan">(s (s (s (s z))))</code></td></tr>
+<tr>
+<td>6</td>
+<td><code class="w3-codespan">(s (s (s (s (s z)))))</code></td></tr></table>
+<pre class="mermaid">flowchart LR
+    n0((&quot;q&quot;))
+    n1[&quot;z&quot;]
+    n2[&quot;(s z)&quot;]
+    n3[&quot;(s (s z))&quot;]
+    n4[&quot;(s (s (s z)))&quot;]
+    n5[&quot;(s (s (s (s z))))&quot;]
+    n6[&quot;(s (s (s (s (s z)))))&quot;]
+    n0 --&gt;|1| n1
+    n0 --&gt;|2| n2
+    n0 --&gt;|3| n3
+    n0 --&gt;|4| n4
+    n0 --&gt;|5| n5
+    n0 --&gt;|6| n6
+  class n0 query
+  class n6,n5,n4,n3,n2,n1 value
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<pre class="mermaid">flowchart LR
+    n0[&quot;'z&quot;]
+    n1(&quot;answer 1&quot;)
+    n2[[&quot;cons&quot;]]
+    n3[&quot;'s&quot;]
+    n4[[&quot;cons&quot;]]
+    n5([&quot;()&quot;])
+    n6(&quot;answer 2&quot;)
+    n7[[&quot;cons&quot;]]
+    n8[[&quot;cons&quot;]]
+    n9(&quot;answer 3&quot;)
+    n10[[&quot;cons&quot;]]
+    n11[[&quot;cons&quot;]]
+    n12(&quot;answer 4&quot;)
+    n13[[&quot;cons&quot;]]
+    n14[[&quot;cons&quot;]]
+    n15(&quot;answer 5&quot;)
+    n16[[&quot;cons&quot;]]
+    n17[[&quot;cons&quot;]]
+    n18(&quot;answer 6&quot;)
+    n1 --&gt; n0
+    n2 --&gt;|car| n3
+    n4 --&gt;|car| n0
+    n4 --&gt;|cdr| n5
+    n2 --&gt;|cdr| n4
+    n6 --&gt; n2
+    n7 --&gt;|car| n3
+    n8 --&gt;|car| n2
+    n8 --&gt;|cdr| n5
+    n7 --&gt;|cdr| n8
+    n9 --&gt; n7
+    n10 --&gt;|car| n3
+    n11 --&gt;|car| n7
+    n11 --&gt;|cdr| n5
+    n10 --&gt;|cdr| n11
+    n12 --&gt; n10
+    n13 --&gt;|car| n3
+    n14 --&gt;|car| n10
+    n14 --&gt;|cdr| n5
+    n13 --&gt;|cdr| n14
+    n15 --&gt; n13
+    n16 --&gt;|car| n3
+    n17 --&gt;|car| n13
+    n17 --&gt;|cdr| n5
+    n16 --&gt;|cdr| n17
+    n18 --&gt; n16
+  class n5,n3,n0 atom
+  class n17,n16,n14,n13,n11,n10,n8,n7,n4,n2 cell
+  class n18,n15,n12,n9,n6,n1 answer
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/peano°/shared _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2519688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/variables-view"><a href="#test/variables-view"><code>test/variables-view</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/variables-view _)
+  (let* ((answers (°-&gt;answers (take° 2 (fresh° (q) (eval-exp° q '() q)))))
+         (g (μkanren-answers-&gt;mermaid answers #:view 'variables #:var 'q)))
+    (⊨ (and (substring-index &quot;((\&quot;q\&quot;))&quot; g) #t))
+    (⊨ (and (substring-index &quot;|×6|&quot; g) #t))
+    (⊨ (and (substring-index &quot;{{\&quot;(symbol? α β)\&quot;}}&quot; g) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.286) (memory #(12582912 2529296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sharing"><a href="#test/sharing"><code>test/sharing</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The variable <code class="w3-codespan">α</code> occurs in two different components of the answer: in the graph it is <i>one</i> node with two parents.</p>
+<p><b>1</b> answer.</p>
+<table class="w3-table w3-bordered w3-small">
+<tr>
+<th>#</th>
+<th>answer</th></tr>
+<tr>
+<td>1</td>
+<td><code class="w3-codespan">((α z) z (α β))</code></td></tr></table>
+<pre class="mermaid">flowchart LR
+    n0((&quot;q&quot;))
+    n1[&quot;((α z) z (α β))&quot;]
+    n2((&quot;α&quot;))
+    n3((&quot;β&quot;))
+    n0 --&gt;|1| n1
+    n1 --&gt;|×2| n2
+    n1 --&gt;|×1| n3
+  class n0 query
+  class n1 value
+  class n3,n2 var
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<pre class="mermaid">flowchart LR
+  subgraph a1[&quot;answer 1&quot;]
+    direction LR
+    n0[[&quot;cons&quot;]]
+    n1[[&quot;cons&quot;]]
+    n2((&quot;α&quot;))
+    n3[[&quot;cons&quot;]]
+    n4[&quot;'z&quot;]
+    n5([&quot;()&quot;])
+    n6[[&quot;cons&quot;]]
+    n7[[&quot;cons&quot;]]
+    n8[[&quot;cons&quot;]]
+    n9[[&quot;cons&quot;]]
+    n10((&quot;β&quot;))
+    n1 --&gt;|car| n2
+    n3 --&gt;|car| n4
+    n3 --&gt;|cdr| n5
+    n1 --&gt;|cdr| n3
+    n0 --&gt;|car| n1
+    n6 --&gt;|car| n4
+    n8 --&gt;|car| n2
+    n9 --&gt;|car| n10
+    n9 --&gt;|cdr| n5
+    n8 --&gt;|cdr| n9
+    n7 --&gt;|car| n8
+    n7 --&gt;|cdr| n5
+    n6 --&gt;|cdr| n7
+    n0 --&gt;|cdr| n6
+  end
+  class n10,n2 var
+  class n5,n4 atom
+  class n9,n8,n7,n6,n3,n1,n0 cell
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sharing _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2514688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/quine"><a href="#test/quine"><code>test/quine</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The smallest quine of the relational interpreter. An answer too wide for a table cell gets a block of its own, pretty-printed with the reader's abbreviations — <code class="w3-codespan">'quote</code>, not <code class="w3-codespan">(quote quote)</code>. Grounding it with <code class="w3-codespan">°-&gt;list/ground</code> would silently drop its three constraints; here they stay, under the term and as chips on the variable they restrict. The bar chart counts the suspensions the engine forced before handing out the answer.</p>
+<p><b>1</b> answer.</p>
+<h3>answer 1</h3>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((λ (α) (list α (list 'quote α))) '(λ (α) (list α (list 'quote α))))
+</code></pre></div>
+<p>constraints: <code class="w3-codespan">(≠ α closure), (≠ α list), (≠ α quote), (symbol? α)</code></p>
+<pre class="mermaid">flowchart LR
+    n0((&quot;q&quot;))
+    n1[&quot;((λ (α) (list α (list 'quote α))) '(λ (α) (list&lt;br/&gt;α (list 'quote α))))&quot;]
+    n2((&quot;α&quot;))
+    n3{{&quot;(≠ α closure)&quot;}}
+    n4{{&quot;(≠ α list)&quot;}}
+    n5{{&quot;(≠ α quote)&quot;}}
+    n6{{&quot;(symbol? α)&quot;}}
+    n0 --&gt;|1| n1
+    n1 --&gt;|×6| n2
+    n2 -.-&gt; n3
+    n2 -.-&gt; n4
+    n2 -.-&gt; n5
+    n2 -.-&gt; n6
+  class n0 query
+  class n1 value
+  class n2 var
+  class n6,n5,n4,n3 constraint
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<pre class="mermaid">flowchart LR
+  subgraph a1[&quot;answer 1&quot;]
+    direction LR
+    n0[[&quot;cons&quot;]]
+    n1[[&quot;cons&quot;]]
+    n2[&quot;'λ&quot;]
+    n3[[&quot;cons&quot;]]
+    n4[[&quot;cons&quot;]]
+    n5((&quot;α&quot;))
+    n6([&quot;()&quot;])
+    n7[[&quot;cons&quot;]]
+    n8[[&quot;cons&quot;]]
+    n9[&quot;'list&quot;]
+    n10[[&quot;cons&quot;]]
+    n11[[&quot;cons&quot;]]
+    n12[[&quot;cons&quot;]]
+    n13[[&quot;cons&quot;]]
+    n14[[&quot;cons&quot;]]
+    n15[&quot;'quote&quot;]
+    n16[[&quot;cons&quot;]]
+    n17[[&quot;cons&quot;]]
+    n18[[&quot;cons&quot;]]
+    n19[[&quot;cons&quot;]]
+    n20[&quot;'closure&quot;]
+    n21{{&quot;symbol?&quot;}}
+    n1 --&gt;|car| n2
+    n4 --&gt;|car| n5
+    n4 --&gt;|cdr| n6
+    n3 --&gt;|car| n4
+    n8 --&gt;|car| n9
+    n10 --&gt;|car| n5
+    n12 --&gt;|car| n9
+    n14 --&gt;|car| n15
+    n16 --&gt;|car| n15
+    n16 --&gt;|cdr| n6
+    n14 --&gt;|cdr| n16
+    n13 --&gt;|car| n14
+    n13 --&gt;|cdr| n4
+    n12 --&gt;|cdr| n13
+    n11 --&gt;|car| n12
+    n11 --&gt;|cdr| n6
+    n10 --&gt;|cdr| n11
+    n8 --&gt;|cdr| n10
+    n7 --&gt;|car| n8
+    n7 --&gt;|cdr| n6
+    n3 --&gt;|cdr| n7
+    n1 --&gt;|cdr| n3
+    n0 --&gt;|car| n1
+    n18 --&gt;|car| n15
+    n19 --&gt;|car| n1
+    n19 --&gt;|cdr| n6
+    n18 --&gt;|cdr| n19
+    n17 --&gt;|car| n18
+    n17 --&gt;|cdr| n6
+    n0 --&gt;|cdr| n17
+    n5 -. ≠ .-&gt; n20
+    n5 -. ≠ .-&gt; n9
+    n5 -. ≠ .-&gt; n15
+    n5 -.-&gt; n21
+  end
+  class n5 var
+  class n20,n15,n9,n6,n2 atom
+  class n19,n18,n17,n16,n14,n13,n12,n11,n10,n8,n7,n4,n3,n1,n0 cell
+  class n21 constraint
+  classDef query fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;
+  classDef value fill:#ffffff,stroke:#495057;
+  classDef var fill:#fff3bf,stroke:#f08c00,stroke-width:2px;
+  classDef atom fill:#e7f5ff,stroke:#1971c2;
+  classDef cell fill:#f8f9fa,stroke:#868e96;
+  classDef constraint fill:#ffe3e3,stroke:#e03131,stroke-dasharray:4 3;
+  classDef answer fill:#ebfbee,stroke:#2f9e44,stroke-width:2px;</pre>
+<pre class="mermaid">xychart-beta
+  title &quot;suspensions forced per answer&quot;
+  x-axis &quot;answer&quot; [&quot;1&quot;]
+  y-axis &quot;forced&quot;
+  bar [14261]</pre>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/quine _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.065) (memory #(12582912 2526448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/blocks"><a href="#test/blocks"><code>test/blocks</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/blocks _)
+  (let1 (md (°-&gt;markdown
+              (take° 1 (fresh° (q) (eval-exp° q '() q)))
+              #:title
+              &quot;quine&quot;
+              #:var
+              'q
+              #:diagram
+              #f))
+        (⊨ (and (substring-index &quot;### answer 1&quot; md) #t))
+        (⊨ (and (substring-index &quot;((λ (α) (list α (list 'quote α)))&quot; md) #t))
+        (⊨ (and (substring-index
+                  &quot;constraints: `(≠ α closure)`, `(≠ α list)`&quot;
+                  md)
+                #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.068) (memory #(12582912 2525712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/window°"><a href="#test/window°"><code>test/window°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>When every answer is a ground tuple of the same length the report spreads it over one column per field, which is what a relational query deserves: this is the <cite><a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL window function</a></cite> example, computed by <code class="w3-codespan">window°</code>.</p>
+<p><b>10</b> answers.</p>
+<table class="w3-table w3-bordered w3-small">
+<tr>
+<th>#</th>
+<th>depname</th>
+<th>empno</th>
+<th>salary</th>
+<th>avg</th></tr>
+<tr>
+<td>1</td>
+<td><code class="w3-codespan">develop</code></td>
+<td><code class="w3-codespan">7</code></td>
+<td><code class="w3-codespan">4200</code></td>
+<td><code class="w3-codespan">5020</code></td></tr>
+<tr>
+<td>2</td>
+<td><code class="w3-codespan">develop</code></td>
+<td><code class="w3-codespan">8</code></td>
+<td><code class="w3-codespan">6000</code></td>
+<td><code class="w3-codespan">5020</code></td></tr>
+<tr>
+<td>3</td>
+<td><code class="w3-codespan">develop</code></td>
+<td><code class="w3-codespan">9</code></td>
+<td><code class="w3-codespan">4500</code></td>
+<td><code class="w3-codespan">5020</code></td></tr>
+<tr>
+<td>4</td>
+<td><code class="w3-codespan">develop</code></td>
+<td><code class="w3-codespan">10</code></td>
+<td><code class="w3-codespan">5200</code></td>
+<td><code class="w3-codespan">5020</code></td></tr>
+<tr>
+<td>5</td>
+<td><code class="w3-codespan">develop</code></td>
+<td><code class="w3-codespan">11</code></td>
+<td><code class="w3-codespan">5200</code></td>
+<td><code class="w3-codespan">5020</code></td></tr>
+<tr>
+<td>6</td>
+<td><code class="w3-codespan">personnel</code></td>
+<td><code class="w3-codespan">2</code></td>
+<td><code class="w3-codespan">3900</code></td>
+<td><code class="w3-codespan">3700</code></td></tr>
+<tr>
+<td>7</td>
+<td><code class="w3-codespan">personnel</code></td>
+<td><code class="w3-codespan">5</code></td>
+<td><code class="w3-codespan">3500</code></td>
+<td><code class="w3-codespan">3700</code></td></tr>
+<tr>
+<td>8</td>
+<td><code class="w3-codespan">sales</code></td>
+<td><code class="w3-codespan">1</code></td>
+<td><code class="w3-codespan">5000</code></td>
+<td><code class="w3-codespan">14600/3</code></td></tr>
+<tr>
+<td>9</td>
+<td><code class="w3-codespan">sales</code></td>
+<td><code class="w3-codespan">3</code></td>
+<td><code class="w3-codespan">4800</code></td>
+<td><code class="w3-codespan">14600/3</code></td></tr>
+<tr>
+<td>10</td>
+<td><code class="w3-codespan">sales</code></td>
+<td><code class="w3-codespan">4</code></td>
+<td><code class="w3-codespan">4800</code></td>
+<td><code class="w3-codespan">14600/3</code></td></tr></table>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/window° _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2554096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/markdown"><a href="#test/markdown"><code>test/markdown</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/markdown _)
+  (let1 (md (μkanren-run/markdown (l 4) (fresh° (a d) (append° a d l))))
+        (⊨ (string? md))
+        (⊨ (and (substring-index &quot;| 2 | `(α . β)` |&quot; md) #t))
+        (⊨ (and (substring-index &quot;```mermaid&quot; md) #t))
+        (⊨ (and (substring-index &quot;classDef query&quot; md) #t))
+        (⊨ (and (substring-index &quot;|car|&quot; md) #t))
+        (μkanren-markdown-&gt;file! md &quot;microkanren-show&quot;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2543048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/markdown/tuples"><a href="#test/markdown/tuples"><code>test/markdown/tuples</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/markdown/tuples _)
+  (let1 (md (μkanren-run/markdown (q 1) (=° q (list 1 2))))
+        (⊨ (and (substring-index &quot;| # | answer |&quot; md) #t))
+        (⊭ (substring-index &quot;| c0 |&quot; md)))
+  (⊭ (substring-index &quot;| c0 |&quot; (μkanren-run/markdown (q 1) (=° q (iota 36)))))
+  (⊨ (and (substring-index
+            &quot;| # | a | b |&quot;
+            (μkanren-run/markdown/table (q 1) '(a b) (=° q (list 1 2))))
+          #t))
+  (⊨ (and (substring-index
+            &quot;| # | c0 | c1 |&quot;
+            (μkanren-run/markdown
+              (q 2)
+              (or° (=° q (list 1 2)) (=° q (list 3 4)))))
+          #t)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2534160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/markdown/query"><a href="#test/markdown/query"><code>test/markdown/query</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/markdown/query _)
+  (let* ((md (μkanren-run/markdown (q 3) (=° q 1)))
+         (query (with-input-from-string
+                  (substring md (+ 10 (substring-index &quot;```scheme\n&quot; md)))
+                  read)))
+    (⊦= '(μkanren-run (q 3 #f) (=° q 1)) query)
+    (⊦= '((λ () 1)) (eval query)))
+  (⊦= '(code/scheme (μkanren-run (q 3 #f) (=° q 1)))
+      (car (μkanren-run/sxml (q 3) (=° q 1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2537800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -1,0 +1,265 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/cleaners"><a href="#test/cleaners"><code>test/cleaners</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/cleaners _)
+  (set! cml-test/log '())
+  (dynamic-wind
+    void
+    (τ (⊦= '()
+           (cml/add-cleaner!
+             &quot;t1&quot;
+             '(at-init at-shutdown)
+             (λ (w) (note! (list 't1 w)))))
+       (⊦= '() (cml/add-cleaner! &quot;t2&quot; 'at-init (λ (w) (note! (list 't2 w)))))
+       (⊦= '()
+           (cml/add-cleaner! &quot;t3&quot; 'at-shutdown (λ (w) (note! (list 't3 w)))))
+       (⊦= 'x (run-cml (τ (note! 'main) (cml/shutdown 'x))))
+       (⊦= '((t1 at-init) (t2 at-init) main (t3 at-shutdown) (t1 at-shutdown))
+           (reverse cml-test/log))
+       (let1 (old (cml/add-cleaner! &quot;t2&quot; 'at-shutdown (λ (w) (void))))
+             (⊦= 1 (length old))
+             (⊦= '(at-init) (car (car old))))
+       (⊦= 1 (length (cml/remove-cleaner! &quot;t1&quot;)))
+       (⊦= 1 (length (cml/remove-cleaner! &quot;t2&quot;)))
+       (⊦= 1 (length (cml/remove-cleaner! &quot;t3&quot;)))
+       (⊦= '() (cml/remove-cleaner! &quot;t3&quot;))
+       (⊦= '(at-exit at-shutdown at-init at-init-fn) cml/at-all)
+       (⊦= '() (cml/add-cleaner! &quot;t4&quot; 'all (λ (w) (note! (list 't4 w)))))
+       (set! cml-test/log '())
+       (⊦= 'y (run-cml (τ (note! 'main) (cml/shutdown 'y))))
+       (⊦= '((t4 at-init) main (t4 at-shutdown)) (reverse cml-test/log))
+       (⊦= (list cml/at-all) (map car (cml/remove-cleaner! &quot;t4&quot;))))
+    (τ (for-each cml/remove-cleaner! '(&quot;t1&quot; &quot;t2&quot; &quot;t3&quot; &quot;t4&quot;))))
+  (⊦= &quot;[000002]&quot; (run/value (τ (tid-&gt;string (current-tid))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5527520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/logged-channel"><a href="#test/logged-channel"><code>test/logged-channel</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/logged-channel _)
+  (let ((ch (make-channel)) (control (make-channel)) (mb (make-mailbox)))
+    (define (state c)
+      (list (%channel-priority c) (%q-empty? (%channel-out-q c))))
+    (dynamic-wind
+      (τ (cml/log-channel! &quot;test-ch&quot; ch) (cml/log-mailbox! &quot;test-mb&quot; mb))
+      (τ (⊦= '(first x x)
+             (run/log
+               (τ (for-each
+                    (λ (c) (spawn (τ (send c 'stale))))
+                    (list ch control))
+                  (note! (select (recv-evt ch) (always-evt 'x)))
+                  (note! (select (recv-evt control) (always-evt 'x)))
+                  (mailbox-send! mb 'old)
+                  (cml/shutdown 'first))))
+         (⊦= '((1 #t) (2 #f)) (list (state ch) (state control)))
+         (⊦= '(() ())
+             (run/value (τ (list (recv-poll ch) (mailbox-recv-poll mb))))))
+      (τ (cml/unlog-channel! &quot;test-ch&quot;) (cml/unlog-mailbox! &quot;test-mb&quot;)))
+    (⊦raises (exn cml unlog) (cml/unlog-channel! &quot;test-ch&quot;))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5533592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/logged-server-shutdown-gets-2-seconds"><a href="#test/logged-server-shutdown-gets-2-seconds"><code>test/logged-server-shutdown-gets-2-seconds</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/logged-server-shutdown-gets-2-seconds _)
+  (let1 (done #f)
+        (dynamic-wind
+          (τ (cml/log-server!
+               &quot;test-slow-server&quot;
+               void
+               (τ (cml/sleep 1.3) (set! done #t))))
+          (τ (⊦= 'first (run-cml (τ (cml/shutdown 'first)))) (⊨ done))
+          (τ (cml/unlog-server! &quot;test-slow-server&quot;)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5533480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/unlog-all"><a href="#test/unlog-all"><code>test/unlog-all</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/unlog-all _)
+  (let1 (mb (make-mailbox))
+        (cml/log-mailbox! &quot;test-mb-all&quot; mb)
+        (cml/unlog-all!)
+        (⊦raises (exn cml unlog) (cml/unlog-mailbox! &quot;test-mb-all&quot;))
+        (run-cml (τ (mailbox-send! mb 'kept) (cml/shutdown)))
+        (⊦= '(kept) (run/value (τ (mailbox-recv-poll mb))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5532456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stale-across-runs"><a href="#test/stale-across-runs"><code>test/stale-across-runs</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stale-across-runs _)
+  (let ((ch (make-channel)) (iv (make-ivar)))
+    (⊦= 'first
+        (run-cml
+          (τ (spawn (τ (send ch 'stale)))
+             (spawn (τ (ivar-get iv)))
+             (cml/shutdown 'first))))
+    (⊦= '(() #f ok)
+        (run/value
+          (τ (ivar-put! iv 'ok)
+             (list (recv-poll ch) (send-poll ch 1) (ivar-get iv)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5531144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stale-waiters-of-blocking-operations-are-dropped"><a href="#test/stale-waiters-of-blocking-operations-are-dropped"><code>test/stale-waiters-of-blocking-operations-are-dropped</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stale-waiters-of-blocking-operations-are-dropped _)
+  (define (size q) (+ (length (%queue-front q)) (length (%queue-rear q))))
+  (define (mb-size mb)
+    (let1 (st (%mailbox-state mb))
+          (if (eq? 'empty (car st))
+            (+ (length (cadr st)) (length (cddr st)))
+            0)))
+  (define bound (* 2 (+ %clean-budget-min 2)))
+  (let ((in (make-channel)) (out (make-channel)) (mb (make-mailbox)))
+    (for-each
+      (λ (i)
+         (run-cml
+           (τ (spawn (τ (recv in)))
+              (spawn (τ (send out i)))
+              (spawn (τ (mailbox-recv mb)))
+              (cml/yield)
+              (cml/shutdown))))
+      (iota 200))
+    (⊨ (&lt;= (size (%channel-in-q in)) bound))
+    (⊨ (&lt;= (size (%channel-out-q out)) bound))
+    (⊨ (&lt;= (mb-size mb) bound))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(12582912 5540000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bad-arguments-raise-at-registration"><a href="#test/bad-arguments-raise-at-registration"><code>test/bad-arguments-raise-at-registration</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bad-arguments-raise-at-registration _)
+  (define (raises? thunk)
+    (condition-case (begin (thunk) 'no-raise) (e (exn) 'raised)))
+  (let1 (mb (make-mailbox))
+        (dynamic-wind
+          void
+          (τ (⊦= '(raised raised raised raised raised raised raised raised)
+                 (map raises?
+                      (list (τ (cml/add-cleaner! &quot;test-bad&quot; 'at-init 42))
+                            (τ (cml/add-cleaner! &quot;test-bad&quot; 'bogus void))
+                            (τ (cml/add-cleaner!
+                                 &quot;test-bad&quot;
+                                 '(at-init bogus)
+                                 void))
+                            (τ (cml/add-cleaner! &quot;test-bad&quot; 42 void))
+                            (τ (cml/log-channel! &quot;test-bad&quot; (make-mailbox)))
+                            (τ (cml/log-mailbox! &quot;test-bad&quot; (make-channel)))
+                            (τ (cml/log-server! &quot;test-bad&quot; 42 void))
+                            (τ (cml/log-server! &quot;test-bad&quot; void 42)))))
+             (⊦= '() (cml/remove-cleaner! &quot;test-bad&quot;))
+             (map (λ (unlog) (⊦raises (exn cml unlog) (unlog &quot;test-bad&quot;)))
+                  (list cml/unlog-channel!
+                        cml/unlog-mailbox!
+                        cml/unlog-server!))
+             (cml/log-mailbox! &quot;test-mb-after&quot; mb)
+             (⊦= 'ok
+                 (run-cml (τ (mailbox-send! mb 'stale) (cml/shutdown 'ok))))
+             (⊦= '(ran ()) (run/value (τ (list 'ran (mailbox-recv-poll mb))))))
+          (τ (condition-case
+               (cml/unlog-mailbox! &quot;test-mb-after&quot;)
+               (e () (void)))
+             (cml/remove-cleaner! &quot;test-bad&quot;)
+             (for-each
+               (λ (unlog) (condition-case (unlog &quot;test-bad&quot;) (e () (void))))
+               (list cml/unlog-channel!
+                     cml/unlog-mailbox!
+                     cml/unlog-server!))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5534608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/registration-lock-given-back-by-a-dying-thread"><a href="#test/registration-lock-given-back-by-a-dying-thread"><code>test/registration-lock-given-back-by-a-dying-thread</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/registration-lock-given-back-by-a-dying-thread _)
+  (set! cml-test/log '())
+  (dynamic-wind
+    (τ (cml/add-cleaner!
+         &quot;test-probe&quot;
+         'at-shutdown
+         (λ (w) (note! 'shutdown-cleaner))))
+    (τ (parameterize
+         ((default-exn-handler (λ (e) (note! 'died))))
+         (⊦= 'ok
+             (run-cml
+               (τ (let1 (t (spawn (τ (let1 (armed #t)
+                                           (dynamic-wind
+                                             void
+                                             (τ (cml/add-cleaner! &quot;test-dying&quot; 'at-shutdown void))
+                                             (τ (when armed
+                                                      (set! armed #f)
+                                                      (error &quot;after thunk&quot;))))))))
+                        (sync (join-evt t))
+                        (note! (sync/timeout
+                                 (wrap (join-evt
+                                         (spawn (τ (cml/log-channel! &quot;test-dying-ch&quot; (make-channel)))))
+                                       (λ ignored 'logged))
+                                 0.5
+                                 'blocked))
+                        (note! 'shutdown)
+                        (cml/shutdown 'ok)))
+               #:quantum
+               1)))
+       (⊦= '(died logged shutdown shutdown-cleaner) (reverse cml-test/log)))
+    (τ (for-each cml/remove-cleaner! '(&quot;test-probe&quot; &quot;test-dying&quot;))
+       (condition-case (cml/unlog-channel! &quot;test-dying-ch&quot;) (e () (void))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5537488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/logged-server"><a href="#test/logged-server"><code>test/logged-server</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/logged-server _)
+  (set! cml-test/log '())
+  (dynamic-wind
+    (τ (cml/log-server! &quot;srv&quot; (τ (note! 'start)) (τ (note! 'stop))))
+    (τ (run-cml (τ (note! 'main) (cml/shutdown))))
+    (τ (cml/unlog-server! &quot;srv&quot;)))
+  (run-cml (τ (cml/shutdown)))
+  (⊦= '(start main stop) (reverse cml-test/log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5538360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/debug"><a href="#test/debug"><code>test/debug</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/debug _)
+  (⊦= &quot;&quot; (with-error-output-to-string (τ (cml/debug &quot;quiet&quot;))))
+  (⊦= &quot;[-000001] hello 1\n&quot;
+      (with-error-output-to-string
+        (τ (parameterize ((cml/debug? #t)) (cml/debug &quot;hello&quot; 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5538160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -1,0 +1,325 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section1391">
+<header>
+<h1>Concurrent ML library: SimpleRPC</h1></header></section>
+<p>Server-side RPC entry points, a port of <code class="w3-codespan">SimpleRPC</code>: every maker returns <code class="w3-codespan">(values call entry-evt)</code>.</p>
+<h2 id="test/rpc"><a href="#test/rpc"><code>test/rpc</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc _)
+  (⊦= '((c1 1) (c1 9) (c2 4) served-3)
+      (cdr (run/log
+             (τ (receive
+                  (call entry-evt)
+                  (make-rpc (λ (x) (* x x)))
+                  (let* ((server
+                           (spawn (τ (for-each (λ (i) (sync entry-evt)) '(1 2 3)))))
+                         (c1-log '())
+                         (c2-log '())
+                         (c1 (spawn (τ (set! c1-log (list (call 1) (call 3))))))
+                         (c2 (spawn (τ (set! c2-log (list (call 2)))))))
+                    (join-all (list c1 c2 server))
+                    (for-each (λ (v) (note! (list 'c1 v))) c1-log)
+                    (for-each (λ (v) (note! (list 'c2 v))) c2-log)
+                    (note! 'served-3)
+                    (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3153056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/fifo"><a href="#test/rpc/fifo"><code>test/rpc/fifo</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/fifo _)
+  (⊦= '(a b c d)
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc (λ (x) (note! x) x))
+             (set! cml-test/log '())
+             (let1 (ts (map (λ (x) (spawn (τ (call x)))) '(a b c d)))
+                   (for-each (λ (i) (sync entry-evt)) (iota 4))
+                   (join-all ts)
+                   (reverse cml-test/log)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3154312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/in"><a href="#test/rpc/in"><code>test/rpc/in</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/in _)
+  (⊦= '((1 . 100) (2 . 100) (3 . 200))
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc/in (λ (x st) (cons x st)))
+             (spawn (τ (sync (entry-evt 100))
+                       (sync (entry-evt 100))
+                       (sync (entry-evt 200))))
+             (map call '(1 2 3)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3154496 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/out"><a href="#test/rpc/out"><code>test/rpc/out</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/out _)
+  (⊦= '(((ack a) (ack b)) (b a))
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc/out (λ (x) (values (list 'ack x) x)))
+             (let* ((states '())
+                    (server
+                      (spawn (τ (for-each
+                                  (λ (i)
+                                     (set! states (cons (sync entry-evt) states)))
+                                  '(1 2))))))
+               (let1 (replies (map call '(a b)))
+                     (sync (join-evt server))
+                     (list replies states))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3156352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/in-out"><a href="#test/rpc/in-out"><code>test/rpc/in-out</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/in-out _)
+  (⊦= '((1 3 6 10) 10)
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc/in-out (λ (x acc) (let1 (s (+ x acc)) (values s s))))
+             (let* ((final #f)
+                    (server
+                      (spawn (τ (let loop ((acc 0) (n 4))
+                                  (if (zero? n)
+                                    (set! final acc)
+                                    (loop (sync (entry-evt acc)) (sub1 n))))))))
+               (let1 (replies (map call '(1 2 3 4)))
+                     (sync (join-evt server))
+                     (list replies final))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3158560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/state"><a href="#test/rpc/state"><code>test/rpc/state</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/state _)
+  (⊦= '((1 2 3) (count-1 count-2 count-3))
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc/state 0 (λ (x n) (values (add1 n) (add1 n))))
+             (let* ((states '())
+                    (server
+                      (spawn (τ (for-each
+                                  (λ (i)
+                                     (set! states (cons (sync entry-evt) states)))
+                                  '(1 2 3))))))
+               (let1 (replies (map call '(x y z)))
+                     (sync (join-evt server))
+                     (list replies
+                           (map (λ (n)
+                                   (string-&gt;symbol
+                                     (string-append &quot;count-&quot; (number-&gt;string n))))
+                                (reverse states))))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3159696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/state/shared"><a href="#test/rpc/state/shared"><code>test/rpc/state/shared</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/state/shared _)
+  (⊦= '(1 2 3 3)
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc/state 0 (λ (x st) (values (+ st x) (+ st x))))
+             (for-each
+               (λ (i) (spawn (τ (let loop () (sync entry-evt) (loop)))))
+               '(1 2))
+             (let1 (replies (map call '(1 1 1)))
+                   (append replies (list (call 0))))))))
+  (for-each
+    (λ (quantum)
+       (let1 (replies
+               (run-cml
+                 (τ (receive
+                      (call entry-evt)
+                      (make-rpc/state
+                        0
+                        (λ (x st) (values (add1 st) (add1 st))))
+                      (for-each
+                        (λ (i)
+                           (spawn (τ (let loop () (sync entry-evt) (loop)))))
+                        (iota 5))
+                      (let ((done (make-mailbox)) (replies '()))
+                        (for-each
+                          (λ (i)
+                             (spawn (τ (for-each
+                                         (λ (j) (push! (call j) replies))
+                                         (iota 40))
+                                       (mailbox-send! done #t))))
+                          (iota 5))
+                        (for-each (λ (i) (mailbox-recv done)) (iota 5))
+                        (cml/shutdown replies))))
+                 #:quantum
+                 quantum))
+             (⊦= (iota 200 1) (sort replies &lt;))))
+    '(1 3 64)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 3169160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/values"><a href="#test/rpc/values"><code>test/rpc/values</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/values _)
+  (⊦= (list (void) 'raised 5 'raised 7)
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc (λ (x) (values)))
+             (receive
+               (call2 entry2)
+               (make-rpc/in-out
+                 (λ (x st) (if (zero? x) st (values (+ x st) (+ x st)))))
+               (receive
+                 (call3 entry3)
+                 (make-rpc/state
+                   0
+                   (λ (x st)
+                      (if (zero? x) (values) (values (+ x st) (+ x st)))))
+                 (spawn (τ (let loop () (sync entry-evt) (loop))))
+                 (spawn (τ (let loop ((st 0)) (loop (sync (entry2 st))))))
+                 (spawn (τ (let loop () (sync entry3) (loop))))
+                 (list (call 1)
+                       (raised-or (exn cml rpc) (call2 0))
+                       (call2 5)
+                       (raised-or (exn cml rpc) (call3 0))
+                       (call3 7)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3178992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/select-loop"><a href="#test/rpc/select-loop"><code>test/rpc/select-loop</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/select-loop _)
+  (⊦= '((get 0) (get 5) stopped)
+      (cdr (run/log
+             (τ (receive
+                  (call-get get-evt)
+                  (make-rpc/in (λ (ignored st) st))
+                  (receive
+                    (call-add add-evt)
+                    (make-rpc/in-out (λ (x st) (values (void) (+ x st))))
+                    (let* ((stop (make-channel))
+                           (server
+                             (spawn (τ (let loop ((st 0))
+                                         (select/case
+                                           ((get-evt st) () (loop st))
+                                           ((add-evt st) (new) (loop new))
+                                           ((recv-evt stop) () (note! 'stopped))))))))
+                      (note! (list 'get (call-get #f)))
+                      (call-add 2)
+                      (call-add 3)
+                      (note! (list 'get (call-get #f)))
+                      (send stop #t)
+                      (sync (join-evt server))
+                      (cml/shutdown)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3166544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/exceptions"><a href="#test/rpc/exceptions"><code>test/rpc/exceptions</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/exceptions _)
+  (⊦= '((raised &quot;no zero&quot; 0) (ok 1/2) (raised &quot;no zero&quot; 0) (ok 1/4) served)
+      (cdr (run/log
+             (τ (receive
+                  (call entry-evt)
+                  (make-rpc (λ (x) (if (zero? x) (error &quot;no zero&quot; x) (/ 1 x))))
+                  (let1 (server
+                          (spawn (τ (for-each (λ (i) (sync entry-evt)) (iota 4)))))
+                        (for-each
+                          (λ (x)
+                             (note! (condition-case
+                                      (list 'ok (call x))
+                                      (e (exn) (list 'raised (message-of e) x)))))
+                          '(0 2 0 4))
+                        (sync (join-evt server))
+                        (note! 'served)
+                        (cml/shutdown)))))))
+  (⊦= '(caught boom)
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc (λ (x) (abort x)))
+             (spawn (τ (sync entry-evt)))
+             (handle-exceptions e (list 'caught e) (call 'boom)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3166088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rpc/exceptions/state"><a href="#test/rpc/exceptions/state"><code>test/rpc/exceptions/state</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rpc/exceptions/state _)
+  (⊦= '((1 raised 3) 3)
+      (run/value
+        (τ (receive
+             (call entry-evt)
+             (make-rpc/in-out
+               (λ (x acc)
+                  (when (negative? x) (error &quot;negative&quot; x))
+                  (values (+ x acc) (+ x acc))))
+             (let* ((final #f)
+                    (server
+                      (spawn (τ (let loop ((acc 0) (n 3))
+                                  (if (zero? n)
+                                    (set! final acc)
+                                    (loop (sync (entry-evt acc)) (sub1 n))))))))
+               (let1 (replies
+                       (map (λ (x) (condition-case (call x) ((exn) 'raised)))
+                            '(1 -5 2)))
+                     (sync (join-evt server))
+                     (list replies final)))))))
+  (⊦= '((server raised &quot;odd&quot;) raised)
+      (cdr (run/log
+             (τ (receive
+                  (call entry-evt)
+                  (make-rpc/out (λ (x) (error &quot;odd&quot; x)))
+                  (let1 (server
+                          (spawn (τ (condition-case
+                                      (sync entry-evt)
+                                      (e (exn)
+                                         (note! (list 'server 'raised (message-of e))))))))
+                        (let1 (r (condition-case (call 1) ((exn) 'raised)))
+                              (sync (join-evt server))
+                              (note! r))
+                        (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3166776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

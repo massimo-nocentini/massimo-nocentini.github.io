@@ -1,0 +1,636 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section725">
+<header>
+<h1>Replaying upstream's records</h1></header></section>
+<p>HANSEI's samplers draw from OCaml's <code class="w3-codespan">Random</code> module, through <code class="w3-codespan">random_selector seed</code>, which re-initialises its global state (P:221-222). <code class="w3-codespan">(aux hansei random)</code> transcribes that generator, the lagged Fibonacci
+        generator of 55 words seeded with MD5 <cite><a href="https://www.rfc-editor.org/rfc/rfc1321">RFC 1321</a></cite>, with the xor <code class="w3-codespan">bits</code> and the three-draw <code class="w3-codespan">Random.float</code> of the OCaml releases HANSEI's records were made with (OCaml 4.14 draws two words), the
+        only variant that replays the records of <code class="w3-codespan">samplingM.ml</code> and <code class="w3-codespan">nested.ml</code> bit for bit; see the plan, D6 and D20, and <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html">Embedded probabilistic domain-specific language HANSEI</a></cite>.</p>
+<p>Why three draws: OCaml 4.14's <code class="w3-codespan">Random.float</code> (OR:167-172) draws two
+        30-bit words, <code class="w3-codespan">(r1 /. 2^30 +. r2) /. 2^30</code>, and with it the rejection
+        sampling of <code class="w3-codespan">dcoin_and 10</code> over 10000 samples, seed 17, gives <code class="w3-codespan">0.054</code> where SM records <code class="w3-codespan">0.0514</code>; three words, <code class="w3-codespan">((r0 /. 2^30 +. r1) /. 2^30 +. r2) /. 2^30</code>, replay every assertion
+        of <code class="w3-codespan">samplingM.ml</code>, <code class="w3-codespan">nested.ml</code>, <code class="w3-codespan">slazy.ml</code>, <code class="w3-codespan">parsec.ml</code> and <code class="w3-codespan">music1a.ml</code> under an OCaml build of HANSEI patched so (deviation 32).
+        The global state is upstream's too: a selector made with a seed re-initialises the one
+        state every selector draws from, which N:30-31 needs (D6).</p>
+<p>The expected values come from three sources: upstream's own assertions; runs of
+        upstream HANSEI under OCaml 4.14.2 with delimcc, two-draw and three-draw; and a Python
+        transcription of the samplers over OCaml's generator, written while planning the port
+        and kept in <code class="w3-codespan">test/hansei-python/</code> (its README says how to run it under <code class="w3-codespan">python3 -I</code>; it is not part of <code class="w3-codespan">make test</code>).</p>
+<h2 id="test/md5"><a href="#test/md5"><code>test/md5</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">md5-digest</code> is OCaml's <code class="w3-codespan">Digest.string</code>, which <code class="w3-codespan">Random.full_init</code> uses to seed the state: the test suite of <cite><a href="https://www.rfc-editor.org/rfc/rfc1321">RFC 1321</a></cite> (A.5), and messages of
+	    55 to 120 bytes around the padding boundaries, whose digests come from OCaml 4.14.2.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/md5 _)
+  (⊦ equal? &quot;d41d8cd98f00b204e9800998ecf8427e&quot; (md5-hex &quot;&quot;))
+  (⊦ equal? &quot;0cc175b9c0f1b6a831c399e269772661&quot; (md5-hex &quot;a&quot;))
+  (⊦ equal? &quot;900150983cd24fb0d6963f7d28e17f72&quot; (md5-hex &quot;abc&quot;))
+  (⊦ equal? &quot;f96b697d7cb7938d525a2f31aaf161d0&quot; (md5-hex &quot;message digest&quot;))
+  (⊦ equal?
+     &quot;c3fcd3d76192e4007dfb496cca67e13b&quot;
+     (md5-hex &quot;abcdefghijklmnopqrstuvwxyz&quot;))
+  (⊦ equal?
+     &quot;d174ab98d277d9f5a5611c2c9f419d9f&quot;
+     (md5-hex
+       &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot;))
+  (⊦ equal?
+     &quot;57edf4a22be3c955ac49da2e2107b67a&quot;
+     (md5-hex (apply string-append (make-list 8 &quot;1234567890&quot;))))
+  (⊦ equal? &quot;04364420e25c512fd958a70738aa8f72&quot; (md5-hex (make-string 55 #\x)))
+  (⊦ equal? &quot;668a72d5ba17f08e62dabcafad6db14b&quot; (md5-hex (make-string 56 #\x)))
+  (⊦ equal? &quot;7dc2ca208106a2f703567bdff99d8981&quot; (md5-hex (make-string 63 #\x)))
+  (⊦ equal? &quot;c1bb4f81d892b2d57947682aeb252456&quot; (md5-hex (make-string 64 #\x)))
+  (⊦ equal? &quot;b2ea3db8221fa9ae01ee0adf42970ba0&quot; (md5-hex (make-string 119 #\y)))
+  (⊦ equal? &quot;723628a6315542e744e4bc6e2f9c84d2&quot; (md5-hex (make-string 120 #\y)))
+  (⊦ equal?
+     #u8(144 1 80 152 60 210 79 176 214 150 63 125 40 225 127 114)
+     (md5-digest #u8(97 98 99))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2650224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ocaml/init"><a href="#test/ocaml/init"><code>test/ocaml/init</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">make-ocaml-random-state seed</code> is OCaml's <code class="w3-codespan">Random.State.make [| seed |]</code> (OR:40-64): the first and last words
+	    after seeding, as OCaml 4.14.2 prints them through <code class="w3-codespan">Obj.magic</code> (and as the Python transcription of the plan, §10.3, computes them). Without a seed
+	    it is OCaml's default state, the one <code class="w3-codespan">Random.bits ()</code> draws from in a
+	    program that never seeds; a seed that is not an exact integer, or a vector of them,
+	    raises <code class="w3-codespan">(exn hansei)</code> of kind <code class="w3-codespan">random</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ocaml/init _)
+  (define (words s) (vector-ref (record-&gt;vector s) 1))
+  (define (idx s) (vector-ref (record-&gt;vector s) 2))
+  (define (first-words s)
+    (list (vector-ref (words s) 0)
+          (vector-ref (words s) 1)
+          (vector-ref (words s) 2)
+          (vector-ref (words s) 3)
+          (vector-ref (words s) 4)))
+  (define s1 (make-ocaml-random-state 1))
+  (⊦ equal?
+     '(613788242 197116386 1014951421 468579290 805446940)
+     (first-words s1))
+  (⊦ equal?
+     '(145365742 323272762 161958640 284739705 672753100)
+     (list (vector-ref (words s1) 50)
+           (vector-ref (words s1) 51)
+           (vector-ref (words s1) 52)
+           (vector-ref (words s1) 53)
+           (vector-ref (words s1) 54)))
+  (⊦ equal? 0 (idx s1))
+  (⊦ equal?
+     '(43684900 826807282 853359337 631525392 682719058)
+     (first-words (make-ocaml-random-state 17)))
+  (⊦ equal?
+     '(76722835 608589901 287828993 653199777 415478086)
+     (first-words (make-ocaml-random-state 0)))
+  (⊦ equal?
+     '(640528891 982617058 790696909 229908377 1042402058)
+     (first-words (make-ocaml-random-state -5)))
+  (⊦ equal?
+     '(972831248 467146799 206477288 695949822 606390225)
+     (first-words (make-ocaml-random-state 123456789)))
+  (⊦ equal?
+     '(987910699 495797812 364182224 414272206 318284740)
+     (first-words (make-ocaml-random-state)))
+  (⊦ equal? #t (ocaml-random-state? ocaml-random-global))
+  (⊦ equal? #f (ocaml-random-state? (words s1)))
+  (⊦raises (exn hansei) (make-ocaml-random-state 'seed))
+  (⊦raises (exn hansei) (make-ocaml-random-state 1.0))
+  (⊦raises (exn hansei) (make-ocaml-random-state #(1 a))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2654472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ocaml/bits"><a href="#test/ocaml/bits"><code>test/ocaml/bits</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">ocaml-random-bits!</code> is OCaml's <code class="w3-codespan">Random.State.bits</code> (OR:76-83), the xor variant of the lagged Fibonacci step: the first five draws after <code class="w3-codespan">Random.init</code> for several seeds, after <code class="w3-codespan">Random.full_init</code>, and from the default state, as OCaml 4.14.2 draws
+	    them.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ocaml/bits _)
+  (define (draws n f)
+    (if (zero? n) '() (let1 (x (f)) (cons x (draws (sub1 n) f)))))
+  (define (bits s) (draws 5 (τ (ocaml-random-bits! s))))
+  (⊦ equal?
+     '(111472438 155495486 1029890784 56915826 660037571)
+     (bits (make-ocaml-random-state 1)))
+  (⊦ equal?
+     '(230024973 197978033 495359752 1036278348 906260834)
+     (bits (make-ocaml-random-state 17)))
+  (⊦ equal?
+     '(218040752 178628190 911923154 33712936 1041571162)
+     (bits (make-ocaml-random-state 0)))
+  (⊦ equal?
+     '(638983422 1072006411 37028206 270829641 521483706)
+     (bits (make-ocaml-random-state -5)))
+  (⊦ equal?
+     '(1047213900 619322777 232370739 831219731 841638859)
+     (bits (make-ocaml-random-state 123456789)))
+  (⊦ equal?
+     '(89809344 994326685 290180182 366831641 332180439)
+     (bits (make-ocaml-random-state)))
+  (⊦ equal?
+     '(218040752 178628190 911923154 33712936 1041571162)
+     (bits (make-ocaml-random-state #())))
+  (⊦ equal?
+     '(311998834 678888426 938209723 870508417 248299610)
+     (bits (make-ocaml-random-state #(1 2 3))))
+  (⊦ equal?
+     '(586659661 422753529 1044869830)
+     (let1 (s (make-ocaml-random-state 17))
+           (draws 997 (τ (ocaml-random-bits! s)))
+           (draws 3 (τ (ocaml-random-bits! s))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2689088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ocaml/float"><a href="#test/ocaml/float"><code>test/ocaml/float</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The doubles of a fresh source are OCaml's three-draw <code class="w3-codespan">rawfloat</code>, <code class="w3-codespan">((r0 / 2^30 + r1) / 2^30 + r2) / 2^30</code>, bit for bit (OCaml
+	    4.14.2 running the three-draw formula over <code class="w3-codespan">Random.bits</code>): the one
+	    variant that replays HANSEI's records (plan D6, D20).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ocaml/float _)
+  (define (doubles seed)
+    (let* ((src (make-ocaml-random-source seed))
+           (a (rng-double! src 0.0 1.0))
+           (b (rng-double! src 0.0 1.0))
+           (c (rng-double! src 0.0 1.0)))
+      (list a b c)))
+  (⊦ equal?
+     '(0.95916053666250445 0.047719400948572799 0.64524492170467784)
+     (doubles 1))
+  (⊦ equal?
+     '(0.46133971976524352 0.18637992054598515 0.699662755317079)
+     (doubles 17))
+  (⊦ equal?
+     '(0.84929461978968279 0.62951315564107035 0.4331830841471257)
+     (doubles 0))
+  (⊦ equal?
+     '(0.03448520507512965 0.97297789481065189 0.34460494547462833)
+     (doubles -5))
+  (⊦ equal?
+     '(0.00046133971976524351 0.055913976163795544 1.7491568882926976)
+     (let* ((s (make-ocaml-random-state 17))
+            (a (ocaml-random-float! s 0.001))
+            (b (ocaml-random-float! s 0.29999999999999999))
+            (c (ocaml-random-float! s 2.5)))
+       (list a b c)))
+  (⊦ equal?
+     0.95916053666250445
+     (rng-double! (make-ocaml-random-source 1) 0 1)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2658416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ocaml/source"><a href="#test/ocaml/source"><code>test/ocaml/source</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">make-ocaml-random-source</code> makes an OCaml state an rng-source of <code class="w3-codespan">(aux hakaru10 random)</code>: <code class="w3-codespan">rng-source-copy</code> replays it, <code class="w3-codespan">rng-integer!</code> is <code class="w3-codespan">lo + Random.int (hi -
+	    lo + 1)</code> (OR:86-94, values from OCaml 4.14.2), and a source over a given state, such
+	    as <code class="w3-codespan">ocaml-random-global</code>, draws from that state, not from a copy.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ocaml/source _)
+  (define (draws n f)
+    (if (zero? n) '() (let1 (x (f)) (cons x (draws (sub1 n) f)))))
+  (define (ints seed n)
+    (let1 (s (make-ocaml-random-state seed))
+          (draws 5 (τ (ocaml-random-int! s n)))))
+  (define src (make-ocaml-random-source 17))
+  (define copy (rng-source-copy src))
+  (define used (make-ocaml-random-state 17))
+  (define global-copy (ocaml-random-state-copy ocaml-random-global))
+  (define global-source (make-ocaml-random-source ocaml-random-global))
+  (⊦ equal?
+     (draws 1000 (τ (rng-double! src 0.0 1.0)))
+     (draws 1000 (τ (rng-double! copy 0.0 1.0))))
+  (⊦ equal?
+     (draws 1000 (τ (rng-integer! src 0 99)))
+     (draws 1000 (τ (rng-integer! copy 0 99))))
+  (⊦ equal?
+     '(-3 -2 -1 0 1 2 3 4)
+     (sort (delete-duplicates (draws 1000 (τ (rng-integer! src 4 -3)))) &lt;))
+  (⊦ equal?
+     '(9 7 5 7 2)
+     (let1 (s (make-ocaml-random-source 1))
+           (draws 5 (τ (rng-integer! s 1 10)))))
+  (⊦ equal? '(8 6 4 6 1) (ints 1 10))
+  (⊦ equal? '(438 486 784 826 571) (ints 1 1000))
+  (⊦ equal? '(3 3 2 8 4) (ints 17 10))
+  (⊦ equal? '(973 33 752 348 834) (ints 17 1000))
+  (⊦ equal? '(0 6 6 2 4) (ints 1 7))
+  (⊦ equal?
+     '(230024973 197978033 495359752 1036278348 906260834)
+     (ints 17 1073741823))
+  (⊦raises (exn hansei) (ocaml-random-int! used 0))
+  (⊦raises (exn hansei) (ocaml-random-int! used 1073741824))
+  (⊦raises (exn hansei) (rng-integer! src 0 1.0))
+  (⊦ equal?
+     '(230024973 197978033 495359752 1036278348 906260834)
+     (begin
+       (draws 100 (τ (ocaml-random-bits! used)))
+       (let1 (s (ocaml-random-init! used 17))
+             (draws 5 (τ (ocaml-random-bits! s))))))
+  (⊦ equal?
+     (ocaml-random-float! global-copy 1.0)
+     (rng-double! global-source 0.0 1.0))
+  (⊦ equal?
+     (ocaml-random-bits! global-copy)
+     (ocaml-random-bits! ocaml-random-global)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0050000000000000001)
+ (memory #(12582912 2661168 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/sampling"><a href="#test/replay/sampling"><code>test/replay/sampling</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The sampling records of <code class="w3-codespan">samplingM.ml</code> (SM:16-269, 398-401),
+	    replayed bit for bit with <code class="w3-codespan">probcc-random-selector</code>: rejection and
+	    importance sampling of shared and independent flips, the burglar alarm, the geometric
+	    distribution, the observation of <code class="w3-codespan">tiblt2</code> and of the Music TR, and
+	    the drunk coin, whose <code class="w3-codespan">dcoin_and_true 10</code> rejection sampling
+	    accepts no world in 10000. The tables are in the order of <code class="w3-codespan">probcc-explore</code> (deviation 5), and the models draw in OCaml's order (D19).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/sampling _)
+  (⊦ equal?
+     '(((V #f) 0.52000000000000002) ((V #t) 0.47999999999999998))
+     (probcc-sample-rejection/a (probcc-random-selector 1) 100 tflip2-shared))
+  (⊦ equal?
+     '(((V #f) 0.76000000000000001) ((V #t) 0.23999999999999999))
+     (probcc-sample-rejection/a
+       (probcc-random-selector 1)
+       100
+       tflip2-noshared))
+  (⊦ equal?
+     '(((V #f) 0.85999999999999999) ((V #t) 0.14000000000000001))
+     (probcc-sample-rejection/a (probcc-random-selector 1) 100 talarm))
+  (⊦ equal?
+     '(((V #f) 0.89128000000000007) ((V #t) 0.10872000000000001))
+     (probcc-sample-importance/a (probcc-random-selector 1) 100 talarm))
+  (⊦ equal?
+     '(((V 0) 0.79000000000000004)
+       ((V 1) 0.17000000000000001)
+       ((V 2) 0.040000000000000001))
+     (probcc-sample-rejection
+       (probcc-random-selector 17)
+       100
+       (probcc-geometric/count 0.84999999999999998)))
+  (⊦ equal?
+     '(((V 0) 0.84999999999999998)
+       ((V 1) 0.1275)
+       ((V 2) 0.019574999999999981)
+       ((V 3) 0.0024750000000000011)
+       ((V 4) 0.0004500000000000001))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       100
+       (probcc-geometric/count 0.84999999999999998)))
+  (⊦ equal?
+     '(((V 0) 0.84999999999999998)
+       ((V 1) 0.1275)
+       ((V 2) 0.019080000000000406)
+       ((V 3) 0.0028349999999999968)
+       ((V 4) 0.00047250000000000032)
+       ((V 5) 9.0000000000000019e-05)
+       ((V 6) 2.2500000000000005e-05))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       1000
+       (probcc-geometric/count 0.84999999999999998)))
+  (⊦ equal?
+     '(((V #f) 0.02))
+     (probcc-sample-rejection/a (probcc-random-selector 1) 100 tiblt2))
+  (⊦ equal?
+     '(((V #t) 0.14000000000000001))
+     (probcc-sample-importance/a (probcc-random-selector 1) 100 tmusictr41))
+  (⊦ equal?
+     '(((V #f) 0.050000000000000003))
+     (probcc-sample-rejection (probcc-random-selector 17) 100 (dcoin-and 10)))
+  (⊦ equal?
+     '(((V #f) 0.051400000000000001))
+     (probcc-sample-rejection
+       (probcc-random-selector 17)
+       10000
+       (dcoin-and 10)))
+  (⊦ equal?
+     '(((V #f) 0.052301965599999993))
+     (probcc-sample-importance (probcc-random-selector 17) 100 (dcoin-and 10)))
+  (⊦ equal?
+     '(((V #f) 0.052635478842930135) ((V #t) 6.9999999999999841e-14))
+     (probcc-sample-importance (probcc-random-selector 1) 5000 (dcoin-and 10)))
+  (⊦ equal?
+     '(((V #f) 0.052641559436170146) ((V #t) 5.9999999999999871e-14))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       5000
+       (dcoin-and 10)))
+  (⊦ equal?
+     '()
+     (probcc-sample-rejection
+       (probcc-random-selector 1)
+       10000
+       (or (dcoin-and 10) (probcc-impossible)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.17000000000000001)
+ (memory #(12582912 2662720 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/selector"><a href="#test/selector"><code>test/selector</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-random-selector</code> (cf. P:221-233) chooses an entry with the
+	    probability of its mass and answers it with the total mass (deviation 18). Its seed
+	    re-initialises OCaml's global <code class="w3-codespan">Random</code> state, as upstream's <code class="w3-codespan">Random.init</code>, so selectors made with the same seed share one
+	    stream; an rng-source of <code class="w3-codespan">(aux hakaru10 random)</code> (OCaml's, the StdGen of Haskell, CHICKEN's) may replace the seed.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/selector _)
+  (define (draws n f)
+    (if (zero? n) '() (let1 (x (f)) (cons x (draws (sub1 n) f)))))
+  (define choices (probcc-map (λ (i) (list i 1/10)) (iota 10)))
+  (define (picks selector) (draws 5 (τ (car (selector choices)))))
+  (define s1 (probcc-random-selector 1))
+  (define first-picks (picks s1))
+  (define s2 (probcc-random-selector 1))
+  (⊦ equal? first-picks (picks s2))
+  (⊦ equal? (begin (probcc-random-selector 1) first-picks) (picks s1))
+  (define src (make-ocaml-random-source 1))
+  (define src-copy (rng-source-copy src))
+  (define global (ocaml-random-state-copy ocaml-random-global))
+  (⊦ equal? first-picks (picks (probcc-random-selector src)))
+  (⊦ equal?
+     (ocaml-random-bits! global)
+     (ocaml-random-bits! ocaml-random-global))
+  (⊦ equal? first-picks (picks (probcc-random-selector src-copy)))
+  (⊦ equal?
+     (picks (probcc-random-selector (make-stdgen-source 3)))
+     (picks (probcc-random-selector (make-stdgen-source 3))))
+  (⊦ equal?
+     (picks (probcc-random-selector
+              (make-chicken-random-source (string-&gt;utf8 &quot;seed&quot;))))
+     (picks (probcc-random-selector
+              (make-chicken-random-source (string-&gt;utf8 &quot;seed&quot;)))))
+  (⊦ equal? '(b 1.0) ((probcc-random-selector 1) '((a 0.0) (b 1.0))))
+  (⊦ equal?
+     '((b 1.0) (b 1.0) (b 1.0))
+     (let1 (s (probcc-random-selector (make-stdgen-source 7)))
+           (draws 3 (τ (s '((a 0.0) (b 1.0) (c 0.0)))))))
+  (⊦ equal?
+     '(3 7/2)
+     (let1 (s (probcc-random-selector 17)) (s '((x 1/2) (3 3))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2666728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/selector/raises"><a href="#test/selector/raises"><code>test/selector/raises</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A selector given no entries raises <code class="w3-codespan">(exn hansei)</code> of kind <code class="w3-codespan">selector</code>, upstream's <code class="w3-codespan">Choice selection: can't
+	    happen</code> (P:224).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/selector/raises _)
+  (⊦raises (exn hansei) ((probcc-random-selector 1) '()))
+  (⊦ equal?
+     'selector
+     (handle-exceptions
+       e
+       ((condition-property-accessor 'hansei 'kind) e)
+       ((probcc-random-selector 1) '()))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2666760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/nested"><a href="#test/replay/nested"><code>test/replay/nested</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The records of <code class="w3-codespan">nested.ml</code> (N:20-287, 346-441), replayed bit for bit:
+	    a sampler inside a model that makes its own <code class="w3-codespan">random_selector 17</code> re-seeds the global state, which the outer sampler then draws from (plan D6);
+	    nested rejection and importance sampling with <code class="w3-codespan">probcc-dist-selector</code> give the distribution of the inner estimates, with the inner failures as empty
+	    tables. Exact masses of 1 are the exact 1 where upstream has 1. (deviation 26), and
+	    the tables are in the order of <code class="w3-codespan">probcc-explore</code> (deviation 5). The
+	    red-light game (N:346-441) plans with risk: a cheat on a red light fails the world
+	    when a nested 10-sample estimate of the chance of being caught reaches <code class="w3-codespan">maxrisk</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/nested _)
+  (define (testn12)
+    (let1 (coin (probcc-distribution
+                  `((,(τ (probcc-coin 0.5)) 0.5) (,(τ #t) 0.5))))
+          (probcc-sample-rejection/a (probcc-random-selector 17) 10 coin)))
+  (define (testn22)
+    (let1 (coin-choice (probcc-coin 0.5))
+          (probcc-sample-rejection
+            (probcc-random-selector 17)
+            10
+            (or (probcc-coin 0.5) coin-choice))))
+  (define (testnl13/14 inferencer)
+    (τ (let* ((coin-choice (probcc-letlazy/nesting (τ (probcc-coin 0.5))))
+              (v1 (inferencer
+                    (τ (let* ((v (probcc-coin 0.5))
+                              (c (coin-choice))
+                              (b (coin-choice)))
+                         (list v b c)))))
+              (b (coin-choice))
+              (a (coin-choice)))
+         (list a b v1))))
+  (define (tf2-nested n selector)
+    (probcc-sample-rejection/a selector n tflip2-noshared))
+  (define (dcoin-and-true n) (or (dcoin-and n) (probcc-impossible)))
+  (define (nested-rejection n model)
+    (probcc-sample-rejection/a probcc-dist-selector n model))
+  (define (nested-importance n model)
+    (probcc-sample-importance/a probcc-dist-selector n model))
+  (define police-monitoring
+    '#(0.10000000000000001
+       0.20000000000000001
+       0.10000000000000001
+       0.20000000000000001
+       0.20000000000000001))
+  (define bad-luck 0.10000000000000001)
+  (define maxrisk 0.20000000000000001)
+  (define (noisy-or a astrength b bstrength baserate)
+    (or (and (probcc-coin astrength) (a))
+        (and (probcc-coin bstrength) (b))
+        (probcc-coin baserate)))
+  (define ((being-caught i t))
+    (or (and (probcc-coin 0.5) (probcc-coin (vector-ref police-monitoring i)))
+        (and (probcc-coin 0.29999999999999999)
+             (if (&lt; t 3)
+               (probcc-coin 0.20000000000000001)
+               (probcc-coin 0.40000000000000002)))
+        (probcc-coin bad-luck)))
+  (define ((game cheatingp))
+    (let loop ((t 0) (pos 0))
+      (cond ((&gt;= pos 5) t)
+            ((probcc-coin 0.5)
+             (cond ((not (probcc-coin cheatingp)) (loop (add1 t) pos))
+                   ((probcc-at-least
+                      maxrisk
+                      #t
+                      (nested-importance 10 (being-caught pos t)))
+                    (probcc-impossible))
+                   (else (loop (add1 t) (add1 pos)))))
+            (else (loop (add1 t) (add1 pos))))))
+  (define coin-tables
+    '(((V (((V #t) 1))) 0.5)
+      ((V (((V #t) 0.59999999999999998) ((V #f) 0.40000000000000002))) 0.5)))
+  (⊦ equal? coin-tables (probcc-reify/exact/a testn12))
+  (⊦ equal?
+     coin-tables
+     (probcc-sample-rejection/a (probcc-random-selector 17) 10 testn12))
+  (⊦ equal?
+     '(((V (((V #t) 1.0))) 0.5)
+       ((V (((V #t) 0.59999999999999998) ((V #f) 0.40000000000000002))) 0.5))
+     (probcc-reify/exact/a testn22))
+  (⊦ equal?
+     '(((V (#t #t (((V (#t #t #t)) 0.5) ((V (#f #t #t)) 0.5))))
+        0.59999999999999998)
+       ((V (#f #f (((V (#t #f #f)) 0.5) ((V (#f #f #f)) 0.5))))
+        0.40000000000000002))
+     (probcc-sample-rejection/a
+       (probcc-random-selector 17)
+       10
+       (testnl13/14 probcc-reify/exact/a)))
+  (⊦ equal?
+     '(((V #f) 0.76000000000000001) ((V #t) 0.23999999999999999))
+     (tf2-nested 100 (probcc-random-selector 1)))
+  (⊦ equal?
+     '(((V (((V #f) 1.0))) 0.76000000000000001)
+       ((V (((V #t) 1.0))) 0.23999999999999999))
+     (probcc-sample-rejection
+       (probcc-random-selector 1)
+       100
+       (tf2-nested 1 probcc-dist-selector)))
+  (⊦ equal?
+     '(((V (((V #f) 1.0))) 0.41999999999999998)
+       ((V (((V #f) 0.66666666666666663) ((V #t) 0.33333333333333331)))
+        0.40000000000000002)
+       ((V (((V #t) 0.66666666666666663) ((V #f) 0.33333333333333331)))
+        0.17999999999999999))
+     (probcc-sample-rejection
+       (probcc-random-selector 1)
+       100
+       (tf2-nested 3 probcc-dist-selector)))
+  (⊦ equal?
+     '(((V (#f
+            #f
+            (((V (#f #f #f)) 0.69999999999999996)
+             ((V (#t #f #f)) 0.29999999999999999))))
+        0.29999999999999999)
+       ((V (#t #t (((V (#t #t #t)) 0.5) ((V (#f #t #t)) 0.5))))
+        0.20000000000000001)
+       ((V (#t
+            #t
+            (((V (#t #t #t)) 0.69999999999999996)
+             ((V (#f #t #t)) 0.29999999999999999))))
+        0.10000000000000001)
+       ((V (#f
+            #f
+            (((V (#t #f #f)) 0.69999999999999996)
+             ((V (#f #f #f)) 0.29999999999999999))))
+        0.10000000000000001)
+       ((V (#f #f (((V (#t #f #f)) 0.5) ((V (#f #f #f)) 0.5))))
+        0.10000000000000001)
+       ((V (#f
+            #f
+            (((V (#f #f #f)) 0.80000000000000004)
+             ((V (#t #f #f)) 0.20000000000000001))))
+        0.10000000000000001)
+       ((V (#f
+            #f
+            (((V (#f #f #f)) 0.59999999999999998)
+             ((V (#t #f #f)) 0.40000000000000002))))
+        0.10000000000000001))
+     (probcc-sample-rejection/a
+       (probcc-random-selector 17)
+       10
+       (testnl13/14 (λ (m) (nested-rejection 10 m)))))
+  (⊦ equal?
+     '(((V ()) 0.9476980344) ((V (((V #f) 1.0))) 0.052301965599999993))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       100
+       (nested-rejection 1 (τ (dcoin-and 10)))))
+  (⊦ equal?
+     '(((V (((V #f) 0.054999999999999986))) 0.5)
+       ((V (((V #f) 0.050499999999999989))) 0.25)
+       ((V (((V #f) 0.05004999999999999))) 0.125)
+       ((V (((V #f) 0.050004999999999987))) 0.0625)
+       ((V (((V #f) 0.050000499999999989))) 0.03125)
+       ((V (((V #f) 0.05000004999999999))) 0.015625)
+       ((V (((V #f) 0.050000004999999986))) 0.0078125)
+       ((V (((V #f) 0.050000000499999989))) 0.00390625)
+       ((V (((V #f) 0.050000000049999986))) 0.001953125)
+       ((V (((V #f) 0.049999999999999989) ((V #t) 4.9999999999999885e-11)))
+        0.001953125))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       100
+       (nested-importance 1 (τ (dcoin-and 10)))))
+  (⊦ equal?
+     '(((V ()) 0.99999999999999989))
+     (probcc-sample-importance
+       (probcc-random-selector 1)
+       100
+       (nested-rejection 1 (τ (dcoin-and-true 10)))))
+  (⊦ equal?
+     '(((V ()) 0.998046875)
+       ((V (((V #t) 4.9999999999999885e-11))) 0.001953125))
+     (probcc-sample-importance
+       (probcc-random-selector 1)
+       100
+       (nested-importance 1 (τ (dcoin-and-true 10)))))
+  (⊦ equal?
+     '(((V ()) 0.88826171875000004)
+       ((V (((V #t) 9.9999999999999776e-13))) 0.10154296875)
+       ((V (((V #t) 1.9999999999999955e-12))) 0.01017578125)
+       ((V (((V #t) 2.9999999999999933e-12))) 1.953125e-05))
+     (probcc-sample-importance
+       (probcc-random-selector 1)
+       100
+       (nested-importance 50 (τ (dcoin-and-true 10)))))
+  (⊦ equal?
+     '(((V #t) 11/20) ((V #f) 9/20))
+     (probcc-reify/exact (noisy-or (τ #t) 1/2 (τ #f) 1/2 1/10)))
+  (⊦ equal?
+     '(((V 9) 0.10625)
+       ((V 6) 0.09999999999999995)
+       ((V 13) 0.053515624999999997)
+       ((V 10) 0.053124999999999999)
+       ((V 7) 0.049999999999999975)
+       ((V 14) 0.026757812499999999)
+       ((V 11) 0.026562499999999999)
+       ((V 8) 0.024999999999999988)
+       ((V 12) 0.01328125)
+       ((V 15) 0.01259765625)
+       ((V 16) 4.8828124999999949e-05))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       10
+       (game 0.20000000000000001)))
+  (⊦ equal?
+     '(((V 7) 0.052499999999999998)
+       ((V 5) 0.040000000000000001)
+       ((V 6) 0.025000000000000001)
+       ((V 8) 0.016250000000000001)
+       ((V 9) 0.010625000000000001))
+     (probcc-sample-importance/a (probcc-random-selector 17) 50 (game 0.5))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.13600000000000001)
+ (memory #(12582912 2688376 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div></body></html>

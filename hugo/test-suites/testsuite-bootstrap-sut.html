@@ -19,7 +19,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
 <p>This test suite drove the implementation of the unittest framework itself.</p>
 <div>
@@ -28,6 +30,7 @@
   *
   (import
     scheme
+    (scheme case-lambda)
     (chicken base)
     (chicken condition)
     (chicken pretty-print)
@@ -46,89 +49,114 @@
     (unittest/testcase-log-set!
       testcase
       (cons msg (unittest/testcase-log testcase))))
+  (define (unittest/testcase-guard result testcase-name witness thunk)
+    (condition-case
+      (thunk)
+      (c (exn unittest-assert-equal)
+         (unittest/result-failed!
+           result
+           (cons testcase-name
+                 (get-condition-property
+                   c
+                   'unittest-assert-equal
+                   'comparison)))
+         witness)
+      (c (exn)
+         (unittest/result-failed!
+           result
+           (list testcase-name
+                 (call-with-output-string
+                   (lambda (port) (print-error-message c port)))))
+         witness)
+      (c () (unittest/result-failed! result (list testcase-name c)) witness)))
   (define (unittest/testcase-run testcase result sut)
     (let* ((methods (cdr sut))
            (setup (alist-ref 'setup methods))
            (teardown (alist-ref 'teardown methods))
-           (testcase-name (unittest/testcase-name testcase)))
+           (testcase-name (unittest/testcase-name testcase))
+           (witness (gensym))
+           (guarded
+             (lambda (thunk)
+               (unittest/testcase-guard result testcase-name witness thunk))))
       (unittest/result-started! result)
-      (let-values
-        ((args (if setup ((car setup) testcase) (values)))
-         ((f code) (apply values (alist-ref testcase-name methods))))
-        (let* ((witness (gensym))
-               (no-outsrt &quot;&quot;)
-               (eta-time 0)
-               (pair (condition-case
-                       (let* ((res (void))
-                              (outstr no-outsrt)
-                              (errstr
-                                (with-error-output-to-string
-                                  (lambda ()
-                                    (set! outstr
-                                      (with-output-to-string
-                                        (lambda ()
-                                          (let-values
-                                            (((u s) (cpu-time)))
-                                            (set! res (apply f testcase args))
-                                            (let-values
-                                              (((uu ss) (cpu-time)))
-                                              (set! eta-time (- (+ uu ss) (+ u s))))))))))))
-                         (list res outstr errstr))
-                       (c (exn unittest-assert-equal)
-                          (begin
-                            (unittest/result-failed!
-                              result
-                              (cons testcase-name
-                                    (get-condition-property
-                                      c
-                                      'unittest-assert-equal
-                                      'comparison)))
-                            (list witness no-outsrt no-outsrt)))
-                       (c (exn)
-                          (begin
-                            (unittest/result-failed!
-                              result
-                              (list testcase-name
-                                    (call-with-output-string
-                                      (lambda (port) (print-error-message c port)))))
-                            (list witness no-outsrt no-outsrt)))
-                       (c ()
-                          (begin
-                            (unittest/result-failed!
-                              result
-                              (list testcase-name c))
-                            (list witness no-outsrt no-outsrt)))))
-               (v (first pair))
-               (outstr (second pair))
-               (errstr (third pair))
-               (hasdoc (and (pair? v) (eq? (car v) 'doc))))
-          (when teardown (apply (car teardown) testcase args))
-          (let ((header-id (symbol-&gt;string testcase-name)))
-            `((h2 (@ (id ,header-id))
-                  (a (@ (href ,(string-append &quot;#&quot; header-id)))
-                     (code ,testcase-name)
-                     &quot;: &quot;
-                     ,(if (eq? v witness)
-                        '(span (@ (class &quot;w3-text-red&quot;)) fail)
-                        '(span (@ (class &quot;w3-text-green&quot;)) pass))))
-              ,@(if hasdoc (cdr v) '())
-              (code/scheme ,(if hasdoc (butlast code) code))
-              (code/scheme
-                ((eta ,(exact-&gt;inexact (/ eta-time 1000)))
-                 (memory ,(memory-statistics))
-                 (stdout ,outstr)
-                 (stderr ,errstr)))))))))
+      (let ((args (if setup
+                    (guarded
+                      (lambda ()
+                        (call-with-values
+                          (lambda () ((car setup) testcase))
+                          list)))
+                    '())))
+        (let-values
+          (((f code) (apply values (alist-ref testcase-name methods))))
+          (let* ((v witness)
+                 (eta-time 0)
+                 (outstr &quot;&quot;)
+                 (errstr
+                   (if (eq? args witness)
+                     &quot;&quot;
+                     (with-error-output-to-string
+                       (lambda ()
+                         (set! outstr
+                           (with-output-to-string
+                             (lambda ()
+                               (let-values
+                                 (((u s) (cpu-time)))
+                                 (set! v
+                                   (guarded (lambda () (apply f testcase args))))
+                                 (let-values
+                                   (((uu ss) (cpu-time)))
+                                   (set! eta-time (- (+ uu ss) (+ u s))))))))))))
+                 (hasdoc (and (pair? v) (eq? (car v) 'doc)))
+                 (torn (cond ((or (not teardown) (eq? args witness)) (void))
+                             ((eq? v witness)
+                              (condition-case
+                                (apply (car teardown) testcase args)
+                                (c ()
+                                   (set! errstr
+                                     (string-append
+                                       errstr
+                                       (call-with-output-string
+                                         (lambda (port) (print-error-message c port)))))
+                                   witness)))
+                             (else
+                              (guarded
+                                (lambda () (apply (car teardown) testcase args)))))))
+            (let ((header-id (symbol-&gt;string testcase-name)))
+              `((h2 (@ (id ,header-id))
+                    (a (@ (href ,(string-append &quot;#&quot; header-id)))
+                       (code ,header-id)
+                       &quot;: &quot;
+                       ,(if (or (eq? v witness) (eq? torn witness))
+                          '(span (@ (class &quot;w3-text-red&quot;)) fail)
+                          '(span (@ (class &quot;w3-text-green&quot;)) pass))))
+                ,@(if hasdoc (cdr v) '())
+                (code/scheme ,(if hasdoc (butlast code) code))
+                (code/scheme
+                  ((eta ,(exact-&gt;inexact (/ eta-time 1000)))
+                   (memory ,(memory-statistics))
+                   (stdout ,outstr)
+                   (stderr ,errstr))))))))))
+  (define (unittest/suite sut)
+    (let loop ((names (map car (cdr sut))))
+      (cond ((null? names) sut)
+            ((memq (car names) (cdr names))
+             (error 'define-suite
+                    &quot;duplicate test case name&quot;
+                    (car sut)
+                    (car names)))
+            (else (loop (cdr names))))))
   (define-syntax
     define-suite
     (syntax-rules
       ()
       ((_ sutname ((casename formal ...) body ...) ...)
        (define sutname
-         `(sutname
-            (casename
-              ,(lambda (formal ...) body ...)
-              ,'(define (casename formal ...) body ...))
-            ...)))))
+         (unittest/suite
+           `(sutname
+              (casename
+                ,(lambda (formal ...) body ...)
+                ,'(define (casename formal ...) body ...))
+              ...))))))
   (define-syntax
     lettest
     (syntax-rules
@@ -149,9 +177,13 @@
       (cons exn (unittest/result-failed result))))
   (define (equal-approx? p)
     (letrec ((? (lambda (a b)
-                  (cond ((and (real? a) (real? b)) (&lt; (abs (- a b)) p))
+                  (cond ((and (real? a) (real? b))
+                         (or (= a b) (&lt; (abs (- a b)) p)))
                         ((and (pair? a) (pair? b))
                          (and (? (car a) (car b)) (? (cdr a) (cdr b))))
+                        ((and (vector? a) (vector? b))
+                         (and (= (vector-length a) (vector-length b))
+                              (every ? (vector-&gt;list a) (vector-&gt;list b))))
                         (else (equal=? a b))))))
       ?))
   (define (⊦ pred? . args)
@@ -190,17 +222,34 @@
           (sxml-tree sut-name `(,@(if sxml ((car sxml) r) '()) ,@docs))
           (symbol-append 'testsuite- sut-name))
         (pretty-print res)
+        (unless
+          (null? (unittest/result-failed r))
+          (implicit-exit-handler (lambda () (exit 1))))
         r)))
-  (define (unittest/condition-expected-actual a b)
-    (condition
-      `(exn message &quot;assert-equal failed&quot;)
-      `(unittest-assert-equal comparison ((expected ,a) (got ,b)))))
+  (define unittest/condition-expected-actual
+    (case-lambda
+      ((a b)
+       (condition
+         `(exn message &quot;assert-equal failed&quot;)
+         `(unittest-assert-equal comparison ((expected ,a) (got ,b)))))
+      (args (condition
+              `(exn message &quot;assert failed&quot;)
+              `(unittest-assert-equal comparison ((got ,@args)))))))
   (define-syntax
     ⊦⧳
     (syntax-rules
       ()
       ((_ ((exn ...) ...) body ...)
-       (condition-case (begin body ...) ((exn ...) (void)) ...)))))
+       (condition-case (begin body ...) ((exn ...) (void)) ...))))
+  (define-syntax
+    ⊦raises
+    (syntax-rules
+      ()
+      ((_ (kind ...) body ...)
+       (⊦= 'raised
+           (condition-case
+             (begin body ... 'not-raised)
+             ((kind ...) 'raised)))))))
 </code></pre></div>
 <h2 id="test-running"><a href="#test-running"><code>test-running</code>: <span class="w3-text-green">pass</span></a></h2>
 <p>hello</p>
@@ -211,7 +260,7 @@
   (⊦= '(teardown test-method setup) (unittest/testcase-log t)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1770736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(12582912 2155096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-result"><a href="#test-result"><code>test-result</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -220,7 +269,7 @@
   (⊦= '((ran 1) (failed 0)) (unittest/result-summary r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1772056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2156592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-failed"><a href="#test-failed"><code>test-failed</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -229,10 +278,10 @@
     ((t 'test-broken))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1) (failed 1 (test-broken (expected useless) (got _))))
-          (unittest/result-summary r))))
+        (unittest/result-summary r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(6291456 1773264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2157976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-unbound-variable"><a href="#test-unbound-variable"><code>test-unbound-variable</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -241,14 +290,112 @@
     ((t 'test-unbound-variable))
     (unittest/testcase-run t r wasrun-sut)
     (⊦= '((ran 1)
-            (failed
-              1
-              (test-unbound-variable
-                &quot;\nError: unbound variable: unbound-v\n&quot;)))
-          (unittest/result-summary r))))
+          (failed
+            1
+            (test-unbound-variable &quot;\nError: unbound variable: unbound-v\n&quot;)))
+        (unittest/result-summary r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(6291456 1774368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2159296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-raising-setup"><a href="#test-raising-setup"><code>test-raising-setup</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-raising-setup tc _ r)
+  (lettest
+    ((t 'test-method))
+    (unittest/testcase-run t r raising-setup-sut)
+    (⊦= '() (unittest/testcase-log t))
+    (⊦= '((ran 1) (failed 1 (test-method &quot;\nError: setup exploded\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2160264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-raising-setup-suite"><a href="#test-raising-setup-suite"><code>test-raising-setup-suite</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-raising-setup-suite tc _ r)
+  (letsuite
+    ((suite '(test-method test-other)))
+    (unittest/testsuite-run suite r raising-setup-sut)
+    (⊦= '((ran 2)
+          (failed
+            2
+            (test-other &quot;\nError: setup exploded\n&quot;)
+            (test-method &quot;\nError: setup exploded\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2161712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-raising-teardown-after-failure"><a href="#test-raising-teardown-after-failure"><code>test-raising-teardown-after-failure</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-raising-teardown-after-failure tc _ r)
+  (lettest
+    ((t 'test-broken))
+    (let ((report
+            (cadr (car (reverse
+                         (unittest/testcase-run t r raising-teardown-sut))))))
+      (⊦= '(&quot;\nError: teardown exploded\n&quot;) (alist-ref 'stderr report))
+      (⊦= '((ran 1) (failed 1 (test-broken (expected 1) (got 2))))
+          (unittest/result-summary r)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2163376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-raising-teardown"><a href="#test-raising-teardown"><code>test-raising-teardown</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-raising-teardown tc _ r)
+  (lettest
+    ((t 'test-method))
+    (unittest/testcase-run t r raising-teardown-sut)
+    (⊦= '(test-method) (unittest/testcase-log t))
+    (⊦= '((ran 1) (failed 1 (test-method &quot;\nError: teardown exploded\n&quot;)))
+        (unittest/result-summary r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2164312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-duplicate-case-name"><a href="#test-duplicate-case-name"><code>test-duplicate-case-name</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-duplicate-case-name tc _ _)
+  (⊦= '(&quot;duplicate test case name&quot; (dup-sut t1))
+      (condition-case
+        (let ()
+          (define-suite
+            dup-sut
+            ((t1 _) (⊦= 1 1))
+            ((t2 _) (⊦= 1 1))
+            ((t1 _) (⊦= 1 2)))
+          dup-sut)
+        (c (exn)
+           (list (get-condition-property c 'exn 'message)
+                 (get-condition-property c 'exn 'arguments))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2168544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-exit-status"><a href="#test-exit-status"><code>test-exit-status</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-exit-status tc _ _)
+  (⊦= 0 (suite-exit-status &quot;(⊦= 1 1)&quot;))
+  (⊦= 1 (suite-exit-status &quot;(⊦= 1 2)&quot;)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2166136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-failed-output"><a href="#test-failed-output"><code>test-failed-output</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-failed-output tc _ r)
+  (lettest
+    ((t 'test-printing-broken))
+    (let ((report (cadr (last (unittest/testcase-run t r wasrun-sut)))))
+      (⊦= '(&quot;printed before failing\n&quot;) (alist-ref 'stdout report))
+      (⊦= '(&quot;warned before failing&quot;) (alist-ref 'stderr report))
+      (⊦= '((ran 1) (failed 1 (test-printing-broken (expected 1) (got 2))))
+          (unittest/result-summary r)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2167400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-failed-result"><a href="#test-failed-result"><code>test-failed-result</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -258,7 +405,7 @@
   (⊦= '((ran 1) (failed 1 no-reason)) (unittest/result-summary r)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1775008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2168776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-suite"><a href="#test-suite"><code>test-suite</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -269,21 +416,66 @@
     (⊦= '((ran 2) (failed 0)) (unittest/result-summary r))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(6291456 1776376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(12582912 2169800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-⊦=-infinities"><a href="#test-⊦=-infinities"><code>test-⊦=-infinities</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊦=-infinities tc _ _)
+  (⊦= +inf.0 +inf.0)
+  (⊦= -inf.0 -inf.0)
+  (⊦= '(1 +inf.0) (list 1.0000001 +inf.0))
+  (⊭ ((equal-approx? 1e-06) +inf.0 -inf.0))
+  (⊭ ((equal-approx? 1e-06) +inf.0 1e+300))
+  (⊭ ((equal-approx? 1e-06) +nan.0 +nan.0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2169976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-⊦=-vectors"><a href="#test-⊦=-vectors"><code>test-⊦=-vectors</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊦=-vectors tc _ _)
+  (⊦= (vector 1.0000000001 '(2.0000000001 #(3.0000000001)))
+      (vector 1 '(2 #(3))))
+  (⊦= #() #())
+  (⊭ ((equal-approx? 1e-06) #(1 2) #(1)))
+  (⊭ ((equal-approx? 1e-06) #(1.1) #(1)))
+  (⊭ ((equal-approx? 1e-06) #(1) '(1))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2171136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-⊦-arity"><a href="#test-⊦-arity"><code>test-⊦-arity</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊦-arity tc _ _)
+  (⊦= '(((got 4)) ((got 1 2 3 1)) ((got)))
+      (map (lambda (thunk)
+             (condition-case
+               (thunk)
+               (c (exn unittest-assert-equal)
+                  (get-condition-property
+                    c
+                    'unittest-assert-equal
+                    'comparison))))
+           (list (lambda () (⊦ odd? 4))
+                 (lambda () (⊦ &lt; 1 2 3 1))
+                 (lambda () (⊦ (lambda () #f)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2176232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-⊨"><a href="#test-⊨"><code>test-⊨</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊨ tc _ _) (⊨ #t))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1777376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2177024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-⊭"><a href="#test-⊭"><code>test-⊭</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-⊭ tc _ _) (⊭ #f))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1778488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2178424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-should-signal"><a href="#test-should-signal"><code>test-should-signal</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -298,5 +490,23 @@
   (⊦⧳ () 99))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1781424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2178976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-should-raise"><a href="#test-should-raise"><code>test-should-raise</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-should-raise tc _ _)
+  (⊦raises (exn) (car '()))
+  (⊦raises (exn-a) (signal (condition '(exn-a message &quot;useless&quot;))))
+  (⊦= '((expected raised) (got not-raised))
+      (condition-case
+        (⊦raises (exn) 99)
+        (c (unittest-assert-equal)
+           (get-condition-property c 'unittest-assert-equal 'comparison))))
+  (⊦= 'escaped
+      (condition-case
+        (⊦raises (exn) (signal (condition '(exn-a message &quot;useless&quot;))))
+        ((exn-a) 'escaped))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2180024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

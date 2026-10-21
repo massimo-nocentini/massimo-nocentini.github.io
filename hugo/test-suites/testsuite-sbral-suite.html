@@ -19,7 +19,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
 <h2 id="test-cons"><a href="#test-cons"><code>test-cons</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -55,7 +57,19 @@
         (⊦= '((3 f (e) (d)) (3 c (b) (a))) (cdr/sbral q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1824752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2046608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-cdr-invalid"><a href="#test-cdr-invalid"><code>test-cdr-invalid</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-cdr-invalid _)
+  (⊦= &quot;cdr/sbral: not a valid sbral&quot;
+      (error-message (λ () (cdr/sbral empty/sbral))))
+  (⊦= &quot;cdr/sbral: not a valid sbral&quot; (error-message (λ () (cdr/sbral 42))))
+  (⊦= &quot;car/sbral: not a valid sbral&quot;
+      (error-message (λ () (car/sbral empty/sbral)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2056128 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-ref"><a href="#test-ref"><code>test-ref</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -70,43 +84,62 @@
         (⊦= 'g (sbral-ref q 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1826184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2058232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test-list-&gt;sbral"><a href="#test-list-&gt;sbral"><code>test-list->sbral</code>: <span class="w3-text-green">pass</span></a></h2>
+<h2 id="test-ref-out-of-bounds"><a href="#test-ref-out-of-bounds"><code>test-ref-out-of-bounds</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-ref-out-of-bounds _)
+  (let1 (q (list-&gt;sbral '(a b c d e f g h i j)))
+        (⊦= '(a b c d e f g h i j) (map (λ (i) (sbral-ref q i)) (iota 10)))
+        (for-each
+          (λ (i)
+             (⊦= &quot;sbral-ref: index out of bounds&quot;
+                 (error-message (λ () (sbral-ref q i)))))
+          (list 10 -1 1.5 2.0 'x (expt 2 100) (- (expt 2 100))))
+        (for-each
+          (λ (i)
+             (⊦= &quot;update/sbral: index out of bounds&quot;
+                 (error-message (λ () (update/sbral i 'y q)))))
+          (list 1.5 2.0 'x (expt 2 100) (- (expt 2 100))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2080144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-list-&gt;sbral"><a href="#test-list-&gt;sbral"><code>test-list-&gt;sbral</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-list-&gt;sbral _)
   (let* ((l '(a b c d e f g)) (ll (iota 100)))
     (⊦= '((7 a (b (c) (d)) (e (f) (g)))) (list-&gt;sbral l))
     (⊦= '((3 0 (1) (2))
-            (3 3 (4) (5))
-            (31
-             6
-             (7
-              (8 (9 (10) (11)) (12 (13) (14)))
-              (15 (16 (17) (18)) (19 (20) (21))))
-             (22
-              (23 (24 (25) (26)) (27 (28) (29)))
-              (30 (31 (32) (33)) (34 (35) (36)))))
-            (63
-             37
-             (38
-              (39
-               (40 (41 (42) (43)) (44 (45) (46)))
-               (47 (48 (49) (50)) (51 (52) (53))))
-              (54
-               (55 (56 (57) (58)) (59 (60) (61)))
-               (62 (63 (64) (65)) (66 (67) (68)))))
-             (69
-              (70
-               (71 (72 (73) (74)) (75 (76) (77)))
-               (78 (79 (80) (81)) (82 (83) (84))))
-              (85
-               (86 (87 (88) (89)) (90 (91) (92)))
-               (93 (94 (95) (96)) (97 (98) (99)))))))
-          (list-&gt;sbral ll))))
+          (3 3 (4) (5))
+          (31
+           6
+           (7
+            (8 (9 (10) (11)) (12 (13) (14)))
+            (15 (16 (17) (18)) (19 (20) (21))))
+           (22
+            (23 (24 (25) (26)) (27 (28) (29)))
+            (30 (31 (32) (33)) (34 (35) (36)))))
+          (63
+           37
+           (38
+            (39
+             (40 (41 (42) (43)) (44 (45) (46)))
+             (47 (48 (49) (50)) (51 (52) (53))))
+            (54
+             (55 (56 (57) (58)) (59 (60) (61)))
+             (62 (63 (64) (65)) (66 (67) (68)))))
+           (69
+            (70
+             (71 (72 (73) (74)) (75 (76) (77)))
+             (78 (79 (80) (81)) (82 (83) (84))))
+            (85
+             (86 (87 (88) (89)) (90 (91) (92)))
+             (93 (94 (95) (96)) (97 (98) (99)))))))
+        (list-&gt;sbral ll))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1829272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2084176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-length"><a href="#test-length"><code>test-length</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -115,7 +148,7 @@
     (⊦= (length l) (length/sbral q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1830784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2086048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-update"><a href="#test-update"><code>test-update</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -125,13 +158,110 @@
         (⊦= '((7 a (b (c) (d)) (hello (f) (g)))) (update/sbral 4 'hello q))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1832224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2087728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-ref/back"><a href="#test-ref/back"><code>test-ref/back</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-ref/back _)
+  (let1 (q (list-&gt;sbral '(e d c b a)))
+        (⊦= '(a b c d e) (map (λ (j) (sbral-ref/back q j 'none)) (iota 5)))
+        (⊦= '(none none) (map (λ (j) (sbral-ref/back q j 'none)) '(5 100)))
+        (⊦= 'none (sbral-ref/back empty/sbral 0 'none))
+        (for-each
+          (λ (j)
+             (⊦= &quot;sbral-ref: index out of bounds&quot;
+                 (error-message (λ () (sbral-ref/back q j 'none)))))
+          (list -1 1.5 (expt 2 100)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2063504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-update/back"><a href="#test-update/back"><code>test-update/back</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-update/back _)
+  (let1 (q (list-&gt;sbral '(c b a)))
+        (⊦= '(c b z) (sbral-&gt;list (update/sbral/back 0 'z 0 q)))
+        (⊦= '(c y a) (sbral-&gt;list (update/sbral/back 1 'y 0 q)))
+        (⊦= '(x 0 c b a) (sbral-&gt;list (update/sbral/back 4 'x 0 q)))
+        (⊦= 'a (sbral-ref/back (update/sbral/back 4 'x 0 q) 0 'none))
+        (⊦= '(w) (sbral-&gt;list (update/sbral/back 0 'w 0 empty/sbral)))
+        (⊦= '(w 0 0) (sbral-&gt;list (update/sbral/back 2 'w 0 empty/sbral)))
+        (for-each
+          (λ (j)
+             (⊦= &quot;update/sbral: index out of bounds&quot;
+                 (error-message (λ () (update/sbral/back j 'v 0 q)))))
+          (list -1 1.5 (expt 2 100)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2058776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-update-out-of-bounds"><a href="#test-update-out-of-bounds"><code>test-update-out-of-bounds</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-update-out-of-bounds _)
+  (let1 (q (list-&gt;sbral '(a b c d e)))
+        (⊦= '((1 a) (1 b) (3 c (d) (hello))) (update/sbral 4 'hello q))
+        (⊦= &quot;update/sbral: index out of bounds&quot;
+            (error-message (λ () (update/sbral 5 'x q))))
+        (⊦= &quot;update/sbral: index out of bounds&quot;
+            (error-message (λ () (update/sbral -1 'x q))))
+        (⊦= &quot;update/sbral: index out of bounds&quot;
+            (error-message (λ () (update/sbral 0 'x empty/sbral))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2069216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test-identity"><a href="#test-identity"><code>test-identity</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-identity _)
-  (let1 (l '(a b c d e f g)) (⊦= l (sbral-&gt;list (list-&gt;sbral l)))))
+  (let1 (l '(a b c d e f g)) (⊦= l (sbral-&gt;list (list-&gt;sbral l))))
+  (do ((n 0 (add1 n)))
+      ((&gt; n 64))
+    (⊦= (iota n) (sbral-&gt;list (list-&gt;sbral (iota n))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1832832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2056824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-foldr"><a href="#test-foldr"><code>test-foldr</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-foldr _)
+  (let1 (q (list-&gt;sbral '(a b c d e f g h i j)))
+        (⊦= '((0 . a)
+              (1 . b)
+              (2 . c)
+              (3 . d)
+              (4 . e)
+              (5 . f)
+              (6 . g)
+              (7 . h)
+              (8 . i)
+              (9 . j))
+            (foldr/sbral (λ (i each out) (cons (cons i each) out)) '() q))
+        (let1 (seen '())
+              (foldr/sbral (λ (i each out) (set! seen (cons i seen))) (void) q)
+              (⊦= (iota 10) seen))
+        (⊦= '((0 a) (1 b) (2 c) (3 d) (4 e) (5 f) (6 g) (7 h) (8 i) (9 j))
+            (sbral-&gt;list (map/sbral (λ (i each) (list i each)) q)))
+        (⊦= '(b d f h j) (sbral-&gt;list (filter/sbral (λ (i each) (odd? i)) q)))
+        (⊦= 0 (foldr/sbral (λ (i each out) (add1 out)) 0 empty/sbral))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2059040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test-exists"><a href="#test-exists"><code>test-exists</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test-exists _)
+  (let1 (q (list-&gt;sbral '(a b c d e f g h i j)))
+        (⊭ (exists?/sbral (λ (i each) #f) q))
+        (⊭ (exists?/sbral (λ (i each) #t) empty/sbral))
+        (let1 (calls 0)
+              (⊦= '(7 h)
+                  (exists?/sbral
+                    (λ (i each)
+                       (set! calls (add1 calls))
+                       (and (&lt; i 8) (list i each)))
+                    q))
+              (⊦= 3 calls))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2060504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

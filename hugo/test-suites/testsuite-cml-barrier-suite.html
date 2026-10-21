@@ -1,0 +1,270 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/barrier/rounds-in-linear-time"><a href="#test/barrier/rounds-in-linear-time"><code>test/barrier/rounds-in-linear-time</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/rounds-in-linear-time _)
+  (define (rounds-time n)
+    (let1 (t0 (current-process-milliseconds))
+          (⊦= 3
+              (run/value
+                (τ (let* ((b (make-barrier 0 add1))
+                          (es (map (λ (i) (barrier-enroll b)) (iota n)))
+                          (ts (map (λ (e)
+                                      (spawn (τ (barrier-wait e)
+                                                (barrier-wait e)
+                                                (barrier-wait e))))
+                                   es)))
+                     (for-each (λ (t) (sync (join-evt t))) ts)
+                     (barrier-value (car es))))))
+          (- (current-process-milliseconds) t0)))
+  (let* ((small (max 20 (rounds-time 100))) (large (rounds-time 600)))
+    (⊨ (&lt; large (* 15 small)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(25165824 5681640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/rounds"><a href="#test/barrier/rounds"><code>test/barrier/rounds</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/rounds _)
+  (let1 (log (cdr (run/log
+                    (τ (let* ((b (make-barrier 0 add1))
+                              (es (map (λ (i) (barrier-enroll b)) (iota 3)))
+                              (ts (map (λ (e tag)
+                                          (spawn (τ (for-each
+                                                      (λ (i) (note! (list tag (barrier-wait e))))
+                                                      (iota 4)))))
+                                       es
+                                       '(x y z))))
+                         (for-each (λ (t) (sync (join-evt t))) ts)
+                         (note! (barrier-value (car es)))
+                         (cml/shutdown))))))
+        (⊦= 4 (last log))
+        (⊦= '(1 2 3 4)
+            (map cadr (filter (λ (x) (and (pair? x) (eq? 'x (car x)))) log)))
+        (⊦= '(1 2 3 4)
+            (map cadr (filter (λ (x) (and (pair? x) (eq? 'z (car x)))) log)))
+        (⊦= 13 (length log))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 5528376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/wake-order"><a href="#test/barrier/wake-order"><code>test/barrier/wake-order</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/wake-order _)
+  (⊦= '(1 2 3)
+      (run/value
+        (τ (let* ((b (make-barrier 0 add1))
+                  (es (map (λ (i) (barrier-enroll b)) (iota 4)))
+                  (mb (make-mailbox)))
+             (for-each
+               (λ (e i) (spawn (τ (barrier-wait e) (mailbox-send! mb i))))
+               (cdr es)
+               '(1 2 3))
+             (cml/yield)
+             (barrier-wait (car es))
+             (map (λ (i) (mailbox-recv mb)) '(1 2 3)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 5530400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/resign-completes-round"><a href="#test/barrier/resign-completes-round"><code>test/barrier/resign-completes-round</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/resign-completes-round _)
+  (⊦= '((a 1) (b 1) resigned-again raised raised)
+      (cdr (run/log
+             (τ (let* ((b (make-barrier 0 add1))
+                       (ea (barrier-enroll b))
+                       (eb (barrier-enroll b))
+                       (ec (barrier-enroll b)))
+                  (spawn (τ (note! (list 'a (barrier-wait ea)))))
+                  (spawn (τ (note! (list 'b (barrier-wait eb)))))
+                  (barrier-resign ec)
+                  (cml/sleep 0.01)
+                  (barrier-resign ec)
+                  (note! 'resigned-again)
+                  (note! (raised-or (exn cml barrier) (barrier-wait ec)))
+                  (spawn (τ (barrier-wait ea)))
+                  (note! (raised-or
+                           (exn cml barrier)
+                           (sync (barrier-wait-evt ea))))
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 5536080 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/misuse-raises-whatever-the-other-branches"><a href="#test/barrier/misuse-raises-whatever-the-other-branches"><code>test/barrier/misuse-raises-whatever-the-other-branches</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/misuse-raises-whatever-the-other-branches _)
+  (⊦= '(raised raised raised raised raised nacked 1)
+      (cdr (run/log
+             (τ (let* ((b (make-barrier 0 add1))
+                       (e (barrier-enroll b))
+                       (b2 (make-barrier 0 add1))
+                       (r (barrier-enroll b2)))
+                  (note! (raised-or
+                           (exn cml barrier)
+                           (select (barrier-wait-evt e) (barrier-wait-evt e))))
+                  (barrier-resign r)
+                  (note! (raised-or
+                           (exn cml barrier)
+                           (select (barrier-wait-evt r) (always-evt 'ok))))
+                  (note! (raised-or
+                           (exn cml barrier)
+                           (select (always-evt 'ok) (barrier-wait-evt r))))
+                  (note! (raised-or
+                           (exn cml barrier)
+                           (sync (wrap-handler
+                                   (barrier-wait-evt r)
+                                   (λ (x) 'handled)))))
+                  (note! (raised-or
+                           (exn cml barrier)
+                           (select
+                             (barrier-wait-evt r)
+                             (with-nack
+                               (λ (nack)
+                                  (spawn (τ (sync nack) (note! 'nacked)))
+                                  (always-evt 'ok))))))
+                  (cml/sleep 0.01)
+                  (note! (barrier-wait e))
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5533360 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/update-raises"><a href="#test/barrier/update-raises"><code>test/barrier/update-raises</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/update-raises _)
+  (⊦= '((b raised) (a raised) 5 (b 6) (a 6))
+      (cdr (run/log
+             (τ (let* ((b (make-barrier
+                            5
+                            (let1 (n 0)
+                                  (λ (x)
+                                     (set! n (add1 n))
+                                     (if (= n 1) (error &quot;no&quot;) (add1 x))))))
+                       (ea (barrier-enroll b))
+                       (eb (barrier-enroll b)))
+                  (spawn (τ (note! (list 'a (raised-or (exn) (barrier-wait ea))))))
+                  (note! (list 'b (raised-or (exn) (barrier-wait eb))))
+                  (cml/yield)
+                  (note! (barrier-value ea))
+                  (spawn (τ (note! (list 'a (barrier-wait ea)))))
+                  (note! (list 'b (barrier-wait eb)))
+                  (cml/yield)
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5533472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/doc-example"><a href="#test/barrier/doc-example"><code>test/barrier/doc-example</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/doc-example _)
+  (⊦= '(5 5)
+      (cdr (run/log
+             (τ (let* ((clock (make-barrier 0 add1))
+                       (parent (barrier-enroll clock))
+                       (spawn-child
+                         (τ (let1 (e (barrier-enroll clock))
+                                  (spawn (τ (let loop ()
+                                              (if (= 5 (barrier-wait e))
+                                                (note! (barrier-value e))
+                                                (loop))))))))
+                       (ts (list (spawn-child) (spawn-child))))
+                  (barrier-resign parent)
+                  (for-each (λ (t) (sync (join-evt t))) ts)
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5535280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/predicates"><a href="#test/barrier/predicates"><code>test/barrier/predicates</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/predicates _)
+  (let* ((b (make-barrier 0 add1)) (e (barrier-enroll b)))
+    (⊨ (barrier? b))
+    (⊭ (barrier? e))
+    (⊨ (enrollment? e))
+    (⊭ (enrollment? b))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5536184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/one-sync-counts-once"><a href="#test/barrier/one-sync-counts-once"><code>test/barrier/one-sync-counts-once</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/one-sync-counts-once _)
+  (define (three)
+    (let1 (b (make-barrier 0 add1))
+          (list b (barrier-enroll b) (barrier-enroll b) (barrier-enroll b))))
+  (⊦= '((a raised) timeout 0)
+      (cdr (run/log
+             (τ (let* ((l (three)) (e1 (cadr l)) (e2 (caddr l)))
+                  (spawn (τ (note! (list 'a
+                                         (raised-or
+                                           (exn cml barrier)
+                                           (select
+                                             (barrier-wait-evt e1)
+                                             (barrier-wait-evt e1)))))))
+                  (note! (sync/timeout (barrier-wait-evt e2) 0.02 'timeout))
+                  (note! (barrier-value e1))
+                  (cml/shutdown))))))
+  (⊦= '(u-blocked 0)
+      (cdr (run/log
+             (τ (let* ((l (three))
+                       (e1 (cadr l))
+                       (e2 (caddr l))
+                       (e3 (cadddr l)))
+                  (spawn (τ (note! (list 't
+                                         (select
+                                           (barrier-wait-evt e1)
+                                           (barrier-wait-evt e2))))))
+                  (let1 (u (spawn (τ (note! (list 'u (barrier-wait e3))))))
+                        (note! (sync/timeout
+                                 (wrap (join-evt u) (λ ignored 'u-done))
+                                 0.02
+                                 'u-blocked))
+                        (note! (barrier-value e1))
+                        (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5542968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/barrier/wait-evt-in-choice"><a href="#test/barrier/wait-evt-in-choice"><code>test/barrier/wait-evt-in-choice</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/barrier/wait-evt-in-choice _)
+  (⊦= '(timeout (a 1) (b 1))
+      (cdr (run/log
+             (τ (let* ((bar (make-barrier 0 add1))
+                       (ea (barrier-enroll bar))
+                       (eb (barrier-enroll bar)))
+                  (note! (sync/timeout (barrier-wait-evt ea) 0.01 'timeout))
+                  (spawn (τ (note! (list 'b (barrier-wait eb)))))
+                  (note! (list 'a (barrier-wait ea)))
+                  (cml/yield)
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5538400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

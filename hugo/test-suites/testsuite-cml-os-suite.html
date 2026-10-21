@@ -1,0 +1,183 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/io-evt/pipe"><a href="#test/io-evt/pipe"><code>test/io-evt/pipe</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/io-evt/pipe _)
+  (receive
+    (in out)
+    (create-pipe)
+    (let1 (log (cdr (run/log
+                      (τ (spawn (τ (cml/sleep 0.02)
+                                   (note! 'writing)
+                                   (file-write out (string-&gt;utf8 &quot;hello\n&quot;))))
+                         (note! (list 'ready (= in (sync (io-evt in 'input)))))
+                         (note! (read-line (open-input-file* in)))
+                         (note! (list 'out (= out (sync (io-evt out 'output)))))
+                         (cml/shutdown)))))
+          (⊦= '(writing (ready #t) &quot;hello&quot; (out #t)) log))
+    (file-close out)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5524784 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/poll-evt"><a href="#test/poll-evt"><code>test/poll-evt</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/poll-evt _)
+  (receive
+    (in1 out1)
+    (create-pipe)
+    (receive
+      (in2 out2)
+      (create-pipe)
+      (let1 (log (cdr (run/log
+                        (τ (note! (sync/timeout
+                                    (poll-evt (list in1 'input) (list in2 'input))
+                                    0.02
+                                    'nothing))
+                           (spawn (τ (cml/sleep 0.01)
+                                     (file-write out2 (string-&gt;utf8 &quot;x&quot;))))
+                           (note! (sync (poll-evt (list in1 'input) (list in2 'input))))
+                           (file-write out1 (string-&gt;utf8 &quot;y&quot;))
+                           (note! (length
+                                    (sync (poll-evt (list in1 'input) (list in2 'input)))))
+                           (cml/shutdown)))))
+            (⊦= `(nothing ((,in2 input)) 2) log))
+      (⊦= `((,in1 input) (,in2 input))
+          (run/value
+            (τ (sync (poll-evt* (list (list in1 'input) (list in2 'input)))))))
+      (⊨ (eq? never-evt (poll-evt* '())))
+      (for-each file-close (list in1 out1 in2 out2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5525592 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/io-evt/yield-loop"><a href="#test/io-evt/yield-loop"><code>test/io-evt/yield-loop</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/io-evt/yield-loop _)
+  (receive
+    (in out)
+    (create-pipe)
+    (⊦= 'io-ready
+        (run/value
+          (τ (let1 (iv (make-ivar))
+                   (spawn (τ (sync (io-evt in 'input))
+                             (ivar-put! iv 'io-ready)))
+                   (file-write out (string-&gt;utf8 &quot;x&quot;))
+                   (let loop ((n 0))
+                     (cond ((pair? (ivar-get-poll iv))
+                            (car (ivar-get-poll iv)))
+                           ((&lt; n 1000000) (cml/yield) (loop (add1 n)))
+                           (else 'starved)))))))
+    (for-each file-close (list in out))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5529848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/io-evt/idle-waiters-do-not-slow-others"><a href="#test/io-evt/idle-waiters-do-not-slow-others"><code>test/io-evt/idle-waiters-do-not-slow-others</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/io-evt/idle-waiters-do-not-slow-others _)
+  (define (hand-off-time n)
+    (receive
+      (r w)
+      (create-pipe)
+      (let1 (t (run-cml
+                 (τ (for-each
+                      (λ (i) (spawn (τ (sync (io-evt r 'input)))))
+                      (iota n))
+                    (cml/sleep 0.02)
+                    (let ((ch (make-channel))
+                          (t0 (current-process-milliseconds)))
+                      (spawn (τ (let loop ((i 0))
+                                  (when (&lt; i 20000) (send ch i) (loop (add1 i))))))
+                      (let loop ((i 0))
+                        (when (&lt; i 20000) (recv ch) (loop (add1 i))))
+                      (cml/shutdown (- (current-process-milliseconds) t0))))))
+            (file-close r)
+            (file-close w)
+            t)))
+  (let* ((none (max 50 (hand-off-time 0))) (idle (hand-off-time 2000)))
+    (⊨ (&lt; idle (* 4 none)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.097) (memory #(12582912 5531448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/process-evt"><a href="#test/process-evt"><code>test/process-evt</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/process-evt _)
+  (let1 (log (cdr (run/log
+                    (τ (let* ((p1 (process-run &quot;true&quot;))
+                              (p2 (process-run &quot;sh&quot; '(&quot;-c&quot; &quot;exit 3&quot;)))
+                              (e1 (process-evt p1)))
+                         (note! (eq? e1 (process-evt p1)))
+                         (note! (sync (process-evt p2)))
+                         (note! (sync e1))
+                         (note! (sync e1))
+                         (cml/shutdown))))))
+        (⊦= '(#t (#t 3) (#t 0) (#t 0)) log))
+  (⊦= '(0 (#t 0) (#t 0) (#t 0) raised)
+      (cdr (run/log
+             (τ (for-each
+                  (λ (i) (sync (process-evt (process-run &quot;true&quot;))))
+                  (iota 20))
+                (note! (length %proc-memo))
+                (let ((p (process-run &quot;true&quot;)) (q (process-run &quot;true&quot;)))
+                  (note! (sync (process-evt p)))
+                  (note! (sync (process-evt p)))
+                  (note! (sync (process-evt (process-id q))))
+                  (note! (raised-or
+                           (exn)
+                           (sync (process-evt (process-id q))))))
+                (cml/shutdown))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(12582912 5534824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/process-evt/bad-pid"><a href="#test/process-evt/bad-pid"><code>test/process-evt/bad-pid</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/process-evt/bad-pid _)
+  (⊦= '(raised raised raised raised)
+      (run/value
+        (τ (map (λ (pid)
+                   (condition-case
+                     (begin (process-evt pid) 'no-raise)
+                     (e (exn) 'raised)))
+                (list 'y &quot;x&quot; 0 -1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5545096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/process-evt/keeps-run-alive"><a href="#test/process-evt/keeps-run-alive"><code>test/process-evt/keeps-run-alive</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/process-evt/keeps-run-alive _)
+  (⊦= '(done (#t 0))
+      (cdr (run/log
+             (τ (let1 (p (process-run &quot;sh&quot; '(&quot;-c&quot; &quot;sleep 0.05&quot;)))
+                      (spawn (τ (note! (sync (process-evt p)))))
+                      (note! 'done)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5547136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/symbol∼subscripts"><a href="#test/symbol∼subscripts"><code>test/symbol∼subscripts</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/symbol∼subscripts _) (⊦= 'g₁₂₃ (symbol∼subscripts 'g123)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1956912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/variable-printer"><a href="#test/variable-printer"><code>test/variable-printer</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/variable-printer _)
+  (⊦= &quot;g₁₂₃&quot; (display-&gt;string (V 'g123)))
+  (⊦= &quot;(g₁ hello)&quot; (display-&gt;string (list (V 'g1) (V 'hello)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1958504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fresh₁"><a href="#test/fresh₁"><code>test/fresh₁</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fresh₁ _)
+  (let ((g₁ (with-output-to-string (τ (fresh₁ display))))
+        (g₂ (with-output-to-string (τ (fresh₁ display)))))
+    (⊨ (gensym-subscripted? g₁))
+    (⊨ (gensym-subscripted? g₂))
+    (⊭ (equal? g₁ g₂)))
+  (fresh₁
+    (λ (v)
+       (⊨ (variable? v))
+       (⊦= (symbol-&gt;string (symbol∼subscripts (variable-s v)))
+           (display-&gt;string v)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1959936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fresh"><a href="#test/fresh"><code>test/fresh</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fresh _)
+  (let1 (vs (fresh (v w z) (list v w z)))
+        (⊦= 3 (length vs))
+        (⊨ (pairwise-different? vs))
+        (let1 (str (with-output-to-string (τ (display vs))))
+              (⊦= (string-append
+                    &quot;(&quot;
+                    (display-&gt;string (car vs))
+                    &quot; &quot;
+                    (display-&gt;string (cadr vs))
+                    &quot; &quot;
+                    (display-&gt;string (caddr vs))
+                    &quot;)&quot;)
+                  str)
+              (⊨ (and (gensym-subscripted? (display-&gt;string (car vs)))
+                      (gensym-subscripted? (display-&gt;string (cadr vs)))
+                      (gensym-subscripted? (display-&gt;string (caddr vs))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1960968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/variable-equal?"><a href="#test/variable-equal?"><code>test/variable-equal?</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/variable-equal? _)
+  (let ((one (V (gensym))) (two (V 'hello)) (three (V 'hello)))
+    (⊦= #f (equal? one two))
+    (⊦= #f (equal? one three))
+    (⊦= #t (equal? two three))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1962136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/V-rejects-non-symbols"><a href="#test/V-rejects-non-symbols"><code>test/V-rejects-non-symbols</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/V-rejects-non-symbols _)
+  (⊦= 'rejected (condition-case (begin (V 42) 'accepted) ((exn) 'rejected)))
+  (⊦= 'rejected (condition-case (begin (V &quot;g1&quot;) 'accepted) ((exn) 'rejected))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1968800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

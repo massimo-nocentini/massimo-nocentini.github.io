@@ -1,0 +1,99 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/delay-and-make-promise"><a href="#test/delay-and-make-promise"><code>test/delay-and-make-promise</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/delay-and-make-promise _)
+  (let* ((count (let1 (counter 0)
+                      (λ () (set! counter (add1 counter)) counter)))
+         (delayed_count (delay (count))))
+    (⊦= 1 (force delayed_count))
+    (⊦= 1 (force delayed_count))
+    (⊦= 1 (force delayed_count))
+    (⊦= 1 (force delayed_count))
+    (⊦= 1 (force delayed_count))
+    (let1 (promised_count (make-promise (count)))
+          (⊦= 2 (force promised_count))
+          (⊦= 2 (force promised_count))
+          (let1 (promised_ccount (make-promise (count)))
+                (⊦= 2 (force promised_count))
+                (⊦= 3 (force promised_ccount))
+                (⊦= 4 (count))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1866032 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/promise?"><a href="#test/promise?"><code>test/promise?</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/promise? _)
+  (⊨ (promise? (delay (+ 3 4))))
+  (⊨ (promise? (delay-force (+ 3 4)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1867224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/delay-force-filter"><a href="#test/delay-force-filter"><code>test/delay-force-filter</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/delay-force-filter _)
+  (letrec ((stream-filter/tailcall
+             (λ (p? s)
+                (delay-force
+                  (let1 (s-mature (force s))
+                        (if (null? s-mature)
+                          (delay '())
+                          (let-values
+                            (((h t) (car+cdr s-mature)))
+                            (if (p? h)
+                              (delay (cons h (stream-filter/tailcall p? t)))
+                              (stream-filter/tailcall p? t))))))))
+           (stream-filter/stackfull
+             (λ (p? s)
+                (delay (force (let1 (s-mature (force s))
+                                    (if (null? s-mature)
+                                      (delay '())
+                                      (let-values
+                                        (((h t) (car+cdr s-mature)))
+                                        (if (p? h)
+                                          (delay (cons h (stream-filter/stackfull p? t)))
+                                          (stream-filter/stackfull p? t)))))))))
+           (from (λ (n) (delay-force (cons n (from (+ n 1))))))
+           (large-number 10000))
+    (⊦= large-number
+        (car (force (stream-filter/tailcall
+                      (λ (n) (= n large-number))
+                      (from 0)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.031) (memory #(6291456 1869432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/force-non-promises"><a href="#test/force-non-promises"><code>test/force-non-promises</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/force-non-promises _)
+  (⊨ (procedure? (force (τ 3))))
+  (⊦= '3 (force (make-promise 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1870696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

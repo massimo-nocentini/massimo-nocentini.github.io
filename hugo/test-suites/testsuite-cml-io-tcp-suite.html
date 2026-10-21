@@ -1,0 +1,223 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/echo-server"><a href="#test/echo-server"><code>test/echo-server</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/echo-server _)
+  (let* ((l (tcp-listen 0 4 &quot;127.0.0.1&quot;))
+         (port (tcp-listener-port l))
+         (log (log-of
+                (τ (define (serve in out)
+                     (let loop ()
+                       (let1 (line (sync (input-line-evt in)))
+                             (if (eof-object? line)
+                               (begin
+                                 (close-input-port in)
+                                 (close-output-port out))
+                               (begin
+                                 (sync (write-string-evt
+                                         out
+                                         (string-append &quot;echo &quot; line &quot;\n&quot;)))
+                                 (loop))))))
+                   (define (client name)
+                     (let* ((io (sync (tcp-connect-evt &quot;127.0.0.1&quot; port)))
+                            (in (car io))
+                            (out (cadr io)))
+                       (let1 (replies
+                               (map (λ (i)
+                                       (sync (write-string-evt
+                                               out
+                                               (string-append name (number-&gt;string i) &quot;\n&quot;)))
+                                       (sync (input-line-evt in)))
+                                    (iota 3)))
+                             (close-output-port out)
+                             (let1 (end (sync (input-line-evt in)))
+                                   (close-input-port in)
+                                   (list name replies end)))))
+                   (spawn (τ (let loop ()
+                               (let1 (io (sync (tcp-accept-evt l)))
+                                     (spawn (τ (serve (car io) (cadr io))))
+                                     (loop)))))
+                   (let* ((r1 (make-result)) (r2 (make-result)))
+                     (spawn (τ (result-put! r1 (client &quot;a&quot;))))
+                     (spawn (τ (result-put! r2 (client &quot;b&quot;))))
+                     (note! (result-get r1))
+                     (note! (result-get r2)))))))
+    (tcp-close l)
+    (⊦= '((&quot;a&quot; (&quot;echo a0&quot; &quot;echo a1&quot; &quot;echo a2&quot;) #!eof)
+          (&quot;b&quot; (&quot;echo b0&quot; &quot;echo b1&quot; &quot;echo b2&quot;) #!eof))
+        log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(13631492 4150296 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/write-string-evt-sends-a-message-at-once"><a href="#test/write-string-evt-sends-a-message-at-once"><code>test/write-string-evt-sends-a-message-at-once</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/write-string-evt-sends-a-message-at-once _)
+  (let* ((l (tcp-listen 0 4 &quot;127.0.0.1&quot;))
+         (port (tcp-listener-port l))
+         (line (make-string 1000 #\m))
+         (r (run/value
+              (τ (spawn (τ (let* ((io (sync (tcp-accept-evt l)))
+                                  (in (car io))
+                                  (out (cadr io)))
+                             (let loop ()
+                               (let1 (s (sync (input-line-evt in)))
+                                     (unless
+                                       (eof-object? s)
+                                       (sync (write-string-evt out (string-append s &quot;\n&quot;)))
+                                       (loop))))
+                             (close-input-port in)
+                             (close-output-port out))))
+                 (let* ((io (sync (tcp-connect-evt &quot;127.0.0.1&quot; port)))
+                        (in (car io))
+                        (out (cadr io))
+                        (t0 (current-process-milliseconds))
+                        (ok (every-reply
+                              (λ ()
+                                 (sync (write-string-evt out (string-append line &quot;\n&quot;)))
+                                 (equal? line (sync (input-line-evt in)))))))
+                   (let1 (ms (- (current-process-milliseconds) t0))
+                         (close-output-port out)
+                         (close-input-port in)
+                         (list ok ms)))))))
+    (tcp-close l)
+    (⊨ (car r))
+    (⊨ (&lt; (cadr r) 400))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.01) (memory #(13631492 4196880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/accept-evt/timeout-then-accept"><a href="#test/accept-evt/timeout-then-accept"><code>test/accept-evt/timeout-then-accept</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/accept-evt/timeout-then-accept _)
+  (let* ((l (tcp-listen 0 4 &quot;127.0.0.1&quot;))
+         (port (tcp-listener-port l))
+         (log (log-of
+                (τ (note! (sync/timeout (tcp-accept-evt l) 0.02 'nobody))
+                   (spawn (τ (cml/sleep 0.02)
+                             (let1 (io (sync (tcp-connect-evt &quot;127.0.0.1&quot; port)))
+                                   (sync (write-string-evt (cadr io) &quot;hi\n&quot;))
+                                   (close-output-port (cadr io))
+                                   (close-input-port (car io)))))
+                   (let1 (io (sync (tcp-accept-evt l)))
+                         (note! (sync (input-line-evt (car io))))
+                         (note! (sync (input-line-evt (car io))))
+                         (close-input-port (car io))
+                         (close-output-port (cadr io)))))))
+    (tcp-close l)
+    (⊦= '(nobody &quot;hi&quot; #!eof) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4181464 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/accept-evt/losing-branch"><a href="#test/accept-evt/losing-branch"><code>test/accept-evt/losing-branch</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/accept-evt/losing-branch _)
+  (let* ((l (tcp-listen 0 4 &quot;127.0.0.1&quot;))
+         (port (tcp-listener-port l))
+         (log (log-of
+                (τ (receive
+                     (cin cout)
+                     (tcp-connect &quot;127.0.0.1&quot; port)
+                     (let1 (got (map (λ (i)
+                                        (select
+                                          (wrap (tcp-accept-evt l)
+                                                (λ (io)
+                                                   (close-input-port (car io))
+                                                   (close-output-port (cadr io))
+                                                   'accepted))
+                                          (always-evt 'other)))
+                                     (iota 4)))
+                           (note! (count (λ (x) (eq? x 'accepted)) got))
+                           (note! (tcp-accept-ready? l)))
+                     (close-input-port cin)
+                     (close-output-port cout))))))
+    (tcp-close l)
+    (⊦= '(1 #f) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(13631492 4183288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/accept-evt/two-acceptors-one-connection"><a href="#test/accept-evt/two-acceptors-one-connection"><code>test/accept-evt/two-acceptors-one-connection</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/accept-evt/two-acceptors-one-connection _)
+  (let* ((l (tcp-listen 0 4 &quot;127.0.0.1&quot;)) (port (tcp-listener-port l)))
+    (receive
+      (cin cout)
+      (tcp-connect &quot;127.0.0.1&quot; port)
+      (let1 (r (run/log
+                 (τ (for-each
+                      (λ (tag)
+                         (spawn (τ (let1 (io (sync (tcp-accept-evt l)))
+                                         (note! 'accepted)
+                                         (close-input-port (car io))
+                                         (close-output-port (cadr io))))))
+                      '(a b))
+                    (spawn (τ (cml/sleep 0.2) (cml/shutdown 'watchdog)))
+                    (cml/exit))
+                 #:quantum
+                 1))
+            (close-input-port cin)
+            (close-output-port cout)
+            (tcp-close l)
+            (⊦= '(watchdog accepted) r)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4186456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/utf-8-split-across-segments"><a href="#test/utf-8-split-across-segments"><code>test/utf-8-split-across-segments</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/utf-8-split-across-segments _)
+  (let* ((l (tcp-listen 0 4 &quot;127.0.0.1&quot;))
+         (port (tcp-listener-port l))
+         (log (parameterize
+                ((tcp-read-timeout 2000))
+                (log-of
+                  (τ (let* ((c (sync (tcp-connect-evt &quot;127.0.0.1&quot; port)))
+                            (s (sync (tcp-accept-evt l)))
+                            (fd (port-&gt;fileno (cadr c)))
+                            (ticks 0))
+                       (spawn (τ (let loop ()
+                                   (cml/sleep 0.01)
+                                   (set! ticks (add1 ticks))
+                                   (loop))))
+                       (spawn (τ (file-write fd (bytevector 99 97 102 195))
+                                 (cml/sleep 0.1)
+                                 (file-write fd (bytevector 169 33 10))))
+                       (note! (condition-case
+                                (sync (input-line-evt (car s)))
+                                (e () 'blocked)))
+                       (note! (&gt; ticks 3))
+                       (for-each close-input-port (list (car c) (car s)))
+                       (for-each
+                         close-output-port
+                         (list (cadr c) (cadr s)))))))))
+    (tcp-close l)
+    (⊦= '(&quot;café!&quot; #t) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4098512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

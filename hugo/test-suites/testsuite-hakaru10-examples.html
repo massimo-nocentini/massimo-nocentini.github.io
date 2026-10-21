@@ -1,0 +1,782 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section2617">
+<header>
+<h1>Examples</h1></header></section>
+<p>Section 3 of the paper <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/design.pdf"><i>Probabilistic Programming Language and its Incremental Evaluation</i></a></cite> (APLAS 2016, <cite><a href="https://doi.org/10.1007/978-3-319-47958-3_19">DOI 10.1007/978-3-319-47958-3_19</a></cite>) evaluates Hakaru10 on two realistic models; quoting design.txt l.454-460:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>The Hakaru10 tutorial might have given an impression that Hakaru10 tries so
+                  hard to preclude problematic behavior, by restricting conditioning and models,
+                  that one cannot do much interesting in it. In this section we briefly evaluate
+                  the expressiveness of the language on two realistic models.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<p>The two models are the Bayesian linear regression of the PPAML small problems
+                collection (problem 4.1) and the population estimation of Milch et al.'s
+                colored balls.  To them the <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/index.html">Hakaru10 page</a></cite> adds the <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/index.html#bird-migration">bird migration problem</a></cite> of the PPAML challenge, which these tests run on synthetic data (the real
+                data run is <code class="w3-codespan">hakaru10-birds.scm</code>, opt-in).  Upstream's <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/ColoredBalls.hs">ColoredBalls.hs</a></cite> and <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/Birds1.hs">Birds1.hs</a></cite> are transcribed definition by definition; the regression exists only in the
+                paper, with its helpers in Birds1.hs.</p>
+<p>Each model is a computation of the State monad that threads the chain, as
+                upstream's <code class="w3-codespan">Model a = MCMCM (SExp a)</code> (Syntax.hs:82), written with <code class="w3-codespan">do/monad</code> as the Haskell
+                is written with <code class="w3-codespan">do</code>: <code class="w3-codespan">dist</code>, <code class="w3-codespan">diracN</code> and <code class="w3-codespan">if_</code> are models, and <code class="w3-codespan">mcmC</code> runs one under the MCMC engine.  The oracles walk the
+                trace graph of one build of the same model: exact enumeration (<code class="w3-codespan">exact-posterior</code>) and the forward sampler (<code class="w3-codespan">likelihood-weighting</code>, <code class="w3-codespan">weighted-samples</code>).  So the same <code class="w3-codespan">cballs-model</code> is checked by MCMC, by
+                likelihood weighting and, on a smaller urn, by exact enumeration, against a
+                closed form; and the generative half of the bird and the regression models, run
+                forward from seed 17, simulates the data that their conditioned versions then
+                explain.  The construction check rebuilds the model, which must give the same
+                graph, values and log-likelihoods, and redraws its choices in address order,
+                which must give back the values and the log-likelihood of the initial trace.</p>
+<p>Nodes are created when a model runs, in bind order: <code class="w3-codespan">do/monad</code> top to bottom, and <code class="w3-codespan">replicate/monad</code>, <code class="w3-codespan">traverse/monad</code>, <code class="w3-codespan">for-each/monad</code> and <code class="w3-codespan">fold/monad</code> head first, upstream's <code class="w3-codespan">sequence . replicate</code>, <code class="w3-codespan">mapM</code>, <code class="w3-codespan">mapM_</code> and <code class="w3-codespan">foldM_</code>: creation order is the topological order of the trace (design.txt
+                l.791-794).  A chain of <code class="w3-codespan">if_</code> is built by <code class="w3-codespan">fold-right</code> over models, which create no node until the
+                outermost one runs, and <code class="w3-codespan">if_</code> delays its branches until it
+                builds them, which reproduces upstream's <code class="w3-codespan">foldr</code> node for node: at 10000 samples the colored balls' histogram is upstream's
+                own record (hakaru10-replay, X14).</p>
+<h2 id="test/colored-balls"><a href="#test/colored-balls"><code>test/colored-balls</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C1.  Population estimation, from Milch et al.'s <cite><a href="http://people.csail.mit.edu/milch/papers/blog-chapter.pdf">BLOG: Probabilistic Models with Unknown Objects</a></cite> (Introduction to Statistical Relational Learning, MIT Press, 2007, pp.
+              373-398), example 1.1, as ColoredBalls.hs:1-13 quotes it:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>An urn contains an unknown number of balls--say, a number chosen from a
+                Poisson or a uniform distributions. Balls are equally likely to be blue or
+                green. We draw some balls from the urn, observing the color of each and
+                replacing it. We cannot tell two identically colored balls apart;
+                furthermore, observed colors are wrong with probability 0.2.  How many balls
+                are in the urn? Was the same ball drawn twice?</i>
+<footer>
+<p class="w3-right-align">Milch et al.</p></footer></blockquote></p>
+<p>The <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/index.html#colored-balls">Hakaru10 page</a></cite> (index.html:111) calls it an elegant example of a model with an indefinite
+              number of objects whose real identity is unobservable, a simplified population
+              estimation, which in Hansei makes the case for the memoization of stochastic
+              functions; the paper (design.txt l.519-520) notes that it motivated BLOG,
+              being hard to implement in many probabilistic languages.  Hakaru10 bounds the
+              number of balls and pre-allocates one color per ball, which the unused branches
+              marginalize (design.txt l.531-544); its footnote 5 (l.566-569) wishes for lazily
+              instantiated branches instead.  Upstream's model, ColoredBalls.hs:28-44 and
+              74-103:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">data Color = Blue | Green deriving (Eq, Show)
+
+opposite_color :: Color -&gt; Color
+opposite_color Blue  = Green
+opposite_color Green = Blue
+
+-- Distribution for the observing of a ball, with the failure rate 20%
+observed_color color =
+  categorical [(color,0.8),(opposite_color color,0.2)]
+
+maxBalls :: Int
+maxBalls = 8
+
+-- Create the prior for the max amount of balls that may be in the urn
+balls_prior n = do
+  balls &lt;- sequence . replicate n $ dist uniformly (pure [Blue,Green])
+  return $ M.fromList $ zip [1..] balls</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Submodel: Given balls color and the observations, perform conditioning
+balls_observe :: M.IntMap (SExp Color) -&gt; [Color] -&gt; Int -&gt; Model ()
+balls_observe balls obs nballs = mapM_ observe_ball obs &gt;&gt; return (pure ())
+ where
+  -- The same ball can be drawn twice as we return the drawn balls
+  -- into the urn. A ball keeps its true color, no matter how many
+  -- times it is drawn.
+   observe_ball color = do
+        b &lt;- dist uniformly (pure [1..nballs])
+        -- It is more efficient to create if statements, rather than
+        -- create an SExp(IntMap Color).
+        let observe i =
+              let true_color = balls ! i in
+              if_ ((== i) &lt;$&gt; b) $
+                dist (color `condition` observed_color) true_color
+        foldr observe (return (pure color)) [1..maxBalls]
+
+-- The model takes a list of observations as an argument
+cballs_model :: [Color] -&gt; Model Int
+cballs_model obs = do
+  balls  &lt;- balls_prior maxBalls
+  nballs &lt;- dist uniformly (pure [1..maxBalls])
+  let obs_number i =
+        if_ ((== i) &lt;$&gt; nballs) $ balls_observe balls obs i
+  foldr obs_number (return (pure())) [1..maxBalls]
+  return nballs
+
+cbr = hist $ mcmC 10000 (cballs_model (replicate 10 Blue))
+
+-- fromList [(1,4265),(2,2203),(3,1244),(4,805),(5,486),(6,291),(7,565),(8,141)]
+-- Good agreement</code></pre></div>
+<p>In Scheme, with <code class="w3-codespan">dispatch</code> the two <code class="w3-codespan">foldr</code>s of nested <code class="w3-codespan">if_</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(begin
+  (define (opposite-color color) (case color ((blue) 'green) ((green) 'blue)))
+  (define (observed-color color)
+    (categorical `((,color . 0.8) (,(opposite-color color) . 0.2))))
+  (define (balls-prior n)
+    (do/monad
+      (← balls (replicate/monad n (dist uniformly '(blue green))))
+      (return (map cons (iota n 1) balls))))
+  (define (dispatch x keys branch otherwise)
+    (fold-right
+      (λ (key rest) (if_ (lift (cut equal? &lt;&gt; key) x) (branch key) rest))
+      otherwise
+      keys))
+  (define (balls-observe balls obs nballs max-balls)
+    (&gt;&gt; (for-each/monad
+          (λ (color)
+             (do/monad
+               (← b (dist uniformly (iota nballs 1)))
+               (dispatch
+                 b
+                 (iota max-balls 1)
+                 (λ (i)
+                    (dist (condition color observed-color)
+                          (alist-ref i balls)))
+                 (return color))))
+          obs)
+        (return (void))))
+  (define (cballs-model obs #!optional (max-balls 8))
+    (do/monad
+      (← balls (balls-prior max-balls))
+      (← nballs (dist uniformly (iota max-balls 1)))
+      (dispatch
+        nballs
+        (iota max-balls 1)
+        (λ (n) (balls-observe balls obs n max-balls))
+        (return (void)))
+      (return nballs))))
+</code></pre></div>
+<p>Given that ten balls were drawn and all looked blue, the posterior of the
+              number of balls has a closed form: with 
+<mtext>n</mtext> balls of which 
+<mtext>k</mtext> are blue, a drawn ball looks blue with probability 
+<mtext>pₙ,ₖ = (0.8k + 0.2(n − k))/n</mtext>, so</p>
+<math display="block">
+<mtext>P(n | obs) ∝ Σₖ₌₀ⁿ C(n, k) 2⁻ⁿ pₙ,ₖ¹⁰,   n = 1, …, 8</mtext></math>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (cballs-closed-form max-balls obs)
+  (define (binomial n k)
+    (fold (λ (i c) (/ (* c (- n i)) (add1 i))) 1 (iota k)))
+  (define (seen color n k)
+    (let1 (blue (/ (+ (* 0.8 k) (* 0.2 (- n k))) n))
+          (if (eq? color 'blue) blue (- 1.0 blue))))
+  (define (likelihood n)
+    (fold (λ (k acc)
+             (+ acc
+                (* (binomial n k)
+                   (expt 2.0 (- n))
+                   (fold (λ (color p) (* p (seen color n k))) 1.0 obs))))
+          0.0
+          (iota (add1 n))))
+  (let* ((ls (map likelihood (iota max-balls 1))) (z (fold + 0.0 ls)))
+    (map (λ (n l) (cons n (/ l z))) (iota max-balls 1) ls)))
+</code></pre></div>
+<p>which is 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 0.41196368095257)
+ (2 0.209728624754566)
+ (3 0.120691976674053)
+ (4 0.0801847685132436)
+ (5 0.0590318166419537)
+ (6 0.046603790739908)
+ (7 0.0386298621005105)
+ (8 0.0331654796231948))
+</code></pre></div>(Hansei's importance sampling gives .4164, .2114, .1238, .0778,
+              .0560, .0445, .0384, .0318, ColoredBalls.hs:139-147, and BLOG's Fig. 1.7 agrees).
+              The closed form is first checked against exact enumeration of the same <code class="w3-codespan">cballs-model</code> on an urn of at most 3 balls with 4 blue
+              observations, <code class="w3-codespan">(exact-posterior (cballs-model (make-list 4 'blue) 3))</code>, within 
+<mtext>10⁻¹²</mtext>: 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 . 0.457651641624931) (2 . 0.298386199220923) (3 . 0.243962159154146))
+</code></pre></div>; the enumerator walks the trace graph of one build, branching over the support
+              of each active random choice, and jumps over the branches of the <code class="w3-codespan">dispatch</code> that its tests leave inactive.  With 8
+              balls and 10 observations enumeration is out of reach (the paths number 
+<mtext>2⁸ · 8¹¹</mtext>), so the full model is checked by sampling:</p>
+<ul>
+<li>MCMC, 20000 samples from seed 17: P(1) within .13 of the exact .41196 (over seeds
+                   1-20 P(1) has mean .417 and sd .030, so .13 is about 4.3 sd), and
+                   P(1) &gt; P(2) &gt; P(3): 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 0.4397)
+ (2 0.2066)
+ (3 0.11305)
+ (4 0.0882)
+ (5 0.04605)
+ (6 0.05185)
+ (7 0.0448)
+ (8 0.00975))
+</code></pre></div>Single-site MH mixes slowly here: CB:46-49 explains why upstream dispatches
+                   on the number of balls first, since nballs and the drawn balls are strongly
+                   correlated; C1′ runs the model it set aside.</li>
+<li>Likelihood weighting, 10000 forward runs of the same model weighted by their
+                   observations: every probability within .05 of the closed form: 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 0.418438355439409)
+ (2 0.212643519168293)
+ (3 0.111059542060967)
+ (4 0.0904212532791994)
+ (5 0.0568639053222174)
+ (6 0.0442100525842873)
+ (7 0.0347098277987992)
+ (8 0.0316535443468282))
+</code></pre></div></li></ul>
+<p>The paper reports 16 seconds for 10000 samples in GHCi bytecode (design.txt
+              l.609-616), against Hansei's 13.4 s for 5000 importance samples and BLOG's 35
+              s.  Hakaru10 has no counterpart of the second question, whether the same ball was
+              drawn twice, which only Hansei answers (ColoredBalls.hs:154-185: a 25% chance that
+              some ball was drawn only once).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/colored-balls _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 2.51) (memory #(12582912 3243232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/colored-balls/direct"><a href="#test/colored-balls/direct"><code>test/colored-balls/direct</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C1′.  ColoredBalls.hs:46-72 keeps, commented out, a first version of <code class="w3-codespan">cballs_model</code> in which every drawn ball is uniform among the <code class="w3-codespan">nballs</code> balls, a support that depends on a random variable:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">{-
+Problem with the following model: nballs and b below are strongly correlated.
+Hence if nballs is drawn as 5 and b is drawn as, say, 3, all the
+proposals to resample nbalss as 1 or 2 will be rejected.
+
+-- The model takes an array of observations as an argument
+cballs_model :: [Color] -&gt; Model Int
+cballs_model obs = do
+  balls  &lt;- balls_prior maxBalls
+  nballs &lt;- dist uniformly (pure [1..maxBalls])
+  -- The same ball can be drawn twice as we return the drawn balls
+  -- into the urn. A ball keeps its true color, no matter how many
+  -- times it is drawn.
+  let observe_ball color = do
+        b &lt;- dist uniformly ((\n -&gt; [1..n]) &lt;$&gt; nballs)
+        -- It is more efficient to create if statements, rather than
+        -- create an SExp(IntMap Color).
+        let observe i =
+              let true_color = balls ! i in
+              if_ ((== i) &lt;$&gt; b) $
+                dist (color `condition` categorical)
+                     ((\bc -&gt; [(bc,0.8),(opposite_color bc,0.2)]) &lt;$&gt;
+                      true_color)
+        foldr observe (return (pure color)) [1..maxBalls]
+  mapM_ observe_ball obs
+  return nballs
+-}</code></pre></div>
+<p>In Scheme the support is <code class="w3-codespan">(lift (λ (n) (iota n 1)) nballs)</code> and the inlined categorical is <code class="w3-codespan">observed-color</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (cballs-model/direct obs #!optional (max-balls 8))
+  (do/monad
+    (← balls (balls-prior max-balls))
+    (← nballs (dist uniformly (iota max-balls 1)))
+    (for-each/monad
+      (λ (color)
+         (do/monad
+           (← b (dist uniformly (lift (λ (n) (iota n 1)) nballs)))
+           (dispatch
+             b
+             (iota max-balls 1)
+             (λ (i)
+                (dist (condition color observed-color) (alist-ref i balls)))
+             (return color))))
+      obs)
+    (return nballs)))
+</code></pre></div>
+<p>It is the same model: exact enumeration on the urn of at most 3 balls with 4
+              blue observations gives the closed form within 
+<mtext>10⁻¹²</mtext>, 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 . 0.457651641624931) (2 . 0.298386199220923) (3 . 0.243962159154146))
+</code></pre></div>and its graph is smaller, 19 resampleable nodes (8 colors,
+              nballs and one ball per observation) against the 89 of C1, whose branches each
+              draw their own balls.  But it mixes badly, for the reason CB:47-49 gives: a
+              proposal of a smaller nballs makes some drawn ball's log-density 
+<mtext>−∞</mtext> and is rejected, while a drawn ball may only move within the current
+              nballs.  At 20000 samples from seed 17, nballs moves 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">26
+</code></pre></div>times, against the 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">302
+</code></pre></div>of C1's chain (fewer than a fifth), and the posterior of the chain, 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((2 0.41845)
+ (3 0.01495)
+ (4 0.1611)
+ (5 0.22275)
+ (6 0.0668)
+ (7 0.08425)
+ (8 0.0317))
+</code></pre></div>misses P(1) = .41196 by more than .2.  Hence upstream's dispatch on the number of
+              balls first (CB:91-99), whose branches redraw the balls whenever nballs changes.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/colored-balls/direct _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.719) (memory #(12582912 4205872 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/birds/neighbors"><a href="#test/birds/neighbors"><code>test/birds/neighbors</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C2.  The grid of the <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/BirdMigrationProblem.pdf">PPAML challenge problem: bird migration</a></cite> (Tom Dietterich and Shahed Sorower, version 6, August 30, 2014): cells are
+            numbered in Matlab order, column major (BirdMigrationProblem.txt:103-122, 140), so
+            that on the 4x4 grid of the 1-bird data set cell 1 is the bottom-left corner, 4 the
+            top-left, 13 the bottom-right and 16 the top-right; <code class="w3-codespan">divMod (n-1) 4</code> answers the column and the row.  A bird flies at most 
+<mtext>dₘₐₓ = 3√2 ≈ 4.2426</mtext> units a night (l.58-59), which
+            Birds1.hs:87-93 compares squared:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">neighbors :: CellNum -&gt; [CellNum]
+neighbors n = filter (\i -&gt; dist n i &lt;= d_max) [1..nCells]
+ where
+  dist n m = let (ix,iy) = divMod (n-1) gridDim
+                 (jx,jy) = divMod (m-1) gridDim
+             in (ix-jx)^2+(iy-jy)^2
+  d_max = 18</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(begin
+  (define (cell-&gt;xy n #!optional (dim grid-dim))
+    (let1 (m (sub1 n)) (cons (quotient m dim) (remainder m dim))))
+  (define squared-distance
+    (Λ ((,ix unquote iy) (,jx unquote jy))
+       (+ (* (- ix jx) (- ix jx)) (* (- iy jy) (- iy jy)))))
+  (define (neighbors n #!optional (dim grid-dim))
+    (let1 (from (cell-&gt;xy n dim))
+          (filter
+            (λ (m) (&lt;= (squared-distance from (cell-&gt;xy m dim)) 18))
+            (iota (* dim dim) 1)))))
+</code></pre></div>
+<p>The 4x4 grid's diagonal is 
+<mtext>3√2</mtext> itself, so every cell neighbors
+            every cell, itself included.  On a 10x10 grid (the 1000-birds data set,
+            l.202-204) cell 1 reaches the 20 cells 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(1 2 3 4 5 11 12 13 14 15 21 22 23 24 31 32 33 34 41 42)
+</code></pre></div></p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/birds/neighbors _)
+  (⊦ equal? '((0 . 0) (0 . 3) (3 . 0) (3 . 3)) (map cell-&gt;xy '(1 4 13 16)))
+  (⊦ equal?
+     '((0 . 0) (0 . 9) (9 . 0) (9 . 9))
+     (map (cut cell-&gt;xy &lt;&gt; 10) '(1 10 91 100)))
+  (⊨ (every (λ (n) (equal? (iota 16 1) (neighbors n))) (iota 16 1)))
+  (⊦ equal?
+     '(1 2 3 4 5 11 12 13 14 15 21 22 23 24 31 32 33 34 41 42)
+     (neighbors 1 10))
+  (⊦ = 20 (length (neighbors 1 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3250680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/birds/transitions"><a href="#test/birds/transitions"><code>test/birds/transitions</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C3.  The migration model is log-linear (BirdMigrationProblem.txt:32-33, 60-79):
+              the potential of a flight from cell 
+<mtext>i</mtext> to cell 
+<mtext>j</mtext> is the dot product of the parameters with its four features, and the
+              probability of the flight is its exponential, normalized over the cells within 
+<mtext>dₘₐₓ</mtext>:</p>
+<math display="block">
+<mtext>θₜ,ₜ₊₁(i, j) = </mtext>
+<mfrac>
+<mtext>exp βᵀxₜ,ₜ₊₁(i, j)</mtext>
+<mtext>Σⱼ′ exp βᵀxₜ,ₜ₊₁(i, j′)</mtext></mfrac></math>
+<p>Birds1.hs computes the numerators, <code class="w3-codespan">phi</code> (B1:82-85) and <code class="w3-codespan">theta</code> (B1:95-99), and leaves the normalization to <code class="w3-codespan">categorical</code> (Distribution.hs:87-91), which divides each weight
+              by their sum; <code class="w3-codespan">birdpos</code> (B1:76-80) finds the bird where exactly
+              one cell counts it:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- where is the single bird on the day d of the year y
+birdpos :: ObsData -&gt; Year -&gt; Day -&gt; Maybe CellNum
+birdpos obs y d = case [i | i &lt;- [1..nCells], obs ! (y,d,i) &gt; 0] of
+  [i] -&gt; Just i
+  _   -&gt; Nothing</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">phi :: Year -&gt; Day -&gt; CellNum -&gt; CellNum -&gt; Features -&gt; [Double] -&gt; Double
+phi y d from to features bs = sum $ zipWith (*) fs bs
+  where
+    fs = [ realToFrac $ features ! (y, d, from, to, i) | i &lt;- [1..nFeatures]]</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- multinomial (0; a,b,c) --&gt; 0
+-- multinomial (1,theta(i,1),,,theta(i,16))  --&gt;
+--     categorical [(1,theta(i,1)),(2,(theta(i,2))),... (16,theta(i,16))]
+theta :: Year -&gt; Day -&gt; CellNum -&gt; CellNum -&gt; Features -&gt; [Double] -&gt; Double
+theta y d from to features bs = exp $ phi y d from to features bs</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(begin
+  (define (phi fs bs) (fold + 0.0 (map * fs bs)))
+  (define (theta fs bs) (exp (phi fs bs)))
+  (define ((transitions features year day) n bs)
+    (map (λ (j) (cons j (theta (features year day n j) bs))) (neighbors n)))
+  (define (birdpos obs year day)
+    (match/first
+      (filter (λ (i) (positive? (obs year day i))) (iota n-cells 1))
+      ((,i) i)
+      (else #f))))
+</code></pre></div>
+<p>The checks: the weights of the flights from cell 6 on the first night, under 
+<mtext>β = (1, 2, 0.5, 1)</mtext>, come out of <code class="w3-codespan">categorical</code> as probabilities summing to 1 within 
+<mtext>10⁻¹²</mtext>, each its weight over the total; staying has the features (0 0 0 2), so its
+              weight is 
+<mtext>e²</mtext>; <code class="w3-codespan">birdpos</code> finds the bird on days 1
+              and 2 (a count of 2 in one cell still is one cell) and not on day 3 (two cells)
+              or day 4 (none).</p>
+<p>Each count is a Poisson observation whose intensity is the number of birds in
+              the cell, 0 or 1 with one bird (l.134-138, D:358-367): seeing no bird where it
+              is has LL 
+<mtext>−1</mtext>, seeing it once 
+<mtext>log 1 − 1 = −1</mtext>, twice 
+<mtext>log(1/2) − 1</mtext>; where it is not, seeing none has LL 
+<mtext>−0</mtext> and seeing any has 
+<mtext>−∞</mtext>, which pins the bird to the
+              cell where it was seen:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">  logDensity (Poisson lambda expl) x
+    | x == 0      = -lambda
+    | lambda == 0 = minusInf
+    | x == 1      = log lambda - lambda
+    | x == 2      = log (lambda*lambda/2) - lambda</code></pre></div>
+<p>cf. Distribution.hs:361-365.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/birds/transitions _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3263336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/birds/synthetic"><a href="#test/birds/synthetic"><code>test/birds/synthetic</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C4.  The bird migration problem, quoting the <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/index.html#bird-migration">Hakaru10 page</a></cite> (index.html:122-128):
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Bird migration problem was one of the Challenge problems of the DARPA PPAML
+                (Probabilistic Programming for Advanced Machine Learning) Program. The goal was
+                to estimate the model parameters from the set of bird migration observations
+                over the period of thirty years. The migration model is a log-linear model with
+                four parameters that gives the probability of a bird flying from cell i to cell
+                j under given conditions.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<p>The problem statement (BirdMigrationProblem.txt:19-79) models the population as
+              a collective graphical model: every night each bird flies from cell 
+<mtext>i</mtext> to cell 
+<mtext>j</mtext> with probability 
+<mtext>θ(i, j)</mtext>, and the birds counted in a cell are Poisson of the birds there.  Its first
+              data set has one bird on a 4x4 grid for 30 years of 20 days: each year the bird
+              starts in the bottom-left cell and heads for the top-right one, a fully observed
+              input-output HMM (l.103-105); the task is to estimate 
+<mtext>β₁, …, β₄</mtext> (l.179-182), whose prior may be the absolute
+              value of a zero-mean Gaussian of sd 10, the features being coded so that every
+              parameter should be non-negative (l.457-464).  Birds1.hs:50-74 is the model of
+              Sasaki Shoichiro's 2018 bachelor thesis, which, the page says, closely reflects
+              the specification:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">model :: Features -&gt; ObsData -&gt; Model [Double]
+model features obs = do
+  b1  &lt;- abs &lt;$&gt; dist normal 0 10 -- see Statement of Problem, p9
+  b2  &lt;- abs &lt;$&gt; dist normal 0 10 -- see Statement of Problem, p9
+  b3  &lt;- abs &lt;$&gt; dist normal 0 10 -- see Statement of Problem, p9
+  b4  &lt;- abs &lt;$&gt; dist normal 0 10 -- see Statement of Problem, p9
+  let bs = collect [b1,b2,b3,b4]
+  forM_ [1..nYears] $ \year -&gt; do -- each year
+    foldM_ (\n day -&gt; do -- one bird exists in cell n on each day(1..nDays-1)
+      let trans n bs = [ (j,theta year day n j features bs) | j&lt;-neighbors n]
+      -- n' cell where the bird is on day+1
+      let day' = day + 1
+      {-
+      n' &lt;- case birdpos obs year day' of
+          Just nreal -&gt; dist (nreal `condition` categorical) $
+                        liftA2 trans n bs
+          Nothing    -&gt; dist categorical $ liftA2 trans n bs
+      -}
+      n' &lt;- dist categorical $ liftA2 trans n bs
+      forM_ [1..nCells] $ \i -&gt;
+        dist (fromIntegral (obs ! (year,day',i)) `condition` poisson)
+           ((\nv -&gt; if i==nv then 1 else 0) &lt;$&gt; n')
+      return n'
+      ) (1 :: SExp Int) [1..nDays-1]
+  return bs</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (birds features obs #!key (years 30) (days 20) (pin #t))
+  (do/monad
+    (← betas
+       (replicate/monad
+         n-features
+         (&lt;$&gt; (cut lift abs &lt;&gt;) (dist normal 0.0 10.0))))
+    (let bs (collect betas))
+    (for-each/monad
+      (λ (year)
+         (fold/monad
+           (λ (n day)
+              (do/monad
+                (let day′ (add1 day))
+                (let trans (lift (transitions features year day) n bs))
+                (let nreal (and pin (birdpos obs year day′)))
+                (← n′
+                   (dist (if nreal (condition nreal categorical) categorical)
+                         trans))
+                (for-each/monad
+                  (λ (i)
+                     (dist (condition (obs year day′ i) poisson)
+                           (lift (λ (nv) (if (= i nv) 1 0)) n′)))
+                  (iota n-cells 1))
+                (return n′)))
+           1
+           (iota (sub1 days) 1)))
+      (iota years 1))
+    (return bs)))
+</code></pre></div>
+<p><code class="w3-codespan">forM_</code> is <code class="w3-codespan">for-each/monad</code>, <code class="w3-codespan">foldM_</code> is <code class="w3-codespan">fold/monad</code>, threading the bird's cell, <code class="w3-codespan">liftA2</code> is <code class="w3-codespan">lift</code>, and the four <code class="w3-codespan">abs &lt;$&gt; dist normal 0 10</code> are made by <code class="w3-codespan">replicate/monad</code>.  The test uses upstream's
+              commented-out alternative
+              (B1:62-67), <code class="w3-codespan">#:pin #t</code>: on a day where the bird is seen its cell
+              is observed, elsewhere it is drawn.  The posterior of 
+<mtext>β</mtext> is the same, but B1:68 alone draws the cell of every day and needs
+              all the observed ones guessed right for a finite initial trace: on the synthetic
+              data below its build at seed 17 has an LL of 
+<mtext>−∞</mtext>, which the construction check reports as <code class="w3-codespan">skipped</code>.</p>
+<p>The synthetic data set has 2 years of 6 days.  Its features follow
+              the covariates of the problem's FAQ (l.430-443), with a wind drawn each night from
+              seed 17; its flights are simulated by running the generative half of the model,
+              with 
+<mtext>β = (1, 2, 0.5, 1)</mtext>, under the forward sampler:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(begin
+  (define (synthetic-features years days #!key (seed 17))
+    (define (lognpdf x mu sigma)
+      (/ (exp (- (/ (expt (- (log x) mu) 2) (* 2.0 sigma sigma))))
+         (* x sigma (sqrt (* 2.0 pi)))))
+    (define (cosine u v)
+      (let ((nu (sqrt (squared-distance u '(0 . 0))))
+            (nv (sqrt (squared-distance v '(0 . 0)))))
+        (if (or (zero? nu) (zero? nv))
+          0.0
+          (/ (+ (* (car u) (car v)) (* (cdr u) (cdr v))) (* nu nv)))))
+    (define (vector-to p q) (cons (- (car q) (car p)) (- (cdr q) (cdr p))))
+    (let* ((src (make-stdgen-source seed))
+           (winds (list-&gt;vector
+                    (map-in-order
+                      (λ (_)
+                         (receive
+                           (angle ll)
+                           (distribution-sample (uniform 0.0 (* 2.0 pi)) src)
+                           (cons (cos angle) (sin angle))))
+                      (iota (* years days)))))
+           (top-right (cell-&gt;xy n-cells)))
+      (memoize
+        (λ (year day from to)
+           (if (= from to)
+             '(0.0 0.0 0.0 2.0)
+             (let* ((p (cell-&gt;xy from)) (v (vector-to p (cell-&gt;xy to))))
+               (list (* 4.0
+                        (lognpdf (sqrt (squared-distance v '(0 . 0))) 1.0 1.0))
+                     (cosine v (vector-to p top-right))
+                     (cosine
+                       v
+                       (vector-ref winds (+ (* (sub1 year) days) (sub1 day))))
+                     0.0)))))))
+  (define (bird-flights features bs #!key (years 30) (days 20))
+    (&lt;$&gt; collect
+         (traverse/monad
+           (λ (year)
+              (&lt;$&gt; (λ (path) (collect (reverse path)))
+                   (fold/monad
+                     (λ (path day)
+                        (&lt;$&gt; (cut cons &lt;&gt; path)
+                             (dist categorical
+                                   (lift (transitions features year day)
+                                         (car path)
+                                         bs))))
+                     '(1)
+                     (iota (sub1 days) 1))))
+           (iota years 1))))
+  (define ((indicator-counts paths missed?) year day cell)
+    (if (and (not (missed? day))
+             (= cell (list-ref (list-ref paths (sub1 year)) (sub1 day))))
+      1
+      0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((1 6 8 10 12 12) (1 11 8 15 16 13))
+</code></pre></div>
+<p>Every third day the watchers miss the bird (a Poisson(1) count is 0 with
+              probability 
+<mtext>1/e</mtext>, l.465-470), so that the cells of days 3 and 6 are
+              latent; <code class="w3-codespan">birdpos</code> recovers the others.  The model has 
+<mtext>4 + 2 · 5 · (1 + 16) + 1 = 175</mtext> nodes: the 4 parameters and 4
+              latent cells are resampleable, 6 cells and 160 counts observed, and the answer
+              is a Dirac node.  The construction check passes: the initial trace's LL is
+              finite, a rebuild gives the same graph, values and LLs, and redrawing the choices
+              in address order from a copy of the source gives back their values and the LL.
+              One <code class="w3-codespan">mcmC-fold</code> over 3000 samples sums the 
+<mtext>β</mtext> tuples and counts the consecutive ones that repeat, the steps
+              whose proposal was rejected: 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">2605
+</code></pre></div> of the 2999 do, so the
+              chain moves, and the posterior means are 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(4.12945104050349 9.82328450023311 1.3251745427761 2.08709026263613)
+</code></pre></div>finite and
+              non-negative, as the prior makes them.  Ten flights are little data, so they are
+              not compared with 
+<mtext>β</mtext>, and over seeds 1-20 the chain mixes too slowly
+              for most of them to be bounded: 
+<mtext>β₄</mtext> ranges from 1.3 to 14.7.  
+<mtext>β₃</mtext>, the weight of flying with the wind, is pinned by the data alone: it
+              stays between 0.92 and 1.54 on every one of those seeds, so the test asks it to
+              be below 3.  As a negative control, the same fold runs on the model with no
+              year of data, <code class="w3-codespan">(birds features obs #:years 0 #:days days)</code>, whose 
+<mtext>β</mtext> are the four 
+<mtext>|N(0, 10)|</mtext> nodes of the prior, of mean 
+<mtext>10 √(2/π) ≈ 7.98</mtext>: its means are 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(7.87600232652835 8.15640125395766 8.22387046673009 8.15729590109516)
+</code></pre></div>and its 
+<mtext>β₃</mtext> is above 3, as it is, between 7.5 and 8.7, on every seed from 1 to 20.  The
+              real data run, Birds1.hs:202-215, is <code class="w3-codespan">hakaru10-birds.scm</code>.  Upstream's thesis run took 9 minutes for a
+              million samples, against BLOG's 49 minutes for a thousand (index.html:163-167).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/birds/synthetic _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.466) (memory #(12582912 3609088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/regression"><a href="#test/regression"><code>test/regression</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C5.  Bayesian linear regression, problem 4.1 of the PPAML small problems
+              collection, quoting design.txt l.464-470:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Given the set of training points (x_ij, y_i), i = 1..N, j = 1..k and the
+                generative model y_i = Σ_j x_ij * w_j + noise_i find the posterior distribution
+                on w_j. In the conventional linear regression language, we are given N
+                observations of y assumed to be a linear combination of the controlled
+                quantities x with the parameters w; we have to estimate w.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote>The model is typeset on page 10 of the paper (design.txt l.471-486), here in
+              ASCII Haskell; its helpers, which the paper describes in l.496-504, are
+              Birds1.hs:103-114:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">type RegrDatum = ([Double],Double) -- Xs and Y
+
+model :: [RegrDatum] -&gt; Model [Double]
+model xsy = do
+  let mu = replicate dimK 0
+  w_mean   &lt;- normals mu 2
+  w        &lt;- normals w_mean 1
+  noise_sd &lt;- (1/) &lt;$&gt; dist gamma 0.5 0.5
+  let make_cond (xs,y) = dist (y `condition` normal) (dot xs w) noise_sd
+  mapM make_cond xsy
+  return $ collect w</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- normals means std
+-- returns several independently distributed normal random variables
+-- whose means are given by the list means, with the same std
+normals :: [SExp Double] -&gt; SExp Double -&gt; MCMCM [SExp Double]
+normals means std = mapM (\m -&gt; dist normal m std) means
+
+
+dot :: [Double] -&gt; [SExp Double] -&gt; SExp Double
+dot xs ays = foldr1 (+) $ zipWith (\x ay -&gt; (*x) &lt;$&gt; ay) xs ays
+
+collect :: [SExp a] -&gt; SExp [a]
+collect = sequenceA</code></pre></div>
+<p>In Scheme <code class="w3-codespan">collect</code> is exported by (aux hakaru10), <code class="w3-codespan">sexp+</code> and <code class="w3-codespan">sexp*</code> lift the arithmetic, <code class="w3-codespan">reduce-right</code> is <code class="w3-codespan">foldr1</code>, and <code class="w3-codespan">mapM</code> is <code class="w3-codespan">traverse/monad</code>, or <code class="w3-codespan">for-each/monad</code> where its results are dropped:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(begin
+  (define (normals means sd) (traverse/monad (λ (m) (dist normal m sd)) means))
+  (define (dot xs ays) (reduce-right sexp+ 0.0 (map sexp* ays xs)))
+  (define (regression data)
+    (do/monad
+      (← w-mean (normals (make-list (length (car (car data))) 0.0) 2.0))
+      (← w (normals w-mean 1.0))
+      (← inverse-noise-sd (dist gamma 0.5 0.5))
+      (let noise-sd (lift (cut / 1.0 &lt;&gt;) inverse-noise-sd))
+      (for-each/monad
+        (Λ ((,xs unquote y)) (dist (condition y normal) (dot xs w) noise-sd))
+        data)
+      (return (collect w)))))
+</code></pre></div>
+<p>The paper's instance has five hundred points and five parameters, a graph of
+              &quot;511 vertices&quot; (design.txt l.493-495; the hakaru10-language suite counts it).
+              Here twenty points with two features are simulated from 
+<mtext>w = (1.5, −0.7)</mtext> and noise sd 0.5 by the forward sampler, from the
+              generative reading of the model with known weights:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (regression-data xss w sd)
+  (&lt;$&gt; collect
+       (traverse/monad
+         (λ (xs)
+            (&lt;$&gt; (cut lift (cut cons xs &lt;&gt;) &lt;&gt;) (dist normal (dot xs w) sd)))
+         xss)))
+</code></pre></div>
+<p>The graph has 
+<mtext>2k + 1 + N = 25</mtext> vertices, plus the Dirac node of the
+              answer; the construction check passes.  After 20000 samples, the first 2000
+              dropped as Birds1.hs:205 drops its burn-in, the posterior means of 
+<mtext>w</mtext> are 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(1.60859970223401 -0.932442673713944)
+</code></pre></div>within .4 of the weights that made the data,
+              and within .04 of the least-squares estimate 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(1.62928672635352 -0.926548718746949)
+</code></pre></div>(over seeds 1-12 and 17 they differ from it by at most .021, mostly by less
+              than .01, so .04 is about 4-5 times that spread), which the weak prior barely moves.  The noise sd, 
+<mtext>1/γ</mtext> with 
+<mtext>γ ~ Γ(0.5, 0.5)</mtext>: 
+<mtext>γ</mtext> has mean 0.25, so its prior rarely proposes the 
+<mtext>γ = 2</mtext> of the data's sd 0.5
+              (
+<mtext>P(γ &gt; 2) ≈ 0.005</mtext>), and the noise sd's posterior sits
+              above 0.5: that widens the posterior of 
+<mtext>w</mtext> but does not move its
+              mean.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (least-squares/2 data)
+  (define (sum f) (fold (Λ ((,xs unquote y) ,acc) (+ acc (f xs y))) 0.0 data))
+  (let* ((a (sum (λ (xs y) (* (first xs) (first xs)))))
+         (b (sum (λ (xs y) (* (first xs) (second xs)))))
+         (d (sum (λ (xs y) (* (second xs) (second xs)))))
+         (u (sum (λ (xs y) (* (first xs) y))))
+         (v (sum (λ (xs y) (* (second xs) y))))
+         (det (- (* a d) (* b b))))
+    (list (/ (- (* d u) (* b v)) det) (/ (- (* a v) (* b u)) det))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/regression _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.708) (memory #(12582912 3745624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/plot-mixture"><a href="#test/plot-mixture"><code>test/plot-mixture</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>C6.  The only use of <code class="w3-codespan">plot</code> upstream, Examples1.hs:166-167,
+              writes for gnuplot the histogram, in bins of 0.2, of the mixture of
+              Examples1.hs:159-164 (whose KL divergence from <code class="w3-codespan">mixng</code> the hakaru10-replay suite replays, X12): 5000 samples of a normal of mean 10
+              and sd 2 followed by 5000 of a gamma of shape 3 and scale 1/3:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">_ =
+ let n = 10000 in plot (tabulate 0.2 $ mcmC (n `div` 2) (dist normal 10 2) ++ mcmC (n `div` 2) (dist gamma 3 (1/3)))</code></pre></div>
+<p>Upstream writes /tmp/plot.dat; here <code class="w3-codespan">plot</code>'s optional path is a temporary file, read back and deleted.  It has the header
+              and one line per bin, 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">86
+</code></pre></div>lines; the masses sum to 1, and the mean of the bins is 
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">5.42921999999999
+</code></pre></div>within .2 of the mixture's mean 
+<mtext>(10 + 1)/2 = 5.5</mtext> less half a bin, since a bin is the floor of its samples (U:37).  The
+              hakaru10-util suite checks the file's format on a toy histogram (cf. U:58-65).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/plot-mixture _))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.024) (memory #(12582912 3278520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

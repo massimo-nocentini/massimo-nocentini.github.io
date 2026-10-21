@@ -19,13 +19,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
-<section id="section300">
+<section id="section715">
 <header>
 <h1>Introduction</h1></header></section>
 <p>This section tests the list monad, which is a monad that represents non-deterministic computations.  A value of type (list a) represents a non-deterministic computation that can produce any of the values in the list.  The monad operations allow us to combine these computations in various ways, such as sequencing them with &gt;&gt;= or combining them with ⊕/monad.</p>
-<section id="section301">
+<section id="section716">
 <header>
 <h1>Implementation</h1></header></section>
 <p>The list monad is implemented as follows, which defines the monad operations for lists.  The return operation creates a singleton list, and the &gt;&gt;= operation uses append-map to apply a function to each element of the list and concatenate the results.  The ⊕/monad operation is defined as append, which combines two lists of computations.</p>
@@ -50,104 +52,188 @@
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/empty _) (⊦= '() (do/monad)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(6291456 1942376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2180256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/return"><a href="#test/return"><code>test/return</code>: <span class="w3-text-green">pass</span></a></h2>Return lifts a value into the list monad, which creates a singleton list.
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/return _) (⊦= '(4) (do/monad ,4)))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1943512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2181568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/two-returns"><a href="#test/two-returns"><code>test/two-returns</code>: <span class="w3-text-green">pass</span></a></h2>Multiple return statements in a do/monad block are implicitly combined with &gt;&gt;=, so the above is equivalent to <code>(return 1) &gt;&gt;= (λ x (let y x) (return (+ x y))).</code>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/two-returns _)
-  (⊦= '(2) (do/monad (← x ,1) (let y x) ,(+ x y))))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/two-returns _) (⊦= '(2) (do/monad (← x ,1) (let y x) ,(+ x y))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1944808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2183048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/let-pattern"><a href="#test/let-pattern"><code>test/let-pattern</code>: <span class="w3-text-green">pass</span></a></h2>A <code>let</code> clause may destructure a pure value with a pattern, binding its variables for the rest of the block.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/let-pattern _)
+  (⊦= '(3 12)
+      (do/monad
+        (← x (return/⊕ 1 4))
+        (let (,a unquote b) (cons x (* 2 x)))
+        ,(+ a b))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2184824 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/let-unquote"><a href="#test/let-unquote"><code>test/let-unquote</code>: <span class="w3-text-green">pass</span></a></h2>As in <code>←</code> clauses, the right-hand side of a <code>let</code> clause may be written <code>,expr</code>; since <code>let</code> binds a pure value, <code>,expr</code> is the same as <code>expr</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/let-unquote _)
+  (⊦= '((3 1 2))
+      (do/monad (let a ,1) (let (,b unquote c) ,(cons 2 3)) ,(list c a b))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2186400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/trailing-binding"><a href="#test/trailing-binding"><code>test/trailing-binding</code>: <span class="w3-text-green">pass</span></a></h2>A <code>←</code> or <code>let</code> clause binds variables for the clauses that follow it, so ending a block with one is rejected when the block is expanded; a trailing ordinary <code>let</code> form is still just an expression.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/trailing-binding _)
+  (let ((rejected?
+          (λ (form)
+             (condition-case
+               (begin (eval form) #f)
+               (e (exn syntax)
+                  (and (substring-index
+                         &quot;do/monad: a binding clause cannot end the block&quot;
+                         ((condition-property-accessor 'exn 'message) e))
+                       #t))))))
+    (⊨ (rejected? '(do/monad (← x (list 1 2)))))
+    (⊨ (rejected? '(do/monad (← (,x) ,1))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let y x))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (,a unquote b) (cons x 2)))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (,a ,b) (list x 2)))))
+    (⊨ (rejected?
+         '(do/monad (← x ,1) (let ((,a ,b) unquote c) (list (list x 2) 3)))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (_ unquote b) (cons x 2)))))
+    (⊨ (rejected? '(do/monad (← x ,1) (let (a ,b) (list x 2)))))
+    (⊦= '(2) (do/monad (← x ,1) (let ((y x)) (list (+ x y)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2207936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pattern-mismatch"><a href="#test/pattern-mismatch"><code>test/pattern-mismatch</code>: <span class="w3-text-green">pass</span></a></h2>A value that does not match the pattern of a <code>←</code> clause is handed to <code>fail</code>, which is the empty list in the list monad, so non-matching shapes are skipped instead of raising an error.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pattern-mismatch _)
+  (⊦= '((1 2) (3 4))
+      (do/monad (← (,x unquote xs) '((1 2) () (3 4))) ,(cons x xs))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2186216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/return/⊕"><a href="#test/return/⊕"><code>test/return/⊕</code>: <span class="w3-text-green">pass</span></a></h2>The <code>return/⊕</code> function lifts a value into the list monad, but it also allows you to specify multiple values to lift, which are combined with ⊕/monad (which is append for lists).  So the above is equivalent to <code>(return/⊕ 1 2 3) &gt;&gt;= (λ x (return/⊕ 4 5 6) &gt;&gt;= (λ y (return/⊕ (+ x y) (- x y)))).</code>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/return/⊕ _)
   (⊦= '(((1 4) 5 -3)
-          ((1 5) 6 -4)
-          ((1 6) 7 -5)
-          ((2 4) 6 -2)
-          ((2 5) 7 -3)
-          ((2 6) 8 -4)
-          ((3 4) 7 -1)
-          ((3 5) 8 -2)
-          ((3 6) 9 -3))
-        (do/monad
-          (← x (return/⊕ 1 2 3))
-          (← y (return/⊕ 4 5 6))
-          (return/⊕ `((,x ,y) ,(+ x y) ,(- x y))))))
+        ((1 5) 6 -4)
+        ((1 6) 7 -5)
+        ((2 4) 6 -2)
+        ((2 5) 7 -3)
+        ((2 6) 8 -4)
+        ((3 4) 7 -1)
+        ((3 5) 8 -2)
+        ((3 6) 9 -3))
+      (do/monad
+        (← x (return/⊕ 1 2 3))
+        (← y (return/⊕ 4 5 6))
+        (return/⊕ `((,x ,y) ,(+ x y) ,(- x y))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1946040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2187064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/fmap"><a href="#test/fmap"><code>test/fmap</code>: <span class="w3-text-green">pass</span></a></h2>The <code>map/monad</code> function is the functor operation for the list monad, which applies a function to each value in the list.  So the above is equivalent to <code>(map add1 (return/⊕ 1 2 3)).</code>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fmap _) (⊦= '(2 3 4) (map/monad add1 (return/⊕ 1 2 3))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1947304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2188528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
-<h2 id="test/&lt;*&gt;"><a href="#test/&lt;*&gt;"><code>test/<*></code>: <span class="w3-text-green">pass</span></a></h2>The <code><*></code> function is the applicative functor operation.  It takes a list of functions and a list of values, and applies each function to each value, returning the combined results.  So the above is equivalent to 
+<h2 id="test/&lt;$&gt;"><a href="#test/&lt;$&gt;"><code>test/&lt;$&gt;</code>: <span class="w3-text-green">pass</span></a></h2>The <code><$></code> function is Haskell's name for <code>map/monad</code>, the functor operation, which maps over the monad with a single bind.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/&lt;$&gt; _)
+  (⊦= '(2 3 4) (&lt;$&gt; add1 (return/⊕ 1 2 3)))
+  (⊦= '() (&lt;$&gt; add1 '())))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2189960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/&lt;*&gt;"><a href="#test/&lt;*&gt;"><code>test/&lt;*&gt;</code>: <span class="w3-text-green">pass</span></a></h2>The <code><*></code> function is the applicative functor operation.  It takes a list of functions and a list of values, and applies each function to each value, returning the combined results.  So the above is equivalent to 
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/&lt;*&gt; _)
   (⊦= '(2 3 4 0 1 2) (&lt;*&gt; (return/⊕ add1 sub1) (return/⊕ 1 2 3))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1948488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2191352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/kleisli"><a href="#test/kleisli"><code>test/kleisli</code>: <span class="w3-text-green">pass</span></a></h2>The <code>o/monad</code> function composes Kleisli arrows right to left, like function composition, while <code>◇</code> composes them left to right, so <code>(◇ f g)</code> runs <code>f</code> first; with no arrows both are <code>return</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/kleisli _)
+  (let ((f (λ (x) (list x (* 10 x)))) (g (λ (x) (list (add1 x)))))
+    (⊦= '(4 31) ((o/monad g f) 3))
+    (⊦= '(4 31) ((◇ f g) 3))
+    (⊦= '(3) ((◇) 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2190376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/list-&gt;monad"><a href="#test/list-&gt;monad"><code>test/list-&gt;monad</code>: <span class="w3-text-green">pass</span></a></h2>The <code>monoids->monad</code> function folds a list with a monoid inside the monad; <code>list->monad</code> is its instance at the list monoid <code>('() , cons)</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/list-&gt;monad _)
+  (⊦= '((1 2 3)) (list-&gt;monad '(1 2 3)))
+  (⊦= '(()) (list-&gt;monad '()))
+  (⊦= '(6) ((monoids-&gt;monad 0 +) '(1 2 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2192112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/lift/monad"><a href="#test/lift/monad"><code>test/lift/monad</code>: <span class="w3-text-green">pass</span></a></h2>The <code>lift/monad</code> function is a convenient way to lift a multi-argument function into the monad.  It takes a function and multiple monadic values, and applies the function to the values inside the monad.  So the above is equivalent to <code>(return/⊕ 1 2 3) &gt;&gt;= (λ x (return/⊕ 4 5 6) &gt;&gt;= (λ y (return (+ x y))))).</code>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/lift/monad _)
-  (⊦= '(5 6 7 6 7 8 7 8 9)
-        (lift/monad + (return/⊕ 1 2 3) (return/⊕ 4 5 6))))
+  (⊦= '(5 6 7 6 7 8 7 8 9) (lift/monad + (return/⊕ 1 2 3) (return/⊕ 4 5 6))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1949816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2193904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/powerset"><a href="#test/powerset"><code>test/powerset</code>: <span class="w3-text-green">pass</span></a></h2>The <code>powerset/monad</code> function generates the powerset of a list, which is the set of all subsets of the list.  It does this by using <code>filter/monad</code> to filter the list with a predicate that non-deterministically returns true or false for each element, effectively including or excluding each element in the subsets.  So the above is equivalent to <code>(filterM (λ (_) (return/⊕ #f #t)) '(1 2 3 4 5)).</code>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/powerset _)
   (⊦= '(()
-          (5)
-          (4)
-          (4 5)
-          (3)
-          (3 5)
-          (3 4)
-          (3 4 5)
-          (2)
-          (2 5)
-          (2 4)
-          (2 4 5)
-          (2 3)
-          (2 3 5)
-          (2 3 4)
-          (2 3 4 5)
-          (1)
-          (1 5)
-          (1 4)
-          (1 4 5)
-          (1 3)
-          (1 3 5)
-          (1 3 4)
-          (1 3 4 5)
-          (1 2)
-          (1 2 5)
-          (1 2 4)
-          (1 2 4 5)
-          (1 2 3)
-          (1 2 3 5)
-          (1 2 3 4)
-          (1 2 3 4 5))
-        (powerset/monad '(1 2 3 4 5))))
+        (5)
+        (4)
+        (4 5)
+        (3)
+        (3 5)
+        (3 4)
+        (3 4 5)
+        (2)
+        (2 5)
+        (2 4)
+        (2 4 5)
+        (2 3)
+        (2 3 5)
+        (2 3 4)
+        (2 3 4 5)
+        (1)
+        (1 5)
+        (1 4)
+        (1 4 5)
+        (1 3)
+        (1 3 5)
+        (1 3 4)
+        (1 3 4 5)
+        (1 2)
+        (1 2 5)
+        (1 2 4)
+        (1 2 4 5)
+        (1 2 3)
+        (1 2 3 5)
+        (1 2 3 4)
+        (1 2 3 4 5))
+      (powerset/monad '(1 2 3 4 5))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 1951056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2195344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

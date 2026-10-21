@@ -1,0 +1,87 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section4037">
+<header>
+<h1>Classic CML examples</h1></header></section>
+<h2 id="test/sieve"><a href="#test/sieve"><code>test/sieve</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sieve _)
+  (define (counter n)
+    (let1 (ch (make-channel))
+          (spawn (τ (let loop ((i n)) (send ch i) (loop (add1 i)))))
+          ch))
+  (define (sift p in)
+    (let1 (out (make-channel))
+          (spawn (τ (let loop ()
+                      (let1 (i (recv in))
+                            (unless (zero? (remainder i p)) (send out i)))
+                      (loop))))
+          out))
+  (define (primes)
+    (let1 (ch (make-channel))
+          (spawn (τ (let loop ((in (counter 2)))
+                      (let1 (p (recv in)) (send ch p) (loop (sift p in))))))
+          ch))
+  (⊦= '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47)
+      (run/value (τ (let1 (ps (primes)) (map (λ (i) (recv ps)) (iota 15)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5545608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/server-with-nack"><a href="#test/server-with-nack"><code>test/server-with-nack</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/server-with-nack _)
+  (define (make-server)
+    (let1 (req (make-channel))
+          (spawn (τ (let loop ((n 0))
+                      (let* ((r (recv req)) (reply (car r)) (nack (cdr r)))
+                        (select
+                          (wrap (send-evt reply n)
+                                (λ (x) (note! (list 'replied n))))
+                          (wrap nack (λ (x) (note! (list 'abandoned n)))))
+                        (loop (add1 n))))))
+          (λ ()
+             (with-nack
+               (λ (nack)
+                  (let1 (reply (make-channel))
+                        (spawn (τ (send req (cons reply nack))))
+                        (recv-evt reply)))))))
+  (⊦= '((got 0) (replied 0) gave-up (abandoned 1) (replied 2) (got 2))
+      (cdr (run/log
+             (τ (let1 (request-evt (make-server))
+                      (note! (list 'got (sync (request-evt))))
+                      (note! (select
+                               (request-evt)
+                               (wrap (timeout-evt 0) (λ (x) 'gave-up))))
+                      (cml/sleep 0.01)
+                      (let1 (v (sync (request-evt)))
+                            (cml/yield)
+                            (note! (list 'got v)))
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5535728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section7458">
+<header>
+<h1>Laws</h1></header></section>
+<p>The equational laws of model composition (P §2.1 l.250-281, §4.3 l.803-843):
+        Dirac is the left and the right unit of composition, and an unused variable is
+        marginalized.  Under the MCMC engine the right unit law holds sample for sample
+        (X2, X16); the left unit law and marginalization hold in distribution.  Under exact
+        enumeration, which walks the built graph and reuses no incremental machinery (plan
+        §6.10), they hold exactly.</p>
+<math display="block">
+<mtext>do {x ← p; diracN x} ≡ p,  do {x ← diracN v; p} ≡ let x = v in p</mtext></math>
+<h2 id="test/laws/left-unit"><a href="#test/laws/left-unit"><code>test/laws/left-unit</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A1: <code class="w3-codespan">do {x &lt;- diracN 5; dist normal x 1}</code> is <code class="w3-codespan">dist normal 5 1</code> sample for sample: the constant Dirac node
+            draws nothing and is never proposed (P l.259-261).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/left-unit _)
+  (⊦ equal?
+     (mcmC 200 (dist normal 5.0 1.0))
+     (mcmC 200 (do/monad (← x (diracN 5.0)) (dist normal x 1.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 6212720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws/diractest"><a href="#test/laws/diractest"><code>test/laws/diractest</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A2: the port of <code class="w3-codespan">diractest</code> (M:1029-1037): &quot;The result
+            should show both True and False, in the same proportion&quot;.  The Dirac node is
+            recomputed with its parent, so the proposals to change x are accepted.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">{-
+diractest = mcmC 5 $ do 
+     a &lt;- bernN (Val 0.5)
+     diracN a
+-}
+diractest = mcmc 10 $
+  with_node_none (bernS 0.5) `next` (\a -&gt;
+  with_node a (\a -&gt; diracS a))
+-- The result should show both True and False, in the same proportion</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/diractest _)
+  (⊦ (equal-approx? 0.03)
+     0.5
+     (frequency
+       identity
+       (mcmC 10000
+             (do/monad (← x (dist bern 0.5)) (diracN (lift identity x)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.022) (memory #(25165824 6438560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws/p2"><a href="#test/laws/p2"><code>test/laws/p2</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A3: P's <code class="w3-codespan">p2 = do {x &lt;- dist uniform 0 1; diracN x}</code> (§4.3 l.812-825), the example on which an MH that treats Dirac as an ordinary
+            distribution never moves: here the independence proposal is always accepted (the
+            uniform density is constant), so nearly every sample is new.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/p2 _)
+  (⊦ &lt;=
+     9990
+     (length
+       (hist (mcmC 10000
+                   (do/monad
+                     (← x (dist uniform 0.0 1.0))
+                     (diracN (lift identity x))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.053) (memory #(25165824 6842280 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws/marginal"><a href="#test/laws/marginal"><code>test/laws/marginal</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A4: pmarg has pnorm's distribution, N(10, 0.5²), though not its samples (P
+            l.278-281; E:43-48).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pmarg (do/monad (← x pbern) (← y pnorm) (return y)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pmarg = do
+  x &lt;- pbern
+  y &lt;- pnorm
+  return y
+
+pmarg_run = mcmC 100 pmarg</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/marginal _)
+  (let1 (m (momenta (mcmC 10000 pmarg)))
+        (⊦ (equal-approx? 0.05) '(10.0 . 0.25) m)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(25165824 6315008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws/joint"><a href="#test/laws/joint"><code>test/laws/joint</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A5: pjoin samples the product of pbern and pnorm (P l.264-272; E:36-42):
+            P(x) = 0.4 and x, y uncorrelated.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pjoin (do/monad (← x pbern) (← y pnorm) (return (pair x y))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">pjoin = do
+  x &lt;- pbern
+  y &lt;- pnorm
+  return (pair x y)
+
+_ = mcmC 100 pjoin</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/joint _)
+  (let* ((samples (mcmC 10000 pjoin))
+         (xs (map (λ (s) (if (car s) 1.0 0.0)) samples))
+         (ys (map cdr samples))
+         (mx (mean xs))
+         (my (mean ys))
+         (cov (mean (map (λ (x y) (* (- x mx) (- y my))) xs ys)))
+         (corr (/ cov (sqrt (* (cdr (momenta xs)) (cdr (momenta ys)))))))
+    (⊦ (equal-approx? 0.03) 0.4 mx)
+    (⊦ &lt; (abs corr) 0.05)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.038) (memory #(25165824 7391856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws/branch-unit"><a href="#test/laws/branch-unit"><code>test/laws/branch-unit</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A6: <code class="w3-codespan">e &gt;&gt;= diracN</code> inside a branch is <code class="w3-codespan">e</code> (S:370-371), sample for sample; see X16.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/branch-unit _) (⊦ equal? (mcmC 1000 tac2) (mcmC 1000 tac3)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(25165824 6258408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laws/exact"><a href="#test/laws/exact"><code>test/laws/exact</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The laws under exact enumeration, where a model is its distribution: the right
+            and left units, marginalization, and a Dirac node introduced for a lifted
+            parameter (ph2, whose posterior is 0.58, E:91).  Enumeration walks the built
+            graph; it reuses no incremental machinery (plan §6.10): a Dirac node's value is
+            recomputed from its parents' on each path.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laws/exact _)
+  (let ((coin (dist bern 0.4))
+        (pmarg/coin
+          (do/monad (← x (dist bern 0.4)) (← y (dist bern 0.3)) (return y))))
+    (⊦ equal?
+       (exact-posterior coin)
+       (exact-posterior (do/monad (← x (dist bern 0.4)) (diracN x))))
+    (⊦ equal?
+       (exact-posterior (dist bern 0.3))
+       (exact-posterior (do/monad (← p (diracN 0.3)) (dist bern p))))
+    (⊦ (equal-approx? 1e-15)
+       (exact-posterior (dist bern 0.3))
+       (exact-posterior pmarg/coin))
+    (⊦ (equal-approx? 1e-15)
+       (exact-posterior ph2)
+       (exact-posterior
+         (do/monad
+           (← x (dist bern 0.2))
+           (← q (diracN (lift (λ (xv) (if xv 0.1 0.7)) x)))
+           (dist bern q))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(25165824 6263624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

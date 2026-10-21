@@ -1,0 +1,210 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section1379">
+<header>
+<h1>Concurrent ML library: Multicast</h1></header></section>
+<p>Asynchronous one-to-many channels, a port of <code class="w3-codespan">Multicast</code> from cml-lib.</p>
+<h2 id="test/predicates"><a href="#test/predicates"><code>test/predicates</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/predicates _)
+  (let1 (mc (make-multicast-channel))
+        (⊨ (multicast-channel? mc))
+        (⊭ (multicast-channel? (make-channel)))
+        (⊦= &quot;#&lt;multicast-channel&gt;&quot; (-&gt;string mc))
+        (⊦= '(#t #f)
+            (run/value
+              (τ (let1 (p (multicast-port mc))
+                       (list (multicast-port? p) (multicast-port? mc))))))
+        (⊦raises (exn cml not-running) (multicast-port mc))
+        (multicast! mc 'nobody-listens)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3158992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/independent-speeds"><a href="#test/independent-speeds"><code>test/independent-speeds</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/independent-speeds _)
+  (let1 (got (run/value
+               (τ (let* ((mc (make-multicast-channel))
+                         (ps (map (λ (i) (multicast-port mc)) (iota 3)))
+                         (logs (make-vector 3 '()))
+                         (reader
+                           (λ (i p pause)
+                              (spawn (τ (let loop ((n 6))
+                                          (unless
+                                            (zero? n)
+                                            (for-each (λ (j) (cml/yield)) (iota pause))
+                                            (vector-set!
+                                              logs
+                                              i
+                                              (cons (multicast-recv p) (vector-ref logs i)))
+                                            (loop (sub1 n)))))))))
+                    (let1 (ts (list (reader 0 (car ps) 0)
+                                    (reader 1 (cadr ps) 3)))
+                          (for-each (λ (v) (multicast! mc v)) '(1 2 3 4 5 6))
+                          (let1 (late (reader 2 (caddr ps) 1))
+                                (join-all (cons late ts))
+                                (map reverse (vector-&gt;list logs))))))))
+        (⊦= '((1 2 3 4 5 6) (1 2 3 4 5 6) (1 2 3 4 5 6)) got)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3158264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/new-port-sees-later-messages"><a href="#test/new-port-sees-later-messages"><code>test/new-port-sees-later-messages</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/new-port-sees-later-messages _)
+  (⊦= '((a b c) (c) (d))
+      (run/value
+        (τ (let* ((mc (make-multicast-channel)) (p1 (multicast-port mc)))
+             (multicast! mc 'a)
+             (multicast! mc 'b)
+             (let1 (p2 (multicast-port mc))
+                   (multicast! mc 'c)
+                   (let1 (p3 (multicast-port mc))
+                         (multicast! mc 'd)
+                         (list (map (λ (i) (multicast-recv p1)) '(1 2 3))
+                               (list (multicast-recv p2))
+                               (list (multicast-recv p3))))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3157264 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/copy-port"><a href="#test/copy-port"><code>test/copy-port</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/copy-port _)
+  (⊦= '(1 (2 3 4) (2 3 4) 5)
+      (run/value
+        (τ (let* ((mc (make-multicast-channel)) (p (multicast-port mc)))
+             (for-each (λ (v) (multicast! mc v)) '(1 2 3))
+             (let1 (first (multicast-recv p))
+                   (let1 (c (multicast-copy-port p))
+                         (multicast! mc 4)
+                         (let* ((from-c
+                                  (map (λ (i) (multicast-recv c)) '(1 2 3)))
+                                (from-p
+                                  (map (λ (i) (multicast-recv p)) '(1 2 3)))
+                                (cc (multicast-copy-port (multicast-copy-port c))))
+                           (multicast! mc 5)
+                           (list first from-c from-p (multicast-recv cc)))))))))
+  (⊦= '((x y) (x y))
+      (run/value
+        (τ (let* ((mc (make-multicast-channel))
+                  (p (multicast-port mc))
+                  (c (multicast-copy-port p)))
+             (multicast! mc 'x)
+             (multicast! mc 'y)
+             (list (list (multicast-recv p) (multicast-recv p))
+                   (list (multicast-recv c) (multicast-recv c))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3157456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/recv-evt"><a href="#test/recv-evt"><code>test/recv-evt</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/recv-evt _)
+  (⊦= '(timeout (got 7) (got 8) timeout)
+      (cdr (run/log
+             (τ (let* ((mc (make-multicast-channel))
+                       (p (multicast-port mc))
+                       (poll (τ (note! (sync/timeout
+                                         (wrap (multicast-recv-evt p)
+                                               (λ (v) (list 'got v)))
+                                         0.01
+                                         'timeout)))))
+                  (poll)
+                  (multicast! mc 7)
+                  (multicast! mc 8)
+                  (poll)
+                  (note! (list 'got (sync (multicast-recv-evt p))))
+                  (poll)
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3165472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/shared-port"><a href="#test/shared-port"><code>test/shared-port</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/shared-port _)
+  (let1 (got (run/value
+               (τ (let* ((mc (make-multicast-channel))
+                         (p (multicast-port mc))
+                         (acc '())
+                         (ts (map (λ (i)
+                                     (spawn (τ (let loop ((n 4))
+                                                 (unless
+                                                   (zero? n)
+                                                   (set! acc (cons (multicast-recv p) acc))
+                                                   (loop (sub1 n)))))))
+                                  '(1 2))))
+                    (for-each (λ (v) (multicast! mc v)) (iota 8))
+                    (join-all ts)
+                    acc))))
+        (⊦= (iota 8) (sort got &lt;))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3159984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/many-messages"><a href="#test/many-messages"><code>test/many-messages</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/many-messages _)
+  (⊦= (iota 500)
+      (run/value
+        (τ (let* ((mc (make-multicast-channel)) (p (multicast-port mc)))
+             (spawn (τ (for-each (λ (v) (multicast! mc v)) (iota 500))))
+             (map (λ (i) (multicast-recv p)) (iota 500)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 3185192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/producer-keeps-to-its-readers-pace"><a href="#test/producer-keeps-to-its-readers-pace"><code>test/producer-keeps-to-its-readers-pace</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/producer-keeps-to-its-readers-pace _)
+  (let1 (lags (run/value
+                (τ (let* ((mc (make-multicast-channel))
+                          (ps (map (λ (i) (multicast-port mc)) (iota 2)))
+                          (got (make-vector 2 0)))
+                     (for-each
+                       (λ (i p)
+                          (spawn (τ (let loop ()
+                                      (multicast-recv p)
+                                      (vector-set! got i (add1 (vector-ref got i)))
+                                      (loop)))))
+                       '(0 1)
+                       ps)
+                     (let loop ((i 0) (lag 0))
+                       (if (= i 20000)
+                         lag
+                         (begin
+                           (multicast! mc i)
+                           (loop (add1 i)
+                                 (max lag
+                                      (- (add1 i)
+                                         (min (vector-ref got 0) (vector-ref got 1))))))))))))
+        (⊨ (&lt; lags 50))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.122) (memory #(12582912 3162768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

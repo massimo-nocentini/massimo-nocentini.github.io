@@ -1,0 +1,416 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section230">
+<header>
+<h1>The Seasoned Schemer</h1></header></section>
+<p>Ported from on-scheme's <code class="w3-codespan">seasoned-schemer.scm</code>, after <cite><a href="https://mitpress.mit.edu/9780262561006/the-seasoned-schemer/">The Seasoned Schemer</a></cite>.</p>
+<section id="section231">
+<header>
+<h1>Implementation</h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux schemer seasoned)
+  *
+  (import
+    scheme
+    (chicken base)
+    (aux base)
+    (aux continuation)
+    (aux continuation classic))
+  (define multi-insert*&amp;co
+    (λ (new old_l old_r sexp coll)
+       (let M ((sexp sexp) (coll coll))
+         (cond ((null? sexp) (coll '() 0 0))
+               ((atom? (car sexp))
+                (cond ((equal? (car sexp) old_l)
+                       (M (cdr sexp)
+                          (λ (new_sexp L R)
+                             (coll (cons new (cons old_l new_sexp))
+                                   (add1 L)
+                                   R))))
+                      ((equal? (car sexp) old_r)
+                       (M (cdr sexp)
+                          (λ (new_sexp L R)
+                             (coll (cons old_r (cons new new_sexp))
+                                   L
+                                   (add1 R)))))
+                      (else
+                       (M (cdr sexp)
+                          (λ (new_sexp L R)
+                             (coll (cons (car sexp) new_sexp) L R))))))
+               (else
+                (M (car sexp)
+                   (λ (new_sexp_car L_car R_car)
+                      (M (cdr sexp)
+                         (λ (new_sexp_cdr L_cdr R_cdr)
+                            (coll (cons new_sexp_car new_sexp_cdr)
+                                  (+ L_car L_cdr)
+                                  (+ R_car R_cdr)))))))))))
+  (define two-in-a-row?
+    (λ (lat)
+       (cond ((null? lat) #f)
+             (else
+              (let T ((preceding (car lat)) (rest (cdr lat)))
+                (cond ((null? rest) #f)
+                      (else
+                       (or (equal? preceding (car rest))
+                           (T (car rest) (cdr rest))))))))))
+  (define two-in-a-row?&amp;hop
+    (λ (lat)
+       (cond ((null? lat) #f)
+             (else
+              (letcc hop
+                     (let T ((preceding (car lat)) (rest (cdr lat)))
+                       (cond ((null? rest) (hop #f))
+                             ((equal? preceding (car rest)) (hop #t))
+                             (else (T (car rest) (cdr rest))))))))))
+  (define intersect/letrec
+    (λ (this that)
+       (letrec ((I (λ (set)
+                      (cond ((null? set) '())
+                            ((member (car set) that)
+                             (cons (car set) (I (cdr set))))
+                            (else (I (cdr set)))))))
+         (I this))))
+  (define intersect
+    (λ (this that)
+       (letrec ((I (λ (l)
+                      (match/first
+                        l
+                        (() '())
+                        ((,i unquote is)
+                         (cond ((member i that) (cons i (I is)))
+                               (else (I is))))))))
+         (I this))))
+  (define intersect+all
+    (λ (sets)
+       (letcc hop
+              (letrec ((intersect
+                         (λ (this that)
+                            (cond ((null? that) (hop '()))
+                                  (else
+                                   (letrec ((I (λ (l)
+                                                  (match/first
+                                                    l
+                                                    (() '())
+                                                    ((,i unquote is)
+                                                     (if (member i that) (cons i (I is)) (I is)))))))
+                                     (I this))))))
+                       (all-null?
+                         (λ (l)
+                            (cond ((null? l) #t)
+                                  ((null? (car l)) (all-null? (cdr l)))
+                                  (else #f))))
+                       (A (λ (sets)
+                             (cond ((all-null? sets) (hop '()))
+                                   ((null? (cdr sets)) (car sets))
+                                   (else (intersect (car sets) (A (cdr sets))))))))
+                (cond ((null? sets) '()) (else (A sets)))))))
+  (define comb-upto-last
+    (λ (atom k lat)
+       (reverse
+         (letcc skip
+                (letrec ((R (λ (prefix k lat)
+                               (match/first
+                                 lat
+                                 (() prefix)
+                                 ((,a unquote as)
+                                  (cond ((equal? atom a)
+                                         (cond ((zero? k) prefix)
+                                               (else (skip (R '() (sub1 k) as)))))
+                                        (else (R (cons a prefix) k as))))))))
+                  (R '() (sub1 k) lat))))))
+  (define atom/book? (λ (x) (not (or (pair? x) (null? x)))))
+  (define leftmost/awkward
+    (λ (l)
+       (letrec ((L (λ (ll)
+                      (match/first
+                        ll
+                        (() '())
+                        ((,first unquote rest)
+                         (cond ((atom/book? first) first)
+                               (else
+                                (let1 (a (L first))
+                                      (cond ((atom/book? a) a) (else (L rest)))))))))))
+         (let1 (atom (L l)) (cond ((atom/book? atom) atom) (else l))))))
+  (define leftmost/awkward+letcc
+    (λ (l)
+       (letrec ((L (λ (ll hop)
+                      (match/first
+                        ll
+                        (() '())
+                        ((,first unquote rest)
+                         (cond ((atom/book? first) (hop first))
+                               (else
+                                (let1 (a (L first hop))
+                                      (cond ((atom/book? a) a) (else (L rest hop)))))))))))
+         (let1 (atom (letcc hop (L l hop)))
+               (cond ((atom/book? atom) atom) (else l))))))
+  (define leftmost/escape+explicit
+    (λ (l)
+       (letrec ((L (λ (ll out)
+                      (cond ((null? ll) '(no symbol here))
+                            ((atom/book? (car ll)) (out (car ll)))
+                            (else (begin (L (car ll) out) (L (cdr ll) out)))))))
+         (escapecc (hop (L l hop)) (else l)))))
+  (define leftmost/escape
+    (λ (l)
+       (escapecc
+         (hop (let L ((ll l))
+                (match/first
+                  ll
+                  (() '(no symbol here))
+                  ((,first unquote rest)
+                   (cond ((atom/book? first) (hop first))
+                         (else (begin (L first) (L rest))))))))
+         (else l))))
+  (define rember1*/letcc
+    (λ (atom sexp)
+       (letrec ((R (λ (sexp skip)
+                      (match/first
+                        sexp
+                        (() (skip 'no-present))
+                        ((,a unquote d)
+                         (cond ((atom/book? a)
+                                (cond ((equal? a atom) d)
+                                      (else (cons a (R d skip)))))
+                               (else
+                                (let1 (new-car (apply/cc R (list a)))
+                                      (cond ((symbol? new-car) (cons a (R d skip)))
+                                            (else (cons new-car d)))))))))))
+         (let1 (s (apply/cc R (list sexp)))
+               (cond ((symbol? s) sexp) (else s))))))
+  (define rember1*/try
+    (λ (atom sexp)
+       (letrec ((make-skipper
+                  (λ (skip sexp)
+                     (τ (let1 (reason `(,atom not present in ,sexp))
+                              (display reason)
+                              (skip reason)))))
+                (R (λ (sexp keep-searching)
+                      (match/first
+                        sexp
+                        (() (keep-searching))
+                        ((,a unquote d)
+                         (cond ((atom/book? a)
+                                (cond ((equal? a atom) d)
+                                      (else (cons a (R d keep-searching)))))
+                               (else
+                                (trycc/named
+                                  (skip (cons (R a (make-skipper skip a)) d))
+                                  (else (cons a (R d keep-searching)))))))))))
+         (trycc/named
+           (skip (R sexp (make-skipper skip sexp)))
+           (else =&gt; (λ (previous) (display previous) sexp)))))))
+</code></pre></div>
+<h2 id="test/multi-insert*&amp;co"><a href="#test/multi-insert*&amp;co"><code>test/multi-insert*&amp;co</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/multi-insert*&amp;co _)
+  (let ((sexp '((((orange fish)) apple anchovy) apple (orange)))
+        (sexp-expected
+          '((((orange tuna fish)) apple tuna anchovy) apple (orange tuna)))
+        (identity-abridged (λ args args)))
+    (⊦= `(,sexp-expected 1 2)
+        (multi-insert*&amp;co 'tuna 'anchovy 'orange sexp identity-abridged))
+    (⊦= `(,sexp-expected 1 2)
+        (letcc hop
+               (multi-insert*&amp;co
+                 'tuna
+                 'anchovy
+                 'orange
+                 sexp
+                 (λ args (hop args)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2063584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/two-in-a-row?"><a href="#test/two-in-a-row?"><code>test/two-in-a-row?</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/two-in-a-row? _)
+  (⊦= #f (two-in-a-row? '()))
+  (⊦= #f (two-in-a-row? '(j f r e k s i)))
+  (⊦= #t (two-in-a-row? '(j f r e k s s)))
+  (⊦= #f (two-in-a-row?&amp;hop '()))
+  (⊦= #f (two-in-a-row?&amp;hop '(j f r e k s i)))
+  (⊦= #t (two-in-a-row?&amp;hop '(j f r e k s s))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2064896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/intersect"><a href="#test/intersect"><code>test/intersect</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/intersect _)
+  (⊦= '() (intersect '(1 2 3) '()))
+  (⊦= '(2 3) (intersect '(1 2 3) '(2 3 4))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2063152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/intersect+all"><a href="#test/intersect+all"><code>test/intersect+all</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/intersect+all _)
+  (⊦= '(3) (intersect+all '((3 mango and) (3 kiwis and) (3 hamburgers))))
+  (⊦= '()
+      (intersect+all '((3 steaks and) (no food and) () (3 diet hamburgers))))
+  (⊦= '()
+      (intersect+all '((3 steaks and) (no food and) (3 diet hamburgers) ())))
+  (⊦= '()
+      (intersect+all
+        '((3 steaks and)
+          (no food and)
+          (three baked potatoes)
+          (3 diet hamburgers)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2064384 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/comb-upto-last"><a href="#test/comb-upto-last"><code>test/comb-upto-last</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/comb-upto-last _)
+  (⊦= '(e f) (comb-upto-last 'a -1 '(a b a d a e f)))
+  (⊦= '(a b c d a e f) (comb-upto-last 'r -1 '(a b c d a e f)))
+  (⊦= '() (comb-upto-last 'a 1 '(a b c d a e f a g h)))
+  (⊦= '(b c d) (comb-upto-last 'a 1 '(b c d a e f a g h)))
+  (⊦= '(e f) (comb-upto-last 'a 2 '(b c d a e f a g h)))
+  (⊦= '(g h) (comb-upto-last 'a 3 '(b c d a e f a g h)))
+  (⊦= '(g h) (comb-upto-last 'a 50 '(b c d a e f a g h))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2065472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/leftmost"><a href="#test/leftmost"><code>test/leftmost</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/leftmost _)
+  (let1 (leftmost leftmost/escape)
+        (⊦= 'a (leftmost '(((a)) b (c))))
+        (⊦= 'b (leftmost '((() ((() (())))) b (c))))
+        (let1 (sexp '((() ((() (())))) (((() ()))) ()))
+              (⊦= sexp (leftmost sexp)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2066696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rember1*"><a href="#test/rember1*"><code>test/rember1*</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rember1* _)
+  (let1 (R (λ args
+              (let1 (result #f)
+                    (with-output-to-string
+                      (τ (set! result (apply rember1*/try args))))
+                    result)))
+        (⊦= '((delicious) (food)) (R 'more '((delicious) more (food))))
+        (⊦= '((orange) more (fruits)) (R 'pizza '((orange) more (fruits))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2068344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/leftmost/variants"><a href="#test/leftmost/variants"><code>test/leftmost/variants</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/leftmost/variants _)
+  (let1 (sexp '((() ((() (())))) (((() ()))) ()))
+        (for-each
+          (λ (leftmost)
+             (⊦= 'a (leftmost '(((a)) b (c))))
+             (⊦= 'b (leftmost '((() ((() (())))) b (c))))
+             (⊦= sexp (leftmost sexp)))
+          (list leftmost/awkward
+                leftmost/awkward+letcc
+                leftmost/escape+explicit
+                leftmost/escape))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2069008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/leftmost/non-symbol-atoms"><a href="#test/leftmost/non-symbol-atoms"><code>test/leftmost/non-symbol-atoms</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/leftmost/non-symbol-atoms _)
+  (for-each
+    (λ (leftmost)
+       (⊦= 1 (leftmost '(1 a)))
+       (⊦= &quot;s&quot; (leftmost '((&quot;s&quot;) a)))
+       (⊦= #f (leftmost '((() #f) a)))
+       (⊦= 'a (leftmost '(() (a) 1))))
+    (list leftmost/awkward
+          leftmost/awkward+letcc
+          leftmost/escape+explicit
+          leftmost/escape)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2070104 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rember1*/non-symbol-atoms"><a href="#test/rember1*/non-symbol-atoms"><code>test/rember1*/non-symbol-atoms</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rember1*/non-symbol-atoms _)
+  (let1 (R (λ args
+              (let1 (result #f)
+                    (with-output-to-string
+                      (τ (set! result (apply rember1*/try args))))
+                    result)))
+        (for-each
+          (λ (rember1*)
+             (⊦= '(1 2) (rember1* 'x '(1 x 2)))
+             (⊦= '(1 (2)) (rember1* 3 '(1 (3 2))))
+             (⊦= '((1 &quot;t&quot;) &quot;s&quot;) (rember1* &quot;s&quot; '((1 &quot;s&quot; &quot;t&quot;) &quot;s&quot;)))
+             (⊦= '(1 (2) #t) (rember1* 'x '(1 (2) #t))))
+          (list rember1*/letcc R))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2072072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rember1*/variants"><a href="#test/rember1*/variants"><code>test/rember1*/variants</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rember1*/variants _)
+  (⊦= '((delicious) (food)) (rember1*/letcc 'more '((delicious) more (food))))
+  (⊦= '((orange) more (fruits))
+      (rember1*/letcc 'pizza '((orange) more (fruits))))
+  (⊦= '((a) x) (rember1*/letcc 'x '((a x) x)))
+  (⊦= '((a) x) (rember1*/try 'x '((a x) x)))
+  (⊦= &quot;(more not present in (delicious))&quot;
+      (with-output-to-string
+        (τ (rember1*/try 'more '((delicious) more (food))))))
+  (⊦= (string-append
+        &quot;(pizza not present in (orange))&quot;
+        &quot;(pizza not present in (fruits))&quot;
+        &quot;(pizza not present in ((orange) more (fruits)))&quot;
+        &quot;((pizza not present in ((orange) more (fruits))))&quot;)
+      (with-output-to-string
+        (τ (rember1*/try 'pizza '((orange) more (fruits)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2072632 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/intersect/letrec"><a href="#test/intersect/letrec"><code>test/intersect/letrec</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/intersect/letrec _)
+  (⊦= '() (intersect/letrec '(1 2 3) '()))
+  (⊦= '(2 3) (intersect/letrec '(1 2 3) '(2 3 4)))
+  (⊦= '() (intersect+all '()))
+  (⊦= '(a b) (intersect+all '((a b))))
+  (⊦= '() (intersect+all '(() ()))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2073640 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

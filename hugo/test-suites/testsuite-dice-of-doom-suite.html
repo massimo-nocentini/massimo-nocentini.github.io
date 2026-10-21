@@ -1,0 +1,244 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/dice-of-doom/initial"><a href="#test/dice-of-doom/initial"><code>test/dice-of-doom/initial</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/initial _)
+  (let1 (boards (seeded-boards))
+        (⊦= &quot;\n    B-2 B-2 \n  B-2 B-2 &quot; (to-string (list-ref boards 0)))
+        (⊦= #((A 4) (A 3) (A 3) (B 2)) (board-cells (list-ref boards 1)))
+        (⊦= '(2 1 3) (stream:-&gt;list (neighbors 0 (list-ref boards 2))))
+        (⊦= '(3 0) (stream:-&gt;list (neighbors 1 (list-ref boards 3))))
+        (⊦= '(0 3) (stream:-&gt;list (neighbors 2 (list-ref boards 4))))
+        (⊦= '(1 0 2) (stream:-&gt;list (neighbors 3 (list-ref boards 5))))
+        (⊦= #((A 3) (A 1) (B 3) (A 2))
+            (board-cells
+              (board-attack
+                (make-board #((A 3) (A 3) (B 3) (B 1)) 2)
+                'A
+                1
+                3
+                3)))
+        (⊦= #((A 2) (B 3) (A 3) (B 1))
+            (board-cells
+              (add-new-dice (make-board #((A 1) (B 3) (A 2) (B 1)) 2) 'A 2)))
+        (⊦= '(A &quot;\n    A-1 B-1 \n  A-2 B-1 &quot;
+                (((cell 2 attacks 3)
+                  (A &quot;\n    A-1 B-1 \n  A-1 A-1 &quot;
+                     ((pass (B &quot;\n    A-1 B-1 \n  A-1 A-1 &quot; ())))))))
+            (game-tree-&gt;sexp
+              (game-tree
+                (make-board #((A 1) (B 1) (A 2) (B 1)) 2)
+                (apply circular-list '(A B))
+                0
+                #t)))
+        (⊦= '(A) (winners (make-board #((A 1) (B 1) (A 1) (A 1)) 2)))
+        (⊦= &quot;\n          A-4 B-1 B-4 A-3 A-4 \n        B-1 A-2 A-1 A-2 A-1 \n      A-1 B-3 B-4 A-1 A-3 \n    A-2 B-3 B-2 A-2 B-4 \n  A-1 A-4 A-1 B-3 B-2 &quot;
+            (with-output-to-string (τ (display (list-ref boards 6)))))
+        (⊦= transcript/4x4
+            (with-output-to-string
+              (τ (let ((board (list-ref boards 7))
+                       (players (apply circular-list '(A B))))
+                   ((computer-vs-computer 4)
+                    (game-tree board players 0 #t))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(12582912 2448536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/literal-boards"><a href="#test/dice-of-doom/literal-boards"><code>test/dice-of-doom/literal-boards</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/literal-boards _)
+  (let1 (boards (seeded-boards))
+        (⊦= (board-cells board/5x5) (board-cells (list-ref boards 6)))
+        (⊦= (board-cells board/4x4) (board-cells (list-ref boards 7))))
+  (⊦= &quot;\n          A-4 B-1 B-4 A-3 A-4 \n        B-1 A-2 A-1 A-2 A-1 \n      A-1 B-3 B-4 A-1 A-3 \n    A-2 B-3 B-2 A-2 B-4 \n  A-1 A-4 A-1 B-3 B-2 &quot;
+      (with-output-to-string (τ (display board/5x5))))
+  (⊦= '(2 1 3) (stream:-&gt;list (neighbors 0 board/2x2)))
+  (⊦= '(3 0) (stream:-&gt;list (neighbors 1 board/2x2)))
+  (⊦= '(0 3) (stream:-&gt;list (neighbors 2 board/2x2)))
+  (⊦= '(1 0 2) (stream:-&gt;list (neighbors 3 board/2x2)))
+  (for-each
+    (λ (pos)
+       (⊦= (stream:-&gt;list (neighbors pos board/5x5))
+           (stream:-&gt;list (neighbors/size pos 5)))
+       (⊦= (stream:-&gt;list (neighbors pos board/5x5))
+           (stream:-&gt;list
+             (neighbors pos (make-board (make-vector 25 '(C 2)) 5)))))
+    (iota 25))
+  (⊦= '(5 1 6) (stream:-&gt;list (neighbors/size 0 5)))
+  (⊦= '(19 18 23) (stream:-&gt;list (neighbors/size 24 5)))
+  (call+stdout
+    (τ ((computer-vs-computer 4)
+        (game-tree board/4x4 (apply circular-list '(A B)) 0 #t)))
+    (λ (result transcript) (⊦= '(A) result) (⊦= transcript/4x4 transcript))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2457488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/gen-board/shape"><a href="#test/dice-of-doom/gen-board/shape"><code>test/dice-of-doom/gen-board/shape</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/gen-board/shape _)
+  (let1 (b (gen-board 5 '(A B) 4))
+        (⊦= 5 (board-size b))
+        (⊦= 25 (board-hexnum b))
+        (⊦= 25 (vector-length (board-cells b)))
+        (⊨ (every (λ (hex)
+                     (and (memq (car hex) '(A B)) (&lt;= 1 (cadr hex) 4) #t))
+                  (vector-&gt;list (board-cells b))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2459712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/printer"><a href="#test/dice-of-doom/printer"><code>test/dice-of-doom/printer</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/printer _)
+  (⊦= &quot;\nCurrent player: A\nBoard:\n    A-1 B-1 \n  A-2 B-1 &quot;
+      (with-output-to-string (τ (display (make-gametree 'A board/2x2 '())))))
+  (⊦= &quot;[\n    A-1 B-1 \n  A-2 B-1 ]&quot;
+      (with-output-to-string
+        (τ (let1 (s (open-output-string))
+                 (display board/2x2 s)
+                 (display &quot;[&quot;)
+                 (display (get-output-string s))
+                 (display &quot;]&quot;))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2461352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/game-tree/tabled"><a href="#test/dice-of-doom/game-tree/tabled"><code>test/dice-of-doom/game-tree/tabled</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/game-tree/tabled _)
+  (let ((t₁ (game-tree board/2x2 (apply circular-list '(A B)) 0 #t))
+        (t₂ (game-tree board/2x2 (list/circular 'A 'B) 0 #t)))
+    (⊨ (eq? t₁ t₂)))
+  (⊦= '(A B C) (players-rotation (circular-list 'A 'B 'C)))
+  (⊦= '(B C A) (players-rotation (cdr (circular-list 'A 'B 'C)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2461104 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/game-tree/key-hash"><a href="#test/dice-of-doom/game-tree/key-hash"><code>test/dice-of-doom/game-tree/key-hash</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/game-tree/key-hash _)
+  (let* ((cells (let C ((n 4))
+                  (cond ((zero? n) '(()))
+                        (else
+                         (append-map
+                           (λ (rest)
+                              (append-map
+                                (λ (p)
+                                   (map (λ (d) (cons (list p d) rest)) '(1 2 3)))
+                                '(A B)))
+                           (C (sub1 n)))))))
+         (boards (map (λ (cs) (make-board (list-&gt;vector cs) 2)) cells))
+         (H (λ (b) (game-tree/key-hash (list b '(A B) 0 #f) 1000003))))
+    (⊦= 1296 (length boards))
+    (⊨ (&gt; (length (delete-duplicates (map H boards))) 1200))
+    (let1 (copy (make-board (vector-copy (board-cells board/2x2)) 2))
+          (⊦= (H board/2x2) (H copy))
+          (⊨ (eq? (game-tree board/2x2 (circular-list 'A 'B) 0 #f)
+                  (game-tree copy (circular-list 'A 'B) 0 #f))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.024) (memory #(12582912 2758504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/game-tree/turn-order"><a href="#test/dice-of-doom/game-tree/turn-order"><code>test/dice-of-doom/game-tree/turn-order</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/game-tree/turn-order _)
+  (let* ((b (make-board #((A 1) (B 1) (A 2) (C 1)) 2))
+         (next-after-pass (λ (t) (car (cadr (car (stream:-&gt;list (caddr t)))))))
+         (t/ABC (game-tree b (circular-list 'A 'B 'C) 0 #f))
+         (t/ACB (game-tree b (circular-list 'A 'C 'B) 0 #f)))
+    (⊨ (not (eq? t/ABC t/ACB)))
+    (⊦= 'B (next-after-pass t/ABC))
+    (⊦= 'C (next-after-pass t/ACB)))
+  (let ((t/AB (game-tree board/2x2 (circular-list 'A 'B) 0 #t))
+        (t/AC (game-tree board/2x2 (circular-list 'A 'C) 0 #t)))
+    (⊨ (not (eq? t/AB t/AC)))
+    (⊦= 'B
+        (car (cadr (car (stream:-&gt;list
+                          (caddr (cadr (car (stream:-&gt;list (caddr t/AB))))))))))
+    (⊦= 'C
+        (car (cadr (car (stream:-&gt;list
+                          (caddr (cadr (car (stream:-&gt;list (caddr t/AC))))))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2765368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/winners/tie"><a href="#test/dice-of-doom/winners/tie"><code>test/dice-of-doom/winners/tie</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/winners/tie _)
+  (⊦= '(A B) (winners (make-board #((A 1) (B 1) (B 1) (A 1)) 2)))
+  (⊦= &quot;\nThe game is a tie between (A B)&quot;
+      (with-output-to-string
+        (τ (announce-winner (make-board #((A 1) (B 1) (B 1) (A 1)) 2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2766664 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/heuristics"><a href="#test/dice-of-doom/heuristics"><code>test/dice-of-doom/heuristics</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/heuristics _)
+  (⊦= '(#f #f #f #t) (map (λ (pos) (threatened pos board/2x2)) '(0 1 2 3)))
+  (⊦= 2 (score-board board/2x2 'A))
+  (⊦= 1 (score-board board/2x2 'B)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2768008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/ratings"><a href="#test/dice-of-doom/ratings"><code>test/dice-of-doom/ratings</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/ratings _)
+  (let1 (t (game-tree board/2x2 (apply circular-list '(A B)) 0 #t))
+        (⊦= '(5) (get-ratings t 'A))
+        (⊦= 5 ((rate-position 'A) t))
+        (⊦= 5
+            (rate-position/αβ t 'A most-positive-fixnum most-negative-fixnum))
+        (⊦= '(5)
+            (get-ratings/αβ-max
+              t
+              'A
+              most-positive-fixnum
+              most-negative-fixnum))
+        (⊦= '(A &quot;\n    A-1 B-1 \n  A-1 A-1 &quot;
+                ((pass (B &quot;\n    A-1 B-1 \n  A-1 A-1 &quot; ()))))
+            (game-tree-&gt;sexp (handle-computer t)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2470432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dice-of-doom/limit-tree-depth"><a href="#test/dice-of-doom/limit-tree-depth"><code>test/dice-of-doom/limit-tree-depth</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dice-of-doom/limit-tree-depth _)
+  (let1 (t (game-tree board/2x2 (apply circular-list '(A B)) 0 #t))
+        (⊨ (stream:null? (caddr ((limit-tree-depth 0) t))))
+        (⊦= '(A &quot;\n    A-1 B-1 \n  A-2 B-1 &quot;
+                (((cell 2 attacks 3) (A &quot;\n    A-1 B-1 \n  A-1 A-1 &quot; ()))))
+            (game-tree-&gt;sexp ((limit-tree-depth 1) t)))
+        (⊦= (game-tree-&gt;sexp t) (game-tree-&gt;sexp ((limit-tree-depth 5) t)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2471712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

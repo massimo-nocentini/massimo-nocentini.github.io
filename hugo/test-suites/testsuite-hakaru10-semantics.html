@@ -1,0 +1,1205 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section7489">
+<header>
+<h1>Semantics of branches</h1></header></section>
+<p>In upstream's kernel an inactive node's updates are delayed (M:298-303) and replayed
+        when its branch is activated again (M:767-775).  For an observed node this is exact:
+        activation adds back the LL that deactivation took.  For a resampleable node the
+        replayed update adds 
+<mtext>ll(now) − ll(stale)</mtext> to the Δ of the switching step: it
+        charges the change of LL of steps already accepted without it.  The note M:1145-1168
+        justifies the treatment of branches by merging a branch's nodes into one node:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">So, when it comes to computing the acceptance ratio for a program
+with branches, we take
+
+p4 = do
+     c &lt;- bernN (Val 0.5)
+     if_ c (do e1 e2 ...)
+           (do e3 e4 e5 ...)
+
+to be
+
+p4' = do
+      c &lt;- bernN (Val 0.5)
+      if_ c e_then e_else
+
+That is, we merge (at least for the purpose of presentation) e1, e2 ...
+into one node e_then, whose ll is the sum of ll of constituents. Ditto
+for e_else.
+
+When we switch the branches, we remove the ll of one branch from
+llcum and add ll of the other branch. In our terms, we remove the ll
+of the deactivated nodes and add ll of the activated nodes.
+
+This algorithm is resilient with respect to adding replacing a node e
+with e &gt;&gt;= diracN -- the desired behavior.</code></pre></div>
+<p>The argument assumes the reactivated nodes are fresh draws from their prior, while
+        the kernel reuses their stale values.  The smallest counterexample, <code class="w3-codespan">pswitch</code> (plan §6.8), has P(c) = 0.5; the exact stationary
+        distribution of upstream's kernel gives P(c) = 0.377286.  The upstream examples are
+        unaffected: their branch-local resampleable nodes have constant parameters.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pswitch
+  (do/monad
+    (← c (dist bern 0.5))
+    (← m (dist uniformly '(0 1)))
+    (if_ c
+         (dist categorical (lift (λ (mv) `((,mv . 0.9) (,(- 1 mv) . 0.1))) m))
+         (diracN (lift identity m)))
+    (return c)))
+</code></pre></div>
+<p>The opt-in <code class="w3-codespan">#:semantics 'extended</code> (deviation 8) runs MH on the
+        space extended with the inactive resampleable nodes as auxiliary variables drawn
+        from their prior, the merged-node argument made exact: updates are never delayed,
+        an inactive resampleable node's LL change counts in Δ and an inactive observed
+        node's does not, (de)activation still moves only observed weights, and the
+        proposal, the retry and the cardinality term are upstream's.  An inactive node whose
+        update raises a parameter error, or any other error that an inactive Dirac node would
+        defer, rejects the step (plan C22).  The kernel residual of
+        hakaru10-exact.scm shows that the extended kernel leaves the posterior invariant,
+        exactly, on small models.</p>
+<h2 id="test/semantics/pswitch/upstream"><a href="#test/semantics/pswitch/upstream"><code>test/semantics/pswitch/upstream</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B1: upstream's bias, documented: P(c) near 0.3773 instead of 0.5.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/pswitch/upstream _)
+  (⊦ (equal-approx? 0.03) 0.3773 (frequency identity (mcmC 40000 pswitch))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.137) (memory #(25165824 7160488 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/pswitch/extended"><a href="#test/semantics/pswitch/extended"><code>test/semantics/pswitch/extended</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B2: the extended semantics samples the right posterior, P(c) = 0.5.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/pswitch/extended _)
+  (⊦ (equal-approx? 0.02)
+     0.5
+     (frequency identity (mcmC 40000 pswitch #:semantics 'extended))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.154) (memory #(25165824 7160976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/extended/examples"><a href="#test/semantics/extended/examples"><code>test/semantics/extended/examples</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B3: the extended semantics on upstream's branching examples gives the same
+            posteriors as S7 and S8, within S7's tolerances.</p>
+<p>The colored balls line is a regression value at seed 17, not a statistical
+            check: P(1) = 0.4265, with P(1) &gt; P(2) &gt; P(3), against the closed form 0.4119636809525704
+            of hakaru10-exact.scm.  At 10000 extended samples the standard deviation of P(1)
+            across seeds is about 0.05 (seeds 1 to 40: mean 0.4085, sd 0.0515), so a
+            tolerance of 4 to 5 of them could not tell a biased sampler from a correct one.
+            That the extended kernel leaves the colored balls' posterior invariant is shown
+            exactly, by the kernel residual of hakaru10-exact.scm (E10), on the colored balls
+            cut to 3 balls and 2 draws.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/extended/examples _)
+  (let1 (run (λ (m) (proportions (mcmC 10000 m #:semantics 'extended))))
+        (⊦ (equal-approx? 0.03)
+           '((10 . 0.25) (11 . 0.25) (20 . 0.25) (21 . 0.25))
+           (run pcond1))
+        (⊦ (equal-approx? 0.04)
+           '((1 . 0.5) (20 . 0.25) (21 . 0.25))
+           (run pcond2))
+        (⊦ (equal-approx? 0.05)
+           '((1 . 0.5) (20 . 0.25) (21 . 0.25))
+           (run pcond3))
+        (⊦ (equal-approx? 0.05)
+           `((1 unquote (/ 2.0 3.0))
+             (20 unquote (/ 1.0 6.0))
+             (21 unquote (/ 1.0 6.0)))
+           (run pcond4)))
+  (let1 (xs (mcmC 10000 mixng #:semantics 'extended))
+        (⊦ (equal-approx? 0.4) 5.5 (mean xs))
+        (⊦ (equal-approx? 0.05) 0.5 (frequency (λ (x) (&gt; x 5.0)) xs)))
+  (let1 (balls (proportions
+                 (mcmC 10000
+                       (cballs-model (make-list 10 'blue))
+                       #:semantics
+                       'extended
+                       #:seed
+                       17)))
+        (⊦ = 0.4265 (alist-ref 1 balls))
+        (⊦ &gt; (alist-ref 1 balls) (alist-ref 2 balls) (alist-ref 3 balls))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.36) (memory #(25165824 6442552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/check"><a href="#test/semantics/check"><code>test/semantics/check</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B4: <code class="w3-codespan">#:check #t</code> on 300 samples of seven models, in both
+            semantics, raises no condition: a rebuild of the model reproduces the initial
+            trace node by node (graph, values, and LLs within 1e-9), an address-order redraw
+            of its random choices reproduces their values and the trace's LL (plan §6.9, §15
+            C37; within 1e-9 of the sum of the LLs' magnitudes, so that <code class="w3-codespan">far-inactive</code>, whose build at seed 17 deactivates an observation
+            of LL about -5·10⁷, passes in both semantics: the 'upstream trace's LL adds and
+            then subtracts it, M:659, and the 'extended one never counts it), and after every
+            step the reference evaluator recomputes every node from scratch (activity
+            counts, Dirac values, distributions and LLs, exits) and finds the incremental
+            state, a rejected step restores the state exactly, and in <code class="w3-codespan">'extended</code> mode an accepted step's Δ is the change of the
+            extended target's LL; the next case shows that each of these checks fails when it
+            should.</p>
+<p>The rebuild builds the branch its test does not select as the first build
+            does, under lazy lifting, so a model whose inactive branch applies <code class="w3-codespan">car</code> to the <code class="w3-codespan">'()</code> its test rules out (a
+            deferred Dirac value, M:99, M:120-129) passes the check, with a constant test and
+            with a lifted one, in both semantics, and samples what it samples without <code class="w3-codespan">#:check</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-car/constant
+  (do/monad
+    (let xs '())
+    (← b (dist bern 0.5))
+    (if_ (lift null? xs) (return b) (diracN (lift car xs)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-car/node
+  (do/monad
+    (← b (dist bern 0.5))
+    (let xs (lift (λ (bv) (if bv '() '(1))) b))
+    (if_ (lift null? xs) (return 'none) (diracN (lift car xs)))))
+</code></pre></div>
+<p>Three models reach the pending weight of the <code class="w3-codespan">'extended</code> semantics (deviation 8), each checked on 2000 samples.  In <code class="w3-codespan">act-update</code> and <code class="w3-codespan">act-update/finite</code> a step that moves x from 2 activates the observation and updates its parameters
+            at once: its weight is added once, with its new LL, when propagation ends, which
+            the step check verifies against the change of the extended LL (the stale LL is
+            -inf in the first, log .5 in the second).  In <code class="w3-codespan">pending-abort</code> the step that activates the observation is then rejected mid-propagation by the
+            inactive <code class="w3-codespan">uniformly '()</code> of the second branch (plan C22): the
+            journal restores the pending flag, which the reference evaluator finds clear and
+            the step check finds restored.  Its chain, which the extended target keeps off x
+            = 0 (as in <code class="w3-codespan">invalid-inactive</code>, case B5), gives P(x = 1) = .3/1.3
+            within .02 over 20000 samples.  The 'extended chain of <code class="w3-codespan">act-update</code> gives its exact posterior, (.9 .3 1)/2.2, within .02
+            over 20000 samples, and the kernel residual (case E10 of hakaru10-exact.scm) is below 
+<mtext>10⁻¹²</mtext> on both <code class="w3-codespan">act-update</code> models.  Counting the
+            weight at activation, or again at the update, makes the residual of <code class="w3-codespan">act-update</code> about .18, and its chain never leaves x = 2.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define act-update
+  (do/monad
+    (← x (dist uniformly '(0 1 2)))
+    (if_ (lift (λ (v) (&lt; v 2)) x)
+         (dist (condition 0 categorical)
+               (lift (λ (v)
+                        (case v
+                          ((0) '((0 . 0.9) (1 . 0.1)))
+                          ((1) '((0 . 0.3) (1 . 0.7)))
+                          (else '((1 . 1.0)))))
+                     x))
+         (return 'none))
+    (return x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define act-update/finite
+  (do/monad
+    (← x (dist uniformly '(0 1 2)))
+    (if_ (lift (λ (v) (&lt; v 2)) x)
+         (dist (condition 0 categorical)
+               (lift (λ (v)
+                        (case v
+                          ((0) '((0 . 0.9) (1 . 0.1)))
+                          ((1) '((0 . 0.3) (1 . 0.7)))
+                          (else '((0 . 0.5) (1 . 0.5)))))
+                     x))
+         (return 'none))
+    (return x)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pending-abort
+  (do/monad
+    (← x (dist uniformly '(0 1 2)))
+    (if_ (lift (λ (v) (&lt; v 2)) x)
+         (dist (condition 0 categorical)
+               (lift (λ (v)
+                        `((0 unquote (if (= v 0) 0.9 0.3))
+                          (1 unquote (if (= v 0) 0.1 0.7))))
+                     x))
+         (return 'none))
+    (if_ (lift (λ (v) (not (= v 0))) x)
+         (dist uniformly (lift (λ (v) (if (= v 0) '() '(a b))) x))
+         (return 'z))
+    (return x)))
+</code></pre></div>
+<p>The chain keeps an initial trace of LL NaN, which only an infinite LL would make
+            it rebuild (Metropolis.hs:853-854, 882-891): at seed 17 <code class="w3-codespan">nan-initial</code>'s build draws b = 3, whose observation has LL NaN.
+            A step that moves b has a NaN ratio, which fails both acceptance tests
+            (Metropolis.hs:939-944), so b stays 3, while c, whose steps leave the NaN term
+            alone, takes both values.  The step check of <code class="w3-codespan">#:check</code> cannot compare a Δ with a change of NaN extended LLs and skips it there, so
+            both chains sample with it what they sample without it.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define nan-initial
+  (do/monad
+    (← b (dist uniformly '(1 2 3)))
+    (dist (condition 0.0 normal)
+          0.0
+          (lift (λ (bv) (case bv ((3) 0.0) ((2) 1.0) (else 2.0))) b))
+    (← c (dist bern 0.5))
+    (return (pair b c))))
+</code></pre></div>
+<p>A value of NaN is equal? to no flonum, not even to itself, and a recomputation
+            builds a fresh one, so the checks match two NaNs, in a value and in a
+            distribution's parameters (<code class="w3-codespan">same-value?</code>): the 300 samples of <code class="w3-codespan">nan-mean</code> are the same with and without <code class="w3-codespan">#:check</code>, in both semantics, and the rebuild check passes at seed 107336, where k = 0
+            and the mean is NaN.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define nan-mean
+  (do/monad
+    (let mean-of (λ (kv) (/ (exact-&gt;inexact (* kv 3)) (exact-&gt;inexact kv))))
+    (← k (dist uniformly '(0 1 2)))
+    (← mean (diracN (lift mean-of k)))
+    (← z
+       (dist categorical
+             (lift (λ (kv) `((,(mean-of kv) . 0) (a . 1) (b . 1))) k)))
+    (return (pair k z))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/check _)
+  (for-each
+    (λ (semantics)
+       (for-each
+         (Λ ((,name ,m))
+            (⊦ equal?
+               (list name semantics 300)
+               (list name
+                     semantics
+                     (length (mcmC 300 m #:semantics semantics #:check #t)))))
+         `((phier3 ,(phierN 3))
+           (mhex ,mhex)
+           (exif2 ,exif2)
+           (pcond4 ,pcond4)
+           (colored-balls ,(cballs-model '(blue green blue)))
+           (pswitch ,pswitch)
+           (regression ,(regression (regression-data 2 10))))))
+    '(upstream extended))
+  (for-each
+    (λ (semantics)
+       (for-each
+         (Λ ((,name ,m))
+            (⊦ equal?
+               (list name semantics (mcmC 50 m #:semantics semantics))
+               (list name
+                     semantics
+                     (mcmC 50 m #:semantics semantics #:check #t))))
+         `((guarded-car/constant ,guarded-car/constant)
+           (guarded-car/node ,guarded-car/node))))
+    '(upstream extended))
+  (for-each
+    (Λ ((,name ,m))
+       (⊦ equal?
+          (list name 2000)
+          (list name (length (mcmC 2000 m #:semantics 'extended #:check #t)))))
+    `((act-update ,act-update)
+      (act-update/finite ,act-update/finite)
+      (pending-abort ,pending-abort)))
+  (⊦ (equal-approx? 0.02)
+     `((1 unquote (/ 0.3 1.3)) (2 unquote (/ 1.0 1.3)))
+     (proportions (mcmC 20000 pending-abort #:semantics 'extended)))
+  (let1 (far-inactive
+          (do/monad
+            (← c (dist bern 0.5))
+            (if_ (lift not c)
+                 (do/monad (dist (condition 1000.0 normal) 0.0 0.1) (return 1))
+                 (return 0))))
+        (for-each
+          (λ (semantics)
+             (⊦ equal?
+                (list semantics #t 100)
+                (list semantics
+                      (construction-check far-inactive #:semantics semantics)
+                      (length
+                        (mcmC 100
+                              far-inactive
+                              #:semantics
+                              semantics
+                              #:check
+                              #t)))))
+          '(upstream extended)))
+  (let1 (exact (exact-posterior act-update))
+        (⊦ (equal-approx? 1e-12)
+           `((0 unquote (/ 0.9 2.2))
+             (1 unquote (/ 0.3 2.2))
+             (2 unquote (/ 1.0 2.2)))
+           exact)
+        (⊦ (equal-approx? 0.02)
+           exact
+           (proportions (mcmC 20000 act-update #:semantics 'extended))))
+  (for-each
+    (λ (semantics)
+       (let1 (xs (mcmC 200 nan-initial #:semantics semantics))
+             (⊦ equal?
+                (list semantics #t xs)
+                (list semantics
+                      (construction-check nan-initial #:semantics semantics)
+                      (mcmC 200 nan-initial #:semantics semantics #:check #t)))
+             (⊦ equal?
+                (list semantics '(3))
+                (list semantics (delete-duplicates (map car xs))))
+             (⊦ equal?
+                (list semantics 2)
+                (list semantics (length (delete-duplicates (map cdr xs)))))))
+    '(upstream extended))
+  (for-each
+    (λ (semantics)
+       (⊦ equal?
+          (list semantics #t (mcmC 300 nan-mean #:semantics semantics) 0)
+          (list semantics
+                (construction-check
+                  nan-mean
+                  #:seed
+                  107336
+                  #:semantics
+                  semantics)
+                (mcmC 300 nan-mean #:semantics semantics #:check #t)
+                (car (car (mcmC 1
+                                nan-mean
+                                #:seed
+                                107336
+                                #:semantics
+                                semantics
+                                #:check
+                                #t))))))
+    '(upstream extended))
+  (⊦ equal?
+     '()
+     (filter-map
+       (Λ ((,name unquote m))
+          (let1 (residual (kernel-residual m))
+                (and (not (&lt; residual 1e-12)) (cons name residual))))
+       `((act-update unquote act-update)
+         (act-update/finite unquote act-update/finite)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 1.051) (memory #(25165824 6207944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/check/negative"><a href="#test/semantics/check/negative"><code>test/semantics/check/negative</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B4′, the negative controls of B4: each oracle of <code class="w3-codespan">#:check</code> reports a chain it should reject, with an <code class="w3-codespan">internal</code> condition.  <code class="w3-codespan">construction-check</code> (plan §6.9, §15 C37) catches
+            a model whose two builds, the initial trace and a rebuild from the same seed,
+            differ in value (a counter answered as the result) or in LL (the same counter as
+            an observation's standard deviation): each run increments the counter after a
+            bind, so each build sees another value.  An LL -inf agrees only with -inf: in <code class="w3-codespan">counter/bound</code> the counter bounds the uniform of an observation
+            in a branch never taken, which is impossible on the first build only, and <code class="w3-codespan">'extended</code> mode, which keeps llcum finite, reports it.  <code class="w3-codespan">mcmC</code> runs it once per chain under <code class="w3-codespan">#:check</code>, and reports both models the same way.  A deferred value (deviation 11) is
+            compared by its arguments, since its closure is fresh per build: <code class="w3-codespan">counter/deferred</code> reads the counter in the inactive branch with a
+            function that raises, and its two builds differ only there.  The rebuild also
+            catches a model whose graph alone changes, <code class="w3-codespan">switching</code>, whose Dirac node reads x on odd runs and y, of the same value, on even ones;
+            and the address-order redraw catches a sampler that draws once more on its third
+            call, the redraw's (<code class="w3-codespan">third-skips</code>, another value), or that then reports its LL plus 1 (<code class="w3-codespan">third-shifts</code>, another LL).  In <code class="w3-codespan">'extended</code> mode the LL that the redraw checks is the extended one, which never counts an
+            inactive observation, so neither does the check's tolerance: the shift is caught
+            next to an inactive observation that is impossible (LL -inf) or far off (LL about
+            -5·10²³).  In <code class="w3-codespan">'upstream</code> mode, whose LL adds and then
+            subtracts that observation's (M:659), the shift is lost: next to the impossible
+            observation the LL is NaN, which the redraw cannot compare, and next to the far
+            one it is lost in the rounding.  A build of LL NaN is still checked, all but the
+            redraw's LL, since <code class="w3-codespan">initial-step</code> keeps it (it retries only an
+            infinite LL, M:853-854): next to the impossible observation, the redraw of <code class="w3-codespan">third-skips</code> reports its value.</p>
+<p><code class="w3-codespan">reference-check</code> catches each of nine corruptions of the
+            initial trace of <code class="w3-codespan">shifted-normal</code>, x and the Dirac node x + 1,
+            made behind the engine's back with its exported setters, each with its own
+            message: an LL shifted by 1 or made -inf, a value, a distribution or a tstamp
+            after now in a node's state, a deactivation count, a delayed update on an active
+            node, a pending weight left over, and the chain's card change.  It also catches,
+            through the wiring of <code class="w3-codespan">mcmC</code>, a user distribution whose
+            density drifts with the number of its calls.  In <code class="w3-codespan">'extended</code> mode, where no update is delayed, it checks the inactive nodes' states too: the
+            LL of the inactive branch's choice of <code class="w3-codespan">tac1</code>, shifted by 1, is reported in an <code class="w3-codespan">'extended</code> build and not in an <code class="w3-codespan">'upstream</code> one, where an inactive node
+            may hold a stale state.</p>
+<p>The step check catches a rejected step that did not restore the state: in <code class="w3-codespan">behind-the-journal</code> the sampler of the proposed node replaces
+            the state of the observed x by an equal copy with the raw <code class="w3-codespan">node-state-set!</code>, which no journal entry undoes; the reference
+            evaluator compares values and LLs and accepts the copy, the step check compares
+            the state objects themselves (C5) and does not, in both semantics.  Without <code class="w3-codespan">#:check</code> the chain runs.</p>
+<p>In <code class="w3-codespan">'extended</code> mode it also catches an accepted step whose Δ
+            is not the change of the extended LL: in <code class="w3-codespan">tampered</code> the sampler of the only resampleable node, armed before step k, adds 1 to the
+            stored LL of the observed x, which the step's Δ does not count; with no
+            observation of the proposed node every step is accepted.  The step check runs
+            before the reference evaluator, which would report the LL instead.  <code class="w3-codespan">#:check 5</code> checks the first 5 steps only: it reports a
+            corruption at step 5 and runs through one at step 6.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/check/negative _)
+  (let ((k 0)
+        (j 0)
+        (u 0)
+        (runs 0)
+        (calls 0)
+        (skips 0)
+        (shifts 0)
+        (victim #f)
+        (shifted #f)
+        (tamper! #f))
+    (define (drifting)
+      (let1 (d (normal 0.0 1.0))
+            (make-distribution
+              'drifting
+              #:log-density
+              (λ (x)
+                 (add1! calls)
+                 (- (distribution-log-density d x) (* 0.001 calls)))
+              #:sample
+              (λ (src) (distribution-sample d src)))))
+    (define (unjournaled)
+      (let1 (d (normal 0.0 1.0))
+            (make-distribution
+              'unjournaled
+              #:log-density
+              (λ (x) (distribution-log-density d x))
+              #:sample
+              (λ (src)
+                 (when (node? victim)
+                       (let1 (s (node-state victim))
+                             (node-state-set!
+                               victim
+                               (make-nstate
+                                 (nstate-val s)
+                                 (nstate-ll s)
+                                 (nstate-dst s)
+                                 (nstate-tstamp s)))))
+                 (distribution-sample d src)))))
+    (define behind-the-journal
+      (do/monad
+        (← x (dist (condition 0.5 normal) 0.0 1.0))
+        (let _ (set! victim x))
+        (← s (dist unjournaled))
+        (dist (condition 3.0 normal) s 0.5)
+        (return s)))
+    (define (restate-node! n f)
+      (let1 (s (node-state n))
+            (node-state-set!
+              n
+              (f (nstate-val s)
+                 (nstate-ll s)
+                 (nstate-dst s)
+                 (nstate-tstamp s)))))
+    (define (restate! ch addr f) (restate-node! (chain-node ch addr) f))
+    (define shifted-normal
+      (do/monad (← x (dist normal 0.0 1.0)) (diracN (sexp+ x 1.0))))
+    (define (corrupted-message
+             corrupt!
+             #!optional
+             (m shifted-normal)
+             (semantics 'upstream))
+      (internal-message
+        (τ (receive
+             (ch result)
+             (build-chain
+               (model-&gt;trace m 'test)
+               (make-stdgen-source 17)
+               semantics)
+             (corrupt! ch)
+             (reference-check ch)))))
+    (define (shift-inactive-ll! ch)
+      (restate-node!
+        (chain-fold
+          (λ (n found)
+             (or found
+                 (and (node-inactive? n) (eq? (node-kind n) 'resampleable) n)))
+          #f
+          ch)
+        (λ (v ll d t) (make-nstate v (+ 1.0 ll) d t))))
+    (define (tampering)
+      (let1 (d (normal 0.0 1.0))
+            (make-distribution
+              'tampering
+              #:log-density
+              (λ (x) (distribution-log-density d x))
+              #:sample
+              (λ (src)
+                 (when tamper! (let1 (t! tamper!) (set! tamper! #f) (t!)))
+                 (distribution-sample d src)))))
+    (define tampered
+      (do/monad
+        (← x (dist (condition 0.5 normal) 0.0 1.0))
+        (let _ (set! shifted x))
+        (dist tampering)))
+    (define counter/k (&gt;&gt;= (return #f) (λ (_) (add1! k) (return k))))
+    (define counter/j
+      (&gt;&gt;= (return #f)
+           (λ (_)
+              (add1! j)
+              (dist (condition 0.0 normal) 0.0 (exact-&gt;inexact j)))))
+    (define counter/bound
+      (&gt;&gt;= (return #f)
+           (λ (_)
+              (add1! u)
+              (if_ #f
+                   (dist (condition 5.0 uniform) 0.0 (if (= u 1) 1.0 10.0))
+                   (return 0.0)))))
+    (define counter/deferred
+      (do/monad
+        (← c (dist bern 0.5))
+        (&gt;&gt;= (return #f)
+             (λ (_)
+                (add1! k)
+                (if_ #t
+                     (return c)
+                     (diracN (lift (λ (kv) (car (list-tail '() kv))) k)))))
+        (return c)))
+    (define switching
+      (do/monad
+        (← x (diracN 1.0))
+        (← y (diracN 1.0))
+        (&gt;&gt;= (return #f)
+             (λ (_) (add1! runs) (diracN (sexp+ (if (odd? runs) x y) 0.0))))))
+    (define (third-skips)
+      (let1 (d (normal 0.0 1.0))
+            (make-distribution
+              'third-skips
+              #:log-density
+              (λ (x) (distribution-log-density d x))
+              #:sample
+              (λ (src)
+                 (add1! skips)
+                 (when (zero? (modulo skips 3)) (distribution-sample d src))
+                 (distribution-sample d src)))))
+    (define (third-shifts)
+      (let1 (d (normal 0.0 1.0))
+            (make-distribution
+              'third-shifts
+              #:log-density
+              (λ (x) (distribution-log-density d x))
+              #:sample
+              (λ (src)
+                 (add1! shifts)
+                 (receive
+                   (x ll)
+                   (distribution-sample d src)
+                   (values x (if (zero? (modulo shifts 3)) (+ ll 1.0) ll)))))))
+    (define (third-shifts-message obs semantics)
+      (set! shifts 0)
+      (internal-message
+        (τ (construction-check
+             (do/monad
+               (← x (dist third-shifts))
+               (if_ #f obs (return 0))
+               (return x))
+             #:semantics
+             semantics))))
+    (define (tampered-message check k)
+      (set! tamper! #f)
+      (internal-message
+        (τ (let loop ((s (mcmC§ tampered #:semantics 'extended #:check check))
+                      (i 0))
+             (car§ s)
+             (when (= i (sub1 k))
+                   (set! tamper!
+                     (τ (restate-node!
+                          shifted
+                          (λ (v ll d t) (make-nstate v (+ 1.0 ll) d t))))))
+             (when (&lt; i 20) (loop (cdr§ s) (add1 i)))))))
+    (⊦ equal?
+       &quot;a rebuild and the initial trace differ in value&quot;
+       (internal-message (τ (construction-check counter/k))))
+    (⊦ equal?
+       &quot;a rebuild and the initial trace differ in LL&quot;
+       (internal-message (τ (construction-check counter/j))))
+    (⊦ equal?
+       &quot;a rebuild and the initial trace differ in value&quot;
+       (internal-message (τ (mcmC 10 counter/k #:check #t))))
+    (⊦ equal?
+       &quot;a rebuild and the initial trace differ in LL&quot;
+       (internal-message (τ (mcmC 10 counter/j #:check #t))))
+    (⊦ equal?
+       &quot;a rebuild and the initial trace differ in LL&quot;
+       (internal-message
+         (τ (construction-check counter/bound #:semantics 'extended))))
+    (⊦ equal?
+       (make-list 3 &quot;a rebuild and the initial trace differ in value&quot;)
+       (list (internal-message (τ (construction-check counter/deferred)))
+             (internal-message
+               (τ (construction-check counter/deferred #:semantics 'extended)))
+             (internal-message (τ (mcmC 10 counter/deferred #:check #t)))))
+    (⊦ equal?
+       &quot;a rebuild and the initial trace differ in graph&quot;
+       (internal-message (τ (construction-check switching))))
+    (⊦ equal?
+       &quot;an address-order redraw and the initial trace differ in value&quot;
+       (internal-message (τ (construction-check (dist third-skips)))))
+    (⊦ equal?
+       &quot;an address-order redraw and the initial trace differ in LL&quot;
+       (internal-message (τ (construction-check (dist third-shifts)))))
+    (let ((impossible (dist (condition 5.0 (uniform 0.0 1.0))))
+          (far (dist (condition 1000000000000.0 normal) 0.0 1.0)))
+      (⊦ equal?
+         (make-list
+           2
+           &quot;an address-order redraw and the initial trace differ in LL&quot;)
+         (map (cut third-shifts-message &lt;&gt; 'extended) (list impossible far)))
+      (⊦ equal?
+         '(none none)
+         (map (cut third-shifts-message &lt;&gt; 'upstream) (list impossible far)))
+      (set! skips 0)
+      (⊦ equal?
+         &quot;an address-order redraw and the initial trace differ in value&quot;
+         (internal-message
+           (τ (construction-check
+                (do/monad
+                  (← x (dist third-skips))
+                  (if_ #f impossible (return 0))
+                  (return x)))))))
+    (⊦ equal?
+       '(&quot;an LL differs from its recomputation&quot; none)
+       (map (λ (semantics)
+               (corrupted-message shift-inactive-ll! tac1 semantics))
+            '(extended upstream)))
+    (for-each
+      (Λ ((,expected ,corrupt!))
+         (⊦ equal? expected (corrupted-message corrupt!)))
+      `((&quot;an LL differs from its recomputation&quot;
+         ,(λ (ch)
+             (restate! ch 1 (λ (v ll d t) (make-nstate v (+ 1.0 ll) d t)))))
+        (&quot;an LL differs from its recomputation&quot;
+         ,(λ (ch) (restate! ch 1 (λ (v ll d t) (make-nstate v -inf.0 d t)))))
+        (&quot;a value differs from its recomputation&quot;
+         ,(λ (ch) (restate! ch 2 (λ (v ll d t) (make-nstate 99.0 ll d t)))))
+        (&quot;a distribution differs from its recomputation&quot;
+         ,(λ (ch)
+             (restate!
+               ch
+               1
+               (λ (v ll d t)
+                  (make-nstate v ll (distk-rd (normal 0.0 2.0)) t)))))
+        (&quot;a tstamp is after now&quot;
+         ,(λ (ch) (restate! ch 1 (λ (v ll d t) (make-nstate v ll d 99)))))
+        (&quot;a deactivation count differs from its recomputation&quot;
+         ,(λ (ch) (node-inactive-set! (chain-node ch 1) 1)))
+        (&quot;an update is delayed on an active node or in 'extended mode&quot;
+         ,(λ (ch) (node-delayed-set! (chain-node ch 1) #t)))
+        (&quot;a node is still pending or queued after the step&quot;
+         ,(λ (ch) (node-pending-set! (chain-node ch 1) #t)))
+        (&quot;the card change differs from its recomputation&quot;
+         ,(λ (ch) (chain-card-change-set! ch 1)))))
+    (⊦ equal?
+       &quot;an LL differs from its recomputation&quot;
+       (internal-message (τ (mcmC 50 (dist drifting) #:check #t))))
+    (⊦ = 50 (length (mcmC 50 behind-the-journal)))
+    (for-each
+      (λ (semantics)
+         (⊦ equal?
+            (list semantics &quot;a rejected step did not restore the state&quot;)
+            (list semantics
+                  (internal-message
+                    (τ (mcmC 50
+                             behind-the-journal
+                             #:check
+                             #t
+                             #:semantics
+                             semantics))))))
+      '(upstream extended))
+    (⊦ equal?
+       &quot;the step's delta is not the extended LL change&quot;
+       (tampered-message #t 3))
+    (⊦ equal?
+       &quot;the step's delta is not the extended LL change&quot;
+       (tampered-message 5 5))
+    (⊦ eq? 'none (tampered-message 5 6))
+    (⊦ eq? 'none (tampered-message #f 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(25165824 6207952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/check/escaped-error"><a href="#test/semantics/check/escaped-error"><code>test/semantics/check/escaped-error</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B4″: an error that escapes a step leaves its journal open, and the next step
+            first rolls it back (<code class="w3-codespan">journal-begin!</code>, no upstream counterpart),
+            so a reader that catches the error and reads on continues from the last accepted
+            state.  In <code class="w3-codespan">flaky</code> the update of y raises once, the first time
+            x is proposed true after the build; at seed 3 that is the fifth read of the
+            stream, and <code class="w3-codespan">#:check #t</code> finds the state sound at every one of
+            the 11 other reads.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/check/escaped-error _)
+  (let ((armed #f))
+    (define flaky
+      (do/monad
+        (← x (dist bern 0.1))
+        (← y
+           (dist normal
+                 (lift (λ (xv)
+                          (if xv
+                            (if armed
+                              (begin (set! armed #f) (error &quot;flaky&quot;))
+                              5.0)
+                            0.0))
+                       x)
+                 1.0))
+        (return (pair x y))))
+    (let ((s (mcmC§ flaky #:check #t #:seed 3)))
+      (set! armed #t)
+      (let1 (reads (let loop ((i 0) (acc '()))
+                     (if (= i 12)
+                       (reverse acc)
+                       (loop (add1 i)
+                             (cons (condition-case
+                                     (let1 (v (car§ s)) (set! s (cdr§ s)) v)
+                                     (e (exn)
+                                        ((condition-property-accessor 'exn 'message) e)))
+                                   acc)))))
+            (⊦ equal? '(&quot;flaky&quot;) (filter string? reads))
+            (⊦ = 11 (count pair? reads))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(25165824 6214696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/invalid-inactive"><a href="#test/semantics/invalid-inactive"><code>test/semantics/invalid-inactive</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B5, plan C22: in extended mode an inactive node is updated, so the gamma of a
+            negative shape in the branch not taken takes part in every step.  Its sampler
+            raises a parameter error, which rejects the initial trace; its density answers
+            -inf, so an update with x ≤ 0 rejects the step through Δ = -inf.  Beta's density
+            raises the parameter error itself (D:330-339): in <code class="w3-codespan">invalid-inactive/beta</code> the update that raises it rejects the
+            step (plan C22's guarded update) instead of stopping the chain.  The extended
+            target is then restricted to the states where every inactive node has
+            valid parameters: here every state with x ≤ 0 holds the inactive <code class="w3-codespan">gamma x 1</code>, so the chain stays where x &gt; 0 and the result, the
+            gamma sample, is always positive, where the model's posterior has P(x &gt; 0) = 0.5.
+            The extended semantics is opt-in for this reason, among others.  In <code class="w3-codespan">'upstream</code> mode, at seed 17, the chain stops with the parameter
+            error, raised when the inactive branch is built or updated with x ≤ 0 (at seeds
+            15 to 19 too; at seed 20 the chain runs, delaying the inactive updates, and gives
+            P(x &gt; 0) = 0.3995); the beta model stops too.</p>
+<p>The other side of C22: of the <code class="w3-codespan">(exn hakaru10)</code> errors only parameter errors reject.  Any other <code class="w3-codespan">(exn hakaru10)</code> error of an inactive node propagates in extended mode, as upstream, at
+            construction (the build guard) and at an update (the guarded update) alike.  An
+            error that is not an <code class="w3-codespan">(exn hakaru10)</code> one, such as <code class="w3-codespan">car</code> of <code class="w3-codespan">'()</code> in a lifted function, is one that
+            an inactive Dirac node defers (M:99), and in extended mode it rejects too, raised
+            by the node's own parameters or by forcing a deferred value (case B6).  In <code class="w3-codespan">invalid-inactive/branch</code> the inner test of the else branch is 0, not a boolean, whenever c holds: with
+            p = 0.5 the initial trace at seed 17 has c true and the build raises <code class="w3-codespan">branch</code>; with p = 0.05 it starts with c false, and the first
+            update that proposes c true raises <code class="w3-codespan">branch</code> instead of
+            rejecting the step, which would keep the chain at c = #f.  In <code class="w3-codespan">'upstream</code> mode the build raises too, while the update, which
+            leaves the inactive branch alone, runs the chain through c = #t.  The oracles
+            (exact enumeration, likelihood weighting and weighted samples) walk the graph of
+            one 'extended build from seed 17, retried only when it is rejected (plan §15.3,
+            C22), so they share that build's fate: with p = 0.5 they raise <code class="w3-codespan">branch</code>; with p = 0.05 the build completes, a walk that takes c
+            true skips the inactive inner <code class="w3-codespan">if_</code>, and enumeration gives P(c) = 0.05.</p>
+<p>And of the nodes only the inactive ones reject: an active node's parameter error
+            propagates in <code class="w3-codespan">'extended</code> mode as in <code class="w3-codespan">'upstream</code>, at construction (a normal of standard deviation 0)
+            and at an update.  In <code class="w3-codespan">active-invalid</code> the observation, always active, gets a beta whose first parameter is -1 when b
+            is false: the initial trace at seed 17 has b true, and the first step that
+            proposes b false raises <code class="w3-codespan">parameter</code> instead of rejecting.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define invalid-inactive
+  (do/monad
+    (← x (dist normal 0.0 1.0))
+    (if_ (lift positive? x) (dist gamma x 1.0) (return 0.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define invalid-inactive/beta
+  (do/monad
+    (← x (dist normal 0.0 1.0))
+    (if_ (lift positive? x) (dist beta x 1.0) (return 0.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (invalid-inactive/branch p)
+  (do/monad
+    (← c (dist bern p))
+    (← x (dist bern 0.5))
+    (if_ c
+         (return 3)
+         (if_ (lift (λ (cv xv) (if cv 0 xv)) c x) (return 1) (return 2)))
+    (return c)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define active-invalid
+  (do/monad
+    (← b (dist bern 0.9))
+    (dist (condition 0.5 beta) (lift (λ (bv) (if bv 1.0 -1.0)) b) 1.0)
+    (return b)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/invalid-inactive _)
+  (let1 (xs (mcmC 2000 invalid-inactive #:semantics 'extended))
+        (⊦ = 2000 (length xs))
+        (⊦ every positive? xs))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (mcmC 2000 invalid-inactive))))
+  (let1 (xs (mcmC 2000 invalid-inactive/beta #:semantics 'extended))
+        (⊦ = 2000 (length xs))
+        (⊦ every positive? xs))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (mcmC 2000 invalid-inactive/beta))))
+  (⊦ eq?
+     'branch
+     (hakaru10-kind
+       (τ (mcmC 1 (invalid-inactive/branch 0.5) #:semantics 'extended))))
+  (⊦ eq?
+     'branch
+     (hakaru10-kind
+       (τ (mcmC 2000 (invalid-inactive/branch 0.05) #:semantics 'extended))))
+  (⊦ eq? 'branch (hakaru10-kind (τ (mcmC 1 (invalid-inactive/branch 0.5)))))
+  (let1 (xs (mcmC 2000 (invalid-inactive/branch 0.05)))
+        (⊦ = 2000 (length xs))
+        (⊦ any identity xs))
+  (⊦ equal?
+     '(branch branch branch)
+     (map (λ (oracle)
+             (hakaru10-kind (τ (oracle (invalid-inactive/branch 0.5)))))
+          (list exact-posterior
+                (cut likelihood-weighting 100 &lt;&gt;)
+                (cut weighted-samples 100 &lt;&gt;))))
+  (⊦ (equal-approx? 1e-12)
+     '((#f . 0.95) (#t . 0.05))
+     (exact-posterior (invalid-inactive/branch 0.05)))
+  (⊦ equal?
+     '(none none)
+     (map (λ (oracle)
+             (hakaru10-kind (τ (oracle 100 (invalid-inactive/branch 0.05)))))
+          (list likelihood-weighting weighted-samples)))
+  (for-each
+    (λ (semantics)
+       (⊦ equal?
+          (list semantics 'parameter 'parameter)
+          (list semantics
+                (hakaru10-kind
+                  (τ (mcmC 10 (dist normal 0.0 0.0) #:semantics semantics)))
+                (hakaru10-kind
+                  (τ (mcmC 2000 active-invalid #:semantics semantics))))))
+    '(extended upstream))
+  (⊦ = 1 (length (mcmC 1 active-invalid #:semantics 'extended))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.029) (memory #(25165824 6224216 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/deferred"><a href="#test/semantics/deferred"><code>test/semantics/deferred</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B6: deferred Dirac values (M:99, M:120-129).  Upstream never forces the value of a
+            Dirac node that nothing reads, so in <code class="w3-codespan">guarded-car</code> the else branch, inactive exactly when xs is empty, applies <code class="w3-codespan">car</code> to <code class="w3-codespan">'()</code> harmlessly.  Here the value of an inactive diracN node
+            whose computation raises is a deferred value, which only a strict reader forces.
+            Exact enumeration gives 1/3 to each of <code class="w3-codespan">a</code>, <code class="w3-codespan">b</code> and <code class="w3-codespan">none</code>; 6000 samples of the chain land within .02 of it in both semantics, and <code class="w3-codespan">#:check</code> finds every state sound; the first five samples at seed
+            17 are a regression value.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-car
+  (do/monad
+    (← k (dist uniformly '(0 1 2)))
+    (← xs (diracN (lift (λ (kv) (list-tail '(a b) kv)) k)))
+    (← empty (diracN (lift null? xs)))
+    (if_ empty (return 'none) (diracN (lift car xs)))))
+</code></pre></div>
+<p>In <code class="w3-codespan">nested-guarded-car</code> the car sits under a second <code class="w3-codespan">if_</code>, on c: when xs is empty and c holds, the inner if_ is
+            inactive and its exit copies the deferred value without forcing it, which an <code class="w3-codespan">'extended</code> step, updating that inactive exit, must do too;
+            forcing it there would reject every step to (#t . none), whose probability is
+            1/6.  The chains of 20000 samples land within .03 of the exact posterior in both
+            semantics, and <code class="w3-codespan">#:check</code> finds every state sound.  The kernel
+            residual of the 'extended semantics (hakaru10-exact.scm, E10) is below 
+<mtext>10⁻¹²</mtext> on both models, and on <code class="w3-codespan">guarded-car/reversed</code>, whose initial trace has the else branch active (a) where guarded-car's has it
+            inactive (none).  The residual enumerates and loads every assignment of the
+            extended space, the else branch's car of <code class="w3-codespan">'()</code> included, which it must compute as lazily as the chain does, whichever
+            assignment the node was last computed in.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define nested-guarded-car
+  (do/monad
+    (← k (dist uniformly '(0 1 2)))
+    (← xs (diracN (lift (λ (kv) (list-tail '(a b) kv)) k)))
+    (← c (dist bern 0.5))
+    (← r
+       (if_ (lift null? xs)
+            (return 'none)
+            (if_ c (diracN (lift car xs)) (return 'other))))
+    (return (pair c r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-car/reversed
+  (do/monad
+    (← k (dist uniformly '(2 1 0)))
+    (← xs (diracN (lift (λ (kv) (list-tail '(a b) kv)) k)))
+    (← empty (diracN (lift null? xs)))
+    (if_ empty (return 'none) (diracN (lift car xs)))))
+</code></pre></div>
+<p>A handler that a model sets up inside a lifted function, around no model, is an
+            ordinary Scheme handler: the error is raised and caught inside the lifted
+            function, on the values of two choices, and exact enumeration of <code class="w3-codespan">guarded-inside-lift</code> gives 1/6 to each of its six outcomes.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define guarded-inside-lift
+  (do/monad
+    (← b (dist uniformly '(0 1 2)))
+    (← c (dist bern 0.5))
+    (return
+      (lift (λ (bv cv)
+               (handle-exceptions
+                 e
+                 'caught
+                 (if (and cv (= bv 0))
+                   (error &quot;guarded-inside-lift&quot;)
+                   (list bv cv))))
+            b
+            c))))
+</code></pre></div>
+<p>Deviation 11, strict propagation: <code class="w3-codespan">strict-reader</code>'s mu is the cdr of a pair whose car is the deferred h, so upstream computes mu =
+            1.0, while here mu is the deferred value itself and the normal, a strict reader,
+            raises <code class="w3-codespan">car</code>'s error, a plain Scheme one, both with a constant
+            test (<code class="w3-codespan">'()</code>) and with a lifted one; with a non-empty xs the
+            branch is active and nothing is deferred.  In <code class="w3-codespan">'extended</code> mode the error rejects instead (C22): every build of <code class="w3-codespan">(strict-reader '())</code> is rejected, so the chain is empty, and <code class="w3-codespan">strict-reader/node</code> never takes its then branch.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (strict-reader xs)
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ (lift null? xs)
+         (return c)
+         (do/monad
+           (← h (diracN (lift car xs)))
+           (← mu (diracN (lift cdr (pair h 1.0))))
+           (dist normal mu 1.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define strict-reader/node
+  (do/monad
+    (← c (dist bern 0.5))
+    (let xs (lift (λ (cv) (if cv '() '(1))) c))
+    (if_ (lift null? xs)
+         (return 'empty)
+         (do/monad
+           (← h (diracN (lift car xs)))
+           (← mu (diracN (lift cdr (pair h 1.0))))
+           (dist normal mu 1.0)))))
+</code></pre></div>
+<p>A function applied to a deferred value in an inactive branch is not called, even
+            one that ignores it: in <code class="w3-codespan">ignoring-reader</code> mu is the deferred car of <code class="w3-codespan">'()</code> itself, so the normal raises
+            in <code class="w3-codespan">'upstream</code> mode and rejects every build in <code class="w3-codespan">'extended</code> mode, where upstream computes mu = 1.0.  And an
+            active diracN computes its value at once: <code class="w3-codespan">strict-active</code>'s then branch, always active, makes a Dirac node of the car of a node whose
+            value is <code class="w3-codespan">'()</code>, which raises <code class="w3-codespan">car</code>'s error when it is made, in both semantics and under enumeration, where
+            upstream, which never reads that node, never forces it.  Lifting too is lazy only
+            in an inactive branch: in <code class="w3-codespan">strict-active/val</code> the lift of <code class="w3-codespan">car</code> over the Val <code class="w3-codespan">'()</code> raises as it is applied.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define ignoring-reader
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ #t
+         (return c)
+         (do/monad
+           (let d (lift car '()))
+           (← mu (diracN (lift (λ (x) 1.0) d)))
+           (dist normal mu 1.0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define strict-active
+  (do/monad
+    (← c (dist bern 0.5))
+    (← xs (diracN (lift (λ (cv) '()) c)))
+    (if_ #t (&gt;&gt; (diracN (lift car xs)) (return c)) (return c))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define strict-active/val
+  (do/monad
+    (← c (dist bern 0.5))
+    (if_ #t (&gt;&gt; (diracN (lift car '())) (return c)) (return c))))
+</code></pre></div>
+<p>Lazy lifting does not leak: a model run from inside an inactive branch's lifted
+            function, here an <code class="w3-codespan">exact-posterior</code> of a model that computes <code class="w3-codespan">(lift car xs)</code> of an empty <code class="w3-codespan">xs</code> after a bind, and discards it, starts without it and raises.  With lazy
+            lifting leaked, <code class="w3-codespan">(lift car xs)</code> would be deferred and never
+            forced, and the posterior would be <code class="w3-codespan">((leaked . 1.))</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/deferred _)
+  (let1 (thirds (map (λ (v) (cons v (/ 1.0 3.0))) '(a b none)))
+        (⊦ (equal-approx? 1e-12) thirds (exact-posterior guarded-car))
+        (for-each
+          (λ (semantics)
+             (⊦ (equal-approx? 0.02)
+                thirds
+                (proportions (mcmC 6000 guarded-car #:semantics semantics)))
+             (⊦ equal?
+                (mcmC 300 guarded-car #:semantics semantics)
+                (mcmC 300 guarded-car #:semantics semantics #:check #t)))
+          '(upstream extended)))
+  (⊦ equal? '(none none b none a) (mcmC 5 guarded-car))
+  (let1 (exact (exact-posterior nested-guarded-car))
+        (⊦ (equal-approx? 1e-12)
+           (map cons
+                '((#f . none) (#f . other) (#t . a) (#t . b) (#t . none))
+                (map (λ (w) (/ w 6.0)) '(1.0 2.0 1.0 1.0 1.0)))
+           exact)
+        (for-each
+          (λ (semantics)
+             (⊦ (equal-approx? 0.03)
+                (list semantics exact)
+                (list semantics
+                      (proportions
+                        (mcmC 20000
+                              nested-guarded-car
+                              #:semantics
+                              semantics))))
+             (⊦ equal?
+                (mcmC 300 nested-guarded-car #:semantics semantics)
+                (mcmC 300
+                      nested-guarded-car
+                      #:semantics
+                      semantics
+                      #:check
+                      #t)))
+          '(upstream extended)))
+  (⊦ equal?
+     '()
+     (filter-map
+       (Λ ((,name unquote m))
+          (let1 (residual (kernel-residual m))
+                (and (not (&lt; residual 1e-12)) (cons name residual))))
+       `((guarded-car unquote guarded-car)
+         (guarded-car/reversed unquote guarded-car/reversed)
+         (nested-guarded-car unquote nested-guarded-car))))
+  (⊦ equal?
+     '(a none)
+     (list (car (mcmC 1 guarded-car/reversed)) (car (mcmC 1 guarded-car))))
+  (let1 (sixths
+          (map (λ (v) (cons v (/ 1.0 6.0)))
+               '(caught (0 #f) (1 #f) (1 #t) (2 #f) (2 #t))))
+        (⊦ (equal-approx? 1e-12) sixths (exact-posterior guarded-inside-lift)))
+  (⊦ equal?
+     '(exn none exn)
+     (map (λ (m) (raised (τ (mcmC 3 m))))
+          (list (strict-reader '()) (strict-reader '(5)) strict-reader/node)))
+  (⊦ equal? '() (mcmC 3 (strict-reader '()) #:semantics 'extended))
+  (⊦ every flonum? (mcmC 300 strict-reader/node #:semantics 'extended))
+  (for-each
+    (λ (m)
+       (⊦ equal?
+          '(exn exn exn)
+          (list (raised (τ (mcmC 3 m)))
+                (raised (τ (mcmC 3 m #:semantics 'extended)))
+                (raised (τ (exact-posterior m))))))
+    (list strict-active strict-active/val))
+  (⊦ equal?
+     '(exn ())
+     (list (raised (τ (mcmC 3 ignoring-reader)))
+           (mcmC 3 ignoring-reader #:semantics 'extended)))
+  (let1 (inner #f)
+        (mcmC 1
+              (do/monad
+                (← c (dist bern 0.5))
+                (if_ #t
+                     (return c)
+                     (diracN
+                       (lift (λ (k)
+                                (set! inner
+                                  (raised
+                                    (τ (exact-posterior
+                                         (do/monad
+                                           (← xs (return '()))
+                                           (let _ (lift car xs))
+                                           (return 'leaked))))))
+                                k)
+                             1)))))
+        (⊦ eq? 'exn inner)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.339) (memory #(25165824 6222072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/semantics/incremental"><a href="#test/semantics/incremental"><code>test/semantics/incremental</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>B8: incremental recomputation (P §4.2 l.765-800).  Every node's update is wrapped
+            to record, step by step, which updates ran and in which order.  In <code class="w3-codespan">pdep</code> resampling x updates y (whose LL changes, not its value) and
+            the Dirac result, never z; resampling y updates z and the result; resampling z
+            the result alone:</p>
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Suppose MH proposes to resample x (and only x). Although the y sample keeps its old
+           value, its distribution parameters, x specifically, changed. Therefore, the LL of
+           the old y sample in the new distribution has to be recomputed. The variable z is
+           not affected by the resampling proposal; also, the parameters of its distribution
+           remain the same. Therefore, no update to the z node is needed.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define pdep
+  (do/monad
+    (← x (dist normal 0.0 1.0))
+    (← y (dist normal x 1.0))
+    (← z (dist normal y 1.0))
+    (return (sexp+ x y z))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (update-traces n model . keys)
+  (let ((updated '()) (steps '()))
+    (define (spy! ch)
+      (chain-fold
+        (λ (node _)
+           (let1 (update (node-update node))
+                 (when update
+                       (node-update-set!
+                         node
+                         (λ (n) (push! (node-addr n) updated) (update n))))))
+        (void)
+        ch))
+    (define (collect! ch accepted? delta)
+      (push! (reverse updated) steps)
+      (set! updated '()))
+    (let1 (next (apply mcmc-generator
+                       n
+                       (model-&gt;trace model 'update-traces)
+                       #:build-hook
+                       spy!
+                       #:step-hook
+                       collect!
+                       keys))
+          (do ((i 0 (add1 i))) ((= i n)) (next)))
+    (reverse steps)))
+</code></pre></div>
+<p>The propagation-order note of Metropolis.hs (M:319-397): in <code class="w3-codespan">upp1</code> and <code class="w3-codespan">upp2</code>, d depends on a, b and c,
+            and resampling a updates b, c and d, each once, in this order, d last; resampling
+            d updates nothing.  Both models also run under <code class="w3-codespan">#:check #t</code>, whose reference evaluator recomputes every node after each step, in both
+            semantics.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define upp1
+  (do/monad
+    (← a (dist uniform 0.0 1.0))
+    (← b (diracN (sexp+ a 2.0)))
+    (← c (diracN (sexp+ a 3.0)))
+    (← d (dist uniform (sexp+ a b) c))
+    (return d)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define upp2
+  (do/monad
+    (← a (dist uniform 0.0 1.0))
+    (← b (diracN (sexp+ a 2.0)))
+    (← c (diracN (sexp+ b 3.0)))
+    (← d (dist uniform (sexp+ a b) c))
+    (return d)))
+</code></pre></div>
+<p>Upstream runs upp1 as M:336-341 writes it, on the raw trace API, where d depends
+            on c and on an extra Dirac node ab = a + b: resampling a updates b, c, ab and d,
+            each once, in this order.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define upp1/raw
+  (do/monad
+    (← a (with-node-none (uniform 0.0 1.0)))
+    (← b (with-node a (λ (av) (dirac (+ av 2.0)))))
+    (← c (with-node a (λ (av) (dirac (+ av 3.0)))))
+    (← ab
+       (with-node-tree
+         (vector a b)
+         (λ (vs) (dirac (+ (vector-ref vs 0) (vector-ref vs 1))))))
+    (with-node-tree
+      (vector ab c)
+      (λ (vs) (uniform (vector-ref vs 0) (vector-ref vs 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/semantics/incremental _)
+  (for-each
+    (λ (semantics)
+       (⊦ equal?
+          (list semantics '((2 4) (3 4) (4)))
+          (list semantics
+                (map car
+                     (hist (update-traces 1000 pdep #:semantics semantics)))))
+       (for-each
+         (λ (m)
+            (⊦ equal?
+               (list semantics '(() (2 3 4)))
+               (list semantics
+                     (map car
+                          (hist (update-traces 1000 m #:semantics semantics)))))
+            (⊦ = 300 (length (mcmC 300 m #:semantics semantics #:check #t))))
+         (list upp1 upp2))
+       (⊦ equal?
+          (list semantics '(() (2 3 4 5)))
+          (list semantics
+                (map car
+                     (hist (update-traces
+                             1000
+                             upp1/raw
+                             #:semantics
+                             semantics)))))
+       (⊦ = 300 (length (mcmC 300 upp1/raw #:semantics semantics #:check #t))))
+    '(upstream extended)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.056) (memory #(25165824 6234936 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

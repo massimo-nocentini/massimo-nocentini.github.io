@@ -1,0 +1,754 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/tid"><a href="#test/tid"><code>test/tid</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tid _)
+  (⊦= &quot;[-000001]&quot; (tid-&gt;string (current-tid)))
+  (let1 (r (run/value
+             (τ (let* ((me (current-tid)) (t (spawn void)))
+                  (list (tid? me)
+                        (tid? 1)
+                        (tid=? me me)
+                        (tid=? me t)
+                        (tid&lt;? me t)
+                        (tid&lt;? t me)
+                        (tid&lt;? me me)
+                        (tid-compare t me)
+                        (tid-compare me me)
+                        (tid-compare me t)
+                        (= (add1 (tid-hash me)) (tid-hash t))
+                        (string=? (tid-&gt;string me) (tid-&gt;string me))
+                        (string-length (tid-&gt;string me)))))))
+        (⊦= '(#t #f #t #f #t #f #f 1 0 -1 #t #t 8) r)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5536056 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/runs-are-independent"><a href="#test/runs-are-independent"><code>test/runs-are-independent</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/runs-are-independent _)
+  (let ((a (run/value
+             (τ (list (tid-&gt;string (current-tid))
+                      (tid-&gt;string (spawn void))))))
+        (b (run/value
+             (τ (list (tid-&gt;string (current-tid))
+                      (tid-&gt;string (spawn void)))))))
+    (⊦= a b)
+    (⊦= &quot;[000002]&quot; (car a))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5537040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/spawn/child-first"><a href="#test/spawn/child-first"><code>test/spawn/child-first</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/spawn/child-first _)
+  (⊦= '(child parent (arg 42))
+      (cdr (run/log
+             (τ (spawn (τ (note! 'child)))
+                (note! 'parent)
+                (spawn/call (λ (x) (note! (list 'arg x))) 42)
+                (cml/shutdown))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5530288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/spawn/not-a-procedure"><a href="#test/spawn/not-a-procedure"><code>test/spawn/not-a-procedure</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/spawn/not-a-procedure _)
+  (⊦= '(raised raised)
+      (run/value
+        (τ (map (λ (thunk)
+                   (condition-case
+                     (begin (thunk) (cml/yield) 'no-raise)
+                     (e (exn) 'raised)))
+                (list (τ (spawn 42)) (τ (spawn/call 42 1))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5538960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/join/normal-exit-exception"><a href="#test/join/normal-exit-exception"><code>test/join/normal-exit-exception</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/join/normal-exit-exception _)
+  (parameterize
+    ((default-exn-handler (λ (e) (note! 'handler))))
+    (⊦= '(handler joined-normal joined-exit joined-exn)
+        (cdr (run/log
+               (τ (let ((t1 (spawn (τ (cml/sleep 0.01))))
+                        (t2 (spawn (τ (cml/sleep 0.01) (cml/exit) (note! 'not-here))))
+                        (t3 (spawn (τ (error &quot;die&quot;)))))
+                    (sync (join-evt t1))
+                    (note! 'joined-normal)
+                    (sync (join-evt t2))
+                    (note! 'joined-exit)
+                    (sync (join-evt t3))
+                    (note! 'joined-exn)
+                    (sync (join-evt t3))
+                    (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5533736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/join/fifo"><a href="#test/join/fifo"><code>test/join/fifo</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/join/fifo _)
+  (⊦= '(w1 w2 w3 w4)
+      (cdr (run/log
+             (τ (let* ((c (make-channel)) (t (spawn (τ (recv c)))))
+                  (for-each
+                    (λ (w) (spawn (τ (sync (join-evt t)) (note! w))))
+                    '(w1 w2 w3 w4))
+                  (send c 'go)
+                  (cml/sleep 0.01)
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5534792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/default-exn-handler"><a href="#test/default-exn-handler"><code>test/default-exn-handler</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/default-exn-handler _)
+  (let1 (err (with-error-output-to-string
+               (τ (⊦= '(after)
+                      (cdr (run/log
+                             (τ (spawn (τ (error &quot;kaboom&quot; 1 2)))
+                                (note! 'after)
+                                (cml/shutdown))))))))
+        (⊨ (and (substring-index &quot;kaboom&quot; err) #t))
+        (⊨ (and (substring-index &quot;[000003]&quot; err) #t))
+        (⊦= err
+            (with-error-output-to-string
+              (τ (run-cml
+                   (τ (uncaught-default-handler
+                        (spawn void)
+                        (make-property-condition
+                          'exn
+                          'message
+                          &quot;kaboom&quot;
+                          'arguments
+                          '(1 2)))
+                      (cml/shutdown)))))))
+  (parameterize
+    ((default-exn-handler (λ (e) (error &quot;handler fails too&quot;))))
+    (⊦= '(still-running)
+        (cdr (run/log
+               (τ (spawn (τ (car '())))
+                  (note! 'still-running)
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5540312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/after-raises"><a href="#test/dynamic-wind/after-raises"><code>test/dynamic-wind/after-raises</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/after-raises _)
+  (parameterize
+    ((default-exn-handler
+       (λ (e) (note! (list 'died (tid-&gt;string (current-tid)))))))
+    (⊦= '(done (died &quot;[000003]&quot;) joined)
+        (run/log
+          (τ (let1 (a (spawn (τ (dynamic-wind
+                                  void
+                                  (τ (cml/sleep 0.02) (note! 'resumed-after-death))
+                                  (τ (error &quot;after&quot;))))))
+                   (sync (join-evt a))
+                   (note! 'joined)
+                   (cml/sleep 0.05)
+                   (cml/shutdown 'done)))))
+    (⊦= '(bye (died &quot;[000003]&quot;))
+        (run/log
+          (τ (spawn (τ (dynamic-wind
+                         void
+                         (τ (cml/shutdown 'bye))
+                         (τ (error &quot;after&quot;)))))
+             (sync never-evt))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5542152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/winders-at-every-switch"><a href="#test/dynamic-wind/winders-at-every-switch"><code>test/dynamic-wind/winders-at-every-switch</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/winders-at-every-switch _)
+  (define (who) (tid-&gt;string (current-tid)))
+  (⊦= '((in &quot;[000003]&quot;)
+        (out &quot;[-000001]&quot;)
+        (in &quot;[000003]&quot;)
+        (body x)
+        (out &quot;[000003]&quot;))
+      (cdr (run/log
+             (τ (let1 (c (make-channel))
+                      (let1 (a (spawn (τ (dynamic-wind
+                                           (τ (note! (list 'in (who))))
+                                           (τ (note! (list 'body (recv c))))
+                                           (τ (note! (list 'out (who))))))))
+                            (send c 'x)
+                            (sync (join-evt a))
+                            (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5538352 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-receiver-not-resumed"><a href="#test/dynamic-wind/dead-receiver-not-resumed"><code>test/dynamic-wind/dead-receiver-not-resumed</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-receiver-not-resumed _)
+  (define (try do-recv)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (cdr (run/log
+             (τ (let ((ch (make-channel)) (armed #f))
+                  (spawn (τ (send ch 'hello) (note! 'sender-resumed)))
+                  (let1 (r (spawn (τ (dynamic-wind
+                                       void
+                                       (τ (set! armed #t)
+                                          (note! (list 'zombie (do-recv ch))))
+                                       (τ (when armed
+                                                (set! armed #f)
+                                                (error &quot;after thunk raised&quot;)))))))
+                        (sync (join-evt r))
+                        (note! 'joined)
+                        (cml/sleep 0.01)
+                        (cml/shutdown))))))))
+  (⊦= '(died sender-resumed joined) (try recv))
+  (⊦= '(died sender-resumed joined) (try (λ (ch) (sync (recv-evt ch)))))
+  (⊦= '(died sender-resumed joined) (try (λ (ch) (car (recv-poll ch))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5542016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-sender-does-not-strand-receiver"><a href="#test/dynamic-wind/dead-sender-does-not-strand-receiver"><code>test/dynamic-wind/dead-sender-does-not-strand-receiver</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-sender-does-not-strand-receiver _)
+  (define (try do-recv)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (run/log
+        (τ (let ((ch (make-channel)) (first #t))
+             (spawn (τ (dynamic-wind
+                         (τ (if first
+                              (set! first #f)
+                              (error &quot;before thunk raised&quot;)))
+                         (τ (send ch 42) (note! 'zombie))
+                         void)))
+             (spawn (τ (cml/sleep 0.02) (send ch 43) (note! 'second-sent)))
+             (cml/yield)
+             (note! (list 'got (do-recv ch)))
+             (cml/sleep 0.03)
+             (cml/shutdown 'ok))))))
+  (⊦= '(ok died (got 43) second-sent) (try recv))
+  (⊦= '(ok died (got 43) second-sent) (try (λ (ch) (sync (recv-evt ch)))))
+  (⊦= '(ok died (got 43) second-sent)
+      (try (λ (ch) (sync (choose (recv-evt ch) (recv-evt (make-channel)))))))
+  (⊦= '(ok died (got ())) (try recv-poll)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5542848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-reader-does-not-strand-syncvar"><a href="#test/dynamic-wind/dead-reader-does-not-strand-syncvar"><code>test/dynamic-wind/dead-reader-does-not-strand-syncvar</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-reader-does-not-strand-syncvar _)
+  (define (try make read)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (cdr (run/log
+             (τ (let ((v (make)) (n 0))
+                  (spawn (τ (dynamic-wind
+                              (τ (set! n (add1 n))
+                                 (when (= n 2) (error &quot;before thunk raised&quot;)))
+                              (τ (note! (list 'zombie (read v))))
+                              void)))
+                  (spawn (τ (note! (list 'second (read v)))))
+                  (cml/sleep 0.01)
+                  (if (ivar? v) (ivar-put! v 42) (mvar-put! v 42))
+                  (note! (sync/timeout
+                           (wrap (timeout-evt 10) (λ ignored 'never))
+                           0.2
+                           'stranded))
+                  (note! (if (ivar? v) (ivar-get-poll v) (mvar-get-poll v)))
+                  (cml/shutdown)))))))
+  (⊦= '(died (second 42) stranded (42)) (try make-ivar ivar-get))
+  (⊦= '(died (second 42) stranded (42))
+      (try make-ivar (λ (v) (sync (ivar-get-evt v)))))
+  (⊦= '(died (second 42) stranded (42)) (try make-mvar mvar-get))
+  (⊦= '(died (second 42) stranded (42))
+      (try make-mvar (λ (v) (sync (mvar-get-evt v)))))
+  (⊦= '(died (second 42) stranded ()) (try make-mvar mvar-take!))
+  (⊦= '(died (second 42) stranded ())
+      (try make-mvar (λ (v) (sync (choose (mvar-take-evt v) never-evt))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 5542000 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-reader-relays-the-current-value"><a href="#test/dynamic-wind/dead-reader-relays-the-current-value"><code>test/dynamic-wind/dead-reader-relays-the-current-value</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-reader-relays-the-current-value _)
+  (define (try take)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (cdr (run/log
+             (τ (let ((v (make-mvar)) (n 0))
+                  (spawn (τ (dynamic-wind
+                              (τ (set! n (add1 n))
+                                 (when (= n 2) (error &quot;before thunk raised&quot;)))
+                              (τ (note! (list 'zombie (take v))))
+                              void)))
+                  (spawn (τ (note! (list 'took (list (take v))))))
+                  (cml/sleep 0.01)
+                  (mvar-put! v 42)
+                  (let1 (p (mvar-take-poll v))
+                        (note! (list 'took p))
+                        (mvar-put! v 43))
+                  (cml/sleep 0.02)
+                  (note! (list 'took (mvar-take-poll v)))
+                  (cml/shutdown)))))))
+  (for-each
+    (λ (take)
+       (let1 (log (try take))
+             (⊦= 'died (car log))
+             (⊦= '(42 43) (sort (append-map cadr (cdr log)) &lt;))))
+    (list mvar-take! (λ (v) (sync (mvar-take-evt v))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5544304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-receiver-does-not-lose-mailbox-message"><a href="#test/dynamic-wind/dead-receiver-does-not-lose-mailbox-message"><code>test/dynamic-wind/dead-receiver-does-not-lose-mailbox-message</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-receiver-does-not-lose-mailbox-message _)
+  (define (try recv2)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (cdr (run/log
+             (τ (let ((mb (make-mailbox)) (n 0))
+                  (spawn (τ (dynamic-wind
+                              (τ (set! n (add1 n))
+                                 (when (= n 2) (error &quot;before thunk raised&quot;)))
+                              (τ (note! (list 'zombie (mailbox-recv mb))))
+                              void)))
+                  (when recv2 (spawn (τ (note! (list 'second (recv2 mb))))))
+                  (cml/sleep 0.01)
+                  (mailbox-send! mb 42)
+                  (mailbox-send! mb 43)
+                  (cml/sleep 0.02)
+                  (note! (list 'poll (mailbox-recv-poll mb)))
+                  (cml/shutdown)))))))
+  (⊦= '(died (second 42) (poll (43))) (try mailbox-recv))
+  (⊦= '(died (second 42) (poll (43)))
+      (try (λ (mb) (sync (choose (mailbox-recv-evt mb) never-evt)))))
+  (⊦= '(died (poll (42))) (try #f)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5546320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mailbox/receiver-dying-later-keeps-its-message"><a href="#test/mailbox/receiver-dying-later-keeps-its-message"><code>test/mailbox/receiver-dying-later-keeps-its-message</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mailbox/receiver-dying-later-keeps-its-message _)
+  (define (try recv)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (cdr (run/log
+             (τ (let1 (mb (make-mailbox))
+                      (spawn (τ (let1 (j (recv mb))
+                                      (note! (list 'w1 j))
+                                      (error &quot;worker 1 crashes on&quot; j))))
+                      (spawn (τ (let loop () (note! (list 'w2 (recv mb))) (loop))))
+                      (cml/yield)
+                      (mailbox-send! mb 'job-1)
+                      (cml/sleep 0.02)
+                      (note! (list 'poll (mailbox-recv-poll mb)))
+                      (mailbox-send! mb 'job-2)
+                      (cml/sleep 0.02)
+                      (cml/shutdown)))))))
+  (⊦= '((w1 job-1) died (poll ()) (w2 job-2)) (try mailbox-recv))
+  (⊦= '((w1 job-1) died (poll ()) (w2 job-2))
+      (try (λ (mb) (sync (mailbox-recv-evt mb)))))
+  (⊦= '((w1 job-1) died (poll ()) (w2 job-2))
+      (try (λ (mb)
+              (sync (wrap (choose (mailbox-recv-evt mb) (timeout-evt 10))
+                          (λ (j) j))))))
+  (⊦= '((w bad) died (w good))
+      (parameterize
+        ((default-exn-handler (λ (e) (note! 'died))))
+        (cdr (run/log
+               (τ (let1 (mb (make-mailbox))
+                        (for-each
+                          (λ (i)
+                             (spawn (τ (let loop ()
+                                         (select
+                                           (wrap (mailbox-recv-evt mb)
+                                                 (λ (j)
+                                                    (note! (list 'w j))
+                                                    (when (eq? j 'bad) (error &quot;bad job&quot;))))
+                                           (timeout-evt 1))
+                                         (loop)))))
+                          (iota 3))
+                        (cml/yield)
+                        (mailbox-send! mb 'bad)
+                        (cml/sleep 0.02)
+                        (mailbox-send! mb 'good)
+                        (cml/sleep 0.02)
+                        (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5550728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-waiter-sets-its-nacks"><a href="#test/dynamic-wind/dead-waiter-sets-its-nacks"><code>test/dynamic-wind/dead-waiter-sets-its-nacks</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-waiter-sets-its-nacks _)
+  (define (try make-evt mode)
+    (parameterize
+      ((default-exn-handler (λ (e) (note! 'died))))
+      (cdr (run/log
+             (τ (let ((n 0) (nk #f))
+                  (receive
+                    (evt fire!)
+                    (make-evt)
+                    (spawn (τ (dynamic-wind
+                                (τ (set! n (add1 n))
+                                   (when (and (eq? mode 'in) (= n 2))
+                                         (error &quot;before&quot;)))
+                                (τ (note! (list 'zombie
+                                                (sync (choose
+                                                        evt
+                                                        (with-nack (λ (nack) (set! nk nack) never-evt)))))))
+                                (τ (when (and (eq? mode 'out) (= n 1))
+                                         (error &quot;after&quot;))))))
+                    (cml/sleep 0.01)
+                    (fire!)
+                    (cml/sleep 0.01)
+                    (note! (list 'nack
+                                 (sync/timeout
+                                   (wrap nk (λ ignored 'set))
+                                   0.2
+                                   'unset)))
+                    (cml/shutdown))))))))
+  (define (ivar)
+    (let1 (iv (make-ivar)) (values (ivar-get-evt iv) (τ (ivar-put! iv 1)))))
+  (define (chan)
+    (let1 (ch (make-channel))
+          (values (recv-evt ch) (τ (spawn (τ (send ch 1)))))))
+  (define (mbox)
+    (let1 (mb (make-mailbox))
+          (values (mailbox-recv-evt mb) (τ (mailbox-send! mb 1)))))
+  (define (join)
+    (let1 (iv (make-ivar))
+          (values (join-evt (spawn (τ (ivar-get iv)))) (τ (ivar-put! iv 1)))))
+  (for-each
+    (λ (make-evt)
+       (⊦= '(died (nack set)) (try make-evt 'in))
+       (⊦= '(died (nack set)) (try make-evt 'out)))
+    (list ivar chan mbox join)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 5549680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/handler-may-exit-or-block"><a href="#test/dynamic-wind/handler-may-exit-or-block"><code>test/dynamic-wind/handler-may-exit-or-block</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/handler-may-exit-or-block _)
+  (define (try handler)
+    (cdr (run/log
+           (τ (let* ((b (spawn (τ (cml/yield) (note! 'b-ran))))
+                     (a (parameterize
+                          ((default-exn-handler handler))
+                          (spawn (τ (dynamic-wind
+                                      void
+                                      (τ (cml/yield) (note! 'a-zombie))
+                                      (τ (error &quot;after raised&quot;))))))))
+                (note! (list 'joined
+                             (sync/timeout
+                               (wrap (join-evt b) (λ ignored 'b))
+                               0.3
+                               'never)))
+                (note! (list 'a-joined
+                             (sync/timeout
+                               (wrap (join-evt a) (λ ignored 'a))
+                               0.3
+                               'never)))
+                (cml/shutdown))))))
+  (⊦= '(a-died b-ran (joined b) (a-joined a)) (try (λ (e) (note! 'a-died))))
+  (⊦= '(a-died b-ran (joined b) (a-joined a))
+      (try (λ (e) (note! 'a-died) (cml/exit))))
+  (⊦= '(a-died b-ran (joined b) handler-woke (a-joined a))
+      (try (λ (e) (note! 'a-died) (cml/sleep 0.05) (note! 'handler-woke)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5549744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dynamic-wind/dead-thread-in-ready-queue"><a href="#test/dynamic-wind/dead-thread-in-ready-queue"><code>test/dynamic-wind/dead-thread-in-ready-queue</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dynamic-wind/dead-thread-in-ready-queue _)
+  (define (try body)
+    (let1 (dead #f)
+          (parameterize
+            ((default-exn-handler (λ (e) (set! dead #t) (note! 'died))))
+            (run/log
+              (τ (let1 (a (spawn (τ (let1 (armed #t)
+                                          (dynamic-wind
+                                            void
+                                            (τ (body (τ dead)))
+                                            (τ (when armed (set! armed #f) (error &quot;after&quot;))))))))
+                       (sync (join-evt a))
+                       (note! 'joined)
+                       (cml/sleep 0.02)
+                       (cml/shutdown 'done)))))))
+  (⊦= '(done died joined)
+      (try (λ (dead?) (cml/yield) (note! 'resumed-after-death))))
+  (⊦= '(done died joined)
+      (try (λ (dead?)
+              (let loop ()
+                (sync (always-evt 1))
+                (if (dead?) (note! 'resumed-after-death) (loop)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5551400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/yield"><a href="#test/yield"><code>test/yield</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/yield _)
+  (⊦= '(a1 b1 a2 b2 a3 b3)
+      (cdr (run/log
+             (τ (let1 (t (spawn (τ (for-each
+                                     (λ (x) (note! x) (cml/yield))
+                                     '(a1 a2 a3)))))
+                      (for-each (λ (x) (note! x) (cml/yield)) '(b1 b2 b3))
+                      (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5550576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/thread-properties"><a href="#test/thread-properties"><code>test/thread-properties</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/thread-properties _)
+  (⊦= '((main) () init (init) (child) () (main))
+      (cdr (run/log
+             (τ (receive
+                  (clear! get peek put!)
+                  (make-thread-property (τ 'init))
+                  (put! 'main)
+                  (note! (peek))
+                  (sync (join-evt
+                          (spawn (τ (note! (peek))
+                                    (note! (get))
+                                    (note! (peek))
+                                    (put! 'child)
+                                    (note! (peek))
+                                    (clear!)
+                                    (note! (peek))))))
+                  (note! (peek))
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5551904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/thread-property/lazy-init"><a href="#test/thread-property/lazy-init"><code>test/thread-property/lazy-init</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/thread-property/lazy-init _)
+  (⊦= '(() 1 1 (1) 2)
+      (cdr (run/log
+             (τ (let1 (n 0)
+                      (receive
+                        (clear! get peek put!)
+                        (make-thread-property (τ (set! n (add1 n)) n))
+                        (note! (peek))
+                        (note! (get))
+                        (note! (get))
+                        (note! (peek))
+                        (sync (join-evt (spawn (τ (note! (get))))))
+                        (cml/shutdown))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5551192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/thread-flag"><a href="#test/thread-flag"><code>test/thread-flag</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/thread-flag _)
+  (⊦= '(#f #t (child #f #t) #t #f #t)
+      (cdr (run/log
+             (τ (receive
+                  (get set)
+                  (make-thread-flag)
+                  (note! (get))
+                  (set #t)
+                  (set #t)
+                  (note! (get))
+                  (sync (join-evt
+                          (spawn (τ (let1 (before (get))
+                                          (set #t)
+                                          (note! (list 'child before (get))))))))
+                  (note! (get))
+                  (set #f)
+                  (note! (get))
+                  (set #t)
+                  (note! (get))
+                  (cml/shutdown)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5552648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fairness/two-producers"><a href="#test/fairness/two-producers"><code>test/fairness/two-producers</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fairness/two-producers _)
+  (let1 (got (run/value
+               (τ (let1 (c (make-channel))
+                        (for-each
+                          (λ (tag)
+                             (spawn (τ (let loop () (send c tag) (loop)))))
+                          '(p q))
+                        (map (λ (i) (recv c)) (iota 20))))))
+        (⊦= 10 (count (λ (x) (eq? x 'p)) got))
+        (⊦= (map (λ (i) (if (even? i) 'p 'q)) (iota 20)) got)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 5554336 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fairness/preemption"><a href="#test/fairness/preemption"><code>test/fairness/preemption</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fairness/preemption _)
+  (let1 (log (cdr (run/log
+                    (τ (let1 (c (make-channel))
+                             (define (worker tag)
+                               (τ (let loop ((i 0))
+                                    (when (&lt; i 400)
+                                          (recv-poll c)
+                                          (when (zero? (remainder i 100)) (note! tag))
+                                          (loop (add1 i))))))
+                             (let ((a (spawn (worker 'a))) (b (spawn (worker 'b))))
+                               (sync (join-evt a))
+                               (sync (join-evt b))
+                               (cml/shutdown))))
+                    #:quantum
+                    16)))
+        (⊦= 8 (length log))
+        (⊭ (equal? '(a a a a b b b b) log))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 5555920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fairness/yield-promotes"><a href="#test/fairness/yield-promotes"><code>test/fairness/yield-promotes</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fairness/yield-promotes _)
+  (⊦= 'worker-done
+      (run-cml
+        (τ (let1 (done #f)
+                 (spawn (τ (let loop ((i 0))
+                             (if (= i 300)
+                               (set! done #t)
+                               (begin (sync (always-evt i)) (loop (add1 i)))))))
+                 (let loop ((n 0))
+                   (cond (done (cml/shutdown 'worker-done))
+                         ((&lt; n 200000) (cml/yield) (loop (add1 n)))
+                         (else (cml/shutdown 'starved))))))))
+  (let1 (sent (run/value
+                (τ (let ((mb (make-mailbox)) (sent 0))
+                     (spawn (τ (let loop ()
+                                 (when (&lt; sent 200000)
+                                       (mailbox-send! mb sent)
+                                       (set! sent (add1 sent))
+                                       (loop)))))
+                     (let loop ((got 0))
+                       (when (&lt; got 2000) (mailbox-recv mb) (loop (add1 got))))
+                     sent))))
+        (⊨ (&lt; sent 3000))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 5557720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fairness/no-phase-lock"><a href="#test/fairness/no-phase-lock"><code>test/fairness/no-phase-lock</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fairness/no-phase-lock _)
+  (let1 (r (run/value
+             (τ (let ((ch (make-channel)) (done 0))
+                  (spawn (τ (let loop () (send ch 1) (loop))))
+                  (let loop ((i 0))
+                    (when (&lt; i 5000)
+                          (spawn (τ (set! done (add1 done))))
+                          (recv ch)
+                          (loop (add1 i))))
+                  (list done
+                        (length (%queue-front %rdy-q2))
+                        (length (%queue-rear %rdy-q2)))))))
+        (⊨ (&gt;= (car r) 4998))
+        (⊨ (&lt;= (+ (cadr r) (caddr r)) 2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.022) (memory #(12582912 5559168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fairness/channel-ping-pong-ticks"><a href="#test/fairness/channel-ping-pong-ticks"><code>test/fairness/channel-ping-pong-ticks</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fairness/channel-ping-pong-ticks _)
+  (define (ping-pong send! recv! server)
+    (run-cml
+      (τ (let ((a (make-channel)) (b (make-channel)) (n 0))
+           (spawn (τ (cml/sleep 0.01)
+                     (cml/shutdown (list 'woke (&lt; n 100000)))))
+           (spawn (τ (server a b)))
+           (let loop ()
+             (set! n (add1 n))
+             (when (&gt; n 100000) (cml/shutdown 'starved))
+             (send! a 1)
+             (recv! b)
+             (loop))))))
+  (⊦= '(woke #t)
+      (ping-pong send recv (λ (a b) (let loop () (send b (recv a)) (loop)))))
+  (⊦= '(woke #t)
+      (ping-pong
+        (λ (ch v) (sync (send-evt ch v)))
+        (λ (ch) (sync (recv-evt ch)))
+        (λ (a b)
+           (let loop ()
+             (sync (send-evt b (sync (choose (recv-evt a) (recv-evt a)))))
+             (loop)))))
+  (⊦= '(timed-out #t)
+      (run-cml
+        (τ (let ((a (make-channel)) (b (make-channel)) (n 0))
+             (spawn (τ (cml/shutdown
+                         (list (sync/timeout
+                                 (recv-evt (make-channel))
+                                 0.01
+                                 'timed-out)
+                               (&lt; n 100000)))))
+             (spawn (τ (let loop () (send b (recv a)) (loop))))
+             (let loop ()
+               (set! n (add1 n))
+               (when (&gt; n 100000) (cml/shutdown 'starved))
+               (send a 1)
+               (recv b)
+               (loop))))))
+  (⊦= '(ran #t)
+      (run-cml
+        (τ (let ((a (make-channel)) (b (make-channel)) (n 0))
+             (spawn (τ (let loop () (send b (recv a)) (loop))))
+             (spawn (τ (let loop ((i 0))
+                         (if (&lt; i 2000)
+                           (begin (sync (always-evt i)) (loop (add1 i)))
+                           (cml/shutdown (list 'ran (&lt; n 100000)))))))
+             (let loop ()
+               (set! n (add1 n))
+               (when (&gt; n 100000) (cml/shutdown 'starved))
+               (send a 1)
+               (recv b)
+               (loop)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.035) (memory #(12582912 5560320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

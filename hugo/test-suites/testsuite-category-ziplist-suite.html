@@ -1,0 +1,174 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section458">
+<header>
+<h1>Introduction</h1></header></section>
+<p>This section tests the ziplist monad, whose bind zips rather than nests: the i-th element of <code>(&gt;&gt;= m g)</code> is the i-th element of <code>(g v)</code>, where <code>v</code> is the i-th element of <code>m</code>.  A pure value is the circular list that repeats it, so it zips with lists of any length.</p>
+<section id="section459">
+<header>
+<h1>Implementation</h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux category ziplist)
+  *
+  (import scheme (chicken base) (only srfi-1 take every iota) (aux base))
+  (define (list-tail/or-false lst i)
+    (cond ((null? lst) #f)
+          ((zero? i) lst)
+          (else (list-tail/or-false (cdr lst) (sub1 i)))))
+  (define (list-rho lst)
+    (let meet ((t lst) (h lst))
+      (cond ((or (null? h) (null? (cdr h))) #f)
+            ((eq? (cdr t) (cddr h))
+             (let* ((t (cdr t))
+                    (start (let S ((a lst) (b t) (n 0))
+                             (if (eq? a b) n (S (cdr a) (cdr b) (add1 n)))))
+                    (period
+                      (let P ((b (cdr t)) (n 1))
+                        (if (eq? b t) n (P (cdr b) (add1 n))))))
+               (cons start period)))
+            (else (meet (cdr t) (cddr h))))))
+  (define (&gt;&gt;=/circular m start period g)
+    (let* ((images (list-&gt;vector (map g (take m (+ start period)))))
+           (at (λ (i)
+                  (vector-ref
+                    images
+                    (if (&lt; i start) i (+ start (modulo (- i start) period))))))
+           (rhos (map (λ (k) (list-rho (vector-ref images k)))
+                      (iota period start)))
+           (from (and (every pair? rhos) (apply max start (map car rhos))))
+           (cycle (and from (apply lcm period (map cdr rhos))))
+           (bound (and from (+ from cycle)))
+           (d (let D ((i 0) (acc '()))
+                (cond ((eqv? i bound) (reverse acc))
+                      ((list-tail/or-false (at i) i)
+                       =&gt;
+                       (λ (t) (D (add1 i) (cons (car t) acc))))
+                      (else (reverse acc))))))
+      (when (and bound (= (length d) bound))
+            (set-cdr! (list-tail d (sub1 bound)) (list-tail d from)))
+      d))
+  (define (return x) (list/circular x))
+  (define (&gt;&gt;= m g)
+    (match/first
+      m
+      ((,l unquote ,m) (g l))
+      (else (match/first
+              (list-rho m)
+              ((,start unquote period) (&gt;&gt;=/circular m start period g))
+              (else (let D ((m* m) (i 0) (acc '()))
+                      (cond ((null? m*) (reverse acc))
+                            ((list-tail/or-false (g (car m*)) i)
+                             =&gt;
+                             (λ (t) (D (cdr m*) (add1 i) (cons (car t) acc))))
+                            (else (reverse acc)))))))))
+  (define (fail . args) '()))
+</code></pre></div>
+<h2 id="test/pure"><a href="#test/pure"><code>test/pure</code>: <span class="w3-text-green">pass</span></a></h2>A pure value repeats forever as a one-element circular list, so <code>write</code> never returns on it; zipping it with a finite list gives a finite result.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pure _)
+  (let ((l (do/monad (← x ,3) (← y ,4) (← z ,5) ,(+ x y z))))
+    (⊨ (eq? l (cdr l)))
+    (⊦= 12 (car l))
+    (⊦= '(12 13 14) (do/monad (← x l) (← y '(0 1 2)) ,(+ x y)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1990504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/circular"><a href="#test/circular"><code>test/circular</code>: <span class="w3-text-green">pass</span></a></h2>A circular list of any period zips too: the diagonal is finite as soon as an inner list of the cycle is, otherwise it is circular again, so <code>(&gt;&gt;= m return)</code> gives back <code>m</code>.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/circular _)
+  (⊦= '(1 2) (&gt;&gt;= (list/circular 1 2) (λ (x) (list x x))))
+  (⊦= '((1 a) (2 b) (1 c))
+      (do/monad (← x (list/circular 1 2)) (← y '(a b c)) ,(list x y)))
+  (let ((r (&gt;&gt;= (list/circular 1 2) return)))
+    (⊦= '(0 . 2) (list-rho r))
+    (⊦= '(1 2) (take r 2)))
+  (let ((r (do/monad
+             (← x (list/circular 1 2 3))
+             (← y (list/circular 'a 'b))
+             ,(list x y))))
+    (⊦= '(0 . 6) (list-rho r))
+    (⊦= '((1 a) (2 b) (3 a) (1 b) (2 a) (3 b) (1 a)) (take r 7)))
+  (let ((r (&gt;&gt;= (cons 0 (cons 9 (list/circular 1 2 3)))
+                (λ (x) (cons x (cons x (list/circular x 'y)))))))
+    (⊦= '(2 . 6) (list-rho r))
+    (⊦= '(0 9 1 y 3 y 2 y 1 y) (take r 10))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1992184 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/diagonal"><a href="#test/diagonal"><code>test/diagonal</code>: <span class="w3-text-green">pass</span></a></h2>Binding zips the lists, truncating at the shortest one.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/diagonal _)
+  (⊦= '((1 a) (2 b)) (do/monad (← x '(1 2 3)) (← y '(a b)) ,(list x y)))
+  (⊦= '(2 1 2) (&lt;*&gt; (list add1 sub1 sub1) (list 1 2 3))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1993416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/false-elements"><a href="#test/false-elements"><code>test/false-elements</code>: <span class="w3-text-green">pass</span></a></h2>A <code>#f</code> element is a value like any other, so predicates zip too.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/false-elements _)
+  (⊦= '(#f #t #f) (do/monad (← x '(1 2 3)) ,(even? x)))
+  (⊦= '(#f #f) (&gt;&gt;= '(1 2) (λ (v) (list #f #f)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1994744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/truncation"><a href="#test/truncation"><code>test/truncation</code>: <span class="w3-text-green">pass</span></a></h2>The diagonal stops at the first inner list too short to reach it, rather than skipping it and sliding the later elements out of their index; a value that does not match the pattern of a <code>←</code> clause goes to <code>fail</code>, the empty list, so the diagonal stops there too.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/truncation _)
+  (⊦= '(x) (&gt;&gt;= '(1 2 3) (λ (v) (if (= v 2) '(a) '(x y z w)))))
+  (⊦= '((1 a c d) (2 b c* e))
+      (do/monad
+        (← x '(1 2 3))
+        (← y '(a b))
+        (← z '(c c*))
+        (← r '(d e f g))
+        ,(list x y z r)))
+  (⊦= '(1) (do/monad (← (,a unquote b) '((1 . 2) 3 (4 . 5))) ,a)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1996688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/associativity"><a href="#test/associativity"><code>test/associativity</code>: <span class="w3-text-green">pass</span></a></h2>Both sides of the associativity law agree index by index.  On ragged inner lists one side may stop earlier: the inner bind on the right truncates at the first index any of its inner lists misses, even when the left side never looks at that index, which is why finite zip lists admit no lawful monad (Haskell's ZipList is only an Applicative).
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/associativity _)
+  (let* ((table '#((1 2 0) (2) (0 1 2 1) (3 0 3 2 1)))
+         (f (λ (v) (vector-ref table v)))
+         (g (λ (v) (reverse (vector-ref table v)))))
+    (for-each
+      (λ (m)
+         (let ((lhs (&gt;&gt;= (&gt;&gt;= m f) g)) (rhs (&gt;&gt;= m (λ (x) (&gt;&gt;= (f x) g)))))
+           (⊦= (map (λ (l r) l) lhs rhs) (map (λ (l r) r) lhs rhs))))
+      '((0 1 2 3) (2 0 1) (0 2 0 1) (1 0 2) (3 3 3 0) (2 2 2) (3 0)))
+    (⊦= '(1 2 3) (&gt;&gt;= (&gt;&gt;= '(3 3 3) f) g))
+    (⊦= '(1 2 3) (&gt;&gt;= '(3 3 3) (λ (x) (&gt;&gt;= (f x) g))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1996040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

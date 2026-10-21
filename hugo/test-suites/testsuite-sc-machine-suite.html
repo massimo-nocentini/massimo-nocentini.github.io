@@ -1,0 +1,240 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section363">
+<header>
+<h1>The SC machine</h1></header></section>
+<p>Ported from on-scheme's <code class="w3-codespan">SC-machine.scm</code>.</p>
+<section id="section364">
+<header>
+<h1>Implementation</h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux machine sc)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken format)
+    (aux base)
+    (aux commons)
+    (aux machine env))
+  (define %check
+    (λ (who pred? v)
+       (cond ((pred? v) v) (else (error who &quot;wrong field type&quot; v)))))
+  (define-record %Id identifier)
+  (define-record %Comb rator rand)
+  (define Id (λ (identifier) (make-%Id (%check 'Id symbol? identifier))))
+  (define Id? %Id?)
+  (define Id-identifier %Id-identifier)
+  (define combination? (λ (c) (or (%Id? c) (%Comb? c))))
+  (define Comb
+    (λ (rator rand)
+       (make-%Comb
+         (%check 'Comb combination? rator)
+         (%check 'Comb combination? rand))))
+  (define Comb? %Comb?)
+  (define Comb-rator %Comb-rator)
+  (define Comb-rand %Comb-rand)
+  (set-record-printer! %Id (λ (c out) (format out &quot;~a&quot; (%Id-identifier c))))
+  (set-record-printer!
+    %Comb
+    (λ (c out) (format out &quot;(~a ~a)&quot; (%Comb-rator c) (%Comb-rand c))))
+  (define curryfy
+    (let1 (C (λ (c) (cond ((list? c) (curryfy c)) (else (Id c)))))
+          (foldl1 (λ (acc c) (Comb acc (C c))) #:H₀ C)))
+  (define value
+    (λ (E)
+       (rec V
+            (λ (c)
+               (cond ((%Id? c) (E (%Id-identifier c)))
+                     ((%Comb? c) ((V (%Comb-rator c)) (V (%Comb-rand c))))
+                     (else (error 'value &quot;not a combination&quot; c)))))))
+  (define-record status S C)
+  (define dbind/status (λ (recv) (λ (s) (recv s (status-S s) (status-C s)))))
+  (set-record-printer!
+    status
+    (λ (s out)
+       (let1 (P (dbind/status (λ (s S C) (format out &quot;(~a ~a)&quot; S C)))) (P s))))
+  (define →/interpreted
+    (let* ((sym/apply (gensym 'apply)) (is-apply? (=to? sym/apply)))
+      (λ (E)
+         (dbind/status
+           (λ (s S C)
+              (cond ((null? C) s)
+                    (else
+                     (match1/first
+                       ((,C₀ unquote C₊) C)
+                       (cond ((is-apply? C₀)
+                              (match1/first
+                                ((,f ,y unquote S₊) S)
+                                (make-status (cons (f y) S₊) C₊)))
+                             ((%Id? C₀)
+                              (let1 (stack (cons (E (%Id-identifier C₀)) S))
+                                    (make-status stack C₊)))
+                             ((%Comb? C₀)
+                              (let* ((cmds (list (%Comb-rand C₀) (%Comb-rator C₀) sym/apply))
+                                     (control (append cmds C₊)))
+                                (make-status S control)))
+                             (else
+                              (error '→/interpreted &quot;not a combination&quot; C₀)))))))))))
+  (define-record %Load selector)
+  (define-record %Apply)
+  (define Load (λ (selector) (make-%Load (%check 'Load procedure? selector))))
+  (define Load? %Load?)
+  (define Load-selector %Load-selector)
+  (define Apply make-%Apply)
+  (define Apply? %Apply?)
+  (define instruction? (λ (i) (or (%Load? i) (%Apply? i))))
+  (set-record-printer!
+    %Load
+    (λ (i out) (format out &quot;(Load ~a)&quot; ((%Load-selector i) (gensym)))))
+  (set-record-printer! %Apply (λ (i out) (format out &quot;Apply&quot;)))
+  (define compile
+    (λ (E)
+       (rec C
+            (λ (c)
+               (cond ((%Id? c) (list (Load (K (E (%Id-identifier c))))))
+                     ((%Comb? c)
+                      (append
+                        (C (%Comb-rand c))
+                        (C (%Comb-rator c))
+                        (list (Apply))))
+                     (else (error 'compile &quot;not a combination&quot; c)))))))
+  (define →/compiled
+    (λ (E)
+       (dbind/status
+         (λ (s S C)
+            (cond ((null? C) s)
+                  (else
+                   (letcar&amp;cdr
+                     (((C₀ C₊) C))
+                     (cond ((%Load? C₀)
+                            (let1 (stack (cons ((%Load-selector C₀) E) S))
+                                  (make-status stack C₊)))
+                           ((%Apply? C₀)
+                            (match1/first
+                              ((,f ,y unquote S₊) S)
+                              (make-status (cons (f y) S₊) C₊)))
+                           (else
+                            (error '→/compiled &quot;not an instruction&quot; C₀)))))))))))
+</code></pre></div>
+<h2 id="test/value"><a href="#test/value"><code>test/value</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/value _)
+  (⊦= 3 ((value E₂) (Id 'a)))
+  (⊦= 4
+      ((value ((extend E₂) `(add1 unquote add1))) (Comb (Id 'add1) (Id 'a)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2055728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/curryfy"><a href="#test/curryfy"><code>test/curryfy</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/curryfy _)
+  (⊦= (Comb (Comb (Id 'p)
+                  (Comb (Comb (Id 'm) (Comb (Comb (Id 'p) (Id 'a)) (Id 'b)))
+                        (Id 'c)))
+            (Comb (Comb (Id 'f) (Id 'a)) (Id 'c)))
+      (curryfy '(p (m (p a b) c) (f a c))))
+  (⊦= (Comb (Comb (Id 'p) (Comb (Comb (Id 'f) (Id 'a)) (Id 'c)))
+            (Comb (Comb (Id 'm) (Id 'c))
+                  (Comb (Comb (Id 'p) (Id 'b)) (Id 'a))))
+      (curryfy '(p (f a c) (m c (p b a)))))
+  (⊦= (Comb (Comb (Id 'p) (Id 'a)) (Id 'b)) (curryfy '((p a) b)))
+  (⊦= (curryfy '(p a b)) (curryfy '((p a) b)))
+  (⊦= (Comb (Comb (Comb (Id 'm) (Id 'c)) (Comb (Id 'f) (Id 'a))) (Id 'b))
+      (curryfy '((m c (f a)) b))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2056912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/printer"><a href="#test/printer"><code>test/printer</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/printer _)
+  (⊦= &quot;((p a) b)&quot; (with-output-to-string (τ (display (curryfy '(p a b))))))
+  (⊦= &quot;((p ((f a) c)) ((m c) ((p b) a)))&quot;
+      (with-output-to-string
+        (τ (display (curryfy '(p (f a c) (m c (p b a)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2058176 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/traces"><a href="#test/traces"><code>test/traces</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/traces _)
+  (let* ((p (λ (a) (λ (b) (+ a b))))
+         (m (λ (a) (λ (b) (- a b))))
+         (f (λ (a) (λ (b) (+ (² a) (² b)))))
+         (control (curryfy '(p (m (p a b) c) (f a c))))
+         (control₁ (curryfy '(p (f a c) (m c (p b a)))))
+         (E ((extend E₀)
+             `(a . 1)
+             `(b . 2)
+             `(c . 3)
+             `(p unquote p)
+             `(m unquote m)
+             `(f unquote f)))
+         (→/interpreted (rtc (→/interpreted E)))
+         (→/compiled (rtc (→/compiled E)))
+         (F (λ (s) (format #t &quot;~a\n&quot; s))))
+    (⊦=/normalised
+      &quot;(() (((p ((m ((p a) b)) c)) ((f a) c))))\n(() (((f a) c) (p ((m ((p a) b)) c)) apply0))\n(() (c (f a) apply0 (p ((m ((p a) b)) c)) apply0))\n((3) ((f a) apply0 (p ((m ((p a) b)) c)) apply0))\n((3) (a f apply0 apply0 (p ((m ((p a) b)) c)) apply0))\n((1 3) (f apply0 apply0 (p ((m ((p a) b)) c)) apply0))\n((#&lt;procedure (f a216)&gt; 1 3) (apply0 apply0 (p ((m ((p a) b)) c)) apply0))\n((#&lt;procedure (f_671 b217)&gt; 3) (apply0 (p ((m ((p a) b)) c)) apply0))\n((10) ((p ((m ((p a) b)) c)) apply0))\n((10) (((m ((p a) b)) c) p apply0 apply0))\n((10) (c (m ((p a) b)) apply0 p apply0 apply0))\n((3 10) ((m ((p a) b)) apply0 p apply0 apply0))\n((3 10) (((p a) b) m apply0 apply0 p apply0 apply0))\n((3 10) (b (p a) apply0 m apply0 apply0 p apply0 apply0))\n((2 3 10) ((p a) apply0 m apply0 apply0 p apply0 apply0))\n((2 3 10) (a p apply0 apply0 m apply0 apply0 p apply0 apply0))\n((1 2 3 10) (p apply0 apply0 m apply0 apply0 p apply0 apply0))\n((#&lt;procedure (p a210)&gt; 1 2 3 10) (apply0 apply0 m apply0 apply0 p apply0 apply0))\n((#&lt;procedure (f_657 b211)&gt; 2 3 10) (apply0 m apply0 apply0 p apply0 apply0))\n((3 3 10) (m apply0 apply0 p apply0 apply0))\n((#&lt;procedure (m a213)&gt; 3 3 10) (apply0 apply0 p apply0 apply0))\n((#&lt;procedure (f_664 b214)&gt; 3 10) (apply0 p apply0 apply0))\n((0 10) (p apply0 apply0))\n((#&lt;procedure (p a210)&gt; 0 10) (apply0 apply0))\n((#&lt;procedure (f_657 b211)&gt; 10) (apply0))\n((10) ())\n&quot;
+      (with-output-to-string
+        (τ ((fmap F) (→/interpreted (make-status '() (list control)))))))
+    (⊦=/normalised
+      &quot;(() ((Load 3) (Load 1) (Load #&lt;procedure (f a216)&gt;) Apply Apply (Load 3) (Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((3) ((Load 1) (Load #&lt;procedure (f a216)&gt;) Apply Apply (Load 3) (Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((1 3) ((Load #&lt;procedure (f a216)&gt;) Apply Apply (Load 3) (Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (f a216)&gt; 1 3) (Apply Apply (Load 3) (Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (f_671 b217)&gt; 3) (Apply (Load 3) (Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((10) ((Load 3) (Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((3 10) ((Load 2) (Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((2 3 10) ((Load 1) (Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((1 2 3 10) ((Load #&lt;procedure (p a210)&gt;) Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (p a210)&gt; 1 2 3 10) (Apply Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (f_657 b211)&gt; 2 3 10) (Apply (Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((3 3 10) ((Load #&lt;procedure (m a213)&gt;) Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (m a213)&gt; 3 3 10) (Apply Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (f_664 b214)&gt; 3 10) (Apply (Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((0 10) ((Load #&lt;procedure (p a210)&gt;) Apply Apply))\n((#&lt;procedure (p a210)&gt; 0 10) (Apply Apply))\n((#&lt;procedure (f_657 b211)&gt; 10) (Apply))\n((10) ())\n&quot;
+      (with-output-to-string
+        (τ ((fmap F) (→/compiled (make-status '() ((compile E) control)))))))
+    (⊦=/normalised
+      &quot;(() (((p ((f a) c)) ((m c) ((p b) a)))))\n(() (((m c) ((p b) a)) (p ((f a) c)) apply0))\n(() (((p b) a) (m c) apply0 (p ((f a) c)) apply0))\n(() (a (p b) apply0 (m c) apply0 (p ((f a) c)) apply0))\n((1) ((p b) apply0 (m c) apply0 (p ((f a) c)) apply0))\n((1) (b p apply0 apply0 (m c) apply0 (p ((f a) c)) apply0))\n((2 1) (p apply0 apply0 (m c) apply0 (p ((f a) c)) apply0))\n((#&lt;procedure (p a210)&gt; 2 1) (apply0 apply0 (m c) apply0 (p ((f a) c)) apply0))\n((#&lt;procedure (f_657 b211)&gt; 1) (apply0 (m c) apply0 (p ((f a) c)) apply0))\n((3) ((m c) apply0 (p ((f a) c)) apply0))\n((3) (c m apply0 apply0 (p ((f a) c)) apply0))\n((3 3) (m apply0 apply0 (p ((f a) c)) apply0))\n((#&lt;procedure (m a213)&gt; 3 3) (apply0 apply0 (p ((f a) c)) apply0))\n((#&lt;procedure (f_664 b214)&gt; 3) (apply0 (p ((f a) c)) apply0))\n((0) ((p ((f a) c)) apply0))\n((0) (((f a) c) p apply0 apply0))\n((0) (c (f a) apply0 p apply0 apply0))\n((3 0) ((f a) apply0 p apply0 apply0))\n((3 0) (a f apply0 apply0 p apply0 apply0))\n((1 3 0) (f apply0 apply0 p apply0 apply0))\n((#&lt;procedure (f a216)&gt; 1 3 0) (apply0 apply0 p apply0 apply0))\n((#&lt;procedure (f_671 b217)&gt; 3 0) (apply0 p apply0 apply0))\n((10 0) (p apply0 apply0))\n((#&lt;procedure (p a210)&gt; 10 0) (apply0 apply0))\n((#&lt;procedure (f_657 b211)&gt; 0) (apply0))\n((10) ())\n&quot;
+      (with-output-to-string
+        (τ ((fmap F) (→/interpreted (make-status '() (list control₁)))))))
+    (let ((t (→/interpreted (make-status '() (list control))))
+          (t/compiled (→/compiled (make-status '() ((compile E) control))))
+          (t₁ (→/interpreted (make-status '() (list control₁)))))
+      (⊦= 26 (length t))
+      (⊦= 18 (length t/compiled))
+      (⊦= 26 (length t₁))
+      (⊦= '((10) ()) (let1 (s (last* t)) (list (status-S s) (status-C s))))
+      (⊦= '((10) ())
+          (let1 (s (last* t/compiled)) (list (status-S s) (status-C s))))
+      (⊦= '((10) ()) (let1 (s (last* t₁)) (list (status-S s) (status-C s))))
+      (let1 (s (last* t)) (⊨ (eq? s ((→/interpreted-step E) s)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(12582912 2117648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/strict-constructors"><a href="#test/strict-constructors"><code>test/strict-constructors</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/strict-constructors _)
+  (⊨ (condition-case (begin (Id &quot;a&quot;) #f) ((exn) #t)))
+  (⊨ (condition-case (begin (Comb 'a (Id 'b)) #f) ((exn) #t)))
+  (⊨ (condition-case (begin (Load 3) #f) ((exn) #t)))
+  (⊨ (condition-case (begin ((value E₀) 'a) #f) ((exn) #t))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2128344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

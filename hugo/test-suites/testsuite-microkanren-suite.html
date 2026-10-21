@@ -19,7 +19,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
-<script>hljs.highlightAll();</script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
 <body>
 <h2 id="test/find"><a href="#test/find"><code>test/find</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -46,28 +48,202 @@
     (⊦= 'a (μkanren-state-find v2 s2))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(12582912 2120256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3102104 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/find/values"><a href="#test/find/values"><code>test/find/values</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/find/values _)
+  (let* ((v1 (make-μkanren-var 0))
+         (v2 (make-μkanren-var 1))
+         (s0 μkanren-state-empty)
+         (s1 (make-μkanren-state
+               1
+               (cons/sbral 'a (μkanren-state-S s0))
+               empty/sbral
+               empty/sbral
+               empty/sbral
+               '()))
+         (s2 (make-μkanren-state
+               2
+               (cons/sbral v1 (μkanren-state-S s1))
+               empty/sbral
+               empty/sbral
+               empty/sbral
+               '())))
+    (⊦= 1 (μkanren-var-index/sbral (μkanren-state-S s2) v1))
+    (⊦= 0 (μkanren-var-index/sbral (μkanren-state-S s2) v2))
+    (⊦= 'a (μkanren-sbral-ref/var (μkanren-state-S s2) v1))
+    (⊦= v1 (μkanren-sbral-ref/var (μkanren-state-S s2) v2))
+    (⊦= '(a a 5) (μkanren-state-find/values (list v1 v2 5) s2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3103256 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/state-with"><a href="#test/state-with"><code>test/state-with</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/state-with _)
+  (let* ((s (make-μkanren-state 3 empty/sbral '((d)) '((a)) '((t)) '(tag)))
+         (s* (μkanren-state-with s #:D '() #:tags '())))
+    (⊦= 3 (μkanren-state-vars-count s*))
+    (⊦= '() (μkanren-state-D s*))
+    (⊦= '((a)) (μkanren-state-A s*))
+    (⊦= '((t)) (μkanren-state-T s*))
+    (⊦= '() (μkanren-state-tags s*))
+    (⊦= '((d)) (μkanren-state-D (μkanren-state-with s)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3104880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/state-unify/stores"><a href="#test/state-unify/stores"><code>test/state-unify/stores</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/state-unify/stores _)
+  (define ((raw=° u v) s)
+    (let1 (r (μkanren-state-unify u v s '())) (if r (list (car r)) '())))
+  (define ((rawS=° u v) s)
+    (let1 (r (μkanren-state-unify u v s '()))
+          (if r
+            (list (μkanren-state-with s #:S (μkanren-state-S (car r))))
+            '())))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh° (x y) (=° q (list x y)) (number° x) (raw=° x 'a) (=° y 1)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh°
+            (x y)
+            (=° q (list x y))
+            (absent° 'a x)
+            (raw=° x 'a)
+            (=° y 1)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh°
+            (x y)
+            (=° q (list x y))
+            (number° x)
+            (rawS=° x 'a)
+            (=° y 1)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (fresh°
+            (x y)
+            (=° q (list x y))
+            (absent° 'a x)
+            (rawS=° x 'a)
+            (=° y 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3095192 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rem-subsumed/by"><a href="#test/rem-subsumed/by"><code>test/rem-subsumed/by</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rem-subsumed/by _)
+  (⊦= '(2 3 1) ((μkanren-rem-subsumed/by member?) '(1 2 1 3 2)))
+  (⊦= '() ((μkanren-rem-subsumed/by member?) '()))
+  (⊦= '(2 3 1) ((μkanren-rem-subsumed/by member? identity list) '(1 2 1 3 2)))
+  (⊦= '(6) ((μkanren-rem-subsumed/by (λ (x L) (pair? L))) '(1 2 3 4 6)))
+  (⊦= '(6 3)
+      ((μkanren-rem-subsumed/by
+         (λ (x L) (pair? L))
+         (μ x (modulo x 2))
+         (μ x (list (modulo x 2))))
+       '(1 2 3 4 6))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3095904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/foldr/verify"><a href="#test/foldr/verify"><code>test/foldr/verify</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/foldr/verify _)
+  (define (step x acc) (and (odd? x) (cons x acc)))
+  (⊦= '(1 3 5) (μkanren-foldr/verify step '(1 3 5)))
+  (⊦= #f (μkanren-foldr/verify step '(1 2 5)))
+  (⊦= '() (μkanren-foldr/verify step '()))
+  (⊦= '() ((μkanren-verify-T+ 'x μkanren-tag/sym μkanren-state-empty) '()))
+  (⊦= #f ((μkanren-verify-T+ 5 μkanren-tag/sym μkanren-state-empty) '())))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3096912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/partition*"><a href="#test/partition*"><code>test/partition*</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/partition* _)
+  (let1 (A (list (cons 'a μkanren-tag/sym)
+                 (cons 'b μkanren-tag/num)
+                 (cons 'a μkanren-tag/sym)
+                 (cons 'c μkanren-tag/sym)))
+        (⊦= `((,μkanren-tag/sym a c) (,μkanren-tag/num b))
+            (μkanren-partition* A)))
+  (⊦= '((λ (α β γ)
+           (assert (every (μ v (symbol? v)) (list α γ)))
+           (assert (every (μ v (number? v)) (list β)))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q a b c)
+          (=° q (list a b c))
+          (symbol° a)
+          (number° b)
+          (symbol° c)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3098240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/=°"><a href="#test/=°"><code>test/=°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=° _) (⊦= '(α) (°-&gt;list/ground (=° 'z 'z))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(12582912 2121400 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3098536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/sharing"><a href="#test/sharing"><code>test/sharing</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sharing _)
   (⊦= '(((α z) z (α β)))
-        (°-&gt;list/ground
-          (fresh°
-            r
-            (n q x)
-            (=° q 'z)
-            (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
+      (°-&gt;list/ground
+        (fresh°
+          r
+          ←
+          (n q x)
+          (=° q 'z)
+          (fresh° (w r) (=° n (list w q)) (=° x (list w r)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(12582912 2127568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3102656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fresh°/typo"><a href="#test/fresh°/typo"><code>test/fresh°/typo</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fresh°/typo _)
+  (⊦= 'syntax-error
+      (condition-case
+        (eval '(μkanren-run (q 3 #f) (fresh° x (null° x) (=° q x))))
+        ((exn syntax) 'syntax-error)))
+  (⊦= '(()) (μkanren-run (q 3 #t) (fresh° (x) (null° x) (=° q x)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3105376 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/define-relation/recursive"><a href="#test/define-relation/recursive"><code>test/define-relation/recursive</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/define-relation/recursive _)
+  (define-relation (ones° x) (or° (=° x 1) (ones° x)))
+  (⊦= '(1 1 1) (°-&gt;list/ground (take° 3 (fresh° (q) (ones° q))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3102744 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/peano°"><a href="#test/peano°"><code>test/peano°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -79,70 +255,146 @@
     (church° n)
     (fresh° (b) (=° n `(λ (s) (λ (z) ,b))) (peano° b)))
   (⊦= '(z (s z)
-            (s (s z))
-            (s (s (s z)))
-            (s (s (s (s z))))
-            (s (s (s (s (s z)))))
-            (s (s (s (s (s (s z))))))
-            (s (s (s (s (s (s (s z)))))))
-            (s (s (s (s (s (s (s (s z))))))))
-            (s (s (s (s (s (s (s (s (s z))))))))))
-        (°-&gt;list/ground (take° 10 (fresh° (n) (peano° n)))))
+          (s (s z))
+          (s (s (s z)))
+          (s (s (s (s z))))
+          (s (s (s (s (s z)))))
+          (s (s (s (s (s (s z))))))
+          (s (s (s (s (s (s (s z)))))))
+          (s (s (s (s (s (s (s (s z))))))))
+          (s (s (s (s (s (s (s (s (s z))))))))))
+      (°-&gt;list/ground (take° 10 (fresh° (n) (peano° n)))))
   (⊦= '((λ (s) (λ (z) z))
-          (λ (s) (λ (z) (s z)))
-          (λ (s) (λ (z) (s (s z))))
-          (λ (s) (λ (z) (s (s (s z)))))
-          (λ (s) (λ (z) (s (s (s (s z))))))
-          (λ (s) (λ (z) (s (s (s (s (s z)))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s z))))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s (s z)))))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
-          (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
-        (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
+        (λ (s) (λ (z) (s z)))
+        (λ (s) (λ (z) (s (s z))))
+        (λ (s) (λ (z) (s (s (s z)))))
+        (λ (s) (λ (z) (s (s (s (s z))))))
+        (λ (s) (λ (z) (s (s (s (s (s z)))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s z))))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s (s z)))))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s (s (s z))))))))))
+        (λ (s) (λ (z) (s (s (s (s (s (s (s (s (s z))))))))))))
+      (°-&gt;list/ground (take° 10 (fresh° (n) (church° n))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(12582912 2139168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(12582912 3116984 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/append°"><a href="#test/append°"><code>test/append°</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
 <pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/append° _)
   (define-relation
     (append° r s rs)
-    (cond°
-      ((null° r) (=° s rs))
-      ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
+    (cond° ((null° r) (=° s rs))
+           ((fresh° (a d c) (cons° a d r) (append° d s c) (cons° a c rs)))))
   (⊦ equal?
-       '((λ (α) α)
-         (λ (α β) (cons α β))
-         (λ (α β γ) (cons α (cons β γ)))
-         (λ (α β γ δ) (cons α (cons β (cons γ δ))))
-         (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
-         (λ (α β γ δ ε ζ)
-             (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
-         (λ (α β γ δ ε ζ η)
-             (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
-         (λ (α β γ δ ε ζ η θ)
-             (cons α
-                   (cons β
-                         (cons γ
-                               (cons δ (cons ε (cons ζ (cons η θ))))))))
-         (λ (α β γ δ ε ζ η θ ι)
-             (cons α
-                   (cons β
-                         (cons γ
-                               (cons δ
-                                     (cons ε (cons ζ (cons η (cons θ ι)))))))))
-         (λ (α β γ δ ε ζ η θ ι κ)
-             (cons α
-                   (cons β
-                         (cons γ
-                               (cons δ
-                                     (cons ε
-                                           (cons ζ (cons η (cons θ (cons ι κ)))))))))))
-       (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
+     '((λ (α) α)
+       (λ (α β) (cons α β))
+       (λ (α β γ) (cons α (cons β γ)))
+       (λ (α β γ δ) (cons α (cons β (cons γ δ))))
+       (λ (α β γ δ ε) (cons α (cons β (cons γ (cons δ ε)))))
+       (λ (α β γ δ ε ζ) (cons α (cons β (cons γ (cons δ (cons ε ζ))))))
+       (λ (α β γ δ ε ζ η)
+          (cons α (cons β (cons γ (cons δ (cons ε (cons ζ η)))))))
+       (λ (α β γ δ ε ζ η θ)
+          (cons α (cons β (cons γ (cons δ (cons ε (cons ζ (cons η θ))))))))
+       (λ (α β γ δ ε ζ η θ ι)
+          (cons α
+                (cons β
+                      (cons γ
+                            (cons δ (cons ε (cons ζ (cons η (cons θ ι)))))))))
+       (λ (α β γ δ ε ζ η θ ι κ)
+          (cons α
+                (cons β
+                      (cons γ
+                            (cons δ
+                                  (cons ε (cons ζ (cons η (cons θ (cons ι κ)))))))))))
+     (μkanren-run (l 10 #f) (fresh° (a d) (append° a d l)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2136072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3117912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/=°/nan"><a href="#test/=°/nan"><code>test/=°/nan</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=°/nan _)
+  (⊦= 1 (length (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (=° q (/ 0.0 0.0)))))
+  (⊦= 1
+      (length
+        (μkanren-run
+          (q 2 #f)
+          (=° q (list 1 (/ 0.0 0.0)))
+          (=° q (list 1 (/ 0.0 0.0))))))
+  (⊦= '() (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (≠° q (/ 0.0 0.0))))
+  (⊦= '() (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (=° q 1.0)))
+  (⊦= '() (μkanren-run (q 2 #f) (absent° (/ 0.0 0.0) q) (=° q (/ 0.0 0.0))))
+  (⊦= '() (μkanren-run (q 2 #f) (=° q (/ 0.0 0.0)) (absent° (/ 0.0 0.0) q)))
+  (⊦= '()
+      (μkanren-run
+        (q 2 #f)
+        (absent° (/ 0.0 0.0) q)
+        (=° q (list 1 (/ 0.0 0.0)))))
+  (⊦= '()
+      (μkanren-run
+        (q 2 #f)
+        (absent° (list (/ 0.0 0.0)) q)
+        (=° q (list (/ 0.0 0.0)))))
+  (⊦= 1
+      (length
+        (μkanren-run (q 2 #f) (absent° (/ 0.0 0.0) q) (=° q (list 1.0 2)))))
+  (let1 (c (λ (s) (string-&gt;number s)))
+        (⊦= 1
+            (length
+              (μkanren-run
+                (q 2 #f)
+                (=° q (c &quot;+nan.0+1i&quot;))
+                (=° q (c &quot;+nan.0+1i&quot;)))))
+        (⊦= '()
+            (μkanren-run
+              (q 2 #f)
+              (=° q (c &quot;+nan.0+1i&quot;))
+              (=° q (c &quot;+nan.0+2i&quot;))))
+        (⊦= '()
+            (μkanren-run
+              (q 2 #f)
+              (=° q (c &quot;+nan.0+1i&quot;))
+              (=° q (c &quot;1+nan.0i&quot;))))
+        (⊦= '()
+            (μkanren-run (q 2 #f) (=° q (c &quot;+nan.0+1i&quot;)) (=° q (/ 0.0 0.0))))
+        (⊦= '()
+            (μkanren-run
+              (q 2 #f)
+              (=° q (c &quot;+nan.0+1i&quot;))
+              (≠° q (c &quot;+nan.0+1i&quot;))))
+        (⊦= 1
+            (length
+              (μkanren-run
+                (q 2 #f)
+                (=° q (c &quot;+nan.0+1i&quot;))
+                (≠° q (c &quot;7+nan.0i&quot;)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3105792 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/≠°/verify"><a href="#test/≠°/verify"><code>test/≠°/verify</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/≠°/verify _)
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (≠° x y) (=° q 1) (=° x 5) (=° y 5))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x y) (≠° (list x y) '(1 2)) (=° q 0) (=° x 1) (=° y 2))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x y z) (≠° x (list y)) (=° q 0) (=° y z) (=° x (list z)))))
+  (⊦= '((λ (α) α))
+      (°-&gt;list #f (fresh° (q x b) (=° q b) (≠° b (list x)) (=° x b))))
+  (⊦= '((λ (α) (begin (deny (equal? α (cons 1 '())))) (cons α (cons 1 '()))))
+      (°-&gt;list
+        #f
+        (fresh° (q b x) (=° q (list b x)) (≠° b (list x)) (=° x 1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3107144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/=°/structure"><a href="#test/=°/structure"><code>test/=°/structure</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -150,14 +402,13 @@
   (define-record person name age)
   (define p (make-person 'alice 30))
   (⊦= #t (record-instance? p))
-  (⊦= `((record ,p))
-        (°-&gt;list/ground (fresh° (r) (=° r (list 'record p)))))
+  (⊦= `((record ,p)) (°-&gt;list/ground (fresh° (r) (=° r (list 'record p)))))
   (⊦= `((record ,(make-person 'α 30)))
-        (°-&gt;list/ground
-          (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
+      (°-&gt;list/ground
+        (fresh° (r a) (=° r (list 'record (make-person a 30)))))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2129560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3109992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div>
 <h2 id="test/=°/structure/vector"><a href="#test/=°/structure/vector"><code>test/=°/structure/vector</code>: <span class="w3-text-green">pass</span></a></h2>
 <div>
@@ -167,8 +418,323 @@
   (⊦= #t (record-instance? p))
   (⊦= #(person alice 30) (record-&gt;vector p))
   (⊦= '((person alice 30))
-        (°-&gt;list/ground (fresh° r (t n a) (=° `#(,t ,n ,a) p)))))
+      (°-&gt;list/ground (fresh° r ← (t n a) (=° `#(,t ,n ,a) p)))))
 </code></pre></div>
 <div>
-<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(12582912 2129552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3110304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/=°/structure/vector/answer"><a href="#test/=°/structure/vector/answer"><code>test/=°/structure/vector/answer</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=°/structure/vector/answer _)
+  (⊦= '((λ () (vector 1 2))) (°-&gt;list #f (fresh° (q) (=° q (vector 1 2)))))
+  (⊦= '((λ (α) (vector 1 α))) (°-&gt;list #f (fresh° (q r) (=° q (vector 1 r))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3111224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/var-&gt;symbol/overflow"><a href="#test/var-&gt;symbol/overflow"><code>test/var-&gt;symbol/overflow</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/var-&gt;symbol/overflow _)
+  (⊦= '((α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω α1 β1))
+      (°-&gt;list/ground
+        (fresh° r ← (a b c d e f g h i j k l m n o p q s t u v w x y z aa)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3129480 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/ground/constrained"><a href="#test/ground/constrained"><code>test/ground/constrained</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/ground/constrained _)
+  (⊦= '(α) (°-&gt;list/ground (fresh° (q) (number° q))))
+  (⊦= '(α) (°-&gt;list/ground (fresh° (q) (≠° q 'α))))
+  (⊦= '(α) (°-&gt;list/ground (fresh° (q) (symbol° q)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3112728 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/absent°/symbol°"><a href="#test/absent°/symbol°"><code>test/absent°/symbol°</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/absent°/symbol° _)
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (symbol° q) (absent° 'closure q) (=° q 'closure))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (absent° 'closure q) (symbol° q) (=° q 'closure))))
+  (⊦= '((λ (α)
+           (begin (deny (equal? α 'closure)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           α))
+      (°-&gt;list #f (fresh° (q) (symbol° q) (absent° 'closure q))))
+  (⊦= '((λ (α β γ)
+           (begin (deny (equal? β 'a)))
+           (assert (every (μ v (symbol? v)) (list α β γ)))
+           (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° q (list x y z))
+          (symbol° x)
+          (symbol° y)
+          (symbol° z)
+          (absent° 'a y)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3115688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/≠°/subsumed"><a href="#test/≠°/subsumed"><code>test/≠°/subsumed</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/≠°/subsumed _)
+  (⊦= '((λ (α β)
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (cons α (cons β '()))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (symbol° x)
+          (symbol° y)
+          (≠° (list x y) (list 1 2)))))
+  (⊦= '((λ (α β)
+           (assert (every (μ v (symbol? v)) (list α β)))
+           (cons α (cons β '()))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (symbol° x)
+          (symbol° y)
+          (≠° (list x y) (list 'a 2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3117168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/≠°/subsumed/keyed"><a href="#test/≠°/subsumed/keyed"><code>test/≠°/subsumed/keyed</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/≠°/subsumed/keyed _)
+  (⊦= '((λ (α β γ) (begin (deny (equal? α β))) (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° q (list x y z))
+          (≠° x y)
+          (≠° (list x z) (list y 1)))))
+  (⊦= '((λ (α β γ) (begin (deny (equal? α β))) (cons α (cons β (cons γ '())))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (=° q (list x y z))
+          (≠° (list z x) (list 1 y))
+          (≠° y x))))
+  (⊦= '((λ (α β) (begin (deny (equal? β 2))) (cons α (cons β '()))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (≠° (list x y) (list 1 2))
+          (≠° y 2))))
+  (⊦= '((λ (α β γ δ)
+           (begin (deny (equal? α δ)))
+           (begin (deny (equal? β δ)))
+           (cons α (cons β (cons γ (cons δ '()))))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q a b c x)
+          (=° q (list a b c x))
+          (≠° x a)
+          (≠° x b)
+          (≠° (list x c) (list b 1)))))
+  (⊦= '((λ (α β γ δ)
+           (begin (deny (equal? α δ)))
+           (begin (deny (equal? β δ)))
+           (begin (deny (equal? γ δ)))
+           (cons α (cons β (cons γ (cons δ '()))))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q a b c)
+          (fresh°
+            (x)
+            (=° q (list a b c x))
+            (≠° x a)
+            (≠° (list c x) (list 1 b))
+            (≠° x b)
+            (≠° x c))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3120776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/stores/order"><a href="#test/stores/order"><code>test/stores/order</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/stores/order _)
+  (⊦= (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° '(b) q) (absent° 'c q)))
+      (°-&gt;list #f (fresh° (q) (absent° 'c q) (absent° '(b) q) (absent° 'a q))))
+  (⊦= (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (≠° q (make-record-instance 'box 1))
+          (≠° q (make-record-instance 'box 2))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q)
+          (≠° q (make-record-instance 'box 2))
+          (≠° q (make-record-instance 'box 1)))))
+  (⊦= (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (≠° (list x y) '(1 2))
+          (≠° (list y x) '(3 4))))
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y)
+          (=° q (list x y))
+          (≠° (list y x) '(3 4))
+          (≠° (list x y) '(1 2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3122960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/=°/hands-on"><a href="#test/=°/hands-on"><code>test/=°/hands-on</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=°/hands-on _)
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (symbol° x) (=° x y) (=° y 5))))
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (symbol° x) (number° y) (=° x y))))
+  (⊦= '() (°-&gt;list #f (fresh° (q x y) (≠° x 1) (=° x y) (=° y 1))))
+  (⊦= '()
+      (°-&gt;list #f (fresh° (q x y) (absent° 'z x) (=° x (list y)) (=° y 'z))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh°
+          (q x y z)
+          (absent° '(1 2) (cons x y))
+          (=° y (list z))
+          (=° x 1)
+          (=° z 2))))
+  (⊦= '((λ (α)
+           (begin (deny (equal? α 'a)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           α))
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (x) (absent° 'a x) (symbol° q) (=° x q)))))
+  (⊦= '((λ (α)
+           (begin (deny (equal? α 'a)))
+           (assert (every (μ v (symbol? v)) (list α)))
+           α))
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (x) (absent° 'a q) (symbol° x) (=° x q))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3120440 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/absent°/structure"><a href="#test/absent°/structure"><code>test/absent°/structure</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/absent°/structure _)
+  (⊦= '() (°-&gt;list #f (fresh° (q) (absent° 'a q) (=° q (vector 'a)))))
+  (⊦= '()
+      (°-&gt;list #f (fresh° (q x) (=° q (vector x)) (absent° 'a q) (=° x 'a))))
+  (⊦= '((λ () (vector 'b)))
+      (°-&gt;list #f (fresh° (q) (=° q (vector 'b)) (absent° 'a q))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (=° q (make-record-instance 'box 'a)) (absent° 'a q)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/absent°/subsumed"><a href="#test/absent°/subsumed"><code>test/absent°/subsumed</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/absent°/subsumed _)
+  (⊦= (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q)))
+      (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q) (≠° q 'a))))
+  (⊦= (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q)))
+      (°-&gt;list #f (fresh° (q) (absent° 'a q) (absent° 'b q) (≠° q 'b)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3121224 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/absent°/datum"><a href="#test/absent°/datum"><code>test/absent°/datum</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/absent°/datum _)
+  (⊦= '((λ () (cons 1 (cons 2 '()))))
+      (°-&gt;list #f (fresh° (q) (=° q '(1 2)) (absent° 5 q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(1 2)) (absent° 2 q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (absent° 5 q) (=° q '(1 5))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 3122544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/absent°/compound"><a href="#test/absent°/compound"><code>test/absent°/compound</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/absent°/compound _)
+  (⊦= '() (°-&gt;list #f (fresh° (q) (absent° '(1 2) q) (=° q '(1 2)))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(1 2)) (absent° '(1 2) q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(0 (1 2) 3)) (absent° '(1 2) q))))
+  (⊦= '() (°-&gt;list #f (fresh° (q) (=° q '(0 1 2)) (absent° '(1 2) q))))
+  (⊦= '((λ () (cons 0 (cons 1 (cons 2 (cons 3 '()))))))
+      (°-&gt;list #f (fresh° (q) (=° q '(0 1 2 3)) (absent° '(1 2) q))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (=° q (list (vector 1 2))) (absent° (vector 1 2) q))))
+  (⊦= '((λ () (vector 0 1 2)))
+      (°-&gt;list #f (fresh° (q) (=° q (vector 0 1 2)) (absent° '(1 2) q))))
+  (⊦= '((λ () (vector 1)))
+      (°-&gt;list #f (fresh° (q) (=° q (vector 1)) (absent° '() q))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x) (=° q (cons 1 x)) (absent° '(1 2) q) (=° x '(2)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x) (absent° '(1 2) q) (=° q (cons 1 x)) (=° x '(2)))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q x) (absent° '(1 2) q) (=° q (list 0 x)) (=° x '(1 2)))))
+  (⊦= '((λ () (cons 1 (cons 3 '()))))
+      (°-&gt;list
+        #f
+        (fresh° (q x) (=° q (cons 1 x)) (absent° '(1 2) q) (=° x '(3)))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) (cons 1 α))) (cons 1 α)))
+      (°-&gt;list #f (fresh° (q x) (=° q (cons 1 x)) (absent° '(1 2) q))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (cons q z))))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (list q z))))))
+  (⊦= '((λ (α) (assert (absent? '(()) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(()) (cons q z))))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) (cons 1 α))) α))
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (z) (absent° '(1 2) (list (cons 1 q) z))))))
+  (⊦= '((λ (α) (assert (absent? '(1 2) α)) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (vector z q))))))
+  (⊦= '((λ (α) α))
+      (°-&gt;list #f (fresh° (q) (fresh° (z) (absent° '(1 2) (cons z z))))))
+  (⊦= '()
+      (°-&gt;list
+        #f
+        (fresh° (q) (fresh° (z) (absent° '(1 2) (cons q z)) (=° q '(1 2)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 3123992 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
 </code></pre></div></body></html>

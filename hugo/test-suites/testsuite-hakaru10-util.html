@@ -1,0 +1,381 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section207">
+<header>
+<h1>Utilities</h1></header></section>
+<p>Helpers to summarize the samples of a chain, after <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/Util.hs">Util.hs</a></cite> of <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/index.html">Embedded probabilistic domain-specific language Hakaru10</a></cite>, November 2016.  A chain of <code class="w3-codespan">mcmC</code> is a list of samples;
+                these procedures reduce it to a histogram, to its first two moments, or to the
+                Kullback-Leibler divergence from another histogram, which is how the paper
+                compares a model with its exact distribution (P §2.1 p.6-7, l.282-327).</p>
+<p>A histogram is an alist <code class="w3-codespan">((key . mass) ...)</code> sorted
+                ascending, standing for Haskell's <code class="w3-codespan">type Histogram = M.Map Double Double</code> (U:25), whose <code class="w3-codespan">M.toList</code> is ascending too.  Where Haskell
+                orders keys by the <code class="w3-codespan">Ord</code> class, the port uses one total
+                order over Scheme values, <code class="w3-codespan">generic&lt;?</code>: booleans, then numbers,
+                characters, strings, symbols, lists and vectors, each ordered in the obvious way
+                (<code class="w3-codespan">#f</code> before <code class="w3-codespan">#t</code>, lists lexicographically,
+                vectors as the lists of their elements).</p>
+<p>The floating-point folds are those of the Haskell code, in the same direction,
+                so that the KL divergences and moments recorded upstream are reproduced bit for
+                bit: <code class="w3-codespan">sum</code> is a left fold, the variance and the insertions of <code class="w3-codespan">tabulate</code> are right folds, <code class="w3-codespan">kl</code> folds the keys
+                of 
+<mtext>p</mtext> in ascending order.  The moments are</p>
+<math display="block">
+<mtext>x̄ = (1/n) Σᵢ₌₁ⁿ xᵢ,   σ² = (1/(n − 1)) Σᵢ₌₁ⁿ (xᵢ − x̄)²</mtext></math>
+<p>and the divergence of 
+<mtext>q</mtext> from the <i>theoretical</i> 
+<mtext>p</mtext> (U:47-50) is</p>
+<math display="block">
+<mtext>KL(p ‖ q) = Σᵢ pᵢ log (pᵢ / qᵢ)</mtext></math>
+<p>which is undefined, and raises an <code class="w3-codespan">(exn hakaru10)</code> condition of
+                kind <code class="w3-codespan">support</code>, where 
+<mtext>qᵢ = 0 &lt; pᵢ</mtext>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux hakaru10 util)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken sort)
+    (chicken flonum)
+    (only (chicken string) -&gt;string)
+    (only srfi-1 count)
+    srfi-69
+    (aux base)
+    (only (aux hakaru10 distribution) hakaru10-error))
+  (define generic-orders
+    (list (cons boolean? (λ (a b) (and (not a) b)))
+          (cons number?
+                (λ (a b)
+                   (cond ((not (and (real? a) (real? b)))
+                          (generic&lt;?
+                            (list (real-part a) (imag-part a))
+                            (list (real-part b) (imag-part b))))
+                         ((= a b) (and (exact? a) (inexact? b)))
+                         (else (&lt; a b)))))
+          (cons char? char&lt;?)
+          (cons string? string&lt;?)
+          (cons symbol?
+                (λ (a b) (string&lt;? (symbol-&gt;string a) (symbol-&gt;string b))))
+          (cons (λ (v) (or (null? v) (pair? v)))
+                (λ (a b)
+                   (cond ((null? a) (pair? b))
+                         ((null? b) #f)
+                         ((generic&lt;? (car a) (car b)) #t)
+                         ((generic&lt;? (car b) (car a)) #f)
+                         (else (generic&lt;? (cdr a) (cdr b))))))
+          (cons vector?
+                (λ (a b) (generic&lt;? (vector-&gt;list a) (vector-&gt;list b))))))
+  (define (generic-order v)
+    (let loop ((rank 0) (orders generic-orders))
+      (cond ((null? orders) (values rank (λ (a b) #f)))
+            (((caar orders) v) (values rank (cdar orders)))
+            (else (loop (add1 rank) (cdr orders))))))
+  (define (generic&lt;? a b)
+    (let-values
+      (((ra less?) (generic-order a)) ((rb _) (generic-order b)))
+      (or (&lt; ra rb) (and (= ra rb) (less? a b)))))
+  (define (histogram-sort alist)
+    (sort alist (λ (p q) (generic&lt;? (car p) (car q)))))
+  (define (hash-table-&gt;histogram table)
+    (histogram-sort (hash-table-&gt;alist table)))
+  (define (hist xs)
+    (let1 (table (make-hash-table equal?))
+          (for-each (λ (x) (hash-table-update!/default table x add1 0)) xs)
+          (hash-table-&gt;histogram table)))
+  (define (frequency pred xs)
+    (fp/ (exact-&gt;inexact (count pred xs)) (exact-&gt;inexact (length xs))))
+  (define (momenta xs)
+    (let* ((xs (map exact-&gt;inexact xs))
+           (n (exact-&gt;inexact (length xs)))
+           (av (fp/ (foldl fp+ 0.0 xs) n))
+           (sqr (λ (x) (fp* x x))))
+      (cons av
+            (fp/ (foldr (λ (x acc) (fp+ (sqr (fp- x av)) acc)) 0.0 xs)
+                 (fp- n 1.0)))))
+  (define (to-bin step x)
+    (let1 (b (fpfloor (fp/ x step))) (fp* (if (fp= b 0.0) 0.0 b) step)))
+  (define (tabulate step xs)
+    (let* ((step (exact-&gt;inexact step))
+           (quantum (fp/ 1.0 (exact-&gt;inexact (length xs))))
+           (insert!
+             (λ (x table)
+                (hash-table-update!/default
+                  table
+                  (to-bin step (exact-&gt;inexact x))
+                  (λ (old) (fp+ quantum old))
+                  0.0)
+                table)))
+      (hash-table-&gt;histogram (foldr insert! (make-hash-table equal?) xs))))
+  (define (tabulate/bins nbins xs)
+    (let* ((ys (map exact-&gt;inexact xs))
+           (mn (foldl fpmin (car ys) (cdr ys)))
+           (mx (foldl fpmax (car ys) (cdr ys)))
+           (step-raw
+             (if (fp= mn mx) 1.0 (fp/ (fp- mx mn) (exact-&gt;inexact nbins)))))
+      (tabulate (fpexpt 10.0 (round (fp/ (fplog step-raw) (fplog 10.0)))) ys)))
+  (define (kl p q)
+    (let1 (q (alist-&gt;hash-table q equal?))
+          (foldl (Λ (,sum (,i unquote pi))
+                    (let1 (qi (hash-table-ref
+                                q
+                                i
+                                (τ (hakaru10-error
+                                     'support
+                                     'kl
+                                     (string-append
+                                       &quot;Undefined KL divergence - q is 0 when p is not at point &quot;
+                                       (-&gt;string i))
+                                     i))))
+                          (+ sum (* pi (log (/ pi qi))))))
+                 0.0
+                 (histogram-sort p))))
+  (define (plot h #!optional (path &quot;/tmp/plot.dat&quot;))
+    (with-output-to-file
+      path
+      (τ (print &quot;x  y&quot;)
+         (for-each (Λ ((,k unquote v)) (print k &quot; &quot; v)) (histogram-sort h))))
+    path))
+</code></pre></div>
+<h2 id="test/hist"><a href="#test/hist"><code>test/hist</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>U1.  <code class="w3-codespan">hist</code> counts the occurrences of each value (with <code class="w3-codespan">equal?</code>) and sorts them with <code class="w3-codespan">generic&lt;?</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Very simple histogram, for a discrete distribution
+hist :: Ord t =&gt; [t] -&gt; M.Map t Int
+hist = foldr (\e -&gt; M.insertWith' (+) e 1) M.empty</code></pre></div>
+<p>cf. U:11-12; the second check exercises the order across types.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/hist _)
+  (⊦ equal? '((#f . 1) (#t . 2) (1 . 1) (2 . 2)) (hist '(#t #f #t 2 1 2)))
+  (⊦ equal? '() (hist '()))
+  (⊦ equal?
+     '((#\a . 1)
+       (&quot;a&quot; . 2)
+       (a . 1)
+       (b . 1)
+       (() . 1)
+       ((1) . 1)
+       ((1 2) . 1)
+       ((2) . 1)
+       (#(1) . 1))
+     (hist '(b (2) #(1) &quot;a&quot; (1 2) a () &quot;a&quot; (1) #\a))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2020976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/generic&lt;?"><a href="#test/generic&lt;?"><code>test/generic&lt;?</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The order standing for Haskell's <code class="w3-codespan">Ord</code> (U:11): an exact number
+            precedes an equal inexact one, a proper prefix precedes the longer list or vector.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/generic&lt;? _)
+  (⊨ (generic&lt;? #f #t))
+  (⊭ (generic&lt;? #t #f))
+  (⊨ (generic&lt;? #t -1))
+  (⊨ (generic&lt;? 1 1.5))
+  (⊨ (generic&lt;? 1 1.0))
+  (⊭ (generic&lt;? 1.0 1))
+  (⊭ (generic&lt;? 2 2))
+  (⊨ (generic&lt;? 'z '()))
+  (⊨ (generic&lt;? '(1 2) '(1 2 0)))
+  (⊨ (generic&lt;? '(1 2) '(1 3)))
+  (⊨ (generic&lt;? '(9) #(0)))
+  (⊨ (generic&lt;? #(1 2) #(1 2 0)))
+  (⊭ (generic&lt;? #(1 3) #(1 2 0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2017120 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/frequency"><a href="#test/frequency"><code>test/frequency</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">frequency</code> is the fraction of the samples satisfying a predicate, as
+            a flonum: the probability of an event estimated from a chain.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/frequency _)
+  (⊦ equal? 0.75 (frequency even? '(2 4 5 6)))
+  (⊦ equal? 0.0 (frequency symbol? '(1 2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2018688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/momenta"><a href="#test/momenta"><code>test/momenta</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>U2.  <code class="w3-codespan">momenta</code> returns the pair <code class="w3-codespan">(mean . variance)</code> with the unbiased variance, dividing by 
+<mtext>n − 1</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- compute the first two momenta
+momenta :: [Double] -&gt; (Double,Double)
+momenta lst = (av,sigma2)
+  where
+    n   = fromIntegral $ length lst
+    av  = sum lst / n
+    sigma2 = (foldr (\x acc -&gt; sqr (x - av) + acc) 0 lst) / (n - 1)
+    sqr x = x * x</code></pre></div>
+<p>cf. U:16-22; exact numbers are taken as flonums.  The last check pins the
+            direction of the fold of the squares: folded from the left they would sum to <code class="w3-codespan">0.0728702</code> rather than <code class="w3-codespan">0.0728702</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/momenta _)
+  (⊦ equal? '(2.5 . 1.66666666666667) (momenta '(1.0 2.0 3.0 4.0)))
+  (⊦ equal? '(2.5 . 1.66666666666667) (momenta '(1 2 3 4)))
+  (⊦ equal? '(0.2602 . 0.0728702) (momenta '(0.1 0.2 0.3 0.7 0.001))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2020768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/tabulate"><a href="#test/tabulate"><code>test/tabulate</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>U3.  <code class="w3-codespan">tabulate</code> puts each sample in the bin 
+<mtext>⌊x / step⌋ · step</mtext> with mass 
+<mtext>1/n</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Tabulate with the given bin size
+tabulate :: Double -&gt; [Double] -&gt; Histogram
+tabulate step lst =
+  foldr (\x -&gt; M.insertWith' (+) (to_bin x) quantum) M.empty lst
+ where
+   quantum = 1 / fromIntegral (length lst)
+   to_bin x = fromInteger (floor (x / step)) * step</code></pre></div>
+<p>cf. U:40-45.  Since <code class="w3-codespan">floor</code> goes through an <code class="w3-codespan">Integer</code>, the bin of <code class="w3-codespan">-0.</code> is <code class="w3-codespan">0.</code>, as the second check
+            shows.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tabulate _)
+  (⊦ equal?
+     '((-0.5 . 0.25) (0.0 . 0.5) (0.5 . 0.25))
+     (tabulate 0.5 '(0.1 0.2 0.7 -0.1)))
+  (⊦ equal? '((0.0 . 0.5) (1.0 . 0.5)) (tabulate 1 '(-0.0 0.0 1.5 1.0))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2022976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/tabulate/bins"><a href="#test/tabulate/bins"><code>test/tabulate/bins</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>U4.  <code class="w3-codespan">tabulate/bins</code>, that is <code class="w3-codespan">tabulate'</code>, takes
+            only a hint of the number of bins: the bin size is rounded to a power of ten.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- The argument is the _hint_ to the number of bins
+tabulate' :: Int -&gt; [Double] -&gt; Histogram
+tabulate' nbins lst =
+  foldr (\x -&gt; M.insertWith' (+) (to_bin x) quantum) M.empty lst
+ where
+   mn = minimum lst
+   mx = maximum lst
+   quantum = 1 / fromIntegral (length lst)
+   step_raw = if mn == mx then 1 else (mx - mn) / fromIntegral nbins
+   step  = 10.0 ** (fromInteger . round $ log step_raw / log 10)
+   to_bin x = fromInteger (floor (x / step)) * step</code></pre></div>
+<p>cf. U:28-37.  The first check has step <code class="w3-codespan">0.1</code> (the ratio of logarithms
+            is <code class="w3-codespan">-1.0</code>), and the floating-point bins show it: <code class="w3-codespan">.3</code> falls in the bin <code class="w3-codespan">.2</code>.  The last check pins
+            Haskell's <code class="w3-codespan">round</code>, which rounds half to even.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/tabulate/bins _)
+  (⊦ equal?
+     '((0.0 . 0.0909090909090909)
+       (0.1 . 0.0909090909090909)
+       (0.2 . 0.181818181818182)
+       (0.4 . 0.0909090909090909)
+       (0.5 . 0.181818181818182)
+       (0.6 . 0.0909090909090909)
+       (0.8 . 0.0909090909090909)
+       (0.9 . 0.0909090909090909)
+       (1.0 . 0.0909090909090909))
+     (tabulate/bins 10 '(0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0)))
+  (⊦ equal?
+     '((0.0 . 0.909090909090909) (10.0 . 0.0909090909090909))
+     (tabulate/bins 3 '(0.0 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0)))
+  (⊦ equal?
+     '((0.0 . 0.333333333333333)
+       (200.0 . 0.333333333333333)
+       (1000.0 . 0.333333333333333))
+     (tabulate/bins 4 '(0.0 250.0 1000.0)))
+  (⊦ equal? '((3.0 . 1.0)) (tabulate/bins 5 '(3.0 3.0)))
+  (⊦ equal?
+     '((0.0 . 0.5) (300.0 . 0.5))
+     (tabulate/bins 1 '(0.0 316.227766016838))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2025232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/kl"><a href="#test/kl"><code>test/kl</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>U5.  <code class="w3-codespan">kl</code> is the Kullback-Leibler divergence 
+<mtext>KL(p ‖ q)</mtext>; the bins of 
+<mtext>q</mtext> need not be sorted, those absent from 
+<mtext>p</mtext> do not count, and of a repeated bin of 
+<mtext>q</mtext> the first one counts, as with <code class="w3-codespan">assoc</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">kl :: Histogram -&gt; Histogram -&gt; Double
+kl p q = M.foldlWithKey' f 0 p
+ where f sum i pi | Just qi &lt;- M.lookup i q = sum + pi * log (pi / qi)
+                  | otherwise =
+         error $ &quot;Undefined KL divergence - q is 0 when p is not at point &quot; ++
+                 show i</code></pre></div>
+<p>cf. U:51-56; the expected value <code class="w3-codespan">0.14384103622589</code> is 
+<mtext>½ log 2 + ½ log ⅔</mtext> summed in this order.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/kl _)
+  (define p (tabulate 0.5 '(0.1 0.2 0.7 -0.1)))
+  (⊦ equal? 0.0 (kl p p))
+  (⊦ equal?
+     0.14384103622589
+     (kl '((0.0 . 0.5) (1.0 . 0.5)) '((1.0 . 0.75) (0.0 . 0.25) (2.0 . 0.0))))
+  (⊦ equal? 0.693147180559945 (kl '((0.0 . 1.0)) '((0.0 . 0.5) (0.0 . 0.25))))
+  (⊦raises (exn hakaru10) (kl p '((0.0 . 0.5) (0.5 . 0.5))))
+  (⊦ equal?
+     '(support
+        .
+        &quot;Undefined KL divergence - q is 0 when p is not at point -0.5&quot;)
+     (condition-case
+       (kl p '((0.0 . 0.5) (0.5 . 0.5)))
+       (c (hakaru10)
+          (cons (get-condition-property c 'hakaru10 'kind)
+                (get-condition-property c 'exn 'message))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 2031560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/plot"><a href="#test/plot"><code>test/plot</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>U6.  <code class="w3-codespan">plot</code> writes a histogram as a two-column file for gnuplot,
+            by default <code class="w3-codespan">/tmp/plot.dat</code>, sorting it first:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">plot :: Histogram -&gt; IO ()
+plot dat = do
+  withFile fname WriteMode write_data
+ where
+   fname = &quot;/tmp/plot.dat&quot;
+   write_data h = do
+     hPutStrLn h &quot;x  y&quot;
+     mapM_ (\ (k,v) -&gt; hPutStrLn h $ unwords [show k,show v]) $ M.toList dat</code></pre></div>
+<p>cf. U:58-65; upstream plots the histogram of a mixture's components at
+            E:166-167:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">_ =
+ let n = 10000 in plot (tabulate 0.2 $ mcmC (n `div` 2) (dist normal 10 2) ++ mcmC (n `div` 2) (dist gamma 3 (1/3)))</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/plot _)
+  (define path (create-temporary-file &quot;dat&quot;))
+  (⊦ equal? path (plot '((0.5 . 0.25) (-0.5 . 0.25) (0.0 . 0.5)) path))
+  (⊦ equal?
+     '(&quot;x  y&quot; &quot;-0.5 0.25&quot; &quot;0.0 0.5&quot; &quot;0.5 0.25&quot;)
+     (with-input-from-file path read-lines))
+  (delete-file path))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(6291456 2033072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

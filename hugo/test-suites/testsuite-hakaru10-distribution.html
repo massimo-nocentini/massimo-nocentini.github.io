@@ -1,0 +1,1529 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section538">
+<header>
+<h1>Distributions</h1></header></section>
+<p>The distributions of Hakaru10 <cite><a href="https://okmij.org/ftp/kakuritu/Hakaru10/Distribution.hs">Distribution.hs</a></cite> are values of two type classes: a <code class="w3-codespan">Distribution</code> has a log-density and a sampler, and a resampleable one (an <code class="w3-codespan">RDistribution</code>) has a proposal kernel too, by default an
+                independence proposal that samples again.  The existential <code class="w3-codespan">SomeRDistr</code> hides the instance (Distribution.hs:14-41):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">class Distribution d a | d -&gt; a where
+  logDensity :: d -&gt; a -&gt; LogLikelihood
+  sample     :: RandomGen g =&gt; d -&gt; g -&gt; (a, LogLikelihood, g)
+
+-- re-sampleable distribution. This is the place to specify
+-- custom proposals
+class Distribution d a =&gt; RDistribution d a | d -&gt; a where
+  resample :: RandomGen g =&gt;
+     d -&gt;
+     a -&gt; LogLikelihood -&gt; -- old value and its LL
+     g -&gt;
+     ((a,              -- new sample
+       LogLikelihood,  -- its likelihood
+       g),             -- new seed
+      LogLikelihood)   -- (fwd - bwd) for the proposal step.
+  -- By default, resample is really sample again
+  resample d _ llold g =
+    let s@(_,ll,_) = sample d g in
+    (s,ll-llold)</code></pre></div>
+<p>In Scheme <code class="w3-codespan">SomeRDistr</code> is the record <code class="w3-codespan">rdistr</code> of closures (<code class="w3-codespan">log-density</code>, <code class="w3-codespan">sample</code>, <code class="w3-codespan">resample</code>, plus a finite <code class="w3-codespan">support</code> for the exact enumerator), and the generator is an <i>rng source</i> that the sampler draws from in place.  The engine wraps a
+                distribution in a <code class="w3-codespan">distk</code> (Metropolis.hs:46-60), whose <code class="w3-codespan">kind</code> is <code class="w3-codespan">resampleable</code>, <code class="w3-codespan">observed</code> (a conditioned distribution: its value is fixed, its
+                log-likelihood follows its parameters) or <code class="w3-codespan">dirac</code> (a deterministic node).  The user-level distributions are the smart
+                constructors <code class="w3-codespan">bern</code>, <code class="w3-codespan">normal</code> and so on, upstream's <code class="w3-codespan">bernS</code>, <code class="w3-codespan">normalS</code>, ... (Metropolis.hs:70-95), which (aux hakaru10) re-exports as named.</p>
+<p>Log-densities are the true ones, normalization included, as upstream insists
+                (Distribution.hs:93-96):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- Make sure we report the real LL rather than up to the constant
+-- (which may depend on the argument to |categorical|).
+-- When logDensity is called during the scoring of a proposal,
+-- the parameters of the distribution have likely changed</code></pre></div>
+<p>because the parameters of a node's distribution change when its parents are
+                resampled, and the Metropolis-Hastings ratio compares log-likelihoods computed
+                under different parameters.</p>
+<p>The samplers are the classical ones: Marsaglia's polar method for the normal
+                distribution (Marsaglia and Bray, 1964); <cite><a href="https://doi.org/10.1145/358407.358414">G. Marsaglia and W. W. Tsang, A Simple Method for Generating Gamma
+                        Variables, ACM TOMS 26(3), 2000</a></cite> for the gamma distribution; Joehnk's method (1964) for a beta distribution
+                with both parameters at most 1, and the ratio of two gamma variates otherwise;
+                Knuth's multiplication method (The Art of Computer Programming, vol. 2,
+                §3.4.1) for the Poisson distribution.  The log-gamma function is Macleod's <cite><a href="http://people.sc.fsu.edu/~burkardt/f_src/asa245/asa245.html">Algorithm AS 245</a></cite> (Applied Statistics 38(2), 1989), transcribed rather than taken from libm,
+                accurate to 10-12 significant digits.</p>
+<p>Every Double expression is transcribed in Haskell's association, and every
+                sampler draws exactly where upstream draws: with the random-1.0.1.1 StdGen of
+                (aux hakaru10 random), the samples are upstream's, bit for bit (D16).  Four
+                upstream defects are fixed, each tagged in the source with its deviation
+                number: the gamma density (deviation 2), the gamma sampler for a shape below 1
+                (deviation 3), the log-likelihood of a Poisson sample (deviation 4) and the
+                categorical walk exhausted by rounding (deviation 5).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux hakaru10 distribution)
+  *
+  (import
+    scheme
+    (only (scheme base) exact-integer?)
+    (chicken base)
+    (chicken flonum)
+    (chicken foreign)
+    (only (chicken format) fprintf)
+    (only (chicken module) reexport)
+    (only srfi-1 every fold alist-copy make-list)
+    (aux base)
+    (aux hakaru10 random))
+  (declare (local))
+  (reexport
+    (only (aux hakaru10 random)
+          hakaru10-error
+          hakaru10-error?
+          hakaru10-error-kind))
+  (define (-&gt;flonum who x)
+    (cond ((flonum? x) x)
+          ((real? x) (exact-&gt;inexact x))
+          (else
+           (hakaru10-error 'parameter who &quot;a real number is expected&quot; x))))
+  (define-syntax-rule
+    (let-flonums who (var ...) body ...)
+    (let ((var (-&gt;flonum who var)) ...) body ...))
+  (define-record
+    rdistr
+    name
+    params
+    log-density
+    sample
+    resample
+    support
+    independence?)
+  (set-record-printer!
+    rdistr
+    (λ (d port)
+       (fprintf port &quot;#&lt;rdistr ~a ~s&gt;&quot; (rdistr-name d) (rdistr-params d))))
+  (define-record distk kind rd value)
+  (set-record-printer!
+    distk
+    (λ (dk port)
+       (let1 (rd (distk-rd dk))
+             (fprintf port &quot;#&lt;distk ~a&quot; (distk-kind dk))
+             (when rd
+                   (fprintf port &quot; ~a ~s&quot; (rdistr-name rd) (rdistr-params rd)))
+             (unless
+               (eq? (distk-kind dk) 'resampleable)
+               (fprintf port &quot; ~s&quot; (distk-value dk)))
+             (display &quot;&gt;&quot; port))))
+  (define ((independence-resample sample) src x llold)
+    (receive (x* ll) (sample src) (values x* ll (fp- ll llold))))
+  (define (make-resampleable
+           name
+           params
+           log-density
+           sample
+           #!optional
+           (resample #f)
+           (support #f))
+    (make-distk
+      'resampleable
+      (make-rdistr
+        name
+        params
+        log-density
+        sample
+        (or resample (independence-resample sample))
+        support
+        (not resample))
+      (void)))
+  (define ((sample/log-density draw log-density) src)
+    (let1 (x (draw src)) (values x (log-density x))))
+  (define-syntax
+    fp-horner
+    (syntax-rules
+      ()
+      ((_ x a) a)
+      ((_ x a b c ...) (fp-horner x (fp+ (fp* a x) b) c ...))))
+  (define-syntax-rule
+    (fp-horner/monic x b c ...)
+    (fp-horner x (fp+ x b) c ...))
+  (define (log-gamma x)
+    (let-flonums
+      'log-gamma
+      (x)
+      (cond ((fp&lt;= x 0.0) +inf.0)
+            ((fp&gt; x 1e+308) +inf.0)
+            ((fp&lt; x 1.5)
+             (receive
+               (a b c)
+               (if (fp&lt; x 0.5)
+                 (values (fpneg (fplog x)) (fp+ x 1.0) x)
+                 (values 0.0 x (fp- x 1.0)))
+               (fp+ a
+                    (fp/ (fp* c
+                              (fp-horner
+                                b
+                                3.13060547623
+                                11.1667541262
+                                -21.9698958928
+                                -24.4387534237
+                                -2.66685511495))
+                         (fp-horner/monic
+                           b
+                           15.234687407
+                           31.4690115749
+                           11.9400905721
+                           0.607771387771)))))
+            ((fp&lt; x 4.0)
+             (fp/ (fp* (fp- x 2.0)
+                       (fp-horner
+                         x
+                         4.16438922228
+                         78.6994924154
+                         137.519416416
+                         -142.046296688
+                         -78.3359299449))
+                  (fp-horner/monic
+                    x
+                    43.3400022514
+                    263.505074721
+                    313.399215894
+                    47.066876606)))
+            ((fp&lt; x 12.0)
+             (fp/ (fp-horner
+                    x
+                    -2296.6072978
+                    -40262.1119975
+                    27464.7644705
+                    230661.510616
+                    -212159.572323)
+                  (fp-horner/monic
+                    x
+                    -570.691009324
+                    -24235.7409629
+                    -146025.937511
+                    -116328.495004)))
+            (else
+             (let* ((y (fplog x))
+                    (k (fp+ (fp- (fp* x (fp- y 1.0)) (fp* 0.5 y))
+                            0.918938533204673)))
+               (if (fp&gt; x 3000000.0)
+                 k
+                 (let* ((x1 (fp/ 1.0 x)) (x2 (fp* x1 x1)))
+                   (fp+ k
+                        (fp/ (fp* x1
+                                  (fp-horner
+                                    x2
+                                    0.0692910599291889
+                                    0.491731761050597
+                                    0.279195317918525))
+                             (fp-horner/monic
+                               x2
+                               6.0124592597641
+                               3.3503438150223))))))))))
+  (define libm-lgamma (foreign-lambda double &quot;lgamma&quot; double))
+  (define (marsaglia src)
+    (let* ((x (rng-double! src -1.0 1.0))
+           (y (rng-double! src -1.0 1.0))
+           (s (fp+ (fp* x x) (fp* y y))))
+      (if (and (fp&gt;= 1.0 s) (fp&gt; s 0.0))
+        (fp* x (fpsqrt (fp/ (fp* -2.0 (fplog s)) s)))
+        (marsaglia src))))
+  (define (normal-rng mu sd src)
+    (if (fp&gt; sd 0.0)
+      (fp+ mu (fp* sd (marsaglia src)))
+      (hakaru10-error 'parameter 'normal &quot;normal: invalid parameters&quot; mu sd)))
+  (define (marsaglia-tsang shape scl src)
+    (let* ((d (fp- shape (fp/ 1.0 3.0))) (c (fp/ 1.0 (fpsqrt (fp* 9.0 d)))))
+      (let retry ()
+        (let* ((v (let until ((v (normal-rng 1.0 c src)))
+                    (if (fp&gt; v 0.0) v (until (normal-rng 1.0 c src)))))
+               (x (fp/ (fp- v 1.0) c))
+               (sqr (fp* x x))
+               (v3 (fp* (fp* v v) v))
+               (u (rng-double! src 0.0 1.0)))
+          (if (or (fp&lt; u (fp- 1.0 (fp* 0.0331 (fp* sqr sqr))))
+                  (fp&lt; (fplog u)
+                       (fp+ (fp* 0.5 sqr)
+                            (fp* d (fp+ (fp- 1.0 v3) (fplog v3))))))
+            (fp* (fp* scl d) v3)
+            (retry))))))
+  (define (gamma-rng shape scl src)
+    (cond ((fp&lt;= shape 0.0)
+           (hakaru10-error
+             'parameter
+             'gamma
+             &quot;gamma: got a negative shape paramater&quot;
+             shape
+             scl))
+          ((fp&lt;= scl 0.0)
+           (hakaru10-error
+             'parameter
+             'gamma
+             &quot;gamma: got a negative scale paramater&quot;
+             shape
+             scl))
+          ((fp&lt; shape 1.0)
+           (let* ((g (gamma-rng (fp+ shape 1.0) 1.0 src))
+                  (w (rng-double! src 0.0 1.0)))
+             (fp* (fp* scl g) (fpexpt w (fp/ 1.0 shape)))))
+          (else (marsaglia-tsang shape scl src))))
+  (define (beta-rng a b src)
+    (cond ((or (fp&lt;= a 0.0) (fp&lt;= b 0.0))
+           (hakaru10-error
+             'parameter
+             'beta
+             &quot;beta: parameters must be positve&quot;
+             a
+             b))
+          ((and (fp&lt;= a 1.0) (fp&lt;= b 1.0))
+           (let retry ()
+             (let* ((u (rng-double! src 0.0 1.0))
+                    (v (rng-double! src 0.0 1.0))
+                    (x (fpexpt u (fp/ 1.0 a)))
+                    (y (fpexpt v (fp/ 1.0 b))))
+               (if (fp&lt;= (fp+ x y) 1.0) (fp/ x (fp+ x y)) (retry)))))
+          (else
+           (let* ((ga (gamma-rng a 1.0 src)) (gb (gamma-rng b 1.0 src)))
+             (fp/ ga (fp+ ga gb))))))
+  (define (bern-with name p kernel)
+    (let-flonums
+      name
+      (p)
+      (let* ((lT (fplog p))
+             (lF (fplog (fp- 1.0 p)))
+             (log-density (λ (x) (if x lT lF))))
+        (make-resampleable
+          name
+          (list p)
+          log-density
+          (λ (src)
+             (if (fp&lt;= (rng-double! src 0.0 1.0) p)
+               (values #t lT)
+               (values #f lF)))
+          (kernel log-density)
+          (τ `((#t unquote p) (#f unquote (fp- 1.0 p))))))))
+  (define (bern p) (bern-with 'bern p (K #f)))
+  (define ((flip-kernel log-density) src x ll)
+    (let1 (x* (not x)) (values x* (log-density x*) 0.0)))
+  (define (bern/flip p) (bern-with 'bern/flip p flip-kernel))
+  (define (uniformly lst)
+    (cond ((null? lst)
+           (hakaru10-error 'parameter 'uniformly &quot;uniformly: empty list&quot;))
+          ((not (list? lst))
+           (hakaru10-error 'parameter 'uniformly &quot;a list is expected&quot; lst))
+          (else
+           (let* ((len (exact-&gt;inexact (length lst)))
+                  (arr (list-&gt;vector lst))
+                  (hi (sub1 (vector-length arr)))
+                  (ll (fpneg (fplog len)))
+                  (p (fp/ 1.0 len)))
+             (make-resampleable
+               'uniformly
+               (list lst)
+               (λ (x) (if (member x lst) ll -inf.0))
+               (λ (src) (values (vector-ref arr (rng-integer! src 0 hi)) ll))
+               #f
+               (τ (map (λ (x) (cons x p)) lst)))))))
+  (define (categorical-walk p alist)
+    (let* ((entry (car alist)) (p0 (cdr entry)))
+      (if (or (fp&lt; p p0) (null? (cdr alist)))
+        (values (car entry) (fplog p0))
+        (categorical-walk (fp- p p0) (cdr alist)))))
+  (define (categorical alist)
+    (unless
+      (and (pair? alist)
+           (list? alist)
+           (every (λ (e) (and (pair? e) (real? (cdr e)))) alist))
+      (hakaru10-error
+        'parameter
+        'categorical
+        &quot;a non-empty alist ((value . weight) ...) is expected&quot;
+        alist))
+    (let* ((weighted
+             (map (λ (e) (cons (car e) (exact-&gt;inexact (cdr e)))) alist))
+           (ptotal (fold (λ (e acc) (fp+ acc (cdr e))) 0.0 weighted))
+           (normalized
+             (map (λ (e) (cons (car e) (fp/ (cdr e) ptotal))) weighted)))
+      (make-resampleable
+        'categorical
+        (list weighted)
+        (λ (x) (cond ((assoc x normalized) =&gt; (o fplog cdr)) (else -inf.0)))
+        (λ (src) (categorical-walk (rng-double! src 0.0 1.0) normalized))
+        #f
+        (τ (alist-copy normalized)))))
+  (define (uniform lo hi)
+    (let-flonums
+      'uniform
+      (lo hi)
+      (let1 (l (fplog (fp/ 1.0 (fp- hi lo))))
+            (make-resampleable
+              'uniform
+              (list lo hi)
+              (λ (x)
+                 (let-flonums
+                   'uniform
+                   (x)
+                   (if (and (fp&lt;= lo x) (fp&lt;= x hi)) l -inf.0)))
+              (λ (src) (values (rng-double! src lo hi) l))))))
+  (define (normal mu sd)
+    (let-flonums
+      'normal
+      (mu sd)
+      (let* ((tau (fp/ 1.0 (fp* sd sd)))
+             (lf (fplog (fp/ (fp/ tau 3.14159265358979) 2.0)))
+             (log-density
+               (λ (x)
+                  (let-flonums
+                    'normal
+                    (x)
+                    (let1 (y (fp- x mu))
+                          (fp/ (fp+ (fpneg (fp* tau (fp* y y))) lf) 2.0))))))
+        (make-resampleable
+          'normal
+          (list mu sd)
+          log-density
+          (sample/log-density (λ (src) (normal-rng mu sd src)) log-density)))))
+  (define (gamma-log-density shape scl)
+    (if (and (fp&gt; shape 0.0) (fp&gt; scl 0.0))
+      (let ((shape-log-scl (fp* shape (fplog scl)))
+            (log-g-shape (log-gamma shape))
+            (shape-1 (fp- shape 1.0)))
+        (λ (x)
+           (let-flonums
+             'gamma
+             (x)
+             (if (fp&lt; x 0.0)
+               -inf.0
+               (fp- (fp+ (fp- (fpneg shape-log-scl) (fp/ x scl))
+                         (fp* shape-1 (fplog x)))
+                    log-g-shape)))))
+      (K -inf.0)))
+  (define (gamma shape scl)
+    (let-flonums
+      'gamma
+      (shape scl)
+      (let1 (log-density (gamma-log-density shape scl))
+            (make-resampleable
+              'gamma
+              (list shape scl)
+              log-density
+              (sample/log-density
+                (λ (src) (gamma-rng shape scl src))
+                log-density)))))
+  (define (beta-log-density a b)
+    (if (or (fp&lt;= a 0.0) (fp&lt;= b 0.0))
+      (λ (x)
+         (hakaru10-error
+           'parameter
+           'beta
+           &quot;beta: parameters must be positve&quot;
+           a
+           b))
+      (let ((factor
+              (fp- (fp- (log-gamma (fp+ a b)) (log-gamma a)) (log-gamma b)))
+            (a-1 (fp- a 1.0))
+            (b-1 (fp- b 1.0)))
+        (λ (x)
+           (let-flonums
+             'beta
+             (x)
+             (if (or (fp&lt; x 0.0) (fp&gt; x 1.0))
+               (hakaru10-error
+                 'support
+                 'beta
+                 &quot;beta: value must be between 0 and 1&quot;
+                 x)
+               (fp+ (fp+ factor (fp* a-1 (fplog x)))
+                    (fp* b-1 (fplog (fp- 1.0 x))))))))))
+  (define (beta a b)
+    (let-flonums
+      'beta
+      (a b)
+      (let1 (log-density (beta-log-density a b))
+            (make-resampleable
+              'beta
+              (list a b)
+              log-density
+              (sample/log-density (λ (src) (beta-rng a b src)) log-density)))))
+  (define (poisson-log-density lam)
+    (let1 (log-lam (fplog lam))
+          (λ (x)
+             (if (not (and (real? x) (integer? x)))
+               -inf.0
+               (let1 (x (inexact-&gt;exact x))
+                     (cond ((= x 0) (fpneg lam))
+                           ((fp= lam 0.0) -inf.0)
+                           ((= x 1) (fp- log-lam lam))
+                           ((= x 2) (fp- (fplog (fp/ (fp* lam lam) 2.0)) lam))
+                           (else
+                            (let1 (xf (exact-&gt;inexact x))
+                                  (fp- (fp- (fp* xf log-lam) lam)
+                                       (log-gamma (fp+ xf 1.0)))))))))))
+  (define (knuth-poisson expl src)
+    (let loop ((p (rng-double! src 0.0 1.0)) (k 1))
+      (if (fp&gt; p expl)
+        (loop (fp* p (rng-double! src 0.0 1.0)) (add1 k))
+        (sub1 k))))
+  (define (poisson lam)
+    (let-flonums
+      'poisson
+      (lam)
+      (unless
+        (fp&gt;= lam 0.0)
+        (hakaru10-error
+          'parameter
+          'poisson
+          &quot;In Poisson distribution, lambda cannot be negative&quot;
+          lam))
+      (let ((expl (fpexp (fpneg lam))) (log-density (poisson-log-density lam)))
+        (make-resampleable
+          'poisson
+          (list lam)
+          log-density
+          (if (fp= lam 0.0)
+            (λ (src) (values 0 0.0))
+            (sample/log-density
+              (λ (src) (knuth-poisson expl src))
+              log-density))))))
+  (define (laplace mu sd)
+    (let-flonums
+      'laplace
+      (mu sd)
+      (let* ((log-2sd (fplog (fp* 2.0 sd)))
+             (log-density
+               (λ (x)
+                  (let-flonums
+                    'laplace
+                    (x)
+                    (fp- (fpneg log-2sd) (fp/ (fpabs (fp- x mu)) sd)))))
+             (draw (λ (src)
+                      (unless
+                        (fp&gt; sd 0.0)
+                        (hakaru10-error
+                          'parameter
+                          'laplace
+                          &quot;laplace: invalid parameters&quot;
+                          mu
+                          sd))
+                      (let1 (u (rng-double! src 0.0 1.0))
+                            (if (fp&lt; u 0.5)
+                              (fp+ mu (fp* sd (fplog (fp+ u u))))
+                              (fp- mu (fp* sd (fplog (fp- (fp- 2.0 u) u)))))))))
+        (make-resampleable
+          'laplace
+          (list mu sd)
+          log-density
+          (sample/log-density draw log-density)))))
+  (define (dirichlet-gammas n a src)
+    (if (zero? n)
+      (values '() 0.0)
+      (receive
+        (xs total)
+        (dirichlet-gammas (sub1 n) a src)
+        (let1 (x (gamma-rng a 1.0 src)) (values (cons x xs) (fp+ x total))))))
+  (define (dirichlet/symmetric n a)
+    (unless
+      (and (exact-integer? n) (positive? n))
+      (hakaru10-error
+        'parameter
+        'dirichlet/symmetric
+        &quot;a positive exact integer is expected&quot;
+        n))
+    (let-flonums
+      'dirichlet/symmetric
+      (a)
+      (let* ((log-g-a (log-gamma a))
+             (a-1 (fp- a 1.0))
+             (log-g-sum (log-gamma (fold fp+ 0.0 (make-list n a))))
+             (log-term
+               (λ (y acc)
+                  (fp+ acc
+                       (fp- (fp* a-1 (fplog (exact-&gt;inexact y))) log-g-a))))
+             (log-density
+               (λ (xs)
+                  (cond ((not (and (list? xs)
+                                   (= (length xs) n)
+                                   (every real? xs)))
+                         -inf.0)
+                        ((not (every positive? xs))
+                         (hakaru10-error
+                           'support
+                           'dirichlet/symmetric
+                           &quot;dirichlet: all values must be between 0 and 1&quot;
+                           xs))
+                        (else (fp+ (fold log-term 0.0 xs) log-g-sum))))))
+        (make-resampleable
+          'dirichlet/symmetric
+          (list n a)
+          log-density
+          (sample/log-density
+            (λ (src)
+               (receive
+                 (xs total)
+                 (dirichlet-gammas n a src)
+                 (map (λ (x) (fp/ x total)) xs)))
+            log-density)))))
+  (define (dirac x) (make-distk 'dirac #f x))
+  (define (distk-sample dk src)
+    (case (distk-kind dk)
+      ((resampleable) ((rdistr-sample (distk-rd dk)) src))
+      ((dirac) (values (distk-value dk) 0.0))
+      ((observed)
+       (let1 (x (distk-value dk))
+             (values x ((rdistr-log-density (distk-rd dk)) x))))
+      (else (hakaru10-error 'internal 'distk-sample &quot;not a distk&quot; dk))))
+  (define (conditioned obs dk)
+    (unless
+      (distk? dk)
+      (hakaru10-error
+        'conditioning
+        'condition
+        &quot;only distributions can be conditioned&quot;
+        dk))
+    (case (distk-kind dk)
+      ((resampleable) (make-distk 'observed (distk-rd dk) obs))
+      ((observed)
+       (hakaru10-error
+         'conditioning
+         'condition
+         &quot;an observed distribution cannot be conditioned again&quot;
+         obs
+         dk))
+      (else
+       (hakaru10-error
+         'conditioning
+         'condition
+         &quot;a Dirac distribution cannot be conditioned&quot;
+         obs
+         dk))))
+  (define (condition obs d #!optional (internal? #f))
+    (when (and internal? (internal? obs))
+          (hakaru10-error
+            'conditioning
+            'condition
+            &quot;observation must be external to the model&quot;
+            obs))
+    (if (procedure? d)
+      (λ args (condition obs (apply d args)))
+      (conditioned obs d)))
+  (define (make-distribution
+           name
+           #!key
+           log-density
+           sample
+           (resample #f)
+           (support #f)
+           (params '()))
+    (define (check ok? what)
+      (unless ok? (hakaru10-error 'construction 'make-distribution what name)))
+    (check (and (procedure? log-density) (procedure? sample))
+           &quot;log-density: and sample: procedures are required&quot;)
+    (check (or (not resample) (procedure? resample))
+           &quot;resample: must be a procedure or #f&quot;)
+    (check (or (not support) (procedure? support))
+           &quot;support: must be a thunk or #f&quot;)
+    (make-resampleable name params log-density sample resample support))
+  (define (distribution-log-density dk x)
+    (unless
+      (distk? dk)
+      (hakaru10-error 'parameter 'distribution-log-density &quot;not a distk&quot; dk))
+    (if (eq? (distk-kind dk) 'dirac)
+      (if (equal? x (distk-value dk)) 0.0 -inf.0)
+      ((rdistr-log-density (distk-rd dk)) x)))
+  (define (distribution-sample dk src)
+    (unless
+      (distk? dk)
+      (hakaru10-error 'parameter 'distribution-sample &quot;not a distk&quot; dk))
+    (distk-sample dk src))
+  (define (distribution-support dk)
+    (unless
+      (distk? dk)
+      (hakaru10-error 'parameter 'distribution-support &quot;not a distk&quot; dk))
+    (if (eq? (distk-kind dk) 'dirac)
+      (list (cons (distk-value dk) 1.0))
+      (let1 (support (rdistr-support (distk-rd dk)))
+            (and support (support))))))
+</code></pre></div>
+<h2 id="test/normal-density"><a href="#test/normal-density"><code>test/normal-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D1.  The log-density of the standard normal distribution at 0.1 is 
+<mtext>−½(0.01 + log 2π) = −0.9239385332046727</mtext>.  The paper quotes 
+<mtext>-0.616</mtext> for this LL (design.pdf p.14, design.txt
+            l.695), an erratum.  The density keeps upstream's form:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">data Normal = Normal !Double !Double !Double !Double
+normal :: Double -&gt; Double -&gt; Normal
+normal mu sd = Normal mu sd tau (log (tau / pi / 2))
+ where tau = 1 / (sd*sd)
+
+instance Distribution Normal Double where
+  logDensity (Normal mu sd tau lf) x =
+   (-tau * square (x - mu) + lf) / 2 where square y = y * y</code></pre></div>
+<p>cf. Distribution.hs:155-162.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/normal-density _)
+  (⊦ (equal-approx? 1e-15) -0.923938533204673 (ld (normal 0 1) 0.1))
+  (⊦ (equal-approx? 1e-15) -0.923938533204673 (ld (normal 0 1) 1/10))
+  (⊦ (equal-approx? 1e-15)
+     (- (+ (log 2.0) (* 0.5 (log (* 2.0 3.14159265358979)))))
+     (ld (normal 1 2) 1.0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2732752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bern-density"><a href="#test/bern-density"><code>test/bern-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D2.  <code class="w3-codespan">bern 0.4</code> has the log-likelihoods 
+<mtext>log 0.4</mtext> and 
+<mtext>log 0.6</mtext>, computed once; 
+<mtext>log(1 − p)</mtext> is computed plainly, as upstream does, not with <code class="w3-codespan">log1p</code>, so that replays stay exact.  Exact parameters become flonums, as Haskell's <code class="w3-codespan">Double</code> literals are:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">data Bern = Bern !Double !Double !Double
+bern :: Double -&gt; Bern
+bern p = Bern p (log p) (log (1-p))
+
+instance Distribution Bern Bool where
+  logDensity (Bern _ lT lF) x = if x then lT else lF
+  sample     (Bern p lT lF) g =
+    let (t, g') = randomR (0, 1) g in
+    if t &lt;= p then (True, lT, g') else (False, lF, g')</code></pre></div>
+<p>cf. Distribution.hs:53-62.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bern-density _)
+  (let1 (d (bern 0.4))
+        (⊦ (equal-approx? 1e-15) -0.916290731874155 (ld d #t))
+        (⊦ (equal-approx? 1e-15) -0.510825623765991 (ld d #f))
+        (⊦ equal?
+           '(bern (0.4))
+           (list (rdistr-name (distk-rd d)) (rdistr-params (distk-rd d)))))
+  (⊦ equal? '(0.5) (rdistr-params (distk-rd (bern 1/2)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2734752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/uniform-density"><a href="#test/uniform-density"><code>test/uniform-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D3.  <code class="w3-codespan">uniform 10 20</code> has the log-density 
+<mtext>log ⅒</mtext> on the closed interval and 
+<mtext>−∞</mtext> outside:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">uniform lo hi = Uniform lo hi (log (recip (hi - lo)))
+
+instance Distribution Uniform Double where
+  logDensity (Uniform lo hi l) x =
+    if lo &lt;= x &amp;&amp; x &lt;= hi then l else minusInf</code></pre></div>
+<p>cf. Distribution.hs:107-117.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uniform-density _)
+  (let1 (d (uniform 10 20))
+        (⊦ equal?
+           (list -2.30258509299405 -2.30258509299405 -2.30258509299405 -inf.0)
+           (map (λ (x) (ld d x)) '(15 10 20 9.99)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2736880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/log-gamma"><a href="#test/log-gamma"><code>test/log-gamma</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D4.  <code class="w3-codespan">log-gamma</code> is AS 245: at 0.3, 5, 7.5 and 20 it answers 1.0957979947868837, 3.1780538330716963, 7.534364243376615 and 39.33988418719949
+            (the prototype's values, through all four branches); it agrees with libm's <code class="w3-codespan">lgamma</code> within 
+<mtext>10⁻⁸</mtext> from 0.3 to 20, and within 
+<mtext>10⁻¹²</mtext> relatively at 
+<mtext>10⁷</mtext> (where only Stirling's leading terms are kept); it is 
+<mtext>+∞</mtext> at 0, below 0 and above 
+<mtext>10³⁰⁸</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">logGamma :: Double -&gt; Double
+logGamma x
+    | x &lt;= 0    = m_pos_inf
+    -- Handle positive infinity. logGamma overflows before 1e308 so
+    -- it's safe
+    | x &gt; 1e308 = m_pos_inf
+    -- Normal cases
+    | x &lt; 1.5   = a + c *
+                  ((((r1_4 * b + r1_3) * b + r1_2) * b + r1_1) * b + r1_0) /
+                  ((((b + r1_8) * b + r1_7) * b + r1_6) * b + r1_5)
+    | x &lt; 4     = (x - 2) *
+                  ((((r2_4 * x + r2_3) * x + r2_2) * x + r2_1) * x + r2_0) /
+                  ((((x + r2_8) * x + r2_7) * x + r2_6) * x + r2_5)
+    | x &lt; 12    = ((((r3_4 * x + r3_3) * x + r3_2) * x + r3_1) * x + r3_0) /
+                  ((((x + r3_8) * x + r3_7) * x + r3_6) * x + r3_5)
+    | x &gt; 3e6   = k
+    | otherwise = k + x1 *
+                  ((r4_2 * x2 + r4_1) * x2 + r4_0) /
+                  ((x2 + r4_4) * x2 + r4_3)</code></pre></div>
+<p>cf. Distribution.hs:212-272 (D4, D4b, D4c).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/log-gamma _)
+  (⊦ (equal-approx? 1e-14)
+     '(1.09579799478688 3.1780538330717 7.53436424337661 39.3398841871995)
+     (map log-gamma '(0.3 5.0 7.5 20.0)))
+  (⊦ (equal-approx? 1e-08)
+     (map libm-lgamma '(0.3 1.5 3.9 5.0 7.5 11.9 20.0))
+     (map log-gamma '(0.3 1.5 3.9 5 7.5 11.9 20)))
+  (⊦ (lambda (a b) (&lt; (abs (- a b)) (* 1e-12 (abs a))))
+     (libm-lgamma 10000000.0)
+     (log-gamma 10000000.0))
+  (⊦ equal? '(+inf.0 +inf.0 +inf.0) (map log-gamma '(0 -1.0 1.5e+308))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2738456 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/gamma-density"><a href="#test/gamma-density"><code>test/gamma-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D5, deviation 2.  Upstream's gamma log-density is 
+<mtext>θ log k − θx + (k − 1) log x − log Γ(k)</mtext> for shape 
+<mtext>k</mtext> and scale 
+<mtext>θ</mtext>, the density of no gamma distribution (Distribution.hs:298-304):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">gammaLogDensity :: Double -&gt; Double -&gt; Double -&gt; Double
+gammaLogDensity shape scl | shape &gt; 0 &amp;&amp; scl &gt; 0 =
+  let logShape =  log shape
+      logGShape = logGamma shape in
+  \x -&gt; if x &lt; 0 then minusInf else
+          scl * logShape - scl * x + (shape - 1) * log x - logGShape
+gammaLogDensity _ _ = \_ -&gt; minusInf</code></pre></div>
+<p>The port uses the scale form, the one <code class="w3-codespan">gamma_rng</code> samples:</p>
+<math display="block">
+<mtext>log p(x) = −k log θ − x/θ + (k − 1) log x − log Γ(k)</mtext></math>
+<p>so <code class="w3-codespan">gamma 3 (1/3)</code> at 1 is 
+<mtext>3 log 3 − 3 − log 2 = −0.3973103145556162</mtext> (closed form), -0.397310314667487 through AS 245; 
+<mtext>−∞</mtext> below 0, and for a
+            non-positive shape or scale, as upstream.  At 1, where 
+<mtext>log x = 0</mtext>, the term 
+<mtext>(k − 1) log x</mtext> vanishes, so the density is
+            also checked away from 1: <code class="w3-codespan">gamma 3 (1/3)</code> at 2 is 
+<mtext>3 log 3 + 2 log 2 − 6 − log 2</mtext> (within 
+<mtext>10⁻⁹</mtext>, through AS 245), and <code class="w3-codespan">gamma 1 2</code> at 3 is 
+<mtext>−log 2 − 3/2</mtext>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/gamma-density _)
+  (let1 (d (gamma 3 1/3))
+        (⊦ (equal-approx? 1e-12) -0.397310314667487 (ld d 1))
+        (⊦ (equal-approx? 1e-09)
+           (- (+ (* 3.0 (log 3.0)) (* 2.0 (log 1.0))) 3.0 (log 2.0))
+           (ld d 1.0))
+        (⊦ = -inf.0 (ld d -0.5)))
+  (⊦ = -inf.0 (ld (gamma 0 1) 1.0))
+  (⊦ = -inf.0 (ld (gamma 2 -1) 1.0))
+  (⊦ (equal-approx? 1e-12) (- (log 0.5) 0.5) (ld (gamma 1 2) 1.0))
+  (⊦ (equal-approx? 1e-09)
+     (- (+ (* 3.0 (log 3.0)) (* 2.0 (log 2.0))) 6.0 (log 2.0))
+     (ld (gamma 3 1/3) 2.0))
+  (⊦ (equal-approx? 1e-12) (- (- (log 2.0)) 1.5) (ld (gamma 1 2) 3.0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2733560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/poisson-density"><a href="#test/poisson-density"><code>test/poisson-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D6.  The Poisson log-density at 
+<mtext>k = 0, 1, 2, 3</mtext> for 
+<mtext>λ = 1</mtext>, through its special cases; 
+<mtext>λ = 0</mtext> is the Dirac distribution at 0; a negative 
+<mtext>λ</mtext> is an error when
+            the distribution is built.  A non-integer has log-density 
+<mtext>−∞</mtext> (Haskell's <code class="w3-codespan">Int</code> type, deviation 9):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">poisson :: Double -&gt; Poisson
+poisson lambda | lambda &gt;= 0 = Poisson lambda (exp(-lambda))
+poisson lambda = error &quot;In Poisson distribution, lambda cannot be negative&quot;
+
+-- if lambda = 0 then poisson(0) = dirac(0)
+instance Distribution Poisson Int where
+  -- density is (lambda ^ x) * exp(-lambda) / x!
+  logDensity (Poisson lambda expl) x
+    | x == 0      = -lambda
+    | lambda == 0 = minusInf
+    | x == 1      = log lambda - lambda
+    | x == 2      = log (lambda*lambda/2) - lambda
+    | otherwise   = fromIntegral x * log lambda - lambda
+                     - logGamma (fromIntegral x + 1)</code></pre></div>
+<p>cf. Distribution.hs:352-367.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/poisson-density _)
+  (⊦ (equal-approx? 1e-12)
+     '(-1.0 -1.0 -1.69314718055995 -2.79175946754953)
+     (map (λ (k) (ld (poisson 1) k)) '(0 1 2 3)))
+  (⊦ eqv? -0.0 (ld (poisson 0) 0))
+  (⊦ = -inf.0 (ld (poisson 0) 1))
+  (⊦ equal? '(-inf.0 -inf.0) (map (λ (k) (ld (poisson 1) k)) '(1.5 -1)))
+  (⊦ = -1.69314718055995 (ld (poisson 1) 2.0))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (poisson -1))))
+  (⊦ equal?
+     &quot;In Poisson distribution, lambda cannot be negative&quot;
+     (hakaru10-message (τ (poisson -1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2738944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/categorical-density"><a href="#test/categorical-density"><code>test/categorical-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D7.  <code class="w3-codespan">categorical [(a,1),(b,3)]</code> normalizes its weights: 
+<mtext>log ¼</mtext>, 
+<mtext>log ¾</mtext>, and 
+<mtext>−∞</mtext> for any other value; keys are compared with <code class="w3-codespan">equal?</code>, Haskell's <code class="w3-codespan">Eq</code>, so a freshly consed <code class="w3-codespan">(a)</code> or string <code class="w3-codespan">&quot;b&quot;</code> finds its entry.  With duplicate keys upstream is asymmetric, and so is the
+            port (plan C10): the sampler gives a key the sum of its weights, the log-density
+            only its first (<code class="w3-codespan">lookup</code>); the support lists every entry, in
+            the sampler's order:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">data Categorical a = Categorical ![(a,Double)]
+categorical :: Eq a =&gt; [(a,Double)] -&gt; Categorical a
+categorical lst =
+  let ptotal = sum $ map snd lst in
+  Categorical $ ptotal `seq` map (\ (i,p) -&gt; (i,p/ptotal)) lst
+
+instance Eq a =&gt; Distribution (Categorical a) a where
+  logDensity (Categorical lst) x = maybe minusInf log $ (lookup x lst)
+  sample     (Categorical lst) g = loop p lst
+    where
+      (p, g1) = randomR (0, 1) g
+      loop p ((x,p0):t) | p &lt; p0 = (x,log p0,g1)
+                        | otherwise = loop (p-p0) t</code></pre></div>
+<p>cf. Distribution.hs:87-91, 97-103.  The walk has no <code class="w3-codespan">[]</code> case: when rounding exhausts it, the port answers the last entry (deviation 5).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/categorical-density _)
+  (let1 (d (categorical '((a . 1) (b . 3))))
+        (⊦ (equal-approx? 1e-15)
+           (list (log 0.25) (log 0.75) -inf.0)
+           (map (λ (x) (ld d x)) '(a b c))))
+  (let1 (d (categorical '((a . 1) (b . 2) (a . 1))))
+        (⊦ = (log 0.25) (ld d 'a))
+        (⊦ equal? '((a . 0.25) (b . 0.5) (a . 0.25)) (distribution-support d)))
+  (⊦ equal?
+     '((x . 1.0) (y . 3.0))
+     (car (rdistr-params (distk-rd (categorical '((x . 1) (y . 3)))))))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (categorical '()))))
+  (let1 (d (categorical '(((a) . 1) (&quot;b&quot; . 3))))
+        (⊦ (equal-approx? 1e-15)
+           (list (log 0.25) (log 0.75) -inf.0)
+           (map (λ (x) (ld d x)) (list (list 'a) (string #\b) (list 'b))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2739304 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/uniformly"><a href="#test/uniformly"><code>test/uniformly</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D8.  <code class="w3-codespan">uniformly</code> on the empty list is an error; on <code class="w3-codespan">[a,b,c]</code> every member has log-density 
+<mtext>−log 3</mtext> (by <code class="w3-codespan">equal?</code>, Haskell's <code class="w3-codespan">elem</code>, so on <code class="w3-codespan">[(a),&quot;b&quot;]</code> a freshly consed <code class="w3-codespan">(a)</code> or string <code class="w3-codespan">&quot;b&quot;</code> has 
+<mtext>−log 2</mtext>), anything else 
+<mtext>−∞</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">uniformly :: Eq a =&gt; [a] -&gt; Uniformly a
+uniformly [] = error &quot;uniformly: empty list&quot;
+uniformly lst = Uniformly (A.listArray (0,len-1) lst) (- log (fromIntegral len))
+ where len = length lst
+
+instance Eq a =&gt; Distribution (Uniformly a) a where
+  logDensity (Uniformly a ll) x = if x `elem` a then ll else minusInf
+  sample     (Uniformly a ll) g = let (i,g1) = randomR (A.bounds a) g in
+                           (unsafeAt a i, ll, g1)</code></pre></div>
+<p>cf. Distribution.hs:73-85.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uniformly _)
+  (⊦ eq? 'parameter (hakaru10-kind (τ (uniformly '()))))
+  (⊦ equal? &quot;uniformly: empty list&quot; (hakaru10-message (τ (uniformly '()))))
+  (let1 (d (uniformly '(a b c)))
+        (⊦ = (- (log 3.0)) (ld d 'b))
+        (⊦ = -inf.0 (ld d 'z))
+        (⊦ equal? '(a b c) (map car (distribution-support d))))
+  (let1 (d (uniformly '((a) &quot;b&quot;)))
+        (⊦ equal?
+           (list (- (log 2.0)) (- (log 2.0)) -inf.0)
+           (map (λ (x) (ld d x)) (list (list 'a) (string #\b) (list 'b))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2741680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/beta-density"><a href="#test/beta-density"><code>test/beta-density</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D9.  <code class="w3-codespan">beta 2 2</code> at 
+<mtext>½</mtext> is 
+<mtext>log 1.5</mtext> within 
+<mtext>10⁻⁸</mtext>, the accuracy of AS 245 at 
+<mtext>log Γ(4)</mtext> (exactly 
+<mtext>log Γ(4) − 2 log Γ(2) + 2 log ½</mtext> through log-gamma).  Upstream raises errors, and so does the port (plan C9), for a value outside 
+<mtext>[0,1]</mtext> and for a non-positive parameter, both when a log-density is computed:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">betaLogDensity :: Double -&gt; Double -&gt; Double -&gt; Double
+betaLogDensity a b | a &lt;= 0 || b &lt;= 0 =
+  error &quot;beta: parameters must be positve&quot;
+betaLogDensity a b =
+  let factor = logGamma (a + b)
+               - logGamma a
+               - logGamma b
+  in \x -&gt; if x &lt; 0 || x &gt; 1 then error &quot;beta: value must be between 0 and 1&quot;
+           else factor + (a - 1) * log x
+                       + (b - 1) * log (1 - x)</code></pre></div>
+<p>cf. Distribution.hs:330-339.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/beta-density _)
+  (⊦ (equal-approx? 1e-08) (log 1.5) (ld (beta 2 2) 0.5))
+  (⊦ =
+     (+ (+ (- (- (log-gamma 4.0) (log-gamma 2.0)) (log-gamma 2.0)) (log 0.5))
+        (log 0.5))
+     (ld (beta 2 2) 0.5))
+  (⊦ eq? 'support (hakaru10-kind (τ (ld (beta 2 2) 1.5))))
+  (⊦ equal?
+     &quot;beta: value must be between 0 and 1&quot;
+     (hakaru10-message (τ (ld (beta 2 2) 1.5))))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (ld (beta 0 2) 0.5))))
+  (⊦ equal?
+     &quot;beta: parameters must be positve&quot;
+     (hakaru10-message (τ (ld (beta 0 2) 0.5)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8402704 2746448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/normalization"><a href="#test/normalization"><code>test/normalization</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D10.  The log-densities are normalized: the probabilities of <code class="w3-codespan">bern</code>, <code class="w3-codespan">uniformly</code> and <code class="w3-codespan">categorical</code> sum to 1, as do their supports; the Poisson ones for 
+<mtext>λ = 3.5</mtext> up to 
+<mtext>k = 60</mtext>; and the trapezoid rule integrates the densities of <code class="w3-codespan">normal 1 2</code>, the corrected <code class="w3-codespan">gamma 3 (1/3)</code> and <code class="w3-codespan">gamma 2 1</code>, and <code class="w3-codespan">beta 2 5</code> to 1 within 
+<mtext>10⁻⁴</mtext>.  Upstream's gamma density would fail this test.
+            The second gamma has 
+<mtext>kθ = 2</mtext>: a density with 
+<mtext>x^k</mtext> in place of 
+<mtext>x^(k−1)</mtext> integrates to 
+<mtext>kθ</mtext>, which is 1 for the first.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/normalization _)
+  (⊦ (equal-approx? 1e-12)
+     1.0
+     (+ (exp (ld (bern 0.3) #t)) (exp (ld (bern 0.3) #f))))
+  (⊦ (equal-approx? 1e-12)
+     1.0
+     (fold +
+           0.0
+           (map (λ (x) (exp (ld (uniformly '(a b c d e f g)) x)))
+                '(a b c d e f g))))
+  (⊦ (equal-approx? 1e-12)
+     1.0
+     (fold +
+           0.0
+           (map (λ (x) (exp (ld (categorical '((a . 1) (b . 3) (c . 2.5))) x)))
+                '(a b c))))
+  (⊦ (equal-approx? 1e-12)
+     '(1.0 1.0 1.0)
+     (map support-mass
+          (list (bern 0.3)
+                (uniformly '(a b c d e f g))
+                (categorical '((a . 1) (b . 3) (c . 2.5))))))
+  (⊦ (equal-approx? 1e-09)
+     1.0
+     (fold + 0.0 (map (λ (k) (exp (ld (poisson 3.5) k))) (iota 61))))
+  (⊦ (equal-approx? 0.0001)
+     '(1.0 1.0 1.0 1.0)
+     (list (trapezoid (normal 1 2) -19.0 21.0 20000)
+           (trapezoid (gamma 3 1/3) 0.0 12.0 12000)
+           (trapezoid (gamma 2 1) 0.0 40.0 40000)
+           (trapezoid (beta 2 5) 0.0 1.0 10000))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.05) (memory #(8402704 2746624 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sampler-moments"><a href="#test/sampler-moments"><code>test/sampler-moments</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D11.  Moments of 
+<mtext>20000</mtext> samples, seed 17, within about four standard
+            errors: <code class="w3-codespan">normal 10 0.5</code>, <code class="w3-codespan">gamma 3 (1/3)</code> (mean 1, variance 
+<mtext>⅓</mtext>), <code class="w3-codespan">beta 2 5</code> (mean 
+<mtext>²⁄₇</mtext>), <code class="w3-codespan">beta 0.5 0.5</code> (Joehnk: mean 
+<mtext>½</mtext>, variance 
+<mtext>⅛</mtext>), <code class="w3-codespan">poisson 3.5</code>, <code class="w3-codespan">uniform 10 20</code> and <code class="w3-codespan">bern 0.3</code>.</p>
+<p>Deviation 3: <code class="w3-codespan">gamma 0.5 2</code> has mean 1 and variance 2.  For a
+            shape below 1 upstream boosts the shape by 1 but keeps the scale, then multiplies
+            by the scale again, so its samples have mean 2 and variance 8:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">gamma_rng shape scl g | shape &lt;  1.0  = (gvar2, g2)
+                      where (gvar1, g1) = gamma_rng (shape + 1) scl g
+                            (w,  g2) = randomR (0,1) g1
+                            gvar2 = scl * gvar1 * (w ** recip shape) </code></pre></div>
+<p>The port draws the boosted variate with scale 1: the same draws, a correct
+            sample (Distribution.hs:279-282).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sampler-moments _)
+  (let* ((within (λ (tol expected got) (⊦ (equal-approx? tol) expected got)))
+         (n 20000))
+    (let1 (mv (mean+var (samples (normal 10 0.5) n)))
+          (within 0.03 10.0 (car mv))
+          (within 0.02 0.25 (cdr mv)))
+    (let1 (mv (mean+var (samples (gamma 3 1/3) n)))
+          (within 0.03 1.0 (car mv))
+          (within 0.03 (/ 1.0 3.0) (cdr mv)))
+    (let1 (mv (mean+var (samples (gamma 0.5 2) n)))
+          (within 0.05 1.0 (car mv))
+          (within 0.25 2.0 (cdr mv)))
+    (within 0.01 (/ 2.0 7.0) (car (mean+var (samples (beta 2 5) n))))
+    (let1 (mv (mean+var (samples (beta 0.5 0.5) n)))
+          (within 0.02 0.5 (car mv))
+          (within 0.01 0.125 (cdr mv)))
+    (let1 (mv (mean+var (samples (poisson 3.5) n)))
+          (within 0.06 3.5 (car mv))
+          (within 0.15 3.5 (cdr mv)))
+    (within 0.1 15.0 (car (mean+var (samples (uniform 10 20) n))))
+    (within
+      0.02
+      0.3
+      (/ (count identity (samples (bern 0.3) n)) (exact-&gt;inexact n)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.509) (memory #(16805408 3229064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/poisson-sample-ll"><a href="#test/poisson-sample-ll"><code>test/poisson-sample-ll</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D12, deviation 4.  The log-likelihood of a Poisson sample is the log-density of
+            the sampled 
+<mtext>k</mtext>; upstream's Knuth sampler answers the probability <code class="w3-codespan">acc*expl</code> itself in the LL position:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">  -- Knuth algorithm
+  sample (Poisson lambda expl) g
+    | lambda == 0 = (0,0,g)
+    | otherwise = let (u, g1) = randomR (0, 1) g
+                  in loop u 1 1 g1
+    where
+      -- acc is lamda^(k-1)/(k-1)!
+      loop p k acc g | p &gt; expl =
+           let (u, g1) = randomR (0, 1) g
+           in loop (p*u) (k+1) (acc*lambda/(fromIntegral k)) g1
+                     | otherwise = (k-1, acc*expl, g)</code></pre></div>
+<p>cf. Distribution.hs:369-379.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/poisson-sample-ll _)
+  (let1 (src (make-stdgen-source 17))
+        (⊨ (every (λ (i)
+                     (receive
+                       (k ll)
+                       (distribution-sample (poisson 3.5) src)
+                       (= ll (ld (poisson 3.5) k))))
+                  (iota 1000))))
+  (⊦ equal?
+     '(0 0.0)
+     (receive
+       (k ll)
+       (distribution-sample (poisson 0) (make-stdgen-source 17))
+       (list k ll))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(16805408 2751736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sampler-errors"><a href="#test/sampler-errors"><code>test/sampler-errors</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D13.  Building <code class="w3-codespan">normal 0 0</code> is fine, as upstream (only <code class="w3-codespan">normal_rng</code> checks the deviation); sampling from it is an error, as is sampling
+            from a gamma distribution with a non-positive shape or scale; the messages are
+            upstream's, typos included.  A parameter that is not a real number is an error
+            when the distribution is built (Haskell's <code class="w3-codespan">Double</code> type, deviation 9).  Sampling a beta distribution with a non-positive
+            parameter raises upstream's density error at once, without drawing; upstream's
+            Joehnk loop never ends for a negative parameter (deviation 10):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">normal_rng mu sd g | sd &gt; 0 = case marsaglia g of
+                                ((x, _), g1) -&gt; (mu + sd * x, g1)
+normal_rng _ _ _ = error &quot;normal: invalid parameters&quot;
+
+gamma_rng shape _   _ | shape &lt;= 0.0  = error &quot;gamma: got a negative shape paramater&quot;
+gamma_rng _     scl _ | scl &lt;= 0.0  = error &quot;gamma: got a negative scale paramater&quot;
+
+beta_rng a b g | a &lt;= 1.0 &amp;&amp; b &lt;= 1.0 =
+                 let (u, g1) = randomR (0.0, 1.0) g
+                     (v, g2) = randomR (0.0, 1.0) g1
+                     x = u ** (recip a)
+                     y = v ** (recip b)
+                 in  case (x+y) &lt;= 1.0 of
+                       True -&gt; (x / (x + y), g2)
+                       False -&gt; beta_rng a b g2</code></pre></div>
+<p>cf. Distribution.hs:148-153, 276-278, 317-325.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sampler-errors _)
+  (⊦ eq?
+     'parameter
+     (hakaru10-kind
+       (τ (distribution-sample (normal 0 0) (make-stdgen-source)))))
+  (⊦ equal?
+     &quot;normal: invalid parameters&quot;
+     (hakaru10-message
+       (τ (distribution-sample (normal 0 0) (make-stdgen-source)))))
+  (⊦ eq?
+     'parameter
+     (hakaru10-kind
+       (τ (distribution-sample (gamma -1 1) (make-stdgen-source)))))
+  (⊦ equal?
+     &quot;gamma: got a negative shape paramater&quot;
+     (hakaru10-message
+       (τ (distribution-sample (gamma -1 1) (make-stdgen-source)))))
+  (⊦ equal?
+     &quot;gamma: got a negative scale paramater&quot;
+     (hakaru10-message
+       (τ (distribution-sample (gamma 2 0) (make-stdgen-source)))))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (normal 'zero 1))))
+  (let1 (src (make-stdgen-source 17))
+        (⊦ equal?
+           '(parameter parameter parameter)
+           (map (λ (a b)
+                   (hakaru10-kind (τ (distribution-sample (beta a b) src))))
+                '(-0.5 0.5 0)
+                '(1 -2 1)))
+        (⊦ equal? '(18 1) (seeds src))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(16805408 2756912 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bern-flip"><a href="#test/bern-flip"><code>test/bern-flip</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D14.  <code class="w3-codespan">bern/flip</code> has upstream's commented-out kernel, which
+            always flips the value, draws nothing and has 
+<mtext>fwd − bwd = 0</mtext>; <code class="w3-codespan">bern</code> keeps the default kernel, which samples again (here 
+<mtext>0.29389… ≤ 0.3</mtext>, so <code class="w3-codespan">#t</code>) and answers 
+<mtext>ll′ − ll</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">-- resampling always flips, so fwd and bwd steps are 0
+instance RDistribution Bern Bool where
+{-
+  resample d x _ g =
+    let x' = not x in
+    ((x', logDensity d x', g),0)
+-}</code></pre></div>
+<p>cf. Distribution.hs:64-70 and 29-32.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bern-flip _)
+  (let* ((d (bern/flip 0.3))
+         (rd (distk-rd d))
+         (src (make-stdgen-source 17))
+         (before (seeds src)))
+    (⊦ equal?
+       (list #f (log 0.7) 0.0)
+       (receive
+         (x ll fb)
+         ((rdistr-resample rd) src #t (log 0.3))
+         (list x ll fb)))
+    (⊦ equal? before (seeds src)))
+  (let* ((rd (distk-rd (bern 0.3))) (src (make-stdgen-source 17)))
+    (⊦ equal?
+       (list #t (log 0.3) (- (log 0.3) (log 0.7)))
+       (receive
+         (x ll fb)
+         ((rdistr-resample rd) src #f (log 0.7))
+         (list x ll fb)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(16805408 2756072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/condition"><a href="#test/condition"><code>test/condition</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D15.  Conditioning a resampleable distk makes an observed one that keeps the
+            distribution and stores the observation; sampling it answers the observation and
+            its log-likelihood and draws nothing.  On a constructor, <code class="w3-codespan">condition</code> is lifted (curried constructors included) and checked when applied.
+            Conditioning twice, or a Dirac distribution, is a type error upstream (design.txt
+            l.397-402) and a <code class="w3-codespan">conditioning</code> error here; so is an
+            observation that the predicate passed by (aux hakaru10)'s <code class="w3-codespan">condition</code>, the engine's <code class="w3-codespan">internal-part</code>, recognizes as part of the model (an SExp or a Model, at any depth of the
+            observation):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">conditioned :: a -&gt; DistK KResampleable a -&gt; DistK KObserved a
+conditioned obs (Resampleable d) = Observed d obs
+
+instance Condition (DistK KResampleable a) where
+  type CondR (DistK KResampleable a) = DistK KObserved a
+  type CondV (DistK KResampleable a) = a
+  condition = conditioned
+
+instance Condition b =&gt; Condition (a -&gt; b) where
+  type CondR (a -&gt; b) = a -&gt; CondR b
+  type CondV (a -&gt; b) = CondV b
+  condition v f = \x -&gt; condition v (f x)</code></pre></div>
+<p>cf. Metropolis.hs:434-435, Syntax.hs:180-193, and <code class="w3-codespan">distk-sample</code>, upstream's <code class="w3-codespan">sampleK</code> (Metropolis.hs:97-100):</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">sampleK :: DistK k a -&gt; StdGen -&gt; (a, LL, StdGen)
+sampleK (Resampleable d) g = sample d g
+sampleK (Dirac x) g = (x,0,g)
+sampleK (Observed d x) g = (x,logDensity d x,g)</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/condition _)
+  (let* ((d (normal 0 1)) (o (condition 1.5 d)))
+    (⊦ eq? 'observed (distk-kind o))
+    (⊦ = 1.5 (distk-value o))
+    (⊦ eq? (distk-rd d) (distk-rd o))
+    (let1 (src (make-stdgen-source 17))
+          (⊦ equal?
+             (list 1.5 (ld d 1.5))
+             (receive (x ll) (distk-sample o src) (list x ll)))
+          (⊦ equal? '(18 1) (seeds src))))
+  (let1 (o ((condition 1.0 normal) 0 1))
+        (⊦ eq? 'observed (distk-kind o))
+        (⊦ equal?
+           '(normal (0.0 1.0))
+           (list (rdistr-name (distk-rd o)) (rdistr-params (distk-rd o)))))
+  (⊦ eq?
+     'observed
+     (distk-kind (((condition 2 (λ (a) (λ (b) (uniform a b)))) 0) 3)))
+  (⊦ eq?
+     'conditioning
+     (hakaru10-kind (τ (condition #t (condition #f (bern 0.5))))))
+  (⊦ eq? 'conditioning (hakaru10-kind (τ (condition 1 (dirac 1)))))
+  (⊦ eq? 'conditioning (hakaru10-kind (τ ((condition 1 dirac) 1))))
+  (⊦ eq? 'conditioning (hakaru10-kind (τ (condition 1 42))))
+  (⊦ eq? 'conditioning (hakaru10-kind (τ (condition 'x (bern 0.5) symbol?))))
+  (⊦ equal?
+     &quot;observation must be external to the model&quot;
+     (hakaru10-message (τ (condition 'x (bern 0.5) symbol?))))
+  (let1 (d (dirac 3))
+        (⊦ equal? '(dirac #f) (list (distk-kind d) (distk-rd d))))
+  (⊦ equal?
+     '(3 0.0)
+     (receive
+       (x ll)
+       (distk-sample (dirac 3) (make-stdgen-source))
+       (list x ll)))
+  (⊦ equal? '(0.0 -inf.0) (list (ld (dirac 3) 3) (ld (dirac 3) 4))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(16805408 2756552 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay"><a href="#test/replay"><code>test/replay</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D16.  The samplers replay upstream's draws: from <code class="w3-codespan">mkStdGen 17</code>, the first three samples of each distribution and the generator after 200
+            samples are those of a Python transcription of Distribution.hs over the
+            random-1.0.1.1 StdGen (with deviation 3 for <code class="w3-codespan">gamma 0.5 2</code>), bit for bit.  That transcription reproduced the sample records of
+            Examples1.hs, so these values are regression oracles: a change in the draw
+            order (Marsaglia's retries, the gamma <code class="w3-codespan">until</code> loop, Joehnk's
+            retries, the categorical walk) or in the floating-point association shows here
+            first.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay _)
+  (⊦ equal? '((#t #f #t) 2040924989 1624004889) (replay (bern 0.3)))
+  (⊦ equal? '((b d c) 33947404 1403159235) (replay (uniformly '(a b c d e))))
+  (⊦ equal?
+     '((b b b) 2040924989 1624004889)
+     (replay (categorical '((a . 1) (b . 3) (c . 2)))))
+  (⊦ equal?
+     '((12.9389958502438 13.273788866478 11.967275951981)
+       2040924989
+       1624004889)
+     (replay (uniform 10 20)))
+  (⊦ equal?
+     '((9.39612042942084 9.41232243145482 9.44440922646125)
+       238574758
+       1847970949)
+     (replay (normal 10 0.5)))
+  (⊦ equal?
+     '((0.380224876466386 1.17402250871286 0.695965406931075)
+       1634784357
+       1431524588)
+     (replay (gamma 3 1/3)))
+  (⊦ equal?
+     '((1.66158483367182 5.89134661162112 3.29908537903117)
+       1634784357
+       1431524588)
+     (replay (gamma 2.5 2)))
+  (⊦ equal?
+     '((0.230839286683393 0.364622341494618 5.99387735984082)
+       507113220
+       1216787979)
+     (replay (gamma 0.5 2)))
+  (⊦ equal?
+     '((0.0859997609215855 0.152619827493028 0.323475141715806)
+       470875069
+       467317093)
+     (replay (beta 2 5)))
+  (⊦ equal?
+     '((0.446268276733181 0.0880533825953212 0.0762135858315621)
+       368601130
+       810754135)
+     (replay (beta 0.5 0.5)))
+  (⊦ equal?
+     '((0.160356098218376 0.29562975594083 0.260198785673769)
+       609399710
+       1534428535)
+     (replay (beta 0.5 2)))
+  (⊦ equal? '((2 3 8) 473751772 1482242513) (replay (poisson 3.5))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(16805408 2759704 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/laplace"><a href="#test/laplace"><code>test/laplace</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D17 (optional extra).  The Laplace distribution, commented out upstream, by
+            inversion of one uniform draw: log-density 
+<mtext>−log 2b − |x − μ|/b</mtext>, normalized, replayed against the
+            transcription, with mean 
+<mtext>μ</mtext> and variance 
+<mtext>2b²</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">laplace_rng :: (RandomGen g) =&gt; Double -&gt; Double -&gt; g -&gt; (Double, g)
+laplace_rng mu sd g = sample (randomR (0.0, 1.0) g)
+   where sample (u, g1) = case u &lt; 0.5 of
+                            True  -&gt; (mu + sd * log (u + u), g1)
+                            False -&gt; (mu - sd * log (2.0 - u - u), g1)
+
+laplaceLogDensity :: Floating a =&gt; a -&gt; a -&gt; a -&gt; a
+laplaceLogDensity mu sd x = - log (2 * sd) - abs (x - mu) / sd</code></pre></div>
+<p>cf. Distribution.hs:384-395.  Sampling with 
+<mtext>b ≤ 0</mtext> is an error, as for the normal distribution (deviation 10).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/laplace _)
+  (let1 (d (laplace 1 2))
+        (⊦ (equal-approx? 1e-15) (- (- (log 4.0)) 1.5) (ld d 4.0))
+        (⊦ (equal-approx? 0.0001) 1.0 (trapezoid d -39.0 41.0 40000))
+        (⊦ equal?
+           '((-0.0627398739205491 0.153020152986878 -0.865576184156956)
+             2040924989
+             1624004889)
+           (replay d))
+        (let1 (mv (mean+var (samples d 20000)))
+              (⊦ (equal-approx? 0.1) 1.0 (car mv))
+              (⊦ (equal-approx? 0.6) 8.0 (cdr mv))))
+  (⊦ eq?
+     'parameter
+     (hakaru10-kind
+       (τ (distribution-sample (laplace 0 0) (make-stdgen-source))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.067) (memory #(16805408 3343656 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/dirichlet"><a href="#test/dirichlet"><code>test/dirichlet</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>D18 (optional extra).  The symmetric Dirichlet distribution, commented out
+            upstream, over lists of 
+<mtext>n</mtext> flonums: 
+<mtext>n</mtext> gamma variates
+            normalized by their total.  Its log-density at 
+<mtext>(0.2, 0.3, 0.5)</mtext> for 
+<mtext>n = 3, α = 2</mtext> is 
+<mtext>log(Γ(6) · 0.2 · 0.3 · 0.5 / Γ(2)³) = log 3.6</mtext>; the flat 
+<mtext>α = 1</mtext> has density 
+<mtext>Γ(3) = 2</mtext>; samples sum to 1, with component means 
+<mtext>⅓</mtext> and variance 
+<mtext>α(nα − α) / ((nα)² (nα + 1)) = 8/252</mtext>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-haskell">dirichlet_rng :: (RandomGen g) =&gt; Int -&gt;  Double -&gt; g -&gt; ([Double], g)
+dirichlet_rng n' a g' = normalize (gammas g' n')
+  where gammas g 0 = ([], 0, g)
+        gammas g n = let (xs, total, g1) = gammas g (n-1)
+                         ( x, g2) = gamma_rng a 1 g1
+                     in ((x : xs), x+total, g2)
+        normalize (b, total, h) = (map (/ total) b, h)
+
+dirichletLogDensity :: [Double] -&gt; [Double] -&gt; Double
+dirichletLogDensity a x | all (&gt; 0) x = sum' (zipWith logTerm a x) + logGamma (sum a)
+  where sum' = foldl' (+) 0
+        logTerm b y = (b-1) * log y - logGamma b
+dirichletLogDensity _ _ = error &quot;dirichlet: all values must be between 0 and 1&quot;</code></pre></div>
+<p>cf. Distribution.hs:397-411.  The first gamma variate drawn ends last in the
+            list.  A value that is not a list of 
+<mtext>n</mtext> reals has log-density 
+<mtext>−∞</mtext> (deviation 10).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/dirichlet _)
+  (let1 (d (dirichlet/symmetric 3 2))
+        (⊦ (equal-approx? 1e-08) (log 3.6) (ld d (list 0.2 0.3 0.5)))
+        (⊦ = -inf.0 (ld d (list 0.5 0.5)))
+        (⊦ eq? 'support (hakaru10-kind (τ (ld d (list 0.5 0.5 0.0)))))
+        (⊦ equal?
+           '(((0.29568912068716 0.572538668183498 0.131772211129342))
+             1901800541
+             817484612)
+           (let1 (r (replay d)) (cons (list (car (car r))) (cdr r))))
+        (let* ((xs (samples d 20000))
+               (mv1 (mean+var (map first xs)))
+               (mv3 (mean+var (map third xs))))
+          (⊨ (every (λ (v) (&lt; (abs (- (fold + 0.0 v) 1.0)) 1e-12)) xs))
+          (⊦ (equal-approx? 0.01) (/ 1.0 3.0) (car mv1))
+          (⊦ (equal-approx? 0.01) (/ 1.0 3.0) (car mv3))
+          (⊦ (equal-approx? 0.003) (/ 8.0 252.0) (cdr mv1))))
+  (⊦ (equal-approx? 1e-08)
+     (log 2.0)
+     (ld (dirichlet/symmetric 3 1) (list 0.1 0.2 0.7))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.153) (memory #(16805408 5644072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/make-distribution"><a href="#test/make-distribution"><code>test/make-distribution</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>make-distribution builds a user distribution, the Scheme form of a new <code class="w3-codespan">RDistribution</code> instance (Distribution.hs:14-41): a log-density, a
+            sampler that answers a value and its log-likelihood, and optionally a proposal
+            kernel (&quot;This is the place to specify custom proposals&quot;, Distribution.hs:18-19),
+            which defaults to sampling again with 
+<mtext>fwd − bwd = ll′ − ll</mtext> (Distribution.hs:29-32), and a finite support for
+            the exact enumerator.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/make-distribution _)
+  (let* ((d (make-distribution
+              'exponential
+              #:log-density
+              (λ (x) (if (&lt; x 0.0) -inf.0 (- x)))
+              #:sample
+              (λ (src)
+                 (let1 (x (- (log (- 1.0 (rng-double! src 0.0 0.9)))))
+                       (values x (- x))))
+              #:params
+              '(1.0)))
+         (rd (distk-rd d))
+         (src (make-stdgen-source 17)))
+    (⊦ eq? 'resampleable (distk-kind d))
+    (⊦ equal? '(exponential (1.0)) (list (rdistr-name rd) (rdistr-params rd)))
+    (⊦ = -2.0 (ld d 2.0))
+    (⊨ (not (distribution-support d)))
+    (receive
+      (x ll fb)
+      ((rdistr-resample rd) src 3.0 -3.0)
+      (⊦ = fb (+ ll 3.0))))
+  (let* ((d (make-distribution
+              'coin
+              #:log-density
+              (λ (x) (log 0.5))
+              #:sample
+              (λ (src) (values (= 0 (rng-integer! src 0 1)) (log 0.5)))
+              #:resample
+              (λ (src x ll) (values (not x) ll 0.0))
+              #:support
+              (τ '((#t . 0.5) (#f . 0.5)))))
+         (rd (distk-rd d)))
+    (⊦ equal?
+       '(#f 0.0)
+       (receive
+         (x ll fb)
+         ((rdistr-resample rd) (make-stdgen-source) #t (log 0.5))
+         (list x fb)))
+    (⊦ = 1.0 (support-mass d)))
+  (⊦ eq?
+     'construction
+     (hakaru10-kind (τ (make-distribution 'broken #:sample (λ (src) 0))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16805408 5648272 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/support-and-printing"><a href="#test/support-and-printing"><code>test/support-and-printing</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">distribution-support</code> answers the finite support of a distk, an
+            alist <code class="w3-codespan">((x . p) ...)</code> in the order its sampler walks the values,
+            or <code class="w3-codespan">#f</code> for a distribution whose support is infinite or
+            continuous; an observed distk keeps the support of the distribution it conditions,
+            and a Dirac distk is certain of its value (Distribution.hs:49-51).  It is what the
+            exact interpretation of a model branches over: where the trace-graph builder draws
+            one value with <code class="w3-codespan">distk-sample</code>, the exact enumerator branches over
+            the support of each active random choice of the static graph (plan §6.10), each
+            value weighted by its probability.</p>
+<p>Distks and their distributions print with their kind, name and parameters, as
+            Metropolis.hs:62-65 shows a <code class="w3-codespan">DistK</code>.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/support-and-printing _)
+  (⊦ equal? '((#t . 0.25) (#f . 0.75)) (distribution-support (bern 1/4)))
+  (⊦ equal?
+     '((#t . 0.25) (#f . 0.75))
+     (distribution-support (condition #f (bern/flip 0.25))))
+  (⊦ equal? '((7 . 1.0)) (distribution-support (dirac 7)))
+  (⊦ equal?
+     '(#f #f #f)
+     (map distribution-support (list (normal 0 1) (poisson 2) (beta 1 1))))
+  (let1 (d (uniformly '(x y z)))
+        (⊨ (every (λ (x) (pair? (assq x (distribution-support d))))
+                  (samples d 200))))
+  (⊦ eq? 'parameter (hakaru10-kind (τ (distribution-support 'normal))))
+  (⊦ equal?
+     '(&quot;#&lt;distk resampleable normal (0.0 1.0)&gt;&quot;
+       &quot;#&lt;distk observed normal (0.0 1.0) 1.5&gt;&quot;
+       &quot;#&lt;distk dirac (a b)&gt;&quot;
+       &quot;#&lt;rdistr categorical (((\&quot;x\&quot; . 1.0)))&gt;&quot;)
+     (map (λ (x) (format &quot;~a&quot; x))
+          (list (normal 0 1)
+                (condition 1.5 (normal 0 1))
+                (dirac '(a b))
+                (distk-rd (categorical '((&quot;x&quot; . 1))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(16805408 2772576 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

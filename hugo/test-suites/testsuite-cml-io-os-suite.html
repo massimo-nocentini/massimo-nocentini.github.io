@@ -1,0 +1,281 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<h2 id="test/system-evt/exit-codes"><a href="#test/system-evt/exit-codes"><code>test/system-evt/exit-codes</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/system-evt/exit-codes _)
+  (⊦= '(0 3 127 137 0)
+      (log-of
+        (τ (note! (cml/system &quot;true&quot;))
+           (note! (sync (system-evt &quot;exit 3&quot;)))
+           (note! (cml/system &quot;a-command-that-does-not-exist 2&gt;/dev/null&quot;))
+           (note! (cml/system &quot;kill -9 $$&quot;))
+           (let1 (e (system-evt &quot;true&quot;)) (sync e) (note! (sync e)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(27262984 6444584 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bad-arguments"><a href="#test/bad-arguments"><code>test/bad-arguments</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bad-arguments _)
+  (⊦= '(raised raised raised raised raised raised)
+      (run/value
+        (τ (map (λ (thunk)
+                   (condition-case
+                     (begin (thunk) 'no-raise)
+                     (e (exn) 'raised)))
+                (list (τ (system-evt 42))
+                      (τ (cml/system 'true))
+                      (τ (cml/execute 'ls))
+                      (τ (cml/execute &quot;ls&quot; &quot;-l&quot;))
+                      (τ (cml/execute &quot;ls&quot; '(1 2)))
+                      (τ (cml/execute &quot;ls&quot; '() '(42)))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(27262984 6460976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/system-evt/eager-and-selectable"><a href="#test/system-evt/eager-and-selectable"><code>test/system-evt/eager-and-selectable</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/system-evt/eager-and-selectable _)
+  (let1 (log (log-of
+               (τ (let1 (e (system-evt &quot;sleep 0.05&quot;))
+                        (note! (select
+                                 (wrap e (λ (c) (list 'done c)))
+                                 (wrap (timeout-evt 0.01) (λ ignored 'timeout))))
+                        (note! (sync e))))))
+        (⊦= '(timeout 0) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(27262984 6449944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/system-evt/concurrent"><a href="#test/system-evt/concurrent"><code>test/system-evt/concurrent</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/system-evt/concurrent _)
+  (let1 (log (log-of
+               (τ (let* ((t0 (cml/now))
+                         (es (map (λ (i)
+                                     (system-evt
+                                       (string-append
+                                         &quot;sleep 0.1; exit &quot;
+                                         (number-&gt;string i))))
+                                  (iota 3))))
+                    (note! (map sync es))
+                    (note! (&lt; (- (cml/now) t0) 0.25))))))
+        (⊦= '((0 1 2) #t) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(27262984 6452864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/execute/cat"><a href="#test/execute/cat"><code>test/execute/cat</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/execute/cat _)
+  (let1 (log (log-of
+               (τ (receive
+                    (in out pid)
+                    (cml/execute &quot;cat&quot;)
+                    (sync (write-string-evt out &quot;ping\npong\n&quot;))
+                    (note! (sync (input-line-evt in)))
+                    (note! (sync/timeout (input-line-evt in) 1 'stuck))
+                    (close-output-port out)
+                    (note! (sync (input-line-evt in)))
+                    (note! (sync (process-evt pid)))
+                    (close-input-port in)))))
+        (⊦= '(&quot;ping&quot; &quot;pong&quot; #!eof (#t 0)) log)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(27262984 4093968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/execute/close-on-exec"><a href="#test/execute/close-on-exec"><code>test/execute/close-on-exec</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/execute/close-on-exec _)
+  (⊦= '((#t 0) #!eof (#t 0))
+      (log-of
+        (τ (receive
+             (in1 out1 pid1)
+             (cml/execute &quot;cat&quot;)
+             (receive
+               (in2 out2 pid2)
+               (cml/execute &quot;cat&quot;)
+               (close-output-port out1)
+               (note! (sync/timeout (process-evt pid1) 2 'still-running))
+               (note! (sync/timeout (input-line-evt in1) 1 'no-eof))
+               (close-output-port out2)
+               (note! (sync (process-evt pid2)))
+               (close-input-port in1)
+               (close-input-port in2)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(27262984 4096320 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/process-evt/reaped-after-the-run"><a href="#test/process-evt/reaped-after-the-run"><code>test/process-evt/reaped-after-the-run</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/process-evt/reaped-after-the-run _)
+  (let1 (pid #f)
+        (⊦= 'gave-up
+            (run-cml
+              (τ (set! pid (process-run &quot;sleep&quot; '(&quot;0.05&quot;)))
+                 (cml/shutdown
+                   (sync/timeout (process-evt pid) 0.005 'gave-up)))))
+        (run-cml (τ (cml/sleep 0.2) (cml/shutdown)))
+        (⊦= 'reaped
+            (condition-case
+              (receive
+                (p normal? code)
+                (process-wait (process-id pid) #t)
+                (list p normal? code))
+              (ignored () 'reaped)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(13631492 4100768 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/execute/closed-stdio"><a href="#test/execute/closed-stdio"><code>test/execute/closed-stdio</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/execute/closed-stdio _)
+  (flush-output (current-output-port))
+  (let ((in0 (duplicate-fileno 0)) (out1 (duplicate-fileno 1)))
+    (file-close 0)
+    (file-close 1)
+    (let1 (log (dynamic-wind
+                 void
+                 (τ (log-of
+                      (τ (receive
+                           (in out pid)
+                           (cml/execute &quot;cat&quot;)
+                           (sync (write-string-evt out &quot;ping\n&quot;))
+                           (note! (sync/timeout (input-line-evt in) 2 'stuck))
+                           (close-output-port out)
+                           (note! (sync (process-evt pid)))
+                           (close-input-port in)))))
+                 (τ (duplicate-fileno in0 0)
+                    (duplicate-fileno out1 1)
+                    (file-close in0)
+                    (file-close out1))))
+          (⊦= '(&quot;ping&quot; (#t 0)) log))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4096536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/system-evt/bin-sh"><a href="#test/system-evt/bin-sh"><code>test/system-evt/bin-sh</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/system-evt/bin-sh _)
+  (let1 (shell (get-environment-variable &quot;SHELL&quot;))
+        (set-environment-variable! &quot;SHELL&quot; &quot;/bin/false&quot;)
+        (let1 (log (dynamic-wind
+                     void
+                     (τ (log-of (τ (note! (cml/system &quot;exit 3&quot;)))))
+                     (τ (if shell
+                          (set-environment-variable! &quot;SHELL&quot; shell)
+                          (unset-environment-variable! &quot;SHELL&quot;)))))
+              (⊦= '(3) log))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4097432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/execute/missing-program"><a href="#test/execute/missing-program"><code>test/execute/missing-program</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/execute/missing-program _)
+  (⊦= '((#t 128))
+      (log-of
+        (τ (receive
+             (in out pid)
+             (cml/execute &quot;/nonexistent/program&quot;)
+             (note! (sync (process-evt pid)))
+             (close-input-port in)
+             (close-output-port out))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(13631492 4099344 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/execute/path-and-argv0"><a href="#test/execute/path-and-argv0"><code>test/execute/path-and-argv0</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/execute/path-and-argv0 _)
+  (⊦= '(&quot;/bin/sh&quot; &quot;sh&quot; (#t 0) (#t 0))
+      (log-of
+        (τ (receive
+             (in1 out1 pid1)
+             (cml/execute &quot;/bin/sh&quot; '(&quot;-c&quot; &quot;echo $0&quot;))
+             (receive
+               (in2 out2 pid2)
+               (cml/execute &quot;sh&quot; '(&quot;-c&quot; &quot;echo $0&quot;))
+               (note! (sync (input-line-evt in1)))
+               (note! (sync (input-line-evt in2)))
+               (note! (sync (process-evt pid1)))
+               (note! (sync (process-evt pid2)))
+               (for-each close-input-port (list in1 in2))
+               (for-each close-output-port (list out1 out2))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(13631492 4104616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/execute/in-env"><a href="#test/execute/in-env"><code>test/execute/in-env</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/execute/in-env _)
+  (⊦= '(&quot;LANG=C\nFOO=a=b\n&quot; (#t 0) &quot;&quot; (#t 0) &quot;set\n&quot; (#t 0) (#t 128) raised)
+      (log-of
+        (τ (define (run cmd args . env)
+             (receive
+               (in out pid)
+               (apply cml/execute cmd args env)
+               (close-output-port out)
+               (note! (sync (input-all-evt in)))
+               (note! (sync (process-evt pid)))
+               (close-input-port in)))
+           (run &quot;/usr/bin/env&quot; '() '(&quot;LANG=C&quot; &quot;FOO=a=b&quot;))
+           (run &quot;/usr/bin/env&quot; '() '())
+           (run &quot;/bin/sh&quot; '(&quot;-c&quot; &quot;echo ${PATH:+set}&quot;))
+           (receive
+             (in out pid)
+             (cml/execute &quot;env&quot; '() '(&quot;A=b&quot;))
+             (note! (sync (process-evt pid)))
+             (close-input-port in)
+             (close-output-port out))
+           (note! (condition-case
+                    (cml/execute &quot;/usr/bin/env&quot; '() '(&quot;NOEQUALS&quot;))
+                    (e (exn) 'raised)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(13631492 4113600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/children-start-with-sigpipe-default"><a href="#test/children-start-with-sigpipe-default"><code>test/children-start-with-sigpipe-default</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/children-start-with-sigpipe-default _)
+  (⊦= '(141 (#f 13) 0)
+      (log-of
+        (τ (note! (cml/system &quot;kill -PIPE $$; exit 0&quot;))
+           (receive
+             (in out pid)
+             (cml/execute &quot;/bin/sh&quot; '(&quot;-c&quot; &quot;kill -PIPE $$; exit 0&quot;))
+             (note! (sync (process-evt pid)))
+             (close-input-port in)
+             (close-output-port out))
+           (note! (sync/timeout
+                    (system-evt
+                      &quot;(while :; do echo x; done 2&gt;/dev/null) | head -1 &gt;/dev/null&quot;)
+                    5
+                    'hung))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(13631492 4111976 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

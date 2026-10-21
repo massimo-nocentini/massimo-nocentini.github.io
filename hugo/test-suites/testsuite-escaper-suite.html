@@ -1,0 +1,473 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section993">
+<header>
+<h1>Escape procedures and <code class="w3-codespan">call/cc</code></h1></header></section>
+<p>Exercises of chapter 16 of Springer and Friedman, <i>Scheme and the Art of Programming</i>, on contexts, escape procedures and <code class="w3-codespan">call/cc</code>.</p>
+<h2 id="test/contexts"><a href="#test/contexts"><code>test/contexts</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/contexts _)
+  (⊦= (+ 3 (* 4 (+ 5 6))) ((λ (▢) (+ 3 (* 4 ▢))) (+ 5 6)))
+  (⊦= 47 ((λ (▢) (+ 3 (* 4 ▢))) (+ 5 6)))
+  (⊦= (letrec ((sum+n (λ (n) (if (zero? n) 1 (+ (add1 n) (sum+n (sub1 n)))))))
+        (* 10 (sum+n 5)))
+      ((λ (▢) (* 10 (+ 6 (+ 5 (+ ▢ (+ 3 (+ 2 1))))))) (add1 3)))
+  (⊦= 210 ((λ (▢) (* 10 (+ 6 (+ 5 (+ ▢ (+ 3 (+ 2 1))))))) (add1 3)))
+  (let* ((out (open-output-string))
+         (v (begin
+              (display 0 out)
+              (let ((n 1))
+                (if (zero? n)
+                  (display (+ 3 (* 4 (+ 5 6))) out)
+                  (display (* (+ (* 3 4) 5) 2) out))
+                (set! n (+ n 2))
+                n))))
+    (⊦= &quot;034&quot; (get-output-string out))
+    (⊦= 3 v))
+  (let* ((out (open-output-string))
+         (n 1)
+         (context
+           (λ (▢)
+              (begin
+                (display 0 out)
+                (display (* (+ ▢ 5) 2) out)
+                (set! n (+ n 2))
+                n))))
+    (⊦= 3 (context (* 3 4)))
+    (⊦= 5 (context (* 3 4)))
+    (⊦= &quot;034034&quot; (get-output-string out))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2461072 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/escaper/first"><a href="#test/escaper/first"><code>test/escaper/first</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/escaper/first _)
+  (⊦= 10
+      (letcc/escaper
+        escaper
+        (let ((escape-* (escaper *))) (+ (escape-* 5 2) 3)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2464848 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/escaper"><a href="#test/escaper"><code>test/escaper</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/escaper _)
+  (⊦= 10 (letcc/escaper escaper (+ ((escaper *) 5 2) 3)))
+  (⊦= 8 (letcc/escaper escaper (+ ((escaper (λ (x) (- (* x 3) 7))) 5) 4)))
+  (⊦= 8
+      (letcc/escaper
+        escaper
+        (+ ((escaper (λ (x) ((escaper -) (* x 3) 7))) 5) 4)))
+  (⊦= 15 ((λ (x) (* x 3)) 5))
+  (⊦= 15
+      (letcc/escaper
+        escaper
+        (+ ((escaper (λ (x) (- ((escaper *) x 3) 7))) 5) 4)))
+  (⊦= 15
+      (letcc/escaper
+        escaper
+        (+ ((escaper (λ (x) ((escaper -) ((escaper *) x 3) 7))) 5) 4))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2465752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/escaper/abandons"><a href="#test/escaper/abandons"><code>test/escaper/abandons</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/escaper/abandons _)
+  (⊦= 8
+      (letcc/escaper escaper (/ (+ ((escaper (λ (x) (- (* x 3) 7))) 5) 4) 2)))
+  (⊦= -1 (letcc/escaper escaper ((escaper add1) ((escaper sub1) 0))))
+  (⊦= '(3)
+      (letcc/escaper
+        escaper
+        (let ((escape-cons (escaper cons)))
+          (escape-cons 1 (escape-cons 2 (escape-cons 3 '()))))))
+  (⊦= &quot;reset invoked&quot;
+      (with-output-to-string
+        (τ (letcc/escaper
+             escaper
+             (let ((reset (λ ()
+                             (let ((escape
+                                     (escaper (λ () (display &quot;reset invoked&quot;)))))
+                               (escape)))))
+               (cons 1 (reset)))))))
+  (⊨ (void? (letcc/escaper
+              escaper
+              (let ((reset (λ ()
+                              (let ((escape (escaper (λ () (void))))) (escape)))))
+                (cons 1 (reset))))))
+  (⊦= '(2)
+      (letcc/escaper
+        escaper
+        (let ((reset (λ () ((escaper (λ () '(2))))))) (cons 1 (reset))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2467232 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/receiver/escaper"><a href="#test/receiver/escaper"><code>test/receiver/escaper</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/receiver/escaper _)
+  (⊦= 27
+      (letcc/escaper
+        escaper
+        (let ((receiver (λ (continuation) 6)) (context (λ (▢) (+ 3 (* 4 ▢)))))
+          (+ 3 (* 4 (receiver (escaper context)))))))
+  (⊦= 27
+      (letcc/escaper
+        escaper
+        (let ((receiver (λ (continuation) (continuation 6)))
+              (context (λ (▢) (+ 3 (* 4 ▢)))))
+          (+ 3 (* 4 (receiver (escaper context)))))))
+  (⊦= 27
+      (letcc/escaper
+        escaper
+        (let ((receiver (λ (continuation) (+ 2 (continuation 6))))
+              (context (λ (▢) (+ 3 (* 4 ▢)))))
+          (+ 3 (* 4 (receiver (escaper context))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2468368 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/receiver/call/cc"><a href="#test/receiver/call/cc"><code>test/receiver/call/cc</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/receiver/call/cc _)
+  (⊦= 27
+      (let ((receiver (λ (continuation) 6))) (+ 3 (* 4 (call/cc receiver)))))
+  (⊦= 27
+      (let ((receiver (λ (continuation) (continuation 6))))
+        (+ 3 (* 4 (call/cc receiver)))))
+  (⊦= 27
+      (let ((receiver (λ (continuation) (+ 2 (continuation 6)))))
+        (+ 3 (* 4 (call/cc receiver))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2471544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/16.9"><a href="#test/16.9"><code>test/16.9</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/16.9 _)
+  (⊦= -22
+      (letcc/escaper
+        escaper
+        (let ((context (λ (▢) (- 3 (* 5 ▢))))
+              (receiver (λ (continuation) (continuation 5))))
+          (- 3 (* 5 (receiver (escaper context)))))))
+  (⊦= -22
+      (let ((receiver (λ (continuation) (continuation 5))))
+        (- 3 (* 5 (call/cc receiver)))))
+  (⊦= -22
+      (letcc/escaper
+        escaper
+        (let ((context (λ (▢) (- 3 (* 5 ▢)))) (receiver (λ (continuation) 5)))
+          (- 3 (* 5 (receiver (escaper context)))))))
+  (⊦= -22
+      (let ((receiver (λ (continuation) 5))) (- 3 (* 5 (call/cc receiver)))))
+  (⊦= -22
+      (letcc/escaper
+        escaper
+        (let ((context (λ (▢) (- 3 (* 5 ▢))))
+              (receiver (λ (continuation) (+ 1000 (continuation 5)))))
+          (- 3 (* 5 (receiver (escaper context)))))))
+  (⊦= -22
+      (let ((receiver (λ (continuation) (+ 1000 (continuation 5)))))
+        (- 3 (* 5 (call/cc receiver))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2470472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/experiment/first"><a href="#test/experiment/first"><code>test/experiment/first</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/experiment/first _)
+  (let* ((port (open-output-string))
+         (call (λ (receiver) (receiver (display/return/port port))))
+         (result (void)))
+    (set! result ((answer-maker/port port) (call receiver-1)))
+    (⊦= &quot;(1)(1)&quot; (get-output-string port))
+    (⊦= '(answer-is 1) result))
+  (let* ((port (open-output-string)) (result/cc (void)))
+    (set! result/cc ((answer-maker/port port) (call/cc receiver-1)))
+    (⊦= &quot;(1)&quot; (get-output-string port))
+    (⊦= '(answer-is 1) result/cc)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2472152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/experiment/second"><a href="#test/experiment/second"><code>test/experiment/second</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/experiment/second _)
+  (let* ((port (open-output-string))
+         (call (λ (receiver) (receiver (display/return/port port))))
+         (result (void)))
+    (set! result ((answer-maker/port port) (call receiver-2)))
+    (⊦= &quot;(2)((2))((2))&quot; (get-output-string port))
+    (⊦= '(answer-is (2)) result))
+  (let* ((port (open-output-string)) (result/cc (void)))
+    (set! result/cc ((answer-maker/port port) (call/cc receiver-2)))
+    (⊦= &quot;(2)&quot; (get-output-string port))
+    (⊦= '(answer-is 2) result/cc)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2472648 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/experiment/third"><a href="#test/experiment/third"><code>test/experiment/third</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/experiment/third _)
+  (let* ((port (open-output-string))
+         (display/return (display/return/port port))
+         (call (λ (receiver) (receiver display/return)))
+         (result (void)))
+    (set! result ((answer-maker/port port) (call receiver-3)))
+    (⊦= &quot;(3 #&lt;procedure&gt;)((3 #&lt;procedure&gt;))((3 #&lt;procedure&gt;))&quot;
+        (procedure-names/normalise (get-output-string port)))
+    (⊦= `(answer-is (3 ,display/return)) result)
+    (let1 (mark (string-length (get-output-string port)))
+          (⊦= '(1000) ((cadr (cadr result)) (list 1000)))
+          (⊦= &quot;(1000)&quot; (substring (get-output-string port) mark)))
+    (⊦= `(answer-is (3 ,display/return)) result)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2479112 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/experiment/third/call/cc"><a href="#test/experiment/third/call/cc"><code>test/experiment/third/call/cc</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/experiment/third/call/cc _)
+  (let* ((phase 0) (port (open-output-string)) (mark 0) (result/cc (void)))
+    (set! result/cc ((answer-maker/port port) (call/cc receiver-3)))
+    (set! phase (add1 phase))
+    (cond ((= phase 1)
+           (⊦= &quot;(3 #&lt;procedure&gt;)&quot;
+               (procedure-names/normalise (get-output-string port)))
+           (⊦= `(answer-is 3 ,(caddr result/cc)) result/cc)
+           (⊨ (procedure? (caddr result/cc)))
+           (set! mark (string-length (get-output-string port)))
+           ((caddr result/cc) (list 1000))
+           (⊭ 'unreachable))
+          (else
+           (⊦= 2 phase)
+           (⊦= &quot;(1000)&quot; (substring (get-output-string port) mark))
+           (⊦= '(answer-is 1000) result/cc)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2481144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/experiment/fourth"><a href="#test/experiment/fourth"><code>test/experiment/fourth</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/experiment/fourth _)
+  (let* ((port (open-output-string))
+         (display/return (display/return/port port))
+         (call (λ (receiver) (receiver display/return)))
+         (result (void)))
+    (⊦= 'done
+        (begin
+          (set! result ((answer-maker/port port) (call receiver-3)))
+          'done))
+    (⊦= &quot;(3 #&lt;procedure&gt;)((3 #&lt;procedure&gt;))((3 #&lt;procedure&gt;))&quot;
+        (procedure-names/normalise (get-output-string port)))
+    (⊦= `(answer-is (3 ,display/return)) result)
+    (let1 (mark (string-length (get-output-string port)))
+          (⊦= '(1000) ((cadr (cadr result)) (list 1000)))
+          (⊦= &quot;(1000)&quot; (substring (get-output-string port) mark)))
+    (⊦= `(answer-is (3 ,display/return)) result)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2482512 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/experiment/fourth/call/cc"><a href="#test/experiment/fourth/call/cc"><code>test/experiment/fourth/call/cc</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/experiment/fourth/call/cc _)
+  (let* ((phase 0) (port (open-output-string)) (mark 0) (result/cc (void)))
+    (let1 (v (begin
+               (set! result/cc ((answer-maker/port port) (call/cc receiver-3)))
+               'done))
+          (set! phase (add1 phase))
+          (⊦= 'done v)
+          (cond ((= phase 1)
+                 (⊦= &quot;(3 #&lt;procedure&gt;)&quot;
+                     (procedure-names/normalise (get-output-string port)))
+                 (⊦= `(answer-is 3 ,(caddr result/cc)) result/cc)
+                 (set! mark (string-length (get-output-string port)))
+                 ((caddr result/cc) (list 1000))
+                 (⊭ 'unreachable))
+                (else
+                 (⊦= 2 phase)
+                 (⊦= &quot;(1000)&quot; (substring (get-output-string port) mark))
+                 (⊦= '(answer-is 1000) result/cc))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2483672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/16.14"><a href="#test/16.14"><code>test/16.14</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/16.14 _)
+  (let ((receiver
+          (λ (continuation)
+             (if (zero? (pseudo-random-integer 2))
+               (+ 1000 6)
+               (continuation 6)))))
+    (do ((i 0 (add1 i)))
+        ((= i 32))
+      (⊨ (member? (* (+ (call/cc receiver) 3) 8) '(72 8072)))
+      (⊨ (member?
+           (+ (* (+ (call/cc receiver) 3) 8) (* (+ (call/cc receiver) 3) 8))
+           '(144 8144 16144)))))
+  (let ((receiver
+          (λ (continuation)
+             (continuation
+               (if (zero? (continuation (pseudo-random-integer 2)))
+                 (+ 1000 6)
+                 6)))))
+    (do ((i 0 (add1 i)))
+        ((= i 32))
+      (⊨ (member?
+           (+ (* (+ (call/cc receiver) 3) 8) (* (+ (call/cc receiver) 3) 8))
+           '(48 56 64))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2483896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/16.16"><a href="#test/16.16"><code>test/16.16</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/16.16 _)
+  (let* ((deep (void))
+         (map-sub1
+           (letrec ((M (λ (ls)
+                          (if (null? ls)
+                            (call/cc
+                              (λ (continuation) (set! deep continuation) '()))
+                            (cons (sub1 (car ls)) (M (cdr ls)))))))
+             M))
+         (run (λ (ls)
+                 (let ((phase 0) (results '()))
+                   (let1 (v (cons 1000 (map-sub1 ls)))
+                         (push! v results)
+                         (set! phase (add1 phase))
+                         (when (= phase 1) (cons 2000 (deep '(a b c)))))
+                   (reverse results)))))
+    (⊦= '((1000) (1000 a b c)) (run '()))
+    (⊦= '((1000 -1) (1000 -1 a b c)) (run '(0)))
+    (⊦= '((1000 0 -1) (1000 0 -1 a b c)) (run '(1 0)))
+    (⊦= '((1000 4 3 2 1 0 -1) (1000 4 3 2 1 0 -1 a b c))
+        (run '(5 4 3 2 1 0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2487560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/escaper/thunk"><a href="#test/escaper/thunk"><code>test/escaper/thunk</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/escaper/thunk _)
+  (⊦= 7 (letcc/escaper escaper ((escaper (τ (add1 6))))))
+  (⊦= 7 (letcc/escaper escaper (+ 5 ((escaper (τ (add1 6))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2488520 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/escaper/receiver"><a href="#test/escaper/receiver"><code>test/escaper/receiver</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/escaper/receiver _)
+  (⊦= '(a b d)
+      (letcc/escaper
+        escaper
+        (let ((receiver (escaper (λ (proc) (cons 'c (proc (list 'd)))))))
+          (cons 'a (cons 'b (call/cc receiver))))))
+  (⊦= '(c d)
+      (letcc/escaper
+        escaper
+        (let ((receiver (escaper (λ (proc) '(c d)))))
+          (cons 'a (cons 'b (call/cc receiver))))))
+  (⊦= '(c d)
+      (letcc/escaper
+        new-escaper
+        (let ((receiver (new-escaper (λ (proc) '(c d)))))
+          (cons 'a (cons 'b (call/cc receiver)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2490248 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/countdown"><a href="#test/countdown"><code>test/countdown</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/countdown _)
+  (let* ((countdown
+           (λ (n attempt)
+              (format #t &quot;~%This string will appear only once~%&quot;)
+              (let* ((message
+                       (λ (direction value)
+                          (format
+                            #t
+                            &quot;\t~Aing `attempt` function with value ~A~%&quot;
+                            direction
+                            value)
+                          value))
+                     (pair (message 'exit (attempt (message 'enter n))))
+                     (v (car pair))
+                     (returner (cadr pair)))
+                (format #t &quot;\tnon-negative number: ~A~%&quot; v)
+                (if (positive? v)
+                  (returner (list (sub1 v) returner))
+                  (format #t &quot;Blastoff&quot;)))))
+         (v (void)))
+    (⊦= &quot;\nThis string will appear only once\n\tentering `attempt` function with value 3\n\texiting `attempt` function with value (3 #&lt;procedure&gt;)\n\tnon-negative number: 3\n&quot;
+        (procedure-names/normalise
+          (with-output-to-string
+            (τ (set! v
+                 (let ((attempt
+                         (λ (n)
+                            (let ((receiver (λ (proc) (list n proc))))
+                              (receiver (λ (x) x))))))
+                   (countdown 3 attempt)))))))
+    (⊦= 2 (car v))
+    (⊨ (procedure? (cadr v)))
+    (⊦= &quot;\nThis string will appear only once\n\tentering `attempt` function with value 3\n\texiting `attempt` function with value (3 #&lt;procedure&gt;)\n\tnon-negative number: 3\n\texiting `attempt` function with value (2 #&lt;procedure&gt;)\n\tnon-negative number: 2\n\texiting `attempt` function with value (1 #&lt;procedure&gt;)\n\tnon-negative number: 1\n\texiting `attempt` function with value (0 #&lt;procedure&gt;)\n\tnon-negative number: 0\nBlastoff&quot;
+        (procedure-names/normalise
+          (with-output-to-string
+            (τ (let ((attempt
+                       (λ (n)
+                          (let ((receiver (λ (proc) (list n proc))))
+                            (call/cc receiver)))))
+                 (countdown 3 attempt))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2491808 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/three-phases"><a href="#test/three-phases"><code>test/three-phases</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/three-phases _)
+  (⊦= &quot;beginbeginmiddlebeginend&quot;
+      (with-output-to-string
+        (τ (let ((receiver (λ (continuation) (continuation continuation)))
+                 (three-phases
+                   (λ (continuation)
+                      (display 'begin)
+                      (call/cc continuation)
+                      (display 'middle)
+                      (call/cc continuation)
+                      (display 'end))))
+             (three-phases (call/cc receiver)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2496048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

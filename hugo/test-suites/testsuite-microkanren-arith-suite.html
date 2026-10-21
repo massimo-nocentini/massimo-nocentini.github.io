@@ -1,0 +1,1180 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section3794">
+<header>
+<h1>Arithmetic as a relation</h1></header></section>
+<p>Chapters 7 and 8 of <cite><a href="https://github.com/TheReasonedSchemer2ndEd/CodeFromTheReasonedSchemer2ndEd/blob/master/trs2-arith.scm">The Reasoned Schemer, Second Edition</a></cite> build addition, subtraction, multiplication, division, exponentiation and the logarithm out of two truth tables and a great deal of unification. The definitions in <code class="w3-codespan">(aux kanren arith)</code> are that development, translated line by line into the <code class="w3-codespan">(aux kanren micro)</code> idiom and then exercised here, with a dozen relations added that the book has no use for -- four mirrored comparisons, then <code class="w3-codespan">multiple°</code>, <code class="w3-codespan">divisor°</code>, <code class="w3-codespan">even°</code>, <code class="w3-codespan">odd°</code>, <code class="w3-codespan">square°</code>, <code class="w3-codespan">composite°</code>, <code class="w3-codespan">between°</code>, <code class="w3-codespan">common-divisor°</code>, <code class="w3-codespan">numeral°</code> and <code class="w3-codespan">prime°</code>, each a few lines over what chapters 7 and 8 already give. Nothing in the translation is clever: <code class="w3-codespan">defrel</code> becomes <code class="w3-codespan">define-relation</code>, <code class="w3-codespan">conde</code> becomes <code class="w3-codespan">cond°</code>, <code class="w3-codespan">fresh</code> becomes <code class="w3-codespan">fresh°</code>, <code class="w3-codespan">==</code> becomes <code class="w3-codespan">=°</code>, <code class="w3-codespan">(run n (q) g ...)</code> becomes <code class="w3-codespan">(μkanren-run (q n #t) g ...)</code>, and the book's trailing <code class="w3-codespan">o</code> -- the mark that a name denotes a relation rather than a function -- becomes the trailing <code class="w3-codespan">°</code> this repository uses for the same purpose. So <code class="w3-codespan">addero</code> is <code class="w3-codespan">adder°</code>, <code class="w3-codespan">*o</code> is <code class="w3-codespan">*°</code>, <code class="w3-codespan">logo</code> is <code class="w3-codespan">log°</code>. The two relations <code class="w3-codespan">null°</code> and <code class="w3-codespan">cons°</code> are not redefined here; they already live in <code class="w3-codespan">(aux kanren micro)</code>.</p>
+<section id="section3795">
+<header>
+<h1>The numeral</h1></header></section>
+<p>A number is a list of the bits <code class="w3-codespan">0</code> and <code class="w3-codespan">1</code>, least significant first, with zero written as the empty list and with no trailing <code class="w3-codespan">0</code>. Two is <code class="w3-codespan">(0 1)</code>, five is <code class="w3-codespan">(1 0 1)</code>, six is <code class="w3-codespan">(0 1 1)</code> and nine is <code class="w3-codespan">(1 0 0 1)</code>. <code class="w3-codespan">build-num</code> is the only function in the module -- everything else is a relation -- and its <code class="w3-codespan">quotient</code> recursion stops at <code class="w3-codespan">zero?</code>, which is what guarantees the absence of a trailing zero. That canonicality is not cosmetic: it makes the encoding injective, so one number has one term, and a term that unifies with <code class="w3-codespan">(0 0 1)</code> is four and cannot be anything else.</p>
+<p>Little-endian is what makes the whole system run in every direction. Addition consumes its arguments from the low bit up, so <code class="w3-codespan">adder°</code> can peel one cell off each addend and recur without knowing how long either list is -- and the very same clause, read with the sum ground and an addend fresh, subtracts. There is no mode declaration anywhere in the module and no guard on which argument happens to be known. <code class="w3-codespan">minus°</code> has no body beyond <code class="w3-codespan">(plus° m k n)</code>; division by <code class="w3-codespan">*°</code> is the multiplication goal with the product ground; factorisation is the same goal with both factors fresh; and <code class="w3-codespan">(exp° b 2 9)</code> is an integer square root only because <code class="w3-codespan">exp°</code> is <code class="w3-codespan">log°</code> with the remainder pinned to <code class="w3-codespan">'()</code>. Termination in those backward directions is bought, explicitly, by the length guards -- <code class="w3-codespan">pos°</code>, <code class="w3-codespan">&gt;1°</code>, <code class="w3-codespan">&lt;l°</code>, <code class="w3-codespan">bound-*°</code> -- and the cases below are written to pin exhaustion, not just correctness: a query that asks for more answers than exist asserts that the stream closes.</p>
+<section id="section3796">
+<header>
+<h1>Goal construction and δ°</h1></header></section>
+<p>In <code class="w3-codespan">(aux kanren micro)</code>, <code class="w3-codespan">and°</code>, <code class="w3-codespan">or°</code> and <code class="w3-codespan">cond°</code> are macros that expand into calls to the procedures <code class="w3-codespan">andª</code> and <code class="w3-codespan">orª</code> -- so every goal sub-expression of every clause is evaluated while the goal tree is being built, long before any substitution exists to search over. That used to be the one respect in which the translation could not be literal: <code class="w3-codespan">define-relation</code> expanded to a plain <code class="w3-codespan">define</code>, so a recursive call sitting next to other goals in a conjunction was built while its caller was, building the tree for <code class="w3-codespan">adder°</code> built the tree for <code class="w3-codespan">adder°</code>, and the first query reaching it never returned. Now <code class="w3-codespan">define-relation</code> is inverse-η-delayed, exactly as the book's <code class="w3-codespan">defrel</code>: calling a relation only returns a λ that builds the body when it is applied to a state, and then suspends. No call site needs a hand-written delay to terminate any more.</p>
+<p>The module still carries the explicit delay it once needed, an eta-expansion around a <code class="w3-codespan">δ</code>:</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define-syntax-rule (δ° g) (μ s (δ (g s))))
+
+((=° 1 b) (=° '() m) (δ° (adder° 0 n '(1) r)))</code></pre></div>
+<p>Three self-calls of <code class="w3-codespan">adder°</code> wear it: the two that discharge a carry against an empty addend and the one that commutes <code class="w3-codespan">'(1)</code> into the first position; <code class="w3-codespan">(aux kanren date)</code> wraps its recursive calls the same way. Around a relation made by <code class="w3-codespan">define-relation</code> the wrapper is redundant for termination. It is kept because removing it drops a suspension, which can shift where answers of a disjunction interleave -- the expectations below were read off runs with the wrappers in place. It is still required around a goal-returning procedure written with a plain <code class="w3-codespan">define</code>, which nothing delays.</p>
+<section id="section3797">
+<header>
+<h1>Reading the expected values</h1></header></section>
+<p>Every expectation below was read off a real run. The third argument of <code class="w3-codespan">μkanren-run</code> is the grounding flag, and it is <code class="w3-codespan">#t</code> throughout: a variable the search never had to instantiate is reified as a Greek letter in order of appearance, so <code class="w3-codespan">(α 1)</code> is a single answer standing for both 2 and 3, and <code class="w3-codespan">(α . β)</code> is <code class="w3-codespan">pos°</code> and nothing more. Those partially ground answers are the interesting ones -- they are the relation declining to decide a bit it was never asked about, and an expectation that spelled a concrete bit there would be asserting something the code does not claim. Answer ORDER is asserted too: <code class="w3-codespan">cond°</code> disjoins by INTERLEAVING its clauses, and for a truth table -- where every clause yields exactly one answer -- the interleaving coincides with textual order, so that order is observable ten definitions later in the order <code class="w3-codespan">plus°</code> hands back its solutions. Where a clause yields more than one answer the two part company, and the expectations below are read off the interleaving.</p>
+<p>The definitions under test are a module, <code class="w3-codespan">(aux kanren arith)</code>, rather than a preamble to this suite: the arithmetic is worth importing on its own, and keeping it out here means a case cannot quietly depend on a definition it also supplies. The <code class="w3-codespan">#;</code>-commented alternatives -- the frame 7:12 half-adder, the frame 7:15 full-adder, and the two flawed <code class="w3-codespan">/°</code>s of frames 8:54 and 8:64 -- are kept because several cases below exist precisely to say what the surviving definition does that the discarded one does not.</p>
+<h2 id="test/car°+cdr°"><a href="#test/car°+cdr°"><code>test/car°+cdr°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">car°</code> and <code class="w3-codespan">cdr°</code> are not accessors: each is the one constraint <code class="w3-codespan">(=° (cons a d) p)</code> projected onto a different variable, which is why the same relation runs backwards and <code class="w3-codespan">(car° q 'x)</code> answers with the invented pair <code class="w3-codespan">(x . α)</code> -- a fresh tail, reified as a Greek letter, rather than a failure for lack of input.</p>
+<p>Both fail on <code class="w3-codespan">'()</code>, since no substitution unifies the empty list with a cons cell. That is a contract and not an accident: it is why <code class="w3-codespan">append°</code> has to test <code class="w3-codespan">null°</code> in its first clause instead of letting the <code class="w3-codespan">cdr°</code> chain run out on its own, and it is the same reason <code class="w3-codespan">pos°</code> and <code class="w3-codespan">&gt;1°</code> downstream can be written purely as shape unifications.</p>
+<p><code class="w3-codespan">null°</code> and <code class="w3-codespan">cons°</code> come from <code class="w3-codespan">(aux kanren micro)</code>, not from <code class="w3-codespan">(aux kanren arith)</code>, so the first two assertions pin the library shapes everything else is built on. If <code class="w3-codespan">cons°</code> ever stopped being <code class="w3-codespan">(=° c (cons a d))</code>, every <code class="w3-codespan">(=° `(,a . ,d) n)</code> in chapters 7 and 8 would still compile and would quietly mean something else.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/car°+cdr° _)
+  (⊦= '(()) (μkanren-run (q 3 #t) (null° q)))
+  (⊦= '((1 (2 3)))
+      (μkanren-run
+        (q 3 #t)
+        (fresh° (a d) (cons° a d '(1 2 3)) (=° q (list a d)))))
+  (⊦= '(a) (μkanren-run (q 3 #t) (car° '(a b c) q)))
+  (⊦= '((b c)) (μkanren-run (q 3 #t) (cdr° '(a b c) q)))
+  (⊦= '((1 2 3))
+      (μkanren-run
+        (q 3 #t)
+        (fresh° (a d) (car° '(1 2 3) a) (cdr° '(1 2 3) d) (=° q (cons a d)))))
+  (⊦= '((x . α)) (μkanren-run (q 3 #t) (car° q 'x)))
+  (⊦= '((α y z)) (μkanren-run (q 3 #t) (cdr° q '(y z))))
+  (⊦= '() (μkanren-run (q 3 #t) (car° '() q)))
+  (⊦= '() (μkanren-run (q 3 #t) (cdr° '() q))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4877528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/append°"><a href="#test/append°"><code>test/append°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Three directions of one relation. Forward it concatenates; with the second argument fresh it subtracts a known prefix; with both inputs fresh and the output ground it enumerates the four ways to cut <code class="w3-codespan">(a b c)</code> in two, both empty-side boundaries included. That third query asks for nine answers and gets four: the assertion is that the search is exhaustive AND terminates, which a spot check for one split would not catch.</p>
+<p>The fourth query runs the generator direction, output fresh, and it does not terminate on its own -- it is the count that stops it. Each answer is one cons longer and the still-fresh elements appear as the same Greek letters in <code class="w3-codespan">x</code> and <code class="w3-codespan">y</code>, showing they are shared cells and not independent unknowns. That is exactly the shape <code class="w3-codespan">exp2°</code> leans on when it calls <code class="w3-codespan">(append° b `(1 . ,b) b2)</code> to double the width of a ground <code class="w3-codespan">b</code>.</p>
+<p>The last case demands a prefix longer than the whole list and gets no answers. A function would have to err or truncate; a relation just has an empty answer stream, and pinning that here is what lets the arithmetic built on it treat failure as ordinary arithmetic information.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/append° _)
+  (⊦= '((a b c d)) (μkanren-run (q 3 #t) (append° '(a b) '(c d) q)))
+  (⊦= '((c d)) (μkanren-run (q 3 #t) (append° '(a b) q '(a b c d))))
+  (⊦= '((() (a b c)) ((a) (b c)) ((a b) (c)) ((a b c) ()))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y) (append° x y '(a b c)) (=° q (list x y)))))
+  (⊦= '((() (c)) ((α) (α c)) ((α β) (α β c)) ((α β γ) (α β γ c)))
+      (μkanren-run
+        (q 4 #t)
+        (fresh° (x y) (append° x '(c) y) (=° q (list x y)))))
+  (⊦= '()
+      (μkanren-run
+        (q 3 #t)
+        (fresh°
+          (x y)
+          (append° x y '(a b c))
+          (=° x '(a b c d))
+          (=° q (list x y))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(16793184 4882920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bit-xor°+bit-and°"><a href="#test/bit-xor°+bit-and°"><code>test/bit-xor°+bit-and°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Both truth tables in full, all four rows each, asked with a count of nine so that a fifth answer or a missing row would fail the case. These two relations are the entire arithmetic content of chapters 7 and 8 -- everything preceding them in the module is plumbing -- so a single transposed row would come back as a wrong sum ten definitions later, with nothing local to blame.</p>
+<p>The answer ORDER is asserted too, and the two tables do not share it: upstream writes <code class="w3-codespan">bit-and°</code> as 00, 10, 01, 11 while <code class="w3-codespan">bit-xor°</code> is 00, 01, 10, 11. Each clause of these tables yields exactly one answer, so <code class="w3-codespan">cond°</code>'s interleaving degenerates to textual order here; that order is observable and it feeds into the order in which <code class="w3-codespan">adder°</code> and <code class="w3-codespan">*°</code> enumerate their solutions, which past the leaves is an interleaving and no longer clause order.</p>
+<p>Run backwards from <code class="w3-codespan">r</code>, <code class="w3-codespan">bit-xor°</code> has two preimages and <code class="w3-codespan">bit-and°</code> has one; that asymmetry is what makes the carry bit the deterministic half of <code class="w3-codespan">half-adder°</code>. The final case feeds a non-bit <code class="w3-codespan">2</code> and gets nothing: the tables are closed, so these relations reject as well as generate, and a malformed bit list dies at the leaf instead of producing a plausible-looking number.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bit-xor°+bit-and° _)
+  (⊦= '((0 0 0) (0 1 1) (1 0 1) (1 1 0))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y r) (bit-xor° x y r) (=° q (list x y r)))))
+  (⊦= '((0 0 0) (1 0 0) (0 1 0) (1 1 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y r) (bit-and° x y r) (=° q (list x y r)))))
+  (⊦= '((0 1) (1 0))
+      (μkanren-run (q 9 #t) (fresh° (x y) (bit-xor° x y 1) (=° q (list x y)))))
+  (⊦= '((1 1))
+      (μkanren-run (q 9 #t) (fresh° (x y) (bit-and° x y 1) (=° q (list x y)))))
+  (⊦= '()
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (y r) (bit-xor° 2 y r) (=° q (list y r))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4885680 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/half-adder°"><a href="#test/half-adder°"><code>test/half-adder°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The whole table, derived rather than written: <code class="w3-codespan">half-adder°</code> is just <code class="w3-codespan">bit-xor°</code> conjoined with <code class="w3-codespan">bit-and°</code>, and the enumeration order it produces is <code class="w3-codespan">bit-xor°</code>'s (00, 01, 10, 11), the first conjunct driving the search while the second filters. The <code class="w3-codespan">#;</code>-commented alternative from frame 7:12 spells the same four rows out as a table; keeping this case honest is what would expose a divergence between the two.</p>
+<p>The last three queries run it backwards, from the outputs to the inputs, which only works because the sum and carry are related by unification and not computed: given <code class="w3-codespan">r</code>=0 and <code class="w3-codespan">c</code>=1 there is exactly one input pair that generates a carry, given <code class="w3-codespan">r</code>=1 and <code class="w3-codespan">c</code>=0 there are two, and <code class="w3-codespan">r</code>=1 with <code class="w3-codespan">c</code>=1 has none at all.</p>
+<p>That empty answer is the point of the case. It encodes the invariant <code class="w3-codespan">x + y = r + 2c</code>, whose maximum is 2, so a sum bit and a carry bit can never both be set. A table with one wrong carry would still answer every forward query plausibly and would only show up as an impossible pair becoming possible here.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/half-adder° _)
+  (⊦= '((0 0 0 0) (0 1 1 0) (1 0 1 0) (1 1 0 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y r c) (half-adder° x y r c) (=° q (list x y r c)))))
+  (⊦= '((1 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y) (half-adder° x y 0 1) (=° q (list x y)))))
+  (⊦= '((0 1) (1 0))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y) (half-adder° x y 1 0) (=° q (list x y)))))
+  (⊦= '()
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y) (half-adder° x y 1 1) (=° q (list x y))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4887168 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/full-adder°"><a href="#test/full-adder°"><code>test/full-adder°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>All eight rows of the table version -- the one the module keeps live because the <code class="w3-codespan">half-adder°</code>-based definition of frame 7:15, kept <code class="w3-codespan">#;</code>-commented beside it, costs three sub-goals per bit. This is the leaf of every addition, subtraction, multiplication, division and logarithm in the rest of the module, so it is the one table worth asserting exhaustively, count of seventeen and all.</p>
+<p>The next three queries invert it on the output pair, and together they partition the eight rows by how many of <code class="w3-codespan">b</code>, <code class="w3-codespan">x</code>, <code class="w3-codespan">y</code> are set: three ways to reach <code class="w3-codespan">(r c)</code>=(1,0), three to reach (0,1), exactly one to reach (1,1), and the unlisted (0,0) is the all-zero row. That is <code class="w3-codespan">b + x + y = r + 2c</code> read off the answer counts, and it is the invariant <code class="w3-codespan">gen-adder°</code> assumes when it threads <code class="w3-codespan">e</code> into the next bit position.</p>
+<p>The last case pins <code class="w3-codespan">b</code>=0 to the half-adder table: the same four rows, as they must be, but in a different ORDER, because the clause order of this table is <code class="w3-codespan">bit-and°</code>-shaped (00, 10, 01, 11) while <code class="w3-codespan">half-adder°</code> inherits <code class="w3-codespan">bit-xor°</code>'s. The two relations are extensionally equal and operationally distinct, and it is the operational half that decides the order in which <code class="w3-codespan">plus°</code> hands back its solutions.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/full-adder° _)
+  (⊦= '((0 0 0 0 0)
+        (1 0 0 1 0)
+        (0 1 0 1 0)
+        (1 1 0 0 1)
+        (0 0 1 1 0)
+        (1 0 1 0 1)
+        (0 1 1 0 1)
+        (1 1 1 1 1))
+      (μkanren-run
+        (q 17 #t)
+        (fresh° (b x y r c) (full-adder° b x y r c) (=° q (list b x y r c)))))
+  (⊦= '((1 0 0) (0 1 0) (0 0 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (b x y) (full-adder° b x y 1 0) (=° q (list b x y)))))
+  (⊦= '((1 1 0) (1 0 1) (0 1 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (b x y) (full-adder° b x y 0 1) (=° q (list b x y)))))
+  (⊦= '((1 1 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (b x y) (full-adder° b x y 1 1) (=° q (list b x y)))))
+  (⊦= '((0 0 0 0) (1 0 1 0) (0 1 1 0) (1 1 0 1))
+      (μkanren-run
+        (q 9 #t)
+        (fresh° (x y r c) (full-adder° 0 x y r c) (=° q (list x y r c))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(16793184 4888968 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/build-num"><a href="#test/build-num"><code>test/build-num</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The numeral, fixed once for the whole suite. Bits are little-endian -- <code class="w3-codespan">(build-num 2)</code> is <code class="w3-codespan">(0 1)</code>, not <code class="w3-codespan">(1 0)</code> -- and zero is the empty list, not <code class="w3-codespan">(0)</code>. The <code class="w3-codespan">quotient</code> recursion stops at <code class="w3-codespan">zero?</code>, so a numeral never carries a trailing <code class="w3-codespan">0</code>: that is the canonicality the <code class="w3-codespan">last</code> assertion pins, and it is what makes the encoding injective. One number, one term.</p>
+<p>The last two lines are the bridge, and they are the reason every other case in this file may write its expectation as a bare bit list. <code class="w3-codespan">plus°</code> and <code class="w3-codespan">*°</code> reconstruct their answers bit by bit through <code class="w3-codespan">gen-adder°</code>, never by calling <code class="w3-codespan">build-num</code>; the assertions say the two constructions agree, term for term. Were a relation ever to answer <code class="w3-codespan">(0 0 0 1 0)</code> for eight -- arithmetically the same number, a different term -- it would still unify with nothing here and every literal below would be testing a different encoding than the one the relations speak.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/build-num _)
+  (⊦= '() (build-num 0))
+  (⊦= '(1) (build-num 1))
+  (⊦= '(0 1) (build-num 2))
+  (⊦= '(1 1) (build-num 3))
+  (⊦= '(0 0 1) (build-num 4))
+  (⊦= '(1 0 1) (build-num 5))
+  (⊦= '(0 1 1) (build-num 6))
+  (⊦= '(1 1 1) (build-num 7))
+  (⊦= '(0 0 0 1) (build-num 8))
+  (⊦= '(1 0 0 0 1) (build-num 17))
+  (⊦= '(0 1 0 1 0 1) (build-num 42))
+  (⊦= '(1 1 1 1 1 1 1 1) (build-num 255))
+  (⊦= '(0 0 0 0 0 0 0 0 1) (build-num 256))
+  (⊦= '(1 1 1 1 1 1 1 1) (map (lambda (n) (last (build-num n))) (iota 8 1)))
+  (⊦= (build-num 8)
+      (car (μkanren-run (r 1 #t) (plus° (build-num 3) (build-num 5) r))))
+  (⊦= (build-num 15)
+      (car (μkanren-run (r 1 #t) (*° (build-num 3) (build-num 5) r)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(16793184 4892952 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pos°"><a href="#test/pos°"><code>test/pos°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">pos°</code> inspects no bits. Its body is the single unification <code class="w3-codespan">(=° `(,a . ,d) n)</code>, so what it actually decides is &quot;n has a car&quot;, and it decides it in constant time with no choice point. That it also means <code class="w3-codespan">n &gt; 0</code> is a property of the encoding, not of the relation: <code class="w3-codespan">build-num</code> sends zero, and only zero, to a term without a car.</p>
+<p>The last three lines mark exactly where the two readings come apart. <code class="w3-codespan">(0)</code> is a non-canonical zero -- <code class="w3-codespan">build-num</code> never emits it -- and <code class="w3-codespan">pos°</code> says yes; the improper pair <code class="w3-codespan">(1 . 2)</code> is not a numeral at all and it says yes too; only an atom, with no car to take, fails. So <code class="w3-codespan">pos°</code> is a structural guard and nothing more, and the obligation to keep non-canonical junk out of it belongs to its callers -- <code class="w3-codespan">adder°</code>, <code class="w3-codespan">*°</code>, <code class="w3-codespan">split°</code> -- which only ever hand it a cdr of a numeral they built themselves.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pos° _)
+  (⊦= '() (μkanren-run (r 2 #t) (pos° '()) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 2 #t) (pos° (build-num 0)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (pos° (build-num 1)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (pos° (build-num 7)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (pos° '(0)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (pos° '(1 . 2)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 2 #t) (pos° 5) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4894064 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/&gt;1°"><a href="#test/&gt;1°"><code>test/&gt;1°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Same trick one bit further along: <code class="w3-codespan">(=° `(,a ,ad . ,dd) n)</code> demands two cars, so the numerals it accepts are exactly those of length two or more, i.e. <code class="w3-codespan">n &gt; 1</code>. The two rejections are the ones that matter in <code class="w3-codespan">adder°</code> and <code class="w3-codespan">*°</code>: zero and one, the cases where the general bit-by-bit clauses would recur on a numeral with no bits left.</p>
+<p>The improper pair separates the two guards. <code class="w3-codespan">(1 . 2)</code> satisfies <code class="w3-codespan">pos°</code> but not <code class="w3-codespan">&gt;1°</code>, because the second pattern also forces the cdr to be a pair. <code class="w3-codespan">(a b c)</code> passes, which says again that these relations count spine cells and never look at whether the cars are bits.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/&gt;1° _)
+  (⊦= '() (μkanren-run (r 2 #t) (&gt;1° '()) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 2 #t) (&gt;1° (build-num 1)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (&gt;1° (build-num 2)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (&gt;1° (build-num 3)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 2 #t) (&gt;1° '(1 . 2)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 2 #t) (&gt;1° '(a b c)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(16793184 4897712 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pos°+&gt;1°/fresh"><a href="#test/pos°+&gt;1°/fresh"><code>test/pos°+&gt;1°/fresh</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Run backwards, neither relation enumerates. Asked for five answers each returns one, because each is a single unification: <code class="w3-codespan">pos°</code> instantiates n to a pair with both fields still fresh, <code class="w3-codespan">&gt;1°</code> to a pair whose cdr is a pair. Conjoining the two does not add an answer, it refines the same term. This is the property the callers depend on: a guard sitting in front of a recursive clause of <code class="w3-codespan">adder°</code> or <code class="w3-codespan">*°</code> must not open a choice point, and a <code class="w3-codespan">pos°</code> that generated all positive numerals instead of constraining one would turn every clause that guards on it into an infinite stream.</p>
+<p>The last line names the reifier. <code class="w3-codespan">μkanren-run</code>'s third argument is the grounded flag: <code class="w3-codespan">#t</code> prints a still-fresh variable as <code class="w3-codespan">α</code>, <code class="w3-codespan">β</code>, <code class="w3-codespan">γ</code> in order of appearance, while <code class="w3-codespan">#f</code> hands back the raw lambda form. Every partially-ground expectation in this file -- here, and the <code class="w3-codespan">α</code> that <code class="w3-codespan">&lt;°</code> and <code class="w3-codespan">log°</code> leave behind -- is written in the <code class="w3-codespan">#t</code> language.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pos°+&gt;1°/fresh _)
+  (⊦= '((α . β)) (μkanren-run (n 5 #t) (pos° n)))
+  (⊦= '((α β . γ)) (μkanren-run (n 5 #t) (&gt;1° n)))
+  (⊦= '((α β . γ)) (μkanren-run (n 5 #t) (pos° n) (&gt;1° n)))
+  (⊦= '((λ (α β) (cons α β))) (μkanren-run (n 1 #f) (pos° n))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4900160 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/pos°/guard-in-adder°"><a href="#test/pos°/guard-in-adder°"><code>test/pos°/guard-in-adder°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Why <code class="w3-codespan">pos°</code> is in <code class="w3-codespan">adder°</code> at all. The second clause, <code class="w3-codespan">((=° 0 b) (=° '() n) (=° m r) (pos° m))</code>, does not need its guard to be true -- 0 + m = m holds for m = 0 as well -- it needs it to stay disjoint from the first clause, which already answers when m is <code class="w3-codespan">'()</code>. Measured on a copy of <code class="w3-codespan">adder°</code> with that one conjunct deleted: <code class="w3-codespan">x + y = 0</code> answers <code class="w3-codespan">((() ()) (() ()))</code> and <code class="w3-codespan">() + () = r</code> answers <code class="w3-codespan">(() ())</code>, the same derivation twice. The overlap is confined to zero -- <code class="w3-codespan">x + y = 6</code> returns the same seven answers with or without the guard -- but a duplicate is still a lie about the search: the count argument of <code class="w3-codespan">μkanren-run</code> asks for n answers, not n derivations, and a relation used as a filter inside <code class="w3-codespan">*°</code> and <code class="w3-codespan">/°</code> has to be able to say &quot;once&quot;.</p>
+<p>The two identity directions in the last lines come out of different clauses and are worth reading together: <code class="w3-codespan">5 + 0</code> is decided by clause one with pure unification and no guard at all, <code class="w3-codespan">0 + 5</code> by clause two, which is the guarded one. Asymmetric code, symmetric answers.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/pos°/guard-in-adder° _)
+  (⊦= '((() ()))
+      (μkanren-run
+        (r 5 #t)
+        (fresh° (x y) (plus° x y (build-num 0)) (=° r (list x y)))))
+  (⊦= '(()) (μkanren-run (r 5 #t) (plus° '() '() r)))
+  (⊦= (list (build-num 5)) (μkanren-run (r 5 #t) (plus° '() (build-num 5) r)))
+  (⊦= (list (build-num 5)) (μkanren-run (r 5 #t) (plus° (build-num 5) '() r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4904616 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/plus°"><a href="#test/plus°"><code>test/plus°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">plus°</code> is <code class="w3-codespan">adder°</code> with the carry nailed to <code class="w3-codespan">0</code>, so these are the cases where the relation happens to behave like a function.  Every query asks for two answers and is handed one: the eight clauses of <code class="w3-codespan">adder°</code> are mutually exclusive by construction, and the <code class="w3-codespan">pos°</code>/<code class="w3-codespan">&gt;1°</code> guards are what stops 7+0 from being proved twice, once by the empty-addend clause and once through <code class="w3-codespan">gen-adder°</code>.  A second answer here would mean a guard was dropped, not that arithmetic broke.  15+1 is the carry-propagation case: every bit of the first addend flips and the numeral grows a digit, the only forward query that drives the full-adder chain from end to end.  The last line runs the very same goal with the first addend fresh -- nothing in <code class="w3-codespan">plus°</code> distinguishes input from output, so subtraction is already available before <code class="w3-codespan">minus°</code> is defined.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/plus° _)
+  (⊦= `(,(build-num 8))
+      (μkanren-run (r 2 #t) (plus° (build-num 3) (build-num 5) r)))
+  (⊦= `(,(build-num 7)) (μkanren-run (r 2 #t) (plus° '() (build-num 7) r)))
+  (⊦= `(,(build-num 7)) (μkanren-run (r 2 #t) (plus° (build-num 7) '() r)))
+  (⊦= '((0 1)) (μkanren-run (r 2 #t) (plus° '(1) '(1) r)))
+  (⊦= `(,(build-num 16))
+      (μkanren-run (r 2 #t) (plus° (build-num 15) (build-num 1) r)))
+  (⊦= `(,(build-num 17))
+      (μkanren-run (r 2 #t) (plus° (build-num 12) (build-num 5) r)))
+  (⊦= `(,(build-num 7))
+      (μkanren-run
+        (r 2 #t)
+        (fresh° (x) (plus° x (build-num 5) (build-num 12)) (=° r x)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.006) (memory #(16793184 4906568 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/adder°"><a href="#test/adder°"><code>test/adder°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The carry <code class="w3-codespan">b</code> is a bit, not a numeral: <code class="w3-codespan">(adder° 1 n m r)</code> is n+m+1, and the two clauses that consume a set carry against an empty addend discharge it by rewriting it into the literal <code class="w3-codespan">'(1)</code> and recurring with <code class="w3-codespan">b</code> back at <code class="w3-codespan">0</code> -- which is why 7+0 with a carry is answered by the same code path as 7+1, and why <code class="w3-codespan">(adder° 1 '() '() r)</code> bottoms out at <code class="w3-codespan">'(1)</code>.  Those two self-calls, together with <code class="w3-codespan">(adder° b '(1) n r)</code>, are exactly the calls this file wraps in <code class="w3-codespan">δ°</code>: they are clause-level conjuncts of a <code class="w3-codespan">cond°</code>, which this port once had to delay by hand; since <code class="w3-codespan">define-relation</code> delays every relation, the wrappers only pin the interleaving, they no longer decide termination.  The last two lines ground the sum and leave the carry fresh: the bit is recovered, uniquely, from 3+4 against 8 rather than 7.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/adder° _)
+  (⊦= `(,(build-num 7))
+      (μkanren-run (r 2 #t) (adder° 0 (build-num 3) (build-num 4) r)))
+  (⊦= `(,(build-num 8))
+      (μkanren-run (r 2 #t) (adder° 1 (build-num 3) (build-num 4) r)))
+  (⊦= '(()) (μkanren-run (r 2 #t) (adder° 0 '() '() r)))
+  (⊦= '((1)) (μkanren-run (r 2 #t) (adder° 1 '() '() r)))
+  (⊦= `(,(build-num 8)) (μkanren-run (r 2 #t) (adder° 1 (build-num 7) '() r)))
+  (⊦= `(,(build-num 8)) (μkanren-run (r 2 #t) (adder° 1 '() (build-num 7) r)))
+  (⊦= '(1)
+      (μkanren-run
+        (b 3 #t)
+        (adder° b (build-num 3) (build-num 4) (build-num 8))))
+  (⊦= '(0)
+      (μkanren-run
+        (b 3 #t)
+        (adder° b (build-num 3) (build-num 4) (build-num 7)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(16793184 4912600 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/gen-adder°"><a href="#test/gen-adder°"><code>test/gen-adder°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">gen-adder°</code> is deliberately not symmetric.  Its body insists on <code class="w3-codespan">(=° `(,d . ,y) m)</code> with <code class="w3-codespan">(pos° y)</code> and on <code class="w3-codespan">(=° `(,c . ,z) r)</code> with <code class="w3-codespan">(pos° z)</code>, so the second addend and the sum must both be at least two bits wide: it adds 1+3 and refuses 3+1, 1+1 and 0+5.  Those refusals are a contract with its only caller, not a defect -- <code class="w3-codespan">adder°</code> reaches it solely behind <code class="w3-codespan">(=° '(1) n)</code> or <code class="w3-codespan">(&gt;1° n)</code>, and hands the shapes it drops to sibling clauses, notably the one that commutes <code class="w3-codespan">(=° '(1) m)</code> into <code class="w3-codespan">(adder° b '(1) n r)</code>, which is why 3+1 still answers 4 on the line below.  Calling the relation directly is the only way those guards are observable at all; every other query in this file meets <code class="w3-codespan">gen-adder°</code> already filtered.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/gen-adder° _)
+  (⊦= `(,(build-num 11))
+      (μkanren-run (r 2 #t) (gen-adder° 0 (build-num 6) (build-num 5) r)))
+  (⊦= `(,(build-num 12))
+      (μkanren-run (r 2 #t) (gen-adder° 1 (build-num 6) (build-num 5) r)))
+  (⊦= `(,(build-num 4))
+      (μkanren-run (r 2 #t) (gen-adder° 0 (build-num 1) (build-num 3) r)))
+  (⊦= '() (μkanren-run (r 1 #t) (gen-adder° 0 (build-num 3) (build-num 1) r)))
+  (⊦= '() (μkanren-run (r 1 #t) (gen-adder° 0 (build-num 1) (build-num 1) r)))
+  (⊦= '() (μkanren-run (r 1 #t) (gen-adder° 0 '() (build-num 5) r)))
+  (⊦= `(,(build-num 4))
+      (μkanren-run (r 2 #t) (adder° 0 (build-num 3) (build-num 1) r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.004) (memory #(16793184 4912944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/minus°"><a href="#test/minus°"><code>test/minus°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">minus°</code> has no arithmetic of its own: its whole body is <code class="w3-codespan">(plus° m k n)</code>, subtraction being addition read in another direction, and the final line reads it in a third one by leaving the subtrahend fresh.  The two empty answers are the point of the case.  This encoding has no negative numeral, so 3-5 is neither an error nor a distinguished value: it is the plain absence of a k with 5+k=3.  Getting <code class="w3-codespan">'()</code> back means the search was exhausted, not abandoned -- it terminates only because the ground difference bounds <code class="w3-codespan">adder°</code>'s recursion -- so asking for one answer and being handed none asserts more than any of the positive lines above.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/minus° _)
+  (⊦= `(,(build-num 7))
+      (μkanren-run (r 2 #t) (minus° (build-num 12) (build-num 5) r)))
+  (⊦= '(()) (μkanren-run (r 2 #t) (minus° (build-num 5) (build-num 5) r)))
+  (⊦= `(,(build-num 7)) (μkanren-run (r 2 #t) (minus° (build-num 7) '() r)))
+  (⊦= '() (μkanren-run (r 1 #t) (minus° (build-num 3) (build-num 5) r)))
+  (⊦= '() (μkanren-run (r 1 #t) (minus° '() (build-num 1) r)))
+  (⊦= `(,(build-num 5))
+      (μkanren-run
+        (r 3 #t)
+        (fresh° (x) (minus° (build-num 12) x (build-num 7)) (=° r x)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(16793184 4913544 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/plus°/pairs"><a href="#test/plus°/pairs"><code>test/plus°/pairs</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The fully relational direction, with both addends fresh, and the only case here that pins a complete answer set: eight answers are requested and five arrive, so the stream was exhausted.  4 has exactly those five ordered decompositions -- zero on either side included -- and no pair is enumerated twice.  Completeness and termination are separate properties and a query that merely checks the first few answers can see neither; widen one guard in <code class="w3-codespan">adder°</code> and this is the assertion that notices.  The order is the interleaving of <code class="w3-codespan">cond°</code>'s disjunction rather than magnitude, which is why 4+0 and 0+4 precede 1+3; the sum-to-6 line pins that same sequence on its first three answers without paying for the full enumeration.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/plus°/pairs _)
+  (⊦= '(((0 0 1) ()) (() (0 0 1)) ((1) (1 1)) ((1 1) (1)) ((0 1) (0 1)))
+      (μkanren-run
+        (r 8 #t)
+        (fresh° (x y) (plus° x y (build-num 4)) (=° r (list x y)))))
+  (⊦= '(((0 1 1) ()) (() (0 1 1)) ((1) (1 0 1)))
+      (μkanren-run
+        (r 3 #t)
+        (fresh° (x y) (plus° x y (build-num 6)) (=° r (list x y))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.009) (memory #(16793184 4917200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/*°"><a href="#test/*°"><code>test/*°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Nine products, each asked for with a count of two so that the assertion also pins the number of answers: <code class="w3-codespan">*°</code> must succeed exactly once on ground factors and then exhaust its stream, not leave a redundant branch alive. The two operands are not symmetric in the code even though the answers are: with <code class="w3-codespan">n</code> odd and <code class="w3-codespan">m</code> even the sixth clause recurs as <code class="w3-codespan">(*° m n p)</code>, swapping the pair so the even operand is the one that gets halved by clause five.  Three of the nine rows reach the seventh clause, the only one that hands the work to <code class="w3-codespan">odd-*°</code>: <code class="w3-codespan">3*5</code> enters it once and is the smallest odd-times-odd product, <code class="w3-codespan">6*7</code> once after clause five has halved the 6 into <code class="w3-codespan">(*° 3 7 z)</code>, and <code class="w3-codespan">7*7</code> eight times -- depth, not path, is what that last row buys, and deleting the clause costs exactly those three of the nine their answer.</p>
+<p>The last two are the zero clauses, and they are the only place <code class="w3-codespan">*°</code> answers without grounding its arguments. <code class="w3-codespan">(*° '() m '())</code> has a single answer that says nothing at all about <code class="w3-codespan">m</code> -- it reifies as <code class="w3-codespan">α</code> -- while <code class="w3-codespan">(*° n '() '())</code> answers twice, once from <code class="w3-codespan">(=° '() n)</code> and once from <code class="w3-codespan">(pos° n)</code>, so a non-empty <code class="w3-codespan">n</code> comes back as the bare pair <code class="w3-codespan">(α . β)</code>. Zero times anything is the one fact this arithmetic knows without looking at the bits.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/*° _)
+  (⊦= (list (build-num 0))
+      (μkanren-run (r 2 #t) (*° (build-num 0) (build-num 5) r)))
+  (⊦= (list (build-num 0))
+      (μkanren-run (r 2 #t) (*° (build-num 5) (build-num 0) r)))
+  (⊦= (list (build-num 0))
+      (μkanren-run (r 2 #t) (*° (build-num 0) (build-num 0) r)))
+  (⊦= (list (build-num 5))
+      (μkanren-run (r 2 #t) (*° (build-num 1) (build-num 5) r)))
+  (⊦= (list (build-num 5))
+      (μkanren-run (r 2 #t) (*° (build-num 5) (build-num 1) r)))
+  (⊦= (list (build-num 6))
+      (μkanren-run (r 2 #t) (*° (build-num 2) (build-num 3) r)))
+  (⊦= (list (build-num 15))
+      (μkanren-run (r 2 #t) (*° (build-num 3) (build-num 5) r)))
+  (⊦= (list (build-num 42))
+      (μkanren-run (r 2 #t) (*° (build-num 6) (build-num 7) r)))
+  (⊦= (list (build-num 49))
+      (μkanren-run (r 2 #t) (*° (build-num 7) (build-num 7) r)))
+  (⊦= '(α) (μkanren-run (m 3 #t) (*° '() m '())))
+  (⊦= '(() (α . β)) (μkanren-run (n 3 #t) (*° n '() '()))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(16793184 4918800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/division-by-*°"><a href="#test/division-by-*°"><code>test/division-by-*°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The same goal run backwards: fix the product and one factor, leave the other fresh, and <code class="w3-codespan">*°</code> divides. Nothing in the relation distinguishes input from output -- there is no mode declaration and no guard on which arguments are ground -- so this direction costs no extra code; what it costs is termination, and that is what these five assertions buy. Both factor positions are exercised because the clause that fires differs: with the fresh variable second the ground odd <code class="w3-codespan">n</code> cannot match clause five at all and the swap in clause six is what fires; with it first clause six is dead and clause five halves the fresh <code class="w3-codespan">n</code> instead.</p>
+<p>The last line is the one that matters. <code class="w3-codespan">(*° 3 m 13)</code> has no solution, and a relational divide that cannot say so is useless: it would have to enumerate ever longer candidates for <code class="w3-codespan">m</code> forever. It returns the empty stream in a couple of milliseconds because a ground product bounds every recursion -- clause five insists <code class="w3-codespan">p</code> begin with a zero bit and shrinks it in step with <code class="w3-codespan">n</code>, and the seventh clause's <code class="w3-codespan">bound-*°</code> caps the rest.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/division-by-*° _)
+  (⊦= (list (build-num 4))
+      (μkanren-run (m 2 #t) (*° (build-num 3) m (build-num 12))))
+  (⊦= (list (build-num 4))
+      (μkanren-run (m 2 #t) (*° m (build-num 3) (build-num 12))))
+  (⊦= (list (build-num 3))
+      (μkanren-run (m 2 #t) (*° (build-num 4) m (build-num 12))))
+  (⊦= (list (build-num 3))
+      (μkanren-run (m 2 #t) (*° (build-num 5) m (build-num 15))))
+  (⊦= '() (μkanren-run (m 1 #t) (*° (build-num 3) m (build-num 13)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.025) (memory #(16793184 4927048 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/factorisation-by-*°"><a href="#test/factorisation-by-*°"><code>test/factorisation-by-*°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Both factors fresh, the product ground: <code class="w3-codespan">*°</code> factorises. The count is twenty and only six, four, two and one answers exist, which is the whole point of the case -- the run has to walk off the end of the stream and come back. A count of six would pass even if the seventh answer took forever to refute, and that seventh step is exactly where an unbounded <code class="w3-codespan">*°</code> diverges.</p>
+<p>The order is the interleaving order of the clauses, not magnitude order: the two trivial factorisations arrive first from clauses three and four, then the pairs with an even left factor, and <code class="w3-codespan">(4 3)</code> precedes <code class="w3-codespan">(3 4)</code>. Five is prime and yields only the trivial pair; one yields only <code class="w3-codespan">(1 1)</code>, which is also the statement that this arithmetic has no non-trivial divisors of one. Every answer here is fully ground -- unlike the zero clauses, factorisation of a positive numeral leaves no bit free.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/factorisation-by-*° _)
+  (⊦= (list (list (build-num 1) (build-num 12))
+            (list (build-num 12) (build-num 1))
+            (list (build-num 2) (build-num 6))
+            (list (build-num 4) (build-num 3))
+            (list (build-num 3) (build-num 4))
+            (list (build-num 6) (build-num 2)))
+      (μkanren-run
+        (r 20 #t)
+        (fresh° (x y) (*° x y (build-num 12)) (=° r (list x y)))))
+  (⊦= (list (list (build-num 1) (build-num 6))
+            (list (build-num 6) (build-num 1))
+            (list (build-num 2) (build-num 3))
+            (list (build-num 3) (build-num 2)))
+      (μkanren-run
+        (r 20 #t)
+        (fresh° (x y) (*° x y (build-num 6)) (=° r (list x y)))))
+  (⊦= (list (list (build-num 1) (build-num 5))
+            (list (build-num 5) (build-num 1)))
+      (μkanren-run
+        (r 20 #t)
+        (fresh° (x y) (*° x y (build-num 5)) (=° r (list x y)))))
+  (⊦= (list (list (build-num 1) (build-num 1)))
+      (μkanren-run
+        (r 20 #t)
+        (fresh° (x y) (*° x y (build-num 1)) (=° r (list x y))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.037) (memory #(16793184 4924896 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/odd-*°"><a href="#test/odd-*°"><code>test/odd-*°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">odd-*°</code> is not a three-way product. Its contract is <code class="w3-codespan">p = 2*(x*m) + m</code>, the distribution of <code class="w3-codespan">(2x+1)*m</code> that clause seven of <code class="w3-codespan">*°</code> peels off when both factors are odd, and it is written as <code class="w3-codespan">(*° x m q)</code> followed by <code class="w3-codespan">(plus° `(0 . ,q) m p)</code> -- the consed zero bit being the doubling. The first three lines read 2(1*5)+5 = 15, 2(2*3)+3 = 15 and 2(3*3)+3 = 21.</p>
+<p>The fourth line is the surprise and the reason this case exists. <code class="w3-codespan">n</code> occurs nowhere in the body except inside <code class="w3-codespan">(bound-*° q p n m)</code>, so its value is never read; only its length is, and even that only as part of the budget <code class="w3-codespan">|n|+|m|</code>. Passing <code class="w3-codespan">'()</code> for <code class="w3-codespan">n</code> -- arithmetically absurd, since <code class="w3-codespan">*°</code> only ever calls this with <code class="w3-codespan">n</code> equal to <code class="w3-codespan">2x+1</code> -- still answers 15, because <code class="w3-codespan">m</code> alone is long enough to pay for <code class="w3-codespan">q</code>. Anyone tempted to &quot;use&quot; <code class="w3-codespan">n</code> in a rewrite is changing a different relation.</p>
+<p>The last two lines check the direction <code class="w3-codespan">*°</code> actually uses it in: with <code class="w3-codespan">p</code> ground it is a test, and it refutes 14 rather than wandering, which is what keeps clause seven from poisoning the whole stream.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/odd-*° _)
+  (⊦= (list (build-num 15))
+      (μkanren-run
+        (p 2 #t)
+        (odd-*° (build-num 1) (build-num 3) (build-num 5) p)))
+  (⊦= (list (build-num 15))
+      (μkanren-run
+        (p 2 #t)
+        (odd-*° (build-num 2) (build-num 5) (build-num 3) p)))
+  (⊦= (list (build-num 21))
+      (μkanren-run
+        (p 2 #t)
+        (odd-*° (build-num 3) (build-num 7) (build-num 3) p)))
+  (⊦= (list (build-num 15))
+      (μkanren-run
+        (p 2 #t)
+        (odd-*° (build-num 1) (build-num 0) (build-num 5) p)))
+  (⊦= '(yes)
+      (μkanren-run
+        (r 2 #t)
+        (odd-*° (build-num 1) (build-num 3) (build-num 5) (build-num 15))
+        (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (odd-*° (build-num 1) (build-num 3) (build-num 5) (build-num 14))
+        (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.017) (memory #(16793184 4927408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/bound-*°"><a href="#test/bound-*°"><code>test/bound-*°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">bound-*°</code> computes nothing. It succeeds exactly when <code class="w3-codespan">|q| &lt; |p|</code> and <code class="w3-codespan">|q| &lt;= |n|+|m|</code>, and the first five lines separate those two conditions: the same <code class="w3-codespan">q</code> and <code class="w3-codespan">p</code> pass with a one-bit <code class="w3-codespan">n</code> and a one-bit <code class="w3-codespan">m</code>, fail when both are empty, and pass again when the two bits are moved into <code class="w3-codespan">m</code> -- the recursion peels <code class="w3-codespan">n</code> first and falls through to <code class="w3-codespan">m</code> once <code class="w3-codespan">n</code> runs out, so only the sum of the two lengths is visible. Line two is the same length pattern written entirely in zero bits, which is arithmetic nonsense and still succeeds: the bits are never inspected.</p>
+<p>The last four lines are why the relation exists at all. With <code class="w3-codespan">p</code> ground, <code class="w3-codespan">bound-*°</code> is a finite generator: it enumerates every list strictly shorter than <code class="w3-codespan">p</code> and no longer than <code class="w3-codespan">|n|+|m|</code>, leaving the bits fresh, so the answers reify as <code class="w3-codespan">()</code>, <code class="w3-codespan">(α)</code>, <code class="w3-codespan">(α β)</code> and then stop; with <code class="w3-codespan">p</code> empty there is nothing at all. That is the fuse <code class="w3-codespan">odd-*°</code> lights before it calls <code class="w3-codespan">*°</code>: the intermediate product <code class="w3-codespan">q</code> is confined to a finite set before any multiplying happens. Remove this goal and <code class="w3-codespan">*°</code> still answers every factorisation in <code class="w3-codespan">test/factorisation-by-*°</code> -- it simply never admits there are no more.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/bound-*° _)
+  (⊦= '(yes)
+      (μkanren-run (r 2 #t) (bound-*° '(1 1) '(1 1 1) '(1) '(1)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 2 #t) (bound-*° '(0 0) '(0 0 0) '(0) '(0)) (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run (r 1 #t) (bound-*° '(1 1) '(1 1) '(1) '(1)) (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run (r 1 #t) (bound-*° '(1 1) '(1 1 1) '() '()) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 2 #t) (bound-*° '(1 1) '(1 1 1) '() '(1 1)) (=° r 'yes)))
+  (⊦= '(()) (μkanren-run (q 20 #t) (bound-*° q '(1) '(1) '(1))))
+  (⊦= '(() (α)) (μkanren-run (q 20 #t) (bound-*° q '(1 1) '(1) '(1))))
+  (⊦= '(() (α) (α β)) (μkanren-run (q 20 #t) (bound-*° q '(1 1 1) '(1) '(1))))
+  (⊦= '() (μkanren-run (q 20 #t) (bound-*° q '() '(1) '(1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4930672 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/=l°-and-&lt;l°-measure-the-spine"><a href="#test/=l°-and-&lt;l°-measure-the-spine"><code>test/=l°-and-&lt;l°-measure-the-spine</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Five is <code class="w3-codespan">(1 0 1)</code> and six is <code class="w3-codespan">(0 1 1)</code>: the same number of cells, different numbers.  That pair is the whole point of this case.  <code class="w3-codespan">=l°</code> holds in both directions and <code class="w3-codespan">&lt;l°</code> in neither, because neither relation ever looks at a bit: the base cases of <code class="w3-codespan">=l°</code> pin <code class="w3-codespan">'()</code> against <code class="w3-codespan">'()</code> and <code class="w3-codespan">'(1)</code> against <code class="w3-codespan">'(1)</code>, and its recursive clause asks only that each argument be a pair with a positive tail, leaving the leading bits <code class="w3-codespan">a</code> and <code class="w3-codespan">b</code> free.  Nine is <code class="w3-codespan">(1 0 0 1)</code>, one cell longer, and that single cell is the entire reason <code class="w3-codespan">(&lt;l° 5 9)</code> succeeds.  Since the representation is canonical -- the last bit of a positive numeral is always 1 -- a shorter numeral is always the smaller number, so <code class="w3-codespan">&lt;l°</code> never lies about value; it is merely blind to every equal-length pair, and that missing half is exactly what <code class="w3-codespan">&lt;°</code> restores.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/=l°-and-&lt;l°-measure-the-spine _)
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (=l° (build-num 5) (build-num 6)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (=l° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (=l° (build-num 5) (build-num 9)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (&lt;l° (build-num 5) (build-num 6)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (&lt;l° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;l° (build-num 5) (build-num 9)) (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run (r 1 #t) (&lt;l° (build-num 9) (build-num 5)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4937760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/&lt;°-and-&lt;=°-measure-the-value"><a href="#test/&lt;°-and-&lt;=°-measure-the-value"><code>test/&lt;°-and-&lt;=°-measure-the-value</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">&lt;°</code> is <code class="w3-codespan">&lt;l°</code> widened: it first tries the length test, then, for equal lengths, <code class="w3-codespan">(=l° n m)</code> together with <code class="w3-codespan">(pos° x)</code> and <code class="w3-codespan">(plus° n x m)</code> -- a strictly positive witness for the gap.  That <code class="w3-codespan">pos°</code> is the whole of irreflexivity: <code class="w3-codespan">(&lt;° 5 5)</code> fails only because the witness would have to be <code class="w3-codespan">'()</code>.  The 4-against-5 line is the one that separates the two orderings in the cheapest possible way: same length, so <code class="w3-codespan">&lt;l°</code> fails, yet <code class="w3-codespan">&lt;°</code> succeeds through the <code class="w3-codespan">plus°</code> witness.  <code class="w3-codespan">&lt;=°</code> adds reflexivity with a bare <code class="w3-codespan">(=° n m)</code>, a unification rather than a value comparison, so asking for four answers to <code class="w3-codespan">(&lt;=° 5 5)</code> still yields one: the <code class="w3-codespan">&lt;°</code> clause cannot also fire.  The same bare unification is why <code class="w3-codespan">(&lt;=° x x)</code> succeeds for a fresh <code class="w3-codespan">x</code> and leaves it unbound -- the answer is the reified <code class="w3-codespan">α</code>.  That query is pinned at count 1 deliberately: a second answer never arrives, because the <code class="w3-codespan">&lt;°</code> branch then walks <code class="w3-codespan">&lt;l°</code>'s recursive clause forever on two aliased fresh spines.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/&lt;°-and-&lt;=°-measure-the-value _)
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;° (build-num 5) (build-num 6)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (&lt;° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (&lt;° (build-num 5) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;° (build-num 4) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (&lt;l° (build-num 4) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;=° (build-num 5) (build-num 6)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 4 #t) (&lt;=° (build-num 5) (build-num 5)) (=° r 'yes)))
+  (⊦= '(α) (μkanren-run (r 1 #t) (fresh° (x) (&lt;=° x x) (=° r x)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.008) (memory #(16793184 4937040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/&lt;=l°-is-not-a-value-test"><a href="#test/&lt;=l°-is-not-a-value-test"><code>test/&lt;=l°-is-not-a-value-test</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The trap.  <code class="w3-codespan">(&lt;=l° 6 5)</code> and <code class="w3-codespan">(&lt;=l° 5 6)</code> both succeed -- <code class="w3-codespan">=l°</code> holds between them -- while <code class="w3-codespan">(&lt;=° 6 5)</code> correctly fails.  <code class="w3-codespan">&lt;=l°</code> is a preorder on widths with no antisymmetry to lose, so substituting it for <code class="w3-codespan">&lt;=°</code> buys a relation that happily proves six no greater than five, and no ground query on a length-differing pair would ever reveal it.  The last two lines keep the case from being vacuous: four cells against three is still refused.  This is also the only sense in which the relation is used downstream -- <code class="w3-codespan">base-three-or-more°</code> writes <code class="w3-codespan">(&lt;=l° ql q)</code> and the discarded <code class="w3-codespan">/°</code> of frame 8:54 writes <code class="w3-codespan">(&lt;=l° mq n)</code> -- as a bound on how wide a numeral the search may consider, never as an arithmetic comparison.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/&lt;=l°-is-not-a-value-test _)
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;=l° (build-num 5) (build-num 6)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;=l° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (&lt;=° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 1 #t) (&lt;=l° (build-num 5) (build-num 9)) (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run (r 1 #t) (&lt;=l° (build-num 9) (build-num 5)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(16793184 4958432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/length-orderings-enumerate-shapes"><a href="#test/length-orderings-enumerate-shapes"><code>test/length-orderings-enumerate-shapes</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Run with the second argument fresh, the length orderings answer with shapes, not numbers, and that is what makes them cheap.  <code class="w3-codespan">(=l° 5 m)</code> has exactly one answer however many are asked for: <code class="w3-codespan">(α β 1)</code> -- three cells, top bit forced to 1 by the <code class="w3-codespan">'(1)</code> base case, the two low bits free -- one answer standing for 4, 5, 6 and 7 at once.  <code class="w3-codespan">(&lt;l° 5 m)</code> collapses just as hard, to the improper list <code class="w3-codespan">(α β γ δ . ε)</code>: <code class="w3-codespan">&lt;l°</code> peels three cells off <code class="w3-codespan">(1 0 1)</code> and discharges the rest with <code class="w3-codespan">(&gt;1° m)</code>, whose unbound tail covers every numeral of four cells or more, so an infinite family of numbers arrives as a single terminating answer.  <code class="w3-codespan">(=l° 0 m)</code> pins the degenerate end: zero is the only numeral of length zero.  The <code class="w3-codespan">&lt;=l°</code> line pins clause order -- the <code class="w3-codespan">=l°</code> answer comes first -- which no ground query can observe.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/length-orderings-enumerate-shapes _)
+  (⊦= '((α β 1)) (μkanren-run (m 5 #t) (=l° (build-num 5) m)))
+  (⊦= '(()) (μkanren-run (m 3 #t) (=l° '() m)))
+  (⊦= '((α β γ δ . ε)) (μkanren-run (m 3 #t) (&lt;l° (build-num 5) m)))
+  (⊦= '((α β 1) (α β γ δ . ε)) (μkanren-run (m 3 #t) (&lt;=l° (build-num 5) m))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4943856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/value-orderings-enumerate-numbers"><a href="#test/value-orderings-enumerate-numbers"><code>test/value-orderings-enumerate-numbers</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Backwards, <code class="w3-codespan">&lt;°</code> is finite and complete where <code class="w3-codespan">&lt;l°</code> is finite and short.  Asking for eight answers below five returns four and stops: 0, 1, <code class="w3-codespan">(α 1)</code> and 4.  The middle answer is partially ground on purpose -- <code class="w3-codespan">α</code> is a reified fresh variable, so that one answer is both 2 and 3, and an assertion that expected a concrete bit there would be asserting something the relation never commits to.  The <code class="w3-codespan">&lt;l°</code> line says which of them were free: the first three are pure length answers, and 4 is the one only the <code class="w3-codespan">=l°</code> plus <code class="w3-codespan">plus°</code> branch can produce.  <code class="w3-codespan">&lt;=°</code> prepends five itself, from its <code class="w3-codespan">(=° n m)</code> clause, ahead of the <code class="w3-codespan">&lt;°</code> answers.  The last line is the mirror direction and the reason this relation terminates upwards at all: one shape answer for everything four cells and wider, then the finitely many equal-length numerals above five, 6 and 7.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/value-orderings-enumerate-numbers _)
+  (⊦= (list '() (build-num 1) '(α 1) (build-num 4))
+      (μkanren-run (n 8 #t) (&lt;° n (build-num 5))))
+  (⊦= (list '() (build-num 1) '(α 1))
+      (μkanren-run (n 6 #t) (&lt;l° n (build-num 5))))
+  (⊦= (list (build-num 5) '() (build-num 1) '(α 1) (build-num 4))
+      (μkanren-run (n 8 #t) (&lt;=° n (build-num 5))))
+  (⊦= (list '(α β γ δ . ε) (build-num 6) (build-num 7))
+      (μkanren-run (m 4 #t) (&lt;° (build-num 5) m))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.011) (memory #(16793184 4946720 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mirrored-orderings"><a href="#test/mirrored-orderings"><code>test/mirrored-orderings</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The book never writes <code class="w3-codespan">&gt;</code> or <code class="w3-codespan">&gt;=</code>: <code class="w3-codespan">/°</code> and <code class="w3-codespan">log°</code> only ever ask whether something is smaller, so chapter 8 needs one direction and stops. A relation has no preferred direction though, and these four are the existing goals with their arguments crossed -- the same move the book already makes when it defines <code class="w3-codespan">minus°</code> as <code class="w3-codespan">plus°</code> read backwards. They are the one part of <code class="w3-codespan">(aux kanren arith)</code> that is not in the book, which is why they are pinned here rather than taken on trust.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mirrored-orderings _)
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;° (build-num 9) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (&gt;° (build-num 5) (build-num 9)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (&gt;° (build-num 5) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;=° (build-num 5) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;=° (build-num 9) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (&gt;=° (build-num 5) (build-num 9)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;° (build-num 1) (build-num 0)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (&gt;° (build-num 0) (build-num 0)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.005) (memory #(16793184 4954944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mirrored-orderings/length-vs-value"><a href="#test/mirrored-orderings/length-vs-value"><code>test/mirrored-orderings/length-vs-value</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Six is <code class="w3-codespan">(0 1 1)</code> and five is <code class="w3-codespan">(1 0 1)</code> -- same width, different value -- so this is the pair that tells the two mirrored families apart. <code class="w3-codespan">&gt;°</code> says yes because six is the larger number; <code class="w3-codespan">&gt;l°</code> says no because neither numeral is the longer one; and <code class="w3-codespan">&gt;=l°</code> says yes on the strength of <code class="w3-codespan">=l°</code> alone. A reader reaching for <code class="w3-codespan">&gt;l°</code> when they meant <code class="w3-codespan">&gt;°</code> gets no error and no empty stream, just a quietly different question answered, which is why the distinction is asserted rather than described.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mirrored-orderings/length-vs-value _)
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;l° (build-num 9) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (&gt;l° (build-num 5) (build-num 9)) (=° r 'yes)))
+  (⊦= (list '(0 1 1) '(1 0 1)) (list (build-num 6) (build-num 5)))
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (&gt;l° (build-num 6) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (&gt;=l° (build-num 6) (build-num 5)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4949608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mirrored-orderings/generate"><a href="#test/mirrored-orderings/generate"><code>test/mirrored-orderings/generate</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Crossing the arguments crosses the enumeration too, and both directions stay finite. Asked for six numerals above five the relation answers three and closes the stream: <code class="w3-codespan">(α β γ δ . ε)</code> for everything four cells and wider, then 6 and 7, which between them are every number greater than five. Downwards it answers four -- 0, 1, <code class="w3-codespan">(α 1)</code> covering both 2 and 3, and 4. <code class="w3-codespan">&gt;=°</code> prepends five itself in each direction, from the <code class="w3-codespan">(=° n m)</code> clause of <code class="w3-codespan">&lt;=°</code>. Counts of six and ten against streams of three and four are the point: they assert exhaustion, not merely the first few answers.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mirrored-orderings/generate _)
+  (⊦= (list '(α β γ δ . ε) (build-num 6) (build-num 7))
+      (μkanren-run (n 6 #t) (&gt;° n (build-num 5))))
+  (⊦= (list (build-num 5) '(α β γ δ . ε) (build-num 6) (build-num 7))
+      (μkanren-run (n 6 #t) (&gt;=° n (build-num 5))))
+  (⊦= (list '() (build-num 1) '(α 1) (build-num 4))
+      (μkanren-run (m 10 #t) (&gt;° (build-num 5) m)))
+  (⊦= (list (build-num 5) '() (build-num 1) '(α 1) (build-num 4))
+      (μkanren-run (m 10 #t) (&gt;=° (build-num 5) m))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(16793184 4951904 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/numeral-equality-is-unification"><a href="#test/numeral-equality-is-unification"><code>test/numeral-equality-is-unification</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>There is deliberately no <code class="w3-codespan">=n°</code> or <code class="w3-codespan">≠n°</code> beside the four mirrored orderings. <code class="w3-codespan">build-num</code> is canonical -- little-endian, no trailing zero -- so two numerals denote the same number exactly when their lists unify, and <code class="w3-codespan">(aux kanren micro)</code>'s own <code class="w3-codespan">=°</code> and <code class="w3-codespan">≠°</code> already decide that. A wrapper would add a name and hide which relation is doing the work. The strengths do differ, and that is worth knowing rather than wrapping away: <code class="w3-codespan">(=° n m)</code> on two fresh variables unifies them without making either one a numeral, whereas <code class="w3-codespan">(&lt;=° n m)</code> constrains both to be numerals on the way to answering.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/numeral-equality-is-unification _)
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (=° (build-num 5) (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run (r 3 #t) (≠° (build-num 5) (build-num 4)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 3 #t) (≠° (build-num 5) (build-num 5)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4953560 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/multiple°"><a href="#test/multiple°"><code>test/multiple°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">(multiple° a b)</code> holds exactly when some <code class="w3-codespan">k</code> makes <code class="w3-codespan">a</code> times <code class="w3-codespan">k</code> equal <code class="w3-codespan">b</code>, and that is the entire definition -- <code class="w3-codespan">*°</code> supplies the search. The three failing assertions carry the weight. A relation that merely lacked an answer would look the same as one that never finished looking, and the naive reading of <code class="w3-codespan">multiple°</code> -- guess <code class="w3-codespan">k</code>, multiply, compare -- does not terminate on a non-multiple, because there is always a larger <code class="w3-codespan">k</code> left to try. What stops it is <code class="w3-codespan">bound-*°</code>, whose only job in chapter 8 is to bound that very search by the width of the product, so 100 is refused as a multiple of 7 in a tenth of a second rather than never.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/multiple° _)
+  (⊦= '(yes)
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 3) (build-num 12))
+        (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 5) (build-num 5))
+        (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 1) (build-num 5))
+        (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 3) (build-num 7))
+        (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 4) (build-num 10))
+        (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 7) (build-num 100))
+        (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.194) (memory #(16793184 4962536 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/multiple°/divisors"><a href="#test/multiple°/divisors"><code>test/multiple°/divisors</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Run with the divisor fresh, <code class="w3-codespan">multiple°</code> enumerates divisors, and it closes the stream when they run out: twenty requested, six delivered for 12 -- 1, 12, 2, 4, 3, 6, every divisor exactly once and in the interleaved order <code class="w3-codespan">*°</code> produces them, not in increasing order. For 7 it answers 1 and 7 and stops, which is to say the same goal read backwards is a primality test; for 1 it answers only 1. Each count here is larger than the stream on purpose, so the case pins exhaustion rather than a prefix -- a <code class="w3-codespan">multiple°</code> that silently dropped a divisor would pass a weaker assertion.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/multiple°/divisors _)
+  (⊦= (map build-num '(1 12 2 4 3 6))
+      (μkanren-run (a 20 #t) (multiple° a (build-num 12))))
+  (⊦= (map build-num '(1 7))
+      (μkanren-run (a 10 #t) (multiple° a (build-num 7))))
+  (⊦= (map build-num '(1))
+      (μkanren-run (a 10 #t) (multiple° a (build-num 1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.027) (memory #(16793184 4957944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/multiple°/degenerate-rows"><a href="#test/multiple°/degenerate-rows"><code>test/multiple°/degenerate-rows</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The rows that a hand-written predicate gets wrong. They are not special cases in the definition -- each one falls out of <code class="w3-codespan">a * k = b</code> -- but they are the ones worth stating. Zero is a multiple of five, with <code class="w3-codespan">k</code> zero. Zero is a multiple of zero. Five is not a multiple of zero, because no <code class="w3-codespan">k</code> makes <code class="w3-codespan">0 * k</code> five, so the relation simply has no answer where a function would have to raise. And asked which numerals divide zero -- all of them -- it does not enumerate forever: it answers <code class="w3-codespan">()</code> and <code class="w3-codespan">(α . β)</code>, zero and one reified shape standing for every positive numeral, then closes. That is the payoff of a partially-ground answer: an infinite set delivered in two lines.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/multiple°/degenerate-rows _)
+  (⊦= '(yes)
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 5) (build-num 0))
+        (=° r 'yes)))
+  (⊦= '(yes)
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 0) (build-num 0))
+        (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (multiple° (build-num 0) (build-num 5))
+        (=° r 'yes)))
+  (⊦= (list '() '(α . β)) (μkanren-run (a 6 #t) (multiple° a (build-num 0)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4960880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/divisor°"><a href="#test/divisor°"><code>test/divisor°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">(divisor° n d)</code> is <code class="w3-codespan">(multiple° d n)</code> read from the other end. It earns its name rather than its logic: both spellings put the described numeral second, so <code class="w3-codespan">(multiple° a b)</code> is &quot;b is a multiple of a&quot; and <code class="w3-codespan">(divisor° n d)</code> is &quot;d is a divisor of n&quot;, and a call site never has to untangle which way round the pair goes. The same six divisors of 12 come back, since it is the same goal.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/divisor° _)
+  (⊦= (map build-num '(1 12 2 4 3 6))
+      (μkanren-run (d 20 #t) (divisor° (build-num 12) d)))
+  (⊦= '(yes)
+      (μkanren-run
+        (r 1 #t)
+        (divisor° (build-num 12) (build-num 4))
+        (=° r 'yes)))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (divisor° (build-num 12) (build-num 5))
+        (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.029) (memory #(16793184 4966472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/even°-and-odd°"><a href="#test/even°-and-odd°"><code>test/even°-and-odd°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Parity needs no arithmetic here. The numeral is little-endian, so its first cell IS the parity bit, and these two relations only look at it -- where <code class="w3-codespan">(multiple° (build-num 2) n)</code> would decide the same question by searching. The <code class="w3-codespan">pos°</code> inside <code class="w3-codespan">even°</code> is canonicality rather than parity: it rejects <code class="w3-codespan">(0)</code>, a zero written with a trailing zero, which is also why the empty list needs a clause of its own.</p>
+<p>Backwards they are the sharpest generators in the module. Asked for five even numerals the relation answers two -- <code class="w3-codespan">()</code> and <code class="w3-codespan">(0 α . β)</code> -- and asked for five odd ones it answers exactly one, <code class="w3-codespan">(1 . α)</code>. Two infinite sets, three answers, and the counts of five are what assert that nothing further is coming.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/even°-and-odd° _)
+  (⊦= '(yes) (μkanren-run (r 1 #t) (even° (build-num 0)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 1 #t) (even° (build-num 6)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (even° (build-num 5)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 1 #t) (odd° (build-num 5)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (odd° (build-num 0)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (odd° (build-num 6)) (=° r 'yes)))
+  (⊦= (list '() '(0 α . β)) (μkanren-run (n 5 #t) (even° n)))
+  (⊦= (list '(1 . α)) (μkanren-run (n 5 #t) (odd° n))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(16793184 4965240 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/square°"><a href="#test/square°"><code>test/square°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">(square° n m)</code> is <code class="w3-codespan">(*° n n m)</code> and nothing else, but the repeated variable is the whole point: the same goal read with <code class="w3-codespan">m</code> ground is the integer square root, because unification is what ties the two factors together and neither position is an input. 144 comes back as 12. The fourth assertion is the one that matters -- 15 has no integer root, and the relation says so and stops, which is again <code class="w3-codespan">bound-*°</code> doing its work. The enumeration runs 0, 1, 4, 16, 64, 256, which is the order <code class="w3-codespan">*°</code> reaches them, not the order a reader expects; 9 and 25 arrive later.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/square° _)
+  (⊦= (build-num 25) (car (μkanren-run (m 1 #t) (square° (build-num 5) m))))
+  (⊦= (list (build-num 4)) (μkanren-run (n 1 #t) (square° n (build-num 16))))
+  (⊦= (list (build-num 12)) (μkanren-run (n 1 #t) (square° n (build-num 144))))
+  (⊦= '() (μkanren-run (n 1 #t) (square° n (build-num 15))))
+  (⊦= (map build-num '(0 1 4 16 64 256))
+      (μkanren-run (m 6 #t) (fresh° (n) (square° n m)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.042) (memory #(16793184 4970416 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/composite°"><a href="#test/composite°"><code>test/composite°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>A numeral is composite when it is a product of two numerals each at least two, and <code class="w3-codespan">&gt;1°</code> says &quot;at least two cells&quot;, which for a canonical numeral is exactly &quot;at least two&quot;. Stated positively like this it stays a relation and needs nothing the module does not already have.</p>
+<p>Its complement, <code class="w3-codespan">prime°</code>, needs a negation -- &quot;no divisor other than 1 and n exists&quot; -- and costs a good deal more; it has its own cases below. 97 is refused as composite in about a third of a second, and that refusal is most of what primality then reads.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/composite° _)
+  (⊦= '(yes) (μkanren-run (r 1 #t) (composite° (build-num 12)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 1 #t) (composite° (build-num 4)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (composite° (build-num 7)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (composite° (build-num 1)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (composite° (build-num 97)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.604) (memory #(16793184 4984448 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/between°"><a href="#test/between°"><code>test/between°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Two comparisons conjoined, which with <code class="w3-codespan">n</code> fresh is a range. Every count here is ten against streams of four, four, one and zero, so each assertion pins the whole range and not a prefix of it. The order is <code class="w3-codespan">3 6 5 4</code> rather than 3 4 5 6 -- the interleaving of <code class="w3-codespan">or°</code> again -- which is worth seeing written down, because a range is the one construct a reader will assume comes out sorted. An inverted range is simply an empty stream: no error, nothing to catch.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/between° _)
+  (⊦= (map build-num '(3 6 5 4))
+      (μkanren-run (n 10 #t) (between° (build-num 3) n (build-num 6))))
+  (⊦= (map build-num '(0 3 1 2))
+      (μkanren-run (n 10 #t) (between° (build-num 0) n (build-num 3))))
+  (⊦= (list (build-num 5))
+      (μkanren-run (n 10 #t) (between° (build-num 5) n (build-num 5))))
+  (⊦= '() (μkanren-run (n 10 #t) (between° (build-num 6) n (build-num 3)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.019) (memory #(16793184 4978096 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/common-divisor°"><a href="#test/common-divisor°"><code>test/common-divisor°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Divides one and divides the other, so with <code class="w3-codespan">d</code> fresh it enumerates the common divisors. 12 and 18 give 1, 2, 3 and 6, and the largest of those is their gcd -- but only a reader can see that it is the largest, because picking the greatest element of a stream is a negation again (&quot;no common divisor is bigger&quot;) -- the same shape of problem that <code class="w3-codespan">prime°</code> below has to pay for. What the relation does give, cheaply, is coprimality: 7 and 13 share exactly one divisor, so the single-element stream is the answer to &quot;are these coprime&quot;. The third line spells the interleaving out once more: 4 and 8 share 1, 4 and 2, delivered in that order.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/common-divisor° _)
+  (⊦= (map build-num '(1 2 3 6))
+      (μkanren-run
+        (d 20 #t)
+        (common-divisor° d (build-num 12) (build-num 18))))
+  (⊦= (map build-num '(1))
+      (μkanren-run (d 10 #t) (common-divisor° d (build-num 7) (build-num 13))))
+  (⊦= (map build-num '(1 4 2))
+      (μkanren-run (d 10 #t) (common-divisor° d (build-num 4) (build-num 8)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.066) (memory #(16793184 4973136 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/numeral°"><a href="#test/numeral°"><code>test/numeral°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">pos°</code> and <code class="w3-codespan">&gt;1°</code> constrain the SHAPE of a numeral; this one enumerates its VALUES, in increasing order, which is the first enumeration in the module that is not interleaved. A canonical numeral is the empty list or a list of bits whose last cell is 1, and <code class="w3-codespan">numeral/pos°</code> is that sentence. The <code class="w3-codespan">bit°</code> inside it is what makes the answers concrete: without it the relation would answer with shapes full of fresh variables, which is the right answer to a different question and useless as a generator.</p>
+<p>The last two assertions are the canonicality guard from the other side. <code class="w3-codespan">(0)</code> and <code class="w3-codespan">(1 0)</code> denote 0 and 1 in a positional reading, but they are not numerals, and a generator that produced them would make <code class="w3-codespan">prime°</code> below enumerate the same prime twice.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/numeral° _)
+  (⊦= (map build-num '(0 1 2 3 4 5 6 7 8 9))
+      (μkanren-run (n 10 #t) (numeral° n)))
+  (⊦= '(yes) (μkanren-run (r 1 #t) (numeral° (build-num 12)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (numeral° '(0)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (numeral° '(1 0)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4981432 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/prime°"><a href="#test/prime°"><code>test/prime°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">prime°</code> is the one relation in the module that is not pure. <code class="w3-codespan">(if° (composite° p) ✗° ✓°)</code> is negation as failure: it asks whether <code class="w3-codespan">composite° p</code> has an answer NOW, so it is sound only when <code class="w3-codespan">p</code> is already ground when it runs, and <code class="w3-codespan">numeral°</code> in front of it is what guarantees that. The order is the definition, not a stylistic choice -- put the negation first and the goal does not return at all, because with <code class="w3-codespan">p</code> fresh <code class="w3-codespan">composite° p</code> has answers and the negation fails before the generator ever chooses a candidate.</p>
+<p>0 and 1 are excluded by <code class="w3-codespan">&gt;1°</code>, which on a canonical numeral means &quot;at least two&quot;; 9 and 12 by the <code class="w3-codespan">composite°</code> refutation. Checked against an ordinary Scheme primality test over 0 to 60, the two agree everywhere.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/prime° _)
+  (⊦= '(yes) (μkanren-run (r 1 #t) (prime° (build-num 2)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 1 #t) (prime° (build-num 7)) (=° r 'yes)))
+  (⊦= '(yes) (μkanren-run (r 1 #t) (prime° (build-num 97)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (prime° (build-num 0)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (prime° (build-num 1)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (prime° (build-num 9)) (=° r 'yes)))
+  (⊦= '() (μkanren-run (r 1 #t) (prime° (build-num 12)) (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.689) (memory #(16793184 5005696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/prime°/generates"><a href="#test/prime°/generates"><code>test/prime°/generates</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The payoff of putting the generator first: the same goal with <code class="w3-codespan">p</code> fresh ENUMERATES the primes, in increasing order, by generate-and-test -- <code class="w3-codespan">numeral°</code> proposes 2, 3, 4, 5, ... and the negation discards the composite ones. A relation written as a test is a generator for free, which is the whole argument of the book, and it survives here even though the test itself is not pure.</p>
+<p>It is not cheap. Each candidate pays for a full <code class="w3-codespan">composite°</code> refutation, so these eight cost about a third of a second and the first twenty about ten. That is why the case stops at eight: the assertion is that the enumeration is correct and ordered, and twelve more primes would only have asserted patience.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/prime°/generates _)
+  (⊦= (map build-num '(2 3 5 7 11 13 17 19))
+      (μkanren-run (p 8 #t) (prime° p))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.648) (memory #(16793184 4980840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/split°"><a href="#test/split°"><code>test/split°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">split°</code> is not a shift on <code class="w3-codespan">n</code>: the second argument is a ruler, and the relation holds exactly when <code class="w3-codespan">n = h·2^(|r|+1) + l</code> with <code class="w3-codespan">l &lt; 2^(|r|+1)</code>. The rows read 6=1·4+2, 6=3·2+0, 13=1·8+5, 12=3·4+0. Two of them pin what that equation leaves open. Splitting 12 at width 1 answers <code class="w3-codespan">l = '()</code>, not <code class="w3-codespan">'(0 0)</code>: the halves come back as numerals, and a trailing zero would not fail here but three frames later, when <code class="w3-codespan">*°</code> or <code class="w3-codespan">plus°</code> inside <code class="w3-codespan">base-three-or-more°</code> refuses an unnormalised operand. <code class="w3-codespan">n = '()</code> drives the first <code class="w3-codespan">cond°</code> clause and forces both halves empty, which is the base case <code class="w3-codespan">n-wider-than-m°</code> leans on when it splits a remainder it has not yet proved positive. The last row runs the same equation backwards and reassembles <code class="w3-codespan">n</code> from its halves; it terminates no matter which of <code class="w3-codespan">n</code>, <code class="w3-codespan">l</code>, <code class="w3-codespan">h</code> are fresh because every recursive clause eats one cell of <code class="w3-codespan">r</code> and every base clause demands <code class="w3-codespan">r = '()</code> -- the ground ruler, and nothing else, bounds the depth of the search.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/split° _)
+  (⊦= (list (build-num 2) (build-num 1))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (l h)
+               (split° (build-num 6) '(1) l h)
+               (=° r (list l h))))))
+  (⊦= (list (build-num 0) (build-num 3))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh° (l h) (split° (build-num 6) '() l h) (=° r (list l h))))))
+  (⊦= (list (build-num 5) (build-num 1))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (l h)
+               (split° (build-num 13) '(0 1) l h)
+               (=° r (list l h))))))
+  (⊦= (list (build-num 0) (build-num 3))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (l h)
+               (split° (build-num 12) '(1) l h)
+               (=° r (list l h))))))
+  (⊦= (list (build-num 0) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh° (l h) (split° '() '(1) l h) (=° r (list l h))))))
+  (⊦= (build-num 6)
+      (car (μkanren-run
+             (r 1 #t)
+             (split° r '(1) (build-num 2) (build-num 1))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4981920 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/split°/ruler"><a href="#test/split°/ruler"><code>test/split°/ruler</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>No clause of <code class="w3-codespan">split°</code> ever looks at a digit of <code class="w3-codespan">r</code>: it is matched only against <code class="w3-codespan">'()</code> or <code class="w3-codespan">`(,a . ,r^)</code> with <code class="w3-codespan">a</code> fresh, so the ruler is consumed as a unary counter. The three rows split 6 at width 2 with the ruler written as the numeral 2, as the numeral 3, and as <code class="w3-codespan">'(a b)</code>, which is not a numeral at all, and all three agree. The last row is the same fact reported by the search itself: asked which ruler splits 6 into <code class="w3-codespan">l=2</code>, <code class="w3-codespan">h=1</code>, it answers once, with <code class="w3-codespan">(α)</code> -- a one-cell list whose element was never constrained. That is the property <code class="w3-codespan">n-wider-than-m°</code> spends: it passes <code class="w3-codespan">/°</code>'s remainder as the ruler of both <code class="w3-codespan">(split° n r nl nh)</code> and <code class="w3-codespan">(split° q r ql qh)</code> while that remainder is still only bounded by <code class="w3-codespan">(&lt;° r m)</code>, not known. A tidier <code class="w3-codespan">split°</code> that unified <code class="w3-codespan">r</code> with a bit list would quietly constrain the remainder and turn long division into guessing.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/split°/ruler _)
+  (⊦= (list (build-num 6) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (l h)
+               (split° (build-num 6) '(0 1) l h)
+               (=° r (list l h))))))
+  (⊦= (list (build-num 6) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (l h)
+               (split° (build-num 6) '(1 1) l h)
+               (=° r (list l h))))))
+  (⊦= (list (build-num 6) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (l h)
+               (split° (build-num 6) '(a b) l h)
+               (=° r (list l h))))))
+  (⊦= '((α))
+      (μkanren-run
+        (r 3 #t)
+        (split° (build-num 6) r (build-num 2) (build-num 1)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.002) (memory #(16793184 4987040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test//°"><a href="#test//°"><code>test//°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">/°</code> dispatches on size, and the rows cover all three of its clauses. 2/5 and 0/3 take the first: a dividend narrower than the divisor is not a recursion at all, just <code class="w3-codespan">q='()</code> and <code class="w3-codespan">r=n</code>. 5/5 takes the second, where <code class="w3-codespan">(=l° m n)</code> pins the quotient to 1 and <code class="w3-codespan">plus°</code> recovers the remainder. 17/3, 12/4 and 7/1 take the third, the only clause that reaches <code class="w3-codespan">n-wider-than-m°</code>. 12/4 is here because an exact division is the one case whose remainder is <code class="w3-codespan">'()</code>, so it is the row that would break first if <code class="w3-codespan">(&lt;° r m)</code> were ever weakened to <code class="w3-codespan">&lt;=°</code>, and 7/1 is the degenerate divisor on the other side, where the quotient is the dividend itself. The last row divides by zero: no clause can hold, since two of them need <code class="w3-codespan">(&lt;° r m)</code> and nothing is below <code class="w3-codespan">'()</code>, and the point of asserting the empty stream is that the failure is finite -- the guards reject before the recursion is entered, so 5/0 costs nothing instead of hanging. Cost note: 17/3 (~60 ms) dominates this family by an order of magnitude -- 12/4 is next at ~7 ms, 7/1 costs ~3 ms and the three narrow cases are at or under 1 ms; the price is in the bit width of the operands, so widen the numbers only with a reason.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test//° _)
+  (⊦= (list (build-num 0) (build-num 2))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (q rem)
+               (/° (build-num 2) (build-num 5) q rem)
+               (=° r (list q rem))))))
+  (⊦= (list (build-num 0) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (q rem)
+               (/° '() (build-num 3) q rem)
+               (=° r (list q rem))))))
+  (⊦= (list (build-num 1) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (q rem)
+               (/° (build-num 5) (build-num 5) q rem)
+               (=° r (list q rem))))))
+  (⊦= (list (build-num 5) (build-num 2))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (q rem)
+               (/° (build-num 17) (build-num 3) q rem)
+               (=° r (list q rem))))))
+  (⊦= (list (build-num 3) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (q rem)
+               (/° (build-num 12) (build-num 4) q rem)
+               (=° r (list q rem))))))
+  (⊦= (list (build-num 7) (build-num 0))
+      (car (μkanren-run
+             (r 1 #t)
+             (fresh°
+               (q rem)
+               (/° (build-num 7) (build-num 1) q rem)
+               (=° r (list q rem))))))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (fresh° (q rem) (/° (build-num 5) '() q rem) (=° r (list q rem))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.097) (memory #(16793184 5014752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test//°/relational"><a href="#test//°/relational"><code>test//°/relational</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>One equation, <code class="w3-codespan">17 = 3·5 + 2</code>, asked four ways: each argument in turn left fresh while the other three are ground. Every run asks for two answers and gets one, so these assertions pin exhaustion as well as value -- the stream is not merely correct at its head, it closes, and <code class="w3-codespan">/°</code> is a function in all four directions on these arguments. The last two directions are the cheap ones, since <code class="w3-codespan">q</code> and <code class="w3-codespan">r</code> are what the clauses compute anyway. The first two run the long division backwards: with <code class="w3-codespan">n</code> or <code class="w3-codespan">m</code> unknown, the third clause's guards <code class="w3-codespan">(pos° q)</code>, <code class="w3-codespan">(&lt;l° m n)</code> and <code class="w3-codespan">(&lt;° r m)</code> are the only thing keeping the width of the answer finite, and <code class="w3-codespan">split°</code> inside <code class="w3-codespan">n-wider-than-m°</code> has to assemble a dividend it was never given, which works only because that relation is driven by the ruler rather than by <code class="w3-codespan">n</code>. Recovering <code class="w3-codespan">m</code> is the slowest of the four at ~140 ms, five times the forward quotient.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test//°/relational _)
+  (⊦= (list (build-num 17))
+      (μkanren-run (r 2 #t) (/° r (build-num 3) (build-num 5) (build-num 2))))
+  (⊦= (list (build-num 3))
+      (μkanren-run (r 2 #t) (/° (build-num 17) r (build-num 5) (build-num 2))))
+  (⊦= (list (build-num 5))
+      (μkanren-run (r 2 #t) (/° (build-num 17) (build-num 3) r (build-num 2))))
+  (⊦= (list (build-num 2))
+      (μkanren-run
+        (r 2 #t)
+        (/° (build-num 17) (build-num 3) (build-num 5) r))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.305) (memory #(16793184 4990040 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/n-wider-than-m°"><a href="#test/n-wider-than-m°"><code>test/n-wider-than-m°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">n-wider-than-m°</code> is the long-division recurrence, not division. It relates <code class="w3-codespan">n</code>, <code class="w3-codespan">m</code>, <code class="w3-codespan">q</code>, <code class="w3-codespan">r</code> whenever <code class="w3-codespan">n = m·q + r</code> and says nothing about the remainder being small or the quotient being positive, so on 17 and 3 it streams q=0 r=17, then q=5 r=2, then q=1 r=14, then q=4 r=5, and does not stop there -- all four satisfy the equation and only the second is a quotient. The discipline lives entirely in the caller: <code class="w3-codespan">/°</code>'s third clause adds <code class="w3-codespan">(pos° q)</code>, <code class="w3-codespan">(&lt;l° m n)</code> and <code class="w3-codespan">(&lt;° r m)</code> before delegating, and the second assertion is the same query through <code class="w3-codespan">/°</code>, asking for four answers and receiving exactly one. The third assertion hands <code class="w3-codespan">/°</code> the first junk answer directly and watches it be refused. Anyone who inlines <code class="w3-codespan">n-wider-than-m°</code> into <code class="w3-codespan">/°</code>, or who moves a guard down into it for symmetry, gets a <code class="w3-codespan">/°</code> that answers q=0 r=n for every division and still passes any test that only looks at the head of the stream -- which is why this case reads four answers deep.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/n-wider-than-m° _)
+  (⊦= (list (list (build-num 0) (build-num 17))
+            (list (build-num 5) (build-num 2))
+            (list (build-num 1) (build-num 14))
+            (list (build-num 4) (build-num 5)))
+      (μkanren-run
+        (r 4 #t)
+        (fresh°
+          (q rem)
+          (n-wider-than-m° (build-num 17) (build-num 3) q rem)
+          (=° r (list q rem)))))
+  (⊦= (list (list (build-num 5) (build-num 2)))
+      (μkanren-run
+        (r 4 #t)
+        (fresh°
+          (q rem)
+          (/° (build-num 17) (build-num 3) q rem)
+          (=° r (list q rem)))))
+  (⊦= '()
+      (μkanren-run
+        (r 1 #t)
+        (/° (build-num 17) (build-num 3) '() (build-num 17))
+        (=° r 'yes))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.391) (memory #(16793184 5001144 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/exp2°"><a href="#test/exp2°"><code>test/exp2°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Despite the name <code class="w3-codespan">exp2°</code> computes no power: <code class="w3-codespan">(exp2° n '() q)</code> relates <code class="w3-codespan">n</code> to <code class="w3-codespan">q = ⌊log₂ n⌋</code>, and it does so structurally -- the yardstick <code class="w3-codespan">b</code> is doubled by <code class="w3-codespan">(append° b `(1 . ,b) b2)</code>, which widens a numeral instead of multiplying it. The 15/16 pair is the case that earns its place: it pins the floor, and pins that the step lands exactly on the power of two. Everything <code class="w3-codespan">log°</code> does in base 2 rests on that.</p>
+<p>Run backwards the measure shows how coarse it is: asking which <code class="w3-codespan">n</code> have <code class="w3-codespan">⌊log₂ n⌋ = 3</code> returns the whole dyadic interval <code class="w3-codespan">[8,16)</code> as six answers, two of them partially ground -- <code class="w3-codespan">(0 α 1 1)</code> stands for 12 and 14, <code class="w3-codespan">(1 α 1 1)</code> for 13 and 15. A bit the search never had to decide is left as a variable rather than split into two answers, and nine answers were requested against six that exist, so the enumeration is complete and terminating, not truncated.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/exp2° _)
+  (define (⌊log2⌋ n) (car (μkanren-run (q 1 #t) (exp2° (build-num n) '() q))))
+  (⊦= (build-num 0) (⌊log2⌋ 1))
+  (⊦= (build-num 1) (⌊log2⌋ 2))
+  (⊦= (build-num 2) (⌊log2⌋ 5))
+  (⊦= (build-num 3) (⌊log2⌋ 8))
+  (⊦= (build-num 3) (⌊log2⌋ 15))
+  (⊦= (build-num 4) (⌊log2⌋ 16))
+  (⊦= '((0 0 0 1) (1 0 0 1) (0 1 0 1) (0 α 1 1) (1 1 0 1) (1 α 1 1))
+      (μkanren-run (n 9 #t) (exp2° n '() (build-num 3)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.014) (memory #(16793184 4998608 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/log°/base-two"><a href="#test/log°/base-two"><code>test/log°/base-two</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">log°</code> special-cases base two with the clause <code class="w3-codespan">(=° '(0 1) b)</code>, which performs no arithmetic at all: it reads <code class="w3-codespan">q</code> off <code class="w3-codespan">exp2°</code> and then uses <code class="w3-codespan">split°</code> to cut <code class="w3-codespan">n</code> at that position for the remainder. Hence none of these five queries costs more than twenty milliseconds where the matching base-three query costs eighty, and the weight is carried by the two non-exact rows, 9 = 2³ + 1 and 12 = 2³ + 4: they are the assertions that would survive nothing, since <code class="w3-codespan">r</code> reaches them only through <code class="w3-codespan">split°</code>. 8 and 16 are exact powers whose remainder stays <code class="w3-codespan">'()</code> however <code class="w3-codespan">split°</code> misbehaves, and 1 never enters this clause at all -- <code class="w3-codespan">(pos° dd)</code> demands three bits, so <code class="w3-codespan">n = 1</code> is answered by the first clause as <code class="w3-codespan">q = 0</code>, <code class="w3-codespan">r = n - 1</code>.</p>
+<p>Asking for four answers of <code class="w3-codespan">log° 12 2</code> and getting exactly one is the contract, not an accident. The clause commits to <code class="w3-codespan">q = ⌊log₂ n⌋</code>, after which <code class="w3-codespan">r</code> is a function of it, so the base-two path is deterministic -- unlike the small frames below, where the same query shape has two answers.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/log°/base-two _)
+  (define (q&amp;r k n b)
+    (μkanren-run
+      (r k #t)
+      (fresh°
+        (q rem)
+        (log° (build-num n) (build-num b) q rem)
+        (=° r (list q rem)))))
+  (⊦= `((,(build-num 0) ,(build-num 0))) (q&amp;r 1 1 2))
+  (⊦= `((,(build-num 3) ,(build-num 0))) (q&amp;r 1 8 2))
+  (⊦= `((,(build-num 3) ,(build-num 1))) (q&amp;r 1 9 2))
+  (⊦= `((,(build-num 3) ,(build-num 4))) (q&amp;r 4 12 2))
+  (⊦= `((,(build-num 4) ,(build-num 0))) (q&amp;r 2 16 2)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.05) (memory #(16793184 5000776 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/log°/small-frames"><a href="#test/log°/small-frames"><code>test/log°/small-frames</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The first four clauses of <code class="w3-codespan">log°</code> are the non-recursive ones and each fails differently. <code class="w3-codespan">n ≤ b</code> (3 in base 7) answers <code class="w3-codespan">q = 0, r = n - 1</code>, because <code class="w3-codespan">b⁰ = 1</code> is subtracted, not <code class="w3-codespan">b</code>. At <code class="w3-codespan">n = b</code> clauses one and two overlap and <code class="w3-codespan">log°</code> is honestly nondeterministic: 5 in base 5 answers both <code class="w3-codespan">5 = 5¹ + 0</code> and <code class="w3-codespan">5 = 5⁰ + 4</code>, and then stops. Four answers were asked for and two exist, which is the real assertion -- the overlap is exactly two-fold and does not leak into the recursive clause.</p>
+<p>Bases 1 and 0 are the frames that exist only to keep <code class="w3-codespan">log°</code> total. Since <code class="w3-codespan">1^q = 1</code> and <code class="w3-codespan">0^q = 0</code> for every positive <code class="w3-codespan">q</code>, the clauses constrain <code class="w3-codespan">q</code> with nothing but <code class="w3-codespan">(pos° q)</code> and it comes back reified as <code class="w3-codespan">(α . β)</code> -- a pair with both halves fresh, which is <code class="w3-codespan">pos°</code> and nothing more. Expecting the Greek letters is expecting <code class="w3-codespan">log°</code> to decline to enumerate: a future guard that forced <code class="w3-codespan">q</code> to a concrete numeral here would turn one answer into infinitely many.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/log°/small-frames _)
+  (define (q&amp;r k n b)
+    (μkanren-run
+      (r k #t)
+      (fresh°
+        (q rem)
+        (log° (build-num n) (build-num b) q rem)
+        (=° r (list q rem)))))
+  (⊦= `((,(build-num 0) ,(build-num 2))) (q&amp;r 4 3 7))
+  (⊦= `((,(build-num 1) ,(build-num 0)) (,(build-num 0) ,(build-num 4)))
+      (q&amp;r 4 5 5))
+  (⊦= `(((α . β) ,(build-num 4))) (q&amp;r 3 5 1))
+  (⊦= `(((α . β) ,(build-num 5))) (q&amp;r 3 5 0)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.007) (memory #(16793184 5005288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/log°/base-three-or-more°"><a href="#test/log°/base-three-or-more°"><code>test/log°/base-three-or-more°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Every base that is not 0, 1 or 2 falls through to <code class="w3-codespan">base-three-or-more°</code>, the most expensive relation in the file: before it commits to a <code class="w3-codespan">q</code> it brackets <code class="w3-codespan">b^q ≤ n &lt; b^(q+1)</code> by widths, calling <code class="w3-codespan">exp2°</code> twice, <code class="w3-codespan">/°</code> twice and <code class="w3-codespan">repeated-mul°</code> twice. Nine in base three costs about 80 ms against 5 ms for the base-two clause; that ratio, not the two answers, is why every base-three case in this suite is a one-digit number.</p>
+<p>9 and 10 are chosen as a pair so that the exact and the inexact answer share a <code class="w3-codespan">q</code>, and 10 is asked for four answers to pin that <code class="w3-codespan">q</code> is the largest exponent with <code class="w3-codespan">b^q ≤ n</code>: <code class="w3-codespan">10 = 3¹ + 7</code> is arithmetically true and is <b>not</b> an answer -- exhausting that proof costs 300 ms against 85 ms for the first one. The third assertion calls <code class="w3-codespan">base-three-or-more°</code> directly and gets the same answer, pinning that <code class="w3-codespan">log°</code>'s last clause delegates the result whole instead of adjusting it -- so a guard added around the call may not change what comes back.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/log°/base-three-or-more° _)
+  (define (q&amp;r k n b)
+    (μkanren-run
+      (r k #t)
+      (fresh°
+        (q rem)
+        (log° (build-num n) (build-num b) q rem)
+        (=° r (list q rem)))))
+  (⊦= `((,(build-num 2) ,(build-num 0))) (q&amp;r 1 9 3))
+  (⊦= `((,(build-num 2) ,(build-num 1))) (q&amp;r 4 10 3))
+  (⊦= `((,(build-num 2) ,(build-num 0)))
+      (μkanren-run
+        (r 1 #t)
+        (fresh°
+          (q rem)
+          (base-three-or-more° (build-num 9) (build-num 3) q rem)
+          (=° r (list q rem))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.671) (memory #(16793184 5007312 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/repeated-mul°"><a href="#test/repeated-mul°"><code>test/repeated-mul°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">repeated-mul°</code> is the naive fold <code class="w3-codespan">n^q = n^(q-1) · n</code> that <code class="w3-codespan">base-three-or-more°</code> leans on, and its two base clauses carry all the risk. <code class="w3-codespan">q = 0</code> answers 1 only for <b>positive</b> <code class="w3-codespan">n</code>: the <code class="w3-codespan">(pos° n)</code> guard is the sole reason <code class="w3-codespan">(repeated-mul° '() '() nq)</code> does not assert <code class="w3-codespan">0⁰ = 1</code>. And <code class="w3-codespan">1^5 = 1</code> is the case where the accumulator never grows, so it fails loudly if the recursion counts down on the wrong argument.</p>
+<p>Both backward directions terminate on this same definition, for different reasons. <code class="w3-codespan">q</code> from <code class="w3-codespan">3^q = 27</code> runs because <code class="w3-codespan">(plus° q1 '(1) q)</code> is a relation and subtracts as happily as it adds; <code class="w3-codespan">n</code> from <code class="w3-codespan">n³ = 27</code> runs because <code class="w3-codespan">*°</code> factorises, and it terminates only because <code class="w3-codespan">bound-*°</code> bounds the factors by the width of the ground product.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/repeated-mul° _)
+  (define (n^q n q)
+    (car (μkanren-run
+           (nq 1 #t)
+           (repeated-mul° (build-num n) (build-num q) nq))))
+  (⊦= (build-num 1) (n^q 3 0))
+  (⊦= (build-num 3) (n^q 3 1))
+  (⊦= (build-num 27) (n^q 3 3))
+  (⊦= (build-num 16) (n^q 2 4))
+  (⊦= (build-num 1) (n^q 1 5))
+  (⊦= `(,(build-num 3))
+      (μkanren-run (q 1 #t) (repeated-mul° (build-num 3) q (build-num 27))))
+  (⊦= `(,(build-num 3))
+      (μkanren-run (n 1 #t) (repeated-mul° n (build-num 3) (build-num 27)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.056) (memory #(16793184 5009864 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/exp°"><a href="#test/exp°"><code>test/exp°</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">exp°</code> has no body of its own -- it is <code class="w3-codespan">(log° n b q '())</code>, exponentiation read as a logarithm with no remainder -- so every use pays whatever <code class="w3-codespan">log°</code> charges for that base. <code class="w3-codespan">2⁵</code> is a few milliseconds down the base-two clause; <code class="w3-codespan">3³</code> is about 0.4 s through <code class="w3-codespan">base-three-or-more°</code> and is the slowest assertion in this file. It is also asserted a second time, via <code class="w3-codespan">repeated-mul°</code> above, on purpose: <code class="w3-codespan">base-three-or-more°</code> reaches 27 <b>using</b> <code class="w3-codespan">repeated-mul°</code>, and agreement between the two readings is the cheapest available check that the bracketing is not off by one.</p>
+<p>The two backward runs are the interesting ones. <code class="w3-codespan">(exp° 2 q 32)</code> is a discrete logarithm and needs no help. <code class="w3-codespan">(exp° b 2 9)</code> is an integer square root, and it works only because <code class="w3-codespan">exp°</code> pins the remainder to <code class="w3-codespan">'()</code>: with the remainder left fresh the same query answers <code class="w3-codespan">(() (1 0 0 1))</code> and <code class="w3-codespan">((1) (0 0 0 1))</code> first -- bases 0 and 1 satisfy <code class="w3-codespan">log°</code> for every <code class="w3-codespan">n</code> -- and only then 3. Zero remainder is exactly the filter that removes the degenerate bases.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/exp° _)
+  (define (b^q b q)
+    (car (μkanren-run (n 1 #t) (exp° (build-num b) (build-num q) n))))
+  (⊦= (build-num 1) (b^q 2 0))
+  (⊦= (build-num 32) (b^q 2 5))
+  (⊦= (build-num 27) (b^q 3 3))
+  (⊦= `(,(build-num 5))
+      (μkanren-run (q 1 #t) (exp° (build-num 2) q (build-num 32))))
+  (⊦= `(,(build-num 3))
+      (μkanren-run (b 1 #t) (exp° b (build-num 2) (build-num 9)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.75) (memory #(16793184 5013008 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

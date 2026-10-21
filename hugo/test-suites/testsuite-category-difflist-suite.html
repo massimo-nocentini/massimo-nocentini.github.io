@@ -1,0 +1,137 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section163">
+<header>
+<h1>Introduction</h1></header></section>
+<p>This section tests difference lists: a difflist is a function that prepends its content to the list it receives, so appending two of them is function composition, in constant time, and <code>difflist->list</code> applies the result to <code>'()</code>.</p>
+<section id="section164">
+<header>
+<h1>Implementation</h1></header></section>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(module
+  (aux category difflist)
+  *
+  (import
+    scheme
+    (chicken base)
+    (chicken pretty-print)
+    (only srfi-1 append-map append-reverse)
+    (aux base))
+  (define-record category-difflist f)
+  (set-record-printer!
+    category-difflist
+    (λ (d port)
+       (let ((lst (difflist-&gt;list d)) (D (display/port port)))
+         (D &quot;⸨&quot;)
+         (for-each (μ v (D &quot; &quot;) (D v)) lst)
+         (D &quot; ⸩&quot;))))
+  (define (return x) (make-category-difflist (λ (x*) (cons x x*))))
+  (define (&gt;&gt;= m g)
+    (let* ((f (category-difflist-f m)) (xs (map g (f '()))))
+      (make-category-difflist
+        (λ (xs*) (foldr (λ (m* lst) ((category-difflist-f m*) lst)) xs* xs)))))
+  (define (fail . args) mempty)
+  (define mempty (make-category-difflist (λ (lst) lst)))
+  (define (mappend l1 l2)
+    (make-category-difflist
+      (o (category-difflist-f l1) (category-difflist-f l2))))
+  (define (mlog x) (make-category-difflist (λ (xs) (cons x xs))))
+  (define (list-&gt;difflist l1) (make-category-difflist (λ (l2) (append l1 l2))))
+  (define (difflist-&gt;list dl) ((category-difflist-f dl) '()))
+  (define (reverse/difflist dl)
+    (make-category-difflist
+      (λ (xs) (append-reverse ((category-difflist-f dl) '()) xs)))))
+</code></pre></div>
+<h2 id="test/monoid"><a href="#test/monoid"><code>test/monoid</code>: <span class="w3-text-green">pass</span></a></h2>Appending is composition, and <code>mempty</code> is the identity.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/monoid _)
+  (⊦= '(1 2 3 4 5)
+      (difflist-&gt;list
+        (mappend (list-&gt;difflist '(1 2 3)) (list-&gt;difflist '(4 5)))))
+  (⊦= '(1 2) (difflist-&gt;list (mappend mempty (list-&gt;difflist '(1 2)))))
+  (⊦= '(1 2) (difflist-&gt;list (mappend (list-&gt;difflist '(1 2)) mempty))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1918504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/fail"><a href="#test/fail"><code>test/fail</code>: <span class="w3-text-green">pass</span></a></h2>A failure is the empty difflist, so it drops only its own branch, as <code>'()</code> does in the list monad.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/fail _)
+  (⊦= '() (difflist-&gt;list (fail)))
+  (⊦= '(1 2) (difflist-&gt;list (mappend (fail) (list-&gt;difflist '(1 2)))))
+  (⊦= '(1 3)
+      (difflist-&gt;list
+        (&gt;&gt;= (list-&gt;difflist '(1 2 3))
+             (λ (x) (if (= x 2) (fail) (return x))))))
+  (⊦= '(1 3 9 9)
+      (difflist-&gt;list
+        (mappend
+          (&gt;&gt;= (list-&gt;difflist '(1 2 3))
+               (λ (x) (if (= x 2) (fail) (return x))))
+          (list-&gt;difflist '(9 9))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1920024 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/reverse"><a href="#test/reverse"><code>test/reverse</code>: <span class="w3-text-green">pass</span></a></h2>Reversing a difflist reverses its own content only, not the tail it is later given.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/reverse _)
+  (⊦= '(3 2 1) (difflist-&gt;list (reverse/difflist (list-&gt;difflist '(1 2 3)))))
+  (⊦= '(3 2 1 4 5)
+      (difflist-&gt;list
+        (mappend
+          (reverse/difflist (list-&gt;difflist '(1 2 3)))
+          (list-&gt;difflist '(4 5)))))
+  (⊦= '(4 5 3 2 1)
+      (difflist-&gt;list
+        (mappend
+          (list-&gt;difflist '(4 5))
+          (reverse/difflist (list-&gt;difflist '(1 2 3)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1921152 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/mlog"><a href="#test/mlog"><code>test/mlog</code>: <span class="w3-text-green">pass</span></a></h2>Logging a value appends it as it is, as the list monoid does, so a writer logs the same over both.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/mlog _)
+  (⊦= '(a) (difflist-&gt;list (mlog 'a)))
+  (⊦= '(1 2)
+      (difflist-&gt;list
+        (W:category-writer-log (W:&gt;&gt;= (W:tell 1) (λ (_) (W:tell 2)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1922528 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/printer"><a href="#test/printer"><code>test/printer</code>: <span class="w3-text-green">pass</span></a></h2>A difflist prints its content, left to right.
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/printer _)
+  (⊦= &quot;⸨ 1 2 3 ⸩&quot;
+      (with-output-to-string (λ () (display (list-&gt;difflist '(1 2 3))))))
+  (⊦= &quot;⸨ ⸩&quot; (with-output-to-string (λ () (display mempty)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(6291456 1923840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

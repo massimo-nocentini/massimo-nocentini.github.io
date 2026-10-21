@@ -1,0 +1,240 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<p>The call-chain buffer is scanned in full by the minor collection that ends every re-entry into Scheme from C, so its length multiplies the cost of every comparison a Scheme comparator makes.  <code class="w3-codespan">timsort-trace-buffer-size</code> shrinks it for the extent of a sort.  It is off by default, because the resize also clears the recorded call chain and so shortens the backtrace of anything the comparator raises.</p>
+<p>These tests are about the parameter, not about the ordering: the sorted results themselves are checked in <code class="w3-codespan">timsort.scm</code>.</p>
+<h2 id="test/default-is-off"><a href="#test/default-is-off"><code>test/default-is-off</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/default-is-off _)
+  (⊦= #f (timsort-trace-buffer-size))
+  (⊦= default-size (timsort-trace-buffer-size/current))
+  (timsort/comparator records)
+  (⊦= default-size (timsort-trace-buffer-size/current)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.024) (memory #(12582912 2230016 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/size-is-restored-exactly"><a href="#test/size-is-restored-exactly"><code>test/size-is-restored-exactly</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/size-is-restored-exactly _)
+  (parameterize
+    ((timsort-trace-buffer-size 3))
+    (do ((i 0 (+ i 1)))
+        ((= i 200))
+      (timsort/comparator (list (cons 3 'a) (cons 1 'b) (cons 2 'c)))))
+  (⊦= default-size (timsort-trace-buffer-size/current)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(12582912 2231760 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/restored-on-every-exit"><a href="#test/restored-on-every-exit"><code>test/restored-on-every-exit</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/restored-on-every-exit _)
+  (parameterize
+    ((timsort-trace-buffer-size 3))
+    (timsort/comparator records)
+    (⊦= default-size (timsort-trace-buffer-size/current))
+    (handle-exceptions
+      e
+      #t
+      ((timsort/gen
+         (lambda (a b) (error 'boom &quot;from the comparator&quot;))
+         #f
+         #f
+         #f
+         #t
+         TIMSORT_USE_COMPARATOR)
+       records))
+    (⊦= default-size (timsort-trace-buffer-size/current))
+    (call-with-current-continuation
+      (lambda (k)
+        ((timsort/gen
+           (lambda (a b) (k 'escaped))
+           #f
+           #f
+           #f
+           #t
+           TIMSORT_USE_COMPARATOR)
+         records)))
+    (⊦= default-size (timsort-trace-buffer-size/current)))
+  (⊦= default-size (timsort-trace-buffer-size/current)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.013) (memory #(12582912 2339696 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/comparator-runs-under-the-requested-size"><a href="#test/comparator-runs-under-the-requested-size"><code>test/comparator-runs-under-the-requested-size</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/comparator-runs-under-the-requested-size _)
+  (let ((seen '()))
+    (parameterize
+      ((timsort-trace-buffer-size 3))
+      ((timsort/gen
+         (lambda (a b)
+           (set! seen (cons (timsort-trace-buffer-size/current) seen))
+           (&lt; a b))
+         #f
+         #f
+         #f
+         #t
+         TIMSORT_USE_COMPARATOR)
+       '(5 4 3 2 1 9 7 8)))
+    (⊦= '(3) (delete-duplicates seen)))
+  (let ((seen '()))
+    ((timsort/gen
+       (lambda (a b)
+         (set! seen (cons (timsort-trace-buffer-size/current) seen))
+         (&lt; a b))
+       #f
+       #f
+       #f
+       #t
+       TIMSORT_USE_COMPARATOR)
+     '(5 4 3 2 1 9 7 8))
+    (⊦= (list default-size) (delete-duplicates seen))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2341928 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/nesting-restores-per-level"><a href="#test/nesting-restores-per-level"><code>test/nesting-restores-per-level</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/nesting-restores-per-level _)
+  (let ((inside-after-inner #f) (done #f))
+    (parameterize
+      ((timsort-trace-buffer-size 8))
+      ((timsort/gen
+         (lambda (a b)
+           (unless
+             done
+             (set! done #t)
+             (parameterize
+               ((timsort-trace-buffer-size 3))
+               ((timsort/gen &lt; #f #f #f #t TIMSORT_USE_COMPARATOR) '(3 1 2)))
+             (set! inside-after-inner (timsort-trace-buffer-size/current)))
+           (&lt; a b))
+         #f
+         #f
+         #f
+         #t
+         TIMSORT_USE_COMPARATOR)
+       '(5 4 3 2 1)))
+    (⊦= 8 inside-after-inner)
+    (⊦= default-size (timsort-trace-buffer-size/current))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2342472 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/with-form"><a href="#test/with-form"><code>test/with-form</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/with-form _)
+  (⊦= (list 3 '(1 2 3))
+      (with-timsort-trace-buffer-size
+        3
+        (lambda ()
+          (list (timsort-trace-buffer-size/current) (timsort '(3 1 2))))))
+  (⊦= default-size (timsort-trace-buffer-size/current))
+  (handle-exceptions
+    e
+    #t
+    (with-timsort-trace-buffer-size 3 (lambda () (error 'boom &quot;inside&quot;))))
+  (⊦= default-size (timsort-trace-buffer-size/current))
+  (⊦= default-size
+      (with-timsort-trace-buffer-size
+        #f
+        (lambda () (timsort-trace-buffer-size/current)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2343424 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/rejects-values-C-cannot-use"><a href="#test/rejects-values-C-cannot-use"><code>test/rejects-values-C-cannot-use</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/rejects-values-C-cannot-use _)
+  (let ((expected
+          &quot;expected #f, or a fixnum between the runtime's minimum and 65536&quot;))
+    (⊦= expected
+        (message-of
+          (lambda () (parameterize ((timsort-trace-buffer-size 16.0)) #t))))
+    (⊦= expected
+        (message-of
+          (lambda () (parameterize ((timsort-trace-buffer-size 2)) #t))))
+    (⊦= expected
+        (message-of
+          (lambda () (parameterize ((timsort-trace-buffer-size 'small)) #t))))
+    (⊦= expected
+        (message-of
+          (lambda ()
+            (parameterize ((timsort-trace-buffer-size (expt 2 80))) #t))))
+    (⊦= expected
+        (message-of
+          (lambda () (parameterize ((timsort-trace-buffer-size 65537)) #t))))
+    (⊨ (fixnum?
+         (parameterize
+           ((timsort-trace-buffer-size 65536))
+           (timsort-trace-buffer-size)))))
+  (⊦= 3
+      (parameterize
+        ((timsort-trace-buffer-size 3))
+        (timsort-trace-buffer-size)))
+  (⊦= default-size (timsort-trace-buffer-size/current)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(12582912 2345752 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/results-identical-with-the-knob-on"><a href="#test/results-identical-with-the-knob-on"><code>test/results-identical-with-the-knob-on</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/results-identical-with-the-knob-on _)
+  (let ((reference (sort records key&lt;?)))
+    (⊨ (every eq? reference (timsort/comparator records)))
+    (⊨ (every eq?
+              reference
+              (parameterize
+                ((timsort-trace-buffer-size 3))
+                (timsort/comparator records)))))
+  (let ((reference (reverse (sort (reverse records) key&lt;?))))
+    (⊨ (every eq?
+              reference
+              (parameterize
+                ((timsort-trace-buffer-size 3))
+                (timtros/comparator records))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.06) (memory #(12582912 2338200 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/C-evaluated-families-unaffected"><a href="#test/C-evaluated-families-unaffected"><code>test/C-evaluated-families-unaffected</code>: <span class="w3-text-green">pass</span></a></h2>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/C-evaluated-families-unaffected _)
+  (let ((d (list-tabulate 2000 (lambda (i) (modulo (* i 40503) 1000)))))
+    (parameterize
+      ((timsort-trace-buffer-size 3))
+      (⊦= (sort d &lt;) (timsort d))
+      (⊦= (reverse (sort (reverse d) &lt;)) (timtros d))
+      (⊦= (sort d &lt;) (timsort/primitive d))
+      (let ((c (list-copy d))) (timsort! c) (⊦= (sort d &lt;) c))
+      (⊦= '(&quot;a&quot; &quot;b&quot; &quot;c&quot;) (timsort/primitive '(&quot;b&quot; &quot;a&quot; &quot;c&quot;)))
+      (⊦= &quot;bad argument type - not a number&quot;
+          (message-of (lambda () (timsort (list 1 &quot;two&quot; 3))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.003) (memory #(12582912 2390832 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div></body></html>

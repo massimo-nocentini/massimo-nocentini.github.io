@@ -1,0 +1,767 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scheme.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/mathematica.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/htmlxml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ocaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pgsql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'; mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });</script></head>
+<body>
+<section id="section2501">
+<header>
+<h1>Correlated memoization and lazy permutations</h1></header></section>
+<p>Lazy lists, shared lazily-evaluated variables and memoized stochastic functions, after <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#all-different">Correlated memoization and lazy permutations</a></cite>, <code class="w3-codespan">slazy.ml</code> and <cite><a href="https://okmij.org/ftp/kakuritu/Hansei.html#sorted">Realistic Example: sorted list</a></cite>:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Sampling of permutations, stochastic bijective functions, sequences of correlated
+	  random variables, the all-different constraint -- are related to the same problem. A
+	  problem with so many names must be important, and so must be its efficient solution.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote></p>
+<p>The goal is a sequence of N all-different random variables over 0 .. N-1, a stochastic
+	bijection: the naive <code class="w3-codespan">f1</code> of LP:36-41, which draws <code class="w3-codespan">uniformly_list [0;1]</code> at every application, is not even a function
+	(test <code class="w3-codespan">test/correlated</code>); <code class="w3-codespan">probcc-memo</code> makes it one, and <code class="w3-codespan">probcc-lazy-permutation</code> (LP:127-229) and <code class="w3-codespan">probcc-lazy-permutation/ins</code> (LP:266-330) correlate the memoized
+	values, so that each one is drawn only when asked for, among the values still free.</p>
+<section id="section2502">
+<header>
+<h1>Laziness and non-determinism</h1></header></section>
+<p>Laziness and non-determinism make a tricky combination (SL:10-93): a variable bound with <code class="w3-codespan">let</code> is computed in every world, also where it is not needed; a thunk
+	is not shared; and the built-in <code class="w3-codespan">delay</code> is shared across worlds, which
+	gives a wrong distribution (DSL p.21 l.912-922). <code class="w3-codespan">probcc-letlazy</code> evaluates its body at most once per world, when it is first needed (P:270-330).</p>
+<section id="section2503">
+<header>
+<h1>Realistic example: sorted list</h1></header></section>
+<p>Harik's problem (H <code class="w3-codespan">#sorted</code>, SO:1-11) draws N numbers uniformly
+	from 0 .. M-1 and asks for the probability that they are sorted; with numbers as lazy
+	lists of bits, the comparison stops at the first differing bit, which is crucial:
+<blockquote class="w3-panel w3-leftbar w3-round w3-border" style="max-width:61.8%"><span style="font-size:261%;opacity:0.2">&#10077;</span>
+<br /><i>Harik's problem is ideal for a benchmark: it is easy to explain and to model. The
+	  expected result is also known. Getting any useful estimate of the result is rather
+	  difficult, especially without extensive fine-tuning of the inference algorithm.</i>
+<footer>
+<p class="w3-right-align">Oleg Kiselyov</p></footer></blockquote>The exact probability for four numbers of five bits, over 2^20 worlds, and upstream's
+	importance-sampling runs of it are checked in <code class="w3-codespan">test/sorted</code>.</p>
+<h2 id="test/llist/kit"><a href="#test/llist/kit"><code>test/llist/kit</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The lazy-list kit of SL:325-355, M1:51-101 and M2:113-119, promoted to a library
+	    (deviation 24): <code class="w3-codespan">'()</code> and pairs <code class="w3-codespan">(head-thunk . tail)</code> stand for <code class="w3-codespan">LNil</code> and <code class="w3-codespan">LCons</code>; <code class="w3-codespan">probcc-lappend</code> and <code class="w3-codespan">probcc-lmap</code> are built with <code class="w3-codespan">probcc-letlazy</code>, so their cells are shared in a
+	    world; <code class="w3-codespan">probcc-lobserve</code> fails as soon as a head or the length
+	    differs, forcing no more than that.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/llist/kit _)
+  (define (to-list l)
+    (match/first
+      (l)
+      (() '())
+      ((,h unquote t) (let1 (x (h)) (cons x (to-list t))))))
+  (define abc (probcc-list-&gt;llist '(a b c)))
+  (⊦ equal? '() (to-list probcc-lnil))
+  (⊦ equal? '(a b c) (to-list abc))
+  (⊦ equal? '(x) (to-list (probcc-lcons (τ 'x) probcc-lnil)))
+  (⊦ equal? 3 (probcc-llength abc))
+  (⊦ equal? 0 (probcc-llength probcc-lnil))
+  (⊦ equal? 2 (probcc-llength/at-most 2 abc))
+  (⊦ equal? 3 (probcc-llength/at-most 7 abc))
+  (⊦ equal? 0 (probcc-llength/at-most 0 abc))
+  (⊦ equal? 'a (probcc-lreflect (probcc-lhead abc)))
+  (⊦ equal? '(b c) (to-list (probcc-ltail abc)))
+  (⊦ equal? 'z (probcc-lreflect (τ 'z)))
+  (⊦ equal?
+     '(((V (a b c d e)) 1))
+     (probcc-reify/exact
+       (to-list (probcc-lappend abc (probcc-list-&gt;llist '(d e))))))
+  (⊦ equal?
+     '(((V (a b c)) 1))
+     (probcc-reify/exact (to-list (probcc-lappend probcc-lnil abc))))
+  (⊦ equal?
+     '(((V (10 20 30)) 1))
+     (probcc-reify/exact
+       (to-list (probcc-lmap (λ (x) (* 10 x)) (probcc-list-&gt;llist '(1 2 3))))))
+  (⊦ equal? '() (probcc-reify/exact (probcc-lhead probcc-lnil)))
+  (⊦ equal? '() (probcc-reify/exact (probcc-ltail probcc-lnil)))
+  (⊦ equal?
+     '(((V ((#t #t) (#t #t))) 1/4)
+       ((V ((#t #f) (#t #f))) 1/4)
+       ((V ((#f #t) (#f #t))) 1/4)
+       ((V ((#f #f) (#f #f))) 1/4))
+     (probcc-reify/exact
+       (let* ((l (probcc-lmap
+                   (λ (_) (probcc-coin 1/2))
+                   (probcc-list-&gt;llist '(1 2))))
+              (b (to-list l))
+              (a (to-list l)))
+         (list a b))))
+  (⊦ equal?
+     '(((V (a b)) 1/2) ((V (a)) 1/2))
+     (probcc-reify/exact
+       (let* ((l (probcc-lappend
+                   (probcc-list-&gt;llist '(a))
+                   (τ (if (probcc-coin 1/2) '() (cons (τ 'b) probcc-lnil)))))
+              (b (to-list l))
+              (a (to-list l)))
+         (if (equal? a b) a 'unshared))))
+  (⊦ equal?
+     `(((V ,(void)) 1))
+     (probcc-reify/exact (probcc-lobserve abc '(a b c))))
+  (⊦ equal? '() (probcc-reify/exact (probcc-lobserve abc '(a x c))))
+  (⊦ equal? '() (probcc-reify/exact (probcc-lobserve abc '(a b))))
+  (⊦ equal? '() (probcc-reify/exact (probcc-lobserve abc '(a b c d))))
+  (⊦ equal?
+     `(((V ,(void)) 1/4))
+     (probcc-reify/exact
+       (probcc-lobserve
+         (probcc-lmap (λ (_) (probcc-coin 1/2)) (probcc-list-&gt;llist '(1 2)))
+         '(#t #f)))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3282944 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/lazy/sharing"><a href="#test/lazy/sharing"><code>test/lazy/sharing</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Call-by-need and non-determinism (SL:10-93): a strict <code class="w3-codespan">x</code> is computed 4 times, also in the world <code class="w3-codespan">u = 0</code> where it is not
+	    needed; a thunk is not shared, so the two components may differ (12 calls); a
+	    promise of <code class="w3-codespan">delay</code> is shared too widely, by the worlds that split
+	    inside its first <code class="w3-codespan">force</code>, so the first world to finish fixes the
+	    value for the others and the distribution is wrong (<code class="w3-codespan">tests3</code>, SL:57-70, where OCaml's <code class="w3-codespan">Lazy</code> is wrong too, differently); <code class="w3-codespan">probcc-letlazy</code> gives the strict distribution and computes <code class="w3-codespan">x</code> only where it is needed, 4 times: the world is split by the coin
+	    before <code class="w3-codespan">x</code> is forced (SL:85-93).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/lazy/sharing _)
+  (⊦ equal?
+     '((((V #f) 1/2)
+        ((V (21 21 #t)) 1/8)
+        ((V (21 21 #f)) 1/8)
+        ((V (11 11 #t)) 1/8)
+        ((V (11 11 #f)) 1/8))
+       4)
+     (with-calls (τ (probcc-reify/exact/a (tests1 1/2)))))
+  (⊦ equal?
+     '((((V #f) 1/2)
+        ((V (21 21 #t)) 1/16)
+        ((V (21 21 #f)) 1/16)
+        ((V (21 11 #t)) 1/16)
+        ((V (21 11 #f)) 1/16)
+        ((V (11 21 #t)) 1/16)
+        ((V (11 21 #f)) 1/16)
+        ((V (11 11 #t)) 1/16)
+        ((V (11 11 #f)) 1/16))
+       12)
+     (with-calls (τ (probcc-reify/exact/a (tests2 1/2)))))
+  (⊦ equal?
+     '((((V #f) 1/2) ((V (11 11 #t)) 1/4) ((V (11 11 #f)) 1/4)) 2)
+     (with-calls (τ (probcc-reify/exact/a (tests3 1/2)))))
+  (⊦ equal?
+     '((((V #f) 1/2)
+        ((V (21 21 #t)) 1/8)
+        ((V (21 21 #f)) 1/8)
+        ((V (11 11 #t)) 1/8)
+        ((V (11 11 #f)) 1/8))
+       4)
+     (with-calls (τ (probcc-reify/exact/a (tests4 1/2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3286960 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/lazy/variables"><a href="#test/lazy/variables"><code>test/lazy/variables</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Lazy variables in <code class="w3-codespan">testl1</code> .. <code class="w3-codespan">testl54</code> (SL:99-284): the lazy and the strict models have the same distribution, and the
+	    expensive function is called as often as upstream's prints its line; a variable that
+	    escapes the scope of its <code class="w3-codespan">letlazy</code>, forced after the world splits,
+	    is computed in each world (8 calls in <code class="w3-codespan">testl4</code>).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/lazy/variables _)
+  (define table
+    '(((V (2 2)) 3/8)
+      ((V (1 1)) 1/4)
+      ((V (6 6)) 1/8)
+      ((V (4 4)) 1/8)
+      ((V (3 3)) 1/8)))
+  (define table3
+    '(((V (2 #t 200 200)) 1/8)
+      ((V (2 #t 20 20)) 1/8)
+      ((V (2 #f 200 200)) 1/8)
+      ((V (2 #f 20 20)) 1/8)
+      ((V (1 #t 100 100)) 1/8)
+      ((V (1 #t 10 10)) 1/8)
+      ((V (1 #f 100 100)) 1/8)
+      ((V (1 #f 10 10)) 1/8)))
+  (⊦ equal?
+     (list table 4)
+     (with-calls (τ (probcc-reify/exact/a (testl1 1/2)))))
+  (⊦ equal?
+     (list table 4)
+     (with-calls (τ (probcc-reify/exact/a (testl2 1/2)))))
+  (⊦ equal?
+     (list table3 4)
+     (with-calls (τ (probcc-reify/exact/a (testl3 1/2)))))
+  (⊦ equal?
+     (list table3 8)
+     (with-calls (τ (probcc-reify/exact/a (testl4 1/2)))))
+  (⊦ equal?
+     (list table 4)
+     (with-calls (τ (probcc-reify/exact/a (testl51 1/2)))))
+  (⊦ equal?
+     (list table 4)
+     (with-calls (τ (probcc-reify/exact/a (testl52 1/2)))))
+  (⊦ equal?
+     (list table 4)
+     (with-calls (τ (probcc-reify/exact/a (testl53 1/2)))))
+  (⊦ equal?
+     '((((V (#t 2 2 2 2)) 1/4)
+        ((V (#t 1 1 1 1)) 1/4)
+        ((V (#f 2 2 2 2)) 1/4)
+        ((V (#f 1 1 1 1)) 1/4))
+       8)
+     (with-calls (τ (probcc-reify/exact/a (testl54 1/2))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.001) (memory #(8396592 3289088 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/llist/at-most"><a href="#test/llist/at-most"><code>test/llist/at-most</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Ken Shan's test (SL:349-367): the length of a lazy list of unbounded length,
+	    counting at most 5 cells, explores finitely many worlds.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/llist/at-most _)
+  (⊦ equal?
+     '(((V 0) 1/2)
+       ((V 1) 1/4)
+       ((V 2) 1/8)
+       ((V 3) 1/16)
+       ((V 5) 1/32)
+       ((V 4) 1/32))
+     (probcc-reify/exact
+       (probcc-llength/at-most 5 (probcc-letlazy (ll-count 0))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3289408 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/llist/pcfg"><a href="#test/llist/pcfg"><code>test/llist/pcfg</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The probabilistic context-free grammar of IBAL's Music TR (SL:288-478): noun
+	    phrases of unbounded length, as lazy lists that are forced only as far as the
+	    question needs; the tables are upstream's bit for bit (SL:387, 401, 451-454, 468).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/llist/pcfg _)
+  (⊦ equal?
+     '(((V (&quot;ants&quot; &quot;ants&quot;)) 0.59999999999999998)
+       ((V (&quot;flies&quot; &quot;flies&quot;)) 0.39999999999999997))
+     (probcc-reify/exact/a pcfg11))
+  (⊦ equal?
+     '(((V (&quot;ants&quot; &quot;ants&quot;)) 0.17999999999999999) ((V (&quot;flies&quot; &quot;flies&quot;)) 0.12))
+     (probcc-reify/exact/a pcfg12))
+  (⊦ equal?
+     '(((V (&quot;ants&quot; &quot;ants&quot; &quot;ants&quot; &quot;ants&quot;)) 0.108)
+       ((V (&quot;flies&quot; &quot;flies&quot; &quot;ants&quot; &quot;ants&quot;)) 0.072000000000000008)
+       ((V (&quot;ants&quot; &quot;ants&quot; &quot;flies&quot; &quot;flies&quot;)) 0.071999999999999995)
+       ((V (&quot;flies&quot; &quot;flies&quot; &quot;flies&quot; &quot;flies&quot;)) 0.048000000000000001))
+     (probcc-reify/exact/a pcfg13))
+  (⊦ equal?
+     '(((V (&quot;flies&quot; &quot;ants&quot;)) 0.071999999999999995)
+       ((V (&quot;flies&quot; &quot;flies&quot;)) 0.048000000000000001))
+     (probcc-reify/exact/a pcfg)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3291856 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/memo/functions"><a href="#test/memo/functions"><code>test/memo/functions</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Without memoization, two applications of a stochastic function to the same
+	    argument may give different results in the same world (<code class="w3-codespan">test1m</code>, SL:661-692); <code class="w3-codespan">test2m</code> and <code class="w3-codespan">test3m</code> of <code class="w3-codespan">hansei.scm</code> show <code class="w3-codespan">probcc-memo</code>. The sprinkler of SL:731-778 memoizes rain, sprinkler and wet grass as functions
+	    of the day: the grass of a day is wet or not once in a world, and given that it is
+	    wet on day 2, it rained with the weights 0.2838 and 0.322, those of the lawn in the suite hansei.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/memo/functions _)
+  (⊦ equal?
+     '(((V (#t 2 2 3 3)) 1/32)
+       ((V (#t 2 2 3 2)) 1/32)
+       ((V (#t 2 2 2 3)) 1/32)
+       ((V (#t 2 2 2 2)) 1/32)
+       ((V (#t 2 1 3 3)) 1/32)
+       ((V (#t 2 1 3 2)) 1/32)
+       ((V (#t 2 1 2 3)) 1/32)
+       ((V (#t 2 1 2 2)) 1/32)
+       ((V (#t 1 2 3 3)) 1/32)
+       ((V (#t 1 2 3 2)) 1/32)
+       ((V (#t 1 2 2 3)) 1/32)
+       ((V (#t 1 2 2 2)) 1/32)
+       ((V (#t 1 1 3 3)) 1/32)
+       ((V (#t 1 1 3 2)) 1/32)
+       ((V (#t 1 1 2 3)) 1/32)
+       ((V (#t 1 1 2 2)) 1/32)
+       ((V (#f 3 3 2 2)) 1/32)
+       ((V (#f 3 3 2 1)) 1/32)
+       ((V (#f 3 3 1 2)) 1/32)
+       ((V (#f 3 3 1 1)) 1/32)
+       ((V (#f 3 2 2 2)) 1/32)
+       ((V (#f 3 2 2 1)) 1/32)
+       ((V (#f 3 2 1 2)) 1/32)
+       ((V (#f 3 2 1 1)) 1/32)
+       ((V (#f 2 3 2 2)) 1/32)
+       ((V (#f 2 3 2 1)) 1/32)
+       ((V (#f 2 3 1 2)) 1/32)
+       ((V (#f 2 3 1 1)) 1/32)
+       ((V (#f 2 2 2 2)) 1/32)
+       ((V (#f 2 2 2 1)) 1/32)
+       ((V (#f 2 2 1 2)) 1/32)
+       ((V (#f 2 2 1 1)) 1/32))
+     (probcc-reify/exact (test1m)))
+  (⊦ equal?
+     '(((V #t) 1.0))
+     (probcc-reify/exact/a
+       (grass-model
+         (λ (grass-is-wet rain)
+            (let* ((b (grass-is-wet 2)) (a (grass-is-wet 2))) (equal? a b))))))
+  (⊦ equal?
+     '(((V #f) 0.32200000000000001) ((V #t) 0.2838))
+     (probcc-reify/exact/a
+       (grass-model
+         (λ (grass-is-wet rain)
+            (probcc-observe (λ (_) (grass-is-wet 2)) (τ (rain 2))))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3293288 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/lazy/delayed"><a href="#test/lazy/delayed"><code>test/lazy/delayed</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Lazy versus delayed evaluation (SL:782-860): an expression whose value is not
+	    used is not evaluated, so its failure is not seen; lazy evaluation is sound only for
+	    expressions that cannot fail, or when only the ratios of the final probabilities
+	    matter. In <code class="w3-codespan">testd1</code> the lazy <code class="w3-codespan">x</code> fails in the worlds where it is forced, in <code class="w3-codespan">testd2</code> it is never forced.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/lazy/delayed _)
+  (⊦ equal?
+     '((((V (1 1)) 1/2) ((V (2 2)) 1/4)) 4)
+     (with-calls (τ (probcc-reify/exact/a testd1))))
+  (⊦ equal? '(((V 2) 1/2) ((V 1) 1/2)) (probcc-reify/exact/a testd2)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3294840 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/split-at"><a href="#test/split-at"><code>test/split-at</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-split-at</code> (cf. LP:139-153, LPI:32-37) answers the zipper of
+	    a list at an element, the elements before it reversed; a list that is too short gives
+	    an empty tail.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/split-at _)
+  (⊦ equal? '(() (1 2 3)) (probcc-split-at 0 '(1 2 3)))
+  (⊦ equal? '((1) (2 3)) (probcc-split-at 1 '(1 2 3)))
+  (⊦ equal? '((2 1) (3)) (probcc-split-at 2 '(1 2 3)))
+  (⊦ equal? '((3 2 1) ()) (probcc-split-at 3 '(1 2 3)))
+  (⊦ equal? '((3 2 1) ()) (probcc-split-at 5 '(1 2 3)))
+  (⊦ equal? '(() ()) (probcc-split-at 2 '())))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3295688 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/uncons"><a href="#test/uncons"><code>test/uncons</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-uniform/either/uncons</code> (cf. LP:155-172) chooses an element
+	    uniformly and answers it with the others; a one-element list makes no choice, and the
+	    empty list fails.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/uncons _)
+  (⊦ equal?
+     '(((V (3 (1 2))) 1/3) ((V (2 (1 3))) 1/3) ((V (1 (2 3))) 1/3))
+     (probcc-reify/exact (probcc-uniform/either/uncons '(1 2 3))))
+  (⊦ equal?
+     '(((V (a ())) 1))
+     (probcc-reify/exact (probcc-uniform/either/uncons '(a))))
+  (⊦ equal?
+     #t
+     (match/first
+       (probcc-reify/0 (τ (probcc-uniform/either/uncons '(a))))
+       ((((V (a ())) 1)) #t)
+       (else #f)))
+  (⊦ equal? '() (probcc-reify/exact (probcc-uniform/either/uncons '()))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3297800 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/insert-shift"><a href="#test/insert-shift"><code>test/insert-shift</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-insert-shift</code> (cf. LP:233-264) inserts into a sorted list
+	    the integer j given as j minus the number of smaller elements.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/insert-shift _)
+  (⊦ equal? '(0 (0)) (probcc-insert-shift 0 '()))
+  (⊦ equal? '(1 (0 1)) (probcc-insert-shift 0 '(0)))
+  (⊦ equal? '(0 (0 1)) (probcc-insert-shift 0 '(1)))
+  (⊦ equal? '(2 (1 2)) (probcc-insert-shift 1 '(1)))
+  (⊦ equal? '(3 (1 3)) (probcc-insert-shift 2 '(1)))
+  (⊦ equal? '(2 (0 1 2)) (probcc-insert-shift 0 '(0 1)))
+  (⊦ equal? '(0 (0 1 2)) (probcc-insert-shift 0 '(1 2)))
+  (⊦ equal? '(3 (1 2 3)) (probcc-insert-shift 1 '(1 2))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3298736 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/correlated"><a href="#test/correlated"><code>test/correlated</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Stochastic functions (LP:17-107, H <code class="w3-codespan">#all-different</code>): <code class="w3-codespan">f1</code> is not a function, the memoized <code class="w3-codespan">f2</code> is; <code class="w3-codespan">f3</code> rejects the worlds where <code class="w3-codespan">f2</code> is not injective, wasting half of the choice space; <code class="w3-codespan">f4</code> draws a whole permutation lazily.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/correlated _)
+  (⊦ equal?
+     (map (λ (l) (list (list 'V l) 1/16))
+          '((1 1 1 1)
+            (1 1 1 0)
+            (1 1 0 1)
+            (1 1 0 0)
+            (1 0 1 1)
+            (1 0 1 0)
+            (1 0 0 1)
+            (1 0 0 0)
+            (0 1 1 1)
+            (0 1 1 0)
+            (0 1 0 1)
+            (0 1 0 0)
+            (0 0 1 1)
+            (0 0 1 0)
+            (0 0 0 1)
+            (0 0 0 0)))
+     (probcc-reify/exact (tuple-0101 f01)))
+  (⊦ equal?
+     '(((V (1 1 1 1)) 1/4)
+       ((V (1 0 1 0)) 1/4)
+       ((V (0 1 0 1)) 1/4)
+       ((V (0 0 0 0)) 1/4))
+     (probcc-reify/exact (tuple-0101 (probcc-memo f01))))
+  (⊦ equal?
+     '(((V (1 0 1 0)) 1/4) ((V (0 1 0 1)) 1/4))
+     (probcc-reify/exact
+       (let* ((f2 (probcc-memo f01))
+              (f3 (λ (x)
+                     (let* ((b (f2 1)) (a (f2 0)))
+                       (when (eqv? a b) (probcc-impossible))
+                       (f2 x)))))
+         (tuple-0101 f3))))
+  (⊦ equal?
+     '(((V (1 0 1 0)) 1/2) ((V (0 1 0 1)) 1/2))
+     (probcc-reify/exact
+       (let* ((perms (probcc-letlazy
+                       (τ (probcc-uniform/either '((0 1) (1 0))))))
+              (p (perms)))
+         (tuple-0101 (λ (i) (list-ref p i)))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3302504 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/lazy-permutation"><a href="#test/lazy-permutation"><code>test/lazy-permutation</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-lazy-permutation</code> (cf. LP:127-229) is a list of correlated
+	    random variables, each choosing among the elements its predecessors left: the 24
+	    permutations of four elements have the exact mass 1/24 (upstream's floats sum to
+	    0.999999999999999667, LP:190), and the lazy <code class="w3-codespan">f5</code> is an injective function that wastes no choice space.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/lazy-permutation _)
+  (define raw (map (λ (l) (list (list 'V l) 1/24)) permutations-of-4))
+  (define (f5-0101 perms) (tuple-0101 (λ (n) ((list-ref perms n)))))
+  (⊦ equal?
+     raw
+     (probcc-reify/exact
+       (probcc-map (λ (th) (th)) (probcc-lazy-permutation '(1 2 3 4)))))
+  (⊦ equal?
+     (list 1 (map (λ (e) (list (car e) (exact-&gt;inexact 1/24))) raw))
+     (probcc-normalize/total
+       (probcc-reify/exact
+         (probcc-map (λ (th) (th)) (probcc-lazy-permutation '(1 2 3 4))))))
+  (⊦ equal?
+     '(((V (3 2 3 2)) 1/6)
+       ((V (3 1 3 1)) 1/6)
+       ((V (2 3 2 3)) 1/6)
+       ((V (2 1 2 1)) 1/6)
+       ((V (1 3 1 3)) 1/6)
+       ((V (1 2 1 2)) 1/6))
+     (probcc-reify/exact (f5-0101 (probcc-lazy-permutation '(1 2 3)))))
+  (⊦ equal?
+     3
+     (probcc-leaves
+       (probcc-reify/0 (τ ((car (probcc-lazy-permutation '(1 2 3))))))))
+  (⊦ equal? '() (probcc-lazy-permutation '()))
+  (⊦ equal?
+     '(((V (a)) 1))
+     (probcc-reify/exact
+       (probcc-map (λ (th) (th)) (probcc-lazy-permutation '(a))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3308880 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/lazy-permutation/ins"><a href="#test/lazy-permutation/ins"><code>test/lazy-permutation/ins</code>: <span class="w3-text-green">pass</span></a></h2>
+<p><code class="w3-codespan">probcc-lazy-permutation/ins</code> (cf. LP:266-330) builds the same
+	    sequences of all-different variables over 0 .. n-1 by insertion; a count that is
+	    not a non-negative exact integer raises (deviation 33).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/lazy-permutation/ins _)
+  (define (f5-0101 perms) (tuple-0101 (λ (n) ((list-ref perms n)))))
+  (⊦ equal?
+     (map (λ (l) (list (list 'V (map sub1 l)) 1/24)) permutations-of-4)
+     (probcc-reify/exact
+       (probcc-map (λ (th) (th)) (probcc-lazy-permutation/ins 4))))
+  (⊦ equal?
+     '(((V (2 1 2 1)) 1/6)
+       ((V (2 0 2 0)) 1/6)
+       ((V (1 2 1 2)) 1/6)
+       ((V (1 0 1 0)) 1/6)
+       ((V (0 2 0 2)) 1/6)
+       ((V (0 1 0 1)) 1/6))
+     (probcc-reify/exact (f5-0101 (probcc-lazy-permutation/ins 3))))
+  (⊦ equal? '() (probcc-lazy-permutation/ins 0))
+  (⊦ equal?
+     '(((V (0)) 1))
+     (probcc-reify/exact
+       (probcc-map (λ (th) (th)) (probcc-lazy-permutation/ins 1))))
+  (⊦raises (exn hansei) (probcc-lazy-permutation/ins -1))
+  (⊦raises (exn hansei) (probcc-lazy-permutation/ins 0.5))
+  (⊦raises (exn hansei) (probcc-lazy-permutation/ins 2.5)))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.0) (memory #(8396592 3311816 1048576)) (stdout &quot;&quot;) (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/sorted"><a href="#test/sorted"><code>test/sorted</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>Harik's sorted-list problem (SO:50-200): numbers are lazy lists of random bits,
+	    so <code class="w3-codespan">gte</code> forces only the bits up to the first difference; the
+	    exact probabilities agree with the theory, <code class="w3-codespan">testp3_theory</code> = 15/64, <code class="w3-codespan">testp4_theory</code> = 165/2048 and <code class="w3-codespan">testp5_theory</code> = 6545/131072 (SO:146-171), the last over 2^20
+	    worlds of which only those that <code class="w3-codespan">gte</code> looks at are generated.
+	    Importance sampling with <code class="w3-codespan">(probcc-random-selector 17)</code> gives what upstream gives under OCaml today, sample for sample, both for the
+	    four numbers of five bits and for the full model of n numbers of 20 bits, whose
+	    probability of being sorted is 1/n!.</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/sorted _)
+  (⊦ equal?
+     (map (λ (l) (list (list 'V l) 1/16))
+          '((1 1 1 1)
+            (1 1 1 0)
+            (1 1 0 1)
+            (1 1 0 0)
+            (1 0 1 1)
+            (1 0 1 0)
+            (1 0 0 1)
+            (1 0 0 0)
+            (0 1 1 1)
+            (0 1 1 0)
+            (0 1 0 1)
+            (0 1 0 0)
+            (0 0 1 1)
+            (0 0 1 0)
+            (0 0 0 1)
+            (0 0 0 0)))
+     (probcc-reify/exact (so-to-list (so-bit-list 4))))
+  (⊦ equal?
+     (map (λ (l) (list (list 'V (list l l)) 1/8))
+          '((1 1 1) (1 1 0) (1 0 1) (1 0 0) (0 1 1) (0 1 0) (0 0 1) (0 0 0)))
+     (probcc-reify/exact
+       (let* ((l (so-bit-list 3)) (b (so-to-list l)) (a (so-to-list l)))
+         (list a b))))
+  (⊦ equal?
+     '(((V #t) 5/8) ((V #f) 3/8))
+     (probcc-reify/exact
+       (let* ((l1 (so-bit-list 2)) (l2 (so-bit-list 2))) (so-gte l1 l2))))
+  (⊦ equal?
+     '(((V #t) 9/16) ((V #f) 7/16))
+     (probcc-reify/exact
+       (let* ((l1 (so-bit-list 3)) (l2 (so-bit-list 3))) (so-gte l1 l2))))
+  (⊦ equal?
+     '(((V #t) 5/8) ((V #f) 3/8))
+     (probcc-reify/exact (so-is-sorted so-gte (so-num-list 2 2))))
+  (⊦ equal?
+     '(((V #t) 9/16) ((V #f) 7/16))
+     (probcc-reify/exact (so-is-sorted so-gte (so-num-list 2 3))))
+  (⊦ equal?
+     '(((V #f) 49/64) ((V #t) 15/64))
+     (probcc-reify/exact (so-is-sorted so-gte (so-num-list 3 3))))
+  (⊦ equal?
+     15/64
+     (/ (so-sum 0 7 (λ (i) (so-sum i 7 (λ (j) (so-sum j 7 (λ (k) 1))))))
+        (* 64 8)))
+  (⊦ equal?
+     '(((V #f) 1883/2048) ((V #t) 165/2048))
+     (probcc-reify/exact (so-is-sorted so-gte (so-num-list 4 3))))
+  (⊦ equal?
+     165/2048
+     (/ (so-sum
+          0
+          7
+          (λ (i0)
+             (so-sum
+               i0
+               7
+               (λ (i) (so-sum i 7 (λ (j) (so-sum j 7 (λ (k) 1))))))))
+        (* 64 64)))
+  (⊦ equal?
+     '(((V #f) 124527/131072) ((V #t) 6545/131072))
+     (probcc-reify/exact (so-is-sorted so-gte (so-num-list 4 5))))
+  (⊦ equal?
+     6545/131072
+     (/ (so-sum
+          0
+          31
+          (λ (i0)
+             (so-sum
+               i0
+               31
+               (λ (i) (so-sum i 31 (λ (j) (so-sum j 31 (λ (k) 1))))))))
+        (* 32 32 32 32)))
+  (⊦ equal?
+     '(((V #f) 77429/81920) ((V #t) 4491/81920))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       100
+       (τ (so-is-sorted so-gte (so-num-list 4 5)))))
+  (⊦ equal?
+     '(((V #f) 155999/163840) ((V #t) 7841/163840))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       200
+       (τ (so-is-sorted so-gte (so-num-list 4 5)))))
+  (⊦ equal?
+     `(((V ,(void)) 51716307/104857600))
+     (probcc-sample-importance/a (probcc-random-selector 17) 100 (so-model 2)))
+  (⊦ equal?
+     `(((V ,(void)) 55302254749/343597383680))
+     (probcc-sample-importance/a (probcc-random-selector 17) 100 (so-model 3)))
+  (⊦ equal?
+     `(((V ,(void)) 97798819259/2748779069440))
+     (probcc-sample-importance/a (probcc-random-selector 17) 200 (so-model 4)))
+  (⊦ equal?
+     '(0.49320513725280762 0.16095074460899922 0.035579003182283485)
+     (probcc-map
+       exact-&gt;inexact
+       (list 51716307/104857600
+             55302254749/343597383680
+             97798819259/2748779069440))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.45700000000000002)
+ (memory #(8396592 3316520 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div>
+<h2 id="test/replay/slazy"><a href="#test/replay/slazy"><code>test/replay/slazy</code>: <span class="w3-text-green">pass</span></a></h2>
+<p>The sampling records of <code class="w3-codespan">slazy.ml</code> (SL:125-211, 431-485, 530,
+	    617-655), replayed bit for bit with <code class="w3-codespan">probcc-random-selector</code>, with upstream's flonum masses (the digits through a transcription of upstream's <code class="w3-codespan">uniform</code>, P:156-165, since <code class="w3-codespan">probcc-uniform</code>'s are exact, deviation 7), and the calls of the expensive function counted as
+	    upstream prints them: lazy variables are computed only in the sampled worlds that
+	    need them. With lazy lists, importance sampling finds the exact probability of
+	    all-ones digits and of 20 heads in one sample, where 2000 samples of the strict
+	    lists find nothing (SL:617-655).</p>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">(define (test/replay/slazy _)
+  (define (rejection seed n thunk)
+    (with-calls
+      (τ (probcc-sample-rejection/a (probcc-random-selector seed) n thunk))))
+  (define (importance seed n thunk)
+    (with-calls
+      (τ (probcc-sample-importance/a (probcc-random-selector seed) n thunk))))
+  (⊦ equal?
+     '((((V (2 2)) 0.40000000000000002)
+        ((V (4 4)) 0.20000000000000001)
+        ((V (3 3)) 0.20000000000000001)
+        ((V (6 6)) 0.10000000000000001)
+        ((V (1 1)) 0.10000000000000001))
+       10)
+     (rejection 1 10 (testl1 0.5)))
+  (⊦ equal?
+     '((((V (2 2)) 0.5)
+        ((V (1 1)) 0.20000000000000001)
+        ((V (6 6)) 0.10000000000000001)
+        ((V (4 4)) 0.10000000000000001)
+        ((V (3 3)) 0.10000000000000001))
+       4)
+     (rejection 1 10 (testl2 0.5)))
+  (⊦ equal?
+     '((((V (2 #f 20 20)) 0.20000000000000001)
+        ((V (1 #f 100 100)) 0.20000000000000001)
+        ((V (1 #f 10 10)) 0.20000000000000001)
+        ((V (2 #t 200 200)) 0.10000000000000001)
+        ((V (2 #t 20 20)) 0.10000000000000001)
+        ((V (2 #f 200 200)) 0.10000000000000001)
+        ((V (1 #t 100 100)) 0.10000000000000001))
+       10)
+     (rejection 1 10 (testl3 0.5)))
+  (⊦ equal?
+     '((((V (2 #t 200 200)) 0.125)
+        ((V (2 #t 20 20)) 0.125)
+        ((V (2 #f 200 200)) 0.125)
+        ((V (2 #f 20 20)) 0.125)
+        ((V (1 #t 100 100)) 0.125)
+        ((V (1 #t 10 10)) 0.125)
+        ((V (1 #f 100 100)) 0.125)
+        ((V (1 #f 10 10)) 0.125))
+       4)
+     (importance 1 10 (testl3 0.5)))
+  (⊦ equal?
+     '((((V (2 #t 200 200)) 0.20000000000000001)
+        ((V (1 #t 100 100)) 0.20000000000000001)
+        ((V (1 #f 100 100)) 0.20000000000000001)
+        ((V (2 #t 20 20)) 0.10000000000000001)
+        ((V (2 #f 200 200)) 0.10000000000000001)
+        ((V (2 #f 20 20)) 0.10000000000000001)
+        ((V (1 #f 10 10)) 0.10000000000000001))
+       10)
+     (rejection 1 10 (testl4 0.5)))
+  (⊦ equal?
+     '((((V (2 #t 200 200)) 0.125)
+        ((V (2 #t 20 20)) 0.125)
+        ((V (2 #f 200 200)) 0.125)
+        ((V (2 #f 20 20)) 0.125)
+        ((V (1 #t 100 100)) 0.125)
+        ((V (1 #t 10 10)) 0.125)
+        ((V (1 #f 100 100)) 0.125)
+        ((V (1 #f 10 10)) 0.125))
+       8)
+     (importance 1 10 (testl4 0.5)))
+  (⊦ equal?
+     '(((V (&quot;ants&quot; &quot;ants&quot;)) 0.17999999999999999) ((V (&quot;flies&quot; &quot;flies&quot;)) 0.12))
+     (probcc-sample-importance/a (probcc-random-selector 1) 100 pcfg12))
+  (⊦ equal?
+     '(((V (&quot;flies&quot; &quot;ants&quot;)) 0.07200000000000005)
+       ((V (&quot;flies&quot; &quot;flies&quot;)) 0.048000000000000036))
+     (probcc-sample-importance/a (probcc-random-selector 1) 100 pcfg))
+  (⊦ equal?
+     `(((V ,(void)) 0.12))
+     (probcc-sample-rejection/a
+       (probcc-random-selector 17)
+       100
+       (full-10tree-obs ml-uniform 1)))
+  (⊦ equal?
+     '(((V 1) 0.00010000000000000003))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       1
+       (full-10ltree-obs ml-uniform 4)))
+  (⊦ equal?
+     '(((V 1) 1/10000))
+     (probcc-sample-importance/a
+       (probcc-random-selector 17)
+       1
+       (full-10ltree-obs probcc-uniform 4)))
+  (⊦ equal?
+     '()
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       2000
+       (if (trues 20 (flips 0.5 20)) (void) (probcc-impossible))))
+  (⊦ equal?
+     `(((V ,(void)) ,(expt 2.0 -20)))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       1
+       (if (ltrues 20 (lflips 0.5 20)) (void) (probcc-impossible))))
+  (⊦ equal?
+     `(((V #t) ,(expt 2.0 -20)))
+     (probcc-sample-importance
+       (probcc-random-selector 17)
+       1
+       (let1 (ts (lflips 0.5 20))
+             (if (ltrues 20 ts)
+               ((probcc-lhead (τ ts)))
+               (probcc-impossible))))))
+</code></pre></div>
+<div>
+<pre class="w3-container"><code class="w3-code w3-round language-scheme">((eta 0.13800000000000001)
+ (memory #(8396592 3306592 1048576))
+ (stdout &quot;&quot;)
+ (stderr &quot;&quot;))
+</code></pre></div></body></html>
