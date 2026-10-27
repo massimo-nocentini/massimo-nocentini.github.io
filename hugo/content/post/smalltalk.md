@@ -8,8 +8,13 @@ summary = 'Pharo is a pure object-oriented programming language and a powerful e
 categories = ['tools', 'AI generated']
 +++
 
-- https://pharo-project.org/
-- https://massimo-nocentini.github.io/Booklet-DSst/
+The official site, [pharo-project.org](https://pharo-project.org/), presents Pharo as *the immersive programming experience*: a pure object-oriented language and an environment that is IDE and OS rolled into one, open source under the MIT License and available for macOS, Windows and Linux. Its main points:
+
+- **A simple and powerful language.** No constructors, type declarations, interfaces or primitive types: objects and messages all the way down, with a syntax that fits on a postcard.
+- **A live, immersive environment.** Immediate feedback while developing, testing and debugging, even in production, with no compile and deploy steps.
+- **The debugger.** Step through code, restart the execution of a method, and create methods on the fly.
+- **The community.** More than 100 contributors to the last release, and hundreds more writing frameworks and libraries. The Pharo Consortium coordinates the work, with essential support from Inria, RMOD, CNRS, UDL and Cristal.
+- **Getting started.** `wget -O- https://get.pharo.org/64 | bash` downloads a VM and an image, and `./pharo Pharo.image eval "42 factorial"` runs one; the Pharo MOOC, a newsletter and a Mastodon account are linked from the page.
 
 ## What this fork adds to pharo-12
 
