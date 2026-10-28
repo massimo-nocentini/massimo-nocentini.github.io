@@ -20,11 +20,11 @@ The official site, [pharo-project.org](https://pharo-project.org/), presents Pha
 
 *Claude generated the content of this section from the repository, its commit messages and its documentation, plus benchmarks run on 2026-10-27. Every number says where it comes from.*
 
-[massimo-nocentini/pharo-vm](https://github.com/massimo-nocentini/pharo-vm/tree/pharo-12) is a fork of [pharo-project/pharo-vm](https://github.com/pharo-project/pharo-vm/tree/pharo-12). Its `pharo-12` branch is 95 commits ahead of `upstream/pharo-12` and 0 behind. The diff covers 306 files, +74.7k/−2.2k lines ([compare](https://github.com/massimo-nocentini/pharo-vm/compare/pharo-project:pharo-vm:pharo-12...massimo-nocentini:pharo-vm:pharo-12)). The changes fall into four groups:
+[massimo-nocentini/pharo-vm](https://github.com/massimo-nocentini/pharo-vm/tree/pharo-12) is a fork of [pharo-project/pharo-vm](https://github.com/pharo-project/pharo-vm/tree/pharo-12). Its `pharo-12` branch is 100 commits ahead of `upstream/pharo-12` and 0 behind. The diff covers 307 files, +77.1k/−2.2k lines ([compare](https://github.com/massimo-nocentini/pharo-vm/compare/pharo-project:pharo-vm:pharo-12...massimo-nocentini:pharo-vm:pharo-12)). The changes fall into four groups:
 
 1. **A WebAssembly port of the VM.** It runs stock 64-bit Pharo 12–15 images in node and in the browser.
 2. **A website built on that port.** It has a Smalltalk Console, a Notebook, the Morphic world in a canvas, saved images, and Iceberg over libgit2.
-3. **Plugins.** There is a new SimdJSONPlugin, a rewrite of LargeIntegers with sub-quadratic kernels, and about twenty robustness fixes in other plugins.
+3. **Plugins.** There is a new SimdJSONPlugin, a JSON reader and writer, a rewrite of LargeIntegers with sub-quadratic kernels, and about twenty robustness fixes in other plugins.
 4. **Fixes to the native VM, VMMaker and the build.** These include Windows arm64 and a GitHub Actions CI that publishes releases.
 
 Some terms used below:
@@ -38,7 +38,7 @@ Some terms used below:
 Where to try it:
 
 - **The site:** <https://massimo-nocentini.github.io/pharo-vm/> (Console and Notebook) and [world.html](https://massimo-nocentini.github.io/pharo-vm/world.html) (the Pharo desktop). It offers Pharo 15 build 50 by default, plus Pharo 14 build 785 ([`?fresh=p14`](https://massimo-nocentini.github.io/pharo-vm/?fresh=p14)) and Pharo 13.1 build 749 ([`?fresh=p13`](https://massimo-nocentini.github.io/pharo-vm/?fresh=p13)).
-- **The release:** [PharoVM-v12.0.6-beta-885ae8867](https://github.com/massimo-nocentini/pharo-vm/releases/tag/PharoVM-v12.0.6-beta-885ae8867) has seven zips: Linux x86_64/aarch64, macOS x86_64/arm64, Windows x86_64/arm64, and WebAssembly (the node VM plus the whole site).
+- **The release:** [PharoVM-v12.0.6-beta-d7ef9de90](https://github.com/massimo-nocentini/pharo-vm/releases/tag/PharoVM-v12.0.6-beta-d7ef9de90) has seven zips: Linux x86_64/aarch64, macOS x86_64/arm64, Windows x86_64/arm64, and WebAssembly (the node VM plus the whole site).
 - **The documentation:**
   - [docs/WebAssembly.md](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/docs/WebAssembly.md) is the long reference for the port.
   - [docs/SimdJSON.md](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/docs/SimdJSON.md) and [plugins/LargeIntegers/tests/README.md](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/plugins/LargeIntegers/tests/README.md) cover the two big plugins.
@@ -195,18 +195,26 @@ Iceberg works through the image's own LGit bindings: 65 FFI methods and 9 callba
 
 ### SimdJSONPlugin (new)
 
-[plugins/SimdJSONPlugin](https://github.com/massimo-nocentini/pharo-vm/tree/pharo-12/plugins/SimdJSONPlugin) parses JSON with simdjson 5.0.5 (C++17, `-fno-exceptions`). One primitive call builds the whole Pharo value. When the reader uses NeoJSON's defaults, the Dictionaries and Arrays are built directly in C.
+[plugins/SimdJSONPlugin](https://github.com/massimo-nocentini/pharo-vm/tree/pharo-12/plugins/SimdJSONPlugin) reads and writes JSON with simdjson 5.0.5 (C++17, `-fno-exceptions`). One primitive call builds the whole Pharo value, or writes the whole text.
 
-[SimdJSON.st](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/plugins/SimdJSONPlugin/st/SimdJSON.st) provides `SimdJSONReader`. It has NeoJSONReader's API (`fromString:`, `on:`, `nextAs:`, mappings, …) plus `fromBytes:`, and works in two modes:
+[SimdJSON.st](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/plugins/SimdJSONPlugin/st/SimdJSON.st) needs no NeoJSON. It provides two classes, drop-in replacements for NeoJSON's:
 
-- **neo:** a subclass of NeoJSONReader. Anything that strict RFC 8259 rejects is re-read by NeoJSON, so values, errors and stream positions are NeoJSON's.
-- **standalone:** a port of NeoJSON's mapper. It is strict and needs no NeoJSON.
-
-Number semantics follow NeoJSON: `1e2` is the Integer 100, `1e-2` is the Fraction 1/100, and integers have arbitrary size.
+- **`SimdJSONReader`** has NeoJSONReader's API (`fromString:`, `on:`, `nextAs:`, mappings, …) plus `fromBytes:`.
+  - When it uses NeoJSON's defaults, the Dictionaries and Arrays are built directly in C.
+  - It is strict RFC 8259. Where NeoJSON is lenient (leading zeros, `1.`, raw control characters) it signals `SimdJSONParseError`.
+  - Number semantics follow NeoJSON: `1e2` is the Integer 100, `1e-2` is the Fraction 1/100, and integers have arbitrary size.
+- **`SimdJSONWriter`** has NeoJSONWriter's API (`toString:`, `toStringPretty:`, `on:`, `nextPut:as:`, mappings, `writeMapStreamingDo:`, …) plus `toBytes:`. Its output is NeoJSONWriter's, character for character, plain and pretty.
+  - The plugin writes the plain data: nil, Booleans, integers of any size, Floats, Strings, Symbols, Arrays, OrderedCollections and Dictionaries. Every other object is left as a hole, which the image fills as NeoJSON would: with the object's own `neoJsonOn:`, its mapping, or as a list or a map. The plugin then writes the plain values inside the hole, at the hole's indentation.
+  - Floats come out as Pharo prints them: simdjson's shortest digits (Dragonbox), laid out by Pharo's rule, with ties rounded up as Pharo does.
+  - On a UTF-8 Zinc stream (a file, a socket), the plugin's bytes go straight to the binary stream underneath, with no second encoding.
+  - It is stricter than NeoJSON in two places. NaN and the infinities signal `SimdJSONWriteError` (or write `null` with `nonFiniteAsNull: true`), where NeoJSON writes `Float nan`. A value nested deeper than 1024 levels, most likely a cycle, signals an error instead of exhausting the stack.
 
 ```smalltalk
 SimdJSONReader fromString: '{"name": "pharo", "versions": [12, 13, 14, 15]}'.
+SimdJSONWriter toStringPretty: { 'name' -> 'pharo'. 'versions' -> #(12 13 14 15) } asDictionary.
 ```
+
+Load `SimdJSON.st`, then `SimdJSON-Tests.st` for the tests. The optional `load-neojson.st` and `SimdJSON-NeoTests.st` compare both classes with NeoJSON and run NeoJSON's own reader and writer tests against them.
 
 The plugin is on by default on every platform: an external plugin natively, and built in for wasm. In wasm, simdjson uses its scalar *fallback* kernel. CI loads the plugin from all six native zips.
 
@@ -318,7 +326,8 @@ Upstream builds its releases on Jenkins; the `Jenkinsfile` is still in the fork.
 
 - Linux x86_64 and aarch64, macOS x86_64 and arm64, and Windows x86_64 and arm64.
   - Windows arm64 builds from C sources generated by a shared Linux job, because the x86_64 VMMaker VM dies under Windows-on-ARM emulation.
-  - Every zip is smoke-run and loads its SimdJSONPlugin. On Windows the PE machine of every binary is checked.
+  - Every job builds with clang and clang++, which a step checks.
+  - Every zip is smoke-run, loads its SimdJSONPlugin and writes a small JSON value with it. On Windows the PE machine of every binary is checked.
 - WebAssembly: emsdk 6.0.10, the Pharo 15/14/13.1 images pinned by SHA256, then `make wasm` and `make wasm-check`.
 
 Pushes to `pharo-12` deploy the site to gh-pages and publish the release `PharoVM-<version>` with seven zips. Since [885ae8867](https://github.com/massimo-nocentini/pharo-vm/commit/885ae8867) the release, like the Pages deploy, comes only from pushes to `pharo-12`.
@@ -425,13 +434,13 @@ Upstream has no SimdJSONPlugin, so its baseline is a JSON reader written in Smal
 **Measured** on the M4 Max:
 
 - **VM and image:** the fork's release VM (Darwin arm64, CoInterpreter) with Pharo 15 build 41.
-- **Reader:** `SimdJSON.st` filed in, standalone mode.
+- **Reader:** `SimdJSON.st` filed in, with no NeoJSON loaded.
 - **Baseline:** STONJSON, which is in the stock image.
 - **Corpus:** simdjson-data.
 - **Method:** two warm-up reads, then 10 samples of at least 50 ms each, in 2 separate VM processes. The value is the mean of the two medians: the time of one read.
 - **Check:** every result was deep-compared with STON's, including number classes and float bits. All 186 checks were equal.
 
-NeoJSON could not be loaded on the M4 Max, so every NeoJSON number below is documented.
+These reader runs did not load NeoJSON, so every NeoJSON reading number below is documented.
 
 | File (size) | STON | SimdJSON | speedup |
 |---|---|---|---|
@@ -464,6 +473,28 @@ NeoJSON could not be loaded on the M4 Max, so every NeoJSON number below is docu
 | [NDJSON 20k, wasm node](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/docs/SimdJSON.md?plain=1#L471) | 3138.5 ms | 332.5 ms | 9.4× |
 
 The slower the VM, the larger the gain, because NeoJSON is Smalltalk and the plugin is C.
+
+**Measured, writing** ([SimdJSON.md, Writing](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/docs/SimdJSON.md#writing)), on the M4 Max:
+
+- **VM and image:** the Darwin arm64 Cog VM of release 885ae8867 with the SimdJSONPlugin of the writer built for it, and Pharo 15 build 41 with NeoJSON 11e274d.
+- **Baseline:** NeoJSONWriter. Both writers write the values NeoJSONReader read from the corpus files.
+- **Method:** the plugin's benchmark, [SJBench](https://github.com/massimo-nocentini/pharo-vm/blob/pharo-12/plugins/SimdJSONPlugin/bench/SJBench.st): a full GC, warm-up runs, then 10 samples of at least 50 ms each, in 2 separate VM processes. The value is the mean of the two medians: the time of one write. The two runs agree within 1.9% for the median series.
+- **Check:** all 124 texts, plain and pretty, are equal to NeoJSONWriter's.
+
+| File | NeoJSONWriter | SimdJSONWriter | speedup | pretty speedup |
+|---|---|---|---|---|
+| twitter.json | 10.21 ms | 1.31 ms | 7.8× | 10.4× |
+| citm_catalog.json | 22.29 ms | 1.85 ms | 12.0× | 12.4× |
+| canada.json | 79.42 ms | 9.70 ms | 8.2× | 7.1× |
+| gsoc-2018.json | 95.35 ms | 10.29 ms | 9.3× | 9.2× |
+| mesh.json | 35.99 ms | 2.41 ms | 14.9× | 14.9× |
+| marine_ik.json | 135.6 ms | 17.12 ms | 7.9× | 4.1× |
+| twitterescaped.json | 11.25 ms | 1.34 ms | 8.4× | 10.4× |
+| update-center.json | 18.54 ms | 1.52 ms | 12.2× | 16.1× |
+
+- marine_ik gains the least when pretty printed (4.1×). Its numbers have exponents, so NeoJSONReader read them as Fractions, and each Fraction is a hole that the image writes, as a Float, in a primitive call of its own.
+- gsoc-2018 has wide characters, so `toString:` decodes the plugin's UTF-8 into a WideString. `toBytes:` skips that step and takes 4.11 ms (23×).
+- Written to a file in memory (`FileSystem memory`), after a full GC, gsoc-2018 takes 4.9 ms with SimdJSONWriter and 94.6 ms with NeoJSONWriter (19×).
 
 ### Design choices inside the WebAssembly port (documented)
 
