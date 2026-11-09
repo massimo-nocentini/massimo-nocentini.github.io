@@ -1,5 +1,5 @@
-_site
-.sass-cache
-.jekyll-metadata
-hugo/public
+# Hugo build output and caches (the site is deployed by GitHub Actions)
+hugo/public/
+hugo/resources/_gen/
+hugo/.hugo_build.lock
 *.DS_Store
