@@ -1,11 +1,10 @@
-
-
 +++
 date = '2026-07-17T09:58:04+01:00'
 title = 'Pharo Smalltalk'
 subtitle = 'The immersive programming experience'
 summary = 'Pharo is a pure object-oriented programming language and a powerful environment, focused on simplicity and immediate feedback (think IDE and OS rolled into one).'
 categories = ['tools', 'AI generated']
+toc = true
 +++
 
 The official site, [pharo-project.org](https://pharo-project.org/), presents Pharo as *the immersive programming experience*: a pure object-oriented language and an environment that is IDE and OS rolled into one, open source under the MIT License and available for macOS, Windows and Linux. Its main points:
@@ -491,6 +490,7 @@ The slower the VM, the larger the gain, because NeoJSON is Smalltalk and the plu
 | marine_ik.json | 135.6 ms | 17.12 ms | 7.9× | 4.1× |
 | twitterescaped.json | 11.25 ms | 1.34 ms | 8.4× | 10.4× |
 | update-center.json | 18.54 ms | 1.52 ms | 12.2× | 16.1× |
+{.fullwidth}
 
 - marine_ik gains the least when pretty printed (4.1×). Its numbers have exponents, so NeoJSONReader read them as Fractions, and each Fraction is a hole that the image writes, as a Float, in a primitive call of its own.
 - gsoc-2018 has wide characters, so `toString:` decodes the plugin's UTF-8 into a WideString. `toBytes:` skips that step and takes 4.11 ms (23×).

@@ -1,19 +1,16 @@
-
-
 +++
 date = '2026-08-14T06:58:04+01:00'
 title = 'SIMD'
 subtitle = 'Single instruction, multiple data.'
 summary = 'A reading path and a working survey.'
 categories = ['AI generated']
+toc = true
 +++
 
 Inspired after reading [*Hashimoto*'s __"Everyone Should Know SIMD"__](https://mitchellh.com/writing/everyone-should-know-simd)
 and [Wikipedia](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data); *Claude* generates the following content according to [this session](https://claude.ai/share/9036f116-968d-4b21-a4e5-4473f04aeb35).
 
-
-
-# SIMD with Clang and Rust — a verified survey
+## SIMD with Clang and Rust — a verified survey
 
 Everything here was compiled and run on one machine: **Ubuntu 24.04, Intel Xeon
 (Cascade Lake / Sapphire Rapids class: AVX-512F/DQ/BW/VL/CD + VNNI), 2.8 GHz, 1 vCPU**, with
@@ -40,7 +37,7 @@ kernel, compiled several times under different target features. In the benchmark
 
 ---
 
-# Part I — C with clang
+## Part I — C with clang
 
 ## 1. Flags
 
@@ -61,6 +58,7 @@ Width is capped independently of `-march`:
 ```c
 for (size_t i = 0; i < n; i++) a[i] = b[i] * k;
 ```
+
 ```
 -O2                                        width 4,  interleave 2   (SSE2 baseline)
 -O2 -march=native                          width 8,  interleave 4   (256-bit, not 512!)
@@ -99,6 +97,7 @@ jb   .LBB0_6        ; -> scalar path
 cmpq $128, %rcx     ; |a-b| far enough apart ?
 jb   .LBB0_6
 ```
+
 ```
 text size, same loop:   no restrict 315 bytes    with restrict 166 bytes
 ```
@@ -303,10 +302,12 @@ return svaddv_f32(svptrue_b32(), acc);
 ```
 
 The autovectorizer targets SVE with *scalable* factors:
+
 ```
 $ clang --target=aarch64-linux-gnu -march=armv8-a+sve -O2 -Rpass=loop-vectorize
 remark: vectorized loop (vectorization width: vscale x 4, interleaved count: 2)
 ```
+
 RISC-V RVV is the same story (`-march=rv64gcv`, `riscv_vector.h`, `vsetvl` strip-mining).
 
 ## 7. Runtime dispatch
@@ -317,7 +318,9 @@ RISC-V RVV is the same story (`-march=rv64gcv`, `riscv_vector.h`, `vsetvl` strip
 __attribute__((target_clones("default","avx2","avx512f")))
 float sum(const float *restrict a, size_t n) { … }
 ```
+
 produces, via an IFUNC resolved once by the loader:
+
 ```
 0000000000002600 i sum
 00000000000022b0 T sum.avx2.0
@@ -326,6 +329,7 @@ produces, via an IFUNC resolved once by the loader:
 0000000000002600 W sum.resolver
 R_X86_64_IRELATIV  2600
 ```
+
 Cost: an indirect call per invocation — put it on the *outer* function.
 
 ### Explicit — control over everything
@@ -335,6 +339,7 @@ if (__builtin_cpu_supports("avx512f")) return dot_avx512;
 if (__builtin_cpu_supports("avx2") && __builtin_cpu_supports("fma")) return dot_avx2;
 return dot_scalar;
 ```
+
 Caveat: this reports CPUID bits only. AVX-512 also needs OS state enabled (`xgetbv`/`XCR0`).
 Cache the pointer instead of re-querying per call.
 
@@ -410,7 +415,7 @@ scaled by powers of two — not a general guarantee.)
 
 ---
 
-# Part II — Rust
+## Part II — Rust
 
 ## 10. The difference that changes everything: Rust never contracts FMA
 
@@ -570,7 +575,7 @@ than one kernel.
 
 ---
 
-# Part III — Cross-cutting lessons
+## Part III — Cross-cutting lessons
 
 1. **Chains beat width.** Every table above shows it. You need ≈ latency × throughput independent
    accumulators (4 on this core; 8–10 on newer ones). A 512-bit single-chain kernel loses to a
@@ -591,9 +596,10 @@ than one kernel.
 
 ---
 
-# Part IV — References
+## Part IV — References
 
 ## Start here
+
 * **[Algorithms for Modern Hardware](https://en.algorithmica.org/hpc/)** (Sergey Slotin) — best
   free introduction. Ch. 10 is SIMD (intrinsics, moving data, reductions, masking, shuffles,
   autovectorization/SPMD); the author suggests starting there if you're comfortable with systems
@@ -604,6 +610,7 @@ than one kernel.
   [NEON.pdf](http://const.me/articles/simd/NEON.pdf).
 
 ## Keep open, don't read
+
 | Resource | Why |
 |---|---|
 | [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html) | Searchable by operation; per-uarch latency/throughput |
@@ -616,6 +623,7 @@ than one kernel.
 | [Reference § `target_feature`](https://doc.rust-lang.org/reference/attributes/codegen.html#the-target_feature-attribute) · [RFC 2325](https://rust-lang.github.io/rfcs/2325-stable-simd.html) | Feature names, safety rules, design rationale |
 
 ## Algorithmic SIMD — the interesting part
+
 * **[Wojciech Muła — 0x80.pl](http://0x80.pl/)** — the closest thing to a journal of algorithmic
   SIMD, each article with a runnable repo (`sse-popcount`, `sse4-strstr`, `base64-avx512`,
   `simd-search`).
@@ -629,6 +637,7 @@ than one kernel.
   **Hacker's Delight**. Most "clever" SIMD kernels are broadword algorithms with wider registers.
 
 ## Libraries
+
 * **[Google Highway](https://github.com/google/highway)** — the §7 pattern done properly:
   platform-agnostic ops over platform-specific intrinsics, static *and* dynamic dispatch, where
   dynamic dispatch replicates only your SIMD code rather than the whole binary. An independent
@@ -646,6 +655,7 @@ than one kernel.
   `simdeez`, `faster`.
 
 ## Tooling and measurement
+
 * Denis Bakhvalov, **Performance Analysis and Tuning on Modern CPUs** (free PDF) — top-down
   analysis, `perf`, why microbenchmarks lie.
 * [Compiler Explorer](https://godbolt.org) · `llvm-mca` · [uiCA](https://uica.uops.info) ·
@@ -658,14 +668,16 @@ Muła's kernels *from the article text alone* before looking at his code.
 
 ---
 
-# Appendix — the sources, exactly as tested
+## Appendix — the sources, exactly as tested
 
 ## A. `dot_bench.c`
+
 ```
 clang -O2 -march=x86-64-v3 dot_bench.c -o dot_bench && ./dot_bench
 clang -O2                  dot_bench.c -o dot_base  && ./dot_base
 ```
-```c
+
+```c {.fullwidth}
 /* build: clang -O2 -march=x86-64-v3 06_dot.c -o 06_dot */
 #include <immintrin.h>
 #include <stdio.h>
@@ -808,10 +820,12 @@ int main(void) {
 ```
 
 ## B. `dot.rs` — Rust scalar / chunked / AVX2 / dispatch / `mul_add` trap
+
 ```
 rustc -O dot.rs -o dot && ./dot
 rustc -O -C target-cpu=x86-64-v3 dot.rs -o dot3 && ./dot3
 ```
+
 ```rust
 use std::hint::black_box;
 use std::time::Instant;
@@ -940,9 +954,11 @@ fn main() {
 ```
 
 ## C. `clone.rs` — one generic kernel, target-feature clones, runtime dispatch
+
 ```
 rustc -O clone.rs -o clone && ./clone      # needs Rust >= 1.89 for the AVX-512 arm
 ```
+
 ```rust
 // Requires Rust >= 1.89 (AVX-512 target features stabilised). Build: rustc -O clone.rs
 
@@ -1002,11 +1018,14 @@ fn main() {
 ```
 
 ## D. `psimd.rs` — `std::simd`, and the baseline-build trap
+
 ```
 rustc -O psimd.rs -o psimd && ./psimd                            #  1.69 GFLOP/s
 rustc -O -C target-cpu=x86-64-v3 psimd.rs -o psimd3 && ./psimd3  # 30.62 GFLOP/s
 ```
+
 Needs nightly (or `RUSTC_BOOTSTRAP=1`, which is how it was verified here).
+
 ```rust
 #![feature(portable_simd)]
 use std::simd::{f32x8, SimdFloat, StdFloat};
@@ -1042,10 +1061,12 @@ fn main() {
 ```
 
 ## E. `contract.rs` — proof that Rust does not contract mul+add
+
 ```
 rustc -O -C target-cpu=x86-64-v3 --emit asm contract.rs
   ->  8 vaddss   8 vfmadd213ss   8 vmulss
 ```
+
 ```rust
 #[inline(never)]
 pub fn madd(a: &[f32], b: &[f32], c: &mut [f32]) {
@@ -1062,6 +1083,7 @@ fn main(){ let a=[1.0f32;8]; let b=[2.0f32;8]; let mut c=[3.0f32;8];
 ## F. Diagnostic snippets used along the way
 
 Reductions and pragma placement (§3.2):
+
 ```c
 #include <stddef.h>
 float sum_strict(const float *a, size_t n) {
@@ -1086,6 +1108,7 @@ float sum_omp(const float *a, size_t n) {
 ```
 
 Generic vectors, `?:`, reductions, ABI (§5):
+
 ```c
 #include <stdio.h>
 #include <stdint.h>
@@ -1107,6 +1130,7 @@ int main(void){
 ```
 
 Portable FP horizontal sum (§5):
+
 ```c
 #include <stdio.h>
 typedef float f32x8 __attribute__((vector_size(32)));
@@ -1126,6 +1150,7 @@ int main(void){ f32x8 v={1,2,3,4,5,6,7,8}; printf("%.1f\n", hsum_f32x8(v)); }
 ```
 
 Conditional stores, early exit, gather (§3.5):
+
 ```c
 #include <stddef.h>
 /* conditional store: needs masked stores (AVX-512 / AVX2 maskstore) */
@@ -1148,6 +1173,7 @@ void gather(float *restrict o, const float *restrict t, const int *restrict idx,
 ```
 
 Alignment and trip-count assumptions (§3.6):
+
 ```c
 #include <stddef.h>
 void f_plain(float *restrict a, const float *restrict b, size_t n){
@@ -1162,10 +1188,12 @@ void f_aligned(float *restrict a, const float *restrict b, size_t n){
 ```
 
 ARM NEON and SVE cross-compile check (§6):
+
 ```
 clang --target=aarch64-linux-gnu -nostdlibinc -O2 -S -o - arm.c
 clang --target=aarch64-linux-gnu -nostdlibinc -march=armv8-a+sve -O2 -S -o - arm.c
 ```
+
 ```c
 #include <stddef.h>
 #if defined(__ARM_NEON)
@@ -1196,7 +1224,8 @@ float dot_sve(const float *restrict a, const float *restrict b, size_t n){
 ```
 
 One-kernel-many-clones, C version (§7):
-```c
+
+```c {.fullwidth}
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>

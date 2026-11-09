@@ -2,10 +2,11 @@
 date = '2026-02-24T10:59:04+01:00'
 title = "Pattern matching"
 subtitle = 'Scheme macrology: a generalized pattern matcher'
-summary = ' '
-tags = ['pattern matching']
 categories = ['scheme']
+tags = ['pattern matching']
 +++
+
+<!--more-->
 
 This post defines and tests the `match/non-overlapping` Scheme macro which is
 
@@ -18,62 +19,33 @@ This post defines and tests the `match/non-overlapping` Scheme macro which is
 
 Inspired by the good old paper:
 
-{{< bibtex
-author = "Dijkstra, Edsger W."
-title = "Guarded commands, nondeterminacy and formal derivation of programs"
-year = "1975"
-issue_date = "Aug. 1975"
-publisher = "Association for Computing Machinery"
-address = "New York, NY, USA"
-volume = "18"
-number = "8"
-issn = "0001-0782"
-url = "https://doi.org/10.1145/360933.360975"
-doi = "10.1145/360933.360975"
-abstract = "So-called “guarded commands” are introduced as a building block for alternative and repetitive constructs that allow nondeterministic program components for which at least the activity evoked, but possibly even the final state, is not necessarily uniquely determined by the initial state. For the formal derivation of programs expressed in terms of these constructs, a calculus will be be shown."
-journal = "Commun. ACM"
-month = aug,
-pages = "453–457"
-numpages = "5"
-keywords = "termination, sequencing primitives, repetition, programming methodology, programming languages, programming language semantics, program semantics, nondeterminancy, derivation of programs, correctness proof, case-construction"
->}}
+{{< bibentry "dijkstra1975guarded" >}}.
+
+{{< abstract >}}
+So-called “guarded commands” are introduced as a building block for alternative and repetitive constructs that allow nondeterministic program components for which at least the activity evoked, but possibly even the final state, is not necessarily uniquely determined by the initial state. For the formal derivation of programs expressed in terms of these constructs, a calculus will be be shown.
+{{< /abstract >}}
 
 It is a generalization of 
 [Oleg Kiselyov’s `pmatch`](https://okmij.org/ftp/Scheme/macros.html#match-case-simple), a 
 simple pattern-matcher for linear patterns:
 from it we adapt the test [`test/meta-circular-interpreter`](#test/meta-circular-interpreter) about a *meta-circular interpreter*.
-This matcher is described and used in [the paper]({{% relref "post/minikanren-live-and-untagged.md" %}}) about *miniKanren*.
+This matcher is described and used in [the paper]({{< relref "post/minikanren-live-and-untagged.md" >}}) about *miniKanren*.
 
 Our implementation contains:
 - some *refactorings* of the upstream code,
 - matching of *vectors* and *records*,
 - *guards* are introduced after the `⇒` keyword,
-- *injection* and *negated injection* of expressions in patterns (see those in action in a [more complex interpreter]({{% relref "post/minikanren-live-and-untagged/#test-%CE%BB-calculus-interpreter" %}}))
+- *injection* and *negated injection* of expressions in patterns (see those in action in a [more complex interpreter]({{< relref "post/minikanren-live-and-untagged.md" >}}#test-%CE%BB-calculus-interpreter))
 - sexp-based *error reporting* in case of either no matches or overlapping patterns.
 
 The implementation of the corresponding syntaxes tackles the critique in:
 
-{{< bibtex
-author = "Wadler, P"
-title = "A critique of Abelson and Sussman or why calculating is better than scheming"
-year = "1987"
-issue_date = "March 1987"
-publisher = "Association for Computing Machinery"
-address = "New York, NY, USA"
-volume = "22"
-number = "3"
-issn = "0362-1340"
-url = "https://doi.org/10.1145/24697.24706"
-doi = "10.1145/24697.24706"
-journal = "SIGPLAN Not."
-month = mar,
-pages = "83–94"
-numpages = "12"
->}}
+{{< bibentry "wadler1987critique" >}}.
 
-# An example
+## An example
 
 For the sake of clarity, consider the following definition:
+
 ```scheme
 (define (w x y)
       (match/non-overlapping (cons x y)
@@ -81,7 +53,9 @@ For the sake of clarity, consider the following definition:
         ((,a . ,b) (+ a b))
         ((,a ,b ,c) (and (number? a) (number? b) (number? c)) ⇒ (+ a b c))))
 ```
+
 so that evaluating the expression `(list (w 3 4) (apply w '(1 (3 4))))` yields
+
 ```scheme
 Error: match/non-overlapping
 
@@ -92,7 +66,7 @@ Error: match/non-overlapping
    (((,a unquote b) (and (number? a) (number? b)) ⇒ (* a b))
     ((,a unquote b) #t ⇒ (+ a b)))))
 ```
-as expected.
 
+as expected.
 
 {{< include "test-suites/testsuite-dmatch-suite.html" >}}

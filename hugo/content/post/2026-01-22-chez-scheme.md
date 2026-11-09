@@ -3,8 +3,9 @@ date = '2026-01-22T10:18:13+01:00'
 title = 'Scheme lang: Chez, 48 and Chicken'
 subtitle = 'Some docs, refs and containers, respectively.' 
 categories = ['containers', 'scheme', "releases"]
-summary = ' '
 +++
+
+<!--more-->
 
 ## On learning the Scheme language
 
@@ -13,7 +14,6 @@ has many advices and his video[^1] is a good starting point.
 
 [^1]: [Resources for Learning Scheme](https://www.youtube.com/watch?v=iC8eSdoyu9A)
 
-
 ## Cisco's Chez Scheme
 
 Cisco open sourced its repo [Chez Scheme](https://cisco.github.io/ChezScheme/), which contains an implementation of a (superset) of 
@@ -21,12 +21,14 @@ Cisco open sourced its repo [Chez Scheme](https://cisco.github.io/ChezScheme/), 
 
 We provide a [container](https://github.com/massimo-nocentini/chez-scheme.docker/pkgs/container/chez-scheme.docker/652560938?tag=10.3.0)
 for version [10.3.0](https://github.com/cisco/ChezScheme/releases/tag/v10.3.0), which can be pulled by:
+
 ```bash
 docker pull ghcr.io/massimo-nocentini/chez-scheme.docker:10.3.0
 ```
+
 it is an [*alpine*-based image](https://hub.docker.com/_/alpine) and the code is compiled with [clang](https://clang.llvm.org/).
 
-## Scheme48 
+## Scheme48
 
 > Scheme 48 is an implementation of Scheme written by Richard Kelsey and Jonathan Rees. 
 > It is based on a byte-code interpreter and is designed to be used as a testbed for experiments 
@@ -37,8 +39,7 @@ and implements the [The Revised⁵ Report on the Algorithmic Language Scheme](ht
 
 We provide the companion [container](https://github.com/massimo-nocentini/scheme48.docker/pkgs/container/scheme48.docker/575699347?tag=1.9.3)
 which can be pulled by:
+
 ```bash
 docker pull ghcr.io/massimo-nocentini/scheme48.docker:1.9.3
 ```
-
-

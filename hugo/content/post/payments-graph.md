@@ -2,11 +2,13 @@
 date = '2026-08-28T09:58:04+01:00'
 title = 'Inspecting the Payments Graph'
 subtitle = 'A Bitcoint induced graph about transactions till 2017'
-summary = ' '
 categories = ['rust', 'AI generated']
+toc = true
 +++
 
-# Topology & subgraph patterns in `/data/bitcoin/bitcoin-webgraph/pg`
+<!--more-->
+
+## Topology & subgraph patterns in `/data/bitcoin/bitcoin-webgraph/pg`
 
 Live analysis log — appended as findings appear (`tail -f` friendly).
 Tooling: `webgraph-rs` (this working copy), driven from a small standalone probe crate
@@ -201,7 +203,6 @@ committing to witness data — which is why the last coinbase runs in §5 all ha
 **txid / address / satoshi.** A transaction's hash, a payment destination, and the smallest unit of
 value. **None of the three exist in this dataset.** Every claim in this document is derived from arc
 structure alone, which is why operators are described by *shape* and never named.
-
 
 ---
 
@@ -533,6 +534,7 @@ Bucketing the ID axis into 400 equal slices (each 1.67 M outputs):
 | 83 M – 150 M | ~3.1 | ~2.9 | 76–81 | ~5 | 2013–2014, richer transactions |
 | 210 M – 250 M | **3–13** | 2.0–4.8 | **36–80** | up to **56** | the anomaly zone, §6 |
 | 300 M – 668 M | ~2.5 | ~2.4 | 77–82 | 7.5 → 14 | 2016–2017, steady state |
+{.fullwidth}
 
 Two things stand out: (a) the `|O| = 2` share peaks at **92 %** around node 17–33 M
 and never returns there — the ledger was at its most "one payment + change"
@@ -629,6 +631,7 @@ first transaction's outputs, …):
 ```
 depth[9]=0  depth[171]=1  depth[172]=1  depth[184]=2  depth[185]=2  depth[187]=3  depth[190]=4
 ```
+
 — exactly the hand-computed values. The DP is correct.
 
 ### 7.1 Result
@@ -739,7 +742,7 @@ long-running service whose change output is respent immediately, over and over.
 
 **What I did.** Ran the same full scan on `pg-t`.
 
-```
+```{.fullwidth}
 forward(v>u)=0   backward(v<u)=2,162,523,341   selfloops=0        <- mirror of §2, as it must be
 nodes with in-degree > 0 = 666,229,139         <- exactly the 666,229,139 covered nodes of §4
 in-degree 0              =   2,032,814         <- exactly the coinbase outputs
@@ -1114,7 +1117,7 @@ decomposition, 35–48 s for the sequential DP passes.
 
 ---
 
-# PART II — deeper dives
+## PART II — deeper dives
 
 ## 17. The `|O| = 21` operator, resolved: it is a **self-recycling mixer**, not a payout batcher
 
@@ -1477,10 +1480,9 @@ now positively confirmed by their change-output signature (§17.1).
 
 ---
 
-
 ---
 
-# PART III — six parallel deep dives
+## PART III — six parallel deep dives
 
 Six probes were run concurrently, each written as an independent binary against the mmapped graph.
 **Every track was then handed to a second, independent agent whose only job was to refute its
@@ -1715,6 +1717,7 @@ R << 1 and ext_out/ext_in >> 1         ->  DISTRIBUTOR    (sprays, does not reci
 | 138,139,140,141,144,146,200,2001 | 20,576+ | **pure-chain BATCHERS** | 96–99.6 % of *all* same-class flow leaves the **last** output | 50 M..660 M |
 | 291, 301, 501, 1001, 2501 | 1–15 k each | BATCHER / dust DISTRIBUTOR | all of the form `N+1` | broad |
 | 36,40,47,49,76,150,151,251 | 2–24 k each | NOISE | R<0.3, no position structure | broad |
+{.fullwidth}
 
 A full sweep of `L = 2 .. 13,107` finds **six** significant classes above `L = 256`, and every one is
 of the form **`N+1`**: 291, 301, 501, 1001, 2001, 2501. The `10^k + 1` lattice of §4.2 runs all the
@@ -1769,7 +1772,7 @@ the top-20 table reproduced digit for digit, in the same order.*
 
 ### 22.1 The ceiling
 
-```
+```{.fullwidth}
 Post-transition region (segment index >= 329,000, node >= 394,909,953): 63,047 blocks
   per-block max in-block chain length:
     25 -> 39,501 blocks (62.65 %)
@@ -2021,7 +2024,7 @@ MERGE  nodes (>=2 critical parents) : 2,151,643 = 53.03 %
 
 ### 24.2 Brittle in topology, resilient in metric
 
-```
+```{.fullwidth}
 1,644,664 nodes each lie on 100 % of those ~10^270,178 paths (the width-1 levels of §18.1).
 Deleting any one of them annihilates the entire family.
 
@@ -2039,7 +2042,7 @@ Long forced runs are *not* expensive per se: deleting the head of the 101,158-le
 The most vital node in the graph is **node 238,404**, at the tail of the one stretch where the
 *entire DAG* — not just the critical subgraph — is a literal single thread:
 
-```
+```{.fullwidth}
 levels with exactly ONE node in the whole graph: 3,809, in exactly 1 maximal run, depths 18,798..22,606
   head (node 217,674) -> drop 3,808     mid (node 222,121) -> drop 3,808
   tail (node 238,404) -> drop 12,731
@@ -2062,7 +2065,7 @@ of a smooth distribution.
 
 Mean critical width per depth bucket, and the dominant `|O|` among critical arcs:
 
-```
+```{.fullwidth}
 depth       0 -   433,612 : width ~1.00-1.14 , |O|=2 at 92-100 %   (four buckets exactly 100 % |O|=2
                                                                     and exactly width 1)
 depth 433,612 -   813,023 : width 3.07-3.89  , |O|=17 14-19 %, 18 ~13 %, 19 ~12 %, 20 ~10 %, 16 ~11 %

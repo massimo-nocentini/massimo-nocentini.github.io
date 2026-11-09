@@ -1,0 +1,21 @@
+{{- /*
+  A link to a container image, with the Docker mark (inline):
+
+    {{< docker "https://github.com/massimo-nocentini/sgb.cweb/pkgs/container/sgb.cweb" "sgb.cweb:master" >}}
+
+  Positional: 0 = the URL of the image's page, 1 = the image (name:tag),
+  which is the link text.
+  Output:
+    <a class="repo-link repo-link-docker" href="URL"><svg class="repo-icon" …></svg><code>IMAGE</code></a>
+  The mark is assets/icons/docker.svg, inline; assets/css/site.css sizes
+  it. Nested in a theme shortcode it goes through tufte/nest.html.
+*/ -}}
+{{- $href := .Get 0 | default "" -}}
+{{- $image := .Get 1 | default "" -}}
+{{- if or (not $href) (not $image) -}}
+  {{- errorf "docker shortcode: a URL and an image are required, e.g. {{< docker \"https://…\" \"name:tag\" >}} (%s)" .Position -}}
+{{- end -}}
+{{- $icon := (resources.Get "icons/docker.svg").Content | strings.TrimSpace -}}
+{{- $icon = replace $icon "<svg " `<svg class="repo-icon" aria-hidden="true" focusable="false" ` 1 -}}
+{{- $out := printf `<a class="repo-link repo-link-docker" href="%s">%s<code>%s</code></a>` (htmlEscape $href) $icon (htmlEscape $image) -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

@@ -2,10 +2,12 @@
 date = '2026-02-06T09:58:04+01:00'
 title = 'Running PostgreSQL natively vs into containers'
 subtitle = 'A benchmark against a stress test'
-tags = ['postgresql']
-summary = ' '
 author = ['Massimo Nocentini', 'Richard Uttner']
+tags = ['postgresql']
+toc = true
 +++
+
+<!--more-->
 
 The results in a nutshell:
 
@@ -15,11 +17,11 @@ The results in a nutshell:
 |M4 Max|container|217s|1,5839|0.34ms|1,619
 |Debian box|native|611s|1|0.95ms|1
 |Debian box|container|974s|1,5941|1.51ms|1,5894
+{.fullwidth}
 
+## On a M4 Max
 
-# On a M4 Max
-
-## System report details
+### System report details
 
 - **Model Name:**	MacBook Pro
 - **Model Identifier:**	Mac16,5
@@ -29,7 +31,7 @@ The results in a nutshell:
 - **System Firmware Version:**	13822.61.10
 - **OS Loader Version:**	13822.61.10
 
-## Running into a container
+### Running into a container
 
 ```
 pgbench (18.1)
@@ -47,6 +49,7 @@ latency average = 1.298 ms
 initial connection time = 5.704 ms
 tps = 770.645801 (without initial connection time)
 ```
+
 <!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 15:00:14
@@ -129,7 +132,7 @@ CALL
 ```
 -->
 
-## Running natively
+### Running natively
 
 ```
 pgbench (18.1)
@@ -229,56 +232,67 @@ NOTICE:  Finished execute_story_chunks at 2026-02-06 15:01:13 for 642398 stories
 CALL
 ``` -->
 
-### Installation steps
+#### Installation steps
 
 For the sake of clarity, here the steps for compiling *PostgreSQL **18.1*** from 
 [sources](https://ftp.postgresql.org/pub/source/v18.1/postgresql-18.1.tar.bz2) according 
 to [the official page](https://www.postgresql.org/docs/current/install-make.html#INSTALL-SHORT-MAKE). 
 The configuration command looks a bit complicated (many thanks, [Stack Overflow](https://stackoverflow.com/questions/52510499/the-following-icu-libraries-were-not-found-i18n-required)):
 
-```bash
+```bash {.fullwidth}
 LDFLAGS="${LDFLAGS} -L`brew --prefix icu4c`/lib" CPPFLAGS="${CPPFLAGS} -I`brew --prefix icu4c`/include" PKG_CONFIG_PATH=`brew --prefix icu4c`/lib/pkgconfig:"$PKG_CONFIG_PATH" ./configure
 ```
+
 Then the `make` as usual:
+
 ```bash
 make && sudo make install
 ```
 
 For the sources in the `contrib` subdirectory:
+
 ```bash
 cd contrib && make && sudo make install
 ```
+
 required to have some useful extensions.
 
 The previous command install artifacts into `/usr/local/pgsql`, so add `/usr/local/pgsql/bin` and `/usr/local/pgsql/lib` to your `$PATH`
 in order to reach them, respectively. Then initialize a new `pg-data` folder somewhere under your `$HOME`:
+
 ```bash
 /usr/local/pgsql/bin/initdb -D $HOME/pg-data
 ```
 
 Before starting the server by:
+
 ```bash
 /usr/local/pgsql/bin/pg_ctl -D $HOME/pg-data -l logfile start
 ```
+
 remember to adjust your `$HOME/pg-data/postgresql.conf` by changing `listen_addresses = '*'`
 and also add to `$HOME/pg-data/pg_hba.conf` the following line:
+
 ```
 host    all             all             all                     trust
 ```
+
 to let the serve accept incoming connections from your network.
 
-# On a Debian Linux box
+## On a Debian Linux box
 
-## System report details
+### System report details
 
-### Hardware Information:
+#### Hardware Information:
+
 - **Hardware Model:**                              Lenovo ThinkPad T14s Gen 1
 - **Memory:**                                      16.0 GiB
 - **Processor:**                                   Intel® Core™ i7-10510U × 8
 - **Graphics:**                                    Intel® UHD Graphics (CML GT2)
 - **Disk Capacity:**                               1.0 TB
 
-### Software Information:
+#### Software Information:
+
 - **Firmware Version:**                            N2YET43W (1.32 )
 - **OS Name:**                                     Debian GNU/Linux 13 (trixie)
 - **OS Build:**                                    (null)
@@ -287,8 +301,8 @@ to let the serve accept incoming connections from your network.
 - **Windowing System:**                            Wayland
 - **Kernel Version:**                              Linux 6.12.63+deb13-amd64
 
+### Running into a container
 
-## Running into a container
 <!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 08:50:49
@@ -370,7 +384,8 @@ NOTICE:  Finished execute_story_chunks at 2026-02-06 09:07:02 for 642398 stories
 CALL
 ``` -->
 
-## Running natively
+### Running natively
+
 <!-- 
 ```
 NOTICE:  Start execute_story_chunks for total of 642398 at 2026-02-06 11:10:16
@@ -452,6 +467,6 @@ NOTICE:  Finished execute_story_chunks at 2026-02-06 11:20:27 for 642398 stories
 CALL
 ``` -->
 
-### Installation steps
+#### Installation steps
 
 The steps here are more straightforward and mimic the ones described in the corresponding section for the *M4 Max* architecture.

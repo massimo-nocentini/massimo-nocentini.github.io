@@ -1,16 +1,16 @@
-
 +++
 date = '2026-08-10T10:33:23+01:00'
 title = "CHICKEN Scheme"
 subtitle = "Versions and implementation notes"
-tags = []
 categories = [ "scheme", "AI generated"]
-summary = ' '
+toc = true
 +++
 
 The latest CHICKEN release is [*6.0.0*](https://code.call-cc.org), which came out on August 10th, 2026.
 
-# How the implementation works, and where it could go faster
+<!--more-->
+
+## How the implementation works, and where it could go faster
 
 *Notes written against this repository — `chicken-core` at commit `d6442142`,
 which `git describe` calls **6.0.1pre1-68-gd6442142**, i.e. 68 commits past
@@ -881,7 +881,7 @@ reachable only under `DEBUGBUILD`. Whichever branch wins is baked into
 `csc` passes when compiling *user* programs (`csc.scm:130-131`). This tree
 confirms it — `chicken-defaults.h:15`:
 
-```c
+```c {.fullwidth}
 #define C_INSTALL_CFLAGS "-fno-strict-aliasing -fwrapv -DHAVE_CHICKEN_CONFIG_H -DC_ENABLE_PTABLES -Os -fomit-frame-pointer"
 ```
 
@@ -1039,7 +1039,7 @@ deleted]**
 `c-platform.scm:1113` and `:1115` (pristine) rewrote the float setters to
 `C_u_i_f32vector_set` / `C_u_i_f64vector_set`:
 
-```c
+```c {.fullwidth}
 /* chicken.h:1656-1657 */
 #define C_u_i_f64vector_set(v, i, x) \
   ((((double *)C_data_pointer(C_block_item((v), 1)))[ C_unfix(i) ] = C_flonum_magnitude(x)), C_SCHEME_UNDEFINED)
@@ -1329,7 +1329,7 @@ flonum. No declaration is needed any more — compile at `-O2` or higher with
 
 and you get:
 
-```c
+```c {.fullwidth}
 double f0;                                        /* ← the *only* unboxed temp */
 ...
 loop:
@@ -1543,6 +1543,7 @@ with no `-march` at all:
 | 1 | SWAR, `uint64_t` + `popcountll` | 0.26 | 2.5× | none |
 | 2 | SSE2 intrinsics (x86-64 psABI baseline) | 0.13 | 4.9× | none, compile-time |
 | 3 | AVX2 under `target("avx2,popcnt")` | 0.04 | **16.0×** | runtime |
+{.fullwidth}
 
 It fails on **Amdahl, measured**. `utf.c` in its entirety is **2.8%** of the CPU of a
 CHICKEN compiler self-compile, and `C_utf_count` — the function that drives 66.6% of all
@@ -1837,6 +1838,7 @@ cells and match the C reference exactly.
 | *win* | *5.86×* | *5.58×* | *3.37×* | *3.34×* |
 | hand-written C, `clang -O3` | 216 | 124 | 216 | 60 |
 | *new `-unsafe` vs C* | *5.7×* | *14.0×* | *5.7×* | *32.7×* |
+{.fullwidth}
 
 (The earlier `-ffast-math` figures for dot and axpy — 125 and 123 ms — are
 unaffected by the patch and are omitted only to keep the table narrow.)
@@ -1848,6 +1850,7 @@ What the emitted C shows, which is the mechanism behind every row:
 | old, any level | 0 | 0 | 0 | 0 | every ref, every set!, `make-f64vector` |
 | new, `-O3` safe | 0 | 1–3 | 1–2 | 0 | `make-f64vector` only |
 | new, `-O3 -unsafe` | 1–3 | 0 | 1–2 | **0** | `make-f64vector` only |
+{.fullwidth}
 
 Three readings:
 
@@ -1888,6 +1891,7 @@ delete; the honest figure for the shipping compiler is 2107 ms. See §10.1 H.
 | `-:s8m` | **970** | 58 | 322 | **681** |
 | `-:s64m` | 1189 | 1 | – | 832 |
 | `-:s256m` | 1263 | 1 | – | – |
+{.fullwidth}
 
 1.82× from 1 MB → 8 MB when there are survivors, non-monotonic beyond that, and
 under 2% when there are none. With Linux's default `ulimit -s 8192`, `-:s8m` and
@@ -1942,6 +1946,7 @@ same `libchicken.so`:
 | f64 axpy, 200M ops | 2340 | 899 | 945 | **893** | 1009 |
 | cons, 100M pairs | 2248 | 1782 | **1756** | 1779 | 1775 |
 | `string-ref`, 10M ASCII | 139 | 120 | **115** | 119 | 122 |
+{.fullwidth}
 
 `-O0` costs up to 8.6× on compute-bound code and only ~1.2× on runtime-bound code
 (where the work happens inside the prebuilt `libchicken`). But **`-O3` buys

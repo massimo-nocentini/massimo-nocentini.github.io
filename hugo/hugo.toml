@@ -1,239 +1,171 @@
-baseurl = "https://massimo-nocentini.github.io"
-DefaultContentLanguage = "en"
-title = "Massimo Nocentini"
-# Using theme as git submodule
-theme = "beautifulhugo"
-# Or when using theme as a hugo module:
-# [[module.imports]]
-#   path = "github.com/halogenica/beautifulhugo/v5"
+# Massimo Nocentini's site, built with the tufte.hugo theme
+# (https://github.com/massimo-nocentini/tufte.hugo, a git submodule in
+# themes/tufte.hugo). The theme's README is the manual of every key below.
 #
-# The theme ships its own hugo.toml: it requires Hugo >= 0.146.2 (standard
-# edition is enough, no SCSS/WebP) and supplies the params defaults
-# colorScheme = "auto" and mathEngine = "katex", which the values below
-# override. Hugo merges params from a theme config but not [markup], so the
-# markup settings have to stay here.
-enableGitInfo = true
-ignoreLogs = ['warning-goldmark-raw-html']
+# The theme needs Hugo 0.169.0 or newer (standard edition). `make build`
+# writes the site to ../docs.
 
+baseURL = "https://massimo-nocentini.github.io/"
+locale = "en-US"
+defaultContentLanguage = "en"
+title = "Massimo Nocentini"
+theme = "tufte.hugo"
+
+# Sections listed on the home page and in the archives. Every post lives in
+# content/post/, so URLs stay /post/<file name>/.
+mainSections = ["post"]
+
+# No enableGitInfo: tufte.hugo reads no Git data, and the "updated on" date
+# of a post comes only from an explicit front-matter `lastmod` (else it is
+# the `date`), so the commit that moved the site to tufte.hugo does not mark
+# every post as updated on that day.
+
+# Some posts hide a block (an old log, structured data) in an HTML comment.
+# With markup.goldmark.renderer.unsafe = false (below) Goldmark leaves it out
+# of the page, which is what a comment is for: no need to warn about it.
+ignoreLogs = ["warning-goldmark-raw-html"]
+
+[frontmatter]
+  lastmod = ["lastmod", "date"]
+
+[pagination]
+  pagerSize = 10
+
+# Hugo does not merge [taxonomies] from a theme. `author` holds the authors
+# of the papers and books a post is about; its plural is also "author", so
+# the term pages keep their URLs (/author/donald-e.-knuth/).
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  author = "author"
+
+# A site [outputs] replaces Hugo's defaults, so html and rss are listed
+# again; `searchindex` is the theme's search index (/search-index.json).
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
-  section = ["HTML", "RSS"]
-  page = ["HTML"]
+  home = ["html", "rss", "searchindex"]
+  section = ["html", "rss"]
 
-[security]
-  allowContent = ['^text/html$', '^text/markdown$']
+[params]
+  subtitle = "Massimo Nocentini's papers, notes, memos and source code."
+  description = "Massimo Nocentini's papers, notes, memos and source code."
+  sections = "h2"
+  footnotes = "sidenotes"
+  showReadingTime = true
+  showWordCount = false
+  showPostNav = true
+  # A table of contents only where a post asks for it (front matter
+  # `toc = true`): most posts are short.
+  toc = false
+  readMore = true
+  homeIntro = true
+  # Site styles (assets/css/site.css): repository links, the included test
+  # suites, run-in headings followed by a list. Appended after the theme's
+  # CSS, so its rules win.
+  customCSS = ["css/site.css"]
 
+  [params.author]
+    name = "Massimo Nocentini"
+    url = "https://massimo-nocentini.github.io/"
+
+  [params.social]
+    github = "massimo-nocentini"
+    gitlab = "massimo-nocentini"
+    email = "massimo.nocentini@gmail.com"
+    rss = true
+
+  # Math is typeset with KaTeX at build time (no JavaScript); its assets are
+  # loaded only on the pages that show a formula.
+  [params.math]
+    enable = "auto"
+    engine = "server"
+
+  [params.comments]
+    enable = false
+
+  # Site search: a box in the site header (press "/") and the results page
+  # content/search.md. Headings are always indexed; the text of a page is
+  # capped, so the index of the long posts and of the test suites (included
+  # HTML) stays small enough to download on first use.
+  [params.search]
+    enable = true
+    contentChars = 50000
+
+  # tufte-latex options (README "tufte-latex parity"). The site keeps the
+  # Tufte CSS look; only the bibliography differs from the defaults.
+  [params.tufte]
+    # Posts show the works they are about with {{< bibentry >}} (the
+    # formatted entry of data/bibliography.yaml, in the text): no automatic
+    # "References" list repeating them at the end of the page
+    # (\nobibliography). A post that cites with {{< cite >}} and wants the
+    # list adds {{< bibliography >}} where it belongs.
+    [params.tufte.bibliography]
+      list = false
+
+# Hugo does not merge [markup] from a theme: these are the settings the
+# theme's render hooks need (README "Required site configuration").
 [markup]
-  [markup.tableOfContents]
-    endLevel = 5
-    ordered = false
-    startLevel = 0
-
-  # Chroma highlighting. noClasses = false makes Chroma emit CSS classes so the
-  # theme's assets/css/syntax.css and syntax-dark.css are used (this replaces the
-  # legacy top-level pygments* keys).
+  [markup.goldmark]
+    # No raw HTML in the content: every construct has a shortcode or a render
+    # hook, and the only HTML the posts hold is comments. Shortcode output
+    # ({{< include >}}, {{< github >}}…) is not affected.
+    [markup.goldmark.renderer]
+      unsafe = false
+    [markup.goldmark.parser]
+      # Required: a stand-alone image becomes a <figure> (image render hook).
+      wrapStandAloneImageWithinParagraph = false
+      # Keep it: section numbers, cross-references and the TOC follow ids.
+      autoHeadingID = true
+      [markup.goldmark.parser.attribute]
+        # {.fullwidth} on tables and code fences, {author="…"} on quotes.
+        block = true
+        # {#sec:x} labels on headings.
+        title = true
+    [markup.goldmark.extensions]
+      # Math: \( … \) and $ … $ inline, \[ … \] and $$ … $$ display. A
+      # literal dollar sign in prose is written \$.
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)'], ['$', '$']]
   [markup.highlight]
+    # Chroma emits classes, coloured by the theme's syntax.css (light and
+    # dark). A fence without a language stays plain text: guesses are
+    # unreliable.
     noClasses = false
     codeFences = true
-    guessSyntax = true
+    guessSyntax = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = false
 
-  # Enables {.class #id} attribute blocks on headings, tables, code fences, ...
-  [markup.goldmark.parser.attribute]
-    block = true
-
-# Ranking configuration for Params.showRelatedPosts (Hugo's related-content
-# engine). Without it Hugo ranks "See also" by the keywords and date indices
-# only -- never by tags, which is what this site actually uses.
-[related]
-  includeNewer = true
-  threshold = 80
-  toLower = false
-  [[related.indices]]
-    name = "tags"
-    weight = 100
-  [[related.indices]]
-    name = "categories"
-    weight = 90
-  [[related.indices]]
-    name = "keywords"
-    weight = 80
-  [[related.indices]]
-    name = "date"
-    weight = 10
-
-[Params]
-  homeTitle = "This site needs no title"
-  subtitle = "Massimo Nocentini's papers, notes, memos and source code."
-  commit = "https://github.com/massimo-nocentini/massimo-nocentini.github.io/commit/"
-  mainSections = ['post']
-#  logo = "samurai.jpg" # Expecting square dimensions
-  favicon = "samurai.jpg"
-  dateFormat = "January 2, 2006" # or a locale token such as ":date_long"
-  since = 2016 # start year of the footer copyright range
-  toc = true
-  #commit = true
-  rss = true
-  comments = false
-  readingTime = true
-  navShort = false
-  wordCount = false
-#  useHLJS = true
-  socialShare = false
-  delayDisqus = false
-  showRelatedPosts = true
-  related_content_limit = 100 # max number of related posts to list
-#  cusdisID = "XXX" # Get your App id from cusdis.com
-  showPostNav = true
-  hideAuthor = false
-  mathEngine = "katex" # "katex", "mathjax" or "none"
-  colorScheme = "light" # "auto", "light" or "dark"
-  selfHosted = false
-  showSource = false
-  sourceRepo = "https://github.com/massimo-nocentini/massimo-nocentini.github.io/blob/master/hugo/content/"
-  ghBadge = ["star", "fork"]
-  ghCount = true
-#  disableFigureOverride = true # use Hugo's native figure shortcode instead of the theme's
-#  headerImgStyle = "narrow" # "big" (default) or "narrow"; applies to Params.bigimg headers
-#  showPageDates = true # show dates on "page" type content
-#  hidePostDates = true # hide dates on "post" type content
-#  disableCanonical = true # suppress <link rel="canonical"> site-wide
-
-# Build-time image processing (page-bundle and assets/ images only; anything
-# under static/, such as samurai.jpg, is always served untouched).
-#  imageProcessing = false # turn the whole feature off
-#  imageWidths = [480, 800, 1200, 1600] # srcset variants for figures/galleries
-#  bigimgWidth = 1920 # max width for Params.bigimg header resources
-
-# Optional schema.org/JSON-LD overrides (see the theme's "SEO & i18n" page).
-#  organizationName = "Massimo Nocentini"
-#  organizationLogo = "https://massimo-nocentini.github.io/samurai.jpg"
-#  alternatePageName = "Massimo Nocentini's notes"
-  socialProfiles = [
-    "https://github.com/massimo-nocentini",
-    "https://gitlab.com/massimo-nocentini",
-  ]
-
-# Site-wide <meta name="robots"> defaults; only applies to Params.mainSections.
-#[Params.seo.robots]
-#  ai-summary-limit = "nosnippet"
-#  gcse = "012345678901234567890:abcdefghijk" # Get your code from google.com/cse. Make sure to go to "Look and Feel" and change Layout to "Full Width" and Theme to "Classic"
-#  disclaimerText = "The opinions expressed herein are my own personal opinions and do not represent my employer’s view in any way."
-
-[Params.search]
-  provider = "fuse"
-
-#[[Params.bigimg]]
-#  src = "img/triangle.jpg"
-#  desc = "Triangle"
-#[[Params.bigimg]]
-#  src = "img/sphere.jpg"
-#  desc = "Sphere"
-#  # position: see values of CSS background-position.
-#  position = "center top"
-#[[Params.bigimg]]
-#  src = "img/hexagon.jpg"
-#  desc = "Hexagon"
-
-[Params.author]
-  # Set only your "username" for default hosts and full URLs otherwise (e.g., "https://MyGitLab.org/username")
-  name = "Massimo Nocentini"
-  website = "https://massimo-nocentini.github.io"
-  email = "massimo.nocentini@gmail.com"
-  #facebook = "username"
-  github = "massimo-nocentini"
-  gitlab = "massimo-nocentini"
-  #bitbucket = "username"
-  #twitter = "username"
-  #reddit = "username"
-  #linkedin = "username"
-  #xing = "username"
-  #stackoverflow = "users/XXXXXXX/username"
-  #snapchat = "username"
-  #instagram = "username"
-  #youtube = "user/username" # or channel/channelname
-  #soundcloud = "username"
-  #spotify = "username"
-  #bandcamp = "username"
-  #itchio = "username"
-  #vk = "username"
-  #paypal = "username"
-  #telegram = "username"
-  #500px = "username"
-  #codepen = "username"
-  #mastodon = "url"
-  #kaggle = "username"
-  #weibo = "username"
-  #slack = "username"
-  #medium = "username"
-  #discord = "invite code" # appended to https://discord.gg/
-  #strava = "userid"
-  #lastfm = "username"
-  #bluesky = "username"
-
-[taxonomies]
-  author = "author"
-  categories = "categories"
-  tags = "tags"
-  reading = "reading"
-  bible_refs = "bible_refs"
-  #date = "date"
-  #year = "years"
-
-
-[[menu.main]]
-    name = "content"
-    url = ""
-    weight = 1
-
-[[menu.main]]
-    parent = "content"
-    name = "About"
-    url = "about/"
-    weight = 1
-
-[[menu.main]]
-    parent = "content"
-    name = "Pages"
-    url = "page/"
-    weight = 2
-
-[[menu.main]]
-    parent = "content"
-    name = "Tags"
-    url = "tags"
-    weight = 3
-
-[[menu.main]]
-    parent = "content"
-    name = "Categories"
-    url = "categories/"
-    weight = 4
-
-[[menu.main]]
-    parent = "content"
-    name = "Authors"
-    url = "author/"
-    weight = 5
-
-#[[menu.main]]
-#    identifier = "externals"
-#    name = "Externals"
-#    weight = 5
-
-#[[menu.main]]
-#    parent = "externals"
-#    name = "Data Structures in Smalltalk"
-#    url = "https://massimo-nocentini.github.io/Booklet-DSst/"
-#    weight = 1
-
-#[[menu.main]]
-#    parent = "externals"
-#    name = "Crate libpq-rs"
-#    url = "https://massimo-nocentini.github.io/libpq-rs/libpq/index.html"
-#    weight = 2
-
-#[[menu.main]]
-#    parent = "externals"
-#    name = "Crate igraph-rs"
-#    url = "https://massimo-nocentini.github.io/igraph-rs/igraph/"
-#    weight = 3
+# The site header menu. pageRef makes Hugo check that each page exists.
+[[menus.main]]
+  name = "About"
+  pageRef = "/about"
+  weight = 10
+[[menus.main]]
+  name = "Posts"
+  pageRef = "/post"
+  weight = 20
+[[menus.main]]
+  name = "Archives"
+  pageRef = "/archives"
+  weight = 30
+[[menus.main]]
+  name = "Categories"
+  pageRef = "/categories"
+  weight = 40
+[[menus.main]]
+  name = "Tags"
+  pageRef = "/tags"
+  weight = 50
+[[menus.main]]
+  name = "Authors"
+  pageRef = "/author"
+  weight = 60
+[[menus.main]]
+  name = "Search"
+  pageRef = "/search"
+  weight = 70

@@ -1,0 +1,132 @@
+{{- /*
+  Includes a test suite written by `make import-test-suites` (aux.scm's
+  unittest runner writes one complete HTML document per suite into
+  test-suites/):
+
+    {{< include "test-suites/testsuite-cml-events-suite.html" >}}
+    {{< include path="test-suites/testsuite-cml-events-suite.html" shift=1 >}}
+
+  Positional: the file, relative to the hugo directory. Named: `path`, and
+  `shift` (default 2), how many levels the suite's headings go down.
+
+  The document is reduced to its <body>; its <head> (highlight.js, its
+  stylesheet, Mermaid) is dropped, and:
+  - every code block, <pre class="w3-container"><code class="… language-X">,
+    is highlighted at build time by Chroma (transform.Highlight), as the
+    fenced code of the posts is: the theme's syntax.css colours it, in light
+    and dark mode, with no JavaScript;
+  - its headings go down `shift` levels: the suite's h1 (a group of tests)
+    becomes an h3 and each test's h2 an h4, below the post's own `##`
+    heading. Their ids (test/NAME), which posts link to, are kept;
+  - its <section> elements become <div class="ts-section">: the theme's
+    content pipeline reads a <section> as one of its own;
+  - an id that an earlier suite of the same page already uses gets "-2"
+    ("-3"…), and so do the links to it, so the page has no duplicate ids;
+  - a suite that draws Mermaid diagrams (class="mermaid") keeps the module
+    script of its head that renders them.
+  The result is wrapped in <div class="fullwidth test-suite">: a suite is
+  mostly code, so it spans the text and the margin columns
+  (assets/css/site.css keeps its paragraphs at a readable width).
+*/ -}}
+{{- $path := "" -}}
+{{- $shift := 2 -}}
+{{- if .IsNamedParams -}}
+  {{- $path = .Get "path" | default "" -}}
+  {{- with .Get "shift" }}{{ $shift = int . }}{{ end -}}
+{{- else -}}
+  {{- $path = .Get 0 | default "" -}}
+{{- end -}}
+{{- if not $path -}}
+  {{- errorf "include shortcode: a file is required, e.g. {{< include \"test-suites/testsuite-x.html\" >}} (%s)" .Position -}}
+{{- end -}}
+{{- if not (fileExists $path) -}}
+  {{- errorf "include shortcode: %q not found; run `make import-test-suites` in the hugo directory (%s)" $path .Position -}}
+{{- end -}}
+{{- $doc := readFile $path -}}
+
+{{- /* The body (a fragment without <body> is taken whole) and the head. */ -}}
+{{- $head := "" -}}
+{{- with findRESubmatch `(?is)<head[^>]*>(.*?)</head>` $doc 1 }}{{ $head = index (index . 0) 1 }}{{ end -}}
+{{- $html := $doc -}}
+{{- with findRESubmatch `(?is)<body[^>]*>(.*)</body>` $doc 1 }}{{ $html = index (index . 0) 1 }}{{ end -}}
+{{- $html = replaceRE `(?is)<script\b.*?</script>|<style\b.*?</style>|<link\b[^>]*>` "" $html -}}
+
+{{- /* Sections are the theme's: the suite's become divs. */ -}}
+{{- $html = replaceRE `(?i)<section\b` `<div class="ts-section"` $html -}}
+{{- $html = replaceRE `(?i)</section\s*>` `</div>` $html -}}
+
+{{- /* Unique ids. Two suites of one post may test functions of the same
+       name (test/return in two category suites): the first suite on the
+       page keeps the id, a later one gets "-2" ("-3"…), with the links to
+       it. Each id remembers the suite that owns it (page Store, which a
+       server rebuild does not reset), so re-rendering the page gives the
+       same ids. Within one suite the ids are unique, and code holds no
+       literal `id="` (its quotes are escaped). */ -}}
+{{- $owners := .Page.Store.Get "includeIds" | default dict -}}
+{{- range findRESubmatch ` id="([^"]+)"` $html -1 -}}
+  {{- $id := index . 1 -}}
+  {{- $owner := index $owners $id -}}
+  {{- if and $owner (ne $owner $path) -}}
+    {{- $new := "" -}}
+    {{- range $n := seq 2 999 -}}
+      {{- $cand := printf "%s-%d" $id $n -}}
+      {{- $o := index $owners $cand -}}
+      {{- if or (not $o) (eq $o $path) }}{{ $new = $cand }}{{ break }}{{ end -}}
+    {{- end -}}
+    {{- $html = replace $html (printf ` id="%s"` $id) (printf ` id="%s"` $new) -}}
+    {{- $html = replace $html (printf ` href="#%s"` $id) (printf ` href="#%s"` $new) -}}
+    {{- $.Page.Store.SetInMap "includeIds" $new $path -}}
+  {{- else if not $owner -}}
+    {{- $.Page.Store.SetInMap "includeIds" $id $path -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Headings down $shift levels, deepest first so that no heading moves
+       twice; h6 is the floor. */ -}}
+{{- if gt $shift 0 -}}
+  {{- range seq 5 -1 1 -}}
+    {{- $to := math.Min 6 (add . $shift) | int -}}
+    {{- $html = replaceRE (printf `(?i)<(/?)h%d([\s>])` .) (printf `<${1}h%d${2}` $to) $html -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Code blocks: Chroma instead of highlight.js. Each block ends with
+       </code></pre>; the escaped code holds no literal "<", so the class
+       and the text are cut at the first `">`. */ -}}
+{{- $open := `<pre class="w3-container"><code class="` -}}
+{{- /* A few blocks (query results, Datalog) come without the container
+       class on their <pre>: same treatment, as plain text. */ -}}
+{{- $html = replace $html `<pre><code class="w3-code` (printf "%sw3-code" $open) -}}
+{{- if strings.Contains $html $open -}}
+  {{- $parts := split $html "</code></pre>" -}}
+  {{- $last := sub (len $parts) 1 -}}
+  {{- $out := slice -}}
+  {{- range $i, $part := $parts -}}
+    {{- if and (lt $i $last) (strings.Contains $part $open) -}}
+      {{- $pieces := split $part $open -}}
+      {{- $n := sub (len $pieces) 1 -}}
+      {{- $before := delimit (first $n $pieces) $open -}}
+      {{- $code := index $pieces $n -}}
+      {{- $class := replaceRE `(?s)^([^"]*)".*$` "$1" $code -}}
+      {{- $src := replaceRE `(?s)^[^"]*">` "" $code | htmlUnescape -}}
+      {{- $lang := "text" -}}
+      {{- with findRESubmatch `language-([A-Za-z0-9_+#-]+)` $class 1 }}{{ $lang = index (index . 0) 1 }}{{ end -}}
+      {{- if eq $lang "pgsql" }}{{ $lang = "postgresql" }}{{ end -}}
+      {{- $out = $out | append $before (string (transform.Highlight $src $lang)) -}}
+    {{- else -}}
+      {{- $out = $out | append $part -}}
+      {{- if lt $i $last }}{{ $out = $out | append "</code></pre>" }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $html = delimit $out "" -}}
+{{- end -}}
+
+{{- /* Mermaid diagrams: keep the suite's own module script. */ -}}
+{{- if strings.Contains $html `class="mermaid"` -}}
+  {{- range findRE `(?is)<script type="module">.*?mermaid.*?</script>` $head 1 -}}
+    {{- $html = printf "%s\n%s" $html . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $out := printf "<div class=\"fullwidth test-suite\">\n%s\n</div>" (strings.TrimSpace $html) -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

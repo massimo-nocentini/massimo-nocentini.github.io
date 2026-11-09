@@ -1,0 +1,117 @@
+/* Site styles, appended after the theme's CSS bundle (params.customCSS),
+   so these rules win. Colours come from the theme's tokens (--tufte-*),
+   which follow the light and dark schemes. */
+
+/* ------------------------------------------------------------------ */
+/* Repository and image links: {{< github >}}, {{< docker >}}          */
+/* ------------------------------------------------------------------ */
+
+a.repo-link {
+    white-space: nowrap;
+}
+
+a.repo-link svg.repo-icon {
+    display: inline-block;
+    width: 1.05em;
+    height: 1em;
+    margin-right: 0.3em;
+    vertical-align: -0.12em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Test suites: {{< include "test-suites/…" >}}                         */
+/* ------------------------------------------------------------------ */
+/* The suite is a div.fullwidth (90% of the page, over the margin
+   column): its code takes that width, its prose the text column's
+   (55% of the page = 61% of the 90% box), as in a section. */
+
+div.test-suite {
+    clear: both;
+    margin: 1.4rem 0;
+}
+
+div.test-suite > :is(p, ul, ol, dl),
+div.test-suite > div.ts-section > :is(p, ul, ol, dl) {
+    width: 61%;
+}
+
+/* A group of tests (the suite's h1, shifted to h3). */
+div.test-suite :is(h3, h4, h5) {
+    font-weight: 400;
+}
+
+/* One test (the suite's h2, shifted to h4): its name and its status. */
+div.test-suite h4 {
+    margin: 2.2rem 0 0.6rem;
+    font-size: 1.25rem;
+    line-height: 1.6rem;
+    font-style: normal;
+}
+
+div.test-suite h4 > a {
+    text-decoration: none;
+    background: none;
+    color: inherit;
+}
+
+div.test-suite .w3-text-green {
+    color: var(--tufte-alert-tip);
+    font-variant: small-caps;
+}
+
+div.test-suite .w3-text-red {
+    color: var(--tufte-alert-caution);
+    font-variant: small-caps;
+}
+
+div.test-suite div.highlight {
+    margin: 0.7rem 0;
+}
+
+/* Plain code blocks the generator left without the w3 classes. */
+div.test-suite pre > code {
+    width: auto;
+    margin-left: 0;
+}
+
+/* Quotations from the papers a suite ports. */
+div.test-suite blockquote {
+    font-size: 1.2rem;
+}
+
+/* Answer tables (the μKanren presentation layer). */
+div.test-suite table {
+    width: auto;
+    border-collapse: collapse;
+    margin: 0.7rem 0;
+}
+
+div.test-suite :is(td, th) {
+    padding: 0.2rem 0.8rem;
+    border-bottom: 1px solid var(--tufte-rule);
+    text-align: left;
+}
+
+@media (max-width: 760px) {
+    div.test-suite {
+        max-width: 100%;
+    }
+
+    div.test-suite > :is(p, ul, ol, dl),
+    div.test-suite > div.ts-section > :is(p, ul, ol, dl) {
+        width: auto;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Run-in headings                                                     */
+/* ------------------------------------------------------------------ */
+/* A #### heading runs into the paragraph after it (\paragraph). When a
+   list, a table, code, a rule, another heading or another block follows
+   instead (or nothing does), it would float beside it: there it stands on
+   its own line. */
+
+section > h4.run-in:is(:last-child, :has(+ :is(ul, ol, dl, div, pre, table, blockquote, figure, section, hr, h2, h3, h4, h5, h6))) {
+    float: none;
+    margin-right: 0;
+}

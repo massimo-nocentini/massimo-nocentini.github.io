@@ -1,9 +1,8 @@
-
 +++
 date = '2026-08-03T10:02:03+01:00'
 title = 'Curriculum Vitae'
 subtitle = 'Et Studiorum'
-summary = ' '
+toc = true
 +++
 
 - **Email:** massimo.nocentini@gmail.com, massimo.nocentini@unifi.it
@@ -13,16 +12,16 @@ summary = ' '
 - **Nationality:** Italiana
 - **Date of birth:** 08/01/1986
 
-# CV
+## CV
 
 **Keywords / Skills:** Pharo Smalltalk, functional programming, logic programming, relational programming, microKanren, miniKanren, Kanren Light, delimited continuations, persistent data structures (skip-list, splay-heap, leftist-heap, binomial-heap, red-black-set, union-find, skew-binary random-access lists), FFI bindings, graph algorithms, graph theory, Bitcoin graph analysis, C#, .NET, TSQL, PostgreSQL, recursive queries, pivoting, LSTM, neural networks, predictive time-series analysis, Rust, igraph, libpq, C, timsort, kann neural network library, Python, Jupyter, data analysis, web crawling, CHICKEN Scheme, Scheme eggs, ZeroMQ, ConcurrentML, Standard ML, OCaml, Common Lisp, HOL Light, theorem proving, Riordan arrays, combinatorics, generating functions, linear algebra, theoretical computer science, compilers, computational complexity, mathematical logic, Roassal visualization, tree-sitter, poppler, pango/cairo, Lua, XMPP, JQuery, open source software.
 
 
-## Summary
+### Summary
 
 Researcher and software developer with a PhD in Computer Science (Università degli Studi di Firenze, 2019). Background spans theoretical computer science (combinatorics, Riordan arrays, generating functions, logic programming), applied graph algorithms and large-scale graph analysis (including Bitcoin transaction graphs and public transport crowding estimation), and neural network / time-series modeling (LSTM). Long-standing open-source contributor, primarily in Pharo Smalltalk, with additional experience across Rust, C, C#/.NET, Python, and the Scheme/ML/Lisp family of languages.
 
-## Publications
+### Publications
 
 - Anna Bernasconi, Damiano Di Francesco Maesa, Matteo Loporchio, Andrea Marino, Massimo Nocentini, Laura Ricci. *Systematizing Graph Models for Bitcoin and Designing Algorithms for Large-Distance Analysis*. Submitted.
 - Daniela Bubboloni, Costanza Catalano, Marco Fanfani, Andrea Marino, Paolo Nesi, Massimo Nocentini. *Public Transport Crowding Estimation via Temporal Graphs*. Submitted.
@@ -31,7 +30,7 @@ Researcher and software developer with a PhD in Computer Science (Università de
 - Massimo Nocentini, Donatella Merlini. *Crawling, (pretty) printing and graphing the OEIS*. Working paper at DiSIA.
 - Donatella Merlini, Massimo Nocentini. *Algebraic generating functions for languages avoiding Riordan patterns*. Journal of Integer Sequences, Volume 21, Article 18.1.3, 2018.
 
-## Academic Experience
+### Academic Experience
 
 **2024–2026 — Assegnista, Università degli Studi di Firenze, DISIA**
 Research grant *Grafi e applicazioni* under the supervision of Prof. Andrea Marino.
@@ -48,7 +47,7 @@ PhD program; the *curriculum studiorum* is available in a [following section](#s
 **2013–2015 — Borsista, Università degli Studi di Firenze, Scuola di Ingegneria**
 Post-graduate research fellowship *Architetture e metodi per la cooperazione applicativa* under the supervision of Prof. Enrico Vicario.
 
-## Professional Experience
+### Professional Experience
 
 **Since 2019 — Libero professionista, Azienda che opera nel settore terziario e dei servizi**
 Development on the Pharo Smalltalk platform and microservices-based architectures.
@@ -74,7 +73,7 @@ Design and development of a management system covering both production and accou
 **Jun–Jul 2004 — Stagista, I.T.I.S Antonio Meucci, Firenze, Italia**
 Built the foundations for a project to automatically manage absences and tardiness using a barcode reader.
 
-## Education
+### Education
 
 **2019 — PhD in Informatica, Università degli Studi di Firenze, Scuola di Scienze Matematiche Fisiche e Naturali**
 Thesis: *An algebraic and combinatorial study of some infinite sequences of numbers supported by symbolic and logic*. Supervisor: Prof. Donatella Merlini.
@@ -88,19 +87,19 @@ Thesis: *Analisi di reti metaboliche basata su proprietà di connessione*. Advis
 **2000–2005 — Tecnico Industriale Informatica (progetto ABACUS), Istituto Tecnico Industriale Antonio Meucci** — Grade: 100
 Main subjects: Informatica, matematica, sistemi, elettronica.
 
-## Skills and Competences
+### Skills and Competences
 
-### Languages
+#### Languages
 - **Native language:** Italian
 - **Other languages:** English (B2: comprehension, listening, spoken production, written production, spoken interaction)
 
-### Social Competences
+#### Social Competences
 Practicing Judo, which teaches working toward goals through mutual cooperation. Occasional volunteer service with CUI — Ragazzi del Sole, an association supporting people with disabilities.
 
-### Organizational Competences
+#### Organizational Competences
 During the period at Comm.it, gained extensive experience in software production process organization, mentored by people who had worked in University of Florence labs. Projects were always developed in teams, which was valuable for understanding both technical and human problems and how to address them.
 
-### Technical Competences
+#### Technical Competences
 
 Most professional projects targeted the .NET platform, written in C#, and often relied on relational databases: TSQL and, to a greater extent, PostgreSQL, including complex constructs such as pivoting and recursive query manipulation.
 
@@ -112,20 +111,20 @@ Python and Jupyter are used for data analysis, rapid prototyping, and research s
 
 All developed code is published on GitHub, reflecting a commitment to freely accessible knowledge.
 
-### Informatics Competences
+#### Informatics Competences
 Strong interest in theoretical computer science, particularly complexity theory, compilers, and logic — approached in part through the study of LISP and the books of Raymond Smullyan. The master's thesis work sparked interest in the combinatorial interpretation of classes of objects and their algebraic manipulation via the theory of Riordan arrays.
 
-### Artistic Competences
+#### Artistic Competences
 Study of chess endgames and the game of Go.
 
-### Driving License
+#### Driving License
 Category B.
 
-## Additional Information
+### Additional Information
 
 **Open-source projects:** https://github.com/massimo-nocentini
 
-## Consent
+### Consent
 
 Consent given for personal data processing pursuant to Italian law no. 196/03.
 
@@ -193,23 +192,23 @@ Consent given for personal data processing pursuant to Italian law no. 196/03.
 ```
 
 
-# Studiorum
+## Studiorum
 
 
 **Keywords / Skills:** Riordan arrays, algebraic combinatorics, generating functions, graph theory, Bitcoin graph analysis, temporal graphs, relational logic programming, microKanren, miniKanren, Kanren Light, HOL Light, theorem proving, mechanized mathematics, delimited continuations, persistent data structures, metaprogramming, LSTM, neural networks, time-series analysis, natural language processing, word embeddings, named entity recognition, Spacy, Pharo Smalltalk, CHICKEN Scheme, Standard ML, OCaml, Common Lisp, Rust, C, Python, Jupyter, C#, .NET, SQL, TSQL, PostgreSQL, dancing links, Sudoku, N-Queens, Roassal, FFI, SRFI 41, lazy evaluation, SECD machine, type inference, computational complexity theory, formal languages, functional programming, open source.
 
-## Current Position
+### Current Position
 
 Since August 2024, research fellowship (*assegno di ricerca*) at the Department of Statistics, Computer Science, Applications (DISIA), University of Florence, working on the project *Graphs and Applications*, under the supervision of Prof. Andrea Marino. In parallel, since January 2019, freelance software developer (VAT id IT-06894000485).
 
-## Education
+### Education
 
 - **Ph.D. in Computer Science**, February 2019, University of Florence (School of Mathematical, Physical and Natural Sciences). Thesis: *An algebraic and combinatorial study of some infinite sequences of numbers supported by symbolic and logic*. Supervisor: Prof. Donatella Merlini.
 - **M.Sc. in Computer Science**, 2015, University of Florence — 110/110 cum laude. Thesis: *Patterns in Riordan Arrays*. Advisor: Prof. Donatella Merlini.
 - **B.Sc. in Computer Science**, 2012, University of Florence — 110/110. Thesis: *Analysis of metabolic networks based on connectivity properties*. Advisor: Prof. Pierluigi Crescenzi.
 - **Industrial Technician diploma in Computer Science** (ABACUS project), 2005, Istituto Tecnico Industriale Antonio Meucci, Florence — score 100/100.
 
-## Research Path
+### Research Path
 
 The common thread running through this research is the combinatorial and algebraic study of integer sequences and discrete structures, together with a broader, ongoing interest in computational foundations (complexity theory, formal languages, logic and functional programming) pursued beyond institutional settings as well.
 
@@ -221,17 +220,17 @@ The common thread running through this research is the combinatorial and algebra
 
 **Since 2019 (parallel)** — Freelance software developer, mainly on the Pharo Smalltalk platform and microservice-based architectures, supporting hands-on exploration of persistent data structures, relational logic programming and metaprogramming techniques, much of which is published and maintained on GitHub.
 
-## Research Philosophy
+### Research Philosophy
 
 The research concerns (i) the study of formal methods and their applications to the analysis of algorithms and data structures, (ii) supporting them with software abstractions implemented in functional and logic programming languages, and (iii) moving toward the broader field of mechanized mathematics. The formal foundation for this approach comes from analytic combinatorics — generating functions, Riordan arrays, the symbolic method — as developed by Flajolet and Sedgewick, Knuth, and Graham, Knuth and Patashnik, complemented by Harrison's work on automated reasoning and HOL Light, and by Friedman, Felleisen and Byrd's *Little books* series on relational and functional programming.
 
 This formal background is paired with combinatorial *interpretations* of analytic results — in the spirit of Benjamin and Quinn, and of Stanley's *Enumerative Combinatorics* — expressed, where possible, in terms of lattice paths, urn models, bracelet configurations or board tilings. Abstract, formal results are best understood when paired with working code that exhibits their structure directly; this is the parallel path leading to writing Lisp, Python, OCaml, Smalltalk and Scheme alongside more formal derivations, and that motivated an extension of HOL Light's goal/tactic mechanism to support a μKanren-style relational paradigm.
 
-## Prior Professional Experience
+### Prior Professional Experience
 
 **2004–2015 (before Ph.D.)** — Several years of experience as a software developer, mainly on the .NET/C# platform, working for companies in the Florence area (Comm.it, Negens Srl, Balena S.R.L., AnemoneLab, Exitech) on projects including: a betting-system generator for the Italian *Sisal* circuit, authenticating dealers over secure channels and producing reports from live odds feeds; an accounting and VAT-register system for small businesses, interfacing with MSSQL using pivot tables, cursors, views and stored procedures, developed jointly with a team in Milan; and a middleware layer for sensor/actuator control on Raspberry Pi boards, interfacing C code with Python scripting over XMPP. This experience provided the practical foundation for the later academic path.
 
-## Selected Publications
+### Selected Publications
 
 - A. Bernasconi, D. Di Francesco Maesa, M. Loporchio, A. Marino, M. Nocentini, L. Ricci. *Systematizing Graph Models for Bitcoin and Designing Algorithms for Large-Distance Analysis*. Submitted.
 - D. Bubboloni, C. Catalano, M. Fanfani, A. Marino, P. Nesi, M. Nocentini. *Public Transport Crowding Estimation via Temporal Graphs*. Submitted.
@@ -241,7 +240,7 @@ This formal background is paired with combinatorial *interpretations* of analyti
 - D. Merlini, M. Nocentini. *Colouring Catalan triangle*. In preparation.
 - M. Nocentini, D. Merlini. *Crawling, (pretty) printing and graphing the OEIS*. Working paper, DiSIA.
 
-## Conferences
+### Conferences
 
 - *ESUG 2019*, Cologne, Germany, August 2019 — talk: *Dancing Links: an educational pearl*.
 - *ESUG 2018*, Cagliari, Italy, September 2018 — volunteer student; talk: *Relational Programming in Smalltalk*.
@@ -251,18 +250,18 @@ This formal background is paired with combinatorial *interpretations* of analyti
 - *ECOOP 2016*, Rome, Italy, July 2016 — volunteer student.
 - *2nd International Symposium on Riordan Arrays and Related Topics*, Lecco, Italy, July 2015 — talk on the modular Catalan triangle C≡₂.
 
-## Seminars and Schools
+### Seminars and Schools
 
 - Ph.D. defense talk, University of Florence.
 - Yearly summaries of Ph.D. activities (1st, 2nd and 3rd year), University of Florence.
 - *Logic and Relational Programming*, Logic Department, University of Florence.
 - *Algebraic generating functions avoiding Riordan patterns* and *OEIS tools*, AORC Open School, Sungkyunkwan University, South Korea, 2017.
 
-## Teaching
+### Teaching
 
 Taught two classes on *SymPy* to introduce symbolic computation on top of Python, within the *Analysis of Algorithms* course given by Prof. Donatella Merlini at the University of Florence, and ported the corresponding lab sessions from Maple to Python. Between April 2019 and March 2020, under a scholarship with Prof. Daniele Vignoli (*Detecting economic uncertainty through press and social media*), applied natural language processing techniques — including word embeddings trained on an Italian Wikipedia snapshot and a Spacy NER model for Italian — to a corpus of newspaper articles.
 
-## Ph.D. Coursework
+### Ph.D. Coursework
 
 - Introduction to process calculi and related type systems (R. Pugliese, I. Castellani)
 - Mathematical methods for Computer Science (E. Barcucci)
@@ -272,7 +271,7 @@ Taught two classes on *SymPy* to introduce symbolic computation on top of Python
 - Advanced programming techniques (L. Bettini)
 - Mathematical logic (B. Donati)
 
-## Selected Open-Source Projects
+### Selected Open-Source Projects
 
 A more complete and up-to-date list is available at https://github.com/massimo-nocentini. A few projects that best represent these interests:
 
@@ -286,15 +285,15 @@ A more complete and up-to-date list is available at https://github.com/massimo-n
 - **theory-of-programming-languages** — a study of type inference following Pierce's *Types and Programming Languages*, implemented in SML/NJ.
 - **network-reasoner** — a gas/water distribution network simulator, joint work with eng. Fabio Tarani, implemented in C# on Mono.
 
-## Technical and Computational Skills
+### Technical and Computational Skills
 
 Languages and environments used regularly: Pharo Smalltalk (persistent data structures, FFI bindings to C libraries, the Roassal visualization engine), CHICKEN Scheme, Standard ML, OCaml, Common Lisp, Rust, C, Python/Jupyter, C#/.NET, SQL (TSQL, PostgreSQL). Cross-cutting research interests: graph theory, algebraic combinatorics, relational logic programming (miniKanren), delimited continuations, computational complexity theory.
 
-## Languages
+### Languages
 
 Italian (native); English (B2 in reading comprehension, listening, spoken production and interaction, and writing).
 
-## Personal Data Processing
+### Personal Data Processing
 
 Consent given for the processing of the personal data contained in this curriculum in accordance with EU Regulation 2016/679 (GDPR) and applicable law.
 

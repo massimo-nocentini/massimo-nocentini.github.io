@@ -1,0 +1,431 @@
+# Site bibliography, in tufte.hugo's native (BibTeX-like) schema: one map
+# from a cite key to an entry (README "Bibliography"). Posts show an entry
+# with {{< bibentry "key" >}}; {{< cite "key" >}} would put it in a sidenote.
+#
+# Every entry was moved here, field by field, from the {{< bibtex … >}}
+# shortcode of the post named in the comment above it (the theme used before
+# tufte.hugo); field names are lowercased, values are verbatim. `type` was
+# added (the old shortcode had none): article for a journal, inproceedings
+# for a booktitle, book, phdthesis, and misc for an entry with no venue.
+# The theme prints the BibTeX fields it knows (author, title, journal,
+# booktitle, publisher, address, year, month, volume, number, pages,
+# edition, series, isbn, issn, doi, url, note…) and ignores the others,
+# kept here as the record: abstract (also shown by the post, in its
+# front-matter `abstract` or in an {{< abstract >}} block), keywords,
+# issue_date, numpages, location, articleno, language, day, timestamp,
+# biburl, bibsource.
+
+# post/the-reasoned-schemer.md
+bender2015efficient:
+  type: misc
+  author: "Bender, David and Kuper, Lindsey and Byrd, William and Friedman, Daniel"
+  year: "2015"
+  month: "03"
+  url: "https://users.soe.ucsc.edu/~lkuper/papers/walk.pdf"
+  abstract: "Unification, a fundamental process for logic programming systems, relies on the ability to efficiently look up values of variables in a substitution. Triangular substitutions, which allow associations to variables that are themselves bound by another association, are an attractive choice for purely functional implementations of logic programming systems because of their fast extension time and linear space requirement, but have the disadvantage of costly lookup. We present several representations for triangular substitutions that decrease the cost of lookup to linear or logarithmic time in the size of the substitution while maintaining most of their desirable properties. In particular, we show that triangular substitutions can be represented efficiently using skew binary random-access lists, and that this representation provides a significant decrease in running time for existing programs written in miniKanren, a declarative logic programming system implemented in a pure functional subset of Scheme."
+  title: "Efficient representations for triangular substitutions: A comparison in miniKanren"
+
+# post/2013-08-09-axioms-for-centrality.md
+boldi2013axioms:
+  type: article
+  title: "Axioms for Centrality"
+  author: "Paolo Boldi and Sebastiano Vigna"
+  journal: "Internet Mathematics"
+  year: "2013"
+  volume: "10"
+  pages: "222 - 262"
+  abstract: "Abstract Given a social network, which of its nodes are more central? This question has been asked many times in sociology, psychology, and computer science, and a whole plethora of centrality measures (a.k.a. centrality indices, or rankings) were proposed to account for the importance of the nodes of a network. In this study, we try to provide a mathematically sound survey of the most important classic centrality measures known from the literature and propose an axiomatic approach to establish whether they are actually doing what they have been designed to do. Our axioms suggest some simple, basic properties that a centrality measure should exhibit. Surprisingly, only a new simple measure based on distances, harmonic centrality, turns out to satisfy all axioms; essentially, harmonic centrality is a correction to Bavelas’s classic closeness centrality [Bavelas 50] designed to take unreachable nodes into account in a natural way. As a sanity check, we examine in turn each measure under the lens of information retrieval, leveraging state-of-the-art knowledge in the discipline to measure the effectiveness of the various indices in locating webpages that are relevant to a query. Although there are some examples of such comparisons in the literature, here, for the first time, we also take into consideration centrality measures based on distances, such as closeness, in an information-retrieval setting. The results closely match the data we gathered using our axiomatic approach. Our results suggest that centrality measures based on distances, which in recent years have been neglected in information retrieval in favor of spectral centrality measures, do provide high-quality signals; moreover, harmonic centrality pops up as an excellent general-purpose centrality index for arbitrary directed graphs."
+  url: "https://api.semanticscholar.org/CorpusID:10140116"
+
+# post/the-reasoned-schemer.md
+byrd2009relational:
+  type: phdthesis
+  author: "William E. Byrd"
+  year: "2009"
+  title: "Relational programming in minikanren: techniques, applications, and implementations"
+  url: "https://dl.acm.org/doi/10.5555/1834996"
+  abstract: "The promise of logic programming is that programs can be written relationally , without distinguishing between input and output arguments. Relational programs are remarkably flexible—for example, a relational type-inferencer also performs type checking and type inhabitation, while a relational theorem prover generates theorems as well as proofs and can even be used as a simple proof assistant. Unfortunately, writing relational programs is difficult, and requires many interesting and unusual tools and techniques. For example, a relational interpreter for a subset of Scheme might use nominal unification to support variable binding and scope, Constraint Logic Programming over Finite Domains (CLP(FD)) to implement relational arithmetic, and tabling to improve termination behavior. In this dissertation I present miniKanren , a family of languages specifically designed for relational programming, and which supports a variety of relational idioms and techniques. I show how miniKanren can be used to write interesting relational programs, including an extremely flexible lean tableau theorem prover and a novel constraint-free binary arithmetic system with strong termination guarantees. I also present interesting and practical techniques used to implement miniKanren, including a nominal unifier that uses triangular rather than idempotent substitutions and a novel “walk”-based algorithm for variable lookup in triangular substitutions. The result of this research is a family of languages that supports a variety of relational idioms and techniques, making it feasible and useful to write interesting programs as relations."
+
+# post/minikanren-live-and-untagged.md
+byrd2012minikanren:
+  type: inproceedings
+  author: "Byrd, William E. and Holk, Eric and Friedman, Daniel P."
+  title: "miniKanren, live and untagged: quine generation via relational interpreters (programming pearl)"
+  year: "2012"
+  isbn: "9781450318952"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  url: "https://doi.org/10.1145/2661103.2661105"
+  doi: "10.1145/2661103.2661105"
+  abstract: "We present relational interpreters for several subsets of Scheme, written in the pure logic programming language miniKanren. We demonstrate these interpreters running \"backwards\"---that is, generating programs that evaluate to a specified value---and show how the interpreters can trivially generate quines (programs that evaluate to themselves). We demonstrate how to transform environment-passing interpreters written in Scheme into relational interpreters written in miniKanren. We show how constraint extensions to core miniKanren can be used to allow shadowing of the interpreter's primitive forms (using the absent° tree constraint), and to avoid having to tag expressions in the languages being interpreted (using disequality constraints and symbol/number type-constraints), simplifying the interpreters and eliminating the need for parsers/unparsers.We provide four appendices to make the code in the paper completely self-contained. Three of these appendices contain new code: the complete implementation of core miniKanren extended with the new constraints; an extended relational interpreter capable of running factorial and doing list processing; and a simple pattern matcher that uses Dijkstra guards. The other appendix presents our preferred version of code that has been presented elsewhere: the miniKanren relational arithmetic system used in the extended interpreter."
+  booktitle: "Proceedings of the 2012 Annual Workshop on Scheme and Functional Programming"
+  pages: "8–29"
+  numpages: "22"
+  keywords: "tagging, scheme, relational programming, quines, miniKanren, logic programming, interpreters"
+  location: "Copenhagen, Denmark"
+  series: "Scheme '12"
+
+# post/2026-01-12-igraph-paper.md
+csardi2006igraph:
+  type: misc
+  title: "The igraph software package for complex network research"
+  author: "Gabor Csardi and Tamas Nepusz"
+  abstract: "The igraph software package provides handy tools for researchers in network science. It is an open source portable library capable of handling huge graphs with millions of vertices and edges and it is also suitable to grid computing. It contains routines for creating, manipulating and visualizing networks, calculating various structural properties, importing from and exporting to various (cid:12)le formats and many more. Via its interfaces to high-level languages like GNU R and Python it supports rapid development and fast prototyping."
+  year: "2006"
+  url: "https://api.semanticscholar.org/CorpusID:16923281"
+
+# post/guarded-pattern-matching.md
+dijkstra1975guarded:
+  type: article
+  author: "Dijkstra, Edsger W."
+  title: "Guarded commands, nondeterminacy and formal derivation of programs"
+  year: "1975"
+  issue_date: "Aug. 1975"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "18"
+  number: "8"
+  issn: "0001-0782"
+  url: "https://doi.org/10.1145/360933.360975"
+  doi: "10.1145/360933.360975"
+  abstract: "So-called “guarded commands” are introduced as a building block for alternative and repetitive constructs that allow nondeterministic program components for which at least the activity evoked, but possibly even the final state, is not necessarily uniquely determined by the initial state. For the formal derivation of programs expressed in terms of these constructs, a calculus will be be shown."
+  journal: "Commun. ACM"
+  month: "aug"
+  pages: "453–457"
+  numpages: "5"
+  keywords: "termination, sequencing primitives, repetition, programming methodology, programming languages, programming language semantics, program semantics, nondeterminancy, derivation of programs, correctness proof, case-construction"
+
+# post/2001-02-01-callcc-patterns.md
+ferguson2001call:
+  type: misc
+  title: "Call with Current Continuation Patterns"
+  author: "Darrell Ferguson and Dwight Deugo"
+  year: "2001"
+  url: "https://api.semanticscholar.org/CorpusID:116150081"
+
+# post/taocp-satisfiability.md
+fichte2023silent:
+  type: article
+  author: "Fichte, Johannes K. and Berre, Daniel Le and Hecher, Markus and Szeider, Stefan"
+  title: "The Silent (R)evolution of SAT"
+  year: "2023"
+  issue_date: "June 2023"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "66"
+  number: "6"
+  issn: "0001-0782"
+  url: "https://doi.org/10.1145/3560469"
+  doi: "10.1145/3560469"
+  abstract: "Today's powerful, robust SAT solvers have become primary tools for solving hard computational problems."
+  journal: "Commun. ACM"
+  month: "may"
+  pages: "64–72"
+  numpages: "9"
+
+# post/1994-02-01-filinski-representing-monads.md
+filinski1994representing:
+  type: inproceedings
+  author: "Filinski, Andrzej"
+  title: "Representing monads"
+  year: "1994"
+  isbn: "0897916360"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  url: "https://doi.org/10.1145/174675.178047"
+  doi: "10.1145/174675.178047"
+  abstract: "We show that any monad whose unit and extension operations are expressible as purely functional terms can be embedded in a call-by-value language with “composable continuations”. As part of the development, we extend Meyer and Wand's characterization of the relationship between continuation-passing and direct style to one for continuation-passing vs. general “monadic” style. We further show that the composable-continuations construct can itself be represented using ordinary, non-composable first-class continuations and a single piece of state. Thus, in the presence of two specific computational effects - storage and escapes - any expressible monadic structure (e.g., nondeterminism as represented by the list monad) can be added as a purely definitional extension, without requiring a reinterpretation of the whole language. The paper includes an implementation of the construction (in Standard ML with some New Jersey extensions) and several examples."
+  booktitle: "Proceedings of the 21st ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages"
+  pages: "446–457"
+  numpages: "12"
+  location: "Portland, Oregon, USA"
+  series: "POPL '94"
+
+# post/1996-01-31-the-little-schemer.md
+friedman1996little:
+  type: book
+  author: "Friedman, Daniel P. and Felleisen, Matthias and Bibby, Duane"
+  title: "The Little Schemer"
+  publisher: "The MIT Press"
+  year: "1996"
+  edition: "4th"
+  url: "https://dl.acm.org/doi/abs/10.5555/230223"
+
+# post/1996-01-31-the-seasoned-schemer.md
+friedman1996seasoned:
+  type: book
+  author: "Friedman, Daniel P. and Felleisen, Matthias and Bibby, Duane"
+  title: "The Seasoned Schemer"
+  publisher: "The MIT Press"
+  year: "1996"
+  edition: "2nd"
+  month: "01"
+  isbn: "9780262287883"
+  abstract: "The notion that \"thinking about computing is one of the most exciting things the human mind can do\" sets both The Little Schemer (formerly known as The Little LISPer) and its new companion volume, The Seasoned Schemer, apart from other books on LISP. The authors' enthusiasm for their subject is compelling as they present abstract concepts in a humorous and easy-to-grasp fashion. Together, these books will open new doors of thought to anyone who wants to find out what computing is really about. The Little Schemer introduces computing as an extension of arithmetic and algebra; things that everyone studies in grade school and high school. It introduces programs as recursive functions and briefly discusses the limits of what computers can do. The authors use the programming language Scheme, and interesting foods to illustrate these abstract ideas. The Seasoned Schemer informs the reader about additional dimensions of computing: functions as values, change of state, and exceptional cases. The Little LISPer has been a popular introduction to LISP for many years. It had appeared in French and Japanese. The Little Schemer and The Seasoned Schemer are worthy successors and will prove equally popular as textbooks for Scheme courses as well as companion texts for any complete introductory course in Computer Science."
+  doi: "10.7551/mitpress/6109.001.0001"
+  url: "https://doi.org/10.7551/mitpress/6109.001.0001"
+
+# post/the-reasoned-schemer.md
+friedman2018reasoned:
+  type: book
+  author: "Friedman, Daniel P. and Byrd, William E. and Kiselyov, Oleg and Hemann, Jason"
+  title: "The Reasoned Schemer"
+  year: "2018"
+  isbn: "0262535513"
+  publisher: "The MIT Press"
+  edition: "2nd"
+  url: "https://dl.acm.org/doi/10.5555/3267158"
+  abstract: "A new edition of a book, written in a humorous question-and-answer style, that shows how to implement and use an elegant little programming language for logic programming. The goal of this book is to show the beauty and elegance of relational programming, which captures the essence of logic programming. The book shows how to implement a relational programming language in Scheme, or in any other functional language, and demonstrates the remarkable flexibility of the resulting relational programs. As in the first edition, the pedagogical method is a series of questions and answers, which proceed with the characteristic humor that marked The Little Schemer and The Seasoned Schemer. Familiarity with a functional language or with the first five chapters of The Little Schemer is assumed. For this second edition, the authors have greatly simplified the programming language used in the book, as well as the implementation of the language. In addition to revising the text extensively, and simplifying and revising the Laws and Commandments, they have added explicit Translation rules to ease translation of Scheme functions into relations."
+
+# post/2002-09-17-final-shift-for-callcc.md
+gasbichler2002final:
+  type: article
+  author: "Gasbichler, Martin and Sperber, Michael"
+  title: "Final shift for call/cc: direct implementation of shift and reset"
+  year: "2002"
+  issue_date: "September 2002"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "37"
+  number: "9"
+  issn: "0362-1340"
+  url: "https://doi.org/10.1145/583852.581504"
+  doi: "10.1145/583852.581504"
+  abstract: "We present a direct implementation of the shift and reset control operators in the SFE system. The new implementation improves upon the traditional technique of simulating shift and reset via callcc. Typical applications of these operators exhibit space savings and a significant overall performance gain. Our technique is based upon the popular incremental stack/heap strategy for representing continuations. We present implementation details as well as some benchmark measurements for typical applications."
+  journal: "SIGPLAN Not."
+  month: "sep"
+  pages: "271–282"
+  numpages: "12"
+  keywords: "scheme, implementation, continuations"
+
+# post/2016-09-20-birank-paper.md
+he2017birank:
+  type: article
+  author: "He, Xiangnan and Gao, Ming and Kan, Min-Yen and Wang, Dingxian"
+  journal: "IEEE Transactions on Knowledge and Data Engineering"
+  title: "BiRank: Towards Ranking on Bipartite Graphs"
+  year: "2017"
+  volume: "29"
+  url: "https://ieeexplore.ieee.org/document/7572089"
+  number: "1"
+  pages: "57-71"
+  abstract: "The bipartite graph is a ubiquitous data structure that can model the relationship between two entity types: for instance, users and items, queries and webpages. In this paper, we study the problem of ranking vertices of a bipartite graph, based on the graph's link structure as well as prior information about vertices (which we term a query vector). We present a new solution, BiRank, which iteratively assigns scores to vertices and finally converges to a unique stationary ranking. In contrast to the traditional random walk-based methods, BiRank iterates towards optimizing a regularization function, which smooths the graph under the guidance of the query vector. Importantly, we establish how BiRank relates to the Bayesian methodology, enabling the future extension in a probabilistic way. To show the rationale and extendability of the ranking methodology, we further extend it to rank for the more generic n-partite graphs. BiRank's generic modeling of both the graph structure and vertex features enables it to model various ranking hypotheses flexibly. To illustrate its functionality, we apply the BiRank and TriRank (ranking for tripartite graphs) algorithms to two real-world applications: a general ranking scenario that predicts the future popularity of items, and a personalized ranking scenario that recommends items of interest to users. Extensive experiments on both synthetic and real-world datasets demonstrate BiRank's soundness (fast convergence), efficiency (linear in the number of graph edges), and effectiveness (achieving state-of-the-art in the two real-world tasks)."
+  keywords: "Bipartite graph;Bayes methods;Electronic mail;Kernel;Data models;Bridges;Probabilistic logic;Bipartite graph ranking;graph regularization;n-partite graphs;popularity prediction;personalized recommendation"
+  doi: "10.1109/TKDE.2016.2611584"
+  issn: "1558-2191"
+  month: "Jan"
+
+# post/the-reasoned-schemer.md
+hemann2013microkanren:
+  type: misc
+  title: "microkanren: A Minimal Functional Core for Relational Programming"
+  abstract: "This paper presents µKanren, a minimalist language in the miniKanren family of relational (logic) programming languages. Its implementation comprises fewer than 40 lines of Scheme. We motivate the need for a minimalist miniKanren language, and iteratively develop a complete search strategy. Finally, we demonstrate that through suf cient user-level features one regains much of the expressiveness of other miniKanren languages. In our opinion its brevity and simple semantics make µKanren uniquely elegant."
+  keywords: "miniKanren, relational programming, logic programming, Scheme (Computer program language)"
+  author: "Jason Hemann and Friedman, Daniel P."
+  url: "https://shu.elsevierpure.com/en/publications/microkanren-a-minimal-functional-core-for-relational-programming/"
+  year: "2013"
+  month: "nov"
+  day: "13"
+  language: "American English"
+  note: "Workshop on Scheme and Functional Programming ; Conference date: 13-11-2013 Through 13-11-2013"
+
+# post/2026-02-03-hyperfunctions.md
+kidney2026hyperfunctions:
+  type: article
+  author: "Kidney, Donnacha and Wu, Nicolas"
+  title: "Hyperfunctions: Communicating Continuations"
+  year: "2026"
+  issue_date: "January 2026"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "10"
+  number: "POPL"
+  url: "https://doi.org/10.1145/3776649"
+  doi: "10.1145/3776649"
+  abstract: "A hyperfunction is a continuation-like construction that can be used to implement communication in the   context of concurrency. Though it has been reinvented many times, it remains somewhat obscure: since its   definition by Launchbury et al., hyperfunctions have been used to implement certain algebraic effect handlers,   coroutines, and breadth-first traversals; however, in each of these examples, the hyperfunction type went   unrecognised.   We identify the hyperfunctions hidden in all of these algorithms, and we exposit the common pattern   between them, building a framework for working with and reasoning about hyperfunctions. We use this   framework to solve a long-standing problem: giving a fully-abstract continuation-based semantics for a   concurrent calculus, the Calculus of Communicating Systems. Finally, we use hyperfunctions to build a   monadic Haskell library for efficient first-class coroutines."
+  journal: "Proc. ACM Program. Lang."
+  month: "jan"
+  articleno: "7"
+  numpages: "30"
+  keywords: "CCS, CPS, Concurrency, Continuations, Coroutines, Hyperfunctions"
+
+# post/microkanren-arithmetic.md
+kiselyov2008pure:
+  type: inproceedings
+  author: "Kiselyov, Oleg and Byrd, William E. and Friedman, Daniel P. and Shan, Chung-Chieh"
+  title: "Pure, declarative, and constructive arithmetic relations"
+  year: "2008"
+  isbn: "3540789685"
+  publisher: "Springer-Verlag"
+  url: "https://dl.acm.org/doi/10.5555/1788446.1788456"
+  address: "Berlin, Heidelberg"
+  abstract: "We present decidable logic programs for addition, multiplication, division with remainder, exponentiation, and logarithm with remainder over the unbounded domain of natural numbers. Our predicates represent relations without mode restrictions or annotations. They are fully decidable under the common, DFS-like, SLD resolution strategy of Prolog or under an interleaving refinement of DFS. We prove that the evaluation of our arithmetic goals always terminates, given arguments that share no logic variables. Further, the (possibly infinite) set of solutions for a goal denotes exactly the corresponding mathematical relation. (For SLD without interleaving, and for some infinite solution sets, only half of the relation's domain may be covered.) We define predicates to handle unary (for illustration) and binary representations of natural numbers, and prove termination and completeness of these predicates. Our predicates are written in pure Prolog, without cut (!), var/1, or other nonlogical operators. The purity and minimalism of our approach allows us to declare arithmetic in other logic systems, such as Haskell type classes."
+  booktitle: "Proceedings of the 9th International Conference on Functional and Logic Programming"
+  pages: "64–80"
+  numpages: "17"
+  location: "Ise, Japan"
+  series: "FLOPS'08"
+
+# post/taocp-satisfiability.md
+knuth2015art:
+  type: book
+  author: "Knuth, Donald E."
+  title: "The Art of Computer Programming, Volume 4, Fascicle 6: Satisfiability"
+  year: "2015"
+  url: "https://dl.acm.org/doi/book/10.5555/2898950"
+  isbn: "0134397606"
+  publisher: "Addison-Wesley Professional"
+  edition: "1st"
+  abstract: "This multivolume work on the analysis of algorithms has long been recognized as the definitive description of classical computer science. The four volumes published to date already comprise a unique and invaluable resource in programming theory and practice. Countless readers have spoken about the profound personal influence of Knuths writings. Scientists have marveled at the beauty and elegance of his analysis, while practicing programmers have successfully applied his cookbook solutions to their day-to-day problems. All have admired Knuth for the breadth, clarity, accuracy, and good humor found in his books. To continue the fourth and later volumes of the set, and to update parts of the existing volumes, Knuth has created a series of small books called fascicles, which are published at regular intervals. Each fascicle encompasses a section or more of wholly new or revised material. Ultimately, the content of these fascicles will be rolled up into the comprehensive, final versions of each volume, and the enormous undertaking that began in 1962 will be complete. Volume 4 Fascicle 6 This fascicle, brimming with lively examples, forms the middle third of what will eventually become hardcover Volume 4B. It introduces and surveys Satisfiability, one of the most fundamental problems in all of computer science: Given a Boolean function, can its variables be set to at least one pattern of 0s and 1s that will make the function true? Satisfiability is far from an abstract exercise in understanding formal systems. Revolutionary methods for solving such problems emerged at the beginning of the twenty-first century, and theyve led to game-changing applications in industry. These so-called SAT solvers can now routinely find solutions to practical problems that involve millions of variables and were thought until very recently to be hopelessly difficult. Fascicle 6 presents full details of seven different SAT solvers, ranging from simple algorithms suitable for small problems to state-of-the-art algorithms of industrial strength. Many other significant topics also arise in the course of the discussion, such as bounded model checking, the theory of traces, Las Vegas algorithms, phase changes in random processes, the efficient encoding of problems into conjunctive normal form, and the exploitation of global and local symmetries. More than 500 exercises are provided, arranged carefully for self-instruction, together with detailed answers."
+
+# post/algebraic-gf-avoiding-patterns.md
+merlini2018algebraic:
+  type: article
+  author: "Donatella Merlini and Massimo Nocentini"
+  title: "Algebraic Generating Functions for Languages Avoiding Riordan Patterns"
+  journal: "Journal of Integer Sequences"
+  volume: "21"
+  number: "1"
+  pages: "18.1.3"
+  year: "2018"
+  url: "https://cs.uwaterloo.ca/journals/JIS/VOL21/Merlini/merlini5.html"
+  timestamp: "Tue, 10 Mar 2020 14:12:37 +0100"
+  abstract: "We study the languages 𝔏𝔭 ⊂ {0,1}* of binary words w avoiding a given pattern 𝔭 such that |w|0 ≤ |w|1 for every w ∈ 𝔏𝔭, where |w|0 and |w|1 correspond to the number of 0-bits and 1-bits in the word w, respectively. In particular, we concentrate on patterns 𝔭 related to the concept of Riordan arrays. These languages are not regular, but can be enumerated by algebraic generating functions corresponding to many integer sequences that were previously unlisted in the On-Line Encyclopedia of Integer Sequences. We give explicit formulas for these generating functions expressed in terms of the autocorrelation polynomial of 𝔭, and also give explicit formulas for the coefficients of some particular patterns, algebraically and combinatorially."
+  biburl: "https://dblp.org/rec/journals/jintseq/MerliniN18.bib"
+  bibsource: "dblp computer science bibliography, https://dblp.org"
+
+# post/functions-jordan-riordan-matrices.md
+merlini2019functions:
+  type: article
+  title: "Functions and Jordan canonical forms of Riordan matrices"
+  journal: "Linear Algebra and its Applications"
+  volume: "565"
+  pages: "177-207"
+  year: "2019"
+  issn: "0024-3795"
+  url: "https://doi.org/10.1016/j.laa.2018.12.011"
+  author: "Donatella Merlini and Massimo Nocentini"
+  keywords: "Riordan arrays, Matrices functions, Hermite interpolating polynomials, Jordan canonical forms"
+  abstract: "This paper collects results about Riordan arrays in the framework of matrix functions; actually, the following methodology applies to any square matrix m×m with exactly one eigenvalue λ of algebraic multiplicity m∈N. Generalized Lagrange bases are used to construct Hermite polynomials that interpolate a family of functions; moreover, we show a parallel application of such functions via Jordan canonical forms and case studies are given."
+
+# post/sbral.md
+okasaki1995purely:
+  type: inproceedings
+  author: "Okasaki, Chris"
+  title: "Purely functional random-access lists"
+  year: "1995"
+  isbn: "0897917197"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  url: "https://doi.org/10.1145/224164.224187"
+  doi: "10.1145/224164.224187"
+  booktitle: "Proceedings of the Seventh International Conference on Functional Programming Languages and Computer Architecture"
+  pages: "86–95"
+  numpages: "10"
+  location: "La Jolla, California, USA"
+  series: "FPCA '95"
+  abstract: "We present a new data structure, called a random-access list, that supports array lookup and update operations in O(log n) time, while simultaneously providing O(1) time list operations (cons, head, tail). A closer analysis of the  array operations improves the bound to O(min{i, log n}) in the worst case and O(log i) in the expected case, where i is the index of the desired element. Empirical evidence suggests that this data structure should be quite efficient in  practice."
+
+# post/sbral.md
+okasaki1998purely:
+  type: book
+  author: "Okasaki, Chris"
+  title: "Purely Functional Data Structures"
+  year: "1998"
+  publisher: "Cambridge University Press"
+  url: "https://www.cambridge.org/core/books/purely-functional-data-structures/0409255DA1B48FA731859AC72E34D494"
+  abstract: "Most books on data structures assume an imperative language like C or C++. However, data structures for these languages do not always translate well to functional languages such as Standard ML, Haskell, or Scheme. This book describes data structures from the point of view of functional languages, with examples, and presents design techniques so that programmers can develop their own functional data structures. It includes both classical data structures, such as red-black trees and binomial queues, and a host of new data structures developed exclusively for functional languages. All source code is given in Standard ML and Haskell, and most of the programs can easily be adapted to other functional languages. This handy reference for professional programmers working with functional languages can also be used as a tutorial or for self-study."
+
+# post/teaching-taocp.md
+ruskey2011teaching:
+  type: inproceedings
+  author: "Frank Ruskey"
+  publisher: "Association for Computing Machinery"
+  year: "2011"
+  pages: "2–6"
+  address: "New York, NY, USA"
+  booktitle: "Proceedings of the 16th Western Canadian Conference on Computing Education"
+  title: "Teaching the art of computer programming (TAOCP)"
+  url: "https://doi.org/10.1145/1989622.1989624"
+  abstract: "Donald Knuth's magnum opus, The Art of Computer Programming (TAOCP), is often bought, frequently cited, sometimes browsed, occasionally read, but almost never used for teaching. The purpose of this paper is to describe the author's experience in teaching two courses, each based on different sections of TAOCP volume 4a, using the pre-fascicles and fascicles that were available at the time. The conclusion reached is that such an adventurous undertaking can be extremely rewarding, not only for the students, but also for the instructor."
+  series: "WCCCE '11"
+
+# post/1993-06-01-sitaram-handling-control.md
+sitaram1993handling:
+  type: article
+  author: "Sitaram, Dorai"
+  title: "Handling control"
+  year: "1993"
+  issue_date: "June 1993"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "28"
+  number: "6"
+  issn: "0362-1340"
+  url: "https://doi.org/10.1145/173262.155104"
+  doi: "10.1145/173262.155104"
+  abstract: "Non-local control transfer and exception handling have a long tradition in higher-order programming languages such as Common Lisp, Scheme and ML. However, each language stops short of providing a full and complementary approach—control handling is provided only if the corresponding control operator is first-order. In this work, we describe handlers in a higher-order control setting. We invoke our earlier theoretical result that all denotational models of control languages invariably include capabilities that handle control. These capabilities, when incorporated into the language, form an elegant and powerful higher-order generalization of the first-order exception-handling mechanism."
+  journal: "SIGPLAN Not."
+  month: "jun"
+  pages: "147–155"
+  numpages: "9"
+
+# post/1995-04-01-tessman-scheme-generic-functions.md
+tessman1995adding:
+  type: article
+  author: "Tessman, Thant"
+  title: "Adding generic functions to Scheme"
+  year: "1995"
+  issue_date: "April 1995"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "30"
+  number: "4"
+  issn: "0362-1340"
+  url: "https://doi.org/10.1145/202176.202182"
+  doi: "10.1145/202176.202182"
+  abstract: "A generic function is a set of methods, all of which have equivalent semantics but each of which apply to different domains. This document describes how to augment the Scheme programming language with the capability to define multi-method generic functions. Also described are optimization issues and areas of potentially fruitful future exploration."
+  journal: "SIGPLAN Not."
+  month: "apr"
+  pages: "45–50"
+  numpages: "6"
+
+# post/1996-06-15-thiemann-cogen-in-six-lines.md (formerly "1996-06-15-sitaram-handling-control copy.md")
+thiemann1996cogen:
+  type: article
+  author: "Thiemann, Peter J."
+  title: "Cogen in six lines"
+  year: "1996"
+  issue_date: "June 15, 1996"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "31"
+  number: "6"
+  issn: "0362-1340"
+  url: "https://doi.org/10.1145/232629.232647"
+  doi: "10.1145/232629.232647"
+  abstract: "We have designed and implemented a program-generator generator (PGG) for an untyped higher-order functional programming language. The program generators perform continuation-based multi-level offline specialization and thus combine the most powerful and general offline partial evaluation techniques. The correctness of the PGG is ensured by deriving it from a multi-level specialize. Our PGG is extremely simple to implement due to the use of multi-level techniques and higher-order abstract syntax."
+  journal: "SIGPLAN Not."
+  month: "jun"
+  pages: "180–189"
+  numpages: "10"
+  keywords: "continuations, multi-level computation, partial evaluation"
+
+# post/guarded-pattern-matching.md
+wadler1987critique:
+  type: article
+  author: "Wadler, P"
+  title: "A critique of Abelson and Sussman or why calculating is better than scheming"
+  year: "1987"
+  issue_date: "March 1987"
+  publisher: "Association for Computing Machinery"
+  address: "New York, NY, USA"
+  volume: "22"
+  number: "3"
+  issn: "0362-1340"
+  url: "https://doi.org/10.1145/24697.24706"
+  doi: "10.1145/24697.24706"
+  journal: "SIGPLAN Not."
+  month: "mar"
+  pages: "83–94"
+  numpages: "12"

@@ -2,11 +2,13 @@
 date = '2026-07-03T09:58:04+01:00'
 title = 'Neovim'
 subtitle = 'Hyperextensible Vim-based text editor'
-summary = ' '
 categories = ['tools', 'lua']
+toc = true
 +++
 
-# Vision 
+<!--more-->
+
+## Vision
 
 [Neovim](https://neovim.io/) is a refactor, and sometimes redactor, in the
 tradition of Vim (which itself derives from
@@ -15,7 +17,7 @@ rewrite but a continuation and extension of Vim. Many clones and derivatives
 exist, some very clever—but none are Vim. Neovim is built for users who want
 the good parts of Vim, and more.
 
-## Goals
+### Goals
 
 Extensible. Usable. Vim.
 
@@ -30,7 +32,7 @@ Extensible. Usable. Vim.
 - In matters of taste/ambiguity, favor tradition/compatibility…
 - …but prefer usability if the benefits are extreme.
 
-## Non-goals
+### Non-goals
 
 - Support Vim9script
 - Turn Vim into an IDE
@@ -38,14 +40,13 @@ Extensible. Usable. Vim.
 - Deprecate Vimscript
 - Conform to POSIX vi
 
+## Learning and docs
 
-# Learning and docs
-
-## [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
+### [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
 
 by [Steve Losh](https://stevelosh.com/).
 
-## [Typecraft's](https://typecraft.dev/) playlists
+### [Typecraft's](https://typecraft.dev/) playlists
 
 [Chris Power](https://typecraft.dev/authors/chris-power) is the author of the followings:
 
@@ -55,11 +56,11 @@ by [Steve Losh](https://stevelosh.com/).
 
 and much more on its [Youtube channel](https://www.youtube.com/@typecraft_dev).
 
-# Releases
+## Releases
 
 All the following are released on [GitHub](https://github.com/neovim/neovim/releases).
 
-## Nvim 0.12.3 is out!
+### Nvim 0.12.3 is out!
 
 Fetch the
 [v0.12.3.tar.gz](https://github.com/neovim/neovim/archive/refs/tags/v0.12.3.tar.gz)

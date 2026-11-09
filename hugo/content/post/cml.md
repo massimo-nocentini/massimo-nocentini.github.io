@@ -3,10 +3,12 @@ date = '2026-09-24T10:00:00+01:00'
 title = "Concurrent ML for CHICKEN Scheme"
 subtitle = "Porting SML/NJ CML as the (aux cml) library"
 categories = [ "scheme", "AI generated"]
-summary = ' '
+toc = true
 +++
 
-# `(aux cml)`: Concurrent ML for CHICKEN Scheme
+<!--more-->
+
+## `(aux cml)`: Concurrent ML for CHICKEN Scheme
 
 This document describes `(aux cml)`, a port of the Concurrent ML library of SML/NJ
 (`smlnj/libraries/cml`) to CHICKEN Scheme. It covers what was studied in the ML sources, the
@@ -23,17 +25,6 @@ algorithms, bugs and doc/code mismatches, and every "ML does ..." comparison) re
 `libraries/cml` of [`git@github.com:smlnj/smlnj.git`](https://github.com/smlnj/smlnj) up to
 commit `92a912a5aea716ecb7454d07a803f3b172f6dc64` ("switch to V3 literals implementation",
 2026-09-22). Later upstream changes are not reflected.
-
-Contents
-
-1. [Overview](#1-overview)
-2. [Findings from studying SML/NJ CML](#2-findings-from-studying-smlnj-cml)
-3. [Definitions: the public API](#3-definitions-the-public-api)
-4. [Algorithms](#4-algorithms)
-5. [Deviations from ML](#5-deviations-from-ml)
-6. [Review log](#6-review-log)
-7. [Testing](#7-testing)
-8. [Known limitations and open items](#8-known-limitations-and-open-items)
 
 ---
 
@@ -759,7 +750,7 @@ TraceCML watch.
 Continuations are captured with plain `call/cc`, through a macro that also ends the "switch in
 progress" state once the continuation is resumed:
 
-```scheme
+```scheme {.fullwidth}
 (define-syntax %letcc/call
   (syntax-rules ()
     ((_ hop body ...) (let1 (v (call-with-current-continuation (λ (hop) body ...))) (%switched-in!) v))))
@@ -907,7 +898,7 @@ blocked on channels, SyncVars, mailboxes, barriers or `never-evt` do not count a
 
 **Sessions.** `run-cml`:
 
-```scheme
+```scheme {.fullwidth}
 (define (run-cml thunk #!key (quantum %default-quantum))
   (when %running (%cml-raise 'running "run-cml: CML is already running"))
   (unless (procedure? thunk) (error "run-cml: not a procedure" thunk))
@@ -1010,7 +1001,7 @@ group tree, `(base . polls)`, `(grp . groups)` or `(nack cvar group)`, by `%forc
 `with-nack` bodies run left to right, depth first, outside the atomic region; each `with-nack`
 gets a fresh cvar, collected in a cell. The forcing runs inside `%force-group`:
 
-```scheme
+```scheme {.fullwidth}
 (define (%force-group force)
   (let ((nacks (list 'nacks)) (me %cur-tid) (done? #f))
     (define (leave!) ...)                                      ; unregister the cell from the tid
@@ -1579,6 +1570,7 @@ reported by two lenses) there were **123 distinct defects**, all fixed or docume
 | 8 | 10 | 0 | 2 | 8 |
 | 9 | 12 | 0 | 4 | 8 |
 | **Total** | **123** | **10** | **40** | **73** |
+{.fullwidth}
 
 The trend: high-severity findings stopped after round 6 (the last one was the channel ping-pong
 that never ticked), and later rounds found mostly low-severity edge cases (threads dying inside

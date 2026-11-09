@@ -1,0 +1,26 @@
+{{- /*
+  A link to a GitHub repository, or to a path inside it, with the GitHub
+  mark (inline):
+
+    {{< github "massimo-nocentini" "sgb.cweb" >}}
+    {{< github "massimo-nocentini" "wolframengine.docker/blob/master/Makefile" >}}
+
+  Positional: 0 = the owner, 1 = the repository (optionally followed by a
+  path in it), which is also the link text.
+  Output:
+    <a class="repo-link repo-link-github" href="https://github.com/OWNER/REPO"><svg class="repo-icon" …></svg><code>REPO</code></a>
+  The mark is assets/icons/github.svg, inline and drawn in currentColor, so
+  it follows the text colour in light and dark mode; assets/css/site.css
+  sizes it. Nested in a theme shortcode (a sidenote, a margin note…) it
+  goes through the theme's nest-token protocol (tufte/nest.html).
+*/ -}}
+{{- $owner := .Get 0 | default "" -}}
+{{- $repo := .Get 1 | default "" -}}
+{{- if or (not $owner) (not $repo) -}}
+  {{- errorf "github shortcode: an owner and a repository are required, e.g. {{< github \"massimo-nocentini\" \"sgb.cweb\" >}} (%s)" .Position -}}
+{{- end -}}
+{{- $href := printf "https://github.com/%s/%s" $owner $repo -}}
+{{- $icon := (resources.Get "icons/github.svg").Content | strings.TrimSpace -}}
+{{- $icon = replace $icon "<svg " `<svg class="repo-icon" aria-hidden="true" focusable="false" ` 1 -}}
+{{- $out := printf `<a class="repo-link repo-link-github" href="%s">%s<code>%s</code></a>` (htmlEscape $href) $icon (htmlEscape $repo) -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}
