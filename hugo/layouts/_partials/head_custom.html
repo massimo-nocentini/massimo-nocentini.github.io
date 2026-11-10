@@ -1,0 +1,14 @@
+{{- /*
+  The theme's head hook (end of <head>). Only the pages of the draft book
+  content/book/dizionario-di-teologia-biblica/ (dufour.tex: tools/dufour) get its
+  stylesheet, assets/css/dufour.css: every other page of the site renders
+  exactly as before.
+*/ -}}
+{{- if hasPrefix .Path "/book/dizionario-di-teologia-biblica" -}}
+  {{- with resources.Get "css/dufour.css" -}}
+    {{- $css := . -}}
+    {{- if hugo.IsProduction }}{{ $css = $css | minify }}{{ end -}}
+    {{- $css = $css | fingerprint "sha384" }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+  {{- end -}}
+{{- end -}}

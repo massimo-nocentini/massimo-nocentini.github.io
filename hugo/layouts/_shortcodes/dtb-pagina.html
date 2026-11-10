@@ -1,0 +1,14 @@
+{{- /*
+  \pagina{N} of the Dizionario di Teologia Biblica (dufour.tex: tools/dufour): the page
+  of the printed source edition where the text that follows begins. The TeX
+  edition hides these marks (\mostrapaginefalse, preamble.tex), and so does
+  this one: an empty, hidden span that keeps the page number.
+
+    {{< dtb-pagina "42" >}}   →  <span class="dtb-pagina" data-pagina="42" hidden></span>
+*/ -}}
+{{- $n := printf "%v" (.Get 0 | default "") -}}
+{{- if not $n -}}
+  {{- errorf "dtb-pagina shortcode: a page number is required (%s)" .Position -}}
+{{- end -}}
+{{- $out := printf `<span class="dtb-pagina" data-pagina="%s" hidden></span>` (htmlEscape $n) -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

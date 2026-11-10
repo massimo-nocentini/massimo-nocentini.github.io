@@ -1,0 +1,152 @@
+/*
+ * Dizionario di Teologia Biblica (dufour.tex: tools/dufour): the constructs of
+ * preamble.tex that tufte.hugo has no style for. Loaded only on the pages of
+ * content/book/dizionario-di-teologia-biblica/ (layouts/_partials/head_custom.html);
+ * every class is dtb-* and set by dufour.tex: tools/dufour/convert.py. Sizes follow the
+ * TeX ones relative to the 10pt text: \small 9pt, \footnotesize 8pt.
+ */
+
+:root {
+  --dtb-gray: #616161;          /* dtbgray, gray 0.38 */
+}
+@media (prefers-color-scheme: dark) {
+  :root { --dtb-gray: #a0a0a0; }
+}
+
+/* \rinvio: a redirect entry, \small, hanging indent; consecutive ones form a
+   compact block, set off from the text before it */
+body.tufte-book section > p.dtb-rinvio {
+  font-size: 1.26rem;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+  margin-top: 0.15rem;
+  margin-bottom: 0.15rem;
+}
+body.tufte-book section > p:not(.dtb-rinvio) + p.dtb-rinvio,
+body.tufte-book section > p.dtb-rinvio:first-child {
+  margin-top: 2rem;
+}
+
+/* \rimandi: the closing → list, \footnotesize, hanging indent */
+body.tufte-book section > p.dtb-rimandi {
+  font-size: 1.12rem;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+
+/* \firma: the signature, flush right, \small small capitals */
+body.tufte-book section > p.dtb-firma {
+  font-size: 1.26rem;
+  text-indent: 0;
+}
+
+/* run-in heads, lettered points and headings set as paragraphs start
+   flush (\noindent); \punto is indented 1em (\hspace*{1em}) */
+body.tufte-book section > p:has(> .run-in:first-child),
+body.tufte-book section > p:has(> .marginnote + .run-in),
+body.tufte-book section > p.dtb-h {
+  text-indent: 0;
+}
+body.tufte-book section > p.dtb-punto { text-indent: 1em; }
+
+/* headings below ### (paragraphs, see convert.py): \testamento in italic,
+   \sezione in bold */
+body.tufte-book section > p.dtb-h { margin-top: 1.4rem; margin-bottom: 0.4rem; }
+body.tufte-book section > p.dtb-h.dtb-sezione,
+body.tufte-book section > p.dtb-h.dtb-parte { font-weight: bold; }
+body.tufte-book section > p.dtb-h.dtb-testamento { font-style: italic; }
+
+/* \dtbstelle: * * * */
+body.tufte-book section > p.dtb-stelle { text-align: center; text-indent: 0; }
+
+/* \pagina: hidden, as in the TeX edition (\mostrapaginefalse) */
+.dtb-pagina { display: none; }
+
+/* front and back matter: multicols and minipages as CSS columns */
+div.dtb-fullwidth.dtb-cols-2,
+div.dtb-fullwidth.dtb-minipages { column-count: 2; column-gap: 3rem; }
+div.dtb-fullwidth.dtb-cols-3 { column-count: 3; column-gap: 2.5rem; }
+@media (max-width: 760px) {
+  div.dtb-fullwidth.dtb-cols-2,
+  div.dtb-fullwidth.dtb-minipages,
+  div.dtb-fullwidth.dtb-cols-3 { column-count: 1; }
+}
+div.dtb-fullwidth p,
+div.dtb-fullwidth dl { margin-top: 0; margin-bottom: 0.2rem; text-indent: 0; }
+div.dtb-fullwidth h2 { break-after: avoid; }
+
+/* \dtbsigla, \dtbsigtab, \dtbnome: term and text on one line */
+.tufte-book article.chapter dl { display: block; }
+.tufte-book article.chapter dl > dt {
+  float: left;
+  clear: left;
+  min-width: 4.2em;
+  margin: 0 0.5em 0 0;
+  font-weight: normal;
+}
+.tufte-book article.chapter dl > dd {
+  margin: 0 0 0.25rem 4.7em;
+}
+div.dtb-fullwidth dl > dd { break-before: avoid; }
+
+/* \dtbcollab, \dtbcollaboratore, \dtbfirmata: \small, hanging indent */
+p.dtb-collab,
+p.dtb-collaboratore,
+p.dtb-firmata,
+p.dtb-firmata-nota {
+  font-size: 1.26rem;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+p.dtb-collaboratore { margin-top: 0.8rem; break-after: avoid; }
+p.dtb-firmata { padding-left: 2em; }
+p.dtb-firmata-nota { padding-left: 2em; font-size: 1.12rem; color: var(--dtb-gray); }
+p.dtb-collab em,
+p.dtb-collaboratore em { color: var(--dtb-gray); }
+
+/* index of names: \dtbnomeiniziale */
+p.dtb-iniziale { color: var(--dtb-gray); margin-top: 0.8rem; }
+
+/* thematic index: \dtbtemaIII (indented), \dtbtemaIV and \dtbtemaV (run-in,
+   hanging), \dtbtemavoci (indented by its argument) */
+body.tufte-book section > p.dtb-tema-iii { text-indent: 1em; }
+body.tufte-book section > p.dtb-tema-iv { padding-left: 2em; text-indent: -1em; }
+body.tufte-book section > p.dtb-tema-v { padding-left: 3em; text-indent: -1em; }
+body.tufte-book section > p.dtb-temavoci { text-indent: 0; }
+body.tufte-book section > p.dtb-temavoci.dtb-indent { padding-left: 1em; }
+
+/* Run-in heads (\sottosezione, \sottotitolo, \spunto, \dtbtemaIV): bold
+   italic (\textbf{\textit{…}}), followed by the text's own "~--~" (the
+   theme's \paragraph adds a 1em space), \addvspace{.3\baselineskip} before.
+   The theme's rules for p:has(> span.run-in:first-child) do not see them
+   when a margin label comes first, and outrank plain class selectors. */
+body.tufte-book article.chapter span.run-in {
+  margin-right: 0;
+  font-weight: bold;
+}
+body.tufte-book section > p.dtb-ss.dtb-ss:has(> span.run-in) {
+  margin-top: 0.6rem;
+  text-indent: 0;
+}
+body.tufte-book section > p.dtb-tema-iv.dtb-tema-iv:has(> span.run-in) {
+  margin-top: 0.4rem;
+  padding-left: 2em;
+  text-indent: -1em;
+}
+
+/* \dtbsigla, \dtbsigtab, \dtbnome: the abbreviation upright, kept with its text */
+.tufte-book article.chapter dl > dt {
+  font-style: normal;
+  break-after: avoid;
+}
+
+/* Headings keep the look of their TeX macro at any depth (## or ###):
+   \parte and \sezione bold upright, \testamento italic, \titoletto and
+   \dtbtestata bold upright (small capitals come from the smallcaps
+   shortcode), \dtbtemaI/II of the thematic index bold upright. */
+article.chapter :is(h2, h3):is(.dtb-parte, .dtb-sezione, .dtb-titoletto, .dtb-dtbtestata, .dtb-tema) {
+  font-style: normal;
+  font-weight: bold;
+}
+article.chapter :is(h2, h3).dtb-testamento { font-style: italic; font-weight: normal; }
+article.chapter :is(h2, h3).dtb-testamento .smallcaps { font-style: normal; }

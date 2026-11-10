@@ -1,0 +1,21 @@
+{{- /*
+  Italics where Markdown's *…* cannot open or close (CommonMark's flanking
+  rules), used by dufour.tex: tools/dufour/convert.py for the Dizionario di Teologia
+  Biblica: an italic comma right after a letter (c'è\textit{,}), or an
+  italic run that ends with a link right before a sidenote. Same output as
+  *…* elsewhere:
+
+    {{< dtb-em >}},{{< /dtb-em >}}   →  <em>,</em>
+
+  The inner text is inline Markdown (links, nested shortcodes), rendered by
+  the theme's tufte/render-inner.html and nested like the theme's own
+  inline shortcodes (tufte/nest.html).
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<em>%s</em>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}
