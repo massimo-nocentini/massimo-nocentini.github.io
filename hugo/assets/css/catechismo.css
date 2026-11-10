@@ -124,3 +124,109 @@ body.tufte-book section > p.ccc-lettere {
   font-size: 1.8rem;
   word-spacing: 0.3em;
 }
+
+/* ---------------------------------------------------------------- Compendio
+   The Compendio del Catechismo della Chiesa Cattolica: the part compendio/
+   of the book (convert.py). */
+
+/* Contents: its chapters are named by level (file names of compendio/): a
+   parte, the front pages, the Appendice and the abbreviations 0, a sezione
+   or a section of the Appendice (appendice-a-…, appendice-b-…) 1em, a
+   capitolo 2em. After the Catechism's rules: same specificity, so these
+   win for /compendio/capitolo-. */
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/compendio/sezione-"]) { padding-left: 1em; }
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/compendio/appendice-"]) { padding-left: 1em; }
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/compendio/capitolo-"]) { padding-left: 2em; }
+
+/* Title page */
+body.tufte-book section > p.ccc-frontespizio {
+  text-align: center;
+  text-indent: 0;
+  padding-left: 0;
+  font-size: 2.2rem;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  margin-top: 1rem;
+}
+body.tufte-book section > p.ccc-sottotitolo.ccc-sottotitolo { font-size: 1.8rem; font-style: italic; }
+body.tufte-book figure.ccc-frontespizio-immagine {
+  max-width: 55%;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+body.tufte-book figure.ccc-frontespizio-immagine img { width: auto; max-width: 100%; height: auto; }
+body.tufte-book section > p.ccc-copyright { text-align: center; text-indent: 0; font-size: 1.26rem; }
+body.tufte-book section > p.ccc-firma { text-align: right; text-indent: 0; margin-top: 0.8rem; }
+
+/* Questions: the number (run-in, anchor comp-qN) and the question in bold,
+   the CCC paragraphs in the margin; the answer below, not indented */
+body.tufte-book article.chapter p.ccc-domanda > span.run-in {
+  font-style: normal;
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+body.tufte-book section > p.ccc-domanda.ccc-domanda:has(> span.run-in) {
+  margin-top: 1.4rem;
+  margin-bottom: 0.3rem;
+  text-indent: 0;
+}
+body.tufte-book section p.ccc-risposta { text-indent: 0; margin-top: 0.3rem; }
+body.tufte-book section p.ccc-domanda .marginnote { font-size: 1rem; line-height: 1.4; }
+/* The CCC label of a question (and of the epigraph): 'ccc' in small capitals
+   (the theme's .smallcaps), then the printed lines, which hang after it, as
+   in tex/ (\ccccompccc). The label sits in the padding: the space after it
+   starts the first line and collapses, so every line starts at the same x. */
+body.tufte-book section p:is(.ccc-domanda, .ccc-epigrafe) .marginnote:has(> .smallcaps:first-child) {
+  box-sizing: border-box;
+  padding-left: 2.4em;
+}
+body.tufte-book section p:is(.ccc-domanda, .ccc-epigrafe) .marginnote > .smallcaps:first-child {
+  position: absolute;
+  left: 0;
+}
+
+/* Quotations after an answer; headings: articoli upright, the italics of
+   a subheading are in its text */
+body.tufte-book section p.ccc-citazione { text-indent: 0; }
+article.chapter :is(h2, h3):is(.ccc-articolo, .ccc-titoletto, .ccc-testo-titolo,
+  .ccc-preghiera-titolo, .ccc-formula-titolo) { font-style: normal; }
+body.tufte-book section > p:is(.ccc-sottotitolo-preghiera, .ccc-fonte) { text-indent: 0; margin-top: 0; }
+
+/* An Italian text and its Latin side by side: two columns, one after the
+   other on a narrow screen; the stanzas of the two are not aligned. The
+   pair holds the Italian column, the Latin title, the Latin column (in
+   reading order); on a wide screen the Latin title is a first row above
+   the Latin column (the Italian title is the heading above the pair), so
+   that the two texts start level. */
+div.fullwidth.ccc-coppia {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 3rem;
+  max-width: 80%;
+  margin: 0.5rem 0 1rem;
+}
+@media (min-width: 761px) {
+  div.ccc-coppia > div.ccc-lingua[lang="it"] { grid-column: 1; grid-row: 2; }
+  div.ccc-coppia > p.ccc-titolo-latino { grid-column: 2; grid-row: 1; }
+  div.ccc-coppia > div.ccc-lingua[lang="la"] { grid-column: 2; grid-row: 2; }
+}
+@media (max-width: 760px) {
+  div.fullwidth.ccc-coppia { grid-template-columns: minmax(0, 1fr); max-width: 100%; }
+  div.ccc-coppia > div.ccc-lingua + p.ccc-titolo-latino { margin-top: 1rem; }
+}
+div.ccc-coppia div.ccc-lingua p,
+div.ccc-coppia > p.ccc-titolo-latino { width: auto; max-width: none; margin-top: 0; margin-bottom: 0.8rem; }
+div.ccc-coppia p.ccc-titolo-latino { font-style: italic; text-indent: 0; }
+body.tufte-book section p.ccc-strofa { text-indent: 0; }
+/* The lines of a stanza (or formula), one ccc-verso each: a line too long
+   for its column continues indented by 1em (as in tex/), so it is not taken
+   for a new line; the line breaks between them are then not needed */
+body.tufte-book section p.ccc-verse > span.ccc-verso {
+  display: block;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+body.tufte-book section p.ccc-verse:has(> span.ccc-verso) > br { display: none; }
+
+/* Formulas (Appendice B): the numbered lists */
+body.tufte-book article.chapter section > ol { margin-top: 0.5rem; }

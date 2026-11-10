@@ -3,9 +3,9 @@
 title: "Catechismo della Chiesa Cattolica"
 author: "Chiesa Cattolica"
 publisher: "Libreria Editrice Vaticana"
-description: "Catechismo della Chiesa Cattolica (Libreria Editrice Vaticana): testo italiano dell’edizione tipica, da vatican.va, come libro tufte.hugo."
+description: "Catechismo della Chiesa Cattolica (Libreria Editrice Vaticana): testo italiano dell’edizione tipica, con il suo Compendio (2005), da vatican.va, come libro tufte.hugo."
 book: true
-copyrightPage: "*Catechismo della Chiesa Cattolica*. Testo italiano dell’edizione tipica latina (Giovanni Paolo II, Lettera apostolica *Laetamur magnopere*, 15 agosto 1997); il n. 2267 nella nuova redazione approvata da Papa Francesco (*Rescriptum “ex Audientia SS.mi”*, 1° agosto 2018).\n\n© Libreria Editrice Vaticana, Città del Vaticano.\n\nTesto tratto per uso personale di studio dalle pagine di vatican.va (`archive/catechism_it`, `archive/ccc_it`), consultate il 10 novembre 2026; pagine, rinvii marginali e indici dall’edizione a stampa (i PDF di vatican.va).\n\nGenerato da `tools/hugo/convert.py` di catechismo.tex (dati: `data/flow.jsonl`, 4457 blocchi)."
+copyrightPage: "*Catechismo della Chiesa Cattolica*. Testo italiano dell’edizione tipica latina (Giovanni Paolo II, Lettera apostolica *Laetamur magnopere*, 15 agosto 1997); il n. 2267 nella nuova redazione approvata da Papa Francesco (*Rescriptum “ex Audientia SS.mi”*, 1° agosto 2018).\n\n© Libreria Editrice Vaticana, Città del Vaticano.\n\n*Compendio del Catechismo della Chiesa Cattolica* (Benedetto XVI, Motu proprio, 28 giugno 2005). © 2005 Libreria Editrice Vaticana.\n\nTesto tratto per uso personale di studio dalle pagine di vatican.va (`archive/catechism_it`, `archive/ccc_it`, `archive/compendium_ccc`), consultate il 10 novembre 2026; pagine, rinvii marginali e indici del Catechismo dall’edizione a stampa (i PDF di vatican.va).\n\nGenerato da `tools/hugo/convert.py` di catechismo.tex (dati: `data/flow.jsonl`, 4457 blocchi; `data/compendio/flow.jsonl`, 1558 blocchi)."
 tufte:
   style: "latex"
   book:

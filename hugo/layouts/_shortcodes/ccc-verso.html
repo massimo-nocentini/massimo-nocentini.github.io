@@ -1,0 +1,21 @@
+{{- /*
+  One line of verse (inline), used by catechismo.tex: tools/hugo/convert.py
+  for the stanzas of the texts, prayers and formulas of the Compendio del
+  Catechismo della Chiesa Cattolica. The lines of a stanza keep their hard
+  breaks between them; catechismo.css sets each line as a block with a
+  hanging indent (and hides the breaks there), so that a line too long for
+  its column continues indented and is not taken for a new line:
+
+    {{< ccc-verso >}}*Ave, o Maria,*{{< /ccc-verso >}}\
+    {{< ccc-verso >}}piena di grazia,{{< /ccc-verso >}}   →  <span class="ccc-verso"><em>Ave, o Maria,</em></span><br>…
+
+  The inner text is inline Markdown, rendered and nested as in ccc-em.
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<span class="ccc-verso">%s</span>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

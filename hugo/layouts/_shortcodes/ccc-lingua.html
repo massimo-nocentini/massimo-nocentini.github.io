@@ -1,0 +1,24 @@
+{{- /*
+  One language of a text printed in two languages side by side (block),
+  used by catechismo.tex: tools/hugo/convert.py for the prayers and texts of
+  the Compendio del Catechismo della Chiesa Cattolica, the Italian and the
+  Latin in a {{< fullwidth class="ccc-coppia" >}} (catechismo.css sets the
+  two columns, and one after the other on a narrow screen):
+
+    {{< ccc-lingua lang="la" >}}
+    Pater noster, qui es in cælis:\
+    …
+    {{< /ccc-lingua >}}                →  <div class="ccc-lingua" lang="la">…</div>
+
+  The inner text is block Markdown, rendered and nested as the theme's
+  fullwidth shortcode does. lang (required) is a BCP 47 language tag.
+*/ -}}
+{{- $lang := "" -}}
+{{- if .IsNamedParams }}{{ $lang = printf "%v" (.Get "lang" | default "") | strings.TrimSpace }}{{ end -}}
+{{- if not (findRE `^[a-z]{2,3}(-[A-Za-z0-9]+)*$` $lang) -}}
+  {{- errorf "ccc-lingua shortcode: lang=\"…\" is required (%s)" .Position -}}
+{{- end -}}
+{{- $text := strings.TrimSpace .InnerDeindent -}}
+{{- $html := partial "tufte/render-inner.html" (dict "page" .Page "inner" $text "text" $text "display" "block" "where" (printf "%s shortcode in %v" .Name .Position)) | string -}}
+{{- $out := printf "<div class=\"ccc-lingua\" lang=\"%s\">\n%s\n</div>" (htmlEscape $lang) $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}
