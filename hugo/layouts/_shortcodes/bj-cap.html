@@ -1,0 +1,8 @@
+{{- /*
+  \capitolo{n} of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py): the
+  chapter numeral that opens the chapter's first paragraph or poem line, as in print.
+
+    {{< bj-cap "3" >}}   →  <span class="bj-cap">3</span>
+*/ -}}
+{{- $out := printf `<span class="bj-cap">%s</span>` (htmlEscape (.Get 0)) -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

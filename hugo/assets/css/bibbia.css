@@ -1,0 +1,390 @@
+/*
+ * La Bibbia di Gerusalemme (the corpus: tools/hugo, from progetti/bibbia-tufte):
+ * the constructs of preambolo.tex that tufte.hugo has no style for. Loaded only on
+ * the pages of content/book/bibbia-di-gerusalemme/
+ * (layouts/_partials/head_custom.html); every class is bj-* and set by
+ * tools/hugo/convert.py of the corpus, or one of the theme's.
+ * Colours as the TeX edition: grey verse numbers (bjgray), the BJ's dark red for
+ * the marks that are not links (footnote calls, bjmark).
+ */
+
+:root {
+  --bj-gray: #6e6e6e;           /* bjgray */
+  --bj-mark: #8b1a1a;           /* bjmark: footnote calls, the group of an introduction */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bj-gray: #a0a0a0; --bj-mark: #e0837a; }
+}
+:root[data-theme="dark"] { --bj-gray: #a0a0a0; --bj-mark: #e0837a; }
+
+/* \vs: superior grey lining figures (the anchor of the verse) */
+sup.bj-v {
+  color: var(--bj-gray);
+  font-size: 0.68em;
+  line-height: 0;
+  vertical-align: 0.45em;
+  font-variant-numeric: lining-nums;
+  margin-right: 0.12em;
+}
+sup.bj-v:target,
+sup.bj-v:target + * { background: rgba(139, 26, 26, 0.12); }
+/* a verse number right after another mark (a footnote call) */
+sup.footnote-ref + sup.bj-v,
+sup.footnote-sep + sup.bj-v { margin-left: 0.12em; }
+
+/* \capitolo: the chapter numeral, semibold lining figures, run in */
+span.bj-cap {
+  font-size: 1.7em;
+  font-weight: 600;
+  line-height: 0.8;
+  font-variant-numeric: lining-nums;
+  margin-right: 0.3em;
+}
+
+/* \pagina: hidden, as in the TeX edition; a mark that links point to (#bjp-N) is an
+   empty inline box instead, since a browser does not scroll to an element without a box */
+.bj-pagina { display: none; }
+.bj-pagina[id] { display: inline; scroll-margin-top: 2em; }
+
+/* \textsuperscript */
+sup.bj-sup { font-size: 0.7em; line-height: 0; }
+
+/* poesia: one paragraph per line. A line that opens a verse (.bj-l) starts at
+   --bj-hang (2.2em, as preambolo.tex), the next stichs (.bj-s, \stico{}) at
+   --bj-stico (3.2em), a line too long for the measure goes on at --bj-pad
+   (4.6em); .bj-strofa: the first line of a poem (a stanza), with the space of
+   \addvspace{3pt} above it. On a phone the next two steps are narrower (3em,
+   4em), so that a line of a 390px screen keeps room for its words; on paper all
+   three are wider (below).
+   The indent is inside the paragraph's width (border-box): the line ends at the
+   right edge of the text column as prose does, and never runs past the screen.
+   --bj-hang and --bj-pad are registered lengths, so that they compute to px on
+   the paragraph and keep that value in the margin notes and the acrostic letters
+   inside it, whose font sizes differ. */
+@property --bj-pad { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --bj-hang { syntax: "<length>"; inherits: true; initial-value: 0px; }
+body.tufte-book article.chapter section > p.bj-l,
+body.tufte-book article.chapter section > p.bj-s {
+  --bj-hang: 2.2em;
+  --bj-stico: 3.2em;
+  --bj-pad: 4.6em;
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: var(--bj-pad);
+  text-indent: calc(var(--bj-hang) - var(--bj-pad));
+}
+body.tufte-book article.chapter section > p.bj-s { text-indent: calc(var(--bj-stico) - var(--bj-pad)); }
+@media screen and (max-width: 760px) {
+  body.tufte-book article.chapter section > p.bj-l,
+  body.tufte-book article.chapter section > p.bj-s {
+    --bj-hang: 2.2em;
+    --bj-stico: 3em;
+    --bj-pad: 4em;
+  }
+}
+/* on paper nothing may stand left of the text column (the page margin clips it):
+   the acrostic letters need the room of the longest, «(Samec)», inside it */
+@media print {
+  body.tufte-book article.chapter section > p.bj-l,
+  body.tufte-book article.chapter section > p.bj-s {
+    --bj-hang: 3.6em;
+    --bj-stico: 4.6em;
+    --bj-pad: 6em;
+  }
+}
+body.tufte-book article.chapter section > p.bj-strofa { margin-top: 0.7rem; }
+body.tufte-book article.chapter section > p.bj-l + :not(p.bj-l, p.bj-s, .margin-toggle, .marginnote, input),
+body.tufte-book article.chapter section > p.bj-s + :not(p.bj-l, p.bj-s, .margin-toggle, .marginnote, input) {
+  margin-top: 0.9rem;
+}
+/* A margin note in a line of a poem: its containing block is the line less its
+   indent (C = P - pad), so the note column of the paragraph (half of P wide, its
+   right edge 60% of P past P) is 50% of C + pad/2 wide and its right edge 60% of
+   C + 0.6 pad past C, as the theme does for its verse lines (tufte-latex.css) */
+@media screen and (width > 760px) {
+  body.tufte-book article.chapter section > :is(p.bj-l, p.bj-s) .marginnote {
+    min-width: 0;
+    width: calc(50% + var(--bj-pad) / 2);
+    margin-right: calc(-60% - var(--bj-pad) * 0.6);
+  }
+}
+@media print {
+  body.tufte-book article.chapter section > :is(p.bj-l, p.bj-s) .marginnote {
+    width: calc((100% + var(--bj-pad)) * var(--pm) / var(--pw)) !important;
+    margin-right: calc((100% + var(--bj-pad)) * (var(--pw) + var(--pl) - 100) / var(--pw)) !important;
+  }
+}
+/* The verse number that opens a line of a poem hangs left of the line, right
+   aligned in a box as wide as three figures, so that the text of every such
+   line starts at --bj-hang, as in print (\vs in a poem: \llap). Only the first
+   verse number of a .bj-l line (convert.py: a .bj-l line always opens with it),
+   and not on the line of a chapter numeral, which is run in as in prose (with
+   the footnote calls that come before the verse number on that line) */
+body.tufte-book article.chapter section > p.bj-l:not(:has(> span.bj-cap)) > sup.bj-v:not(sup.bj-v ~ sup.bj-v) {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 2em;
+  margin-left: -2em;
+  margin-right: 0;
+  padding-right: 0.25em;
+  text-align: right;
+  text-indent: 0;
+}
+/* \acrostico: the letter in small italics, hanging in the indent of its line,
+   right aligned a little left of the column of the hanging verse numbers (the
+   2em box of the 0.68em figures is 1.89em of the 0.72em letter), so that the
+   letters stand in one column; a long one (Ghimel, Samech) reaches into the
+   margin, as in print */
+span.bj-acr {
+  position: absolute;
+  left: auto;
+  right: calc(100% - var(--bj-hang) + 1.89em + 0.25em);
+  text-indent: 0;
+  white-space: nowrap;
+  font-size: 0.72em;
+  font-style: italic;
+  color: var(--bj-gray);
+  line-height: inherit;
+}
+
+/* \parte: letterspaced small capitals, upright, flush left (the smallcaps
+   shortcode lowercases the capitals of the source) */
+body.tufte-book article.chapter h2.bj-parte {
+  font-style: normal;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  margin-top: 2.6rem;
+  margin-bottom: 0.9rem;
+}
+body.tufte-book article.chapter h2.bj-parte + h2.bj-parte { margin-top: 0.6rem; }
+/* each h2 opens a section of the theme: two \parte in a row (I. Le origini…,
+   1. Dalla creazione…) are two sections, the first holding only its heading;
+   they keep the one line between them of print, not the space of two sections */
+body.tufte-book article.chapter section:has(> h2.bj-parte:only-child) { padding-bottom: 0; }
+body.tufte-book article.chapter section:has(> h2.bj-parte:only-child) + section > h2.bj-parte:first-child { margin-top: 0.6rem; }
+/* the first heading of a chapter page: the space below the chapter title is
+   enough (header.chapter-head) */
+body.tufte-book article.chapter > header.chapter-head + section > h2.bj-parte:first-child { margin-top: 0; }
+/* \sezione: the pericope, italic \large, ragged */
+body.tufte-book article.chapter h3.bj-sezione {
+  font-style: italic;
+  font-size: 1.55rem;
+  margin-top: 1.7rem;
+  margin-bottom: 0.6rem;
+}
+
+/* \introduzione: the kicker "Introduzione" is the chapter's subtitle, in small
+   capitals; the group of the Old Testament that the introduction opens
+   (\gruppo) a line in the BJ's red above its text */
+body.tufte-book article.chapter .chapter-head p.subtitle {
+  font-style: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+body.tufte-book article.chapter section > p.bj-gruppo {
+  text-indent: 0;
+  color: var(--bj-mark);
+  letter-spacing: 0.06em;
+  margin-top: 0;
+}
+
+/* BJ notes: real footnotes, the calls in the BJ's red italics */
+body.tufte-book sup.footnote-ref a { color: var(--bj-mark); font-style: italic; }
+body.tufte-book ol.footnotes-list > li { font-size: 1.25rem; line-height: 1.55; }
+/* the letter of a note (the theme writes the alpha marks with ::before, from
+   data-mark), red italic as the call */
+body.tufte-book ol.footnotes-list > li[data-mark]::before { color: var(--bj-mark); font-style: italic; }
+
+/* margin references (\mref): the signs as printed, links of the theme */
+body.tufte-book .marginnote { hyphens: manual; }
+
+/* The references: some hundred links on a page of text, notes and margin. They
+   keep the theme's underline (a link is seen as one, in print too) in a light
+   tint of the text colour, full on hover and focus; the text stays the colour
+   of the text, so that a page of the Bible does not read as a page of links. */
+body.tufte-book article.chapter :is(section, .marginnote) a:link,
+body.tufte-book article.chapter :is(section, .marginnote) a:visited {
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+body.tufte-book article.chapter :is(section, .marginnote) a:is(:hover, :focus-visible) {
+  text-decoration-color: currentColor;
+}
+body.tufte-book article.chapter a.heading-anchor { text-decoration: none; }
+
+/* the book page: links to the chapters, then the outline of its parts and
+   pericopes */
+body.tufte-book article.chapter section > p.bj-capitoli {
+  text-indent: 0;
+  line-height: 2;
+}
+body.tufte-book article.chapter section > p.bj-capitoli a {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-right: 0.35em;
+  text-align: right;
+  font-variant-numeric: lining-nums;
+}
+/* a grid of numbers: each one is plainly a link, the underline only on hover */
+body.tufte-book article.chapter section > p.bj-capitoli a:is(:link, :visited) { text-decoration: none; }
+body.tufte-book article.chapter section > p.bj-capitoli a:is(:hover, :focus-visible) { text-decoration: underline; }
+body.tufte-book article.chapter section > p.bj-capitoli + ul,
+body.tufte-book article.chapter section > p.bj-capitoli + ul ul {
+  list-style: none;
+}
+body.tufte-book article.chapter section > p.bj-capitoli + ul { padding-left: 0; }
+body.tufte-book article.chapter section > p.bj-capitoli + ul ul { padding-left: 1.5em; }
+
+/* the contents (landing and part pages), as the Sommario of the TeX edition:
+   the books (and the pages of the front and back matter) upright, the
+   introductions in italics after "Introduzione:", and close together (114
+   entries: the theme's \tableofcontents spaces its few chapters 1.5em apart in
+   \LARGE) */
+body.tufte-book .book-toc li.toc-chapter,
+body.tufte-book ol.book-toc-chapters > li {
+  font-style: normal;
+  font-size: 1.6rem;
+  line-height: 1.35;
+  margin-top: 0.35em;
+}
+body.tufte-book .book-toc li.toc-chapter > a[href*="/introduzione-"] { font-style: italic; }
+body.tufte-book .book-toc li.toc-chapter > a[href*="/introduzione-"]::before { content: "Introduzione: "; }
+body.tufte-book .book-toc li.toc-chapter:has(> a[href*="/introduzione-"]) { margin-top: 1em; }
+
+/* the outline of a book of one chapter (no chapter links before it): the
+   first block of the page */
+body.tufte-book article.chapter section:first-of-type > ul:first-child,
+body.tufte-book article.chapter section:first-of-type > ul:first-child ul { list-style: none; }
+body.tufte-book article.chapter section:first-of-type > ul:first-child { padding-left: 0; }
+
+/* ------------------------------------------------------------------ the front
+   matter and the appendices (preambolo.tex, second part) */
+
+/* \testo*: the maps, the editions, the title page (no title in the PDF) */
+:root { --bj-rosso: #d72319; }   /* rossotitolo */
+
+/* center, flushleft, autore (\firma: the signature, then the title) */
+body.tufte-book article.chapter p.bj-center { text-align: center; text-indent: 0; }
+body.tufte-book article.chapter p.bj-flushleft {
+  text-align: left; text-indent: 0; margin-top: 0.4rem; margin-bottom: 0.4rem;
+}
+body.tufte-book article.chapter p.bj-autore {
+  text-align: right; text-indent: 0; font-size: 1.2rem; margin-top: 0.2rem; margin-bottom: 0.2rem;
+}
+body.tufte-book article.chapter p.bj-autore + p:not(.bj-autore) { margin-top: 1.6rem; }
+/* the old title page: LA BIBBIA DI GERUSALEMME in the red of the title */
+body.tufte-book article.chapter p.bj-titolo {
+  font-size: 2.8rem; line-height: 1.15; letter-spacing: 0.04em; color: var(--bj-rosso);
+  margin: 2rem 0;
+}
+body.tufte-book article.chapter figure.bj-monogramma img { width: 10rem; margin: 0 auto; display: block; }
+/* \hspace*{2em}, \phantom{…}, \decimale{…} */
+span.bj-sp { display: inline-block; }
+span.bj-ph { visibility: hidden; }
+
+/* \carta, \immaginepagina: the maps and the chart of the dynasties, then their
+   title in small capitals */
+body.tufte-book article.chapter figure.bj-carta,
+body.tufte-book article.chapter figure.bj-immagine { margin-top: 2rem; }
+body.tufte-book article.chapter p.bj-carta { text-align: center; text-indent: 0; margin-top: 0.4rem; }
+
+/* \titolosezione, \periodo: centred titles inside a text, letterspaced */
+body.tufte-book article.chapter h2.bj-titolosezione,
+body.tufte-book article.chapter h2.bj-periodo {
+  font-style: normal; text-align: center; letter-spacing: 0.06em; font-size: 1.5rem;
+  margin-top: 2.4rem;
+}
+body.tufte-book article.chapter p.bj-periodo-sub { text-align: center; text-indent: 0; margin-top: 0; }
+/* centred over what they head: the text column (55%; 65% on paper), or the
+   full-width tables of the chronology and of the measures (90%; 100% on paper);
+   an h2 of the theme spans the margin too, which put the titles right of the
+   centre of their tables and the line under a period's title left of it */
+body.tufte-book article.chapter section > :is(h2.bj-titolosezione, h2.bj-periodo, p.bj-periodo-sub) {
+  box-sizing: border-box;
+  width: 55%;
+  max-width: none;
+}
+body.tufte-book article.chapter section:has(> div.table-wrapper.fullwidth) > :is(h2.bj-titolosezione, h2.bj-periodo, p.bj-periodo-sub) {
+  width: 90%;
+}
+@media screen and (max-width: 760px) {
+  body.tufte-book article.chapter section > :is(h2.bj-titolosezione, h2.bj-periodo, p.bj-periodo-sub),
+  body.tufte-book article.chapter section:has(> div.table-wrapper.fullwidth) > :is(h2.bj-titolosezione, h2.bj-periodo, p.bj-periodo-sub) {
+    width: 100%;
+  }
+}
+@media print {
+  body.tufte-book article.chapter section > :is(h2.bj-titolosezione, h2.bj-periodo, p.bj-periodo-sub) {
+    width: calc(var(--pt) * 1%);
+    break-after: avoid;
+  }
+  body.tufte-book article.chapter section:has(> div.table-wrapper.fullwidth) > :is(h2.bj-titolosezione, h2.bj-periodo, p.bj-periodo-sub) {
+    width: 100%;
+  }
+}
+body.tufte-book article.chapter p.bj-testolargo { font-size: 1.2rem; text-indent: 0; }
+body.tufte-book article.chapter p.bj-titolettocodici,
+body.tufte-book article.chapter p.bj-gruppocanone,
+body.tufte-book article.chapter p.bj-sottogruppocanone,
+body.tufte-book article.chapter p.bj-titolettoriferimenti { text-indent: 0; margin-bottom: 0.3rem; }
+
+/* the divisions of the Hebrew and the Greek Bible: the canon (numbers as
+   printed), the Greek list (no marks, hanging) */
+body.tufte-book article.chapter ol.bj-canone { margin-top: 0.3rem; }
+body.tufte-book article.chapter ul.bj-elencogreco { list-style: none; padding-left: 1.5em; }
+body.tufte-book article.chapter ul.bj-elencogreco > li { text-indent: -1.5em; }
+/* the dynasties as nested lists (\nodo{depth}) */
+body.tufte-book article.chapter ul.bj-albero,
+body.tufte-book article.chapter ul.bj-albero ul { list-style: none; padding-left: 1.6em; }
+body.tufte-book article.chapter ul.bj-albero { padding-left: 0; }
+body.tufte-book article.chapter ul.bj-albero li { margin: 0.1rem 0; }
+
+/* the Indice generale: the title, its page right aligned */
+body.tufte-book article.chapter p.bj-vocegenerale {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1.5em;
+  text-indent: 0; margin: 0.15rem 0; font-variant-numeric: lining-nums;
+}
+body.tufte-book article.chapter p.bj-gruppoindice { text-indent: 0; margin: 1.2rem 0 0.4rem; }
+body.tufte-book article.chapter p.bj-testamentoindice { text-align: center; text-indent: 0; margin-top: 2rem; }
+body.tufte-book article.chapter p.bj-notapagine { font-size: 1.2rem; text-indent: 0; }
+
+/* the tables: the head of a table that has none in print hidden, the cells on
+   top, figures tabular (the decimals line up with \decimale), \hline as a rule
+   above its row, a paragraph of a cell a block */
+body.tufte-book table.bj-senzatesta > thead { display: none; }
+/* in the book's serif, as in print (tufte.css sets its tables in Trebuchet MS) */
+body.tufte-book div.table-wrapper:has(> table:is(.bj-cronologia, .bj-tabella, .bj-abbreviazioni, .bj-codici)) {
+  font-family: var(--tufte-serif, et-book, Palatino, "Palatino Linotype", Georgia, serif);
+}
+body.tufte-book div.table-wrapper > table.bj-senzatesta { border-top: none; border-bottom: none; }
+body.tufte-book table.bj-tabella td,
+body.tufte-book table.bj-cronologia td,
+body.tufte-book table.bj-abbreviazioni td,
+body.tufte-book table.bj-codici td { vertical-align: top; font-variant-numeric: tabular-nums lining-nums; }
+body.tufte-book table.bj-cronologia { font-size: 1.05rem; }
+body.tufte-book table.bj-cronologia td:first-child { white-space: nowrap; padding-right: 1rem; }
+body.tufte-book table.bj-cronologia.bj-col-3 { font-size: 0.98rem; }
+/* the tables of the measures and the coins: as wide as their figures and centred
+   under their titles, as in print (stretched to the full width, their few
+   columns stood a hand apart and a cell of two words broke in three lines) */
+body.tufte-book div.table-wrapper > table.bj-tabella.fullwidth {
+  width: auto;
+  min-width: 0;
+  margin: 0 auto;
+}
+body.tufte-book table tr:has(.bj-hl) > td { border-top: 1px solid var(--bj-gray); }
+body.tufte-book table.bj-codici td { padding-top: 0.1rem; padding-bottom: 0.1rem; }
+body.tufte-book table.bj-codici td:nth-child(2) { padding-left: 0.3rem; padding-right: 0.3rem; }
+body.tufte-book table.bj-abbreviazioni td { padding-top: 0.05rem; padding-bottom: 0.05rem; }
+span.bj-par { display: block; margin-top: 0.35em; }
+
+/* the two indices (voci): two columns, as the Dizionario's indices; each entry
+   hanging; \lettera a blank line between two letters */
+div.fullwidth.bj-voci { column-count: 2; column-gap: 3rem; }
+@media (max-width: 760px) { div.fullwidth.bj-voci { column-count: 1; } }
+div.fullwidth.bj-voci p.bj-voce {
+  margin: 0 0 0.15rem; padding-left: 1.4em; text-indent: -1.4em; font-size: 1.2rem; line-height: 1.5;
+}
+div.fullwidth.bj-voci p.bj-voce.bj-lettera { margin-top: 1.2rem; }
+div.fullwidth.bj-voci p.bj-voce:target { background: rgba(139, 26, 26, 0.12); }

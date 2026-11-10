@@ -1,0 +1,20 @@
+{{- /*
+  \pagina{N} of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py): the page
+  of the printed edition where the text that follows begins, hidden (as in the TeX
+  edition). A page that the front matter or the appendices refer to (\bjpagine of
+  libri/elenco.tex) gets an anchor too, the label key of bjp.N; that span is empty
+  but not hidden (bibbia.css: .bj-pagina[id]), because a browser does not scroll to
+  an element that has no box, and the links to it must land on its line:
+
+    {{< bj-pagina "42" >}}            →  <span class="bj-pagina" data-pagina="42" hidden></span>
+    {{< bj-pagina "21" "bjp-21" >}}   →  <span class="bj-pagina" data-pagina="21" id="bjp-21"></span>
+*/ -}}
+{{- $n := printf "%v" (.Get 0 | default "") -}}
+{{- if not $n -}}
+  {{- errorf "bj-pagina shortcode: a page number is required (%s)" .Position -}}
+{{- end -}}
+{{- $out := printf `<span class="bj-pagina" data-pagina="%s" hidden></span>` (htmlEscape $n) -}}
+{{- with .Get 1 -}}
+  {{- $out = printf `<span class="bj-pagina" data-pagina="%s" id="%s"></span>` (htmlEscape $n) (htmlEscape .) -}}
+{{- end -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

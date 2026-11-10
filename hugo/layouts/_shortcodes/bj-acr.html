@@ -1,0 +1,9 @@
+{{- /*
+  \acrostico{Alef} of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py): the
+  letter of an alphabetic poem, small italics hanging in the indent of its line
+  (bibbia.css).
+
+    {{< bj-acr "Alef" >}}   →  <span class="bj-acr">Alef</span>
+*/ -}}
+{{- $out := printf `<span class="bj-acr">%s</span>` (htmlEscape (.Get 0)) -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

@@ -20,4 +20,13 @@
     {{- $css = $css | fingerprint "sha384" }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
   {{- end -}}
+{{- else if hasPrefix .Path "/book/bibbia-di-gerusalemme" -}}
+  {{- /* The book content/book/bibbia-di-gerusalemme/ (the corpus: tools/hugo)
+         gets assets/css/bibbia.css. */ -}}
+  {{- with resources.Get "css/bibbia.css" -}}
+    {{- $css := . -}}
+    {{- if hugo.IsProduction }}{{ $css = $css | minify }}{{ end -}}
+    {{- $css = $css | fingerprint "sha384" }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+  {{- end -}}
 {{- end -}}

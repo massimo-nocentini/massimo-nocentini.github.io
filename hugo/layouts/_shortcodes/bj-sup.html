@@ -1,0 +1,8 @@
+{{- /*
+  \textsuperscript{…} of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py):
+  Markdown has no superscript and raw HTML is off.
+
+    {{< bj-sup "a" >}}   →  <sup class="bj-sup">a</sup>
+*/ -}}
+{{- $out := printf `<sup class="bj-sup">%s</sup>` (htmlEscape (.Get 0)) -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

@@ -1,0 +1,10 @@
+{{- /*
+  \phantom{…} and \decimale{…} of the Bibbia di Gerusalemme (corpus:
+  tools/hugo/convert.py): text that is not shown but keeps its room (the
+  decimals a number lacks, so that the commas of a column line up; the cross
+  before the second line of a signature). Hidden (visibility), not read.
+
+    {{< bj-ph ",0" >}}   →  <span class="bj-ph" aria-hidden="true">,0</span>
+*/ -}}
+{{- $out := printf `<span class="bj-ph" aria-hidden="true">%s</span>` (htmlEscape (.Get 0)) -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

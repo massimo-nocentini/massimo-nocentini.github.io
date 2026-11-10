@@ -1,0 +1,15 @@
+{{- /*
+  \vs{v} of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py): the verse
+  number, a superior grey figure, with the verse's anchor. The first argument is
+  the OSIS verse id of the TeX (\vs: <OSIS>.<chapter>.<v>, or the [id] of \vs[id]{v}),
+  the second the number as printed; the id is the theme's label key of the OSIS id
+  (lowercase, "." -> "-"), so links to #gen-1-1 land here:
+
+    {{< bj-v "Gen.1.1" "1" >}}   →  <sup class="bj-v" id="gen-1-1">1</sup>
+
+  Called ~35,000 times: no label machinery, only the nest token when it sits in
+  another shortcode (tufte/nest.html).
+*/ -}}
+{{- $id := replace (lower (.Get 0)) "." "-" -}}
+{{- $out := printf `<sup class="bj-v" id="%s">%s</sup>` $id (htmlEscape (.Get 1)) -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

@@ -1,0 +1,12 @@
+{{- /*
+  \hspace*{2em} of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py,
+  the verso of the old title page): a horizontal space of that width.
+
+    {{< bj-sp "2em" >}}   →  <span class="bj-sp" style="width:2em"></span>
+*/ -}}
+{{- $w := .Get 0 -}}
+{{- if not (findRE `^[0-9.]+(em|mm|pt)$` $w 1) -}}
+  {{- errorf "bj-sp shortcode: a width like 2em is required (%s)" .Position -}}
+{{- end -}}
+{{- $out := printf `<span class="bj-sp" style="width:%s"></span>` $w -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

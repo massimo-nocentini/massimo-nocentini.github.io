@@ -1,0 +1,9 @@
+{{- /*
+  \hline of the Bibbia di Gerusalemme (corpus: tools/hugo/convert.py, the table
+  of the coins): put in the first cell of the row below the rule; bibbia.css
+  draws the rule above that row (tr:has(.bj-hl)).
+
+    {{< bj-hl >}}   →  <span class="bj-hl"></span>
+*/ -}}
+{{- $out := `<span class="bj-hl"></span>` -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

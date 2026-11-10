@@ -1,0 +1,12 @@
+{{- /*
+  A line break inside a table cell of the Bibbia di Gerusalemme (corpus:
+  tools/hugo/convert.py: the chronology, the measures, the calendar), where
+  Markdown has no paragraphs: a \\ (or \newline) of the TeX a <br>, a paragraph
+  break of a cell (a blank line in its TeX) a block of its own with a little
+  space above (bibbia.css).
+
+    {{< bj-br >}}       →  <br>
+    {{< bj-br "p" >}}   →  <span class="bj-par"></span>
+*/ -}}
+{{- $out := cond (eq (.Get 0) "p") `<span class="bj-par"></span>` `<br>` -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}
