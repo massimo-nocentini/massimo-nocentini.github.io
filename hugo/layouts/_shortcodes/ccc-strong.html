@@ -1,0 +1,19 @@
+{{- /*
+  Bold where Markdown's **…** cannot open or close (CommonMark's flanking
+  rules), used by catechismo.tex: tools/hugo/convert.py for the Catechismo
+  della Chiesa Cattolica: a headword of the analytic index that starts with
+  a guillemet right after its label, {{< label "ia:oggi" >}}« OGGI ». Same
+  output as **…** elsewhere:
+
+    {{< ccc-strong >}}« OGGI »{{< /ccc-strong >}}   →  <strong>« OGGI »</strong>
+
+  The inner text is inline Markdown, rendered and nested as in ccc-em.
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<strong>%s</strong>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

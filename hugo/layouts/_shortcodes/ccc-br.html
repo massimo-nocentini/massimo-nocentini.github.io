@@ -1,0 +1,9 @@
+{{- /*
+  A line break where Markdown has none: inside a table cell (the lines of
+  the Creeds and of the Decalogue), used by catechismo.tex:
+  tools/hugo/convert.py for the Catechismo della Chiesa Cattolica.
+  Paragraphs use Markdown's own hard break (backslash, newline).
+
+    Io credo in Dio, Padre onnipotente,{{< ccc-br >}}Creatore del cielo   →  …,<br>Creatore…
+*/ -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" "<br>") | safeHTML -}}

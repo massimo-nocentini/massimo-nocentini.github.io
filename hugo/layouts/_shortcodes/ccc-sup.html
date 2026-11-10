@@ -1,0 +1,17 @@
+{{- /*
+  A superior letter, which Markdown has no syntax for (and raw HTML is off),
+  used by catechismo.tex: tools/hugo/convert.py for the Catechismo della
+  Chiesa Cattolica: the one <sup> of its data, in the sigle (Funk):
+
+    2{{< ccc-sup >}}a{{< /ccc-sup >}} ed.   →  2<sup>a</sup> ed.
+
+  The inner text is inline Markdown, rendered and nested as in ccc-em.
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<sup>%s</sup>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

@@ -1,11 +1,20 @@
 {{- /*
-  The theme's head hook (end of <head>). Only the pages of the draft book
+  The theme's head hook (end of <head>). Only the pages of the book
   content/book/dizionario-di-teologia-biblica/ (dufour.tex: tools/dufour) get its
-  stylesheet, assets/css/dufour.css: every other page of the site renders
+  stylesheet, assets/css/dufour.css, and only the pages of the book
+  content/book/catechismo-della-chiesa-cattolica/ (catechismo.tex: tools/hugo)
+  get assets/css/catechismo.css: every other page of the site renders
   exactly as before.
 */ -}}
 {{- if hasPrefix .Path "/book/dizionario-di-teologia-biblica" -}}
   {{- with resources.Get "css/dufour.css" -}}
+    {{- $css := . -}}
+    {{- if hugo.IsProduction }}{{ $css = $css | minify }}{{ end -}}
+    {{- $css = $css | fingerprint "sha384" }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+  {{- end -}}
+{{- else if hasPrefix .Path "/book/catechismo-della-chiesa-cattolica" -}}
+  {{- with resources.Get "css/catechismo.css" -}}
     {{- $css := . -}}
     {{- if hugo.IsProduction }}{{ $css = $css | minify }}{{ end -}}
     {{- $css = $css | fingerprint "sha384" }}

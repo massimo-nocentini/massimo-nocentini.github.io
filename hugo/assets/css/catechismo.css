@@ -1,0 +1,126 @@
+/*
+ * Catechismo della Chiesa Cattolica (catechismo.tex: tools/hugo): the
+ * constructs of the book that tufte.hugo has no style for. Loaded only on the
+ * pages of content/book/catechismo-della-chiesa-cattolica/
+ * (layouts/_partials/head_custom.html); every class is ccc-* and set by
+ * catechismo.tex: tools/hugo/convert.py.
+ */
+
+/* Numbered paragraphs: the number in bold, upright, flush left; a smaller
+   space before than the theme's \paragraph (1.4rem). Doubled classes: the
+   theme's p:has(> span.run-in:first-child) rules outrank a plain class. */
+body.tufte-book article.chapter p.ccc-n > span.run-in {
+  font-style: normal;
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+body.tufte-book section > p.ccc-n.ccc-n:has(> span.run-in) {
+  margin-top: 0.9rem;
+  text-indent: 0;
+}
+
+/* Small print of the printed edition (historical notes, quotations) */
+body.tufte-book section p.ccc-small { font-size: 1.26rem; }
+
+/* In sintesi: the italics are in the text; a little air around the block */
+body.tufte-book section > p.ccc-sintesi.ccc-n:has(> span.run-in) { margin-top: 0.6rem; }
+
+/* Dash items, numbered items, verse */
+body.tufte-book section p.ccc-item,
+body.tufte-book section p.ccc-enum {
+  padding-left: 1.5em;
+  text-indent: -1em;
+}
+body.tufte-book section p.ccc-verse {
+  text-indent: 0;
+  padding-left: 1.5em;
+}
+
+/* The two apostolic documents */
+body.tufte-book section > p.ccc-sottotitolo,
+body.tufte-book section > p.ccc-intitolazione {
+  text-align: center;
+  text-indent: 0;
+  padding-left: 0;
+  letter-spacing: 0.05em;
+}
+body.tufte-book section > p.ccc-indirizzo { font-style: italic; text-indent: 0; padding-left: 0; }
+body.tufte-book section > p.ccc-data { font-style: italic; text-indent: 0; }
+
+/* Epigraphs after a heading */
+body.tufte-book section p.ccc-epigrafe { text-indent: 0; }
+
+/* Headings: roman sections upright, In sintesi italic, subheadings
+   (### or, one level deeper, a paragraph) italic */
+article.chapter :is(h2, h3).ccc-romana { font-style: normal; }
+article.chapter :is(h2, h3).ccc-sintesi-titolo { font-style: italic; }
+body.tufte-book section > p.ccc-h {
+  margin-top: 1.2rem;
+  margin-bottom: 0.3rem;
+  text-indent: 0;
+  font-style: italic;
+}
+
+/* The Creeds and the Decalogue */
+table.ccc-tabella td,
+table.ccc-tabella th {
+  vertical-align: top;
+  text-align: left;
+}
+table.ccc-tabella td { font-size: 1.26rem; }
+/* the Creeds are text, not data: the serif of the text (the theme sets
+   tables in sans); a note in a header cell is not bold */
+table.ccc-tabella :is(td, th) {
+  font-family: var(--tufte-serif, et-book, Palatino, "Palatino Linotype", Georgia, serif);
+}
+table.ccc-tabella th :is(.sidenote, .marginnote) { font-weight: normal; }
+
+/* Contents: the levels of the Catechism (part > sezione > capitolo >
+   articolo > paragrafo) are chapters of one level for the theme; the file
+   names say the level (convert.py), so the contents indent them: a sezione
+   0, a capitolo 1em, an articolo 2em, a paragrafo 3em. An articolo that is
+   a child of its sezione (Parte quarta, Sezione seconda: no capitolo) is
+   named sezione-…-articolo-…: 1em. */
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/capitolo-"]) { padding-left: 1em; }
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/articolo-"]) { padding-left: 2em; }
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/paragrafo-"]) { padding-left: 3em; }
+:is(nav.book-toc, ol.book-toc-chapters) li.toc-chapter:has(> a[href*="/sezione-"][href*="-articolo-"]) { padding-left: 1em; }
+
+/* Sigle: term and text on one line */
+.tufte-book article.chapter dl { display: block; }
+.tufte-book article.chapter dl > dt {
+  float: left;
+  clear: left;
+  min-width: 4.5em;
+  margin: 0 0.5em 0 0;
+  font-weight: normal;
+  font-style: normal;
+}
+.tufte-book article.chapter dl > dd { margin: 0 0 0.25rem 5em; }
+
+/* Indices: CSS columns, hanging indents */
+div.ccc-indice.ccc-cols { column-count: 3; column-gap: 2.5rem; }
+@media (max-width: 1100px) { div.ccc-indice.ccc-cols { column-count: 2; } }
+@media (max-width: 760px) { div.ccc-indice.ccc-cols { column-count: 1; } }
+div.ccc-indice p {
+  margin-top: 0;
+  margin-bottom: 0.1rem;
+  text-indent: -1em;
+  padding-left: 1em;
+  font-size: 1.26rem;
+}
+div.ccc-indice p.ccc-ir-libro { margin-top: 0.6rem; break-after: avoid; }
+div.ccc-indice p.ccc-ir-1 { padding-left: 2em; }
+div.ccc-indice p.ccc-ir-2 { padding-left: 3em; }
+body.tufte-book section > p.ccc-ia-voce {
+  text-indent: -1em;
+  padding-left: 1em;
+  font-size: 1.26rem;
+  margin-top: 0.4rem;
+}
+body.tufte-book section > p.ccc-lettere {
+  text-align: center;
+  text-indent: 0;
+  font-size: 1.8rem;
+  word-spacing: 0.3em;
+}
