@@ -150,6 +150,10 @@ ignoreLogs = ["warning-goldmark-raw-html"]
   pageRef = "/post"
   weight = 20
 [[menus.main]]
+  name = "Books"
+  pageRef = "/book"
+  weight = 25
+[[menus.main]]
   name = "Archives"
   pageRef = "/archives"
   weight = 30
