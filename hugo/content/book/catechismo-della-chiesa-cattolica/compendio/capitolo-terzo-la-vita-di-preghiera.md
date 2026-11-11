@@ -13,7 +13,7 @@ linkTitle: "Capitolo terzo · La vita di preghiera"
 Tutti i momenti sono indicati per la preghiera, ma la Chiesa propone ai fedeli ritmi destinati ad alimentare la preghiera continua: preghiere del mattino e della sera, prima e dopo i pasti; liturgia delle Ore; Eucaristia domenicale; santo Rosario; feste dell’anno liturgico.
 {.ccc-risposta}
 
-> *«È necessario ricordarsi di Dio più spesso di quanto si respiri»* (san Gregorio Nazianzeno).
+> «*È necessario ricordarsi di Dio più spesso di quanto si respiri*» (san Gregorio Nazianzeno).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q568" >}}568{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2697](/book/catechismo-della-chiesa-cattolica/parte-quarta/capitolo-terzo-la-vita-di-preghiera#ccc-2697)-[2699](/book/catechismo-della-chiesa-cattolica/parte-quarta/capitolo-terzo-la-vita-di-preghiera#ccc-2699){{< /marginnote >}} **Quali sono le espressioni della vita di preghiera?**
@@ -39,7 +39,7 @@ La meditazione è una riflessione orante, che parte soprattutto dalla Parola di 
 {{< paragraph label="comp-q571" >}}571{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2709](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-le-espressioni-della-preghiera#ccc-2709)-[2719](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-le-espressioni-della-preghiera#ccc-2719){{< ccc-br >}}[2724](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-le-espressioni-della-preghiera#ccc-2724){{< ccc-br >}}[2739](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2739)-[2741](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2741){{< /marginnote >}} **Che cos’è la preghiera contemplativa?**
 {.ccc-domanda}
 
-La preghiera contemplativa è un semplice sguardo su Dio nel silenzio e nell’amore. E un dono di Dio, un momento di fede pura, durante il quale l’orante cerca Cristo, si rimette alla volontà amorosa del Padre e raccoglie il suo essere sotto l’azione dello Spirito. Santa Teresa d’Avila la definisce un intimo rapporto di amicizia, «nel quale ci si intrattiene spesso da solo a solo con Dio da cui ci si sa amati».
+La preghiera contemplativa è un semplice sguardo su Dio nel silenzio e nell’amore. E un dono di Dio, un momento di fede pura, durante il quale l’orante cerca Cristo, si rimette alla volontà amorosa del Padre e raccoglie il suo essere sotto l’azione dello Spirito. Santa Teresa d’Avila la definisce un intimo rapporto di amicizia, «*nel quale ci si intrattiene spesso da solo a solo con Dio da cui ci si sa amati*».
 {.ccc-risposta}
 
 ## IL COMBATTIMENTO DELLA PREGHIERA {#comp-p4s1c3a2 .ccc-articolo}
@@ -71,14 +71,14 @@ La confidenza filiale è messa alla prova quando pensiamo di non essere esauditi
 {{< paragraph label="comp-q576" >}}576{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2742](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2742)-[2745](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2745){{< ccc-br >}}[2757](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2757){{< /marginnote >}} **È possibile pregare in ogni momento?**
 {.ccc-domanda}
 
-Pregare è sempre possibile, perché il tempo del cristiano è il tempo del Cristo risorto, il quale «rimane con noi tutti i giorni» (*Mt* 28,20). Preghiera e vita cristiana sono perciò inseparabili.
+Pregare è sempre possibile, perché il tempo del cristiano è il tempo del Cristo risorto, il quale «*rimane con noi tutti i giorni*».{{< marginnote >}}[*Mt* 28,20](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-28#matt-28-20){{< /marginnote >}} Preghiera e vita cristiana sono perciò inseparabili.
 {.ccc-risposta}
 
-> *«È possibile, anche al mercato o durante una passeggiata solitaria, fare una frequente e fervorosa preghiera. È possibile pure nel vostro negozio, sia mentre comperate sia mentre vendete, o anche mentre cucinate»* (san Giovanni Crisostomo).
+> «*È possibile, anche al mercato o durante una passeggiata solitaria, fare una frequente e fervorosa preghiera. È possibile pure nel vostro negozio, sia mentre comperate sia mentre vendete, o anche mentre cucinate*» (san Giovanni Crisostomo).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q577" >}}577{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2604](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2604){{< ccc-br >}}[2746](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2746)-[2751](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2751){{< ccc-br >}}[2758](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-combattimento-della-preghiera#ccc-2758){{< /marginnote >}} {{< ccc-strong >}}Che cos’è la preghiera dell’*Ora* di Gesù?{{< /ccc-strong >}}
 {.ccc-domanda}
 
-È chiamata così la preghiera sacerdotale di Gesù all’Ultima Cena. Gesù, il Sommo Sacerdote della Nuova Alleanza, la rivolge al Padre quando giunge l’*Ora* del suo «passaggio» a lui, l’*Ora* del suo sacrificio.
+È chiamata così la preghiera sacerdotale di Gesù all’Ultima Cena. Gesù, il Sommo Sacerdote della Nuova Alleanza, la rivolge al Padre quando giunge l’*Ora* del suo «*passaggio*» a lui, l’*Ora* del suo sacrificio.
 {.ccc-risposta}

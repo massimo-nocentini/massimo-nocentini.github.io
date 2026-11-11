@@ -13,5 +13,5 @@ linkTitle: "Sezione prima · La vocazione dell’uomo: La vita nello Spirito"
 Ciò che il Simbolo della fede professa, i Sacramenti lo comunicano. Infatti, con essi i fedeli ricevono la grazia di Cristo e i doni dello Spirito Santo, che li rendono capaci di vivere la nuova vita di figli di Dio nel Cristo accolto con la fede.
 {.ccc-risposta}
 
-> *«Riconosci, o cristiano, la tua dignità»* (san Leone Magno).
+> «*Riconosci, o cristiano, la tua dignità*» (san Leone Magno).
 > {.ccc-citazione}

@@ -41,13 +41,13 @@ I Sacramenti sono segni sensibili ed efficaci della grazia, istituiti da Cristo 
 I misteri della vita di Cristo costituiscono il fondamento di ciò che adesso Cristo, mediante i ministri della Chiesa, dispensa nei Sacramenti.
 {.ccc-risposta}
 
-> *«Ciò che era visibile nel nostro Salvatore è passato nei suoi sacramenti»* (san Leone Magno).
+> «*Ciò che era visibile nel nostro Salvatore è passato nei suoi sacramenti*» (san Leone Magno).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q226" >}}226{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1117](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1117)-[1119](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1119){{< /marginnote >}} **Qual è il legame dei Sacramenti con la Chiesa?**
 {.ccc-domanda}
 
-Cristo ha affidato i Sacramenti alla sua Chiesa. Essi sono «della Chiesa», in un duplice significato: sono «da essa», in quanto sono azioni della Chiesa, la quale è sacramento dell’azione di Cristo; e sono «per essa», nel senso che edificano la Chiesa.
+Cristo ha affidato i Sacramenti alla sua Chiesa. Essi sono «*della Chiesa*», in un duplice significato: sono «*da essa*», in quanto sono azioni della Chiesa, la quale è sacramento dell’azione di Cristo; e sono «*per essa*», nel senso che edificano la Chiesa.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q227" >}}227{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1121](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1121){{< /marginnote >}} {{< ccc-strong >}}Che cos’è il *carattere* sacramentale?{{< /ccc-strong >}}
@@ -59,13 +59,13 @@ Cristo ha affidato i Sacramenti alla sua Chiesa. Essi sono «della Chiesa», in 
 {{< paragraph label="comp-q228" >}}228{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1122](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1122)-[1126](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1126){{< ccc-br >}}[1133](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1133){{< /marginnote >}} **Qual è la relazione dei Sacramenti con la fede?**
 {.ccc-domanda}
 
-I Sacramenti non solo suppongono la fede, ma con le parole e con gli elementi rituali la nutrono, la irrobustiscono e la esprimono. Celebrando i Sacramenti, la Chiesa confessa la fede apostolica. Da qui viene l’antico detto: *«Lex orandi, lex credendi*», cioè la Chiesa crede come prega.
+I Sacramenti non solo suppongono la fede, ma con le parole e con gli elementi rituali la nutrono, la irrobustiscono e la esprimono. Celebrando i Sacramenti, la Chiesa confessa la fede apostolica. Da qui viene l’antico detto: «*Lex orandi, lex credendi*», cioè la Chiesa crede come prega.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q229" >}}229{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1127](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1127)-[1128](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1128){{< ccc-br >}}[1131](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1131){{< /marginnote >}} **Perché i Sacramenti sono efficaci?**
 {.ccc-domanda}
 
-I Sacramenti sono efficaci *ex opere operato (*«per il fatto stesso che l’azione sacramentale viene compiuta»), perché è Cristo che agisce in essi e che comunica la grazia che significano, indipendentemente dalla santità personale del ministro. Tuttavia i frutti dei Sacramenti dipendono anche dalle disposizioni di chi li riceve.
+I Sacramenti sono efficaci *ex opere operato* («*per il fatto stesso che l’azione sacramentale viene compiuta*»), perché è Cristo che agisce in essi e che comunica la grazia che significano, indipendentemente dalla santità personale del ministro. Tuttavia i frutti dei Sacramenti dipendono anche dalle disposizioni di chi li riceve.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q230" >}}230{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1129](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1129){{< /marginnote >}} **Per quale motivo i Sacramenti sono necessari alla salvezza?**
@@ -83,5 +83,5 @@ La grazia sacramentale è la grazia dello Spirito Santo, donata da Cristo e prop
 {{< paragraph label="comp-q232" >}}232{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1130](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-il-mistero-pasquale-nei-sacramenti-della#ccc-1130){{< /marginnote >}} **Qual è la relazione tra i Sacramenti e la vita eterna?**
 {.ccc-domanda}
 
-Nei Sacramenti la Chiesa riceve già un anticipo della vita eterna, mentre resta «nell’attesa della beata speranza e della manifestazione della gloria del nostro grande Dio e Salvatore Gesù Cristo» *(Tt* 2,13).
+Nei Sacramenti la Chiesa riceve già un anticipo della vita eterna, mentre resta «*nell’attesa della beata speranza e della manifestazione della gloria del nostro grande Dio e Salvatore Gesù Cristo*».{{< marginnote >}}[*Tt* 2,13](/book/bibbia-di-gerusalemme/nuovo-testamento/tito-2#titus-2-13){{< /marginnote >}}
 {.ccc-risposta}

@@ -12,13 +12,13 @@ linkTitle: "Capitolo I · Io credo in Dio Padre"
 {{< paragraph label="comp-q33" >}}33{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [185](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-185)-[188](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-188){{< ccc-br >}}[192](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-192),[197](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-197){{< /marginnote >}} **Che cosa sono i Simboli della fede?**
 {.ccc-domanda}
 
-Sono formule articolate, chiamate anche «Professioni di fede» o «Credo», con cui la Chiesa, fin dalle sue origini, ha espresso sinteticamente e trasmesso la propria fede con un linguaggio normativa, comune a tutti i fedeli.
+Sono formule articolate, chiamate anche «*Professioni di fede*» o «*Credo*», con cui la Chiesa, fin dalle sue origini, ha espresso sinteticamente e trasmesso la propria fede con un linguaggio normativa, comune a tutti i fedeli.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q34" >}}34{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [189](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-189)-[191](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-191){{< /marginnote >}} **Quali sono i più antichi Simboli della fede?**
 {.ccc-domanda}
 
-Sono i Simboli *battesimali.* Poiché il Battesimo viene dato «nel nome del Padre e del Figlio e dello Spirito Santo» *(Mt* 28,19), le verità di fede ivi professate sono articolate in riferimento alle tre Persone della Santissima Trinità.
+Sono i Simboli *battesimali.* Poiché il Battesimo viene dato «*nel nome del Padre e del Figlio e dello Spirito Santo*»,{{< marginnote >}}[*Mt* 28,19](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-28#matt-28-19){{< /marginnote >}} le verità di fede ivi professate sono articolate in riferimento alle tre Persone della Santissima Trinità.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q35" >}}35{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [193](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-193)-[195](/book/catechismo-della-chiesa-cattolica/parte-prima/sezione-seconda-la-professione-della-fede-cristiana#ccc-195){{< /marginnote >}} **Quali sono i più importanti Simboli della fede?**
@@ -27,51 +27,51 @@ Sono i Simboli *battesimali.* Poiché il Battesimo viene dato «nel nome del Pad
 Essi sono il *Simbolo degli Apostoli,* che è l’antico Simbolo battesimale della Chiesa di Roma, e il *Simbolo niceno-costantinopolitano,* frutto dei primi due Concili Ecumenici di Nicea (325) e di Costantinopoli (381), ancora oggi comune a tutte le grandi Chiese d’Oriente e d’Occidente.
 {.ccc-risposta}
 
-## «IO CREDO IN DIO, PADRE ONNIPOTENTE, CREATORE DEL CIELO E DELLA TERRA» {#comp-p1s2c1a1 .ccc-articolo}
+## «*IO CREDO IN DIO, PADRE ONNIPOTENTE, CREATORE DEL CIELO E DELLA TERRA*» {#comp-p1s2c1a1 .ccc-articolo}
 
-{{< paragraph label="comp-q36" >}}36{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [198](/book/catechismo-della-chiesa-cattolica/parte-prima/capitolo-primo-io-credo-in-dio-padre#ccc-198)-[199](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-199){{< /marginnote >}} **Perché la professione di fede inizia con: «Io credo in Dio»?**
+{{< paragraph label="comp-q36" >}}36{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [198](/book/catechismo-della-chiesa-cattolica/parte-prima/capitolo-primo-io-credo-in-dio-padre#ccc-198)-[199](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-199){{< /marginnote >}} **Perché la professione di fede inizia con: «*Io credo in Dio*»?**
 {.ccc-domanda}
 
-Perché l’affermazione «Io credo in Dio» è la più importante, la fonte di tutte le altre verità sull’uomo e sul mondo, e di tutta la vita di ogni credente in lui.
+Perché l’affermazione «*Io credo in Dio*» è la più importante, la fonte di tutte le altre verità sull’uomo e sul mondo, e di tutta la vita di ogni credente in lui.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q37" >}}37{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [200](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-200)-[202](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-202){{< ccc-br >}}[228](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-228){{< /marginnote >}} {{< ccc-strong >}}Perché professiamo *un solo* Dio?{{< /ccc-strong >}}
 {.ccc-domanda}
 
-Perché egli si è rivelato al popolo d’Israele come l’Unico, quando disse: «Ascolta, Israele, il Signore è uno solo» *(Dt* 6,4), «non ce n’è altri» *(Is* 45,22). Gesù stesso l’ha confermato: Dio è «l’unico Signore» *(Mc* 12,29). Professare che Gesù e lo Spirito Santo sono anch’essi Dio e Signore non introduce alcuna divisione nel Dio Uno.
+Perché egli si è rivelato al popolo d’Israele come l’Unico, quando disse: «*Ascolta, Israele, il Signore è uno solo*»,{{< marginnote >}}[*Dt* 6,4](/book/bibbia-di-gerusalemme/antico-testamento/deuteronomio-6#deut-6-4){{< /marginnote >}} «*non ce n’è altri*».{{< marginnote >}}[*Is* 45,22](/book/bibbia-di-gerusalemme/antico-testamento/isaia-45#isa-45-22){{< /marginnote >}} Gesù stesso l’ha confermato: Dio è «*l’unico Signore*».{{< marginnote >}}[*Mc* 12,29](/book/bibbia-di-gerusalemme/nuovo-testamento/marco-12#mark-12-29){{< /marginnote >}} Professare che Gesù e lo Spirito Santo sono anch’essi Dio e Signore non introduce alcuna divisione nel Dio Uno.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q38" >}}38{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [203](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-203)-[205](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-205){{< ccc-br >}}[230](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-230)-[231](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-231){{< /marginnote >}} **Con quale nome Dio si rivela?**
 {.ccc-domanda}
 
-A Mosè Dio si rivela come il Dio vivente, «il Dio di Abramo, il Dio di Isacco, il Dio di Giacobbe» *(Es* 3,6). Allo stesso Mosè Dio rivela il suo nome misterioso: «Io Sono Colui che Sono (YHWH)». Il nome ineffabile di Dio già nei tempi dell’Antico Testamento fu sostituito dalla parola *Signore.* Così nel Nuovo Testamento, Gesù, chiamato *Signore,* appare come vero Dio.
+A Mosè Dio si rivela come il Dio vivente, «*il Dio di Abramo, il Dio di Isacco, il Dio di Giacobbe*».{{< marginnote >}}[*Es* 3,6](/book/bibbia-di-gerusalemme/antico-testamento/esodo-3#exod-3-6){{< /marginnote >}} Allo stesso Mosè Dio rivela il suo nome misterioso: «*Io Sono Colui che Sono (YHWH)*». Il nome ineffabile di Dio già nei tempi dell’Antico Testamento fu sostituito dalla parola *Signore.* Così nel Nuovo Testamento, Gesù, chiamato *Signore,* appare come vero Dio.
 {.ccc-risposta}
 
-{{< paragraph label="comp-q39" >}}39{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [212](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-212)-[213](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-213){{< /marginnote >}} **Solo Dio «è»?**
+{{< paragraph label="comp-q39" >}}39{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [212](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-212)-[213](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-213){{< /marginnote >}} **Solo Dio «*è*»?**
 {.ccc-domanda}
 
-Mentre le creature hanno ricevuto da Dio tutto ciò che sono e che hanno, Dio solo è in se stesso la pienezza dell’essere e di ogni perfezione. Egli è «Colui che è», senza origine e senza fine. Gesù rivela che anch’egli porta il Nome divino: «Io sono» (Gv 8,28).
+Mentre le creature hanno ricevuto da Dio tutto ciò che sono e che hanno, Dio solo è in se stesso la pienezza dell’essere e di ogni perfezione. Egli è «*Colui che è*», senza origine e senza fine. Gesù rivela che anch’egli porta il Nome divino: «*Io sono*».{{< marginnote >}}[Gv 8,28](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-8#john-8-28){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q40" >}}40{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [206](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-206)-[213](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-213){{< /marginnote >}} **Perché è importante la rivelazione del nome di Dio?**
 {.ccc-domanda}
 
-Nel rivelare il suo nome, Dio fa conoscere le ricchezze contenute nel suo mistero ineffabile: egli solo è, da sempre e per sempre, Colui che trascende il mondo e la storia. È lui che ha fatto il cielo e la terra. È il Dio fedele, sempre vicino al suo popolo per salvarlo. È il santo per eccellenza, «ricco di misericordia» *(Ef 2,4),* sempre pronto a perdonare. È l’Essere spirituale, trascendente, onnipotente, eterno, personale, perfetto. È verità e amore.
+Nel rivelare il suo nome, Dio fa conoscere le ricchezze contenute nel suo mistero ineffabile: egli solo è, da sempre e per sempre, Colui che trascende il mondo e la storia. È lui che ha fatto il cielo e la terra. È il Dio fedele, sempre vicino al suo popolo per salvarlo. È il santo per eccellenza, «*ricco di misericordia*»,{{< marginnote >}}[*Ef* 2,4](/book/bibbia-di-gerusalemme/nuovo-testamento/efesini-2#eph-2-4){{< /marginnote >}} sempre pronto a perdonare. È l’Essere spirituale, trascendente, onnipotente, eterno, personale, perfetto. È verità e amore.
 {.ccc-risposta}
 
-> *«Dio è l’essere infinitamente perfetto che è la SS.ma Trinità»* (santo Toribio di Mogrovejo).
+> «*Dio è l’essere infinitamente perfetto che è la SS.ma Trinità*» (santo Toribio di Mogrovejo).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q41" >}}41{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [214](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-214)-[217](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-217){{< ccc-br >}}[231](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-231){{< /marginnote >}} **In che senso Dio è la verità?**
 {.ccc-domanda}
 
-Dio è la Verità stessa e come tale non s’inganna e non può ingannare. Egli «è luce e in lui non ci sono tenebre» (*1 Gv* 1,5). Il Figlio eterno di Dio, Sapienza incarnata, è stato inviato nel mondo «per rendere testimonianza alla Verità» (Gv 18,37).
+Dio è la Verità stessa e come tale non s’inganna e non può ingannare. Egli «*è luce e in lui non ci sono tenebre*».{{< marginnote >}}[*1 Gv* 1,5](/book/bibbia-di-gerusalemme/nuovo-testamento/1-giovanni-1#1john-1-5){{< /marginnote >}} Il Figlio eterno di Dio, Sapienza incarnata, è stato inviato nel mondo «*per rendere testimonianza alla Verità*».{{< marginnote >}}[Gv 18,37](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-18#john-18-37){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q42" >}}42{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [218](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-218)-[221](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-221){{< /marginnote >}} **In qual modo Dio rivela che egli è amore?**
 {.ccc-domanda}
 
-Dio si rivela ad Israele come colui che ha un amore più forte di quello di un padre o di una madre per i suoi figli o di uno sposo per la sua sposa. Egli in se stesso «è Amore» *(1 Gv* 4,8.16), che si dona completamente e gratuitamente e che «ha tanto amato il mondo da dare il suo Figlio unigenito, perché il mondo si salvi per mezzo di lui» (*Gv* 3,16-17). Mandando il suo Figlio e lo Spirito Santo, Dio rivela che egli stesso è eterno scambio d’amore.
+Dio si rivela ad Israele come colui che ha un amore più forte di quello di un padre o di una madre per i suoi figli o di uno sposo per la sua sposa. Egli in se stesso «*è Amore*»,{{< marginnote >}}[*1 Gv* 4,8.16](/book/bibbia-di-gerusalemme/nuovo-testamento/1-giovanni-4#1john-4-8){{< /marginnote >}} che si dona completamente e gratuitamente e che «*ha tanto amato il mondo da dare il suo Figlio unigenito, perché il mondo si salvi per mezzo di lui*».{{< marginnote >}}[*Gv* 3,16-17](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-3#john-3-16){{< /marginnote >}} Mandando il suo Figlio e lo Spirito Santo, Dio rivela che egli stesso è eterno scambio d’amore.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q43" >}}43{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [222](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-222)-[227](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-227){{< ccc-br >}}[229](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-1-io-credo-in-dio#ccc-229){{< /marginnote >}} **Che cosa comporta credere in un solo Dio?**
@@ -95,13 +95,13 @@ Dio ha lasciato qualche traccia del suo Essere trinitario nella creazione e nell
 {{< paragraph label="comp-q46" >}}46{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [240](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-240)-[242](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-242){{< /marginnote >}} **Che cosa Gesù Cristo ci rivela del mistero del Padre?**
 {.ccc-domanda}
 
-Gesù Cristo ci rivela che Dio è «Padre», non solo in quanto è Creatore dell’universo e dell’uomo, ma soprattutto perché genera eternamente nel suo seno il Figlio, che è il suo Verbo, «irradiazione della sua gloria, impronta della sua sostanza» *(Eb* 1,3).
+Gesù Cristo ci rivela che Dio è «*Padre*», non solo in quanto è Creatore dell’universo e dell’uomo, ma soprattutto perché genera eternamente nel suo seno il Figlio, che è il suo Verbo, «*irradiazione della sua gloria, impronta della sua sostanza*».{{< marginnote >}}[*Eb* 1,3](/book/bibbia-di-gerusalemme/nuovo-testamento/ebrei-1#heb-1-3){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q47" >}}47{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [243](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-243)-[248](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-248){{< /marginnote >}} **Chi è lo Spirito Santo, rivelato a noi da Gesù Cristo?**
 {.ccc-domanda}
 
-È la terza Persona della Santissima Trinità. È Dio, uno e uguale al Padre e al Figlio. Egli «procede dal Padre» (*Gv* 15,26), il quale, principio senza principio, è l’origine di tutta la vita trinitaria. E procede anche dal Figlio *(Filioque),* per il dono eterno che il Padre ne fa al Figlio. Inviato dal Padre e dal Figlio incarnato, lo Spirito Santo guida la Chiesa «a conoscere la Verità tutta intera» (*Gv* 16,13).
+È la terza Persona della Santissima Trinità. È Dio, uno e uguale al Padre e al Figlio. Egli «*procede dal Padre*»,{{< marginnote >}}[*Gv* 15,26](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-15#john-15-26){{< /marginnote >}} il quale, principio senza principio, è l’origine di tutta la vita trinitaria. E procede anche dal Figlio *(Filioque),* per il dono eterno che il Padre ne fa al Figlio. Inviato dal Padre e dal Figlio incarnato, lo Spirito Santo guida la Chiesa «*a conoscere la Verità tutta intera*».{{< marginnote >}}[*Gv* 16,13](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-16#john-16-13){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q48" >}}48{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [249](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-249)-[256](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-256){{< ccc-br >}}[266](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-il-padre#ccc-266){{< /marginnote >}} **Come la Chiesa esprime la sua fede trinitaria?**
@@ -116,16 +116,16 @@ La Chiesa esprime la sua fede trinitaria confessando un solo Dio in tre Persone:
 Inseparabili nella loro unica sostanza, le Persone divine sono inseparabili anche nel loro operare: la Trinità ha una sola e medesima operazione. Ma, nell’unico agire divino, ogni Persona è presente secondo il modo che le è proprio nella Trinità.
 {.ccc-risposta}
 
-> «*O mio Dio, Trinità che adoro… pacifica la mia anima; fanne il tuo cielo, la tua dimora amata e il luogo del tuo riposo. Che io non ti lasci mai sola, ma che sia lì, con tutta me stessa, tutta vigile nella mia fede, tutta adorante, tutta offerta alla tua azione creatrice»* (beata Elisabetta della Trinità).
+> «*O mio Dio, Trinità che adoro… pacifica la mia anima; fanne il tuo cielo, la tua dimora amata e il luogo del tuo riposo. Che io non ti lasci mai sola, ma che sia lì, con tutta me stessa, tutta vigile nella mia fede, tutta adorante, tutta offerta alla tua azione creatrice*» (beata Elisabetta della Trinità).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q50" >}}50{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [268](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-onnipotente#ccc-268)-[278](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-onnipotente#ccc-278){{< /marginnote >}} **Che cosa significa che Dio è onnipotente?**
 {.ccc-domanda}
 
-Dio si è rivelato come «il Forte, il Potente» (*Sal* 24,8), colui al quale «nulla è impossibile» *(Lc* 1,37). La sua onnipotenza è universale, misteriosa, e si manifesta nel creare il mondo dal nulla e l’uomo per amore, ma soprattutto nell’Incarnazione e nella Risurrezione del Suo Figlio, nel dono dell’adozione filiale e nel perdono dei peccati. Per questo la Chiesa rivolge la sua preghiera al «Dio onnipotente ed eterno» («*Omnipotens sempiterne Deus…*»).
+Dio si è rivelato come «*il Forte, il Potente*»,{{< marginnote >}}[*Sal* 24,8](/book/bibbia-di-gerusalemme/antico-testamento/salmi-24#ps-24-8){{< /marginnote >}} colui al quale «*nulla è impossibile*».{{< marginnote >}}[*Lc* 1,37](/book/bibbia-di-gerusalemme/nuovo-testamento/luca-1#luke-1-37){{< /marginnote >}} La sua onnipotenza è universale, misteriosa, e si manifesta nel creare il mondo dal nulla e l’uomo per amore, ma soprattutto nell’Incarnazione e nella Risurrezione del Suo Figlio, nel dono dell’adozione filiale e nel perdono dei peccati. Per questo la Chiesa rivolge la sua preghiera al «*Dio onnipotente ed eterno*» («*Omnipotens sempiterne Deus…*»).
 {.ccc-risposta}
 
-{{< paragraph label="comp-q51" >}}51{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [279](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-279)-[289](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-289){{< ccc-br >}}[315](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-315){{< /marginnote >}} **Perché è importante affermare: «In principio Dio creò il cielo e la terra» (Gn 1,1)?**
+{{< paragraph label="comp-q51" >}}51{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [279](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-279)-[289](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-289){{< ccc-br >}}[315](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-315){{< /marginnote >}} **Perché è importante affermare: «*In principio Dio creò il cielo e la terra*»?{{< marginnote >}}[Gn 1,1](/book/bibbia-di-gerusalemme/antico-testamento/genesi-1#gen-1-1){{< /marginnote >}}**
 {.ccc-domanda}
 
 Perché la creazione è il fondamento di tutti i divini progetti di salvezza; manifesta l’amore onnipotente e sapiente di Dio; è il primo passo verso l’Alleanza dell’unico Dio con il suo popolo; è l’inizio della storia della salvezza culminante in Cristo; è una prima risposta agli interrogativi fondamentali dell’uomo circa la propria origine e il proprio fine.
@@ -140,16 +140,16 @@ Il Padre, il Figlio e lo Spirito Santo sono il principio unico e indivisibile de
 {{< paragraph label="comp-q53" >}}53{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [293](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-293)-[294](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-294){{< ccc-br >}}[319](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-319){{< /marginnote >}} **Perché è stato creato il mondo?**
 {.ccc-domanda}
 
-Il mondo è stato creato per la gloria di Dio, che ha voluto manifestare e comunicare la sua bontà, verità e bellezza. Il fine ultimo della creazione è che Dio, in Cristo, possa essere «tutto in tutti» (*1 Cor* 15,28), per la sua gloria e per la nostra felicità.
+Il mondo è stato creato per la gloria di Dio, che ha voluto manifestare e comunicare la sua bontà, verità e bellezza. Il fine ultimo della creazione è che Dio, in Cristo, possa essere «*tutto in tutti*»,{{< marginnote >}}[*1 Cor* 15,28](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-15#1cor-15-28){{< /marginnote >}} per la sua gloria e per la nostra felicità.
 {.ccc-risposta}
 
-> «*La gloria di Dio è l’uomo vivente e la vita dell’uomo è la visione di Dio»* (sant’Ireneo)
+> «*La gloria di Dio è l’uomo vivente e la vita dell’uomo è la visione di Dio*» (sant’Ireneo)
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q54" >}}54{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [295](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-295)-[301](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-301){{< ccc-br >}}[317](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-317)-[320](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-320){{< /marginnote >}} **Come Dio ha creato l’universo?**
 {.ccc-domanda}
 
-Dio ha creato l’universo liberamente con sapienza e amore. Il mondo non è il prodotto di una necessità, di un destino cieco o del caso. Dio ha creato «dal nulla» *(ex nihilo*: *2 Mac* 7,28) un mondo ordinato e buono, che egli trascende in modo infinito. Dio conserva nell’essere la sua creazione e la sorregge, dandole la capacità di agire e conducendo la al suo compimento, per mezzo del suo Figlio e dello Spirito Santo.
+Dio ha creato l’universo liberamente con sapienza e amore. Il mondo non è il prodotto di una necessità, di un destino cieco o del caso. Dio ha creato «*dal nulla*» *(ex nihilo*: [*2 Mac* 7,28](/book/bibbia-di-gerusalemme/antico-testamento/2-maccabei-7#2macc-7-28)) un mondo ordinato e buono, che egli trascende in modo infinito. Dio conserva nell’essere la sua creazione e la sorregge, dandole la capacità di agire e conducendo la al suo compimento, per mezzo del suo Figlio e dello Spirito Santo.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q55" >}}55{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [302](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-302)-[306](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-306){{< ccc-br >}}[321](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-321){{< /marginnote >}} **In che cosa consiste la Provvidenza divina?**
@@ -161,7 +161,7 @@ Essa consiste nelle disposizioni, con cui Dio conduce le sue creature verso la p
 {{< paragraph label="comp-q56" >}}56{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [307](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-307)-[308](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-308){{< ccc-br >}}[323](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-323){{< /marginnote >}} **Come l’uomo collabora con la Provvidenza divina?**
 {.ccc-domanda}
 
-All’uomo Dio dona e chiede, rispettando la sua libertà, di collaborare con le sue azioni, le sue preghiere, ma anche con le sue sofferenze, suscitando in lui «il volere e l’operare secondo i suoi benevoli disegni» *(Fil* 2,13).
+All’uomo Dio dona e chiede, rispettando la sua libertà, di collaborare con le sue azioni, le sue preghiere, ma anche con le sue sofferenze, suscitando in lui «*il volere e l’operare secondo i suoi benevoli disegni*».{{< marginnote >}}[*Fil* 2,13](/book/bibbia-di-gerusalemme/nuovo-testamento/filippesi-2#phil-2-13){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q57" >}}57{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [309](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-309)-[310](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-310){{< ccc-br >}}[324](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-creatore#ccc-324),[400](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-400){{< /marginnote >}} **Se Dio è onnipotente e provvidente, perché allora esiste il male?**
@@ -181,7 +181,7 @@ La fede ci dà la certezza che Dio non permetterebbe il male, se dallo stesso ma
 {{< paragraph label="comp-q59" >}}59{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [325](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-325)-[327](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-327){{< /marginnote >}} **Che cosa ha creato Dio?**
 {.ccc-domanda}
 
-La Sacra Scrittura dice: «In principio Dio creò il cielo e la terra» (*Gn* 1,1). La Chiesa, nella sua Professione di fede, proclama che Dio è il creatore di tutte le cose visibili e invisibili: di tutti gli esseri spirituali e materiali, cioè degli angeli e del mondo visibile, e in modo particolare dell’uomo.
+La Sacra Scrittura dice: «*In principio Dio creò il cielo e la terra*».{{< marginnote >}}[*Gn* 1,1](/book/bibbia-di-gerusalemme/antico-testamento/genesi-1#gen-1-1){{< /marginnote >}} La Chiesa, nella sua Professione di fede, proclama che Dio è il creatore di tutte le cose visibili e invisibili: di tutti gli esseri spirituali e materiali, cioè degli angeli e del mondo visibile, e in modo particolare dell’uomo.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q60" >}}60{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [328](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-328)-[333](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-333){{< ccc-br >}}[350](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-350)-[351](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-351){{< /marginnote >}} **Chi sono gli angeli?**
@@ -196,13 +196,13 @@ Gli angeli sono creature puramente spirituali, incorporee, invisibili e immortal
 La Chiesa si unisce agli angeli per adorare Dio, invoca la loro assistenza e di alcuni celebra liturgicamente la memoria.
 {.ccc-risposta}
 
-> «*Ogni fedele ha al proprio fianco un angelo come protettore e pastore, per condurlo alla vita»* (san Basilio Magno).
+> «*Ogni fedele ha al proprio fianco un angelo come protettore e pastore, per condurlo alla vita*» (san Basilio Magno).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q62" >}}62{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [337](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-337)-[344](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-il-cielo-e-la-terra#ccc-344){{< /marginnote >}} **Che cosa insegna la Sacra Scrittura circa la creazione del mondo visibile?**
 {.ccc-domanda}
 
-Attraverso il racconto dei «sei giorni» della creazione, la Sacra Scrittura ci fa conoscere il valore del creato e la sua finalità di lode a Dio e di servizio all’uomo.
+Attraverso il racconto dei «*sei giorni*» della creazione, la Sacra Scrittura ci fa conoscere il valore del creato e la sua finalità di lode a Dio e di servizio all’uomo.
 {.ccc-risposta}
 
 Ogni cosa deve la propria esistenza a Dio, dal quale riceve la propria bontà e perfezione, le proprie leggi e il proprio posto nell’universo.
@@ -228,7 +228,7 @@ L’opera della creazione culmina nell’opera ancora più grande della redenzio
 
 ### *L’uomo* {#comp-p1s2c1a1-t2 .ccc-titoletto}
 
-{{< paragraph label="comp-q66" >}}66{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [355](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-355)-[357](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-357){{< /marginnote >}} **In che senso l’uomo è creato a «immagine di Dio»?**
+{{< paragraph label="comp-q66" >}}66{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [355](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-355)-[357](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-357){{< /marginnote >}} **In che senso l’uomo è creato a «*immagine di Dio*»?**
 {.ccc-domanda}
 
 L’uomo è creato a immagine di Dio nel senso che è capace di conoscere e di amare, nella libertà, il proprio Creatore. È la sola creatura, su questa terra, che Dio ha voluto per se stessa e che ha chiamato a condividere, nella conoscenza e nell’amore, la sua vita divina. Egli, in quanto creato a immagine di Dio, ha la dignità di persona: non è qualcosa, ma qualcuno, capace di conoscersi, di donarsi liberamente e di entrare in comunione con Dio e con le altre persone.
@@ -237,13 +237,13 @@ L’uomo è creato a immagine di Dio nel senso che è capace di conoscere e di a
 {{< paragraph label="comp-q67" >}}67{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [358](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-358)-[359](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-359){{< /marginnote >}} **Per quale fine Dio ha creato l’uomo?**
 {.ccc-domanda}
 
-Dio ha creato tutto per l’uomo, ma l’uomo è stato creato per conoscere, servire e amare Dio, per offrirgli, in questo mondo, tutta la creazione in rendimento di grazie ed essere elevato alla vita con Dio in cielo. Solamente nel mistero del Verbo incarnato trova vera luce il mistero dell’uomo predestinato a riprodurre l’immagine del Figlio di Dio fatto uomo, che è la perfetta «immagine del Dio invisibile» *(Col* 1,15).
+Dio ha creato tutto per l’uomo, ma l’uomo è stato creato per conoscere, servire e amare Dio, per offrirgli, in questo mondo, tutta la creazione in rendimento di grazie ed essere elevato alla vita con Dio in cielo. Solamente nel mistero del Verbo incarnato trova vera luce il mistero dell’uomo predestinato a riprodurre l’immagine del Figlio di Dio fatto uomo, che è la perfetta «*immagine del Dio invisibile*».{{< marginnote >}}[*Col* 1,15](/book/bibbia-di-gerusalemme/nuovo-testamento/colossesi-1#col-1-15){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q68" >}}68{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [360](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-360)-[361](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-361){{< /marginnote >}} **Perché gli uomini formano un’unità?**
 {.ccc-domanda}
 
-Tutti gli uomini formano l’unità del genere umano, per la comune origine che hanno da Dio. Dio, inoltre, ha creato «da uno solo tutte le nazioni degli uomini» *(At* 17,26). Tutti, poi, hanno un unico Salvatore e sono chiamati a condividere l’eterna felicità di Dio.
+Tutti gli uomini formano l’unità del genere umano, per la comune origine che hanno da Dio. Dio, inoltre, ha creato «*da uno solo tutte le nazioni degli uomini*».{{< marginnote >}}[*At* 17,26](/book/bibbia-di-gerusalemme/nuovo-testamento/atti-17#acts-17-26){{< /marginnote >}} Tutti, poi, hanno un unico Salvatore e sono chiamati a condividere l’eterna felicità di Dio.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q69" >}}69{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [362](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-362)-[365](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-365){{< ccc-br >}}[382](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-382){{< /marginnote >}} **Come nell’uomo l’anima e il corpo formano un’unità?**
@@ -261,7 +261,7 @@ L’anima spirituale non viene dai genitori, ma è creata direttamente da Dio, e
 {{< paragraph label="comp-q71" >}}71{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [369](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-369)-[373](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-373){{< ccc-br >}}[383](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-383){{< /marginnote >}} **Quale relazione Dio ha posto tra l’uomo e la donna?**
 {.ccc-domanda}
 
-L’uomo e la donna sono stati creati da Dio in uguale dignità in quanto persone umane, e, nello stesso tempo, in una reciproca complementarità, essendo maschio e femmina. Dio li ha voluti l’uno per l’altro, per una comunione di persone. Insieme sono anche chiamati a trasmettere la vita umana, formando nel matrimonio «una sola carne» *(Gn* 2,24), e a dominare la terra come «amministratori» di Dio.
+L’uomo e la donna sono stati creati da Dio in uguale dignità in quanto persone umane, e, nello stesso tempo, in una reciproca complementarità, essendo maschio e femmina. Dio li ha voluti l’uno per l’altro, per una comunione di persone. Insieme sono anche chiamati a trasmettere la vita umana, formando nel matrimonio «*una sola carne*»,{{< marginnote >}}[*Gn* 2,24](/book/bibbia-di-gerusalemme/antico-testamento/genesi-2#gen-2-24){{< /marginnote >}} e a dominare la terra come «*amministratori*» di Dio.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q72" >}}72{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [374](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-374)-[379](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-379){{< ccc-br >}}[384](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-l-uomo#ccc-384){{< /marginnote >}} **Qual era la condizione originaria dell’uomo secondo il progetto di Dio?**
@@ -287,13 +287,13 @@ Con tale espressione si indica che Satana e gli altri demoni, di cui parlano la 
 {{< paragraph label="comp-q75" >}}75{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [396](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-396)-[403](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-403){{< ccc-br >}}[415](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-415)-[417](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-417){{< /marginnote >}} **In che cosa consiste il primo peccato dell’uomo?**
 {.ccc-domanda}
 
-L’uomo, tentato dal diavolo, ha lasciato spegnere nel suo cuore la fiducia nei confronti del suo Creatore e, disobbedendo Gli, ha voluto diventare «come Dio» senza Dio, e non secondo Dio *(Gn* 3,5). Così Adamo ed Eva hanno perduto immediatamente, per sé e per tutti i loro discendenti, la grazia originale della santità e della giustizia.
+L’uomo, tentato dal diavolo, ha lasciato spegnere nel suo cuore la fiducia nei confronti del suo Creatore e, disobbedendo Gli, ha voluto diventare «*come Dio*» senza Dio, e non secondo Dio.{{< marginnote >}}[*Gn* 3,5](/book/bibbia-di-gerusalemme/antico-testamento/genesi-3#gen-3-5){{< /marginnote >}} Così Adamo ed Eva hanno perduto immediatamente, per sé e per tutti i loro discendenti, la grazia originale della santità e della giustizia.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q76" >}}76{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [404](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-404){{< ccc-br >}}[419](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-419){{< /marginnote >}} **Che cos’è il peccato originale?**
 {.ccc-domanda}
 
-Il peccato originale nel quale tutti gli uomini nascono è lo stato di privazione della santità e della giustizia originali. È un peccato da noi «contratto», non «commesso»; è una condizione di nascita, e non un atto personale. A motivo dell’unità di origine di tutti gli uomini, esso si trasmette ai discendenti di Adamo con la natura umana, «non per imitazione, ma per propagazione». Questa trasmissione rimane un mistero che non possiamo comprendere appieno.
+Il peccato originale nel quale tutti gli uomini nascono è lo stato di privazione della santità e della giustizia originali. È un peccato da noi «*contratto*», non «*commesso*»; è una condizione di nascita, e non un atto personale. A motivo dell’unità di origine di tutti gli uomini, esso si trasmette ai discendenti di Adamo con la natura umana, «*non per imitazione, ma per propagazione*». Questa trasmissione rimane un mistero che non possiamo comprendere appieno.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q77" >}}77{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [405](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-405)-[409](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-409){{< ccc-br >}}[418](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-418){{< /marginnote >}} **Quali altre conseguenze provoca il peccato originale?**
@@ -305,5 +305,5 @@ In conseguenza del peccato originale la natura umana, senza essere interamente c
 {{< paragraph label="comp-q78" >}}78{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [410](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-410)-[412](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-412){{< ccc-br >}}[420](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-7-la-caduta#ccc-420){{< /marginnote >}} **Dopo il primo peccato, che cosa ha fatto Dio?**
 {.ccc-domanda}
 
-Dopo il primo peccato, il mondo è stato inondato di peccati, ma Dio non ha abbandonato l’uomo in potere della morte, ma, al contrario, gli ha predetto in modo misterioso – nel «Protovangelo» *(Gn* 3,15) – che il male sarebbe stato vinto e l’uomo sollevato dalla caduta. E il primo annuncio del Messia redentore. Perciò la caduta sarà perfino chiamata *felice colpa,* perché «ha meritato un tale e così grande Redentore» (Liturgia della Veglia pasquale).
+Dopo il primo peccato, il mondo è stato inondato di peccati, ma Dio non ha abbandonato l’uomo in potere della morte, ma, al contrario, gli ha predetto in modo misterioso – nel «*Protovangelo*»{{< marginnote >}}[*Gn* 3,15](/book/bibbia-di-gerusalemme/antico-testamento/genesi-3#gen-3-15){{< /marginnote >}} – che il male sarebbe stato vinto e l’uomo sollevato dalla caduta. E il primo annuncio del Messia redentore. Perciò la caduta sarà perfino chiamata *felice colpa,* perché «*ha meritato un tale e così grande Redentore*» (Liturgia della Veglia pasquale).
 {.ccc-risposta}

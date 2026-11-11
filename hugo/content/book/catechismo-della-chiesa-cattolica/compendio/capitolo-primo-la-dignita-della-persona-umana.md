@@ -38,7 +38,7 @@ Esse rispondono all’innato desiderio di felicità che Dio ha posto nel cuore d
 {{< paragraph label="comp-q362" >}}362{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1720](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-2-la-nostra-vocazione-alla-beatitudine#ccc-1720)-[1724](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-2-la-nostra-vocazione-alla-beatitudine#ccc-1724){{< ccc-br >}}[1727](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-2-la-nostra-vocazione-alla-beatitudine#ccc-1727)-[1729](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-2-la-nostra-vocazione-alla-beatitudine#ccc-1729){{< /marginnote >}} **Che cos’è la beatitudine eterna?**
 {.ccc-domanda}
 
-È la visione di Dio nella vita eterna, in cui noi saremo pienamente «partecipi della natura divina» (*2 Pt* 1,4), della gloria di Cristo e del godimento della vita trinitaria. La beatitudine oltrepassa le capacità umane: è un dono soprannaturale e gratuito di Dio, come la grazia che ad essa conduce. La beatitudine promessa ci pone di fronte a scelte morali decisive riguardo ai beni terreni, stimolandoci ad amare Dio al di sopra di tutto.
+È la visione di Dio nella vita eterna, in cui noi saremo pienamente «*partecipi della natura divina*»,{{< marginnote >}}[*2 Pt* 1,4](/book/bibbia-di-gerusalemme/nuovo-testamento/2-pietro-1#2pet-1-4){{< /marginnote >}} della gloria di Cristo e del godimento della vita trinitaria. La beatitudine oltrepassa le capacità umane: è un dono soprannaturale e gratuito di Dio, come la grazia che ad essa conduce. La beatitudine promessa ci pone di fronte a scelte morali decisive riguardo ai beni terreni, stimolandoci ad amare Dio al di sopra di tutto.
 {.ccc-risposta}
 
 ## LA LIBERTÀ DELL’UOMO {#comp-p3s1c1a3 .ccc-articolo}
@@ -64,7 +64,7 @@ Il diritto all’esercizio della libertà è proprio d’ogni uomo, in quanto è
 {{< paragraph label="comp-q366" >}}366{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1739](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-liberta-dell-uomo#ccc-1739)-[1742](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-liberta-dell-uomo#ccc-1742){{< ccc-br >}}[1748](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-liberta-dell-uomo#ccc-1748){{< /marginnote >}} **Come si colloca la libertà umana nell’ordine della salvezza?**
 {.ccc-domanda}
 
-La nostra libertà è indebolita a causa del primo peccato. L’indebolimento è reso più acuto dai peccati successivi. Ma Cristo «ci ha liberati perché restassimo liberi» *(Gal* 5, 1). Con la sua grazia lo Spirito Santo ci conduce alla libertà spirituale, per farci suoi liberi collaboratori nella Chiesa e nel mondo.
+La nostra libertà è indebolita a causa del primo peccato. L’indebolimento è reso più acuto dai peccati successivi. Ma Cristo «*ci ha liberati perché restassimo liberi*».{{< marginnote >}}[*Gal* 5, 1](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-5#gal-5-1){{< /marginnote >}} Con la sua grazia lo Spirito Santo ci conduce alla libertà spirituale, per farci suoi liberi collaboratori nella Chiesa e nel mondo.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q367" >}}367{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1749](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-4-la-moralita-degli-atti-umani#ccc-1749)-[1754](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-4-la-moralita-degli-atti-umani#ccc-1754){{< ccc-br >}}[1757](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-4-la-moralita-degli-atti-umani#ccc-1757)-[1758](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-4-la-moralita-degli-atti-umani#ccc-1758){{< /marginnote >}} **Quali sono le fonti della moralità degli atti umani?**
@@ -122,7 +122,7 @@ La coscienza morale retta e veritiera si forma con l’educazione, con l’assim
 {{< paragraph label="comp-q375" >}}375{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1789](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-6-la-coscienza-morale#ccc-1789){{< /marginnote >}} **Quali norme la coscienza deve sempre seguire?**
 {.ccc-domanda}
 
-Ce ne sono tre più generali: 1) non è mai consentito fare il male perché ne derivi un bene; 2) la cosiddetta *Regola d’oro:* «Tutto quanto volete che gli uomini facciano a voi, anche voi fatelo a loro» *(Mt* 7,12); 3) la carità passa sempre attraverso il rispetto del prossimo e della sua coscienza, anche se questo non significa accettare come un bene ciò che è oggettivamente un male.
+Ce ne sono tre più generali: 1) non è mai consentito fare il male perché ne derivi un bene; 2) la cosiddetta *Regola d’oro:* «*Tutto quanto volete che gli uomini facciano a voi, anche voi fatelo a loro*»;{{< marginnote >}}[*Mt* 7,12](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-7#matt-7-12){{< /marginnote >}} 3) la carità passa sempre attraverso il rispetto del prossimo e della sua coscienza, anche se questo non significa accettare come un bene ciò che è oggettivamente un male.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q376" >}}376{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1790](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-6-la-coscienza-morale#ccc-1790)-[1794](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-6-la-coscienza-morale#ccc-1794){{< ccc-br >}}[1801](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-6-la-coscienza-morale#ccc-1801)-[1802](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-6-la-coscienza-morale#ccc-1802){{< /marginnote >}} **La coscienza morale può emettere giudizi erronei?**
@@ -136,7 +136,7 @@ La persona deve sempre obbedire al giudizio certo della propria coscienza, ma pu
 {{< paragraph label="comp-q377" >}}377{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1803](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1803),[1833](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1833){{< /marginnote >}} **Che cos’è la virtù?**
 {.ccc-domanda}
 
-La virtù è una disposizione abituale e ferma a fare il bene. «Il fine di una vita virtuosa consiste nel divenire simile a Dio» (san Gregorio di Nissa). Vi sono virtù umane e virtù teologali.
+La virtù è una disposizione abituale e ferma a fare il bene. «*Il fine di una vita virtuosa consiste nel divenire simile a Dio*» (san Gregorio di Nissa). Vi sono virtù umane e virtù teologali.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q378" >}}378{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1804](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1804){{< ccc-br >}}[1810](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1810)-[1811](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1811){{< ccc-br >}}[1834](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1834),[1839](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1839){{< /marginnote >}} **Che cosa sono le virtù umane?**
@@ -160,7 +160,7 @@ La prudenza dispone la ragione a discernere, in ogni circostanza, il nostro vero
 {{< paragraph label="comp-q381" >}}381{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1807](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1807){{< ccc-br >}}[1836](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1836){{< /marginnote >}} **Che cos’è la giustizia?**
 {.ccc-domanda}
 
-La giustizia consiste nella volontà costante e ferma di dare agli altri ciò che è loro dovuto. La giustizia verso Dio è chiamata «virtù della religione».
+La giustizia consiste nella volontà costante e ferma di dare agli altri ciò che è loro dovuto. La giustizia verso Dio è chiamata «*virtù della religione*».
 {.ccc-risposta}
 
 {{< paragraph label="comp-q382" >}}382{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1808](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1808){{< ccc-br >}}[1837](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1837){{< /marginnote >}} **Che cos’è la fortezza?**
@@ -190,7 +190,7 @@ Le virtù teologali sono la fede, la speranza e la carità.
 {{< paragraph label="comp-q386" >}}386{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1814](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1814)-[1816](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1816){{< ccc-br >}}[1842](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1842){{< /marginnote >}} **Che cos’è la fede?**
 {.ccc-domanda}
 
-La fede è la virtù teologale per la quale noi crediamo a Dio e a tutto ciò che egli ci ha rivelato e che la Chiesa ci propone di credere, perché Dio è la stessa Verità. Con la fede l’uomo si abbandona a Dio liberamente. Perciò colui che crede cerca di conoscere e fare la volontà di Dio, perché «la fede opera per mezzo della carità» *(Gal* 5,6).
+La fede è la virtù teologale per la quale noi crediamo a Dio e a tutto ciò che egli ci ha rivelato e che la Chiesa ci propone di credere, perché Dio è la stessa Verità. Con la fede l’uomo si abbandona a Dio liberamente. Perciò colui che crede cerca di conoscere e fare la volontà di Dio, perché «*la fede opera per mezzo della carità*».{{< marginnote >}}[*Gal* 5,6](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-5#gal-5-6){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q387" >}}387{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1817](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1817)-[1821](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1821){{< ccc-br >}}[1843](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1843){{< /marginnote >}} **Che cos’è la speranza?**
@@ -202,7 +202,7 @@ La speranza è la virtù teologale per la quale noi desideriamo e aspettiamo da 
 {{< paragraph label="comp-q388" >}}388{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1822](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1822)-[1829](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1829){{< ccc-br >}}[1844](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1844){{< /marginnote >}} **Che cos’è la carità?**
 {.ccc-domanda}
 
-La carità è la virtù teologale per la quale amiamo Dio al di sopra di tutto e il nostro prossimo come noi stessi per amore di Dio. Gesù fa di essa il comandamento nuovo, la pienezza della Legge. Essa è «il vincolo della perfezione» *(Col* 3,14) e il fondamento delle altre virtù, che anima, ispira e ordina: senza di essa «io non sono nulla» e «niente mi giova» (*1 Cor* 13,1-3).
+La carità è la virtù teologale per la quale amiamo Dio al di sopra di tutto e il nostro prossimo come noi stessi per amore di Dio. Gesù fa di essa il comandamento nuovo, la pienezza della Legge. Essa è «*il vincolo della perfezione*»{{< marginnote >}}[*Col* 3,14](/book/bibbia-di-gerusalemme/nuovo-testamento/colossesi-3#col-3-14){{< /marginnote >}} e il fondamento delle altre virtù, che anima, ispira e ordina: senza di essa «*io non sono nulla*» e «*niente mi giova*».{{< marginnote >}}[*1 Cor* 13,1-3](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-13#1cor-13-1){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q389" >}}389{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1830](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1830)-[1831](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1831){{< ccc-br >}}[1845](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1845){{< /marginnote >}} **Che cosa sono i doni dello Spirito Santo?**
@@ -214,7 +214,7 @@ I *doni* dello Spirito Santo sono disposizioni permanenti che rendono l’uomo d
 {{< paragraph label="comp-q390" >}}390{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1832](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-7-le-virtu#ccc-1832){{< /marginnote >}} **Che cosa sono i frutti dello Spirito Santo?**
 {.ccc-domanda}
 
-I *frutti* dello Spirito Santo sono perfezioni plasmate in noi come primizie della gloria eterna. La tradizione della Chiesa ne enumera dodici: «Amore, gioia, pace, pazienza, longanimità, bontà, benevolenza, mitezza, fedeltà, modestia, continenza, castità» *(Gal* 5,22-23 volg.).
+I *frutti* dello Spirito Santo sono perfezioni plasmate in noi come primizie della gloria eterna. La tradizione della Chiesa ne enumera dodici: «*Amore, gioia, pace, pazienza, longanimità, bontà, benevolenza, mitezza, fedeltà, modestia, continenza, castità*».{{< marginnote >}}[*Gal* 5,22-23](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-5#gal-5-22) volg.{{< /marginnote >}}
 {.ccc-risposta}
 
 ## IL PECCATO {#comp-p3s1c1a7 .ccc-articolo}
@@ -228,7 +228,7 @@ Essa comporta che riconosciamo le nostre colpe, pentendoci dei nostri peccati. D
 {{< paragraph label="comp-q392" >}}392{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1849](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1849)-[1851](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1851){{< ccc-br >}}[1871](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1871)-[1872](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1872){{< /marginnote >}} **Che cos’è il peccato?**
 {.ccc-domanda}
 
-Il peccato è «una parola, un atto o un desiderio contrari alla Legge eterna» (sant’Agostino). È un’offesa a Dio, nella disobbedienza al suo amore. Esso ferisce la natura dell’uomo e attenta alla solidarietà umana. Cristo nella sua Passione svela pienamente la gravità del peccato e lo vince con la sua misericordia.
+Il peccato è «*una parola, un atto o un desiderio contrari alla Legge eterna*» (sant’Agostino). È un’offesa a Dio, nella disobbedienza al suo amore. Esso ferisce la natura dell’uomo e attenta alla solidarietà umana. Cristo nella sua Passione svela pienamente la gravità del peccato e lo vince con la sua misericordia.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q393" >}}393{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1852](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1852)-[1853](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1853){{< ccc-br >}}[1873](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-8-il-peccato#ccc-1873){{< /marginnote >}} **Esiste una varietà dei peccati?**

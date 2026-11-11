@@ -27,7 +27,7 @@ La legge naturale, iscritta dal Creatore nel cuore di ogni uomo, consiste in una
 A causa del peccato, la legge naturale non sempre e non da tutti viene percepita con uguale chiarezza e immediatezza.
 {.ccc-risposta}
 
-> *Per questo Dio* «*ha scritto sulle tavole della Legge quanto gli uomini non riuscivano a leggere nei loro cuori»* (sant’Agostino).
+> *Per questo Dio* «*ha scritto sulle tavole della Legge quanto gli uomini non riuscivano a leggere nei loro cuori*» (sant’Agostino).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q418" >}}418{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1961](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1961)-[1962](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1962){{< ccc-br >}}[1980](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1980){{< /marginnote >}} **Qual è il rapporto tra la legge naturale e la Legge antica?**
@@ -45,10 +45,10 @@ La Legge antica permette di conoscere molte verità accessibili alla ragione, in
 {{< paragraph label="comp-q420" >}}420{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1965](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1965)-[1972](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1972){{< ccc-br >}}[1983](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1983)-[1985](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1985){{< /marginnote >}} **Che cos’è la nuova Legge o Legge evangelica?**
 {.ccc-domanda}
 
-La nuova Legge o Legge evangelica, proclamata e realizzata da Cristo, è la pienezza e il compimento della Legge divina, naturale e rivelata. Essa è riassunta nel comandamento di amare Dio e il prossimo, e di amarci come Cristo ci ha amato; è anche una realtà interiore all’uomo: la grazia dello Spirito Santo che rende possibile un tale amore. È «la legge della libertà» *(Gc* 1,25), perché porta ad agire spontaneamente sotto l’impulso della carità.
+La nuova Legge o Legge evangelica, proclamata e realizzata da Cristo, è la pienezza e il compimento della Legge divina, naturale e rivelata. Essa è riassunta nel comandamento di amare Dio e il prossimo, e di amarci come Cristo ci ha amato; è anche una realtà interiore all’uomo: la grazia dello Spirito Santo che rende possibile un tale amore. È «*la legge della libertà*»,{{< marginnote >}}[*Gc* 1,25](/book/bibbia-di-gerusalemme/nuovo-testamento/giacomo-1#jas-1-25){{< /marginnote >}} perché porta ad agire spontaneamente sotto l’impulso della carità.
 {.ccc-risposta}
 
-> «*La nuova legge è principalmente la stessa grazia dello Spirito Santo, che è data ai credenti in Cristo»* (san Tommaso d’Aquino).
+> «*La nuova legge è principalmente la stessa grazia dello Spirito Santo, che è data ai credenti in Cristo*» (san Tommaso d’Aquino).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q421" >}}421{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1971](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1971)-[1974](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1974){{< ccc-br >}}[1986](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-1-la-legge-morale#ccc-1986){{< /marginnote >}} **Dove si trova la Legge nuova?**
@@ -106,7 +106,7 @@ Tutti i fedeli sono chiamati alla santità cristiana. Essa è pienezza della vit
 {{< paragraph label="comp-q429" >}}429{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2030](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2030)-[2031](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2031){{< ccc-br >}}[2047](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2047){{< /marginnote >}} **In qual modo la Chiesa nutre la vita morale del cristiano?**
 {.ccc-domanda}
 
-La Chiesa è la comunità dove il cristiano accoglie la Parola di Dio e gli insegnamenti della «Legge di Cristo» *(Gal* 6,2); riceve la grazia dei sacramenti; si unisce all’offerta eucaristica di Cristo, in modo che la sua vita morale sia un culto spirituale; apprende l’esempio di santità della Vergine Maria e dei Santi.
+La Chiesa è la comunità dove il cristiano accoglie la Parola di Dio e gli insegnamenti della «*Legge di Cristo*»;{{< marginnote >}}[*Gal* 6,2](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-6#gal-6-2){{< /marginnote >}} riceve la grazia dei sacramenti; si unisce all’offerta eucaristica di Cristo, in modo che la sua vita morale sia un culto spirituale; apprende l’esempio di santità della Vergine Maria e dei Santi.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q430" >}}430{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2032](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2032)-[2040](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2040){{< ccc-br >}}[2049](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2049)-[2051](/book/catechismo-della-chiesa-cattolica/parte-terza/articolo-3-la-chiesa-madre-e-maestra#ccc-2051){{< /marginnote >}} **Perché il Magistero della Chiesa interviene nel campo morale?**

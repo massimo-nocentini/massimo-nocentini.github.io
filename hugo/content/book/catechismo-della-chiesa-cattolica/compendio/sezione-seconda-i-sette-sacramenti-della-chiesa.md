@@ -39,5 +39,5 @@ Septem Ecclesiae Sacramenta
 {{< paragraph label="comp-q250" >}}250{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1210](/book/catechismo-della-chiesa-cattolica/parte-seconda/sezione-seconda-i-sette-sacramenti-della-chiesa#ccc-1210)-[1211](/book/catechismo-della-chiesa-cattolica/parte-seconda/sezione-seconda-i-sette-sacramenti-della-chiesa#ccc-1211){{< /marginnote >}} **Come si distinguono i Sacramenti della Chiesa?**
 {.ccc-domanda}
 
-Si distinguono in: Sacramenti dell’iniziazione cristiana (Battesimo, Confermazione e Eucaristia); Sacramenti della guarigione (Penitenza e Unzione degli infermi); Sacramenti al servizio della comunione e della missione (Ordine e Matrimonio). Essi toccano i momenti importanti della vita cristiana. Tutti i Sacramenti sono ordinati all’Eucaristia «come al loro specifico fine» (san Tommaso d’Aquino).
+Si distinguono in: Sacramenti dell’iniziazione cristiana (Battesimo, Confermazione e Eucaristia); Sacramenti della guarigione (Penitenza e Unzione degli infermi); Sacramenti al servizio della comunione e della missione (Ordine e Matrimonio). Essi toccano i momenti importanti della vita cristiana. Tutti i Sacramenti sono ordinati all’Eucaristia «*come al loro specifico fine*» (san Tommaso d’Aquino).
 {.ccc-risposta}

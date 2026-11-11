@@ -1015,7 +1015,7 @@ Rosarium
 {{< ccc-verso >}}Ti adoriamo, o Cristo, con il tuo Padre buono e lo Spirito Santo, perché sei venuto e ci hai salvati.{{< /ccc-verso >}}
 {.ccc-strofa .ccc-verse}
 
-## Preghiera di «addio all’altare» dopo la liturgia {#comp-appendice-a19 .ccc-preghiera-titolo}
+## Preghiera di «*addio all’altare*» dopo la liturgia {#comp-appendice-a19 .ccc-preghiera-titolo}
 
 *(Tradizione Siro-Maronita)*
 {.ccc-sottotitolo-preghiera}

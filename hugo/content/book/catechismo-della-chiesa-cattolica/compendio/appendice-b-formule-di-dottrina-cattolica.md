@@ -18,7 +18,7 @@ linkTitle: "B) · Formule di Dottrina Cattolica"
 
 ## La regola d’oro {#comp-appendice-b2 .ccc-formula-titolo}
 
-*(Mt* 7,12)
+{{< marginnote >}}[*Mt* 7,12](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-7#matt-7-12){{< /marginnote >}}
 {.ccc-fonte}
 
 {{< ccc-verso >}}Tutto quanto volete che gli uomini{{< /ccc-verso >}}\
@@ -28,7 +28,7 @@ linkTitle: "B) · Formule di Dottrina Cattolica"
 
 ## Le Beatitudini {#comp-appendice-b3 .ccc-formula-titolo}
 
-*(Mt* 5,3-12)
+{{< marginnote >}}[*Mt* 5,3-12](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-5#matt-5-3){{< /marginnote >}}
 {.ccc-fonte}
 
 {{< ccc-verso >}}Beati i poveri in spirito,{{< /ccc-verso >}}\

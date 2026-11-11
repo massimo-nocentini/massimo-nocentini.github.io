@@ -22,5 +22,5 @@ La liturgia, azione sacra per eccellenza, costituisce il culmine verso cui tende
 {{< paragraph label="comp-q220" >}}220{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1076](/book/catechismo-della-chiesa-cattolica/parte-seconda/sezione-prima-l-economia-sacramentale#ccc-1076){{< /marginnote >}} **In che cosa consiste l’economia sacramentale?**
 {.ccc-domanda}
 
-L’economia sacramentale consiste nel comunicare i frutti della redenzione di Cristo, mediante la celebrazione dei sacramenti della Chiesa, massimamente dell’Eucaristia, «finché egli venga» *(1 Cor* 11,26).
+L’economia sacramentale consiste nel comunicare i frutti della redenzione di Cristo, mediante la celebrazione dei sacramenti della Chiesa, massimamente dell’Eucaristia, «*finché egli venga*».{{< marginnote >}}[*1 Cor* 11,26](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-11#1cor-11-26){{< /marginnote >}}
 {.ccc-risposta}

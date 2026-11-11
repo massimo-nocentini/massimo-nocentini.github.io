@@ -6,5 +6,5 @@ matter: "main"
 label: "p1s2c1"
 ---
 
-{{< paragraph label="ccc:198" >}}198{{< /paragraph >}} La nostra professione di fede incomincia con Dio, perché Dio è «il primo e l’ultimo» (*Is* 44,6), il principio e la fine di tutto. Il Credo incomincia con Dio *Padre*, perché il Padre è la prima Persona divina della Santissima Trinità. Il nostro Simbolo incomincia con la creazione del cielo e della terra, perché la creazione è l’inizio e il fondamento di tutte le opere di Dio.
+{{< paragraph label="ccc:198" >}}198{{< /paragraph >}} La nostra professione di fede incomincia con Dio, perché Dio è «*il primo e l’ultimo*»,{{< marginnote >}}[*Is* 44,6](/book/bibbia-di-gerusalemme/antico-testamento/isaia-44#isa-44-6){{< /marginnote >}} il principio e la fine di tutto. Il Credo incomincia con Dio *Padre*, perché il Padre è la prima Persona divina della Santissima Trinità. Il nostro Simbolo incomincia con la creazione del cielo e della terra, perché la creazione è l’inizio e il fondamento di tutte le opere di Dio.
 {.ccc-n data-pagina="73"}

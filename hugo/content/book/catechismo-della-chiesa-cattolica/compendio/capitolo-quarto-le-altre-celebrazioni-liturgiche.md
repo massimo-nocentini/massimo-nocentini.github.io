@@ -24,7 +24,7 @@ Si ha un esorcismo quando la Chiesa domanda con la sua autorità, in nome di Ges
 {{< paragraph label="comp-q353" >}}353{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1674](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-1-i-sacramentali#ccc-1674)-[1676](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-1-i-sacramentali#ccc-1676){{< ccc-br >}}[1679](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-1-i-sacramentali#ccc-1679){{< /marginnote >}} **Quali forme di pietà popolare accompagnano la vita sacramentale della Chiesa?**
 {.ccc-domanda}
 
-Il senso religioso del popolo cristiano ha sempre trovato diverse espressioni nelle varie forme di pietà che accompagnano la vita sacramentale della Chiesa, quali la venerazione delle reliquie, le visite ai santuari, i pellegrinaggi, le processioni, la «Via crucis», il Rosario. La Chiesa con la luce della fede illumina e favorisce le forme autentiche di pietà popolare
+Il senso religioso del popolo cristiano ha sempre trovato diverse espressioni nelle varie forme di pietà che accompagnano la vita sacramentale della Chiesa, quali la venerazione delle reliquie, le visite ai santuari, i pellegrinaggi, le processioni, la «*Via crucis*», il Rosario. La Chiesa con la luce della fede illumina e favorisce le forme autentiche di pietà popolare
 {.ccc-risposta}
 
 ## LE ESEQUIE CRISTIANE {#comp-p2s2c4a2 .ccc-articolo}
@@ -32,7 +32,7 @@ Il senso religioso del popolo cristiano ha sempre trovato diverse espressioni ne
 {{< paragraph label="comp-q354" >}}354{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1680](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-le-esequie-cristiane#ccc-1680)-[1683](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-le-esequie-cristiane#ccc-1683){{< /marginnote >}} **Quale rapporto esiste tra i Sacramenti e la morte del cristiano?**
 {.ccc-domanda}
 
-Il cristiano che muore in Cristo giunge, al termine della sua esistenza terrena, al compimento della nuova vita iniziata con il Battesimo, rafforzata dalla Confermazione e nutrita dall’Eucaristia, anticipazione del banchetto celeste. Il senso della morte del cristiano si manifesta alla luce della Morte e della Risurrezione di Cristo, nostra unica speranza; il cristiano che muore in Cristo Gesù, va ad «abitare presso il Signore» (*2 Cor* 5,8).
+Il cristiano che muore in Cristo giunge, al termine della sua esistenza terrena, al compimento della nuova vita iniziata con il Battesimo, rafforzata dalla Confermazione e nutrita dall’Eucaristia, anticipazione del banchetto celeste. Il senso della morte del cristiano si manifesta alla luce della Morte e della Risurrezione di Cristo, nostra unica speranza; il cristiano che muore in Cristo Gesù, va ad «*abitare presso il Signore*».{{< marginnote >}}[*2 Cor* 5,8](/book/bibbia-di-gerusalemme/nuovo-testamento/2-corinzi-5#2cor-5-8){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q355" >}}355{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1684](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-le-esequie-cristiane#ccc-1684)-[1685](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-le-esequie-cristiane#ccc-1685){{< /marginnote >}} **Che cosa esprimono le esequie?**
@@ -44,5 +44,5 @@ Le esequie, pur celebrando si secondo differenti riti rispondenti alle situazion
 {{< paragraph label="comp-q356" >}}356{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1686](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-le-esequie-cristiane#ccc-1686)-[1690](/book/catechismo-della-chiesa-cattolica/parte-seconda/articolo-2-le-esequie-cristiane#ccc-1690){{< /marginnote >}} **Quali sono i momenti principali delle esequie?**
 {.ccc-domanda}
 
-Solitamente le esequie comprendono quattro momenti principali: l’accoglienza della salma da parte della comunità con parole di conforto e di speranza, la liturgia della Parola, il sacrificio eucaristico e «l’addio», col quale l’anima del defunto viene affidata a Dio, fonte di vita eterna, mentre il suo corpo viene sepolto in attesa della risurrezione.
+Solitamente le esequie comprendono quattro momenti principali: l’accoglienza della salma da parte della comunità con parole di conforto e di speranza, la liturgia della Parola, il sacrificio eucaristico e «*l’addio*», col quale l’anima del defunto viene affidata a Dio, fonte di vita eterna, mentre il suo corpo viene sepolto in attesa della risurrezione.
 {.ccc-risposta}

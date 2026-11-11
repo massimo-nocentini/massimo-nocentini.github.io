@@ -24,19 +24,19 @@ Abramo è un modello di preghiera perché cammina alla presenza di Dio, lo ascol
 {{< paragraph label="comp-q537" >}}537{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2574](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2574)-[2577](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2577){{< ccc-br >}}[2593](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2593){{< /marginnote >}} **Come pregava Mosè?**
 {.ccc-domanda}
 
-La preghiera di Mosè è tipica della preghiera contemplativa: Dio, che chiama Mosè dal Roveto ardente, s’intrattiene spesso e a lungo con lui «faccia a faccia, come un uomo con il suo amico» (Es 33,11). Da questa intimità con Dio, Mosè attinge la forza per intercedere con tenacia a favore del popolo: la sua preghiera prefigura così l’intercessione dell’unico mediatore, Cristo Gesù.
+La preghiera di Mosè è tipica della preghiera contemplativa: Dio, che chiama Mosè dal Roveto ardente, s’intrattiene spesso e a lungo con lui «*faccia a faccia, come un uomo con il suo amico*».{{< marginnote >}}[Es 33,11](/book/bibbia-di-gerusalemme/antico-testamento/esodo-33#exod-33-11){{< /marginnote >}} Da questa intimità con Dio, Mosè attinge la forza per intercedere con tenacia a favore del popolo: la sua preghiera prefigura così l’intercessione dell’unico mediatore, Cristo Gesù.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q538" >}}538{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2578](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2578)-[2580](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2580){{< ccc-br >}}[2594](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2594){{< /marginnote >}} **Quali rapporti hanno nell’Antico Testamento il tempio e il re con la preghiera?**
 {.ccc-domanda}
 
-All’ombra della dimora di Dio — l’Arca dell’Alleanza, poi il tempio — si sviluppa la preghiera del Popolo di Dio sotto la guida dei suoi pastori. Fra loro, Davide è il re «secondo il cuore di Dio», il pastore che prega per il suo popolo. La sua preghiera è un modello per la preghiera del popolo, poiché è adesione alla promessa divina e fiducia, colma d’amore, in Colui che è il solo Re e Signore.
+All’ombra della dimora di Dio — l’Arca dell’Alleanza, poi il tempio — si sviluppa la preghiera del Popolo di Dio sotto la guida dei suoi pastori. Fra loro, Davide è il re «*secondo il cuore di Dio*», il pastore che prega per il suo popolo. La sua preghiera è un modello per la preghiera del popolo, poiché è adesione alla promessa divina e fiducia, colma d’amore, in Colui che è il solo Re e Signore.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q539" >}}539{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2581](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2581)-[2584](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2584){{< /marginnote >}} **Qual è il ruolo della preghiera nella missione dei profeti?**
 {.ccc-domanda}
 
-I profeti attingono dalla preghiera luce e forza per esortare il popolo alla fede e alla conversione del cuore. Entrano in una grande intimità con Dio e intercedono per i fratelli, ai quali annunciano quanto hanno visto e udito dal Signore. Elia è il padre dei profeti, di coloro cioè che cercano il Volto di Dio. Sul Monte Carmelo egli ottiene il ritorno del popolo alla fede grazie all’intervento di Dio, da lui supplicato così: «Rispondimi, Signore, rispondimi!» (1 Re 18,37).
+I profeti attingono dalla preghiera luce e forza per esortare il popolo alla fede e alla conversione del cuore. Entrano in una grande intimità con Dio e intercedono per i fratelli, ai quali annunciano quanto hanno visto e udito dal Signore. Elia è il padre dei profeti, di coloro cioè che cercano il Volto di Dio. Sul Monte Carmelo egli ottiene il ritorno del popolo alla fede grazie all’intervento di Dio, da lui supplicato così: «*Rispondimi, Signore, rispondimi!*».{{< marginnote >}}[1 Re 18,37](/book/bibbia-di-gerusalemme/antico-testamento/1-re-18#1kgs-18-37){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q540" >}}540{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2579](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2579){{< ccc-br >}}[2585](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2585)-[2589](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2589){{< ccc-br >}}[2596](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2596)-[2597](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-1-nell-antico-testamento#ccc-2597){{< /marginnote >}} **Qual è l’importanza dei Salmi nella preghiera?**
@@ -74,19 +74,19 @@ Gesù ci insegna a pregare, non solo con la preghiera del Padre nostro, ma anche
 {{< paragraph label="comp-q545" >}}545{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2615](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2615)-[2616](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2616){{< /marginnote >}} **Perché è efficace la nostra preghiera?**
 {.ccc-domanda}
 
-La nostra preghiera è efficace, perché è unita nella fede a quella di Gesù. In lui la preghiera cristiana diventa comunione d’amore con il Padre. Possiamo in tal caso presentare le nostre richieste a Dio e venire esauditi: «Chiedete e otterrete, perché la vostra gioia sia piena» (Gv 16,24).
+La nostra preghiera è efficace, perché è unita nella fede a quella di Gesù. In lui la preghiera cristiana diventa comunione d’amore con il Padre. Possiamo in tal caso presentare le nostre richieste a Dio e venire esauditi: «*Chiedete e otterrete, perché la vostra gioia sia piena*».{{< marginnote >}}[Gv 16,24](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-16#john-16-24){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q546" >}}546{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2617](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2617); [2618](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2618){{< ccc-br >}}[2622](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2622); [2674](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2674){{< ccc-br >}}[2679](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2679){{< /marginnote >}} **Come pregava la Vergine Maria?**
 {.ccc-domanda}
 
-La preghiera di Maria è caratterizzata dalla sua fede e dall’offerta generosa di tutto il suo essere a Dio. La Madre di Gesù è anche la Nuova Eva, la «Madre dei viventi»: essa prega Gesù, suo Figlio, per i bisogni degli uomini.
+La preghiera di Maria è caratterizzata dalla sua fede e dall’offerta generosa di tutto il suo essere a Dio. La Madre di Gesù è anche la Nuova Eva, la «*Madre dei viventi*»: essa prega Gesù, suo Figlio, per i bisogni degli uomini.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q547" >}}547{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2619](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-nella-pienezza-del-tempo#ccc-2619){{< /marginnote >}} **Esiste nel Vangelo una preghiera di Maria?**
 {.ccc-domanda}
 
-Oltre all’intercessione di Maria a Cana di Galilea, il Vangelo ci consegna il Magnificat (Lc 1,46-55), che è il cantico della Madre di Dio e quello della Chiesa, il grazie gioioso che sale dal cuore dei poveri perché la loro speranza è realizzata dal compimento delle promesse divine.
+Oltre all’intercessione di Maria a Cana di Galilea, il Vangelo ci consegna il Magnificat,{{< marginnote >}}[Lc 1,46-55](/book/bibbia-di-gerusalemme/nuovo-testamento/luca-1#luke-1-46){{< /marginnote >}} che è il cantico della Madre di Dio e quello della Chiesa, il grazie gioioso che sale dal cuore dei poveri perché la loro speranza è realizzata dal compimento delle promesse divine.
 {.ccc-risposta}
 
 ## LA PREGHIERA NEL TEMPO DELLA CHIESA {#comp-p4s1c1a3 .ccc-articolo}
@@ -94,7 +94,7 @@ Oltre all’intercessione di Maria a Cana di Galilea, il Vangelo ci consegna il 
 {{< paragraph label="comp-q548" >}}548{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2623](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-nel-tempo-della-chiesa#ccc-2623)-[2624](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-nel-tempo-della-chiesa#ccc-2624){{< /marginnote >}} **Come pregava la prima comunità cristiana di Gerusalemme?**
 {.ccc-domanda}
 
-All’inizio degli Atti degli Apostoli è scritto che nella prima comunità di Gerusalemme, educata dallo Spirito Santo alla vita di preghiera, i credenti «erano assidui nell’ascoltare l’insegnamento degli Apostoli, e nell’unione fraterna, nella frazione del pane e nelle preghiere» (At 2,42).
+All’inizio degli Atti degli Apostoli è scritto che nella prima comunità di Gerusalemme, educata dallo Spirito Santo alla vita di preghiera, i credenti «*erano assidui nell’ascoltare l’insegnamento degli Apostoli, e nell’unione fraterna, nella frazione del pane e nelle preghiere*».{{< marginnote >}}[At 2,42](/book/bibbia-di-gerusalemme/nuovo-testamento/atti-2#acts-2-42){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q549" >}}549{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2623](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-nel-tempo-della-chiesa#ccc-2623); [2625](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-nel-tempo-della-chiesa#ccc-2625){{< /marginnote >}} **Come interviene lo Spirito Santo nella preghiera della Chiesa?**

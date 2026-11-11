@@ -336,31 +336,31 @@ ibid.
 
 ## {{< smallcaps >}}ESEMPI DI CITAZIONI{{< /smallcaps >}} {#front-sigle-esempi-di-citazioni .dtb-titoletto}
 
-1 Cor 2, 7
+[1 Cor 2, 7](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : prima lettera ai Corinti, capitolo 2, versetto 7
 
-1 Cor 2, 7 s
+[1 Cor 2, 7 s](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : “ “ “ “ c. 2, v. 7 ed 8
 
-1 Cor 2, 7 ss
+[1 Cor 2, 7 ss](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : “ “ “ “ c. 2, v. 7, 8 e 9
 
-1 Cor 2, 7-10
+[1 Cor 2, 7-10](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : “ “ “ “ c. 2, dal v. 7 al 10 incluso
 
-1 Cor 2, 7…
+[1 Cor 2, 7…](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : “ “ “ “ c. 2, v. 7 e seguenti
 
-1 Cor 2, 7 – 3, 4
+[1 Cor 2, 7 – 3, 4](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : “ “ “ “ dal c. 2, v. 7 al c. 3, v. 4 incluso
 
-1 Cor 2, 7. 15
+[1 Cor 2, 7. 15](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7)
 : “ “ “ “ c. 2, v. 7 e 15
 
-1 Cor 2, 7; 4, 6
+[1 Cor 2, 7](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-2#1cor-2-7); [4, 6](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-4#1cor-4-6)
 : “ “ “ “ c. 2, v. 7 e c. 4, v. 6
 
-Sal 55, 23 = 1 Piet 5, 7
+[Sal 55, 23](/book/bibbia-di-gerusalemme/antico-testamento/salmi-55#ps-55-23) = [1 Piet 5, 7](/book/bibbia-di-gerusalemme/nuovo-testamento/1-pietro-5#1pet-5-7)
 : il testo del salmo è citato da Pietro
 
 ## {{< smallcaps >}}N.B.{{< /smallcaps >}} {#front-sigle-nb .dtb-titoletto}

@@ -4,7 +4,7 @@ title: "MOTU PROPRIO"
 weight: 2
 matter: "main"
 label: "comp-motu-proprio"
-linkTitle: "«Motu Proprio»"
+linkTitle: "«*Motu Proprio*»"
 ---
 
 per l’approvazione e la pubblicazione del *Compendio* del *Catechismo della Chiesa Cattolica*
@@ -41,7 +41,7 @@ Affido pertanto con fiducia questo *Compendio* anzitutto alla Chiesa intera e ad
 Ma questo *Compendio*, per la sua brevità, chiarezza e integrità, si rivolge a ogni persona, che, vivendo in un mondo dispersivo e dai molteplici messaggi, desidera conoscere la Via della Vita, la Verità, affidata da Dio alla Chiesa del Suo Figlio.
 {.ccc-testo}
 
-Leggendo questo autorevole strumento che è il *Compendio*, possa ciascuno, grazie in particolare all’intercessione di Maria Santissima, la Madre di Cristo e della Chiesa, riconoscere e accogliere sempre di più l’inesauribile bellezza, unicità e attualità del Dono per eccellenza che Dio ha fatto all’umanità: il Suo unico Figlio, Gesù Cristo, che è «la Via, la Verità e la Vita» (Gv 14,6).
+Leggendo questo autorevole strumento che è il *Compendio*, possa ciascuno, grazie in particolare all’intercessione di Maria Santissima, la Madre di Cristo e della Chiesa, riconoscere e accogliere sempre di più l’inesauribile bellezza, unicità e attualità del Dono per eccellenza che Dio ha fatto all’umanità: il Suo unico Figlio, Gesù Cristo, che è «*la Via, la Verità e la Vita*».{{< marginnote >}}[Gv 14,6](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-14#john-14-6){{< /marginnote >}}
 {.ccc-testo}
 
 Dato il 28 giugno 2005, vigilia della Solennità dei SS. Pietro e Paolo, anno primo di Pontificato.

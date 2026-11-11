@@ -7,24 +7,24 @@ label: "comp-p1s2c3"
 linkTitle: "Capitolo terzo · Credo nello Spirito Santo"
 ---
 
-## «CREDO NELLO SPIRITO SANTO» {#comp-p1s2c3a1 .ccc-articolo}
+## «*CREDO NELLO SPIRITO SANTO*» {#comp-p1s2c3a1 .ccc-articolo}
 
-{{< paragraph label="comp-q136" >}}136{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [683](/book/catechismo-della-chiesa-cattolica/parte-prima/capitolo-terzo-credo-nello-spirito-santo#ccc-683)-[686](/book/catechismo-della-chiesa-cattolica/parte-prima/capitolo-terzo-credo-nello-spirito-santo#ccc-686){{< /marginnote >}} **Che cosa vuol dire la Chiesa quando professa: «Credo nello Spirito Santo»?**
+{{< paragraph label="comp-q136" >}}136{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [683](/book/catechismo-della-chiesa-cattolica/parte-prima/capitolo-terzo-credo-nello-spirito-santo#ccc-683)-[686](/book/catechismo-della-chiesa-cattolica/parte-prima/capitolo-terzo-credo-nello-spirito-santo#ccc-686){{< /marginnote >}} **Che cosa vuol dire la Chiesa quando professa: «*Credo nello Spirito Santo*»?**
 {.ccc-domanda}
 
-Credere nello Spirito Santo è professare la terza Persona della Santissima Trinità, che procede dal Padre e dal Figlio ed è «adorato e glorificato con il Padre e il Figlio». Lo Spirito è stato «mandato nei nostri cuori» *(Gal* 4,6), affinché riceviamo la nuova vita di figli di Dio.
+Credere nello Spirito Santo è professare la terza Persona della Santissima Trinità, che procede dal Padre e dal Figlio ed è «*adorato e glorificato con il Padre e il Figlio*». Lo Spirito è stato «*mandato nei nostri cuori*»,{{< marginnote >}}[*Gal* 4,6](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-4#gal-4-6){{< /marginnote >}} affinché riceviamo la nuova vita di figli di Dio.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q137" >}}137{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [687](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-687)-[690](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-690){{< ccc-br >}}[742](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-742)-[743](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-743){{< /marginnote >}} **Perché la missione del Figlio e dello Spirito sono inseparabili?**
 {.ccc-domanda}
 
-Nella Trinità indivisibile, il Figlio e lo Spirito sono distinti ma inseparabili. Dal principio alla fine dei tempi, infatti, quando il Padre invia suo Figlio, invia anche il suo Spirito che ci unisce a Cristo nella fede, affinché possiamo, da figli adottivi, chiamare Dio «Padre» *(Rm* 8,15). Lo Spirito è invisibile, ma noi lo conosciamo attraverso la sua azione quando ci rivela il Verbo e quando agisce nella Chiesa.
+Nella Trinità indivisibile, il Figlio e lo Spirito sono distinti ma inseparabili. Dal principio alla fine dei tempi, infatti, quando il Padre invia suo Figlio, invia anche il suo Spirito che ci unisce a Cristo nella fede, affinché possiamo, da figli adottivi, chiamare Dio «*Padre*».{{< marginnote >}}[*Rm* 8,15](/book/bibbia-di-gerusalemme/nuovo-testamento/romani-8#rom-8-15){{< /marginnote >}} Lo Spirito è invisibile, ma noi lo conosciamo attraverso la sua azione quando ci rivela il Verbo e quando agisce nella Chiesa.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q138" >}}138{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [691](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-691)-[693](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-693){{< /marginnote >}} **Quali sono gli appellativi dello Spirito Santo?**
 {.ccc-domanda}
 
-«Spirito Santo» è il nome proprio della terza Persona della Santissima Trinità. Gesù lo chiama anche: Spirito Paraclito (Consolatore, Avvocato) e Spirito di Verità. Il Nuovo Testamento lo chiama pure: Spirito di Cristo, del Signore, di Dio, Spirito della gloria, della promessa.
+«*Spirito Santo*» è il nome proprio della terza Persona della Santissima Trinità. Gesù lo chiama anche: Spirito Paraclito (Consolatore, Avvocato) e Spirito di Verità. Il Nuovo Testamento lo chiama pure: Spirito di Cristo, del Signore, di Dio, Spirito della gloria, della promessa.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q139" >}}139{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [694](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-694)-[701](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-701){{< /marginnote >}} **Con quali simboli si rappresenta lo Spirito Santo?**
@@ -33,7 +33,7 @@ Nella Trinità indivisibile, il Figlio e lo Spirito sono distinti ma inseparabil
 Sono numerosi: *l’acqua viva,* che scaturisce dal cuore trafitto di Cristo e disseta i battezzati; *l’unzione* con l’olio, che è il segno sacramentale della Confermazione; il *fuoco,* che trasforma ciò che tocca; la *nube,* oscura o luminosa, in cui si rivela la gloria divina; *l’imposizione delle mani,* per cui viene dato lo Spirito; la *colomba,* che scende su Cristo e rimane su di lui al battesimo.
 {.ccc-risposta}
 
-{{< paragraph label="comp-q140" >}}140{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [687](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-687)-[688](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-688){{< ccc-br >}}[702](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-702)-[706](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-706){{< ccc-br >}}[743](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-743){{< /marginnote >}} **Che cosa significa che lo Spirito «ha parlato per mezzo dei profeti»?**
+{{< paragraph label="comp-q140" >}}140{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [687](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-687)-[688](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-688){{< ccc-br >}}[702](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-702)-[706](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-706){{< ccc-br >}}[743](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-743){{< /marginnote >}} **Che cosa significa che lo Spirito «*ha parlato per mezzo dei profeti*»?**
 {.ccc-domanda}
 
 Con il termine *profeti* si intende quanti furono ispirati dallo Spirito Santo per parlare in nome di Dio. Lo Spirito porta le profezie dell’Antico Testamento a pieno compimento in Cristo, di cui svela il mistero nel Nuovo Testamento.
@@ -42,13 +42,13 @@ Con il termine *profeti* si intende quanti furono ispirati dallo Spirito Santo p
 {{< paragraph label="comp-q141" >}}141{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [717](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-717)-[720](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-720){{< /marginnote >}} **Che cosa compie lo Spirito Santo in Giovanni Battista?**
 {.ccc-domanda}
 
-Lo Spirito riempie Giovanni Battista, l’ultimo profeta dell’Antico Testamento, il quale, sotto la sua azione, è mandato a «preparare al Signore un popolo ben disposto» *(Lc* 1,17) e ad annunciare la venuta di Cristo, Figlio di Dio: colui sul quale ha visto scendere e rimanere lo Spirito, «colui che battezza in Spirito» *(Gv* 1,33).
+Lo Spirito riempie Giovanni Battista, l’ultimo profeta dell’Antico Testamento, il quale, sotto la sua azione, è mandato a «*preparare al Signore un popolo ben disposto*»{{< marginnote >}}[*Lc* 1,17](/book/bibbia-di-gerusalemme/nuovo-testamento/luca-1#luke-1-17){{< /marginnote >}} e ad annunciare la venuta di Cristo, Figlio di Dio: colui sul quale ha visto scendere e rimanere lo Spirito, «*colui che battezza in Spirito*».{{< marginnote >}}[*Gv* 1,33](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-1#john-1-33){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q142" >}}142{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [721](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-721)-[726](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-726){{< ccc-br >}}[744](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-744){{< /marginnote >}} **Qual è l’opera dello Spirito in Maria?**
 {.ccc-domanda}
 
-Lo Spirito Santo porta a compimento in Maria le attese e la preparazione dell’Antico Testamento alla venuta di Cristo. In maniera unica la riempie di grazia e rende la sua verginità feconda, per dare alla luce il Figlio di Dio incarnato. Fa di lei la Madre del «Cristo totale», cioè di Gesù Capo e della Chiesa suo corpo. Maria è presente fra i Dodici il giorno della Pentecoste, quando lo Spirito inaugura gli «ultimi tempi» con la manifestazione della Chiesa.
+Lo Spirito Santo porta a compimento in Maria le attese e la preparazione dell’Antico Testamento alla venuta di Cristo. In maniera unica la riempie di grazia e rende la sua verginità feconda, per dare alla luce il Figlio di Dio incarnato. Fa di lei la Madre del «*Cristo totale*», cioè di Gesù Capo e della Chiesa suo corpo. Maria è presente fra i Dodici il giorno della Pentecoste, quando lo Spirito inaugura gli «*ultimi tempi*» con la manifestazione della Chiesa.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q143" >}}143{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [727](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-727)-[730](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-730){{< ccc-br >}}[745](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-745)- [746](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-746){{< /marginnote >}} **Quale relazione c’è tra lo Spirito e Cristo Gesù, nella sua missione terrena?**
@@ -63,13 +63,13 @@ Il Figlio di Dio attraverso l’unzione dello Spirito è consacrato Messia nella
 Cinquanta giorni dopo la sua Risurrezione, a Pentecoste, Gesù Cristo glorificato effonde lo Spirito a profusione e lo manifesta come Persona divina, sicché la Trinità Santa è pienamente rivelata. La Missione di Cristo e dello Spirito diviene la Missione della Chiesa, inviata per annunziare e diffondere il mistero della comunione trinitaria.
 {.ccc-risposta}
 
-> «*Abbiamo visto la vera Luce, abbiamo ricevuto lo Spirito celeste, abbiamo trovato la vera fede: adoriamo la Trinità indivisibile perché ci ha salvati»* (Liturgia Bizantina, Tropario dei Vespri di Pentecoste).
+> «*Abbiamo visto la vera Luce, abbiamo ricevuto lo Spirito celeste, abbiamo trovato la vera fede: adoriamo la Trinità indivisibile perché ci ha salvati*» (Liturgia Bizantina, Tropario dei Vespri di Pentecoste).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q145" >}}145{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [733](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-733)-[741](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-741){{< ccc-br >}}[747](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-747){{< /marginnote >}} **Che cosa fa lo Spirito nella Chiesa?**
 {.ccc-domanda}
 
-Lo Spirito edifica, anima e santifica la Chiesa: Spirito d’Amore, egli ridona ai battezzati la somiglianza divina perduta a causa del peccato e li fa vivere in Cristo, della Vita stessa della Trinità Santa. Li manda a testimoniare la Verità di Cristo e li organizza nelle loro mutue funzioni, affinché tutti portino «il frutto dello Spirito» *(Gal* 5,22).
+Lo Spirito edifica, anima e santifica la Chiesa: Spirito d’Amore, egli ridona ai battezzati la somiglianza divina perduta a causa del peccato e li fa vivere in Cristo, della Vita stessa della Trinità Santa. Li manda a testimoniare la Verità di Cristo e li organizza nelle loro mutue funzioni, affinché tutti portino «*il frutto dello Spirito*».{{< marginnote >}}[*Gal* 5,22](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-5#gal-5-22){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q146" >}}146{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [738](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-738)-[741](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-8-credo-nello-spirito-santo#ccc-741){{< /marginnote >}} **Come agiscono Cristo e il suo Spirito nel cuore dei fedeli?**
@@ -78,7 +78,7 @@ Lo Spirito edifica, anima e santifica la Chiesa: Spirito d’Amore, egli ridona 
 Per mezzo dei *sacramenti,* Cristo comunica alle membra del suo Corpo il suo Spirito e la grazia di Dio che porta i frutti di *vita nuova,* secondo lo Spirito. Infine, lo Spirito Santo è il Maestro della *preghiera.*
 {.ccc-risposta}
 
-## «CREDO LA SANTA CHIESA CATTOLICA» {#comp-p1s2c3a2 .ccc-articolo}
+## «*CREDO LA SANTA CHIESA CATTOLICA*» {#comp-p1s2c3a2 .ccc-articolo}
 
 ### *La Chiesa nel disegno di Dio* {#comp-p1s2c3a2-t1 .ccc-titoletto}
 
@@ -147,13 +147,13 @@ Per mezzo dello Spirito, Cristo morto e risorto unisce a sé intimamente i suoi 
 {{< paragraph label="comp-q157" >}}157{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [792](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-792)- [795](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-795){{< ccc-br >}}[807](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-807){{< /marginnote >}} **Chi è il capo di questo corpo?**
 {.ccc-domanda}
 
-Cristo «è il Capo del corpo, cioè della Chiesa» *(Col* 1,18). La Chiesa vive di lui, in lui e per lui. Cristo e Chiesa formano il «Cristo totale» (sant’Agostino); «Capo e membra sono, per così dire, una sola persona mistica» (san Tommaso d’Aquino).
+Cristo «*è il Capo del corpo, cioè della Chiesa*».{{< marginnote >}}[*Col* 1,18](/book/bibbia-di-gerusalemme/nuovo-testamento/colossesi-1#col-1-18){{< /marginnote >}} La Chiesa vive di lui, in lui e per lui. Cristo e Chiesa formano il «*Cristo totale*» (sant’Agostino); «*Capo e membra sono, per così dire, una sola persona mistica*» (san Tommaso d’Aquino).
 {.ccc-risposta}
 
 {{< paragraph label="comp-q158" >}}158{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [796](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-796){{< ccc-br >}}[808](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-808){{< /marginnote >}} **Perché la Chiesa è detta la sposa di Cristo?**
 {.ccc-domanda}
 
-Perché il Signore stesso si è definito come lo «Sposo» *(Mc* 2,19), che ha amato la Chiesa, unendola a sé con un’Alleanza eterna. Egli ha dato se stesso per lei, per purificarla con il suo sangue e «renderla santa» *(Ef* 5,26) e madre feconda di tutti i figli di Dio. Mentre il termine «corpo» evidenzia l’unità del «capo» con le membra, il termine «sposa» mette in risalto la distinzione dei due in relazione personale.
+Perché il Signore stesso si è definito come lo «*Sposo*»,{{< marginnote >}}[*Mc* 2,19](/book/bibbia-di-gerusalemme/nuovo-testamento/marco-2#mark-2-19){{< /marginnote >}} che ha amato la Chiesa, unendola a sé con un’Alleanza eterna. Egli ha dato se stesso per lei, per purificarla con il suo sangue e «*renderla santa*»{{< marginnote >}}[*Ef* 5,26](/book/bibbia-di-gerusalemme/nuovo-testamento/efesini-5#eph-5-26){{< /marginnote >}} e madre feconda di tutti i figli di Dio. Mentre il termine «*corpo*» evidenzia l’unità del «*capo*» con le membra, il termine «*sposa*» mette in risalto la distinzione dei due in relazione personale.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q159" >}}159{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [797](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-797)-[798](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-798){{< ccc-br >}}[809](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-809)-[810](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-810){{< /marginnote >}} {{< ccc-strong >}}Perché la Chiesa è detta *tempio dello Spirito Santo?*{{< /ccc-strong >}}
@@ -162,7 +162,7 @@ Perché il Signore stesso si è definito come lo «Sposo» *(Mc* 2,19), che ha a
 Perché lo Spirito Santo risiede nel corpo che è la Chiesa: nel suo Capo e nelle sue membra; egli inoltre edifica la Chiesa nella carità con la Parola di Dio, i sacramenti, le virtù e i *carismi.*
 {.ccc-risposta}
 
-> *«Quello che il nostro spirito, ossia la nostra anima, è per le nostre membra, lo stesso è lo Spirito Santo per le membra di Cristo, per il corpo di Cristo, che è la Chiesa»* (sant’Agostino).
+> «*Quello che il nostro spirito, ossia la nostra anima, è per le nostre membra, lo stesso è lo Spirito Santo per le membra di Cristo, per il corpo di Cristo, che è la Chiesa*» (sant’Agostino).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q160" >}}160{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [799](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-799)-[801](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-2-la-chiesa-popolo-di-dio-corpo#ccc-801){{< /marginnote >}} **Che cosa sono i carismi?**
@@ -206,13 +206,13 @@ La Chiesa è santa, in quanto Dio Santissimo è il suo autore; Cristo ha dato se
 {{< paragraph label="comp-q166" >}}166{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [830](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-830)-[831](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-831){{< ccc-br >}}[868](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-868){{< /marginnote >}} {{< ccc-strong >}}Perché la Chiesa è detta *cattolica?*{{< /ccc-strong >}}
 {.ccc-domanda}
 
-La Chiesa è *cattolica,* cioè *universale,* in quanto in essa è presente Cristo: «Là dove è Cristo Gesù, ivi è la Chiesa cattolica» (sant’Ignazio di Antiochia). Essa annunzia la totalità e l’integrità della fede; porta e amministra la pienezza dei mezzi di salvezza; è inviata in missione a tutti i popoli in ogni tempo e a qualsiasi cultura appartengano.
+La Chiesa è *cattolica,* cioè *universale,* in quanto in essa è presente Cristo: «*Là dove è Cristo Gesù, ivi è la Chiesa cattolica*» (sant’Ignazio di Antiochia). Essa annunzia la totalità e l’integrità della fede; porta e amministra la pienezza dei mezzi di salvezza; è inviata in missione a tutti i popoli in ogni tempo e a qualsiasi cultura appartengano.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q167" >}}167{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [832](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-832)-[835](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-835){{< /marginnote >}} {{< ccc-strong >}}È cattolica la Chiesa *particolare?*{{< /ccc-strong >}}
 {.ccc-domanda}
 
-È cattolica ogni Chiesa *particolare* (cioè la *diocesi* e *l’eparchia),* formata dalla comunità dei cristiani che sono in comunione nella fede e nei sacramenti, con il loro Vescovo ordinato nella successione apostolica, e con la Chiesa di Roma, che «presiede nella carità» (sant’Ignazio di Antiochia).
+È cattolica ogni Chiesa *particolare* (cioè la *diocesi* e *l’eparchia),* formata dalla comunità dei cristiani che sono in comunione nella fede e nei sacramenti, con il loro Vescovo ordinato nella successione apostolica, e con la Chiesa di Roma, che «*presiede nella carità*» (sant’Ignazio di Antiochia).
 {.ccc-risposta}
 
 {{< paragraph label="comp-q168" >}}168{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [836](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-836)-[838](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-838){{< /marginnote >}} **Chi appartiene alla Chiesa cattolica?**
@@ -224,7 +224,7 @@ Tutti gli uomini in vario modo appartengono o sono ordinati alla cattolica unit�
 {{< paragraph label="comp-q169" >}}169{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [839](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-839)-[840](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-840){{< /marginnote >}} **Qual è il rapporto della Chiesa cattolica con il popolo ebraico?**
 {.ccc-domanda}
 
-La Chiesa cattolica riconosce il proprio rapporto con il popolo ebraico nel fatto che Dio scelse questo popolo, primo fra tutti, ad accogliere la sua Parola. È al popolo ebraico che appartengono «l’adozione a figli, la gloria, le alleanze, la legislazione, il culto, le promesse, i patriarchi; da esso proviene Cristo secondo la carne» *(Rm* 9,4.5). A differenza delle altre religioni non cristiane, la fede ebraica è già risposta alla Rivelazione di Dio nell’Antica Alleanza.
+La Chiesa cattolica riconosce il proprio rapporto con il popolo ebraico nel fatto che Dio scelse questo popolo, primo fra tutti, ad accogliere la sua Parola. È al popolo ebraico che appartengono «*l’adozione a figli, la gloria, le alleanze, la legislazione, il culto, le promesse, i patriarchi; da esso proviene Cristo secondo la carne*».{{< marginnote >}}[*Rm* 9,4.5](/book/bibbia-di-gerusalemme/nuovo-testamento/romani-9#rom-9-4){{< /marginnote >}} A differenza delle altre religioni non cristiane, la fede ebraica è già risposta alla Rivelazione di Dio nell’Antica Alleanza.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q170" >}}170{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [841](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-841)-[845](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-845){{< /marginnote >}} **Che legame c’è tra la Chiesa cattolica e le religioni non cristiane?**
@@ -233,7 +233,7 @@ La Chiesa cattolica riconosce il proprio rapporto con il popolo ebraico nel fatt
 C’è un legame, dato anzitutto dall’origine e dal fine comuni di tutto il genere umano. La Chiesa cattolica riconosce che quanto di buono e di vero si trova nelle altre religioni viene da Dio, è raggio della sua verità, può preparare all’accoglienza del Vangelo e spingere verso l’unità dell’umanità nella Chiesa di Cristo.
 {.ccc-risposta}
 
-{{< paragraph label="comp-q171" >}}171{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [846](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-846)-[848](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-848){{< /marginnote >}} **Che cosa significa l’affermazione: «Fuori della Chiesa non c’è salvezza»?**
+{{< paragraph label="comp-q171" >}}171{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [846](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-846)-[848](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-848){{< /marginnote >}} **Che cosa significa l’affermazione: «*Fuori della Chiesa non c’è salvezza*»?**
 {.ccc-domanda}
 
 Essa significa che ogni salvezza viene da Cristo-Capo per mezzo della Chiesa, che è il suo Corpo. Pertanto non possono essere salvati quanti, conoscendo la Chiesa come fondata da Cristo e necessaria alla salvezza, non vi entrassero e non vi perseverassero. Nello stesso tempo, grazie a Cristo e alla sua Chiesa, possono conseguire la salvezza eterna quanti, senza loro colpa, ignorano il Vangelo di Cristo e la sua Chiesa, ma cercano sinceramente Dio e, sotto l’influsso della grazia, si sforzano di compiere la sua volontà conosciuta attraverso il dettame della coscienza.
@@ -242,7 +242,7 @@ Essa significa che ogni salvezza viene da Cristo-Capo per mezzo della Chiesa, ch
 {{< paragraph label="comp-q172" >}}172{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [849](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-849)-[851](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-851){{< /marginnote >}} **Perché la Chiesa deve annunciare il Vangelo a tutto il mondo?**
 {.ccc-domanda}
 
-Perché Cristo ha ordinato: «Andate dunque e ammaestrate tutte le nazioni, battezzandole nel nome del Padre, del Figlio e dello Spirito Santo» *(Mt* 28,19). Questo mandato missionario del Signore ha la sua sorgente nell’amore eterno di Dio, che ha inviato il suo Figlio e il suo Spirito perché «vuole che tutti gli uomini siano salvati e giungano alla conoscenza della verità» (*1 Tm* 2,4).
+Perché Cristo ha ordinato: «*Andate dunque e ammaestrate tutte le nazioni, battezzandole nel nome del Padre, del Figlio e dello Spirito Santo*».{{< marginnote >}}[*Mt* 28,19](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-28#matt-28-19){{< /marginnote >}} Questo mandato missionario del Signore ha la sua sorgente nell’amore eterno di Dio, che ha inviato il suo Figlio e il suo Spirito perché «*vuole che tutti gli uomini siano salvati e giungano alla conoscenza della verità*».{{< marginnote >}}[*1 Tm* 2,4](/book/bibbia-di-gerusalemme/nuovo-testamento/1-timoteo-2#1tim-2-4){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q173" >}}173{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [852](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-852)-[856](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-856){{< /marginnote >}} **In che modo la Chiesa è missionaria?**
@@ -254,13 +254,13 @@ Guidata dallo Spirito Santo, la Chiesa continua nel corso della storia la missio
 {{< paragraph label="comp-q174" >}}174{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [857](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-857){{< ccc-br >}}[869](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-869){{< /marginnote >}} {{< ccc-strong >}}Perché la Chiesa è *apostolica?*{{< /ccc-strong >}}
 {.ccc-domanda}
 
-La Chiesa è apostolica per la sua *origine,* essendo costruita sul «fondamento degli Apostoli» *(Ef* 2,20); per il suo *insegnamento,* che è quello stesso degli Apostoli; per la sua *struttura,* in quanto istruita, santificata e governata, fino al ritorno di Cristo, dagli Apostoli, grazie ai loro successori, i Vescovi, in comunione col successore di Pietro.
+La Chiesa è apostolica per la sua *origine,* essendo costruita sul «*fondamento degli Apostoli*»;{{< marginnote >}}[*Ef* 2,20](/book/bibbia-di-gerusalemme/nuovo-testamento/efesini-2#eph-2-20){{< /marginnote >}} per il suo *insegnamento,* che è quello stesso degli Apostoli; per la sua *struttura,* in quanto istruita, santificata e governata, fino al ritorno di Cristo, dagli Apostoli, grazie ai loro successori, i Vescovi, in comunione col successore di Pietro.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q175" >}}175{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [858](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-858)-[861](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-861){{< /marginnote >}} **In che cosa consiste la missione degli Apostoli?**
 {.ccc-domanda}
 
-La parola *Apostolo* significa inviato. Gesù, l’Inviato del Padre, chiamò a sé dodici fra i suoi discepoli e li costituì come suoi Apostoli, facendo di loro i testimoni scelti della sua risurrezione e le fondamenta della sua Chiesa. Diede loro il mandato di continuare la sua missione, dicendo: «Come il Padre ha mandato me, anch’io mando voi» *(Gv* 20,21), e promettendo di essere con loro sino alla fine del mondo.
+La parola *Apostolo* significa inviato. Gesù, l’Inviato del Padre, chiamò a sé dodici fra i suoi discepoli e li costituì come suoi Apostoli, facendo di loro i testimoni scelti della sua risurrezione e le fondamenta della sua Chiesa. Diede loro il mandato di continuare la sua missione, dicendo: «*Come il Padre ha mandato me, anch’io mando voi*»,{{< marginnote >}}[*Gv* 20,21](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-20#john-20-21){{< /marginnote >}} e promettendo di essere con loro sino alla fine del mondo.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q176" >}}176{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [861](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-861)-[865](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-3-la-chiesa-e-una-santa-cattolica#ccc-865){{< /marginnote >}} **Che cos’è la successione apostolica?**
@@ -349,7 +349,7 @@ I fedeli laici hanno come vocazione propria quella di cercare il Regno di Dio, i
 {{< paragraph label="comp-q189" >}}189{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [901](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-i-fedeli-gerarchia-laici-vita-consacrata#ccc-901)-[903](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-i-fedeli-gerarchia-laici-vita-consacrata#ccc-903){{< /marginnote >}} **Come partecipano i fedeli laici all’ufficio sacerdotale di Cristo?**
 {.ccc-domanda}
 
-Essi vi partecipano nell’offrire – quale sacrificio spirituale «gradito a Dio per mezzo di Gesù Cristo» *(1 Pt* 2,5), soprattutto nell’Eucaristia -la propria vita con tutte le opere, le preghiere e le iniziative apostoliche, la vita familiare e il lavoro giornaliero, le molestie della vita sopportate con pazienza e il sollievo corporale e spirituale. Così, anche i laici, dedicati a Cristo e consacrati dallo Spirito Santo, offrono a Dio il mondo stesso.
+Essi vi partecipano nell’offrire – quale sacrificio spirituale «*gradito a Dio per mezzo di Gesù Cristo*»,{{< marginnote >}}[*1 Pt* 2,5](/book/bibbia-di-gerusalemme/nuovo-testamento/1-pietro-2#1pet-2-5){{< /marginnote >}} soprattutto nell’Eucaristia -la propria vita con tutte le opere, le preghiere e le iniziative apostoliche, la vita familiare e il lavoro giornaliero, le molestie della vita sopportate con pazienza e il sollievo corporale e spirituale. Così, anche i laici, dedicati a Cristo e consacrati dallo Spirito Santo, offrono a Dio il mondo stesso.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q190" >}}190{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [904](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-i-fedeli-gerarchia-laici-vita-consacrata#ccc-904)-[907](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-i-fedeli-gerarchia-laici-vita-consacrata#ccc-907){{< ccc-br >}}[942](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-4-i-fedeli-gerarchia-laici-vita-consacrata#ccc-942){{< /marginnote >}} **Come partecipano al suo ufficio profetico?**
@@ -381,7 +381,7 @@ La vita consacrata partecipa alla missione della Chiesa mediante una piena dediz
 {{< paragraph label="comp-q194" >}}194{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [946](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-946)-[953](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-953){{< ccc-br >}}[960](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-960){{< /marginnote >}} {{< ccc-strong >}}Che cosa significa l’espressione *comunione dei santi?*{{< /ccc-strong >}}
 {.ccc-domanda}
 
-Tale espressione indica anzitutto la comune partecipazione di tutti i membri della Chiesa alle cose sante *(sancta):* la fede, i Sacramenti, in particolare l’Eucaristia, i carismi e gli altri doni spirituali. Alla radice della comunione c’è la carità che «non cerca il proprio interesse» *(1 Cor* 13,5), ma spinge il fedele «a mettere tutto in comune» *(At* 4,32), anche i propri beni materiali a servizio dei più poveri.
+Tale espressione indica anzitutto la comune partecipazione di tutti i membri della Chiesa alle cose sante *(sancta):* la fede, i Sacramenti, in particolare l’Eucaristia, i carismi e gli altri doni spirituali. Alla radice della comunione c’è la carità che «*non cerca il proprio interesse*»,{{< marginnote >}}[*1 Cor* 13,5](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-13#1cor-13-5){{< /marginnote >}} ma spinge il fedele «*a mettere tutto in comune*»,{{< marginnote >}}[*At* 4,32](/book/bibbia-di-gerusalemme/nuovo-testamento/atti-4#acts-4-32){{< /marginnote >}} anche i propri beni materiali a servizio dei più poveri.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q195" >}}195{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [954](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-954)-[959](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-959){{< ccc-br >}}[961](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-961)-[962](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-5-la-comunione-dei-santi#ccc-962){{< /marginnote >}} {{< ccc-strong >}}Che cosa significa ancora l’espressione *comunione dei santi?*{{< /ccc-strong >}}
@@ -395,7 +395,7 @@ Tale espressione designa anche la comunione tra le persone sante *(sancti),* e c
 {{< paragraph label="comp-q196" >}}196{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [963](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-maria-madre-di-cristo-madre-della#ccc-963)-[966](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-maria-madre-di-cristo-madre-della#ccc-966){{< ccc-br >}}[973](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-maria-madre-di-cristo-madre-della#ccc-973){{< /marginnote >}} **In che senso la beata Vergine Maria è Madre della Chiesa?**
 {.ccc-domanda}
 
-La beata Vergine Maria è Madre della Chiesa nell’ordine della grazia perché ha dato alla luce Gesù, il Figlio di Dio, Capo del corpo che è la Chiesa. Gesù, morente in Croce, l’ha indicata come madre al discepolo con queste parole: «Ecco la tua madre» *(Gv* 19,27).
+La beata Vergine Maria è Madre della Chiesa nell’ordine della grazia perché ha dato alla luce Gesù, il Figlio di Dio, Capo del corpo che è la Chiesa. Gesù, morente in Croce, l’ha indicata come madre al discepolo con queste parole: «*Ecco la tua madre*».{{< marginnote >}}[*Gv* 19,27](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-19#john-19-27){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q197" >}}197{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [967](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-maria-madre-di-cristo-madre-della#ccc-967)-[970](/book/catechismo-della-chiesa-cattolica/parte-prima/paragrafo-6-maria-madre-di-cristo-madre-della#ccc-970){{< /marginnote >}} **Come la Vergine Maria aiuta la Chiesa?**
@@ -416,7 +416,7 @@ Dopo l’ascensione del suo Figlio, la Vergine Maria aiuta, con le sue preghiere
 Guardando a Maria, tutta santa e già glorificata in corpo e anima, la Chiesa contempla in lei ciò che essa stessa è chiamata ad essere sulla terra e quello che sarà nella patria celeste.
 {.ccc-risposta}
 
-## «CREDO LA REMISSIONE DEI PECCATI» {#comp-p1s2c3a3 .ccc-articolo}
+## «*CREDO LA REMISSIONE DEI PECCATI*» {#comp-p1s2c3a3 .ccc-articolo}
 
 {{< paragraph label="comp-q200" >}}200{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [976](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-976),[980](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-980){{< ccc-br >}}[984](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-984)-[985](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-985){{< /marginnote >}} **Come si rimettono i peccati?**
 {.ccc-domanda}
@@ -427,18 +427,18 @@ Il primo e principale sacramento per il perdono dei peccati è il Battesimo. Per
 {{< paragraph label="comp-q201" >}}201{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [981](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-981)-[983](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-983){{< ccc-br >}}[986](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-986)-[987](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-10-credo-la-remissione-dei-peccati#ccc-987){{< /marginnote >}} **Perché la Chiesa ha il potere di perdonare i peccati?**
 {.ccc-domanda}
 
-La Chiesa ha la missione e il potere di perdonare i peccati, perché Cristo stesso glielo ha conferito: «Ricevete lo Spirito Santo; a chi rimetterete i peccati saranno rimessi e a chi non li rimetterete resteranno non rimessi» *(Gv* 20,22-23).
+La Chiesa ha la missione e il potere di perdonare i peccati, perché Cristo stesso glielo ha conferito: «*Ricevete lo Spirito Santo; a chi rimetterete i peccati saranno rimessi e a chi non li rimetterete resteranno non rimessi*».{{< marginnote >}}[*Gv* 20,22-23](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-20#john-20-22){{< /marginnote >}}
 {.ccc-risposta}
 
-## «CREDO LA RISURREZIONE DELLA CARNE» {#comp-p1s2c3a4 .ccc-articolo}
+## «*CREDO LA RISURREZIONE DELLA CARNE*» {#comp-p1s2c3a4 .ccc-articolo}
 
 {{< paragraph label="comp-q202" >}}202{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [990](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-990){{< ccc-br >}}[1015](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1015){{< /marginnote >}} {{< ccc-strong >}}Che cosa si indica con il termine *carne,* e qual è la sua importanza?{{< /ccc-strong >}}
 {.ccc-domanda}
 
-Il termine *carne* designa l’uomo nella sua condizione di debolezza e di mortalità. «La carne è il cardine della salvezza» (Tertulliano). Infatti, noi crediamo in Dio creatore della carne; crediamo nel Verbo fatto carne per riscattare la carne; crediamo nella risurrezione della carne, compimento della creazione e della redenzione della carne.
+Il termine *carne* designa l’uomo nella sua condizione di debolezza e di mortalità. «*La carne è il cardine della salvezza*» (Tertulliano). Infatti, noi crediamo in Dio creatore della carne; crediamo nel Verbo fatto carne per riscattare la carne; crediamo nella risurrezione della carne, compimento della creazione e della redenzione della carne.
 {.ccc-risposta}
 
-{{< paragraph label="comp-q203" >}}203{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [990](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-990){{< /marginnote >}} **Che cosa significa «risurrezione della carne»?**
+{{< paragraph label="comp-q203" >}}203{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [990](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-990){{< /marginnote >}} **Che cosa significa «*risurrezione della carne*»?**
 {.ccc-domanda}
 
 Significa che lo stato definitivo dell’uomo non sarà soltanto l’anima spirituale separata dal corpo, ma che anche i nostri corpi mortali un giorno riprenderanno vita.
@@ -447,7 +447,7 @@ Significa che lo stato definitivo dell’uomo non sarà soltanto l’anima spiri
 {{< paragraph label="comp-q204" >}}204{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [998](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-998){{< ccc-br >}}[1002](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1002)-[1003](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1003){{< /marginnote >}} **Qual è il rapporto tra la Risurrezione di Cristo e la nostra?**
 {.ccc-domanda}
 
-Come Cristo è veramente risorto dai morti e vive per sempre, così egli stesso risusciterà tutti nell’ultimo giorno, con un corpo incorruttibile: «quanti fecero il bene per una risurrezione di vita e quanti fecero il male per una risurrezione di condanna» *(Gv* 5,29).
+Come Cristo è veramente risorto dai morti e vive per sempre, così egli stesso risusciterà tutti nell’ultimo giorno, con un corpo incorruttibile: «*quanti fecero il bene per una risurrezione di vita e quanti fecero il male per una risurrezione di condanna*».{{< marginnote >}}[*Gv* 5,29](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-5#john-5-29){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q205" >}}205{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [992](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-992)-[1004](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1004){{< ccc-br >}}[1016](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1016)-[1018](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1018){{< /marginnote >}} **Con la morte, che cosa succede al nostro corpo e alla nostra anima?**
@@ -459,10 +459,10 @@ Con la morte, separazione dell’anima e del corpo, il corpo cade nella corruzio
 {{< paragraph label="comp-q206" >}}206{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1005](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1005)-[1014](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1014){{< ccc-br >}}[1019](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-11-credo-la-risurrezione-della-carne#ccc-1019){{< /marginnote >}} **Che cosa significa morire in Cristo Gesù?**
 {.ccc-domanda}
 
-Significa morire in grazia di Dio, senza peccato mortale. Il credente in Cristo, seguendo il suo esempio, può così trasformare la propria morte in un atto di obbedienza e di amore verso il Padre. «Certa è questa parola: se moriamo con lui, vivremo anche con lui» (2 *Tm* 2, 11).
+Significa morire in grazia di Dio, senza peccato mortale. Il credente in Cristo, seguendo il suo esempio, può così trasformare la propria morte in un atto di obbedienza e di amore verso il Padre. «*Certa è questa parola: se moriamo con lui, vivremo anche con lui*».{{< marginnote >}}[*2 Tm* 2, 11](/book/bibbia-di-gerusalemme/nuovo-testamento/2-timoteo-2#2tim-2-11){{< /marginnote >}}
 {.ccc-risposta}
 
-## «CREDO LA VITA ETERNA» {#comp-p1s2c3a5 .ccc-articolo}
+## «*CREDO LA VITA ETERNA*» {#comp-p1s2c3a5 .ccc-articolo}
 
 {{< paragraph label="comp-q207" >}}207{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1020](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1020){{< ccc-br >}}[1051](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1051){{< /marginnote >}} **Che cos’è la vita eterna?**
 {.ccc-domanda}
@@ -476,13 +476,13 @@ La vita eterna è quella che inizierà subito dopo la morte. Essa non avrà fine
 È il giudizio di retribuzione immediata, che ciascuno, fin dalla sua morte, riceve da Dio nella sua anima immortale, in rapporto alla sua fede e alle sue opere. Tale retribuzione consiste nell’accesso alla beatitudine del cielo, immediatamente o dopo un’adeguata purificazione, oppure alla dannazione eterna nell’inferno.
 {.ccc-risposta}
 
-{{< paragraph label="comp-q209" >}}209{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1023](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1023)-[1026](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1026){{< ccc-br >}}[1053](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1053){{< /marginnote >}} **Che cosa s’intende per «cielo»?**
+{{< paragraph label="comp-q209" >}}209{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1023](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1023)-[1026](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1026){{< ccc-br >}}[1053](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1053){{< /marginnote >}} **Che cosa s’intende per «*cielo*»?**
 {.ccc-domanda}
 
-Per «cielo» s’intende lo stato di felicità suprema e definitiva. Quelli che muoiono nella grazia di Dio e non hanno bisogno di ulteriore purificazione sono riuniti attorno a Gesù e a Maria, agli Angeli e ai Santi. Formano così la Chiesa del cielo, dove essi vedono Dio «a faccia a faccia» (1 *Cor* 13,12), vivono in comunione d’amore con la Santissima Trinità e intercedono per noi.
+Per «*cielo*» s’intende lo stato di felicità suprema e definitiva. Quelli che muoiono nella grazia di Dio e non hanno bisogno di ulteriore purificazione sono riuniti attorno a Gesù e a Maria, agli Angeli e ai Santi. Formano così la Chiesa del cielo, dove essi vedono Dio «*a faccia a faccia*»,{{< marginnote >}}[*1 Cor* 13,12](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-13#1cor-13-12){{< /marginnote >}} vivono in comunione d’amore con la Santissima Trinità e intercedono per noi.
 {.ccc-risposta}
 
-> «*La vita, nella sua stessa realtà e verità, è il Padre, che, attraverso il Figlio nello Spirito Santo, riversa come fonte su tutti noi i suoi doni celesti. E per la sua bontà promette veramente anche a noi uomini i beni divini della vita eterna»* (san Cirillo di Gerusalemme).
+> «*La vita, nella sua stessa realtà e verità, è il Padre, che, attraverso il Figlio nello Spirito Santo, riversa come fonte su tutti noi i suoi doni celesti. E per la sua bontà promette veramente anche a noi uomini i beni divini della vita eterna*» (san Cirillo di Gerusalemme).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q210" >}}210{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1030](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1030)-[1031](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1031){{< ccc-br >}}[1054](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1054){{< /marginnote >}} **Che cos’è il purgatorio?**
@@ -500,19 +500,19 @@ In virtù della comunione dei santi, i fedeli ancora pellegrini sulla terra poss
 {{< paragraph label="comp-q212" >}}212{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1033](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1033)-[1035](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1035){{< ccc-br >}}[1056](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1056)-[1057](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1057){{< /marginnote >}} **In che cosa consiste l’inferno?**
 {.ccc-domanda}
 
-Consiste nella dannazione eterna di quanti muoiono per libera scelta in peccato mortale. La pena principale dell’inferno sta nella separazione eterna da Dio, nel quale unicamente l’uomo ha la vita e la felicità, per le quali è stato creato e alle quali aspira. Cristo esprime questa realtà con le parole: «Via, lontano da me, maledetti, nel fuoco eterno» *(Mt* 25,41).
+Consiste nella dannazione eterna di quanti muoiono per libera scelta in peccato mortale. La pena principale dell’inferno sta nella separazione eterna da Dio, nel quale unicamente l’uomo ha la vita e la felicità, per le quali è stato creato e alle quali aspira. Cristo esprime questa realtà con le parole: «*Via, lontano da me, maledetti, nel fuoco eterno*».{{< marginnote >}}[*Mt* 25,41](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-25#matt-25-41){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q213" >}}213{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1036](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1036)-[1037](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1037){{< /marginnote >}} **Come si concilia l’esistenza dell’inferno con l’infinita bontà di Dio?**
 {.ccc-domanda}
 
-Dio, pur volendo «che tutti abbiano modo di pentirsi» (*2 Pt* 3,9), tuttavia, avendo creato l’uomo libero e responsabile, rispetta le sue decisioni. Pertanto, è l’uomo stesso che, in piena autonomia, si esclude volontariamente dalla comunione con Dio se, fino al momento della propria morte, persiste nel peccato mortale, rifiutando l’amore misericordioso di Dio.
+Dio, pur volendo «*che tutti abbiano modo di pentirsi*»,{{< marginnote >}}[*2 Pt* 3,9](/book/bibbia-di-gerusalemme/nuovo-testamento/2-pietro-3#2pet-3-9){{< /marginnote >}} tuttavia, avendo creato l’uomo libero e responsabile, rispetta le sue decisioni. Pertanto, è l’uomo stesso che, in piena autonomia, si esclude volontariamente dalla comunione con Dio se, fino al momento della propria morte, persiste nel peccato mortale, rifiutando l’amore misericordioso di Dio.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q214" >}}214{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1038](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1038)-[1041](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1041){{< ccc-br >}}[1058](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1058)-[1059](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1059){{< /marginnote >}} **In che cosa consisterà il giudizio finale?**
 {.ccc-domanda}
 
-Il giudizio finale (universale) consisterà nella sentenza di vita beata o di condanna eterna, che il Signore Gesù, ritornando quale giudice dei vivi e dei morti, emetterà a riguardo «dei giusti e degli ingiusti» *(At* 24,15), riuniti tutti insieme davanti a lui. A seguito di tale giudizio finale, il corpo risuscitato parteciperà alla retribuzione che l’anima ha avuto nel giudizio particolare.
+Il giudizio finale (universale) consisterà nella sentenza di vita beata o di condanna eterna, che il Signore Gesù, ritornando quale giudice dei vivi e dei morti, emetterà a riguardo «*dei giusti e degli ingiusti*»,{{< marginnote >}}[*At* 24,15](/book/bibbia-di-gerusalemme/nuovo-testamento/atti-24#acts-24-15){{< /marginnote >}} riuniti tutti insieme davanti a lui. A seguito di tale giudizio finale, il corpo risuscitato parteciperà alla retribuzione che l’anima ha avuto nel giudizio particolare.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q215" >}}215{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1040](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1040){{< /marginnote >}} **Quando avverrà questo giudizio?**
@@ -524,7 +524,7 @@ Questo giudizio avverrà alla fine del mondo, di cui solo Dio conosce il giorno 
 {{< paragraph label="comp-q216" >}}216{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1042](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1042)-[1050](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1050){{< ccc-br >}}[1060](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1060){{< /marginnote >}} **Che cos’è la speranza dei cieli nuovi e della terra nuova?**
 {.ccc-domanda}
 
-Dopo il giudizio finale, lo stesso universo, liberato dalla schiavitù della corruzione, parteciperà alla gloria di Cristo con l’inaugurazione dei «nuovi cieli» e di una «terra nuova» (2 *Pt* 3,13). Sarà così raggiunta la pienezza del Regno di Dio, ossia la realizzazione definitiva del disegno salvifico di Dio di «ricapitolare in Cristo tutte le cose, quelle del cielo come quelle della terra» *(Ef* 1,10). Dio allora sarà «tutto in tutti» (*1 Cor* 15,28), nella vita eterna.
+Dopo il giudizio finale, lo stesso universo, liberato dalla schiavitù della corruzione, parteciperà alla gloria di Cristo con l’inaugurazione dei «*nuovi cieli*» e di una «*terra nuova*».{{< marginnote >}}[*2 Pt* 3,13](/book/bibbia-di-gerusalemme/nuovo-testamento/2-pietro-3#2pet-3-13){{< /marginnote >}} Sarà così raggiunta la pienezza del Regno di Dio, ossia la realizzazione definitiva del disegno salvifico di Dio di «*ricapitolare in Cristo tutte le cose, quelle del cielo come quelle della terra*».{{< marginnote >}}[*Ef* 1,10](/book/bibbia-di-gerusalemme/nuovo-testamento/efesini-1#eph-1-10){{< /marginnote >}} Dio allora sarà «*tutto in tutti*»,{{< marginnote >}}[*1 Cor* 15,28](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-15#1cor-15-28){{< /marginnote >}} nella vita eterna.
 {.ccc-risposta}
 
 ## «*Amen*» {#comp-p1s2c3a6 .ccc-articolo}
@@ -532,5 +532,5 @@ Dopo il giudizio finale, lo stesso universo, liberato dalla schiavitù della cor
 {{< paragraph label="comp-q217" >}}217{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [1061](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1061)-[1065](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-12-credo-la-vita-eterna#ccc-1065){{< /marginnote >}} {{< ccc-strong >}}Che cosa significa *l’Amen,* che conclude la nostra professione di fede?{{< /ccc-strong >}}
 {.ccc-domanda}
 
-La parola ebraica *Amen,* che conclude anche l’ultimo libro della Sacra Scrittura, alcune preghiere del Nuovo Testamento e quelle liturgiche della Chiesa, significa il nostro «sì» fiducioso e totale a quanto abbiamo professato di credere, fidandoci totalmente di colui che è l’«*Amen*» *(Ap* 3,14) definitivo: Cristo Signore.
+La parola ebraica *Amen,* che conclude anche l’ultimo libro della Sacra Scrittura, alcune preghiere del Nuovo Testamento e quelle liturgiche della Chiesa, significa il nostro «*sì*» fiducioso e totale a quanto abbiamo professato di credere, fidandoci totalmente di colui che è l’«*Amen*»{{< marginnote >}}[*Ap* 3,14](/book/bibbia-di-gerusalemme/nuovo-testamento/apocalisse-3#rev-3-14){{< /marginnote >}} definitivo: Cristo Signore.
 {.ccc-risposta}

@@ -9,4 +9,4 @@ label: "p3s1c3"
 {{< paragraph label="ccc:1949" >}}1949{{< /paragraph >}} Chiamato alla beatitudine, ma ferito dal peccato, l’uomo ha bisogno della salvezza di Dio. L’aiuto divino gli viene dato in Cristo, per mezzo della Legge che lo dirige e nella grazia che lo sostiene:
 {.ccc-n data-pagina="529"}
 
-> «Attendete alla vostra salvezza con timore e tremore. È Dio infatti che suscita in voi il volere e l’operare secondo i suoi benevoli disegni» (*Fil* 2,12-13).
+> «*Attendete alla vostra salvezza con timore e tremore. È Dio infatti che suscita in voi il volere e l’operare secondo i suoi benevoli disegni*».{{< marginnote >}}[*Fil* 2,12-13](/book/bibbia-di-gerusalemme/nuovo-testamento/filippesi-2#phil-2-12){{< /marginnote >}}

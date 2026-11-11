@@ -18,7 +18,7 @@ L’uomo, sostenuto dalla grazia divina, risponde con l’obbedienza della fede,
 {{< paragraph label="comp-q26" >}}26{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [144](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-144)-[149](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-149){{< /marginnote >}} **Quali sono nella Sacra Scrittura i principali testimoni di obbedienza della fede?**
 {.ccc-domanda}
 
-Ci sono molti testimoni, in particolare due: *Abramo,* che, messo alla prova, «ebbe fede in Dio» *(Rm* 4,3) e sempre obbedì alla sua chiamata, e, per questo è diventato «padre di tutti quelli che credono» *(Rm* 4, 11,18); e la *Vergine Maria,* che realizzò nel modo più perfetto, durante tutta la sua vita, l’obbedienza della fede: «*Fiat mihi secundum Verbum tuum* – *Avvenga di me quello che hai detto» (Lc* 1,38).
+Ci sono molti testimoni, in particolare due: *Abramo,* che, messo alla prova, «*ebbe fede in Dio*»{{< marginnote >}}[*Rm* 4,3](/book/bibbia-di-gerusalemme/nuovo-testamento/romani-4#rom-4-3){{< /marginnote >}} e sempre obbedì alla sua chiamata, e, per questo è diventato «*padre di tutti quelli che credono*»;{{< marginnote >}}[*Rm* 4, 11](/book/bibbia-di-gerusalemme/nuovo-testamento/romani-4#rom-4-11),18{{< /marginnote >}} e la *Vergine Maria,* che realizzò nel modo più perfetto, durante tutta la sua vita, l’obbedienza della fede: «*Fiat mihi secundum Verbum tuum – Avvenga di me quello che hai detto*».{{< marginnote >}}[*Lc* 1,38](/book/bibbia-di-gerusalemme/nuovo-testamento/luca-1#luke-1-38){{< /marginnote >}}
 {.ccc-risposta}
 
 {{< paragraph label="comp-q27" >}}27{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [150](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-150)-[152](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-152){{< ccc-br >}}[176](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-176)-[178](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-178){{< /marginnote >}} **Che cosa significa per l’uomo credere in Dio?**
@@ -30,7 +30,7 @@ Significa aderire a Dio stesso, affidandosi a Lui e dando l’assenso a tutte le
 {{< paragraph label="comp-q28" >}}28{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [153](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-153)-[165](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-165){{< ccc-br >}}[179](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-179)-[180](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-180){{< ccc-br >}}[183](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-183)-[184](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-184){{< /marginnote >}} **Quali sono le caratteristiche della fede?**
 {.ccc-domanda}
 
-La fede, *dono gratuito* di Dio e accessibile a quanti la chiedono umilmente, è la virtù soprannaturale *necessaria* per essere salvati, L’atto di fede è *un atto umano,* cioè un atto dell’intelligenza dell’uomo che, sotto la spinta della volontà mossa da Dio, dà liberamente il proprio consenso alla verità divina. La fede, inoltre, è *certa,* perché fondata sulla Parola di Dio; è *operosa* «per mezzo della carità» *(Gal* 5,6); è in *continua crescita,* grazie all’ascolto della Parola di Dio e alla preghiera, Essa fin d’ora ci *fa pregustare* la gioia celeste.
+La fede, *dono gratuito* di Dio e accessibile a quanti la chiedono umilmente, è la virtù soprannaturale *necessaria* per essere salvati, L’atto di fede è *un atto umano,* cioè un atto dell’intelligenza dell’uomo che, sotto la spinta della volontà mossa da Dio, dà liberamente il proprio consenso alla verità divina. La fede, inoltre, è *certa,* perché fondata sulla Parola di Dio; è *operosa* «*per mezzo della carità*»;{{< marginnote >}}[*Gal* 5,6](/book/bibbia-di-gerusalemme/nuovo-testamento/galati-5#gal-5-6){{< /marginnote >}} è in *continua crescita,* grazie all’ascolto della Parola di Dio e alla preghiera, Essa fin d’ora ci *fa pregustare* la gioia celeste.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q29" >}}29{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [159](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-1-io-credo#ccc-159){{< /marginnote >}} **Perché non ci sono contraddizioni tra fede e scienza?**
@@ -39,7 +39,7 @@ La fede, *dono gratuito* di Dio e accessibile a quanti la chiedono umilmente, è
 Anche se la fede supera la ragione, non vi potrà mai essere contraddizione tra fede e scienza, perché entrambe hanno origine da Dio. È lo stesso Dio che dona all’uomo sia il lume della ragione sia la fede.
 {.ccc-risposta}
 
-> *«Credi per comprendere: comprendi per credere» (sant’Agostino).*
+> «*Credi per comprendere: comprendi per credere*» *(sant’Agostino).*
 > {.ccc-citazione}
 
 ## NOI CREDIAMO {#comp-p1s1c3a2 .ccc-articolo}
@@ -47,10 +47,10 @@ Anche se la fede supera la ragione, non vi potrà mai essere contraddizione tra 
 {{< paragraph label="comp-q30" >}}30{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [166](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-166)-[169](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-169){{< ccc-br >}}[181](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-181){{< /marginnote >}} **Perché la fede è un atto personale e insieme ecclesiale?**
 {.ccc-domanda}
 
-La fede è un atto personale, in quanto libera risposta dell’uomo a Dio che si rivela. Ma è nello stesso tempo un atto ecclesiale, che si esprime nella confessione: «Noi crediamo». È infatti la Chiesa che crede: essa in tal modo, con la grazia dello Spirito Santo, precede, genera e nutre la fede del singolo cristiano. Per questo la Chiesa è Madre e Maestra.
+La fede è un atto personale, in quanto libera risposta dell’uomo a Dio che si rivela. Ma è nello stesso tempo un atto ecclesiale, che si esprime nella confessione: «*Noi crediamo*». È infatti la Chiesa che crede: essa in tal modo, con la grazia dello Spirito Santo, precede, genera e nutre la fede del singolo cristiano. Per questo la Chiesa è Madre e Maestra.
 {.ccc-risposta}
 
-> «*Non può avere Dio per Padre chi non ha la Chiesa per Madre»* (san Cipriano).
+> «*Non può avere Dio per Padre chi non ha la Chiesa per Madre*» (san Cipriano).
 > {.ccc-citazione}
 
 {{< paragraph label="comp-q31" >}}31{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [170](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-170)-[171](/book/catechismo-della-chiesa-cattolica/parte-prima/articolo-2-noi-crediamo#ccc-171){{< /marginnote >}} **Perché le formule della fede sono importanti?**

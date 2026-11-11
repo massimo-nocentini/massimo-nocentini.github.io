@@ -21,10 +21,10 @@ Nella Chiesa è attraverso la Tradizione vivente che lo Spirito Santo insegna a 
 Esse sono:
 {.ccc-risposta}
 
-— la *Parola di Dio,* che ci dà la «sublime scienza» di Cristo *(Fil* 3,8); la *Liturgia della Chiesa,* che annuncia, attualizza e comunica il mistero della salvezza; le *virtù teologali;* le *situazioni quotidiane,* perché in esse possiamo incontrare Dio.
+— la *Parola di Dio,* che ci dà la «*sublime scienza*» di Cristo;{{< marginnote >}}[*Fil* 3,8](/book/bibbia-di-gerusalemme/nuovo-testamento/filippesi-3#phil-3-8){{< /marginnote >}} la *Liturgia della Chiesa,* che annuncia, attualizza e comunica il mistero della salvezza; le *virtù teologali;* le *situazioni quotidiane,* perché in esse possiamo incontrare Dio.
 {.ccc-risposta .ccc-item}
 
-> *«Vi amo, Signore, e la sola grazia che vi chiedo è di amarvi eternamente. Mio Dio, se la mia lingua non può ripetere, ad ogni istante, che vi amo, voglio che il mio cuore ve lo ripeta tutte le volte che respiro»* (san Giovanni Maria Vianney).
+> «*Vi amo, Signore, e la sola grazia che vi chiedo è di amarvi eternamente. Mio Dio, se la mia lingua non può ripetere, ad ogni istante, che vi amo, voglio che il mio cuore ve lo ripeta tutte le volte che respiro*» (san Giovanni Maria Vianney).
 > {.ccc-citazione}
 
 ## IL CAMMINO DELLA PREGHIERA {#comp-p4s1c2a2 .ccc-articolo}
@@ -38,19 +38,19 @@ Nella Chiesa esistono diversi cammini di preghiera, legati ai differenti contest
 {{< paragraph label="comp-q560" >}}560{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2664](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2664){{< ccc-br >}}[2680](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2680)-[2681](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2681){{< /marginnote >}} **Qual è la via della nostra preghiera?**
 {.ccc-domanda}
 
-La via della nostra preghiera è Cristo, perché essa si rivolge a Dio nostro Padre, ma giunge fino a lui solo se, almeno implicitamente, noi preghiamo nel Nome di Gesù. La sua umanità è, in effetti, l’unica via per la quale lo Spirito Santo ci insegna a pregare il nostro Padre. Perciò le preghiere liturgiche si concludono con la formula: «Per il nostro Signore Gesù Cristo».
+La via della nostra preghiera è Cristo, perché essa si rivolge a Dio nostro Padre, ma giunge fino a lui solo se, almeno implicitamente, noi preghiamo nel Nome di Gesù. La sua umanità è, in effetti, l’unica via per la quale lo Spirito Santo ci insegna a pregare il nostro Padre. Perciò le preghiere liturgiche si concludono con la formula: «*Per il nostro Signore Gesù Cristo*».
 {.ccc-risposta}
 
 {{< paragraph label="comp-q561" >}}561{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2670](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2670)-[2672](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2672){{< ccc-br >}}[2680](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2680)-[2681](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2681){{< /marginnote >}} **Qual è il ruolo dello Spirito Santo nella preghiera?**
 {.ccc-domanda}
 
-Poiché lo Spirito Santo è il Maestro interiore della preghiera cristiana e «noi non sappiamo che cosa dobbiamo chiedere» (Rm 8,26), la Chiesa ci esorta a invocarlo e ad implorarlo in ogni occasione: «Vieni, Spirito Santo!».
+Poiché lo Spirito Santo è il Maestro interiore della preghiera cristiana e «*noi non sappiamo che cosa dobbiamo chiedere*»,{{< marginnote >}}[Rm 8,26](/book/bibbia-di-gerusalemme/nuovo-testamento/romani-8#rom-8-26){{< /marginnote >}} la Chiesa ci esorta a invocarlo e ad implorarlo in ogni occasione: «*Vieni, Spirito Santo!*».
 {.ccc-risposta}
 
 {{< paragraph label="comp-q562" >}}562{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2673](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2673)-[2679](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2679){{< ccc-br >}}[2682](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2682){{< /marginnote >}} **In che cosa la preghiera cristiana è mariana?**
 {.ccc-domanda}
 
-Per la sua singolare cooperazione all’azione dello Spirito Santo, la chiesa ama pregare Maria e pregare con Maria, l’Orante perfetta, per magnificare e invocare il Signore con Lei. Maria, in effetti, ci «mostra la via» che è Suo Figlio, l’unico Mediatore.
+Per la sua singolare cooperazione all’azione dello Spirito Santo, la chiesa ama pregare Maria e pregare con Maria, l’Orante perfetta, per magnificare e invocare il Signore con Lei. Maria, in effetti, ci «*mostra la via*» che è Suo Figlio, l’unico Mediatore.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q563" >}}563{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2676](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2676)-[2678](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2678){{< ccc-br >}}[2682](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-2-il-cammino-della-preghiera#ccc-2682){{< /marginnote >}} **Come la Chiesa prega Maria?**
@@ -70,11 +70,11 @@ I Santi sono i nostri modelli di preghiera e a loro domandiamo anche di interced
 {{< paragraph label="comp-q565" >}}565{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2685](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-guide-per-la-preghiera#ccc-2685)-[2690](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-guide-per-la-preghiera#ccc-2690){{< ccc-br >}}[2694](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-guide-per-la-preghiera#ccc-2694)-[2695](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-guide-per-la-preghiera#ccc-2695){{< /marginnote >}} **Chi può educare alla preghiera?**
 {.ccc-domanda}
 
-La famiglia cristiana costituisce il primo focolare dell’educazione alla preghiera. La preghiera familiare quotidiana è particolarmente raccomandata, perché è la prima testimonianza della vita di preghiera della Chiesa. La catechesi, i gruppi di preghiera, la «direzione spirituale» costituiscono una scuola e un aiuto alla preghiera.
+La famiglia cristiana costituisce il primo focolare dell’educazione alla preghiera. La preghiera familiare quotidiana è particolarmente raccomandata, perché è la prima testimonianza della vita di preghiera della Chiesa. La catechesi, i gruppi di preghiera, la «*direzione spirituale*» costituiscono una scuola e un aiuto alla preghiera.
 {.ccc-risposta}
 
 {{< paragraph label="comp-q566" >}}566{{< /paragraph >}}{{< marginnote >}}{{< smallcaps >}}CCC{{< /smallcaps >}} [2691](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-guide-per-la-preghiera#ccc-2691){{< ccc-br >}}[2696](/book/catechismo-della-chiesa-cattolica/parte-quarta/articolo-3-guide-per-la-preghiera#ccc-2696){{< /marginnote >}} **Quali sono i luoghi favorevoli alla preghiera?**
 {.ccc-domanda}
 
-Si può pregare dovunque, ma la scelta di un luogo appropriato non è indifferente per la preghiera. La chiesa è il luogo proprio della preghiera liturgica e dell’adorazione eucaristica. Anche altri luoghi aiutano a pregare, come un «angolo di preghiera» in casa; un monastero; un santuario.
+Si può pregare dovunque, ma la scelta di un luogo appropriato non è indifferente per la preghiera. La chiesa è il luogo proprio della preghiera liturgica e dell’adorazione eucaristica. Anche altri luoghi aiutano a pregare, come un «*angolo di preghiera*» in casa; un monastero; un santuario.
 {.ccc-risposta}
