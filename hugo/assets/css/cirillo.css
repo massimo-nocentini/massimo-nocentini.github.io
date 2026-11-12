@@ -1,0 +1,83 @@
+/*
+ * Cirillo di Gerusalemme, Le catechesi (cirillo: tools/hugo): the constructs
+ * of the book that tufte.hugo has no style for. Loaded only on the pages of
+ * content/book/cirillo-di-gerusalemme-le-catechesi/
+ * (layouts/_partials/head_custom.html); every class is cir-* and set by
+ * cirillo: tools/hugo/convert.py.
+ */
+
+/* The Introduction and the rubrics are set in italics in the source, their
+   emphasis upright: the paragraphs are italic, their <em> upright. */
+body.tufte-book p.cir-i { font-style: italic; }
+body.tufte-book p.cir-i em { font-style: normal; }
+/* their notes are set as every other note */
+body.tufte-book p.cir-i :is(.sidenote, .marginnote) { font-style: normal; }
+body.tufte-book p.cir-i :is(.sidenote, .marginnote) em { font-style: italic; }
+
+/* The rubric under the title of a catechesi (small print) */
+body.tufte-book section > p.cir-rubrica {
+  font-size: 1.26rem;
+  text-indent: 0;
+  margin-bottom: 1.6rem;
+}
+
+/* The superscription of the catechesi (Prima catechesi) and the subtitles of
+   the two Creeds, in small capitals: centred, as printed */
+body.tufte-book section > p.cir-soprascritta,
+body.tufte-book section > p.cir-sottotitolo {
+  text-align: center;
+  text-indent: 0;
+  padding-left: 0;
+  width: 55%;
+}
+body.tufte-book section > p.cir-soprascritta { margin-bottom: 1.4rem; }
+@media (max-width: 760px) {
+  body.tufte-book section > p.cir-soprascritta,
+  body.tufte-book section > p.cir-sottotitolo { width: 100%; }
+}
+
+/* The pages of the printed edition: an empty anchor (cir-pagina shortcode) */
+.cir-pagina { display: inline; scroll-margin-top: 2em; }
+
+/* A note marker whose note the source PDF does not have: raised like the
+   theme's note numbers, without a note */
+sup.cir-rimando {
+  font-family: var(--tufte-serif-old, et-book-roman-old-style);
+  font-size: 1rem;
+  line-height: 0;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.5rem;
+  left: 0.1rem;
+  cursor: help;
+}
+
+/* The indexes: CSS columns */
+div.cir-indice.cir-cols-3 { column-count: 3; column-gap: 2.5rem; }
+div.cir-indice.cir-cols-4 { column-count: 4; column-gap: 2rem; }
+@media (max-width: 760px) {
+  div.cir-indice.cir-cols-3,
+  div.cir-indice.cir-cols-4 { column-count: 2; }
+}
+div.cir-indice p {
+  margin-top: 0;
+  margin-bottom: 0.2rem;
+  text-indent: -1em;
+  padding-left: 1em;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+div.cir-indice p.cir-libro {
+  margin-top: 0.8rem;
+  text-indent: 0;
+  padding-left: 0;
+  break-after: avoid;
+}
+
+/* The list of the series */
+body.tufte-book section > p.cir-collana {
+  text-indent: -1.5em;
+  padding-left: 1.5em;
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+}

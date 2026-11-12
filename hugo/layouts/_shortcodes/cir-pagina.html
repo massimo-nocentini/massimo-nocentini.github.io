@@ -1,0 +1,16 @@
+{{- /*
+  A page of the printed edition of Cirillo di Gerusalemme, *Le catechesi*
+  (Città Nuova 1993; cirillo: tools/hugo/convert.py), where the text that
+  follows begins: the page number of the running head of the source PDF. The
+  two indexes of the volume link to these anchors (#pag-N). The span is empty;
+  it is not hidden (cirillo.css), because a browser does not scroll to an
+  element that has no box, and the links must land on its line:
+
+    {{< cir-pagina "42" >}}   →  <span class="cir-pagina" data-pagina="42" id="pag-42"></span>
+*/ -}}
+{{- $n := printf "%v" (.Get 0 | default "") -}}
+{{- if not $n -}}
+  {{- errorf "cir-pagina shortcode: a page number is required (%s)" .Position -}}
+{{- end -}}
+{{- $out := printf `<span class="cir-pagina" data-pagina="%s" id="pag-%s"></span>` (htmlEscape $n) (htmlEscape $n) -}}
+{{- if .Parent }}{{ partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML }}{{ else }}{{ $out | safeHTML }}{{ end -}}

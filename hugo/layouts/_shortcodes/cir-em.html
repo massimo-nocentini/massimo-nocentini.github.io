@@ -1,0 +1,20 @@
+{{- /*
+  Italics where Markdown's *…* cannot open or close (CommonMark's flanking
+  rules), used by cirillo: tools/hugo/convert.py for Cirillo di Gerusalemme,
+  *Le catechesi*, e.g. an italic run that ends with punctuation
+  right before a sidenote. Same output as *…* elsewhere:
+
+    {{< cir-em >}}Dei Verbum,{{< /cir-em >}}   →  <em>Dei Verbum,</em>
+
+  The inner text is inline Markdown (links, nested shortcodes), rendered by
+  the theme's tufte/render-inner.html and nested like the theme's own
+  inline shortcodes (tufte/nest.html). A copy of ccc-em.
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<em>%s</em>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

@@ -1,0 +1,17 @@
+{{- /*
+  A superior figure or letter, which Markdown has no syntax for (and raw HTML is off),
+  used by cirillo: tools/hugo/convert.py for Cirillo di Gerusalemme, *Le
+  catechesi*: the editions and ordinals of the notes (Paris 1988², 2ª ed.):
+
+    1988{{< cir-sup >}}2{{< /cir-sup >}}   →  1988<sup>2</sup>
+
+  The inner text is inline Markdown, rendered and nested as in cir-em.
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<sup>%s</sup>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}

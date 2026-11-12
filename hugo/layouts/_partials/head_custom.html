@@ -29,4 +29,13 @@
     {{- $css = $css | fingerprint "sha384" }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
   {{- end -}}
+{{- else if hasPrefix .Path "/book/cirillo-di-gerusalemme-le-catechesi" -}}
+  {{- /* The book content/book/cirillo-di-gerusalemme-le-catechesi/ (cirillo:
+         tools/hugo) gets assets/css/cirillo.css. */ -}}
+  {{- with resources.Get "css/cirillo.css" -}}
+    {{- $css := . -}}
+    {{- if hugo.IsProduction }}{{ $css = $css | minify }}{{ end -}}
+    {{- $css = $css | fingerprint "sha384" }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+  {{- end -}}
 {{- end -}}
