@@ -5,16 +5,16 @@ weight: 24
 label: "ch:catechesi-22"
 ---
 
-Quarta catechesi mistagogica, sul corpo e sul sangue di Cristo, dopo la lettura della Prima Epistola di Paolo ai Corinzi: «Io, infatti, ho ricevuto dal Signore quello che a mia volta vi ho trasmesso, ecc.» {{< cir-rimando "2" >}}*.*
+Quarta catechesi mistagogica, sul corpo e sul sangue di Cristo, dopo la lettura della Prima Epistola di Paolo ai Corinzi: «*Io, infatti, ho ricevuto dal Signore quello che a mia volta vi ho trasmesso, ecc.*» {{< cir-rimando "2" >}}*.*
 {.cir-rubrica .cir-i}
 
 ## 1. Istituzione dell’Eucaristia ([1 Cor. 16, 23](/book/bibbia-di-gerusalemme/nuovo-testamento/1-corinzi-16#1cor-16-23); [Mt. 26, 26.28](/book/bibbia-di-gerusalemme/nuovo-testamento/matteo-26#matt-26-26)) {#s1}
 
 {{< cir-pagina "455" >}}La lettura di san Paolo basta da sola per farvi pienamente conoscere di quali divini misteri siete stati fatti degni partecipando allo stesso corpo di Cristo e al suo medesimo sangue.
 
-Paolo infatti proclamava poc’anzi: «Nella notte in cui il Signore nostro Gesù Cristo veniva tradito, prese il pane e, dopo aver reso grazie, lo spezzò e disse ai suoi discepoli: “Prendete e mangiate, questo è il mio corpo”; prese anche il calice, dopo aver reso grazie, disse: “Prendete e bevete, questo è il mio sangue”»{{< cir-rimando "3" >}}.
+Paolo infatti proclamava poc’anzi: «*Nella notte in cui il Signore nostro Gesù Cristo veniva tradito, prese il pane e, dopo aver reso grazie, lo spezzò e disse ai suoi discepoli: “Prendete e mangiate, questo è il mio corpo”; prese anche il calice, dopo aver reso grazie, disse: “Prendete e bevete, questo è il mio sangue”*»{{< cir-rimando "3" >}}.
 
-È stato lui a pronunziare quelle parole, a dire del pane: «Questo è il mio corpo»! Chi dunque oserebbe {{< cir-pagina "456" >}}metterle in dubbio? Se fu lui ad assicurarci sulla realtà espressa dalle parole: «Questo è il mio sangue», chi mai potrebbe dubitarne dicendo che quello non è il suo sangue?{{< cir-rimando "4" >}}.
+È stato lui a pronunziare quelle parole, a dire del pane: «*Questo è il mio corpo*»! Chi dunque oserebbe {{< cir-pagina "456" >}}metterle in dubbio? Se fu lui ad assicurarci sulla realtà espressa dalle parole: «*Questo è il mio sangue*», chi mai potrebbe dubitarne dicendo che quello non è il suo sangue?{{< cir-rimando "4" >}}.
 
 ## 2. A Cana un preannunzio della transustanziazione {#s2}
 
@@ -24,11 +24,11 @@ E che? Troviamo credibile che a Cana di Galilea abbia trasformato l’acqua in v
 
 È con somma certezza di fede, quindi, che partecipiamo al corpo e al sangue di Cristo{{< cir-rimando "7" >}}.
 
-Sotto le specie del pane ti è dato il suo corpo e sotto le specie del vino ti è dato il suo sangue, perché partecipando al corpo e al sangue di Cristo tu diventi un solo corpo e un solo sangue con lui{{< cir-rimando "8" >}}. Noi diventiamo portatori del Cristo! Mentre il suo corpo e il suo sangue si espandono per le nostre membra, diveniamo quel che dice san Pietro: «partecipi della natura divina»{{< cir-rimando "9" >}}.
+Sotto le specie del pane ti è dato il suo corpo e sotto le specie del vino ti è dato il suo sangue, perché partecipando al corpo e al sangue di Cristo tu diventi un solo corpo e un solo sangue con lui{{< cir-rimando "8" >}}. Noi diventiamo portatori del Cristo! Mentre il suo corpo e il suo sangue si espandono per le nostre membra, diveniamo quel che dice san Pietro: «*partecipi della natura divina*»{{< cir-rimando "9" >}}.
 
 ## 4. Mangiare e bere in senso spirituale {#s4}
 
-{{< cir-pagina "457" >}}Parlando una volta con i giudei, Cristo aveva detto: «Se non mangerete la mia carne e non berrete il mio sangue non avrete in voi la vita»{{< cir-rimando "10" >}}. Quelli non intesero le sue parole in senso spirituale{{< cir-rimando "11" >}}, e pensando che egli li spingesse all’antropofagia se ne andarono via scandalizzati{{< cir-rimando "12" >}}.
+{{< cir-pagina "457" >}}Parlando una volta con i giudei, Cristo aveva detto: «*Se non mangerete la mia carne e non berrete il mio sangue non avrete in voi la vita*»{{< cir-rimando "10" >}}. Quelli non intesero le sue parole in senso spirituale{{< cir-rimando "11" >}}, e pensando che egli li spingesse all’antropofagia se ne andarono via scandalizzati{{< cir-rimando "12" >}}.
 
 ## 5. I pani della proposizione prefigurazioni eucaristiche {#s5}
 
@@ -40,20 +40,20 @@ Non vedere però nel pane e nel vino dei semplici e naturali alimenti, perché i
 
 ## 7. Parole profetiche di Davide {#s7}
 
-Il santo Davide ti parla della forza che il Signore ti dà col pane e col vino: «Tu hai preparato davanti a me una {{< cir-pagina "458" >}}tavola di fronte ai miei oppressori»{{< cir-rimando "15" >}}.
+Il santo Davide ti parla della forza che il Signore ti dà col pane e col vino: «*Tu hai preparato davanti a me una* {{< cir-pagina "458" >}}*tavola di fronte ai miei oppressori*»{{< cir-rimando "15" >}}.
 
-Vuol dire press’a poco: «Prima della tua venuta, i demoni apprestavano agli uomini una mensa insozzata e contaminata{{< cir-rimando "16" >}} sotto l’influsso totale delle potenze diaboliche; ma dopo il tuo avvento, sei tu, o Signore, che prepari una tavola davanti a me. Quando un uomo dice a Dio: «Hai preparato davanti a me una tavola» di qual altra mensa intende parlare se non di quella mistica e spirituale che Dio preparò di fronte all’avversario, in opposizione ai demoni? Quanto opportunamente operò Dio! Alla mensa di comunione con i demoni doveva essere contrapposta questa di comunione con Dio.
+Vuol dire press’a poco: «Prima della tua venuta, i demoni apprestavano agli uomini una mensa insozzata e contaminata{{< cir-rimando "16" >}} sotto l’influsso totale delle potenze diaboliche; ma dopo il tuo avvento, sei tu, o Signore, che prepari una tavola davanti a me. Quando un uomo dice a Dio: «*Hai preparato davanti a me una tavola*» di qual altra mensa intende parlare se non di quella mistica e spirituale che Dio preparò di fronte all’avversario, in opposizione ai demoni? Quanto opportunamente operò Dio! Alla mensa di comunione con i demoni doveva essere contrapposta questa di comunione con Dio.
 
-Lo stesso salmo contiene le parole profetiche: «Hai impinguato con olio il mio capo»{{< cir-rimando "17" >}}, che si sono avverate. Egli infatti ti unse con il suo olio, ponendoti sulla fronte il suo sigillo perché con esso divenissi impronta del sigillo{{< cir-rimando "18" >}}, tempio di Dio. Le parole: «Come è delizioso il tuo calice, che mi inebria»{{< cir-rimando "19" >}} evidentemente si riferiscono al calice che Gesù prese tra le mani e rendendo grazie disse: «Questo è il mio sangue sparso per molti in remissione dei peccati»{{< cir-rimando "20" >}}.
+Lo stesso salmo contiene le parole profetiche: «*Hai impinguato con olio il mio capo*»{{< cir-rimando "17" >}}, che si sono avverate. Egli infatti ti unse con il suo olio, ponendoti sulla fronte il suo sigillo perché con esso divenissi impronta del sigillo{{< cir-rimando "18" >}}, tempio di Dio. Le parole: «*Come è delizioso il tuo calice, che mi inebria*»{{< cir-rimando "19" >}} evidentemente si riferiscono al calice che Gesù prese tra le mani e rendendo grazie disse: «*Questo è il mio sangue sparso per molti in remissione dei peccati*»{{< cir-rimando "20" >}}.
 
 ## 8. [Qo. 9, 7-8](/book/bibbia-di-gerusalemme/antico-testamento/qoelet-9#eccl-9-7) prefigura precetti di vita eucaristica {#s8}
 
-Anche Salomone{{< cir-rimando "21" >}} quindi, parlando enigmaticamente di questa grazia, nell’Ecclesiaste dice: «Va’, mangia qui – il qui esprime l’invito a salvezza e alla beatitudine – con gioia il tuo pane – il pane spirituale –, e bevi con cuore lieto il tuo vino – il vino spiritua{{< cir-pagina "459" >}}le –; versa sulla tua testa l’olio – Salomone parla profeticamente della mistica crismazione –: in ogni tempo le tue vesti siano bianche{{< cir-rimando "22" >}}, perché ormai Dio ha gradito le tue opere, già «vanità delle vanità», prima che ti avvicinassi alla grazia».
+Anche Salomone{{< cir-rimando "21" >}} quindi, parlando enigmaticamente di questa grazia, nell’Ecclesiaste dice: «*Va’, mangia qui – il qui esprime l’invito a salvezza e alla beatitudine – con gioia il tuo pane – il pane spirituale –, e bevi con cuore lieto il tuo vino – il vino spiritua*{{< cir-pagina "459" >}}*le –; versa sulla tua testa l’olio – Salomone parla profeticamente della mistica crismazione –: in ogni tempo le tue vesti siano bianche*{{< cir-rimando "22" >}}*, perché ormai Dio ha gradito le tue opere, già «vanità delle vanità», prima che ti avvicinassi alla grazia*».
 
-Ora che sei approdato alla grazia, hai deposto i vecchi abiti e indossato bianche vesti, candide in senso spirituale, tutto in te deve essere candore: non che debba continuare a indossare sempre abiti tutti bianchi, ma perché devi sempre esibire nella tua vita abiti di immacolato candore e splendore, sì da poter dire con il beato Isaia: «Si rallegri l’anima mia nel Signore, che mi ha fatto indossare il manto della salvezza e mi ha vestito della tunica della gioia»{{< cir-rimando "23" >}}.
+Ora che sei approdato alla grazia, hai deposto i vecchi abiti e indossato bianche vesti, candide in senso spirituale, tutto in te deve essere candore: non che debba continuare a indossare sempre abiti tutti bianchi, ma perché devi sempre esibire nella tua vita abiti di immacolato candore e splendore, sì da poter dire con il beato Isaia: «*Si rallegri l’anima mia nel Signore, che mi ha fatto indossare il manto della salvezza e mi ha vestito della tunica della gioia*»{{< cir-rimando "23" >}}.
 
 ## 9. Fede viva e letificante nel corpo e nel sangue di Cristo {#s9}
 
-Hai sentito, e alla luce della fede ne sei già sicuro: quel che pare pane, e ne ha ancora il sapore, non è più pane ma il corpo di Cristo; quel che pare vino, benché il gusto dica il contrario, non è più vino ma il sangue di Cristo. Ne aveva profeticamente parlato il Salmista come «del vino che allieta il cuore dell’uomo, dell’olio che fa brillare il suo volto»{{< cir-rimando "24" >}}. Sostieni forte nella fede il tuo cuore quando ti accosti a ricevere questo pane che dà vigore spirituale e allieta il volto della tua anima{{< cir-rimando "25" >}}.
+Hai sentito, e alla luce della fede ne sei già sicuro: quel che pare pane, e ne ha ancora il sapore, non è più pane ma il corpo di Cristo; quel che pare vino, benché il gusto dica il contrario, non è più vino ma il sangue di Cristo. Ne aveva profeticamente parlato il Salmista come «*del vino che allieta il cuore dell’uomo, dell’olio che fa brillare il suo volto*»{{< cir-rimando "24" >}}. Sostieni forte nella fede il tuo cuore quando ti accosti a ricevere questo pane che dà vigore spirituale e allieta il volto della tua anima{{< cir-rimando "25" >}}.
 
 Possa il tuo volto riflettere nello specchio della limpida coscienza la gloria del Signore{{< cir-rimando "26" >}}, progredendo nella contemplazione di gloria in gloria, in Cristo Gesù nostro Signore, al quale l’onore, la potenza e la gloria nei {{< cir-pagina "460" >}}secoli dei secoli. Amen.
