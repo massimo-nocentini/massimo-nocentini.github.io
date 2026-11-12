@@ -39,19 +39,6 @@ body.tufte-book section > p.cir-soprascritta { margin-bottom: 1.4rem; }
 /* The pages of the printed edition: an empty anchor (cir-pagina shortcode) */
 .cir-pagina { display: inline; scroll-margin-top: 2em; }
 
-/* A note marker whose note the source PDF does not have: raised like the
-   theme's note numbers, without a note */
-sup.cir-rimando {
-  font-family: var(--tufte-serif-old, et-book-roman-old-style);
-  font-size: 1rem;
-  line-height: 0;
-  vertical-align: baseline;
-  position: relative;
-  top: -0.5rem;
-  left: 0.1rem;
-  cursor: help;
-}
-
 /* The indexes: CSS columns */
 div.cir-indice.cir-cols-3 { column-count: 3; column-gap: 2.5rem; }
 div.cir-indice.cir-cols-4 { column-count: 4; column-gap: 2rem; }

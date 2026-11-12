@@ -5,7 +5,7 @@ weight: 25
 label: "ch:catechesi-23"
 ---
 
-Quinta catechesi mistagogica, a partire dalla lettura dell’Epistola Cattolica di san Pietro: «*Deposta dunque ogni malizia e ogni frode e ipocrisia, ecc.*» {{< cir-rimando "2" >}}*.*
+Quinta catechesi mistagogica, a partire dalla lettura dell’Epistola Cattolica di san Pietro: «*Deposta dunque ogni malizia e ogni frode e ipocrisia, ecc.*»*.*
 {.cir-rubrica .cir-i}
 
 ## 1. L’ultima catechesi vuol essere la corona dell’edificio {#s1}
@@ -16,13 +16,13 @@ Quinta catechesi mistagogica, a partire dalla lettura dell’Epistola Cattolica 
 
 Avete visto che il diacono dava al celebrante e ai presbiteri attorno all’altare di Dio l’occorrente per il lavabo: non perché essi abbiano da eliminare sozzure materiali, già assenti dal momento che il nostro corpo non è più sporco già da quando siamo entrati in chiesa.
 
-L’abluzione delle mani è un rito simbolico che ci ricorda il dovere di purificarci sempre più da ogni peccato o mancanza: le mani infatti simboleggiano l’attività umana, e il lavarle significa la volontà di purificazione che deve rendere irreprensibili le nostre azioni. Questo {{< cir-pagina "462" >}}mistero l’ho sentito illustrare dalle parole del santo Davide: «*Laverò le mie mani tra gli innocenti e circonderò il tuo altare, Signore*»{{< cir-rimando "3" >}}. Dunque, il gesto simbolico del lavabo durante la messa non significa che un rinnovato impegno di restare immuni da colpa.
+L’abluzione delle mani è un rito simbolico che ci ricorda il dovere di purificarci sempre più da ogni peccato o mancanza: le mani infatti simboleggiano l’attività umana, e il lavarle significa la volontà di purificazione che deve rendere irreprensibili le nostre azioni. Questo {{< cir-pagina "462" >}}mistero l’ho sentito illustrare dalle parole del santo Davide: «*Laverò le mie mani tra gli innocenti e circonderò il tuo altare, Signore*». Dunque, il gesto simbolico del lavabo durante la messa non significa che un rinnovato impegno di restare immuni da colpa.
 
 ## 3. Il bacio di riconciliazione e di pace {#s3}
 
 A un certo punto poi il diacono dice a voce alta: «*Scambiamoci un segno di mutua accoglienza e di vicendevole amore*».
 
-Non pensare a un bacio quale è quello che di solito amici comuni si scambiano incontrandosi in piazza: nulla del genere. Il nostro è un gesto che esprime la volontà di conciliare le anime con il proposito di dimenticare le vicendevoli offese: un segno di unione dei cuori e della estinzione d’ogni inimicizia. Per questo il Cristo disse: «*Se tu stai facendo la tua offerta all’altare e lì ti ricordi che tuo fratello ha qualcosa contro di te, lascia la tua offerta sull’altare e va’ prima a riconciliarti con tuo fratello; poi vieni a presentare la tua offerta*»{{< cir-rimando "4" >}}. Il nostro gesto equivale quindi a una riconciliazione, e per questo si dice bacio santo. Lo proclama san Paolo dicendo: «*Accoglietevi l’un l’altro e scambiatevi un bacio santo*{{< cir-rimando "5" >}}»; e lo ripete Pietro chiamandolo «*bacio nella carità*»{{< cir-rimando "6" >}}.
+Non pensare a un bacio quale è quello che di solito amici comuni si scambiano incontrandosi in piazza: nulla del genere. Il nostro è un gesto che esprime la volontà di conciliare le anime con il proposito di dimenticare le vicendevoli offese: un segno di unione dei cuori e della estinzione d’ogni inimicizia. Per questo il Cristo disse: «*Se tu stai facendo la tua offerta all’altare e lì ti ricordi che tuo fratello ha qualcosa contro di te, lascia la tua offerta sull’altare e va’ prima a riconciliarti con tuo fratello; poi vieni a presentare la tua offerta*». Il nostro gesto equivale quindi a una riconciliazione, e per questo si dice bacio santo. Lo proclama san Paolo dicendo: «*Accoglietevi l’un l’altro e scambiatevi un bacio santo*»; e lo ripete Pietro chiamandolo «*bacio nella carità*».
 
 ## 4. Il dialogo: «In alto i cuori – Sono rivolti al Signore» {#s4}
 
@@ -32,25 +32,25 @@ Nessuno dica con la bocca: «*Li teniamo rivolti al Signore*», mentre la sua me
 
 ## 5. Il dialogo: «Rendiamo grazie – È cosa degna e giusta» {#s5}
 
-Il celebrante poi dice: «*Rendiamo grazie al Signore*». Infatti veramente non potremmo mai finire di ringraziarlo per tanta grazia cui ci ha chiamati benché indegni, per lo Spirito d’adozione di cui ci ha fatti degni riconciliandoci da nemici che eravamo{{< cir-rimando "7" >}}. Quindi rispondete: «*È cosa degna e giusta*». Col ringraziarlo infatti noi non faremo mai altro che una cosa degna e giusta; mentre egli, col beneficarci e col farci degni di beni sì grandi, ha fatto una cosa più {{< cir-pagina "464" >}}che giusta, al di là di ogni giustizia.
+Il celebrante poi dice: «*Rendiamo grazie al Signore*». Infatti veramente non potremmo mai finire di ringraziarlo per tanta grazia cui ci ha chiamati benché indegni, per lo Spirito d’adozione di cui ci ha fatti degni riconciliandoci da nemici che eravamo. Quindi rispondete: «*È cosa degna e giusta*». Col ringraziarlo infatti noi non faremo mai altro che una cosa degna e giusta; mentre egli, col beneficarci e col farci degni di beni sì grandi, ha fatto una cosa più {{< cir-pagina "464" >}}che giusta, al di là di ogni giustizia.
 
 ## 6. La lode delle creature e la dossologia serafica {#s6}
 
-Ci uniamo poi nel ricordo{{< cir-rimando "8" >}} al cielo, alla terra e al mare, al sole, alla luna e agli astri, al mondo tutto delle creature ragionevoli e irragionevoli, visibili e invisibili, degli angeli e degli arcangeli, delle Virtù e delle Dominazioni, dei Principati e delle Potestà, dei Troni e dei Cherubini dalle molte facce{{< cir-rimando "9" >}}, dicendo con forza le parole di Davide: «*Magnificate con me il Signore*»{{< cir-rimando "10" >}}.
+Ci uniamo poi nel ricordo al cielo, alla terra e al mare, al sole, alla luna e agli astri, al mondo tutto delle creature ragionevoli e irragionevoli, visibili e invisibili, degli angeli e degli arcangeli, delle Virtù e delle Dominazioni, dei Principati e delle Potestà, dei Troni e dei Cherubini dalle molte facce, dicendo con forza le parole di Davide: «*Magnificate con me il Signore*».
 
-Ricordiamo anche i Serafini che Isaia contemplò nello Spirito Santo, diritti in cerchio attorno al trono di Dio. Essi con due ali nascondevano il volto, con due i piedi, e con due volavano dicendo: «*Santo, santo, santo il Signore Sabaot*»{{< cir-rimando "11" >}}; noi non facciamo quindi che ripetere la dossologia rivelataci dai Serafini, per unirci in comunione di lode con le milizie sovracelesti.
+Ricordiamo anche i Serafini che Isaia contemplò nello Spirito Santo, diritti in cerchio attorno al trono di Dio. Essi con due ali nascondevano il volto, con due i piedi, e con due volavano dicendo: «*Santo, santo, santo il Signore Sabaot*»; noi non facciamo quindi che ripetere la dossologia rivelataci dai Serafini, per unirci in comunione di lode con le milizie sovracelesti.
 
 ## 7. Invocazione a Dio perché mandi il suo Spirito Santo {#s7}
 
-Santificati da questi inni spirituali{{< cir-rimando "12" >}}, preghiamo quindi Dio misericordioso perché mandi lo Spirito Santo sulle oblate che abbiamo dinanzi, a trasformare il pane nel corpo di Cristo, il vino nel sangue di Cristo. Lo Spirito Santo santifica e trasforma totalmente qualunque cosa abbia toccato{{< cir-rimando "13" >}}.
+Santificati da questi inni spirituali, preghiamo quindi Dio misericordioso perché mandi lo Spirito Santo sulle oblate che abbiamo dinanzi, a trasformare il pane nel corpo di Cristo, il vino nel sangue di Cristo. Lo Spirito Santo santifica e trasforma totalmente qualunque cosa abbia toccato.
 
 ## 8. Memento dei vivi {#s8}
 
-{{< cir-pagina "465" >}}Così, compita l’immolazione incruenta della Vittima spirituale, su questa stessa Vittima di propiziazione invochiamo Dio perché conceda la pace a ogni comunità ecclesiale e la stabilità dell’ordine a tutto il mondo. Preghiamo insieme e offriamo il Sacrificio per gli imperatori, per le loro forze armate e per i loro alleati, per i malati e per gli afflitti, insomma per tutti i bisognosi di aiuto{{< cir-rimando "14" >}}.
+{{< cir-pagina "465" >}}Così, compita l’immolazione incruenta della Vittima spirituale, su questa stessa Vittima di propiziazione invochiamo Dio perché conceda la pace a ogni comunità ecclesiale e la stabilità dell’ordine a tutto il mondo. Preghiamo insieme e offriamo il Sacrificio per gli imperatori, per le loro forze armate e per i loro alleati, per i malati e per gli afflitti, insomma per tutti i bisognosi di aiuto.
 
 ## 9. Memento dei morti {#s9}
 
-Facciamo poi ricordo di tutti coloro che si sono addormentati: a partire dai patriarchi e dai profeti, dagli apostoli e dai martiri, perché Dio accolga le nostre preghiere attraverso le loro e con il loro patrocinio; per finire con i santi che ci sono stati padri, con i vescovi defunti e con gli altri che ci hanno preceduto nel sonno della morte. Crediamo di sommo giovamento per le anime la preghiera che per esse innalziamo mentre si offre sull’altare il santo e tremendo Sacrificio{{< cir-rimando "15" >}}.
+Facciamo poi ricordo di tutti coloro che si sono addormentati: a partire dai patriarchi e dai profeti, dagli apostoli e dai martiri, perché Dio accolga le nostre preghiere attraverso le loro e con il loro patrocinio; per finire con i santi che ci sono stati padri, con i vescovi defunti e con gli altri che ci hanno preceduto nel sonno della morte. Crediamo di sommo giovamento per le anime la preghiera che per esse innalziamo mentre si offre sull’altare il santo e tremendo Sacrificio.
 
 ## 10. I suffragi, osmosi di meriti per la comunione dei santi {#s10}
 
@@ -62,49 +62,49 @@ In modo simile ci comportiamo anche noi, quando presentiamo le nostre domande pe
 
 ## 11. Padre nostro, di noi che portiamo l’immagine dell’uomo celeste {#s11}
 
-Recitando poi la preghiera che il Salvatore lasciò ai suoi discepoli, diamo con pura coscienza a Dio il nome di Padre, dicendo: «*Padre nostro che sei nei cieli*»{{< cir-rimando "16" >}}.
+Recitando poi la preghiera che il Salvatore lasciò ai suoi discepoli, diamo con pura coscienza a Dio il nome di Padre, dicendo: «*Padre nostro che sei nei cieli*».
 
-O somma misericordia di Dio! A tal punto accorda perdono totale e comunione di grazia da farsi chiamare padre da chi l’ha abbandonato commettendo i più gravi peccati: nell’espressione «*Padre che sei nei cieli*», per cieli possiamo intendere anche gli uomini che portano in sé l’immagine dell’uomo celeste{{< cir-rimando "17" >}}, in cui egli abita e con cui cammina{{< cir-rimando "18" >}}.
+O somma misericordia di Dio! A tal punto accorda perdono totale e comunione di grazia da farsi chiamare padre da chi l’ha abbandonato commettendo i più gravi peccati: nell’espressione «*Padre che sei nei cieli*», per cieli possiamo intendere anche gli uomini che portano in sé l’immagine dell’uomo celeste, in cui egli abita e con cui cammina.
 
 ## 12. Cosa comporta il santificare il nome di Dio {#s12}
 
-Preghiamo: «*Sia santificato il tuo nome*». Il nome di Dio è per natura santo, sia che lo diciamo sia che non lo diciamo; poiché però tra i peccatori c’è chi talora lo profana, secondo il detto biblico: «*Per causa vostra il mio nome è bestemmiato tra le genti*»{{< cir-rimando "19" >}}, noi domandiamo che sia santificato il nome di Dio. Preghiamo così non già perché esso non sia santo o possa passare dal non {{< cir-pagina "467" >}}essere santo ad essere santo, ma perché diventi santo in noi, che ci santifichiamo con opere degne della sua santità.
+Preghiamo: «*Sia santificato il tuo nome*». Il nome di Dio è per natura santo, sia che lo diciamo sia che non lo diciamo; poiché però tra i peccatori c’è chi talora lo profana, secondo il detto biblico: «*Per causa vostra il mio nome è bestemmiato tra le genti*», noi domandiamo che sia santificato il nome di Dio. Preghiamo così non già perché esso non sia santo o possa passare dal non {{< cir-pagina "467" >}}essere santo ad essere santo, ma perché diventi santo in noi, che ci santifichiamo con opere degne della sua santità.
 
 ## 13. Venga il Regno di Dio, e non regni più il peccato {#s13}
 
 Venga il tuo regno! È dell’anima pura pregare con tutta libertà: «*Venga il tuo regno*».
 
-Può così pregare chi, avendo compreso le parole di Paolo: «*Che il peccato non regni nel vostro corpo mortale*»{{< cir-rimando "20" >}}, si sia conservato puro nelle opere, nei pensieri e nelle parole.
+Può così pregare chi, avendo compreso le parole di Paolo: «*Che il peccato non regni nel vostro corpo mortale*», si sia conservato puro nelle opere, nei pensieri e nelle parole.
 
 ## 14. Sia fatta la tua volontà quaggiù come la si fa lassù {#s14}
 
 Preghiamo poi: «*Sia fatta la tua volontà come in cielo così in terra*».
 
-Fare la volontà di Dio è proprio dei divini e santi angeli di Dio, secondo dice Davide nel salmo che canta: «*Benedite il Signore, voi tutti suoi angeli, potenti esecutori dei suoi comandi*»{{< cir-rimando "21" >}}. Prega quindi con la stessa intensità, dicendo: «*Come tra gli angeli si compie la tua volontà, Signore, così anche sulla terra essa sia fatta in me*».
+Fare la volontà di Dio è proprio dei divini e santi angeli di Dio, secondo dice Davide nel salmo che canta: «*Benedite il Signore, voi tutti suoi angeli, potenti esecutori dei suoi comandi*». Prega quindi con la stessa intensità, dicendo: «*Come tra gli angeli si compie la tua volontà, Signore, così anche sulla terra essa sia fatta in me*».
 
 ## 15. Domandiamo il pane sostanziale per l’oggi della fede {#s15}
 
-Dicendo: «*Dacci oggi il nostro pane sostanziale*», chiediamo non il pane che comunemente impastiamo, ma quello santo, sostanziale in quanto ordinato a sostentare la sostanza dell’anima. Esso non va a finire nel ventre per esserne poi espulso{{< cir-rimando "22" >}}, ma va ad alimentare ogni tua {{< cir-pagina "468" >}}struttura, dell’anima e del corpo, per l’oggi di cui parla Paolo che dà all’espressione «*quotidiano*» il senso di una durata «*fino al tempo in cui dura quest’oggi*»{{< cir-rimando "23" >}}.
+Dicendo: «*Dacci oggi il nostro pane sostanziale*», chiediamo non il pane che comunemente impastiamo, ma quello santo, sostanziale in quanto ordinato a sostentare la sostanza dell’anima. Esso non va a finire nel ventre per esserne poi espulso, ma va ad alimentare ogni tua {{< cir-pagina "468" >}}struttura, dell’anima e del corpo, per l’oggi di cui parla Paolo che dà all’espressione «*quotidiano*» il senso di una durata «*fino al tempo in cui dura quest’oggi*».
 
 ## 16. Patto vantaggioso per l’uomo, il perdonare per essere perdonati {#s16}
 
 Aggiungiamo: «*E rimetti a noi i nostri debiti, come anche noi li rimettiamo ai nostri debitori*».
 
-Commettiamo infatti tante colpe, in parole, in pensieri e in tante opere meritevoli di condanna; come dice Giovanni, «*se diciamo di non aver peccato, mentiamo*»{{< cir-rimando "24" >}}! Pregando Dio che perdoni a noi come anche noi rimettiamo i debiti del prossimo, noi col Signore facciamo un patto di mutuo perdono, vantaggioso per noi. Commisurando l’utile che ne ricaviamo con quello che diamo in cambio, non c’è da esitare o tergiversare; perché le offese degli altri nei nostri riguardi sono ben poca cosa, leggere e veniali, rispetto alle colpe gravi da noi commesse contro Dio, imperdonabili se non intervenisse la sua misericordia.
+Commettiamo infatti tante colpe, in parole, in pensieri e in tante opere meritevoli di condanna; come dice Giovanni, «*se diciamo di non aver peccato, mentiamo*»! Pregando Dio che perdoni a noi come anche noi rimettiamo i debiti del prossimo, noi col Signore facciamo un patto di mutuo perdono, vantaggioso per noi. Commisurando l’utile che ne ricaviamo con quello che diamo in cambio, non c’è da esitare o tergiversare; perché le offese degli altri nei nostri riguardi sono ben poca cosa, leggere e veniali, rispetto alle colpe gravi da noi commesse contro Dio, imperdonabili se non intervenisse la sua misericordia.
 
 Bada dunque a te! Per avere ricevuto delle offese piccole e leggere, non chiudere la porta al perdono di Dio per i tuoi gravissimi peccati.
 
 ## 17. Non permettere che veniamo sommersi dalle tentazioni {#s17}
 
-Quando poi il Signore ci insegna a pregare: «*E non c’indurre in tentazione*»{{< cir-rimando "25" >}}, vuole forse dirci di pregare perché non siamo mai tentati? Come mai allora altrove ha potuto dire: «*Chi non ha avuto delle prove, poco* {{< cir-pagina "469" >}}*conosce*»{{< cir-rimando "26" >}}, e di nuovo: «*Considerate, fratelli, perfetta letizia quando subite ogni sorta di prove*»{{< cir-rimando "27" >}}?
+Quando poi il Signore ci insegna a pregare: «*E non c’indurre in tentazione*», vuole forse dirci di pregare perché non siamo mai tentati? Come mai allora altrove ha potuto dire: «*Chi non ha avuto delle prove, poco* {{< cir-pagina "469" >}}*conosce*», e di nuovo: «*Considerate, fratelli, perfetta letizia quando subite ogni sorta di prove*»?
 
 Ma entrare in tentazione vuol dire forse esserne sommersi? No, la tentazione è come un torrente che è difficile attraversare: gli uni, lungi dal venirne sommersi, diventano attraversandolo, valenti nuotatori – quelli che non si fanno trascinare dalle tentazioni –; gli altri si comportano in maniera opposta, e appena entrati ne sono sommersi. Così per esempio Giuda, entrato in tentazione d’avarizia, non seppe nuotare e ne rimase sommerso, affogando materialmente e spiritualmente; Pietro invece, entrato in tentazione di rinnegamento, non se ne fece sommergere appena entrato, ma riuscì con coraggio a nuotare e a vincere la prova.
 
-Ascolta ancora un altro passo, dove il coro dei santi vittoriosi ringrazia Dio di essere scampato alla tentazione: «*Dio, tu ci hai messo alla prova e ci hai passati al crogiuolo come l’argento; ci hai fatto cadere in un agguato e hai messo un peso ai nostri fianchi facendo cavalcare uomini sulle nostre teste; ci hai fatto passare per il fuoco e per l’acqua, ma poi ci hai sospinto verso il refrigerio*». Vedi con quanta fiducia parlano, dal momento che hanno potuto subire i marosi della tentazione senza rimanerne sommersi? Dicono: «*Tu ci hai sospinto verso il refrigerio*»{{< cir-rimando "28" >}}. Giungere al luogo del refrigerio vuol dire essere stati liberati dalla tentazione.
+Ascolta ancora un altro passo, dove il coro dei santi vittoriosi ringrazia Dio di essere scampato alla tentazione: «*Dio, tu ci hai messo alla prova e ci hai passati al crogiuolo come l’argento; ci hai fatto cadere in un agguato e hai messo un peso ai nostri fianchi facendo cavalcare uomini sulle nostre teste; ci hai fatto passare per il fuoco e per l’acqua, ma poi ci hai sospinto verso il refrigerio*». Vedi con quanta fiducia parlano, dal momento che hanno potuto subire i marosi della tentazione senza rimanerne sommersi? Dicono: «*Tu ci hai sospinto verso il refrigerio*». Giungere al luogo del refrigerio vuol dire essere stati liberati dalla tentazione.
 
 ## 18. «Liberaci dal maligno. Amen» {#s18}
 
-Se l’espressione «*non c’indurre in tentazione*» fosse da intendere come preghiera di non essere tentati, Gesù {{< cir-pagina "470" >}}non l’avrebbe concluso dicendo: «*Ma liberaci dal maligno*»{{< cir-rimando "29" >}}. L’avversario da cui preghiamo d’essere liberati è il maligno, il demonio.
+Se l’espressione «*non c’indurre in tentazione*» fosse da intendere come preghiera di non essere tentati, Gesù {{< cir-pagina "470" >}}non l’avrebbe concluso dicendo: «*Ma liberaci dal maligno*». L’avversario da cui preghiamo d’essere liberati è il maligno, il demonio.
 
 L’amen finale che chiude come con un sigillo l’orazione, vuol dire: «*Si compia tutto quello che il Signore ci ha insegnato a chiedere in questa orazione*».
 
@@ -112,24 +112,24 @@ L’amen finale che chiude come con un sigillo l’orazione, vuol dire: «*Si co
 
 Poi il sacerdote dice: «*Le cose sante ai santi*».
 
-Sante sono le oblate sulle quali è venuto lo Spirito Santo, e santi siete anche voi se fatti degni dallo Spirito Santo{{< cir-rimando "30" >}}. Cose sante e santi sono in stretta relazione.
+Sante sono le oblate sulle quali è venuto lo Spirito Santo, e santi siete anche voi se fatti degni dallo Spirito Santo. Cose sante e santi sono in stretta relazione.
 
 Quindi voi dite: «*Un solo santo, un solo Signore Gesù Cristo*». Uno solo è infatti il Santo per natura; noi lo siamo non per natura bensì per partecipazione, santi mediante una vita ascetica e di preghiera.
 
 ## 20. Gustate nella fede il corpo e il sangue di Cristo {#s20}
 
-Ascoltate poi la voce divinamente melodiosa del cantore che vi esorta alla comunione dei santi misteri dicendo: «*Gustate e vedete come è buono il Signore!*»{{< cir-rimando "31" >}}.
+Ascoltate poi la voce divinamente melodiosa del cantore che vi esorta alla comunione dei santi misteri dicendo: «*Gustate e vedete come è buono il Signore!*».
 
-Esercitate il vostro discernimento a partire non dalla laringe materiale ma dalla fede aliena da dubbio, disponendovi ad accogliere il suo invito a gustare non il tipo del pane e del vino, bensì l’antitipo del corpo e del sangue di Cristo{{< cir-rimando "32" >}}.
+Esercitate il vostro discernimento a partire non dalla laringe materiale ma dalla fede aliena da dubbio, disponendovi ad accogliere il suo invito a gustare non il tipo del pane e del vino, bensì l’antitipo del corpo e del sangue di Cristo.
 
 ## 21. Fare col cavo della sinistra un trono alla destra {#s21}
 
-{{< cir-pagina "471" >}}Quando ti accosti{{< cir-rimando "33" >}}, non stendere le palme delle mani con le dita disgiunte{{< cir-rimando "34" >}}; ma con la sinistra facendo un trono alla destra che deve accogliere il Re, ricevi il corpo di Cristo sul cavo della destra, dicendo: «*Amen*».
+{{< cir-pagina "471" >}}Quando ti accosti, non stendere le palme delle mani con le dita disgiunte; ma con la sinistra facendo un trono alla destra che deve accogliere il Re, ricevi il corpo di Cristo sul cavo della destra, dicendo: «*Amen*».
 
-Quando la tua mano viene a contatto del corpo santo{{< cir-rimando "35" >}}, santifica gli occhi, attento a non lasciarne cadere qualche frammento, perché sarebbe per te come perdere un membro del tuo corpo. Se le tue mani ricevessero dell’oro, non lo custodiresti con la più grande attenzione per non perderne nulla, per non esserne in alcun modo depauperato? Ancora più attento devi essere per non lasciar cadere alcun frammento di quel che è più prezioso dell’oro e delle pietre preziose!
+Quando la tua mano viene a contatto del corpo santo, santifica gli occhi, attento a non lasciarne cadere qualche frammento, perché sarebbe per te come perdere un membro del tuo corpo. Se le tue mani ricevessero dell’oro, non lo custodiresti con la più grande attenzione per non perderne nulla, per non esserne in alcun modo depauperato? Ancora più attento devi essere per non lasciar cadere alcun frammento di quel che è più prezioso dell’oro e delle pietre preziose!
 
 ## 22. Accostati al calice, e inchinandoti bevi il sangue di Cristo {#s22}
 
 Dopo la comunione col corpo di Cristo, accostati al calice del suo sangue senza stendere le mani, ma prendine inchinandoti con gesto della massima adorazione, e dicendo: «*Amen*» santíficati tutto.
 
-Finché hai il sangue di Cristo sulle labbra, toccalo con le mani e con esso santifica gli occhi, la fronte e gli altri sensi. Poi, in attesa dell’orazione, rendi grazie a Dio che ti ha degnato di sì sublimi misteri»{{< cir-rimando "36" >}}.
+Finché hai il sangue di Cristo sulle labbra, toccalo con le mani e con esso santifica gli occhi, la fronte e gli altri sensi. Poi, in attesa dell’orazione, rendi grazie a Dio che ti ha degnato di sì sublimi misteri».
