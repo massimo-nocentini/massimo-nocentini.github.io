@@ -429,3 +429,296 @@ wadler1987critique:
   month: "mar"
   pages: "83–94"
   numpages: "12"
+
+# post/bottom-k-sketches/index.md
+# Every entry below was checked against Crossref's record of its DOI (or the
+# publisher's or authors' page, for the ones without a DOI) in November 2026.
+anderson2018bitcoin:
+  type: misc
+  author: "Ross Anderson and Ilia Shumailov and Mansoor Ahmed and Alessandro Rietmann"
+  title: "Bitcoin Redux"
+  howpublished: "Workshop on the Economics of Information Security (WEIS 2018), Innsbruck"
+  year: "2018"
+  month: "jun"
+  url: "https://www.cl.cam.ac.uk/~rja14/Papers/bitcoin-redux.pdf"
+
+baryossef2002counting:
+  type: inproceedings
+  author: "Ziv Bar-Yossef and T. S. Jayram and Ravi Kumar and D. Sivakumar and Luca Trevisan"
+  title: "Counting Distinct Elements in a Data Stream"
+  booktitle: "Randomization and Approximation Techniques in Computer Science: 6th International Workshop, RANDOM 2002"
+  editor: "José D. P. Rolim and Salil Vadhan"
+  series: "Lecture Notes in Computer Science"
+  volume: "2483"
+  pages: "1–10"
+  publisher: "Springer"
+  year: "2002"
+  doi: "10.1007/3-540-45726-7_1"
+  url: "https://doi.org/10.1007/3-540-45726-7_1"
+
+beyer2007synopses:
+  type: inproceedings
+  author: "Kevin Beyer and Peter J. Haas and Berthold Reinwald and Yannis Sismanis and Rainer Gemulla"
+  title: "On synopses for distinct-value estimation under multiset operations"
+  booktitle: "Proceedings of the 2007 ACM SIGMOD International Conference on Management of Data"
+  series: "SIGMOD '07"
+  pages: "199–210"
+  publisher: "Association for Computing Machinery"
+  year: "2007"
+  doi: "10.1145/1247480.1247504"
+  url: "https://doi.org/10.1145/1247480.1247504"
+
+broder1997resemblance:
+  type: inproceedings
+  author: "Andrei Z. Broder"
+  title: "On the resemblance and containment of documents"
+  booktitle: "Proceedings. Compression and Complexity of SEQUENCES 1997"
+  pages: "21–29"
+  publisher: "IEEE Computer Society"
+  year: "1997"
+  doi: "10.1109/SEQUEN.1997.666900"
+  url: "https://doi.org/10.1109/SEQUEN.1997.666900"
+
+chao1982general:
+  type: article
+  author: "M. T. Chao"
+  title: "A general purpose unequal probability sampling plan"
+  journal: "Biometrika"
+  volume: "69"
+  number: "3"
+  pages: "653–656"
+  year: "1982"
+  doi: "10.1093/biomet/69.3.653"
+  url: "https://doi.org/10.1093/biomet/69.3.653"
+
+cohen2007summarizing:
+  type: inproceedings
+  author: "Edith Cohen and Haim Kaplan"
+  title: "Summarizing data using bottom-k sketches"
+  booktitle: "Proceedings of the Twenty-Sixth Annual ACM Symposium on Principles of Distributed Computing"
+  series: "PODC '07"
+  pages: "225–234"
+  publisher: "Association for Computing Machinery"
+  year: "2007"
+  doi: "10.1145/1281100.1281133"
+  url: "https://doi.org/10.1145/1281100.1281133"
+
+cohen2008tighter:
+  type: article
+  author: "Edith Cohen and Haim Kaplan"
+  title: "Tighter estimation using bottom k sketches"
+  journal: "Proceedings of the VLDB Endowment"
+  volume: "1"
+  number: "1"
+  pages: "213–224"
+  year: "2008"
+  doi: "10.14778/1453856.1453884"
+  url: "https://doi.org/10.14778/1453856.1453884"
+
+cohen2009coordinated:
+  type: article
+  author: "Edith Cohen and Haim Kaplan and Subhabrata Sen"
+  title: "Coordinated weighted sampling for estimating aggregates over multiple weight assignments"
+  journal: "Proceedings of the VLDB Endowment"
+  volume: "2"
+  number: "1"
+  pages: "646–657"
+  year: "2009"
+  doi: "10.14778/1687627.1687701"
+  url: "https://doi.org/10.14778/1687627.1687701"
+
+cohen2009stream:
+  type: inproceedings
+  author: "Edith Cohen and Nick Duffield and Haim Kaplan and Carsten Lund and Mikkel Thorup"
+  title: "Stream sampling for variance-optimal estimation of subset sums"
+  booktitle: "Proceedings of the Twentieth Annual ACM-SIAM Symposium on Discrete Algorithms"
+  series: "SODA '09"
+  pages: "1255–1264"
+  publisher: "Society for Industrial and Applied Mathematics"
+  year: "2009"
+  doi: "10.1137/1.9781611973068.136"
+  url: "https://doi.org/10.1137/1.9781611973068.136"
+
+cohen2011efficient:
+  type: article
+  author: "Edith Cohen and Nick Duffield and Haim Kaplan and Carsten Lund and Mikkel Thorup"
+  title: "Efficient Stream Sampling for Variance-Optimal Estimation of Subset Sums"
+  journal: "SIAM Journal on Computing"
+  volume: "40"
+  number: "5"
+  pages: "1402–1431"
+  year: "2011"
+  doi: "10.1137/10079817X"
+  url: "https://doi.org/10.1137/10079817X"
+
+cohen2011structure:
+  type: article
+  author: "Edith Cohen and Graham Cormode and Nick Duffield"
+  title: "Structure-aware sampling: flexible and accurate summarization"
+  journal: "Proceedings of the VLDB Endowment"
+  volume: "4"
+  number: "11"
+  pages: "819–830"
+  year: "2011"
+  doi: "10.14778/3402707.3402721"
+  url: "https://doi.org/10.14778/3402707.3402721"
+
+duffield2007priority:
+  type: article
+  author: "Nick Duffield and Carsten Lund and Mikkel Thorup"
+  title: "Priority sampling for estimation of arbitrary subset sums"
+  journal: "Journal of the ACM"
+  volume: "54"
+  number: "6"
+  articleno: "32"
+  note: "Article 32"
+  year: "2007"
+  month: "dec"
+  doi: "10.1145/1314690.1314696"
+  url: "https://doi.org/10.1145/1314690.1314696"
+
+flajolet2007hyperloglog:
+  type: inproceedings
+  author: "Philippe Flajolet and Éric Fusy and Olivier Gandouet and Frédéric Meunier"
+  title: "HyperLogLog: the analysis of a near-optimal cardinality estimation algorithm"
+  booktitle: "2007 Conference on Analysis of Algorithms (AofA 07)"
+  series: "DMTCS Proceedings"
+  volume: "AH"
+  pages: "137–156"
+  year: "2007"
+  doi: "10.46298/dmtcs.3545"
+  url: "https://doi.org/10.46298/dmtcs.3545"
+
+horvitz1952generalization:
+  type: article
+  author: "D. G. Horvitz and D. J. Thompson"
+  title: "A Generalization of Sampling Without Replacement from a Finite Universe"
+  journal: "Journal of the American Statistical Association"
+  volume: "47"
+  number: "260"
+  pages: "663–685"
+  year: "1952"
+  doi: "10.1080/01621459.1952.10483446"
+  url: "https://doi.org/10.1080/01621459.1952.10483446"
+
+ioffe2010improved:
+  type: inproceedings
+  author: "Sergey Ioffe"
+  title: "Improved Consistent Sampling, Weighted Minhash and L1 Sketching"
+  booktitle: "2010 IEEE International Conference on Data Mining"
+  pages: "246–255"
+  publisher: "IEEE"
+  year: "2010"
+  doi: "10.1109/ICDM.2010.80"
+  url: "https://doi.org/10.1109/ICDM.2010.80"
+
+madow1949theory:
+  type: article
+  author: "William G. Madow"
+  title: "On the Theory of Systematic Sampling, II"
+  journal: "The Annals of Mathematical Statistics"
+  volume: "20"
+  number: "3"
+  pages: "333–354"
+  year: "1949"
+  doi: "10.1214/aoms/1177729988"
+  url: "https://doi.org/10.1214/aoms/1177729988"
+
+moser2014towards:
+  type: inproceedings
+  author: "Malte Möser and Rainer Böhme and Dominic Breuker"
+  title: "Towards Risk Scoring of Bitcoin Transactions"
+  booktitle: "Financial Cryptography and Data Security: FC 2014 Workshops, BITCOIN and WAHC 2014"
+  editor: "Rainer Böhme and Michael Brenner and Tyler Moore and Matthew Smith"
+  series: "Lecture Notes in Computer Science"
+  volume: "8438"
+  pages: "16–32"
+  publisher: "Springer"
+  year: "2014"
+  doi: "10.1007/978-3-662-44774-1_2"
+  url: "https://doi.org/10.1007/978-3-662-44774-1_2"
+
+moulton2018maximally:
+  type: inproceedings
+  author: "Ryan Moulton and Yunjiang Jiang"
+  title: "Maximally Consistent Sampling and the Jaccard Index of Probability Distributions"
+  booktitle: "2018 IEEE International Conference on Data Mining (ICDM)"
+  pages: "347–356"
+  publisher: "IEEE"
+  year: "2018"
+  doi: "10.1109/ICDM.2018.00050"
+  url: "https://doi.org/10.1109/ICDM.2018.00050"
+
+nakamoto2008bitcoin:
+  type: misc
+  author: "Satoshi Nakamoto"
+  title: "Bitcoin: A Peer-to-Peer Electronic Cash System"
+  year: "2008"
+  url: "https://bitcoin.org/bitcoin.pdf"
+
+ohlsson1998sequential:
+  type: article
+  author: "Esbjörn Ohlsson"
+  title: "Sequential Poisson Sampling"
+  journal: "Journal of Official Statistics"
+  volume: "14"
+  number: "2"
+  pages: "149–162"
+  year: "1998"
+  url: "https://www.scb.se/contentassets/ca21efb41fee47d293bbee5bf7be7fb3/sequential-poisson-sampling.pdf"
+
+rosen1997asymptotic:
+  type: article
+  author: "Bengt Rosén"
+  title: "Asymptotic theory for order sampling"
+  journal: "Journal of Statistical Planning and Inference"
+  volume: "62"
+  number: "2"
+  pages: "135–158"
+  year: "1997"
+  doi: "10.1016/S0378-3758(96)00185-1"
+  url: "https://doi.org/10.1016/S0378-3758(96)00185-1"
+
+steele2014fast:
+  type: inproceedings
+  author: "Guy L. Steele and Doug Lea and Christine H. Flood"
+  title: "Fast splittable pseudorandom number generators"
+  booktitle: "Proceedings of the 2014 ACM International Conference on Object Oriented Programming Systems Languages & Applications"
+  pages: "453–472"
+  publisher: "Association for Computing Machinery"
+  year: "2014"
+  doi: "10.1145/2660193.2660195"
+  url: "https://doi.org/10.1145/2660193.2660195"
+
+szegedy2006dlt:
+  type: inproceedings
+  author: "Mario Szegedy"
+  title: "The DLT priority sampling is essentially optimal"
+  booktitle: "Proceedings of the Thirty-Eighth Annual ACM Symposium on Theory of Computing"
+  series: "STOC '06"
+  pages: "150–158"
+  publisher: "Association for Computing Machinery"
+  year: "2006"
+  doi: "10.1145/1132516.1132539"
+  url: "https://doi.org/10.1145/1132516.1132539"
+
+thorup2013bottom:
+  type: inproceedings
+  author: "Mikkel Thorup"
+  title: "Bottom-k and priority sampling, set similarity and subset sums with minimal independence"
+  booktitle: "Proceedings of the Forty-Fifth Annual ACM Symposium on Theory of Computing"
+  series: "STOC '13"
+  pages: "371–380"
+  publisher: "Association for Computing Machinery"
+  year: "2013"
+  doi: "10.1145/2488608.2488655"
+  url: "https://doi.org/10.1145/2488608.2488655"
+
+williams1991probability:
+  type: book
+  author: "David Williams"
+  title: "Probability with Martingales"
+  publisher: "Cambridge University Press"
+  year: "1991"
+  doi: "10.1017/CBO9780511813658"
+  url: "https://doi.org/10.1017/CBO9780511813658"
