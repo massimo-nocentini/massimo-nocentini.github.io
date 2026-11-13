@@ -11,6 +11,7 @@ dateText: "Parrocchia S. Lorenzo da Brindisi, Francavilla Fontana, 9–10 marzo 
 description: "Catechesi di don Fabio Rosini sul processo di Gesù nella passione secondo Giovanni (Gv 18–19), tenuta in due serate alla Settimana biblica 2017 a Francavilla Fontana."
 keywords: ["Fabio Rosini", "Vangelo di Giovanni", "passione", "processo di Gesù", "diritto romano", "Ponzio Pilato", "Caifa", "Anna", "Simon Pietro", "Malco", "rinnegamento", "Io sono", "regno non di questo mondo", "verità", "Barabba", "flagellazione", "Ecce homo", "titulus", "re dei Giudei", "È compiuto", "agnello pasquale", "Satana accusatore", "remissione dei peccati", "Benedetto XVI", "Gesù di Nazaret", "regalità della verità"]
 font: "libertinus"
+toc: true
 tufte:
   style: "latex"
   print:
@@ -1022,5 +1023,3 @@ Per Pilato dopo l’interrogatorio è chiaro ciò che, in linea di principio, eg
 Penso che si debba tener conto di questa paura in Pilato: c’era forse veramente qualcosa di divino in quest’uomo? Condannandolo si metteva forse contro una potenza divina? Doveva forse aspettarsi l’ira di tali potenze? Penso che il suo atteggiamento in questo processo non si spieghi soltanto in ragione di un certo impegno per la giustizia, ma proprio anche in base a queste idee.
 
 Ovviamente gli accusatori se ne rendono conto ed oppongono ora ad una paura un’altra paura. Alla paura superstiziosa per una possibile presenza divina, essi oppongono la paura molto concreta di restare privo del favore dell’imperatore, di perdere la posizione e di precipitare così in una situazione senza sostegno. L’affermazione «*Se liberi costui, non sei amico di Cesare*»{{< sidenote >}}[Gv 19,12](/book/bibbia-di-gerusalemme/nuovo-testamento/giovanni-19#john-19-12).{{< /sidenote >}} è una minaccia. Alla fine, la preoccupazione per la carriera è più forte della paura di fronte alle potenze divine.
-
-{{< tableofcontents >}}
