@@ -1,0 +1,20 @@
+{{- /*
+  Italics where Markdown's *…* cannot open or close (CommonMark's flanking
+  rules), used by the handout content/page/ecce-homo/ (ported from the LaTeX
+  ecce-homo), e.g. an italic quotation that ends with punctuation right before
+  a sidenote. Same output as *…* elsewhere:
+
+    {{< eh-em >}}perché mi percuoti?{{< /eh-em >}}   →  <em>perché mi percuoti?</em>
+
+  The inner text is inline Markdown (links, nested shortcodes), rendered by
+  the theme's tufte/render-inner.html and nested like the theme's own
+  inline shortcodes (tufte/nest.html). A copy of cir-em.
+*/ -}}
+{{- $text := .InnerDeindent -}}
+{{- $html := "" -}}
+{{- with $text -}}
+  {{- $html = partial "tufte/render-inner.html" (dict "page" $.Page "inner" . "text" . "display" "inline" "shortcodes" "" "where" (printf "%s shortcode in %v" $.Name $.Position)) | string -}}
+  {{- $html = partial "func/flatten-p.html" $html | strings.TrimSpace -}}
+{{- end -}}
+{{- $out := printf `<em>%s</em>` $html -}}
+{{- partial "tufte/nest.html" (dict "ctx" . "html" $out) | safeHTML -}}
