@@ -643,8 +643,7 @@ Let $d_j = \hat v_{b_j} - v_{b_j}$ and $D_j = \sum_{i \le j} d_i = \hat F(b_j) -
 {{< /proof >}}
 
 {{< remark >}}
-Point 5 also explains a number measured in section 8. For a diffuse colour, whose lights are all tiny against $\tau$, the fractional parts of the $S_j$ run densely through $[0, 1)$, so the largest CDF error over all cuts is close to $\tau \max(U, 1 - U)$, whose expectation is $\tfrac34 \tau$. The single-shot KS distance of `varopt` measured on the exact colours was between $0.741\tau$ and $0.750\tau$ for $k = 16$ to $4096$, a little lower at small $k$ (§8.8). (The code's comments in `metrics.rs` and `eval.rs` say "about $\tau/2$"; the data and this argument say $\tfrac34 \tau$.)
-{{< /remark >}}
+Point 5 also explains a number measured in section 8. For a diffuse colour, whose lights are all tiny against $\tau$, the fractional parts of the $S_j$ run densely through $[0, 1)$, so the largest CDF error over all cuts is close to $\tau \max(U, 1 - U)$, whose expectation is $\tfrac34 \tau$. The single-shot KS distance of `varopt` measured on the exact colours was between $0.741\tau$ and $0.750\tau$ for $k = 16$ to $4096$, a little lower at small $k$ (§8.8).{{< /remark >}}
 
 The code never sorts to find $\tau$; it iterates.
 
