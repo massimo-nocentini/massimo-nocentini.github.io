@@ -1346,7 +1346,7 @@ A sketch of $k$ points of a colour spread over thousands of bands cannot have a 
 | `varopt` 64 | 2,580 / 5,330 [M] | 17.9 / 37 | 8.5 GB [M] | 1.1 h [M] | 31.3 GB [M] | ~20 GB [E] | Pareto |
 | `varopt` 128 | 1,333 / 2,759 [M] | 9.3 / 19 | 12.4 GB [M] | 1.8–2.0 h [M] | 65.6 GB [M] | 41.7 GB [M] | Pareto |
 | `varopt` 256 | 686 / 1,426 [M] | 4.8 / 9.9 | 20.3 GB [M] | 3.4 h [M] | 144.5 GB [M] | ~86 GB [E] | Pareto, fallback |
-| **`varopt` 512** | **349 / 729 [M]** | **2.4 / 5.1** | **36.3 GB [M]** | **6.3–6.6 h [P]** | **~312 GB [P]** | **~175–190 GB [E]** | **Pareto, chosen** |
+| **`varopt` 512** | **349 / 729 [M]** | **2.4 / 5.1** | **36.3 GB [M]** | **5.1 h [M]** | **~312 GB [P]** | **172.7 GB [M]** | **Pareto, chosen** |
 | `varopt` 1024 | 178 / 372 [M] | 1.2 / 2.6 | ~68 GB [P] | 11.4–11.9 h [P] | 659–721 GB [P] | ~380–420 GB [E] | Pareto, for a tight tolerance |
 | `varopt` 64, step mode | 3,866 / – [M] | 26.8 / – | ≈ `varopt` 64 [E] | fold time 0.98× `varopt` 64 [M] | ≈ `varopt` 64 [E] | – | dominated |
 | `prio` 64 | 15,303 / 33,373 [M] | 106 / 232 | ≈ `varopt` 64 | fold time 1.07× `varopt` 64 [M] | not measured | – | dominated |
@@ -1354,15 +1354,15 @@ A sketch of $k$ points of a colour spread over thousands of bands cannot have a 
 | `prio` 1024 | 3,731 / 8,158 [M] | 26 / 57 | ~68 GB [P] | ≥ `varopt` 1024 | not measured | – | dominated |
 | `coord` 64 | 67,482 / 121,513 [M] | 469 / 844 | ≈ `varopt` 64 | fold time 0.77× `varopt` 64 [M] | not measured | – | dominated |
 | `coord` 256 | 59,072 / 105,765 [M] | 410 / 734 | ≈ `varopt` 256 | fold time 0.64× `varopt` 256 [M] | not measured | – | dominated |
-{#tab:cost .fullwidth caption="Error against cost over the whole chain. Wall times are of single-configuration emits run beside other jobs (good to about 12 percent); for step mode, prio and coord only the fold time of pass A is known, given relative to varopt at the same k. Sizes are the emit compressed by zstd with 16 threads."}
+{#tab:cost .fullwidth caption="Error against cost over the whole chain. Wall times are of single-configuration emits run beside other jobs (good to about 12 percent), except k = 512, whose wall time and --long=27 size are those of the production run of section 9, which ran almost alone; for step mode, prio and coord only the fold time of pass A is known, given relative to varopt at the same k. Sizes are the emit compressed by zstd with 16 threads."}
 
 {{< fig src="pareto.svg" type="fullwidth" label="fig:pareto" alt="Two log-log panels: mean and p90 error of the mean against compressed size and against wall time, for varopt k 64 to 1024; measured points filled, projected hollow." >}}
 `varopt`, error against cost for $k = 64$ to $1024$. Filled markers are measured, hollow ones projected or estimated; the horizontal bars are ranges. Every doubling of $k$ halves the error and roughly doubles the bytes and the time: there is no knee.
 {{< /fig >}}
 
-- **Size.** Measured with `zstd -T16 -12` over the whole chain: 31.3, 65.6 and 144.5 GB at $k = 64, 128, 256$ (raw 114.7, 212.8 and 411.9 GB), and 151.2 GB for the first 400M records at $k = 512$ (raw 410.5 GB). Every run parsed all 778,613,440 records with a matching trailer, and repeated runs wrote byte-identical output. The whole-chain $k = 512$ size is projected by scaling the $k = 256$ tail (400M records to the end) by the $k = 512 / k = 256$ ratio: measured over 300–400M, that gives 313.6 GB (403 B a record; raw about 806 GB), and measured over 0–400M, 310.7 GB; $k = 1024$ at 659–721 GB (raw about 1.59 TB, which would not fit on the disk: the raw stream must never be written). `--long=27` (a 128 MB window) saved 36.4% at $k = 128$ over the whole chain and 40.7% at $k = 256$ over 0–350M; the larger-$k$ figures with it are estimates. Compressed bytes peak at 580–650M records (238.2 B a record at $k = 256$ for 600–610M), not at the slowest stretch (290–330M).
+- **Size.** Measured with `zstd -T16 -12` over the whole chain: 31.3, 65.6 and 144.5 GB at $k = 64, 128, 256$ (raw 114.7, 212.8 and 411.9 GB), and 151.2 GB for the first 400M records at $k = 512$ (raw 410.5 GB). Every run parsed all 778,613,440 records with a matching trailer, and repeated runs wrote byte-identical output. The whole-chain $k = 512$ size is projected by scaling the $k = 256$ tail (400M records to the end) by the $k = 512 / k = 256$ ratio: measured over 300–400M, that gives 313.6 GB (403 B a record; raw about 806 GB), and measured over 0–400M, 310.7 GB; $k = 1024$ at 659–721 GB (raw about 1.59 TB, which would not fit on the disk: the raw stream must never be written). `--long=27` (a 128 MB window) saved 36.4% at $k = 128$ over the whole chain and 40.7% at $k = 256$ over 0–350M; at $k = 512$ the production run measured it over the whole chain, 172.7 GB (221.8 B a record), about 45% below the 312 GB projected without it. The $k = 64$, $256$ and $1024$ figures with it are estimates. Compressed bytes peak at 580–650M records (238.2 B a record at $k = 256$ for 600–610M), not at the slowest stretch (290–330M).
 - **Memory.** Peak RSS 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$; the fit $\text{VmHWM} \approx 4.5\ \text{GB} + 8.3\ \text{B} \times$ peak entries, with peak entries $\approx 7.485\text{M} \times k$, projects about 68 GB at $k = 1024$, consistent with pass B. Live sketches hold about $0.985\,k$ entries each at the peak. The machine has 503 GB, so memory constrains no $k$ here.
-- **Time.** 1 h 07 min, 1 h 47 min to 2 h 00 min, and 3 h 23 min at $k = 64, 128, 256$; about 2 h 52 min to 400M records at $k = 512$, projected to 6.3–6.6 h for the whole chain (the tail runs 1.22–1.28× slower than the head, more so at larger $k$), and 11.4–11.9 h at $k = 1024$. The emit uses 120–135% of a core; `zstd -12` with 16 threads runs at 230–290 MB/s against at most about 55 MB/s of output, so it is never the bottleneck.
+- **Time.** 1 h 07 min, 1 h 47 min to 2 h 00 min, and 3 h 23 min at $k = 64, 128, 256$; about 2 h 52 min to 400M records at $k = 512$, projected to 6.3–6.6 h for the whole chain (the tail runs 1.22–1.28× slower than the head, more so at larger $k$); the production run, with almost nothing beside it, took 5 h 06 min, so the projection, made from emits that shared the machine, was about 25% high. $k = 1024$ is projected at 11.4–11.9 h by the same method, and is probably high by a similar margin. The emit uses 120–135% of a core; `zstd -12` with 16 threads runs at 230–290 MB/s against at most about 55 MB/s of output, so it is never the bottleneck.
 
 ### 8.10 The choice of $k$ {#sec:choice}
 
@@ -1391,11 +1391,29 @@ sketch emit --config varopt:512 --oracle lastspend-2022.u32 --limit all --stats 
 
 It writes `colors.sketch-varopt512.zst`: for each of the 778,613,440 transactions, in record order, its colour as a `varopt` sketch of at most 512 blocks ($k \pm 1$ in rare rounding events), normalised to sum one, with the bit that says whether it is exact (and, when it is not, its $\tau$ and raw mass), in the format of §7.10. It decodes with a plain `zstd -d` piped into `sketch decode`, and `sketch check` recomputes from it the error tables of a `chain` run.
 
-TODO(production): wall time, peak RSS (VmHWM), compressed size of `colors.sketch-varopt512.zst` (and bytes per record), `k+-1` count from `emit.err`, and the pipeline exit status from `done.txt`.
+It ran from 07:39 to 12:45, and the pipeline exited with status 0.
 
-TODO(production): the result of `sketch check` on the file, if it is run (it must reproduce pass B's `varopt-k512-s1-rec` metric columns).
+| | measured | projected before the run |
+| :--- | :--- | :--- |
+| wall time | 5 h 05 min 56 s (fold busy 15,797 s; 131% of a core) | 6.3–6.6 h [P] |
+| peak RSS (VmHWM) | 35,480,448 kB = 36.3 GB | 36.3 GB (measured on 0–400M) |
+| `colors.sketch-varopt512.zst` | 172,702,042,699 bytes, 221.8 B a record | about 175–190 GB [E]; about 312 GB [P] without `--long=27` |
+| reductions | 198,939,818 | – |
+| peak distinct live sketches | 7,593,630 | – |
+| $k \pm 1$ events | 0 | – |
+{#tab:production caption="The production run. It shared the machine only with the end of pass B and a site build, which is why it beat the projection, made from emits that ran beside other jobs."}
 
-Projected before the run: 6.3–6.6 h, 36.3 GB peak RSS (measured on 0–400M), about 175–190 GB [E] with `--long=27`, against about 312 GB [P] without.
+No reduction rounded to $k \pm 1$: every sketch in the file has at most 512 entries.
+
+**Checked by reading it back.** The file was decoded and scored against the exact references, independently of the run that wrote it:
+
+```text
+zstd -dc colors.sketch-varopt512.zst \
+  | sketch check --out check --every 16 --rows-every 16 --bucket 10000000 \
+      --laplace-ref colors.laplace.zst --moments-ref colors.moments.zst
+```
+
+It took 1 h 03 min in 131 MB, read all 778,613,440 records, and found the count and checksum of the file's trailer correct. Its per-record error rows (3,041,460 of them, every 256th record) and its 2,496 bucket rows are byte for byte those of the `varopt-k512-s1-rec` store of pass B, which computed them in memory while folding. So the file holds exactly the sketches whose accuracy section 8 reports: over the whole chain, 349 blocks mean and 729 blocks p90 error on the mean block (Table 1, §8.2). A plain `zstd -d` decodes it; a 128 MB window needs no flag.
 
 ## 10. What Is Left {#sec:left}
 
@@ -1404,4 +1422,4 @@ Projected before the run: 6.3–6.6 h, 36.3 GB peak RSS (measured on 0–400M), 
 - **Why `varopt`'s error does not grow with depth.** {{< xref "cor:rate" "full" >}} proves the $1/k$ rate at every record, with a factor $\sqrt{A_t}$ that is allowed to grow with depth; that the error relative to the colours' spread stays flat, as measured, is not proved (§6.3). The control for the stratification explanation, VarOpt with its lights chosen in random order, was run only with the design-phase prototype on a prefix of the chain (§6.4); repeating it with the final binary over the whole chain is open.
 - **Literal bottom-$k$ against VarOpt.** The literal weighted bottom-$k$ sketch of sections 2–4 is `prio`, and here it loses by 6–21×; the exponential (PPSWOR) ranks of §2.2 were tried in the design phase and were no different from priority ranks. Whether some bottom-$k$ variant can recover the $1/k$ rate (for instance by making the choice among the lights systematic, which is what VarOpt does) is open.
 - **The band-based floors.** The figure of TV1024 against its floor has to be redrawn with each row's own $\tau$ before it can be shown; the numbers in §8.8 are the corrected ones.
-- **`--long=27` sizes** at $k = 256$ and above are estimates from the $k = 128$ saving, and more likely high than low (the saving was larger in the tail than in the head).
+- **`--long=27` sizes** at $k = 64$, $256$ and $1024$ are estimates from the $k = 128$ saving; at $k = 512$ the production run measured 172.7 GB, just below its estimate.
