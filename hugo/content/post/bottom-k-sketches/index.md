@@ -47,7 +47,7 @@ processing each item takes $O(1)$ expected time or $O(\log k)$ worst-case time.
 
 ### 1.2 Primary Applications
 
-#### Cardinality Estimation (Count-Distinct)
+### 1.2.1 Cardinality Estimation (Count-Distinct)
 
 If $N$ distinct items are hashed uniformly into $[0, 1]$, they divide the interval into
 $N + 1$ sub-intervals of expected length $\frac{1}{N + 1}$. The $k$-th smallest hash
@@ -69,7 +69,7 @@ et al.{{< cite "baryossef2002counting,beyer2007synopses" >}}{{< /sidenote >}} St
 $k = 1024$ hashes yields an estimate with $\approx 3.1\%$ error regardless of whether
 $N = 10^4$ or $N = 10^{10}$.
 
-#### Set Merging (Unions)
+### 1.2.2 Set Merging (Unions)
 
 Given sketch $S(A)$ and sketch $S(B)$ built with the same hash function $h$, the exact
 bottom-$k$ sketch of $A \cup B$ is:{{< sidenote >}}This is why KMV sketches merge
@@ -78,7 +78,7 @@ union are among the $k$ smallest of each of its parts.{{< /sidenote >}}
 
 $$S(A \cup B) = \text{bottom-}k\big(S(A) \cup S(B)\big)$$
 
-#### Jaccard Similarity & Intersections
+### 1.2.3 Jaccard Similarity & Intersections
 
 The Jaccard similarity $J(A, B) = \frac{|A \cap B|}{|A \cup B|}$ is estimated by taking
 the fraction of elements in $S(A \cup B)$ present in both $S(A)$ and $S(B)$:
@@ -94,7 +94,10 @@ when $fk = \Omega(1)$.{{< cite "thorup2013bottom" >}}{{< /sidenote >}}
 
 ### 1.3 Comparison: Bottom-$k$ vs. MinHash vs. HyperLogLog
 
-| Feature | Bottom-$k$ Sketch (KMV) | $k$-Hash MinHash{{< cite "broder1997resemblance" >}} | HyperLogLog (HLL){{< cite "flajolet2007hyperloglog" >}} |
+The two usual alternatives are $k$-hash MinHash{{< cite "broder1997resemblance" >}} and
+HyperLogLog:{{< cite "flajolet2007hyperloglog" >}}
+
+| Feature | Bottom-$k$ Sketch (KMV) | $k$-Hash MinHash | HyperLogLog (HLL) |
 | :--- | :--- | :--- | :--- |
 | **Hash Functions per Item** | $1$ | $k$ | $1$ |
 | **Update Time Complexity** | $O(1)$ expected, $O(\log k)$ worst | $O(k)$ | $O(1)$ |
@@ -126,7 +129,7 @@ transformations or priority scaling.
 
 Given uniform random hashes $u_i = h(i) \in (0, 1)$ and weights $w_i > 0$:
 
-#### Method A: Exponential Scaling (PPSWOR)
+### 2.2.1 Method A: Exponential Scaling (PPSWOR)
 
 Transform $u_i \sim \text{Uniform}(0, 1)$ into an exponential variable
 $r_i \sim \text{Exp}(w_i)${{< cite "cohen2008tighter,rosen1997asymptotic" >}}:
@@ -138,7 +141,7 @@ proportional to its weight:
 
 $$\Pr\left(r_i = \min_{j \in S} r_j\right) = \frac{w_i}{\sum_{j \in S} w_j}$$
 
-#### Method B: Priority Sampling (Uniform Scaling)
+### 2.2.2 Method B: Priority Sampling (Uniform Scaling)
 
 Scale the uniform float directly{{< sidenote >}}Priority sampling is due to Duffield,
 Lund and Thorup. The same ranks $u_i / w_i$, keeping the $n$ smallest, define Ohlsson's
@@ -225,7 +228,7 @@ Kaplan's *rank conditioning*, which generalises the derivation Duffield, Lund an
 gave for priority sampling to any family of rank
 distributions.{{< cite "cohen2008tighter" >}}{{< /sidenote >}}
 
-#### Fundamental Equivalence:
+### 3.1.1 Fundamental Equivalence
 
 1. Item $i$ is inside the top $k-1$ overall ranks if and only if $r_i < \tau_{-i}$:
    $$r_i < \tau \iff r_i < \tau_{-i}$$
