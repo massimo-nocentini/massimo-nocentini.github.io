@@ -3470,12 +3470,18 @@ The checks on these pairs (`r7_checks.py`):
   two `varopt` sketches are unreduced, and so *are* the colours, up to `f32`; every
   selected record has more than 1,024 blocks, so its `varopt:512` sketch is always
   reduced. The check stands on the prefix (§10.8).
-- TODO(iv): the band bound,
-  $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
-  in at least 99% of the pairs, with $\mathrm{TV}_{1024}$ the exact TV of the two colours
-  binned into 1,024 bands (binning can only lower it), read from `colors.bands1024.zst`.
-  The extraction of the selected records from that file was still running when this was
-  written.
+- **L1 against an exact lower bound.** Binning two colours into the same 1,024 bands
+  can only lower their TV, and `colors.bands1024.zst` holds every record's exact binned
+  colour; so $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
+  should hold in at least 99% of the pairs. Read for the 1,280 selected records (a
+  streaming pass over the 1.67 TB file that took 3 h 42 min), it holds in
+  99.986% of the 130,816 `chain` pairs at $m = 1024$, in 100%, 99.97% and 99.997% of the
+  32,640 pairs of `w2013`, `w2017` and `w2022`, and likewise at $m = 512$ and in `f64`;
+  every band line's transaction matched the selection. The bound is far from tight
+  inside a window: the median of $\widehat{\mathrm{TV}} / \mathrm{TV}_{1024}$ (over
+  pairs with $\mathrm{TV}_{1024} > 0.01$) is 1.10 in `chain` but 1.36 to 1.82 in the
+  windows, whose colours differ mostly within bands of 745 blocks. A check that passes,
+  then, and not an exact reference.
 
 Across time, in the whole-chain matrix of {{< xref "fig:jchain" "full" >}}, the upper
 triangle has no exact $J$ to show, as the prefix's has, and a containment drawn on
@@ -3630,7 +3636,8 @@ way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped
   records and, at full depth, only on the 1,280 records R5 selected
   ($7.8 \times 10^{-5}$ relative at worst). L1 against the exact $J_w$ was checked on the
   prefix only: no record of the whole-chain selections has an unreduced `varopt`
-  sketch to compare with.
+  sketch to compare with. At full depth there is only the band lower bound of §10.9,
+  which holds but is loose inside a window.
 - **A weighted sample that keeps the subset lemma.** Ranks $u_b / g(b)$ with a fixed
   function $g$ of the block keep {{< xref "lem:kmv-sub" "full" >}}, so they would fold
   exactly with exact weights, sampling blocks by a prior rather than by the colour. Which
