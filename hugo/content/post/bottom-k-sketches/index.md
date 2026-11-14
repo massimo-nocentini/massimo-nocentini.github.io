@@ -2017,7 +2017,8 @@ block, and the mean of the largest Laplace error over the seven $s$. `varopt` fo
 the $1/k$ guide from 16 to 1024; `prio` follows $1/\sqrt{k}$; `coord` barely moves.
 {{< /fig >}}
 
-`varopt`'s error halves with every doubling of $k$, with no floor up to $k = 1024$. Over
+`varopt`'s error halves with every doubling of $k$, with no floor up to $k = 1024$
+({{< xref "fig:k" "full" >}}). Over
 $k = 16..256$ the log-log slopes are $-0.93$ to $-0.96$ for
 $\lvert\Delta\text{mean}\rvert$, $\lvert\Delta\text{sd}\rvert$, the Laplace errors at
 $s = 0.5..8$, the largest Laplace error and the binned $W_1$; $-0.90$ and $-0.85$ for
@@ -2050,7 +2051,7 @@ does; relative to that spread (right) it is flat at every $k$. `coord`'s relativ
 keeps growing.
 {{< /fig >}}
 
-There is no accumulation with depth. The error in blocks grows, by about 1.8× from
+There is no accumulation with depth ({{< xref "fig:depth" "full" >}}). The error in blocks grows, by about 1.8× from
 100–200M to 700–778.6M at every $k$, because the colours themselves spread out (their
 exact sd goes from 118k to 210k blocks). Relative to the spread it is flat: the ratio of
 the last stretch to 100–200M is 1.01–1.02 for $k = 16..256$, 1.03 at $k = 512$ and 1.05
@@ -2086,7 +2087,7 @@ while `prio` swings by up to about 1,800. Right, signed mean over mean absolute 
 {{< /fig >}}
 
 `varopt` is unbiased by {{< xref "thm:dag" "full" >}}, and the chain does not contradict
-it, but the test is weak. Rows of one run share sketches and ancestry, so per-row
+it ({{< xref "fig:bias" "full" >}}), but the test is weak. Rows of one run share sketches and ancestry, so per-row
 standard errors understate the spread of a mean many times over (by 3× to 35× on the
 first 600k records; that produced "biases" at $z = 24$ that 16 seeds showed were not
 there). The honest test uses independent seeds: three at $k = 64$ and at $k = 256$,
@@ -2112,7 +2113,7 @@ whole-chain count-weighted signed means, $t$ with 2 degrees of freedom.
 combine) over that of one reduction per record, per bucket.
 {{< /fig >}}
 
-Step mode is worse at every depth: over the whole chain 1.49× for
+Step mode is worse at every depth ({{< xref "fig:step" "full" >}}): over the whole chain 1.49× for
 $\lvert\Delta\text{mean}\rvert$, 1.72× for $\lvert\Delta\text{sd}\rvert$, 1.34× for the
 largest Laplace error, 1.24× for $\Lambda_8$, 1.46× for binned $W_1$ and 1.51× for the
 band-edge KS, between 1.18× and 2.02× per stretch, with $\lvert\Delta\text{sd}\rvert$
@@ -2137,7 +2138,8 @@ colour. Right: how much the recursion adds for `varopt`, in percent.
 | \|Δmean\| | +29% | +67% |
 {#tab:ideal caption="eval3m, varopt, colours with more than 32,768 blocks: excess of the recursive sketch over the single-shot reduction of the exact colour (paired, every 200th record of the first 3M)."}
 
-The recursion has a price, and it grows slowly with $k$, but both errors keep falling:
+The recursion has a price ({{< xref "fig:ideal" "full" >}} and the table above), and it
+grows slowly with $k$, but both errors keep falling:
 the recursive KS and $W_1$ fall as $k^{-1.05}$ and $k^{-1.07}$, the single shot as
 $k^{-1.17}$ and $k^{-1.14}$. For colours of 4,097 to 32,768 blocks the $W_1$ excess is
 only +2% to +28%. And the price does not grow with depth (§8.3).
@@ -2209,8 +2211,10 @@ halves the error and roughly doubles the bytes and the time: there is no knee.
 
 ### 8.10 The choice of $k$ {#sec:choice}
 
-The rule: pick the smallest $k$ whose deep-chain p90 $\lvert\Delta\text{mean}\rvert$ is
-below the tolerance a downstream analysis can accept for one transaction's mean colour.
+The cost has no knee ({{< xref "fig:pareto" "full" >}}): every doubling of $k$ halves the
+error and roughly doubles the bytes and the time. So the rule is a tolerance: pick the
+smallest $k$ whose deep-chain p90 $\lvert\Delta\text{mean}\rvert$ is below the tolerance
+a downstream analysis can accept for one transaction's mean colour.
 
 | deep-chain p90 \|Δmean\| (700–778.6M) | ≈ days | $k$ |
 | ---: | ---: | ---: |
@@ -3205,12 +3209,12 @@ The ratios are those of 16 draws of a stratum that moves as a whole within a run
 seed's RMS over theory, in a stratum of more than 100,000 records, ranged from 0.22 to
 3.08; pooled over 16 seeds, among the strata of more than 100,000 records the ratio left
 $[0.85, 1.2]$ in a few (0.82–0.84 and 1.23 for $\hat n$ at $k = 64$, 0.75–0.79 for
-$\hat n_M$ at $k = 1024$), all inside the variance bands. The figure below draws the
-strata of $\lvert S \rvert / k$ with at least 1,000 records, among them some of fewer than
+$\hat n_M$ at $k = 1024$), all inside the variance bands. Panels (a) and (b) of
+{{< xref "fig:count" "full" >}} draw the strata of $\lvert S \rvert / k$ with at least 1,000 records, among them some of fewer than
 100,000, where the ratio reaches 1.24 for $\hat n$ at $k = 64$ (1.22 for $\hat n_M$) and
 0.78 for $\hat n$ at $k = 1024$. A per-run accuracy band is not a test, and none is used.
 
-{{< fig src="count-accuracy.svg" type="fullwidth" label="fig:count" alt="Three panels. Top left: pooled RMS relative error of the count against the support size over k, for k 64, 256 and 1024, with theory curves, for the restricted and the full-universe estimator. Top right: mean relative error of the restricted count with across-seed error bars, all near zero. Bottom: the median count per 10 million records over the whole chain, rising from about 130 to 710 thousand blocks, with its 10th and 90th percentiles, the exact quantiles on the first 31.2 million records, the most a count can be, and on a second axis the share of records counted exactly, 30 percent at first and under 2 percent after 60 million records." >}}
+{{< fig src="count-accuracy.svg" type="fullwidth" label="fig:count" alt="Four panels. Top left: pooled RMS relative error of the count against the support size over k, for k 64, 256 and 1024, with theory curves, for the restricted and the full-universe estimator. Top right: mean relative error of the restricted count with across-seed error bars, all near zero. Third, across the full width: the median count per 10 million records over the whole chain, rising from about 130 to 710 thousand blocks, with its 10th and 90th percentiles, the exact quantiles on the first 31.2 million records, the most a count can be. Fourth, below it on a log scale: the share of records counted exactly, 30 percent at first and between about 0.25 and 2 percent after 60 million records." >}}
 Counts against their exact sizes, then over the whole chain; `sets`. (a) and (b): the
 first 31,187,785 records, 16 seeds per $k$, by stratum of $\lvert S \rvert / k$ (log 2),
 strata with at least 1,000 records. (a) RMS relative error pooled over the seeds, with
@@ -3221,8 +3225,8 @@ standard errors across seeds. (c) R4, all 778,613,440 records, $k = 1024$, seed 
 10M records: the median $\hat n$ (dots) and its 10th and 90th percentiles (thin lines
 and band), in thousands of blocks; the exact quantiles (crosses) in the three buckets
 wholly inside the first 31.2M records; the median $\beta_t + 1$ (grey, dotted), the most
-an $\hat n$ can be; and, on the right axis, the share of records whose sketch is whole
-and counted exactly. Years along the top. Records of one seed share one permutation, so
+an $\hat n$ can be. Years along the top. (d) The share of the same buckets' records
+whose sketch is whole and counted exactly, on a log scale. Records of one seed share one permutation, so
 their errors are correlated; the spread that counts is across seeds.
 {{< /fig >}}
 
@@ -3411,8 +3415,8 @@ the exact sizes exist, a bucket's median $\hat n$ is within 0.5% of the exact me
 (0.9965, 1.0008 and 1.0047 in the first three 10M-record buckets). The median support
 grows from 131,000 blocks in the first 10M records to 708,000 in the last 8.6M, and
 fills more of its universe as it grows: the median of $\hat n / (\beta_t + 1)$ is 0.85
-over the first 100M records and 0.93 over the last 78.6M. The share counted exactly is
-30% of the first 10M records, 6.1% of the first 100M, and between 0.25% and 1.9% of
+over the first 100M records and 0.93 over the last 78.6M. The share counted exactly
+(panel (d)) is 30% of the first 10M records, 6.1% of the first 100M, and between 0.25% and 1.9% of
 every 10M bucket after the first 60M. The finite-population factor shrinks as the
 supports fill their universe, so the theory RSE falls with depth: over the full records
 its median is 1.21% in the first 100M, 0.92% over the chain (10th and 90th percentiles
