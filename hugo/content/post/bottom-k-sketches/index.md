@@ -1,6 +1,6 @@
 +++
 date = '2026-11-12T10:30:00+01:00'
-lastmod = '2026-11-14T01:03:00+01:00'
+lastmod = '2026-11-14T10:03:00+01:00'
 title = 'Comprehensive Guide to Bottom-$k$ Sketches'
 subtitle = 'Unweighted, Weighted, Proofs & Implementations; and VarOpt Sketches of a Recurrence on the Bitcoin Chain'
 description = 'Bottom-k (KMV) sketches: cardinality, unions and Jaccard similarity; the weighted extension by priority sampling and exponential scaling with the Horvitz-Thompson estimator; the proof of unbiasedness; Rust and C99 implementations. Then a recurrence sketched: the colour of every transaction of the Bitcoin chain up to 2022 as a VarOpt sketch of at most k blocks, with proofs, the Rust implementation and measurements over 778 million records; and count-distinct and Jaccard similarity of the colours by a coordinated bottom-k of their supports, exact through the DAG, with a weighted similarity by a Cauchy linear sketch.'
@@ -2504,7 +2504,7 @@ block $b_2$ ranks 0.8 in $D$, inside the merged threshold $0.889$, and 4 in $A$,
 $A$'s sketch, so its share from $A$ is unknown. Ranks that depend on the block alone
 keep the lemma, and so would block-level priorities $u_b / g(b)$ for any *fixed*
 function $g$ of the block: a sample weighted by a prior rather than by the colour, which
-§11 leaves open.
+§12 leaves open.
 {{< /remark >}}
 
 The exact weights were not shipped.{{< sidenote >}}The design-phase prototype stored
@@ -3594,7 +3594,198 @@ with nearly the same support get nearly the same error. A second seed's file is 
 way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped.
 
 
-## 11. What Is Left {#sec:left}
+## 11. Ten Sketched Colours {#sec:ten}
+
+What the production file holds, read for a few transactions: the sketch $\hat C_t$ of
+§5.3, a polynomial in $x$ with at most 512 terms, where the exponent is the block a coin
+was minted in and the coefficient the sketch's estimate of the share of $t$'s value
+minted there. The ten below are among the 1,280 records of §10.9 that R6 cut out of
+`colors.sketch-varopt512.zst`, each picked for one property of its sketch. Each has
+exactly 512 terms, and its coefficients sum to 1 to seven digits, as point 4 of
+{{< xref "thm:varopt" "full" >}} and {{< xref "thm:dag" "full" >}} say they must. The
+subscript is the record number.
+
+Terms with equal coefficients are grouped, heaviest group first, and only the first
+four groups are written out; $\rho(x)$ is the rest, $\rho(1)$ its mass. The
+coefficients are rounded to six digits. All 5,120 terms, as stored, are in
+[`ten-colours.txt`](ten-colours.txt).
+
+| record | block | group | distinct coefficients | heavy entries | largest coefficient | mean block | newest block | $\hat n$ | KS | $W_1$ (blocks) |
+| ---: | ---: | :--- | ---: | ---: | :--- | ---: | ---: | ---: | ---: | ---: |
+| 51,126 | 50,299 | `chain` | 8 | 263 | 0.0150 at each of 16 | 39,923 | 47,918 | 1,506 | $2 \times 10^{-8}$ | 0 |
+| 99,576 | 72,310 | `chain` | 26 | 109 | 0.9942 at 71,925 | 71,906 | 71,925 | 2,267 | $3.8 \times 10^{-8}$ | 0 |
+| 243,275 | 104,360 | `chain` | 33 | 352 | 0.9500 at 99,535 | 98,783 | 102,880 | 20,742 | $3.8 \times 10^{-7}$ | 0 |
+| 456,104 | 121,087 | `chain` | 54 | 285 | 0.0083 at each of 2 | 66,631 | 93,271 | 16,532 | 0.00028 | 10 |
+| 19,031,745 | 240,001 | `w2013` | 107 | 113 | 0.9093 at 239,070 | 236,737 | 239,070 | 190,919 | $8.4 \times 10^{-5}$ | 6 |
+| 69,818,050 | 358,042 | `chain` | 437 | 439 | 0.0100 at 357,814 | 357,545 | 357,937 | 310,142 | $1.8 \times 10^{-5}$ | 2 |
+| 77,146,563 | 366,405 | `chain` | 308 | 321 | 0.0337 at 366,190 | 366,128 | 366,271 | 320,370 | $3.3 \times 10^{-9}$ | 0 |
+| 229,491,784 | 470,000 | `w2017` | 35 | 48 | 0.0501 at 210,595 | 165,048 | 229,223 | 183,586 | 0.0016 | 142 |
+| 778,613,383 | 762,260 | `w2022` | 1 | 0 | $1/512$ at each of 512 | 175,122 | 391,528 | 443,316 | 0.0025 | 262 |
+| 778,611,720 | 762,260 | `chain` | 1 | 0 | $1/512$ at each of 512 | 351,468 | 761,472 | 711,490 | 0.0025 | 524 |
+{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of section 10.10. KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks."}
+
+The ten, in the order of the table:
+
+1. **The first `chain` record.** It is the first deep record at or after block 50,000;
+   the first deep record of the chain is earlier, record 44,447 in block 44,006. Its 512
+   terms take only 8 values. Equal coefficients are lights of some earlier reduction,
+   which set every light it kept to its own $\tau$, carried down to this record by the
+   same shares; 263 of them are heavy at the last reduction, which kept them as they
+   came.
+
+$$
+\begin{aligned}
+\hat C_{51126}(x) ={}& 0.01505\,\underbrace{(x^{46567} + x^{46633} + \dots + x^{47918})}_{16\ \text{terms}} \\
+&+ 0.0123652\,(x^{30732} + x^{33941} + x^{34409}) \\
+&+ 0.00368812\,(x^{13316} + x^{24451} + x^{35892}) \\
+&+ 0.00355412\,\underbrace{(x^{36099} + x^{36101} + \dots + x^{41649})}_{200\ \text{terms}} \\
+&+ \rho(x), \quad \text{290 terms with 4 coefficients},\ \rho(1) = 0.000216719
+\end{aligned}
+$$
+
+2. **The most concentrated colour.** One block, minted 385 blocks earlier, carries
+   99.42% of the value. Binned, the exact colour puts 0.9949 in that block's band
+   (blocks 71,520 to 72,264), and so does the sketch.
+
+$$
+\begin{aligned}
+\hat C_{99576}(x) ={}& 0.994246\,x^{71925} \\
+&+ 8.25445 \times 10^{-5}\,x^{70186} \\
+&+ 8.2528 \times 10^{-5}\,x^{70566} \\
+&+ 8.25116 \times 10^{-5}\,\underbrace{(x^{70432} + x^{70627} + \dots + x^{71402})}_{8\ \text{terms}} \\
+&+ \rho(x), \quad \text{501 terms with 22 coefficients},\ \rho(1) = 0.00492931
+\end{aligned}
+$$
+
+3. **One block and a long tail.** 95% from block 99,535, and a tail that reaches back
+   to block 9.
+
+$$
+\begin{aligned}
+\hat C_{243275}(x) ={}& 0.950014\,x^{99535} \\
+&+ 0.0178931\,x^{99327} \\
+&+ 0.00582011\,(x^{93408} + x^{93446} + x^{93795}) \\
+&+ 0.00133668\,(x^{99223} + x^{99305} + x^{99466}) \\
+&+ \rho(x), \quad \text{504 terms with 29 coefficients},\ \rho(1) = 0.0106228
+\end{aligned}
+$$
+
+4. **Old money in 2011.** A diffuse colour, with no coefficient above 0.84%, whose
+   heaviest terms are blocks of early 2009.
+
+$$
+\begin{aligned}
+\hat C_{456104}(x) ={}& 0.00832831\,(x^{2659} + x^{5065}) \\
+&+ 0.00832812\,\underbrace{(x^{2775} + x^{3549} + \dots + x^{7312})}_{4\ \text{terms}} \\
+&+ 0.00831587\,(x^{1025} + x^{2148}) \\
+&+ 0.0083124\,x^{80654} \\
+&+ \rho(x), \quad \text{503 terms with 50 coefficients},\ \rho(1) = 0.925087
+\end{aligned}
+$$
+
+5. **The 2013 window.** 91% of the value was minted in one block, 931 blocks earlier.
+
+$$
+\begin{aligned}
+\hat C_{19031745}(x) ={}& 0.909327\,x^{239070} \\
+&+ 0.0087706\,x^{235587} \\
+&+ 0.00719864\,x^{234980} \\
+&+ 0.00359045\,x^{237394} \\
+&+ \rho(x), \quad \text{508 terms with 103 coefficients},\ \rho(1) = 0.0711136
+\end{aligned}
+$$
+
+6. **The richest structure.** 437 distinct coefficients out of 512: the sketch is mostly
+   heavy entries (439), which the last reduction kept with their own weights. Its top band (blocks
+   357,600 to 358,344) holds 0.5665 of the value, in the sketch and in the exact
+   colour.
+
+$$
+\begin{aligned}
+\hat C_{69818050}(x) ={}& 0.0100038\,x^{357814} \\
+&+ 0.00999311\,x^{357928} \\
+&+ 0.00997362\,x^{357875} \\
+&+ 0.0099514\,x^{357858} \\
+&+ \rho(x), \quad \text{508 terms with 433 coefficients},\ \rho(1) = 0.960078
+\end{aligned}
+$$
+
+7. **The youngest money of a deep colour.** The sketch's mean block is only 277 blocks
+   before the transaction's own, though its support is about 320,000 blocks: 99.58% of
+   the value was minted in blocks 365,795 to 366,539, and the sketch puts the same
+   99.58% there.
+
+$$
+\begin{aligned}
+\hat C_{77146563}(x) ={}& 0.0336654\,x^{366190} \\
+&+ 0.0335747\,x^{366239} \\
+&+ 0.0335313\,x^{366088} \\
+&+ 0.0334709\,x^{366001} \\
+&+ \rho(x), \quad \text{508 terms with 304 coefficients},\ \rho(1) = 0.865758
+\end{aligned}
+$$
+
+8. **The 2017 window, spending 2013 coins.** In block 470,000, mid-2017, the newest
+   block of the sketch is 229,223, from spring 2013; and the exact colour agrees at the
+   bands' resolution: none of its value was minted after block 229,459.
+
+$$
+\begin{aligned}
+\hat C_{229491784}(x) ={}& 0.0500903\,x^{210595} \\
+&+ 0.05\,x^{197851} \\
+&+ 0.0499097\,x^{210667} \\
+&+ 0.048659\,x^{192682} \\
+&+ \rho(x), \quad \text{508 terms with 31 coefficients},\ \rho(1) = 0.801341
+\end{aligned}
+$$
+
+9. **Pre-2016 money in 2022: a flat sketch.** In the last block of the data, the
+   sketch's newest block is 391,528, from early January 2016. The exact colour is not
+   quite so old: 0.051% of its value was minted after that block's band, as late as
+   blocks 495,425 to 496,169, in late 2017. Together those shares are about a quarter
+   of $\tau = 1/512$; a light entry is kept with probability $v / \tau$, and the
+   sketch kept none of them. That is VarOpt sampling, not an error: in expectation they
+   are there.
+
+$$
+\begin{aligned}
+\hat C_{778613383}(x) ={}& \tfrac{1}{512}\,\underbrace{(x^{2717} + x^{4596} + \dots + x^{391528})}_{512\ \text{terms}}
+\end{aligned}
+$$
+
+10. **The largest support.** About 711,490 distinct blocks, 93% of the 762,261 that
+    existed then, also as a flat sketch. Its 512 blocks are a sample of the whole
+    chain: binned, it puts mass in 498 of the 1,023 bands where the colour has some,
+    and its total variation distance from the binned colour is 0.42, yet its CDF is
+    within 0.0025 of the exact one everywhere, and its $W_1$ is 524 blocks, under four
+    days.
+
+$$
+\begin{aligned}
+\hat C_{778611720}(x) ={}& \tfrac{1}{512}\,\underbrace{(x^{3607} + x^{7180} + \dots + x^{761472})}_{512\ \text{terms}}
+\end{aligned}
+$$
+
+**Flat sketches.** 543 of the 1,280 sketches of §10.9 are flat, as 9 and 10 are: 512
+coefficients all equal to $1/512$. A sketch is flat when no entry of the merged parents'
+sketch exceeds the threshold $\tau$ of the last reduction
+({{< xref "def:varopt" "full" >}}). Every entry is then light, each is kept with
+probability $v / \tau$, and every kept one gets $\tau$; the mass is 1 and exactly
+$k$ entries are kept, so $\tau = 1/k$. A flat sketch is thus an equal-weight sample of
+512 blocks, each drawn with probability proportional to its weight in the merged
+sketch, and is unbiased like any other.
+
+**Read with care.** Each coefficient estimates the share of one block without bias
+({{< xref "thm:dag" "full" >}}), but the estimate of a single light block is
+crude: it is $\tau$ or 0. What a sketch gets right is the colour's CDF, and the
+functionals of §5.1. The KS column of the table, against the binned exact colour, runs
+from $3 \times 10^{-9}$, for colours made of heavy entries, to $0.0025$ for the flat
+sketches, a little over $\tau = 1/512$. That is allowed: the bound $\tau$ of
+{{< xref "cor:bv" "full" >}} is for one reduction against its own input, and through
+the recurrence the errors of the earlier reductions add to it (§6.3).
+
+
+## 12. What Is Left {#sec:left}
 
 - **Bias at $k \ge 512$.** Pass B ran one seed; the 3-seed test covers $k = 64$ and
   $256$ only, and its 95% bounds (11.4% and 16.7% of the mean absolute error) are loose.
@@ -3663,9 +3854,9 @@ way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped
   day the chain passes in about 2028; `:bits=21` doubles the tables to 16 MiB.
 
 
-## 12. Notes and References {#sec:references}
+## 13. Notes and References {#sec:references}
 
-### 12.1 Further reading
+### 13.1 Further reading
 
 - **Sampling theory.** {{< cite keys="horvitz1952generalization" mode="text" >}}
   introduced the estimator that weights each sampled item by the inverse of its
@@ -3742,6 +3933,6 @@ way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped
   the shuffle of Fisher and Yates in Durstenfeld's in-place form, Algorithm P of Knuth's
   §3.4.2.{{< cite "knuth1997taocp2" >}}
 
-### 12.2 References
+### 13.2 References
 
 {{< bibliography heading="" >}}
