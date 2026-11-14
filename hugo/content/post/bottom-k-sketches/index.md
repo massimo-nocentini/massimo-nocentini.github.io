@@ -1,11 +1,11 @@
 +++
 date = '2026-11-12T10:30:00+01:00'
-lastmod = '2026-11-13T09:00:00+01:00'
+lastmod = '2026-11-14T01:03:00+01:00'
 title = 'Comprehensive Guide to Bottom-$k$ Sketches'
 subtitle = 'Unweighted, Weighted, Proofs & Implementations; and VarOpt Sketches of a Recurrence on the Bitcoin Chain'
-description = 'Bottom-k (KMV) sketches: cardinality, unions and Jaccard similarity; the weighted extension by priority sampling and exponential scaling with the Horvitz-Thompson estimator; the proof of unbiasedness; Rust and C99 implementations. Then a recurrence sketched: the colour of every transaction of the Bitcoin chain up to 2022 as a VarOpt sketch of at most k blocks, with proofs, the Rust implementation and measurements over 778 million records.'
+description = 'Bottom-k (KMV) sketches: cardinality, unions and Jaccard similarity; the weighted extension by priority sampling and exponential scaling with the Horvitz-Thompson estimator; the proof of unbiasedness; Rust and C99 implementations. Then a recurrence sketched: the colour of every transaction of the Bitcoin chain up to 2022 as a VarOpt sketch of at most k blocks, with proofs, the Rust implementation and measurements over 778 million records; and count-distinct and Jaccard similarity of the colours by a coordinated bottom-k of their supports, exact through the DAG, with a weighted similarity by a Cauchy linear sketch.'
 categories = ['data structure', 'rust', 'c']
-tags = ['sketches', 'bottom-k', 'priority sampling', 'VarOpt', 'bitcoin']
+tags = ['sketches', 'bottom-k', 'priority sampling', 'VarOpt', 'bitcoin', 'count-distinct', 'Jaccard']
 toc = true
 font = 'etbook'
 mathFont = 'euler'
@@ -69,6 +69,15 @@ et al.{{< cite "baryossef2002counting,beyer2007synopses" >}}{{< /sidenote >}} St
 $k = 1024$ hashes yields an estimate with $\approx 3.1\%$ error regardless of whether
 $N = 10^4$ or $N = 10^{10}$.
 
+The same estimator is exactly unbiased in a finite model as well. If the hash is a
+uniformly random *permutation* of a universe of $M$ items, with ranks $0, \dots, M - 1$,
+and $R$ is the $k$-th smallest rank of the $N$ items as an integer, then
+$\hat N = (k - 1)M / R$ has $\mathbb{E}[\hat N] = N$, and its variance is slightly below
+$N(N - k + 1)/(k - 2) \cdot (M - N)/(M - 1)$, within 1% for $k \ge 256$: the
+finite-population factor $(M - N)/(M - 1)$ is a free gain when the set fills a good part
+of its universe. Section 10.4 proves this, writing $n$ for the set size and $N$ for the
+universe, and uses it with a smaller universe chosen for each record.
+
 ### 1.2.2 Set Merging (Unions)
 
 Given sketch $S(A)$ and sketch $S(B)$ built with the same hash function $h$, the exact
@@ -80,17 +89,34 @@ $$S(A \cup B) = \text{bottom-}k\big(S(A) \cup S(B)\big)$$
 
 ### 1.2.3 Jaccard Similarity & Intersections
 
-The Jaccard similarity $J(A, B) = \frac{|A \cap B|}{|A \cup B|}$ is estimated by taking
-the fraction of elements in $S(A \cup B)$ present in both $S(A)$ and $S(B)$:
+The Jaccard similarity $J(A, B) = \frac{|A \cap B|}{|A \cup B|}$ is estimated from the
+bottom-$k$ sketch of the union, $S(A \cup B) = \text{bottom-}k\big(S(A) \cup S(B)\big)$,
+by the fraction of its elements present in both $S(A)$ and $S(B)$:
 
-$$\hat{J}(A, B) = \frac{|S(A \cup B) \cap S(A) \cap S(B)|}{k}$$
+$$\hat{J}(A, B) = \frac{|S(A \cup B) \cap S(A) \cap S(B)|}{|S(A \cup B)|}, \qquad |S(A \cup B)| = \min(k, |A \cup B|).$$
+
+Membership is read off exactly: an element of $S(A \cup B)$ that belongs to $A$ has fewer
+than $k$ elements of $A$ hashed below it, so it is in $S(A)$. When $|A \cup B| > k$,
+$S(A \cup B)$ is a uniformly random $k$-subset of $A \cup B$, the count in the numerator
+is hypergeometric, and $\hat J$ is exactly unbiased, with variance
+$J(1 - J)/k \cdot (|A \cup B| - k)/(|A \cup B| - 1) \le 1/(4k)$. When both sketches hold
+their whole sets (each set has at most $k$ items), compute $J$ exactly from them: the
+formula above is then still an estimate whenever the union exceeds $k$ (§10.5).
 
 The intersection size is then estimated as
-$|A \cap B| \approx \hat{J}(A, B) \cdot \hat{N}_{A \cup B}$.{{< sidenote >}}These
-estimates ask little of the hash function. Thorup shows that with a merely 2-independent
-$h$ the expected relative error of estimating a fraction $f$ (here $J$) from a
-bottom-$k$ sample is $O(1/\sqrt{fk})$, within a constant factor of truly random hashing
-when $fk = \Omega(1)$.{{< cite "thorup2013bottom" >}}{{< /sidenote >}}
+$|A \cap B| \approx \hat{J}(A, B) \cdot \hat{N}_{A \cup B}$, consistently but not
+unbiasedly, and the *containment* $|A \cap B| / |A|$ by the elements of $S(A)$ that hash
+at or below the $k$-th hash of $S(B)$ (all of $S(A)$ when $S(B)$ holds the whole of
+$B$): the fraction of them found in $S(B)$. That $k$-th element belongs to $B$, so when
+it is also in $A$ it is a sure hit, which biases the fraction up by about $c(1 - c)/k$
+for a containment $c$ (at most 0.00025 at $k = 1024$). The fraction is undefined when no
+element of $S(A)$ is that small, which is common when $A$ is much smaller than
+$B$.{{< sidenote >}}These estimates ask little of the hash function. Thorup shows that
+with a merely 2-independent $h$ the expected relative error of estimating a fraction $f$
+(here $J$) from a bottom-$k$ sample is $O(1/\sqrt{fk})$, within a constant factor of
+truly random hashing when $fk = \Omega(1)$. Bottom-$k$ estimators of Jaccard and
+containment from two sketches are treated by Cohen and
+Kaplan.{{< cite "thorup2013bottom,cohen2007summarizing" >}}{{< /sidenote >}}
 
 ### 1.3 Comparison: Bottom-$k$ vs. MinHash vs. HyperLogLog
 
@@ -646,7 +672,9 @@ threshold sampler, the sibling of the priority sampling of §2 rather than one o
 members. The literal weighted bottom-$k$ sketch of §2 was built too (`prio` below) and
 measured beside it; it lost by a factor of 6 to 21 at the same size. Section 6 proves
 what each variant guarantees, section 7 shows the code, section 8 the measurements, and
-the reasons the threshold sampler wins run through all three.
+the reasons the threshold sampler wins run through all three. Section 10 turns to two
+questions that no sketch of a colour answers: from how many blocks a transaction
+descends, and how much two transactions share.
 
 ### 5.1 Colours
 
@@ -737,7 +765,10 @@ Three consequences shape everything below.
 
 1. A block's weight in the child is assembled from several parents' estimates. If a
    parent's sketch does not hold the block, its share of that block is simply unknown;
-   §6.6 shows that this alone breaks the exactness of a coordinated (same-hash) merge.
+   §6.6 shows that this alone breaks the exactness of a coordinated (same-hash) merge
+   whose ranks depend on the weights. With ranks that depend on the block alone it does
+   not: a block kept in the child's sketch is kept in the sketch of every parent whose
+   support contains it, and its weight is assembled exactly (§10.3).
 2. Each node re-estimates an estimate. For the errors not to compound, each reduction
    must be unbiased *conditionally on its inputs* (§6.2), and its randomness must be
    fresh: independent of the randomness that chose the inputs (§6.5).
@@ -1269,6 +1300,16 @@ because a block held by one parent's sketch and not by the other's has only a *l
 bound* on its weight: the missing parent's share is unknown and is taken as zero (the
 "zero rule").
 
+The share is missing because `coord`'s rank $u_b / v$ depends on the weight, and a
+block's weight in a parent differs from its weight in the child: the block can rank
+below the merged sketch's threshold in the child and outside a parent's sketch, as $b_2$
+does below. With ranks that depend on the block alone the share is never missing: a
+block kept by the child is kept by every parent whose support holds it
+({{< xref "lem:kmv-sub" "full" >}}), and the weights of a coordinated merge are then
+exact ({{< xref "lem:kmv-weights" "full" >}}). What such a sketch gives up is the
+weighting itself: it is a uniform sample of the support, which serves the count and the
+Jaccard similarity of §10 and not the functionals of §5.1.
+
 {{< example note="overlap" label="ex:overlap" >}}
 Two blocks $b_1, b_2$ with keys $u = (0.3, 0.4)$; $k = 1$; $A = (0.9, 0.1)$,
 $B = (0.1, 0.9)$, $s_a = s_b = \tfrac12$, so $D = (0.5, 0.5)$.
@@ -1322,24 +1363,28 @@ lost: its error is almost all bias (§8.4) and does not fall with $k$.
 ## 7. Implementation {#sec:implementation}
 
 The code below is excerpted from the `sketch` binary of `coloring-bt-transactions-rs`,
-trimmed (`// …` marks a cut) but not rewritten. It is about 6,500 lines with its tests,
-adds no dependency, and reuses the repository's record parser, release oracle, exact
-weighted store and Laplace tables through `#[path]` modules.
+trimmed (`// …` marks a cut) but not rewritten. It is about 6,500 lines with its tests
+(about 12,700 with the stores of section 10), adds no dependency, and reuses the
+repository's record parser, release oracle, exact weighted store and Laplace tables
+through `#[path]` modules.
 
 ### 7.1 Where things are
 
 | file | what it holds |
 | :--- | :--- |
 | `sketch.rs` | command line, global allocator, dispatch to the modes |
-| `hash.rs` | every random draw, as a hash of where it is drawn |
+| `hash.rs` | every random draw, as a hash of where it is drawn; the permutation of the blocks and the Cauchy draws of §10 |
 | `algebra.rs` | the sketch type, the `Algebra` trait, operand grouping, the n-way merge |
 | `varopt.rs`, `prio.rs`, `coord.rs` | the three reductions |
 | `driver.rs` | the recurrence, driven exactly as `run()` drives it |
-| `exact.rs` | the exact colour as an `Algebra`, bit-identical to `--weighted` |
+| `exact.rs` | the exact colour as an `Algebra`, bit-identical to `--weighted`, with its `sets` and `pos` supports |
 | `feed.rs` | one parse broadcast to many stores; reference files read in lock-step |
-| `metrics.rs` | mean, spread, Laplace, KS, $W_1$, TV over 1024 bands |
+| `metrics.rs` | mean, spread, Laplace, KS, $W_1$, TV over 1024 bands; $t$ and $\chi^2$ quantiles |
 | `eval.rs`, `chain.rs`, `modes.rs` | the modes `eval`, `chain`, `check`, `emit`, `decode` |
 | `encode.rs` | the binary output format |
+| `kmv.rs` | the coordinated bottom-$k$ of the support: store, capped merges, estimators, count stream |
+| `l1.rs` | the Cauchy projection of the colour: store, scale MLE, weighted Jaccard |
+| `count.rs`, `pick.rs`, `pairs.rs` | the modes `count`, `pick`, `pairs` |
 | `tests.rs` | tests through the whole pipeline |
 
 ### 7.2 A sketch in memory
@@ -1844,7 +1889,8 @@ production uses it. Those notes, and the production line in `sketch.rs`'s docume
 ### 7.11 The tests
 
 `cargo test --release --bin sketch -- --include-ignored` passed 106 of 106 at the time
-of the runs. What they assert:
+of the runs of section 8, and 139 of 139 with the stores of section 10. What they
+assert:
 
 - **Randomness (T1).** `splitmix64`'s golden value; `unit` strictly inside $(0, 1)$ at
   both ends and over a million draws; streams deterministic and distinct across salts
@@ -1882,6 +1928,47 @@ of the runs. What they assert:
   by transaction, against `coloring-bt-transactions 100000 --weighted`: worst absolute
   error $3.34 \times 10^{-8}$, worst relative error $2.22 \times 10^{-7}$ for
   coefficients of at least $10^{-6}$.
+- **The permutation (T-K1).** `Perm` is a bijection with `block(rank(b)) == b` on all of
+  $[0, 2^{\text{bits}})$ for bits 12, 16 and 20 and three seeds, with its first ranks
+  pinned; seeds share fewer than 1% of fixed points; a block past the universe is a hard
+  error. Over $2^{16}$ seeds at 12 bits the rank of a fixed block passes a $\chi^2$ test
+  on 64 cells ($p > 10^{-4}$), and the ranks of two blocks show no correlation.
+- **Capped merges (T-K2).** The two-way merge, the tree and the heap equal a
+  brute-force bottom-$k$ of the union, with the truncation flag exact, over random runs
+  with overlaps, identical and empty runs, $k \in \{1, 2, 3, 16, 64\}$.
+- **KMV through the driver (T-K3 to T-K5).** On the synthetic streams of T7 (shared
+  parents, repeated inputs, zero amounts, all-zero records, one-group records, the
+  BIP-30 duplicate) and on a random DAG, with and without the oracle,
+  $k \in \{2, 3, 16, 64\}$: every sketch is the bottom-$k$ of the brute-force support,
+  `full` holds exactly when the support exceeds $k$, a whole sketch's count is the
+  support's size, the `sets` support equals the exact store's terms and the `pos`
+  support its positive-share reachability; permuting or splitting operands changes no
+  byte. A block diluted $10^{18}$-fold over 30 steps, whose coefficient underflows to
+  0, stays in the `pos` support.
+- **Estimators over 2,000 seeds (T-K6 to T-K8).** The count over both universes
+  (including dense subsets of $[0, \beta]$) and the restricted union count are
+  unbiased within 4 SE, with RMS within 10% of the formula; Jaccard is exact when both
+  sketches are whole, also when their union exceeds $k$ (where the textbook form is
+  not), and over $J \in \{0, 0.024, 0.2, 0.95, 1\}$ its mean is within 4 SE and its SD
+  within 10% of the hypergeometric value; containment is NaN exactly when its sample is
+  empty and otherwise unbiased within 4 SE where its sample is large.
+- **The projection (T-L1 to T-L4).** The L1 store's vector equals $A\,C_t$ computed from
+  the exact colour, through the grouped and the free path, to $10^{-6}$ relative in
+  `f32` and $10^{-12}$ in `f64`; over 400 seeds at $m \in \{128, 512\}$ and
+  $\mathrm{TV} \in \{0.001, 0.01, 0.1, 0.5, 1\}$ the scale MLE has a relative bias of at
+  most 2% and a relative SD times $\sqrt m$ in $[1.30, 1.52]$ ($\sqrt 2 = 1.414$);
+  identical colours give $\widehat{\mathrm{TV}} = 0$ exactly, disjoint ones a value
+  within $3\sqrt{2/m}$ of 1, injected infinities a finite one; two seeds are
+  uncorrelated.
+- **Streams and modes (T-K9, T-K10, T-P1, T-P2, T-E1).** The count stream round-trips
+  with its checksum at fixed width, `decode` dispatches on the magic and still writes
+  the old text for `SKETCH01`; the same seed writes the same bytes; `pairs` equals the
+  pure estimators and is byte-identical at 1 and 8 threads; `pick` captures each
+  selected record once; `eval` finds no set mismatch; damaged headers are an error, not
+  a panic; the new modes refuse options they would ignore.
+- **Integration (T-I1).** The first 1,000,000 records of the chain at $k = 1024$
+  against the exact support sizes: exact wherever the support has at most $k$ blocks,
+  and every seed gate of a 16-seed family at $k = 256$ passes.
 
 
 ## 8. Results {#sec:results}
@@ -2197,8 +2284,1311 @@ the file holds exactly the sketches whose accuracy section 8 reports: over the w
 chain, 349 blocks mean and 729 blocks p90 error on the mean block (Table 1, §8.2). A
 plain `zstd -d` decodes it; a 128 MB window needs no flag.
 
+A second product sits beside it: `colors.kmv1024.counts.zst`, the size of every
+transaction's support, counted by the coordinated bottom-$k$ of section 10, exactly when
+the support has at most 1024 blocks and by an unbiased estimate otherwise. Section 10.10
+says how to read it.
 
-## 10. What Is Left {#sec:left}
+
+## 10. Counting and Comparing Colours {#sec:counting}
+
+{{< newthought >}}Sections 5–9 read a colour{{< /newthought >}} through linear
+functionals: its mean, its CDF, its Laplace values. Two questions about transactions are
+not of that kind. *From how many blocks does a transaction descend?* And *how much do two
+transactions share?* The `varopt` sketches cannot answer either (§10.2), and nothing about
+them needs to change for the answers: two more stores, folded by the same driver beside
+or instead of `varopt`, answer them, one exactly through the whole DAG (§10.3–10.5) and
+one through a linear sketch (§10.6).
+
+### 10.1 What is asked
+
+Both questions are about the *support* of a colour, the blocks it descends from, and the
+support has a recurrence of its own, the set-valued shadow of
+{{< eqref "eq:recurrence" >}}:
+
+$$
+S_t = \{\beta\} \ \text{for a coinbase of block } \beta, \qquad S_t = \bigcup_{i=1}^{n} S_{p_i} \ \text{otherwise.} \label{eq:support}
+$$
+
+It comes with two semantics, and every number below names which one it is about:
+
+- **`sets`** keeps every input, zero-amount ones included. It is what the repository's
+  `--sets` computes, the exact sizes of the first 31,187,785 records are on disk
+  (`finalBCUTXO_2022.sets-counts.31187785.txt`), and it is the default.
+- **`pos`** keeps the operands with a positive share,
+  $S^+_t = \bigcup_{i : s_{t,i} > 0} S^+_{p_i}$: the blocks reachable through
+  positive-share edges. In exact arithmetic this is $\{b : c_t(b) > 0\}$, the support of
+  the weighted colour, since $c_t(b)$ is a sum over paths of products of shares. In
+  `f64` a coefficient can underflow to zero while its block stays reachable: record
+  2,499,382 has 96,213 terms, 9,392 of them exactly 0, every one an underflow. On this
+  chain the two supports nearly coincide; their $k = 1024$ seed-1 count streams differ
+  in 104 of the 31,187,785 records.
+
+Three measures are asked of it.
+
+- **Count**, $\lvert S_t \rvert$: the number of blocks a transaction's coins descend
+  from (under `sets`, through zero-amount inputs too). §5.2 gives its scale: a median of
+  about 174,000 blocks over the first 31.2M records.
+- **Jaccard similarity**,
+  $J(x, y) = \lvert S_x \cap S_y \rvert / \lvert S_x \cup S_y \rvert$, and the
+  **containment** $\lvert S_x \cap S_y \rvert / \lvert S_x \rvert$: shared *ancestry*.
+- **Weighted Jaccard similarity**,
+  $J_w(x, y) = \sum_b \min(c_x(b), c_y(b)) / \sum_b \max(c_x(b), c_y(b))$: shared
+  *value*.
+
+On this chain the last two say very different things. Among 255 deep transactions spread
+over the first 3M records (the `deep` selection of §10.8, every support of at least
+1,024 blocks), the median $J$ of a pair is 0.157 but the median $J_w$ is
+$1.4 \times 10^{-4}$, and 92% of the pairs have $J_w < 0.01$: old supports are largely
+shared, while a colour's weight sits on its recent blocks, which two transactions far
+apart in time do not share. Inside a window of three blocks (the `window` selection) the
+median $J$ is 0.994 and the median $J_w$ is 0.18. Over the whole chain the weights
+overlap more: among 512 deep transactions spread from 2010 to 2022 (§10.9) the median
+$J$ of a pair is 0.48 and the median estimated $J_w$ is 0.21, still 0.18 for pairs more
+than 60,000 blocks apart.
+
+### 10.2 Why the VarOpt sketches cannot answer
+
+The production file of §9 holds a sketch of every colour, and it is tempting to read
+counts and similarities off it. It cannot be done, for four reasons.
+
+1. **Its randomness is fresh at every reduction** (§6.2), so two sketches are not
+   coordinated: a block in both supports is kept in both sketches only by coincidence,
+   and the overlap of two kept sets does not estimate the overlap of the supports.
+2. **Kept lights are carried at $\tau$** ({{< xref "def:varopt" "full" >}}), so a kept
+   light's true weight, and with it its inclusion probability $v_b/\tau$, is not in the
+   sketch: a Horvitz–Thompson count $\sum 1/\pi_b$ cannot be formed from it, even
+   after a single reduction.
+3. **A block dropped at an ancestor is gone for every descendant**: the candidate of a
+   record holds only blocks its parents' sketches kept.
+4. **Blocks reached only through zero-amount inputs have weight 0** and are skipped
+   (§6.2), so they are in the `sets` support and in no weighted sketch.
+
+The weighted similarity has a natural plug-in,
+$(1 - \widehat{\mathrm{TV}})/(1 + \widehat{\mathrm{TV}})$ of the two sketches ($J_w$ is
+a function of TV, §10.6), and it is biased low. With $Q_x, Q_y$ the two sketches, $\min$
+is concave, so by Jensen
+$\mathbb{E}[\min(Q_x(b), Q_y(b))] \le \min(\mathbb{E} Q_x(b), \mathbb{E} Q_y(b)) = \min(x_b, y_b)$
+block by block: the sum of minima, $1 - \widehat{\mathrm{TV}}$, is biased low, and
+$\widehat{\mathrm{TV}}$ high. That alone does not sign the bias of the plug-in, a convex
+function of $\widehat{\mathrm{TV}}$; what does is the size of the loss on the light
+blocks. Heavy blocks are exact; a light block shared by two independent reductions is
+kept by both with probability $(x_b/\tau_x)(y_b/\tau_y)$ and then counts
+$\min(\tau_x, \tau_y)$, so it contributes about $x_b y_b / \max(\tau_x, \tau_y)$, far
+less than $\min(x_b, y_b)$, and the plug-in came out low in every stratum measured
+(§10.8). Within one run the two sketches share the reductions of their common ancestors,
+so the bias depends on how many fresh reductions separate a pair from its common
+ancestry, and it grows with depth. Measured:
+
+- Two independent `varopt` sketches ($k = 512$, seeds 1 and 2) of the *same* colour
+  give a plug-in $J_w$ with mean 0.963 and minimum 0, against the truth 1 (design-phase
+  prototype, colours of the first 2M records).
+- On pairs of reduced colours with $J_w \in [0.1, 0.5)$, the bias of the same-run
+  plug-in grows from $-0.014$ over records 0–1M to $-0.079$ over 1–1.5M and $-0.111$
+  over 1.5–2M (same prototype).
+- On the prefix runs of §10.8 the same-run plug-in of `varopt:512` underestimates $J_w$
+  by 0.171 on average over the 32,640 pairs of the `window` selection (mean 0.029 against
+  0.200), by 0.268 for $J_w \in [0.2, 0.5)$ and by 0.430 for $J_w \in [0.5, 0.9)$
+  (the table of weighted errors in §10.8).
+
+The plug-in is therefore not shipped; `pairs` writes it only to document this. The
+Wasserstein distance between two `varopt` sketches has no such problem. It is a metric
+under which each sketch is close to its colour (section 8 measures $W_1(Q_x, x)$: a
+reduction moves mass only between nearby blocks), so by the triangle inequality it is
+off by at most those two errors. TV is a metric too, but under TV a sketch is far from
+its colour, since its kept lights are carried at $\tau$: that is the bias above. $W_1$
+serves below as a "temporal distance" between transactions.
+
+### 10.3 A coordinated bottom-$k$ of the support is exact through the DAG
+
+A word on notation, as in §6. From here on $\tau$ is a threshold on *ranks*, small ranks
+kept, as in §2 and §6.6, not the weight threshold of §6.1–6.5 and §10.2; and $M$ is the
+size of the permutation, the universe of §1.2.1.
+
+Number the blocks $0, \dots, M - 1$ with $M = 2^{20} = 1{,}048{,}576 > L$, and let $\rho$
+be a uniformly random permutation of $[0, M)$, drawn once per run and shared by every
+sketch: block $b$ has *rank* $\rho(b)$, and the ranks are what makes the sketches
+coordinated. For a set of blocks $S$ let $K_k(S)$ be its $\min(k, \lvert S \rvert)$
+elements of smallest rank. The `kmv` store keeps, for every colour, $K_k(S_t)$ as an
+ascending array of ranks and one bit, *full*, which says $\lvert S_t \rvert > k$. A
+sketch that is not full *is* the support. Throughout, $S$, $A$, $B$ are supports, which
+are functions of the chain alone and independent of $\rho$.
+
+{{< lemma note="union" label="lem:kmv-union" >}}
+For any sets $S_1, \dots, S_G$ with union $S$,
+$K_k(S) = K_k\big(K_k(S_1) \cup \dots \cup K_k(S_G)\big)$. Hence any tree of pairwise
+merges, each keeping the $k$ smallest ranks of its two inputs, computes $K_k(S)$, in any
+order and grouping.
+{{< /lemma >}}
+
+{{< proof >}}
+Let $x \in K_k(S)$, so fewer than $k$ elements of $S$ rank below $x$. If $x \in S_i$,
+fewer than $k$ elements of $S_i \subseteq S$ rank below $x$, so $x \in K_k(S_i)$. Hence
+$K_k(S) \subseteq T \subseteq S$ with $T = \bigcup_i K_k(S_i)$. For any such $T$,
+$K_k(T) = K_k(S)$: if $\lvert S \rvert \le k$ then $K_k(S) = S$ and $T = S$; otherwise
+$T$ contains the $k$ smallest elements of $S$, and every other element of $T$ is an
+element of $S$ ranked above all of them, so the $k$ smallest of $T$ are those. The tree:
+by induction on its height, a node over the leaves $S_i, i \in I$, outputs
+$K_k\big(K_k(\bigcup_{I_1}) \cup K_k(\bigcup_{I_2})\big) = K_k(\bigcup_I S_i)$.
+{{< /proof >}}
+
+{{< lemma note="subsets" label="lem:kmv-sub" >}}
+If $T \subseteq S$ and $x \in K_k(S) \cap T$, then $x \in K_k(T)$. In particular, for
+$x \in K_k(A \cup B)$: $x \in A$ if and only if $x \in K_k(A)$.
+{{< /lemma >}}
+
+{{< proof >}}
+The elements of $T$ ranked below $x$ are elements of $S$ ranked below $x$, of which
+there are fewer than $k$. For the second statement take $T = A \subseteq A \cup B$; the
+converse is $K_k(A) \subseteq A$.
+{{< /proof >}}
+
+{{< theorem note="exact through the DAG" label="thm:kmv-dag" >}}
+Fold $K_k$ through the driver of §7.4: a coinbase of block $\beta$ is $\{\rho(\beta)\}$,
+not full; a record groups its operands by parent (under `pos` it skips those of share
+0), answers the parent's own sketch when one group is left, and otherwise merges the
+groups' sketches by capped merges, with *full* set when an operand is full or a merge
+had elements left over. Then for every record $t$ the stored sketch is $K_k(S_t)$ (or
+$K_k(S^+_t)$) and *full* holds if and only if $\lvert S_t \rvert > k$
+($\lvert S^+_t \rvert > k$), whatever the fold order, the grouping, the repeated
+operands, the zero amounts and the release oracle.
+{{< /theorem >}}
+
+{{< proof of="thm:kmv-dag" >}}
+By induction in file order; parents come earlier, so their sketches are
+$K_k(S_{p_i})$. A coinbase is $K_k(\{\beta\})$. Operands that are the same parent are
+the same set, and a union is idempotent, so grouping changes nothing; one group means
+$S_t = S_p$, and the parent's sketch is $K_k(S_p)$. Otherwise
+{{< xref "lem:kmv-union" "full" >}} gives $K_k(S_t)$. *Full*: if an operand is full,
+$\lvert S_t \rvert \ge \lvert S_{p_i} \rvert > k$; if a merge had leftovers, the union
+below it exceeds $k$. Conversely, if no operand is full, every operand is its whole
+support, and if no merge had leftovers the root holds the whole union, so
+$\lvert S_t \rvert \le k$. Under `sets` every operand is kept, which is
+{{< eqref "eq:support" >}}; under `pos` the skipped operands are exactly those outside
+the union defining $S^+_t$. The release oracle frees a colour after its last spender has
+read it and never changes which colour an input reads, and a BIP-30 duplicate displaces
+the older colour as in `run()`, the same for the support as for the colour.
+{{< /proof >}}
+
+So the fold has **no recursion error**. The sketch of a record at any depth is the
+one-shot bottom-$k$ of its support, a deterministic function of $\rho$ and $S_t$, and
+every estimate read from it has exactly the law of a one-shot KMV estimate. This is the
+opposite of §6.3, where the whole difficulty was the error the recursion adds. What the
+records of one run do share is the permutation: their errors are correlated, and
+questions of bias are asked across seeds (§10.8).
+
+The same argument gives what §5.4 and §6.6 said a coordinated merge could not have:
+exact weights.
+
+{{< lemma note="kept weights" label="lem:kmv-weights" >}}
+Let each sketch also store the colour weight $c_t(b)$ of every kept block. Then for
+every record $t$ and every $b \in K_k(S_t)$,
+$c_t(b) = \sum_{i : b \in K_k(S_{p_i})} s_{t,i}\, c_{p_i}(b)$: the child's kept weights
+are computed exactly from the parents' sketches.
+{{< /lemma >}}
+
+{{< proof >}}
+$c_t(b) = \sum_i s_{t,i}\, c_{p_i}(b)$ by {{< eqref "eq:recurrence" >}}. A term with
+$s_{t,i}\, c_{p_i}(b) > 0$ has $b$ in the support of $C_{p_i}$, which is contained in
+$S_{p_i} \subseteq S_t$ (in $S^+_{p_i} \subseteq S^+_t$ under `pos`, since
+$s_{t,i} > 0$), so $b \in K_k(S_{p_i})$ by {{< xref "lem:kmv-sub" "full" >}}: every
+nonzero term is held by the corresponding parent's sketch, and by induction with its
+exact weight.
+{{< /proof >}}
+
+{{< remark >}}
+{{< xref "lem:kmv-sub" "full" >}} is the property `coord` lacks. Its rank $u_b / v$ uses
+the weight, which changes from parent to child, so a block can rank below the child's
+merged threshold and outside a parent's sketch: in {{< xref "ex:overlap" "full" >}}
+block $b_2$ ranks 0.8 in $D$, inside the merged threshold $0.889$, and 4 in $A$, outside
+$A$'s sketch, so its share from $A$ is unknown. Ranks that depend on the block alone
+keep the lemma, and so would block-level priorities $u_b / g(b)$ for any *fixed*
+function $g$ of the block: a sample weighted by a prior rather than by the colour, which
+§11 leaves open.
+{{< /remark >}}
+
+The exact weights were not shipped.{{< sidenote >}}The design-phase prototype stored
+them and, summing in the exact store's order, matched the exact colour bit for bit on
+the kept blocks (14,219 sampled records of the first 3M, four values of $k$: maximum
+difference 0). As an estimator of $J_w$, though, a uniform sample of the support misses
+the few heavy recent blocks that hold most of the mass: the ratio
+$\sum_K \min / \sum_K \max$ over the kept blocks was biased upward by 0.051, 0.030 and
+0.015 at $k = 64$, 256 and 1024 for pairs with $J_w \ge 0.9$. Weights also double the
+memory. §10.6 has a better tool for $J_w$.{{< /sidenote >}} The store keeps ranks only.
+
+| | `kmv` store |
+| :--- | :--- |
+| rank | a Fisher–Yates permutation of $[0, 2^{20})$, seeded, 8 MiB of tables per seed (both directions) |
+| why a finite permutation | the count is then exactly unbiased in the model actually run, and it can be restricted to the blocks a support can hold (§10.4) |
+| an entry | 4 bytes (a `u32` rank); the block is the inverse permutation of the rank |
+| a sketch | at most $k$ ranks plus the *full* bit, behind an `Rc` of about 40 bytes |
+| a record of $G$ distinct parents | $O(Gk)$ by a balanced tree of two-pointer merges, each capped at $k$; one parent costs a reference-count bump |
+| error added by the recursion | none: every sketch is the one-shot $K_k$ of its support |
+| limit | blocks below $2^{20}$; a larger block is a hard error naming `:bits=` |
+{#tab:kmv caption="The coordinated bottom-k of the support, as stored by the kmv store."}
+
+### 10.4 Counting {#sec:kmv-count}
+
+{{< proposition note="KMV over a finite universe" label="prop:kmv-count" >}}
+Let $V$ be a set of $N$ blocks fixed independently of $\rho$, $S \subseteq V$ with
+$n = \lvert S \rvert$, and $k \ge 2$. If the sketch is not full,
+$\hat n = \lvert K_k(S) \rvert = n$. If it is full, let $R$ be the number of blocks of
+$V$ ranked below the $k$-th smallest rank of $S$ (the 0-based position of that rank
+among the ranks of $V$). Then $\hat n = (k - 1) N / R$ satisfies
+$\mathbb{E}[\hat n] = n$ exactly, and $(k - 1)(k - 2) N (N - 1) / (R (R - 1))$ is an
+unbiased estimate of $n(n - 1)$ for $k \ge 3$.
+{{< /proposition >}}
+
+{{< proof >}}
+The restriction of a uniform permutation of $[0, M)$ to $V$ orders $V$ uniformly at
+random, so the positions of $S$ among the $N$ positions of $V$ are a uniformly random
+$n$-subset of $\{0, \dots, N - 1\}$, and $R$ is its $k$-th smallest element. Choosing
+$k - 1$ positions below $r$ and $n - k$ above,
+
+$$
+\Pr(R = r) = \binom{r}{k-1}\binom{N-1-r}{n-k} \Big/ \binom{N}{n}, \qquad k - 1 \le r \le N - n + k - 1 .
+$$
+
+Since $\frac{k-1}{r}\binom{r}{k-1} = \binom{r-1}{k-2}$,
+
+$$
+\mathbb{E}\Big[\frac{k-1}{R}\Big] = \sum_r \binom{r-1}{k-2}\binom{N-1-r}{n-k} \Big/ \binom{N}{n} = \binom{N-1}{n-1} \Big/ \binom{N}{n} = \frac{n}{N},
+$$
+
+where the middle sum counts the $(n-1)$-subsets of an $(N-1)$-set by the position
+$r - 1$ of their $(k-1)$-th smallest element. Multiplying by $N$ gives
+$\mathbb{E}[\hat n] = n$. In the same way
+$\frac{(k-1)(k-2)}{r(r-1)}\binom{r}{k-1} = \binom{r-2}{k-3}$, and the sum of
+$\binom{r-2}{k-3}\binom{N-1-r}{n-k}$ is $\binom{N-2}{n-2}$, which gives
+$\mathbb{E}\big[\frac{(k-1)(k-2)}{R(R-1)}\big] = \frac{n(n-1)}{N(N-1)}$.
+($R \ge k - 1 \ge 1$ throughout.)
+{{< /proof >}}
+
+Write $\hat n_V$ for this estimator. Then, for $k \ge 3$,
+$\hat n_V^2 - \hat n_V - (k-1)(k-2)N(N-1)/(R(R-1))$ is an unbiased estimate of
+$\operatorname{Var}(\hat n_V)$, since $n(n - 1) + n = n^2$. The variance itself has no
+closed form, though it is a finite sum over the law of $R$; it is about
+
+$$
+\operatorname{Var}(\hat n_V) \approx \frac{n(n - k + 1)}{k - 2} \cdot \frac{N - n}{N - 1},
+$$
+
+the continuous-hash value of §1.2.1 times the finite-population factor (§1.2.1 writes
+$N$ for the set size and $M$ for the universe). The approximation slightly overstates
+it: summed exactly over the law of $R$, for $n/N \le 0.9$ the variance is below it by
+under 1% at $k \ge 256$, under 3% at $k = 64$ and up to 11.5% at $k = 16$. The seed
+tests of §10.8 check it on the chain.
+
+The proposition leaves the universe $V$ free, and the choice matters. The textbook
+choice is the whole permutation, $V = [0, M)$, with $R$ the $k$-th smallest rank itself:
+$\hat n_M = (k - 1)M/R$. But every block of $S_t$ is at most $\beta_t$, the newest block
+seen up to record $t$ (the record's own block, on a chain read in block order), and
+$\beta_t$ is a function of the chain, not of $\rho$. So $V = [0, \beta_t]$ is a valid
+universe with $N = \beta_t + 1$, and $R_t$, the number of blocks $b \le \beta_t$ ranked
+below the $k$-th smallest rank of $S_t$, gives
+
+$$
+\hat n = \frac{(k - 1)(\beta_t + 1)}{R_t},
+$$
+
+exactly unbiased as well and never above $\beta_t + 1$. Supports on this chain are dense
+in their universe: the supports of records 3,000,000 and 31,187,785 cover 70% and 84% of
+$[0, \beta_t]$, so at the latter the finite-population factor is about 0.16 where $M$'s
+is 0.78. In the deepest stratum of the first 31.2M records (supports of 131,072 to
+262,144 blocks) the theory RSE at $k = 1024$ is 0.0144 for $\hat n$ against 0.0283 for
+$\hat n_M$: half the error, the gain a $k$ nearly four times larger would bring. The
+measured RMS over 16 seeds is 0.0152 against 0.0266, 57% of the error, the gain of a $k$
+about three times larger. $R_t$ costs one query of a Fenwick tree over rank space per
+full record, into which the blocks are inserted as the chain's newest block advances
+(§10.7). Both estimates are written; $\hat n$ is the primary one.
+
+### 10.5 Jaccard, containment and unions {#sec:kmv-pairs}
+
+For two transactions with supports $A$ and $B$ and sketches $K_k(A)$, $K_k(B)$:
+
+{{< proposition note="Jaccard" label="prop:kmv-jaccard" >}}
+If neither sketch is full, $J(A, B)$ is computed exactly from the two stored sets. If one
+is, let $K = K_k\big(K_k(A) \cup K_k(B)\big)$ and
+$X = \lvert K \cap K_k(A) \cap K_k(B) \rvert$, and put $\hat J = X / k$. Then $X$ is
+hypergeometric with population $n_u = \lvert A \cup B \rvert$, $\lvert A \cap B \rvert$
+successes and $k$ draws, so $\mathbb{E}[\hat J] = J$ and
+
+$$
+\operatorname{Var}(\hat J) = \frac{J(1 - J)}{k} \cdot \frac{n_u - k}{n_u - 1} \le \frac{1}{4k}.
+$$
+
+{{< /proposition >}}
+
+{{< proof >}}
+A sketch that is not full is its whole support. If one is full, $n_u > k$, and
+$K = K_k(A \cup B)$ by {{< xref "lem:kmv-union" "full" >}}; since $A \cup B$ is fixed
+and $\rho$ uniform, $K$ is a uniformly random $k$-subset of $A \cup B$. By
+{{< xref "lem:kmv-sub" "full" >}}, an element of $K$ is in $K_k(A)$ if and only if it is
+in $A$, and likewise for $B$, so $X = \lvert K \cap A \cap B \rvert$: the number of
+successes among $k$ draws without replacement. Its mean is $k J$ and its variance
+$k J (1 - J)(n_u - k)/(n_u - 1)$.
+{{< /proof >}}
+
+When neither sketch is full but their union exceeds $k$, the textbook formula over $K$
+is still an estimate (it deviated by up to 0.0035 in the design-phase prototype); the
+exact value is in hand, so it is used. In the `even` selection of §10.8, 208,335 of the
+499,500 pairs have both sketches whole at $k = 1024$ and are computed exactly; in 57 of
+them the union exceeds $k$, where the textbook formula would have been an estimate.
+Neither estimator uses everything: both sketches are complete below the smaller of their
+two thresholds, so the union is known there, with between $k$ and $2k$ elements, which
+could lower the variance for small $J$.{{< sidenote >}}Cohen and Kaplan's estimators
+for bottom-$k$ sketches use such samples, which hold more than the $k$ smallest of the
+union.{{< cite "cohen2007summarizing" >}}{{< /sidenote >}}
+
+The **union count** $\lvert A \cup B \rvert$ is exact when neither sketch is full (the
+union is then in hand, whatever its size). Otherwise it is the count of
+$K = K_k(A \cup B)$, which the proof above has in hand, by
+{{< xref "prop:kmv-count" "full" >}} with the pair's universe
+$N = \max(\beta_A, \beta_B) + 1$: exactly unbiased. The **intersection**
+$\hat J \cdot \hat n_u$ is a product of dependent estimates: consistent, not unbiased.
+
+The **containment** of $A$ in $B$, $\lvert A \cap B \rvert / \lvert A \rvert$, is read
+from the part of $A$'s sketch that $B$'s sketch can vouch for. Let $\tau_B$ be the
+$k$-th smallest rank of $B$ when $B$'s sketch is full and $+\infty$ otherwise, let
+$T = \{x \in K_k(A) : \rho(x) \le \tau_B\}$, and estimate the containment by
+$\lvert T \cap K_k(B) \rvert / \lvert T \rvert$. $T$ is the set of elements of $A$
+ranked at most $\min(\tau_A, \tau_B)$, and for each of them membership in $B$ is exact,
+because $B$'s sketch holds every element of $B$ up to $\tau_B$. So the estimate is a
+ratio over a random subset of $A$ whose memberships are known exactly: consistent. It is
+not unbiased, because $\tau_B$ depends on the ranks of $B$, and with them on those of
+$A \cap B$; in particular the element at $\tau_B$ belongs to $B$, so when it is in $T$
+it is a sure hit. That biases the ratio up by about $c(1 - c)/k$ for a containment $c$:
+0.004 at $k = 64$ in a simulation, and at most 0.00025 at $k = 1024$. With a strict
+threshold, $\rho(x) < \tau_B$, the same simulation (20,000 permutations per case) showed
+no bias within its standard error. The code keeps $\le$: at $k = 1024$ its bias is far
+below every error measured in §10.8. The estimate is undefined when $T$ is empty, which
+happens when $A$ is much smaller than $B$: $A$ then has few elements below $\tau_B$,
+about $k \lvert A \rvert / \lvert B \rvert$ on average. `pairs` writes the size of $T$
+beside every containment, and the ratio $\hat J \hat n_u / \hat n_A$ as a flagged
+fallback.
+
+### 10.6 Weighted similarity: a function of L1, and L1 has a linear sketch {#sec:l1}
+
+The support's sketch says nothing about weights. The weighted Jaccard similarity needs a
+different tool, and the shape of the colours makes it simple.
+
+{{< lemma label="lem:jw-tv" >}}
+For probability vectors $x$ and $y$, with $\mathrm{TV} = \tfrac12 \lVert x - y \rVert_1$,
+$\sum_b \min(x_b, y_b) = 1 - \mathrm{TV}$ and $\sum_b \max(x_b, y_b) = 1 + \mathrm{TV}$,
+so
+
+$$
+J_w(x, y) = \frac{1 - \mathrm{TV}}{1 + \mathrm{TV}} .
+$$
+
+{{< /lemma >}}
+
+{{< proof >}}
+Coordinate by coordinate $\min + \max = x_b + y_b$ and
+$\max - \min = \lvert x_b - y_b \rvert$. Summing, $\sum \min + \sum \max = 2$ and
+$\sum \max - \sum \min = 2\,\mathrm{TV}$.
+{{< /proof >}}
+
+So $J_w$ of two colours depends on their L1 distance alone, and L1 distance has a
+*linear* sketch: random projections by a 1-stable law, the Cauchy
+distribution.{{< cite "indyk2006stable" >}} Let $\Pi$ be an $m \times M$ matrix of
+independent standard Cauchy draws $\Pi_{jb}$, one column per block, drawn once per run
+(coordinated, like $\rho$), and let the `l1` store keep $v(C) = \Pi\,C \in \mathbb{R}^m$
+for every colour.
+
+{{< proposition note="the projection commutes with the recurrence" label="prop:l1-linear" >}}
+Fold $v$ through the driver: a coinbase of block $\beta$ is the column
+$(\Pi_{j\beta})_j$; a record groups its operands by parent, skipping those of share 0,
+with $q_g$ the parent of group $g$ and $\bar s_g = \sum_{i : p_i = q_g} s_{t,i}$ its
+summed share, answers the parent's own vector when one group is left, and otherwise
+stores $\sum_g \bar s_g\, v_{q_g}$. Then in exact arithmetic $v_t = \Pi\,C_t$ for every
+record $t$, at any depth.
+{{< /proposition >}}
+
+{{< proof >}}
+By induction in file order: a coinbase of block $\beta$ has the colour $e_\beta$, all
+its mass on $\beta$, and $\Pi\,e_\beta$ is column $\beta$; otherwise
+$\sum_g \bar s_g\, \Pi\,C_{q_g} = \Pi \sum_i s_{t,i}\, C_{p_i} = \Pi\,C_t$ by
+linearity, where grouping only reassociates the sum, share-0 operands contribute 0, and
+one group has $\bar s_g = 1$ and $C_t = C_{q_g}$.
+{{< /proof >}}
+
+There is no reduction, no $k$, no per-record randomness: the only error is floating
+point. The fold accumulates in `f64` in group order and stores `f32` (or `f64`); on the
+first 3M records the stored vector matched $\Pi\,C_t$ computed from the exact colour to
+$6.8 \times 10^{-7}$ relative in `f32` and $5.7 \times 10^{-14}$ in `f64` (§10.8).
+
+For two fixed colours $x$ and $y$, which are functions of the chain and independent of
+$\Pi$, the differences $d_j = v_j(x) - v_j(y) = \sum_b \Pi_{jb}(x_b - y_b)$ are
+independent over $j$ and, by 1-stability, each is Cauchy with scale
+$\sigma = \lVert x - y \rVert_1 = 2\,\mathrm{TV}$. The scale is estimated by maximum
+likelihood, one of the estimators of a Cauchy scale that Li, Hastie and Church
+compare:{{< cite "li2007nonlinear" >}} the log-likelihood
+$\sum_j \big[\ln \sigma - \ln(\sigma^2 + d_j^2)\big]$ is stationary where
+
+$$
+\sum_{j=1}^{m} \frac{\sigma^2}{\sigma^2 + d_j^2} = \frac{m}{2},
+$$
+
+whose left side increases from the number of zero $d_j$ to $m$, so the root
+$\hat\sigma$ is unique (and $\hat\sigma = 0$ when at least half the $d_j$ are 0, as for
+equal colours). The Fisher information of a Cauchy scale is $1/(2\sigma^2)$ per
+observation, so $\hat\sigma$ has relative SD about $\sqrt{2/m}$: 0.0625 at $m = 512$,
+0.0442 at $m = 1024$. The estimates are
+$\widehat{\mathrm{TV}} = \hat\sigma/2$ and
+$\hat J_w = (1 - \min(\widehat{\mathrm{TV}}, 1))/(1 + \min(\widehat{\mathrm{TV}}, 1))$,
+whose SD is, by the delta method, about
+$2\,\mathrm{TV}/(1 + \mathrm{TV})^2 \cdot \sqrt{2/m}$, at most $\tfrac12\sqrt{2/m}$
+(0.022 at $m = 1024$). The mean of $\lvert d_j \rvert$ would be the obvious estimator and
+has no expectation at all; the median is consistent but has relative SD
+$\pi/(2\sqrt m)$, 11% more than the MLE.
+
+The clipping leaves a **floor**. For disjoint colours ($\mathrm{TV} = 1$, $J_w = 0$),
+$\widehat{\mathrm{TV}} \approx 1 + \varepsilon$ with $\varepsilon$ about normal with SD
+$\sqrt{2/m}$, and $\hat J_w \approx \max(-\varepsilon, 0)/2$, whose mean is
+
+$$
+\mathbb{E}[\hat J_w] \approx \frac{\sqrt{2/m}}{2\sqrt{2\pi}} :
+$$
+
+0.0176, 0.0125 and 0.0088 at $m = 256$, 512 and 1024. Pairs with $J_w$ below a few
+hundredths cannot be resolved one by one; the unclipped $\widehat{\mathrm{TV}}$ is
+written beside $\hat J_w$ for averages over many pairs. On the prefix, where the median
+$J_w$ of deep pairs across time is $1.4 \times 10^{-4}$ (§10.1), a weighted map would
+show only the floor. Over the whole chain it would not (§10.9: only a fifth of the pairs
+lie below the floor), but there the maps are drawn for windows of a few blocks, where
+$J$ is near 1 and $J_w$ is what tells transactions apart.
+
+Why a linear sketch and not a weighted MinHash? Consistent weighted
+sampling{{< cite "manasse2010consistent,ioffe2010improved" >}} and P-MinHash, the
+sampler of Moulton and Jiang,{{< cite "moulton2018maximally" >}} make two vectors'
+samples collide with a probability equal to a weighted similarity, and their samples
+are coordinated, as `coord`'s are. But a colour is a *sum* of its parents' colours, and
+for the simplest of these samplers no merge exists.
+
+{{< proposition note="no merge under sums, for priority ranks" label="prop:no-sum-merge" >}}
+Let the sample of a nonnegative vector $x$ be $\mathrm{sk}(x) = (b^*, r_{b^*})$, with
+ranks $r_b = E_b / x_b$ ($+\infty$ when $x_b = 0$) and $b^* = \arg\min_b r_b$, where the
+$E_b$ are independent and identically distributed with a positive density on an interval
+$(0, c)$: exponential for P-MinHash, uniform for priority sampling and for `coord`'s
+$u_b / v$. Then no function $f$ satisfies
+$\mathrm{sk}(\tfrac12 x + \tfrac12 y) = f(\mathrm{sk}(x), \mathrm{sk}(y))$ almost surely
+for all probability vectors $x, y$.
+{{< /proposition >}}
+
+{{< proof >}}
+Over four blocks take $x = (\tfrac12, \tfrac12, 0, 0)$,
+$x' = (\tfrac12, 0, 0, \tfrac12)$ and $y = (0, \tfrac12, \tfrac12, 0)$, and the event
+$E_1 < E_2$, $E_1 < E_4$, $E_3 < E_2$, $E_2 < 2\min(E_1, E_3)$, which has positive
+probability (it is open and holds at $E \propto (1, 1.5, 1.1, 2)$, scaled into
+$(0, c)$). On it $\mathrm{sk}(x) = \mathrm{sk}(x') = (1, 2E_1)$ and
+$\mathrm{sk}(y) = (3, 2E_3)$. But $\tfrac12(x + y) = (\tfrac14, \tfrac12, \tfrac14, 0)$
+has ranks $(4E_1, 2E_2, 4E_3, \infty)$ and sample block 2, while
+$\tfrac12(x' + y) = (\tfrac14, \tfrac14, \tfrac14, \tfrac14)$ has ranks $4E_b$ and a
+sample block other than 2, since $E_1 < E_2$. The same inputs to $f$ require two
+different outputs.
+{{< /proof >}}
+
+Samples of $k$ follow on the same event intersected with one on which $k - 1$ further
+blocks, shared by all three vectors, have ranks small enough to fill the first $k - 1$
+places. The proposition is about this class only, ranks $E_b / x_b$; consistent weighted
+sampling as Ioffe defines it ranks by a randomised step function of $x_b$, also
+nonincreasing in $x_b$, and is not covered by the proof. The same samplers do compose
+under the coordinate-wise **maximum**: the rank of $b$ in $\max(x, y)$ is
+$E_b / \max(x_b, y_b) = \min(E_b/x_b, E_b/y_b)$, so the bottom-$k$ of $\max(x, y)$ is the
+bottom-$k$ of the two samples merged. A union is a maximum of indicator vectors, and the
+support of a positive mixture is the support of the maximum, which is why the KMV of
+the support folds exactly and the weighted samples do not. Linearity is what survives
+the sum.
+
+### 10.7 Implementation {#sec:kmv-impl}
+
+Both stores are `Algebra`s of their own, each on its own thread and fed by the same
+parse as every other store (§7.9); the `SKETCH01` format, the production file and the
+`varopt` code are untouched, and the old modes write byte-identical output. That was
+checked during the implementation against two references: the build of the commit
+before the stores (`f09847c`), on `emit`, `decode`, `eval`, `chain`, `check` and the
+first 300 MB of the production file's `decode`; and the binary of the section-8 sweep, on
+`chain`, an `emit` of 1M records and the first 1,000,000 records of the production
+file's `decode`. With the final binary, the one of every run below, the `emit` and
+`eval` checks were repeated.
+
+The permutation is a Fisher–Yates shuffle{{< cite "knuth1997taocp2" >}} driven by the
+hash of §7.3, built once per seed and shared by every store of that seed:
+
+```rust
+pub fn new(seed: u64, bits: u32) -> Perm {
+    // …
+    let m = 1usize << bits;
+    let mut fwd: Box<[u32]> = (0..m as u32).collect();
+    for i in (1..m).rev() {
+        let j = (h3(seed, SALT_KMV, i as u64, 0) % (i as u64 + 1)) as usize;
+        fwd.swap(i, j);
+    }
+    let mut inv = vec![0u32; m].into_boxed_slice();
+    for (b, &r) in fwd.iter().enumerate() {
+        inv[r as usize] = b as u32;
+    }
+    Perm { bits, seed, fwd, inv }
+}
+```
+
+The modulo bias of each swap is below $M / 2^{64}$. A Feistel network would also be a
+bijection and needs no table, but even with ideal round functions it is not a uniform
+permutation, and both counts of §10.4 are proved exactly unbiased under one;
+Fisher–Yates with ideal swaps is exactly uniform.
+
+The capped merge of two ascending runs of ranks stops as soon as it holds $k$:
+
+```rust
+/// `K_k(a u b)` of two ascending runs into `out` (cleared first), equal ranks
+/// once; answers whether anything was left over, i.e. whether the union has
+/// more than `k` elements.  It stops as soon as `out` holds `k`.
+pub fn merge_cap(a: &[u32], b: &[u32], k: usize, out: &mut Vec<u32>) -> bool {
+    out.clear();
+    out.reserve(k.min(a.len() + b.len()));
+    let (mut i, mut j) = (0, 0);
+    while i < a.len() && j < b.len() {
+        if out.len() == k {
+            return true;
+        }
+        let (x, y) = (a[i], b[j]);
+        if x < y {
+            out.push(x);
+            i += 1;
+        } else if y < x {
+            out.push(y);
+            j += 1;
+        } else {
+            out.push(x);
+            i += 1;
+            j += 1;
+        }
+    }
+    let rest = if i < a.len() { &a[i..] } else { &b[j..] };
+    let room = k - out.len();
+    if rest.len() > room {
+        out.extend_from_slice(&rest[..room]);
+        true
+    } else {
+        out.extend_from_slice(rest);
+        false
+    }
+}
+```
+
+and a record is {{< xref "thm:kmv-dag" "full" >}} in code. `union_cap` runs a balanced
+tree of `merge_cap`s, or a heap from 2,048 groups on; supports here are nested, so the
+parents' sketches nearly coincide and the heap, which pops every duplicate, was slower
+than the tree below that (measured over the first 15M records at $k = 1024$: 106 s of
+store time with a heap from 3 groups, 26–28 s with the tree).
+
+```rust
+fn record(&mut self, ops: &[(KHandle, f64)], rec: u64) -> KHandle {
+    self.group(ops);
+    assert!(!self.groups.is_empty(), "record {} has no operand with a say in its support", rec);
+    if self.groups.len() == 1 {
+        // The union of one set with itself: the parent's own sketch.
+        return Rc::clone(&ops[self.groups[0]].0);
+    }
+    let groups = &self.groups;
+    let any_full = groups.iter().any(|&i| ops[i].0.full);
+    let k = self.spec.k;
+    let cut = union_cap(groups.len(), |g| &ops[groups[g]].0.r, k, &mut self.out, &mut self.scratch);
+    if cut {
+        self.work.reductions += 1;
+    }
+    let full = any_full || cut;
+    debug_assert!(self.out.len() <= k && (!full || self.out.len() == k));
+    Kmv::new(self.out.as_slice().into(), full)
+}
+```
+
+`group` collects the operands by `Rc` pointer, as `Sketcher::group` does (§7.5), and
+under `pos` skips those of share 0. The restricted rank $R_t$ of §10.4 comes from a
+Fenwick tree over rank space, grown block by block as the chain's newest block advances,
+so a whole run costs one insertion per block and one query per full record:
+
+```rust
+pub fn grow(&mut self, n: u64) {
+    while self.n < n {
+        let r = self.perm.rank(u32::try_from(self.n).expect("a block id fits in a u32")) as usize;
+        let mut i = r + 1;
+        while i < self.tree.len() {
+            self.tree[i] += 1;
+            i += i & i.wrapping_neg();
+        }
+        self.n += 1;
+    }
+}
+
+/// How many inserted blocks rank strictly below `r`.
+#[inline]
+pub fn below(&self, r: u32) -> u64 {
+    let mut i = r as usize;
+    let mut s = 0u64;
+    while i > 0 {
+        s += self.tree[i] as u64;
+        i &= i - 1;
+    }
+    s
+}
+
+// …
+
+#[inline]
+pub fn count_full(k: usize, n_univ: u64, below: u64) -> f64 {
+    (k as f64 - 1.0) * n_univ as f64 / below.max(1) as f64
+}
+```
+
+All pair estimates come from one merge walk over the two sketches, which reads
+membership off each side ({{< xref "lem:kmv-sub" "full" >}}), counts the first $k$
+distinct ranks for the Jaccard similarity, and every rank for the containments:
+
+```rust
+pub fn pair_raw(a: View, b: View, k: usize) -> PairRaw {
+    let exact = !a.full && !b.full;
+    let (ta, tb) = (a.rk().unwrap_or(u32::MAX), b.rk().unwrap_or(u32::MAX));
+    let mut p = PairRaw { exact, ..PairRaw::default() };
+    let (mut i, mut j) = (0, 0);
+    let mut taken = 0usize;
+    while i < a.r.len() || j < b.r.len() {
+        // … the next rank `v` of the union, and whether it is in `a` and in `b`
+        if exact || taken < k {
+            taken += 1;
+            p.union += 1;
+            if in_a && in_b {
+                p.inter += 1;
+            }
+            if !exact && taken == k {
+                p.union_rk = Some(v);
+            }
+        }
+        if in_a && v <= tb {
+            p.t_ab += 1;
+            p.hit_ab += in_b as u64;
+        }
+        if in_b && v <= ta {
+            p.t_ba += 1;
+            p.hit_ba += in_a as u64;
+        }
+    }
+    // …
+    p
+}
+```
+
+`pair_est` turns these into $\hat J$ (`inter / union` when exact, `inter / k`
+otherwise), its hypergeometric SE, the intersection and the two containments, NaN when
+their sample is empty.
+
+The `l1` store's record is the sum of {{< xref "prop:l1-linear" "full" >}}, with the
+shares of repeated parents added first:
+
+```rust
+fn record(&mut self, ops: &[(LHandle, f64)], rec: u64) -> LHandle {
+    self.group(ops);
+    assert!(!self.groups.is_empty(), "record {} has no operand with a positive share", rec);
+    if self.groups.len() == 1 {
+        return Rc::clone(&ops[self.groups[0].0].0);
+    }
+    self.acc.iter_mut().for_each(|a| *a = 0.0);
+    for &(i, s) in &self.groups {
+        match &*ops[i].0 {
+            Vector::F32(v) => {
+                for (a, &x) in self.acc.iter_mut().zip(v.iter()) {
+                    *a += s * x as f64;
+                }
+            }
+            Vector::F64(v) => {
+                for (a, &x) in self.acc.iter_mut().zip(v.iter()) {
+                    *a += s * x;
+                }
+            }
+        }
+    }
+    stored(&self.acc, self.spec.prec)
+}
+```
+
+A coinbase is $m$ draws `tan(pi (u - 1/2))` with `u = unit(h3(seed, SALT_L1, b, j))`,
+always finite since `unit` is strictly inside $(0, 1)$ (§7.3). The scale MLE solves its
+equation by Newton's method on $\ln \sigma$, started at the median of $\lvert d_j \rvert$
+and safeguarded by a bisection bracket, so heavy Cauchy tails cannot throw it off:
+
+```rust
+pub fn cauchy_scale_mle(d: &[f64]) -> f64 {
+    let m = d.len();
+    // …
+    let half = m as f64 / 2.0;
+    let mut a: Vec<f64> = d.iter().map(|x| if x.is_finite() { x.abs() } else { f64::INFINITY }).collect();
+    let zeros = a.iter().filter(|&&x| x == 0.0).count();
+    if zeros as f64 >= half {
+        return 0.0;
+    }
+    let mid = a.len() / 2;
+    let med = *a.select_nth_unstable_by(mid, |x, y| x.total_cmp(y)).1;
+    // f(t) = sum 1/(1 + (a/s)^2) - m/2, f'(t) = sum 2 q (1 - q).
+    let f = |t: f64| -> (f64, f64) {
+        let inv = (-t).exp();
+        let (mut v, mut dv) = (0.0f64, 0.0f64);
+        for &x in &a {
+            let r = x * inv;
+            let q = 1.0 / (1.0 + r * r);
+            v += q;
+            dv += 2.0 * q * (1.0 - q);
+        }
+        (v - half, dv)
+    };
+    // … t = ln med; a bracket [lo, hi] with f(lo) < 0 < f(hi)
+    for _ in 0..200 {
+        let (v, dv) = f(t);
+        if v == 0.0 {
+            break;
+        }
+        if v < 0.0 {
+            lo = t;
+        } else {
+            hi = t;
+        }
+        let mut next = t - v / dv;
+        if !(dv > 0.0) || !(next > lo && next < hi) {
+            next = 0.5 * (lo + hi);
+        }
+        let done = (next - t).abs() <= 1e-12 || (hi - lo) <= 1e-12;
+        t = next;
+        if done {
+            break;
+        }
+    }
+    t.exp()
+}
+```
+
+**Modes.** Three modes use the stores, and `eval` and `decode` learn them:
+
+- **`count`** folds one store per `--kmv` and writes every record's count as a
+  fixed-width stream, comparing as it goes with the exact sizes of `--sets-counts`
+  where they exist. A whole sketch whose length is not the exact size, a full sketch of
+  a support of at most $k$, or a whole sketch of a larger one fails the run. It folds no
+  colour, so it costs the parse and a capped merge per record.
+- **`pick`** folds any stores once (`--config`, `--kmv`, `--l1`, and the exact store
+  with `--exact` on a prefix) and dumps the sketches of the records listed in a
+  selection file. Which records are worth comparing (deep ones, a window, an even
+  spread) is known only after a `count` run, so selection is a second pass, and
+  sketches of every record are never stored: at $k = 1024$ they would be about 3.2 TB.
+- **`pairs`** reads a `pick` directory and computes every pair of each group, by every
+  measure it finds, with the exact values beside them when the exact store was dumped;
+  it writes a long table and a square matrix per group and measure, byte-identical at
+  any thread count.
+- **`eval --kmv/--l1`** checks the sketches against the exact store on a prefix, and
+  **`decode`** reads a count stream; with `--select` it cuts the records of a selection
+  out of a `SKETCH01` file, which is how the production `varopt` sketches of selected
+  records are read without a new fold.
+
+The count stream (`kmv.rs`):
+
+```text
+header (48 B): "KMVCNT01" | u32 version=1 | u32 k | u64 seed | u8 support (0 sets, 1 pos)
+               | u8 bits | u16 0 | u32 0 | u64 M | u64 0
+record (20 B): u64 tx | u32 block | u32 m | u32 rk
+               m  = len, with bit 31 set when full
+               rk = the 0-based k-th smallest rank when full, else 0
+trailer:       "KMVEND01" | u64 records | u64 sum of (tx ^ m ^ (rk << 32)), wrapping
+```
+
+Record $i$ is at byte $48 + 20i$; its field `m` is the sketch's length, not the
+dimension $m$ of §10.6. Both counts are lossless from it: the header's seed and bits
+rebuild the permutation, and the running maximum of `block` is the universe of §10.4.
+
+The commands that were run (`$K` and `$L` are lists of `--kmv` and `--l1` specs):
+
+```text
+# R1 and R2, concurrently: k = 64, 256, 1024 at seeds 1..16
+K=""; for k in 64 256 1024; do for s in $(seq 1 16); do K="$K --kmv $k:seed=$s"; done; done
+sketch eval $K --kmv 1024:support=pos --l1 512 --l1 1024 --l1 1024:prec=f64 \
+  --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --oracle lastspend-2022.u32 \
+  --limit 3000000 --every 97 --l1-every 997 --metric-threads 32 --out R1-eval3m --stats < finalBCUTXO_2022.scm
+sketch count $K --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --oracle lastspend-2022.u32 \
+  --limit 31187785 --every 97 --zstd --out R2-count31m --stats < finalBCUTXO_2022.scm
+
+# R3: the prefix selections from R2's seed-1 stream, one fold with the exact store, then all pairs
+#   $K: k = 1024 at seeds 1..16, k = 128, 512, 2048 at seeds 1..4
+#   $L: m = 1024 at seeds 1..8, m = 256, 512 at seeds 1..4
+python3 select.py prefix --bin sketch --counts R2-count31m/counts.kmv-k1024-s1-sets.bin.zst \
+  --sc finalBCUTXO_2022.sets-counts.31187785.txt --limit 3000000 --out sel/prefix
+sketch pick --select sel/prefix.txt --config varopt:512 $K --kmv 1024:support=pos $L --l1 1024:prec=f64 \
+  --exact --oracle lastspend-2022.u32 --limit 3000000 --out R3-pick3m --stats < finalBCUTXO_2022.scm
+sketch pairs --in R3-pick3m --out R3-pairs3m --threads 64
+# R3b: more seeds on the same selection (k = 1024 seeds 17..64, k = 128, 512, 2048 seeds 5..16),
+#   no exact fold: pairs reuses R3's exact.bin
+
+# R4: the whole chain
+sketch count --kmv 1024 --kmv 1024:seed=2 --kmv 1024:seed=3 --kmv 256 --kmv 1024:support=pos \
+  --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --oracle lastspend-2022.u32 \
+  --limit all --every 4001 --zstd --out R4-countall --stats < finalBCUTXO_2022.scm
+
+# R5 to R7: the whole-chain selections from R4's seed-1 stream, one fold, the production
+# varopt sketches of the same records, and all pairs
+python3 select.py chain --bin sketch --counts R4-countall/counts.kmv-k1024-s1-sets.bin.zst --out sel/chain
+sketch pick --select sel/chain.txt --kmv 1024 --kmv 1024:seed=2 --kmv 1024:seed=3 \
+  --l1 1024 --l1 1024:prec=f64 --l1 512:seed=2 --kmv 1024:support=pos \
+  --oracle lastspend-2022.u32 --limit all --out R5-pickall --stats < finalBCUTXO_2022.scm
+# (--long=27 is redundant: as section 9 says, a plain zstd -d reads the production file)
+zstd -dc --long=27 < colors.sketch-varopt512.zst | sketch decode --select sel/chain.txt > varopt512.sel.txt
+sketch pairs --in R5-pickall --varopt-text varopt512.sel.txt --out R7-pairsall --threads 64
+```
+
+### 10.8 Results on the first 3M and 31.2M records {#sec:kmv-results}
+
+Four runs on prefixes of the chain, where exact answers exist, with the binary of §10.7
+(139 tests passing):
+
+- **R1** (`eval`, the first 3M records, every 97th record, 30,928 records): 49 KMV
+  stores ($k = 64, 256, 1024$ at 16 seeds each under `sets`, and $k = 1024$ under
+  `pos`) and three L1 stores against the exact store.
+- **R2** (`count`, the first 31,187,785 records, all of them): 48 KMV stores
+  ($k = 64, 256, 1024$ at 16 seeds) against the exact sizes.
+- **R3** (`pick` and `pairs`, the first 3M records): three selections, with the exact
+  store, `varopt:512` and L1 stores beside the KMV ones. `deep`: records with supports
+  of at least 1,024 blocks, one for each of 256 target blocks evenly spaced from the
+  first such record's block, 44,006, to block 178,609; each target takes such a record
+  of its own block or of the next block that has one (118 moved), and the last target
+  found none left after the `window` had taken the last deep records: 255 records in
+  blocks 44,006 to 178,081, 32,385 pairs. `window`: the last 256 such records before
+  record 3M, records 2,999,685 to 2,999,999 in blocks 178,608 to 178,610, 32,640 pairs.
+  `even`: 1,000 records evenly spaced over the 3M, with no depth condition, 499,500
+  pairs. **R3b** added seeds on the same selection, so that $k = 1024$ has 64 seeds and
+  $k = 128, 512, 2048$ have 16.
+
+Within one run every record and every pair shares one permutation (or one projection),
+so their errors are correlated: within a 10M-record bucket, the error of a count is
+mostly one offset shared by all its records. A per-run spread across records says
+nothing about the estimator; **seeds are the unit** of every bias and variance claim
+below. A bias test is Student's $t$ over the seeds' means, Bonferroni-corrected for the
+strata tested; a variance test compares the mean over records of each record's variance
+*across seeds* with the theory, inside the $\chi^2$ band that would hold even if all the
+records of a stratum moved together.
+
+**Exactness.** In R1 every one of the 49 stores' 30,928 sampled sketches was compared
+with the bottom-$k$ of the exact support, ranked by the same permutation: 1,515,472
+comparisons, **0 mismatches**, and *full* was set exactly when the support exceeded $k$.
+The exact store's support size equalled the `--sets` size on all 30,928 records. In R2
+every whole sketch had exactly the reference size: 4,615,915, 4,715,656 and 4,792,897
+records at $k = 64$, 256 and 1024, for every seed, and no full sketch had a support of
+$k$ or fewer blocks. The L1 projection matched $\Pi\,C_t$ from the exact colour on 3,010
+records with a worst deviation per coordinate, relative to
+$\sum_b \lvert \Pi_{jb} \rvert c_t(b)$, of $5.1 \times 10^{-7}$ ($m = 512$, `f32`),
+$6.8 \times 10^{-7}$ ($m = 1024$, `f32`) and $5.7 \times 10^{-14}$ ($m = 1024$, `f64`).
+In R3, at every $k$, the pairs whose sketches were both whole had $\hat J$ equal to the
+exact $J$ in every case: 208,335 `even` pairs at $k = 1024$ (and 190,653, 205,120 and
+209,628 at $k = 128$, 512 and 2048), and 1,953 `deep` pairs at $k = 2048$.
+
+**Counts.** All 184 seed gates of R2 (92 testable strata, bias and variance) passed, and
+all 160 of R1. The largest $\lvert t \rvert$ in R2 was 2.08 ($k = 64$, $\hat n_M$,
+supports of 8,192 to 16,384 blocks), against Bonferroni thresholds of 4.20 to 4.36; the
+across-seed variance over theory ran from 0.57 to 1.49, inside bands of about
+$[0.19, 2.76]$.
+
+| $k$ | estimator | mean relative error, all full records | $t$ | RMS, deepest stratum | theory | ratio |
+| ---: | :--- | ---: | ---: | ---: | ---: | ---: |
+| 64 | $\hat n$ | $+0.0066 \pm 0.0117$ | 0.56 | 0.0549 | 0.0588 | 0.93 |
+| 64 | $\hat n_M$ | $-0.0012 \pm 0.0212$ | $-0.06$ | 0.1009 | 0.1151 | 0.88 |
+| 256 | $\hat n$ | $+0.0075 \pm 0.0060$ | 1.26 | 0.0269 | 0.0290 | 0.93 |
+| 256 | $\hat n_M$ | $+0.0045 \pm 0.0151$ | 0.29 | 0.0667 | 0.0568 | 1.17 |
+| 1024 | $\hat n$ | $+0.0019 \pm 0.0035$ | 0.55 | 0.0152 | 0.0144 | 1.05 |
+| 1024 | $\hat n_M$ | $+0.0097 \pm 0.0055$ | 1.76 | 0.0266 | 0.0283 | 0.94 |
+{#tab:count .fullwidth caption="R2, support=sets, the first 31,187,785 records, 16 seeds per k. Mean relative error of the count over every record whose support exceeds k (26.6M, 26.5M and 26.4M records), as the mean of the 16 seeds' means plus or minus the standard error across seeds, and its t. RMS: pooled over the 16 seeds, in the deepest stratum (supports of 131,072 to 262,144 blocks, 24,334,496 records), against the theory RSE of section 10.4 with each estimator's universe."}
+
+The ratios are those of 16 draws of a stratum that moves as a whole within a run. One
+seed's RMS over theory, in a stratum of more than 100,000 records, ranged from 0.22 to
+3.08; pooled over 16 seeds, among the strata of more than 100,000 records the ratio left
+$[0.85, 1.2]$ in a few (0.82–0.84 and 1.23 for $\hat n$ at $k = 64$, 0.75–0.79 for
+$\hat n_M$ at $k = 1024$), all inside the variance bands. The figure below draws the
+strata of $\lvert S \rvert / k$ with at least 1,000 records, among them some of fewer than
+100,000, where the ratio reaches 1.24 for $\hat n$ at $k = 64$ (1.22 for $\hat n_M$) and
+0.78 for $\hat n$ at $k = 1024$. A per-run accuracy band is not a test, and none is used.
+
+{{< fig src="count-accuracy.svg" type="fullwidth" label="fig:count" alt="Three panels. Top left: pooled RMS relative error of the count against the support size over k, for k 64, 256 and 1024, with theory curves, for the restricted and the full-universe estimator. Top right: mean relative error of the restricted count with across-seed error bars, all near zero. Bottom: the median count per 10 million records over the whole chain, rising from about 130 to 710 thousand blocks, with its 10th and 90th percentiles, the exact quantiles on the first 31.2 million records, the most a count can be, and on a second axis the share of records counted exactly, 30 percent at first and under 2 percent after 60 million records." >}}
+Counts against their exact sizes, then over the whole chain; `sets`. (a) and (b): the
+first 31,187,785 records, 16 seeds per $k$, by stratum of $\lvert S \rvert / k$ (log 2),
+strata with at least 1,000 records. (a) RMS relative error pooled over the seeds, with
+$\pm 2$ standard errors across seeds, against the theory RSE of each estimator (lines):
+the restricted $\hat n$ over $[0, \beta_t]$ (filled markers, solid lines) and $\hat n_M$
+over $M = 2^{20}$ (hollow, dotted). (b) Mean relative error of $\hat n$, with $\pm 2$
+standard errors across seeds. (c) R4, all 778,613,440 records, $k = 1024$, seed 1, per
+10M records: the median $\hat n$ (dots) and its 10th and 90th percentiles (thin lines
+and band), in thousands of blocks; the exact quantiles (crosses) in the three buckets
+wholly inside the first 31.2M records; the median $\beta_t + 1$ (grey, dotted), the most
+an $\hat n$ can be; and, on the right axis, the share of records whose sketch is whole
+and counted exactly. Years along the top. Records of one seed share one permutation, so
+their errors are correlated; the spread that counts is across seeds.
+{{< /fig >}}
+
+**Jaccard similarity.** No bias gate failed (0 of 52, groups $\times$ $k$ $\times$
+strata of $J$). Pooled over seeds, the RMS error matches the hypergeometric SD of
+{{< xref "prop:kmv-jaccard" "full" >}}, in the table below and in panels (a) and (b) of
+{{< xref "fig:jerror" "full" >}}:
+
+| selection | pairs, $0 < J < 1$ | $k$ (seeds) | largest $\lvert t \rvert$ | threshold | RMS / hypergeometric SD |
+| :--- | ---: | :--- | ---: | ---: | :--- |
+| `deep` | 31,969 | 128 (16) | 1.08 | 3.73 | 0.93–1.05 |
+| | | 512 (16) | 0.82 | 3.73 | 0.89–1.04 |
+| | | 1024 (64) | 2.37 | 3.23 | 0.98–1.03 |
+| | | 2048 (16) | 0.99 | 3.73 | 0.93–1.01 |
+| `window` | 29,749 | 128 (16) | 0.38 | 3.48 | 0.87–1.26 |
+| | | 512 (16) | 2.22 | 3.48 | 0.94–1.29 |
+| | | 1024 (64) | 2.21 | 3.05 | 0.83–1.02 |
+| | | 2048 (16) | 2.06 | 3.48 | 0.81–0.86 |
+| `even` | 200,021 | 128 (16) | 1.62 | 3.73 | 0.87–1.12 |
+| | | 512 (16) | 1.79 | 3.73 | 0.87–1.13 |
+| | | 1024 (64) | 2.20 | 3.23 | 0.94–1.03 |
+| | | 2048 (16) | 1.52 | 3.73 | 0.92–1.02 |
+{#tab:jaccard .fullwidth caption="R3 and R3b, support=sets, the first 3M records. Strata of the exact J: (0, 0.05], (0.05, 0.2], (0.2, 0.5], (0.5, 0.9], (0.9, 1); the window has no pairs below 0.2. Largest |t| of the across-seed bias test over the strata, with its Bonferroni threshold; range over the strata of the RMS error pooled over seeds, over the hypergeometric SD."}
+
+The `window` is the exception, and it is a small one. Its 256 records have only 110
+distinct support sizes, nested within three blocks, so a seed's error moves almost all
+of its pairs together and the per-seed spread is heavy-tailed. Its stratum
+$J \in (0.9, 1)$ came out at a ratio of 0.83 with 64 seeds (ratio squared
+$0.70 \pm 0.07$); recomputed by brute force from the exact supports with 200 fresh seeds
+on 3,000 of its 26,899 pairs, the ratio squared was $0.955 \pm 0.066$ (in batches of 50
+seeds: 1.040, 1.027, 0.700, 1.053). The $k = 2048$ shortfall in the window (0.81–0.86
+over 16 seeds) is within about two standard errors of its ratio as well. Within one seed
+the fraction of pairs off by more than two hypergeometric SDs was mostly 2–6% per
+stratum (extremes 0.7% and 12.5%, in the window's smallest strata).{{< sidenote >}}The
+SE that `pairs` writes per pair is the plug-in
+$\sqrt{\hat J(1 - \hat J)/k \cdot (\hat n_u - k)/(\hat n_u - 1)}$, which is 0 whenever
+$\hat J$ is 0 or 1. Against it, 18.5% of the window's pairs and 24.8% of the even
+selection's were off by more than two SEs (averages over the 16 seeds of R3); among the
+pairs with a positive SE, 4.5% of `deep`, 1.1% of `window` and 3.8% of `even`. Coverage
+should be judged against the true SD, as above.{{< /sidenote >}}
+
+**Containment** of one support in another was defined for every pair of `deep` and
+`window`, and for 73.1% and 86.4% of the ordered `even` pairs (older in newer, newer in
+older): the undefined ones are small supports against large ones. Across 16 seeds at
+$k = 1024$ no stratum showed a bias ($\lvert t \rvert \le 2.55$ against a threshold of
+3.62); the RMS error per stratum was 0.002 to 0.016 in `deep` and `window`, and up to
+0.131 in the `even` pairs whose containment lies in $[0.5, 0.9)$.
+
+**Union counts** (the restricted universe of the pair) were unbiased in a separate check
+with 32 seeds on 2.5M records: relative bias $-0.0026$ ($t = -0.82$) and RMS over theory
+1.01 at $k = 1024$ on deep pairs. {{< xref "fig:jprefix" "full" >}} draws one seed's
+$\hat J$ for the `deep` selection against the exact values.
+
+{{< fig src="jaccard-prefix.svg" type="fullwidth" label="fig:jprefix" alt="For 255 deep transactions of the first 3M records in time order, 2010 to 2012: a strip of support sizes at the left; a matrix with the estimated Jaccard similarity below the diagonal and the exact one above, nearly mirror images; and a triangle of the estimation error below the diagonal, within a few hundredths, in stripes." >}}
+The `deep` selection: 255 transactions with supports of 1,046 to 123,230 blocks, one
+per evenly spaced target block of the first 3M records, in time order; `sets`,
+$k = 1024$, seed 1. (a) $\hat J$ below the diagonal, the exact $J$ above; agreement shows
+as mirror symmetry. (b) $\hat J - J$ below the diagonal, clipped at $\pm 0.05$ (RMS
+0.0102; 1st and 99th percentiles $-0.032$ and $+0.022$; none beyond $\pm 0.05$). (c) The
+strip at the left: $\log_{10}$ of the exact support size, from 3 (dark) to 5.2 (light).
+Year ticks where the rows cross 1 January. Errors share one permutation, so they are
+correlated across cells (the stripes); the honest spread is across seeds (the Jaccard
+table above).
+{{< /fig >}}
+
+**Weighted similarity.** The L1 store was run at $m = 1024$ with 8 seeds and at
+$m = 256$ and $512$ with 4 each.
+
+| exact $J_w$ | pairs | $m = 256$ | $m = 512$ | $m = 1024$ | `varopt` plug-in |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| $< 0.01$ | 3,410 | $+0.014$ / 0.028 | $+0.014$ / 0.024 | $+0.008$ / 0.017 | $-0.003$ / 0.004 |
+| $[0.01, 0.05)$ | 2,553 | $+0.004$ / 0.031 | $+0.006$ / 0.024 | $+0.002$ / 0.019 | $-0.020$ / 0.023 |
+| $[0.05, 0.2)$ | 12,230 | $-0.004$ / 0.041 | $+0.002$ / 0.029 | $-0.003$ / 0.021 | $-0.121$ / 0.127 |
+| $[0.2, 0.5)$ | 13,376 | $+0.002$ / 0.035 | $+0.003$ / 0.025 | $-0.003$ / 0.019 | $-0.268$ / 0.275 |
+| $[0.5, 0.9)$ | 1,050 | $+0.006$ / 0.026 | $+0.006$ / 0.019 | $-0.003$ / 0.015 | $-0.430$ / 0.434 |
+| $\ge 0.9$ | 21 | $+0.000$ / 0.002 | $+0.000$ / 0.001 | $-0.000$ / 0.001 | $-0.017$ / 0.032 |
+{#tab:jw .fullwidth caption="R3, the window selection (32,640 pairs, records 2,999,685 to 2,999,999): bias / RMS error of the weighted Jaccard similarity by stratum of its exact value. L1 estimates averaged over 4, 4 and 8 seeds; the varopt plug-in is the one production run's (k = 512, seed 1)."}
+
+On the window's pairs with $J_w \ge 0.05$ (26,677 of them) the L1 store at $m = 1024$
+has a bias of $-0.0029$ (SE across seeds 0.0029) and an RMS error of 0.0201, against
+0.0263 at $m = 512$ and 0.0379 at $m = 256$: the $\sqrt{2/m}$ law of §10.6. Below
+$J_w = 0.01$ the mean estimate is the floor (panel (c) of
+{{< xref "fig:jerror" "full" >}}): 0.009–0.011 at $m = 1024$, 0.013–0.017 at $m = 512$,
+0.017–0.019 at $m = 256$ over the three selections, against 0.0088, 0.0125 and 0.0176
+predicted for $J_w = 0$. `f32` and `f64` stores gave the same $\widehat{\mathrm{TV}}$ to
+$9.6 \times 10^{-7}$ relative in the window and $1.9 \times 10^{-7}$ in `deep`; in
+`even` one pair reached $1.08 \times 10^{-5}$, at a TV of $2.1 \times 10^{-4}$ (an
+absolute difference of $2.3 \times 10^{-9}$). The plug-in column is §10.2's bias,
+measured. {{< xref "fig:jwindow" "full" >}} draws the window's two matrices, the
+estimates against the exact values.
+
+{{< fig src="jaccard-error.svg" type="fullwidth" label="fig:jerror" alt="Three panels. Top left: RMS error of the Jaccard estimate against the exact J in 13 bins, for k 128, 512, 1024 and 2048, lying on the hypergeometric curves. Top right: mean error by bin with across-seed error bars, within a few thousandths of zero. Bottom: on log-log axes, the mean weighted Jaccard estimate against the exact value by bin, for L1 at three m, which follow the diagonal down to a floor between 0.01 and 0.02, and for the varopt plug-in, which lies far below the diagonal." >}}
+The first 3M records (R3 and R3b), `sets`. (a) RMS of $\hat J - J$ pooled over seeds
+(markers, with $\pm 2$ standard errors) and the hypergeometric SD of §10.5 (lines), in
+13 bins of the exact $J$, over the `deep` and `even` pairs with at least one full sketch
+and $0 < J < 1$ (the others are exact); 64 seeds at $k = 1024$, 16 at $k = 128$, 512
+and 2048. Measured over predicted runs from 0.82 to 1.15 across the bins. (b) The mean of
+$\hat J - J$ in the same bins, with $\pm 2$ standard errors across seeds, in units of
+$10^{-2}$, the four $k$ slightly offset; the largest $\lvert t \rvert$ is 2.87
+($k = 1024$), against a Bonferroni threshold of 3.0 for 13 bins. (c) The weighted
+similarity over the 564,525 pairs of all three selections, in 11 bins of the exact $J_w$
+(the first, $J_w < 10^{-3}$, at the left edge): the mean $\hat J_w$ of the L1 store at
+$m = 256$ and 512 (4 seeds each) and 1024 (8 seeds), with $\pm 2$ standard errors across
+seeds, and the mean plug-in of the production `varopt:512` sketches (not used; below
+$10^{-4}$, off the axis, in the first bin). The L1 curves follow the diagonal down to
+the floor of §10.6 (mean $\hat J_w$ 0.019, 0.013 and 0.0089 where $J_w < 10^{-3}$); the
+plug-in is 4 to 10 times too small for $J_w$ from $10^{-3}$ to 0.7. Errors share one
+permutation or projection within a seed, so the honest spread is across seeds.
+{{< /fig >}}
+
+{{< fig src="jaccard-window.svg" type="fullwidth" label="fig:jwindow" alt="For 256 transactions in a window of three blocks, clustered, with a strip of support sizes at the left: the set distance on a log scale, the KMV estimate below the diagonal and the exact value above, mostly below one in a hundred; and the weighted Jaccard similarity, the L1 estimate below and the exact value above, mostly below four tenths (median 0.18)." >}}
+The `window`: the last 256 deep transactions before record 3M (records 2,999,685 to
+2,999,999, blocks 178,608 to 178,610), ordered by average-linkage clustering on
+$1 - \hat J$ with optimal leaf ordering (on the estimate, since production has no exact
+values). (a) The set distance $1 - J$ on a log scale, `sets`, $k = 1024$ seed 1 below
+the diagonal, exact above; values of $10^{-3}$ or less, including identical supports
+(8.9% of the pairs), take the end colour. (b) $J_w$ on a linear scale to 0.6 (0.45% of
+the exact values lie above), L1 $m = 1024$ seed 1 below, exact above. The strip at the
+left: $\log_{10}$ of the exact support size, from 4.79 (dark) to 5.10 (light). The two
+matrices say different things: nearly the whole history is shared (median $J$ 0.994),
+while the shared *value* is a few tenths at most (median $J_w$ 0.18).
+{{< /fig >}}
+
+**Cost.** Peak memory is the VmHWM of `/usr/bin/time -v`, in GB of $10^9$ bytes as in
+§8.9. R1 took 8 min 24 s and 100.2 GB, almost all of it the exact store. R2 folded
+48 KMV stores over 31.2M records in 2 min 55 s and 68.0 GB; a $k = 1024$ store was busy
+146.7 s and peaked at 617,119,725 ranks in 733,466 live sketches. In R3, which folded
+the exact store and 29 KMV, 17 L1 and one `varopt` store in one pass (7 min 36 s,
+107.6 GB), a $k = 1024$ KMV store was busy 11.5 s over the 3M records, an L1 store at
+$m = 1024$ 14.3 s and `varopt:512` 23.9 s; `pairs` took 56 s for the 564,525 pairs.
+
+### 10.9 The whole chain {#sec:kmv-chain}
+
+**Counts.** R4 counted every one of the 778,613,440 records with five stores in one
+pass: $k = 1024$ at seeds 1, 2 and 3, $k = 256$, and $k = 1024$ under `pos`. It took
+1 h 09 min 47 s, at 544% of a core, and 144.2 GB.
+
+| store | busy | peak ranks | peak live sketches | records cut to $k$ |
+| :--- | ---: | ---: | ---: | ---: |
+| $k = 1024$, seed 1 | 3,853 s | 7,660,615,688 | 7,593,632 | 137,238,198 |
+| $k = 1024$, seed 2 | 3,817 s | 7,660,615,688 | 7,593,632 | 135,831,031 |
+| $k = 1024$, seed 3 | 3,910 s | 7,660,615,688 | 7,593,632 | 135,305,680 |
+| $k = 256$, seed 1 | 2,143 s | 1,916,423,324 | 7,593,632 | 102,302,532 |
+| $k = 1024$, seed 1, `pos` | 3,777 s | 7,660,613,640 | 7,593,630 | 137,238,132 |
+{#tab:r4 caption="R4, all 778,613,440 records: per store, the time its thread was busy, the peaks of ranks held and of live sketches, and the number of records whose merge had elements left over. The seed changes the peaks not at all and the last column by about 1 percent."}
+
+At the peak a $k = 1024$ store holds about 1,009 ranks in each of 7.59M live sketches,
+as many as the production run of §9 keeps alive: 30.6 GB of ranks.
+
+- **Against the exact sizes.** On the first 31,187,785 records every hard counter of
+  every store was 0: no whole sketch of the wrong size, no full sketch of a support of at
+  most $k$, no whole sketch of a larger one, no sketch of more than $k$ ranks. The whole
+  sketches of exactly the reference size were R2's: 4,792,897 at $k = 1024$, at every
+  seed, and 4,715,656 at $k = 256$.
+- **Determinism.** The first 623,755,748 bytes of R4's seed-1 stream,
+  $48 + 20 \cdot 31{,}187{,}785$, equal R2's: the whole-chain stream extends the one
+  validated against the exact sizes.
+- **Seeds against each other.** Past record 31,187,785 there is no reference, so the
+  three $k = 1024$ seeds were compared with each other: per 10M-record bucket and per
+  pair of seeds, the RMS of the relative difference of their $\hat n$ over $\sqrt 2$,
+  against the RMS of the records' theory RSE. Pooled over the 767,323,643 records full
+  at every seed, the ratio was 0.424 for seeds 1 and 2, 0.966 for 1 and 3, 0.828 for 2
+  and 3; per bucket it ranged from 0.23 to 1.58. Within a bucket, though, the spread of
+  the differences around their bucket's mean is only 0.16 to 0.55 of the theory: most of
+  a bucket's seed difference is one offset shared by its 10M records, as one
+  permutation per seed and heavily overlapping supports make it. The pooled ratios are
+  therefore a handful of effective draws, not 767M, and should scatter around 1 by a
+  factor of about 2. Seeds 1 and 2 sit low all along, as on R2, where seed 1 had the
+  smallest error (RMS over theory 0.37, 0.70 and 0.76 for seeds 1 to 3, and 0.50 for
+  the pair 1–2); without a reference this cannot be told from two close offsets.
+  Reported, not gated. The seed gates of the first 31.2M records passed (0 of 52 failed;
+  with 3 seeds they are weak, a $t$ threshold of 36).
+- **Never above the universe.** No record has a restricted $\hat n$ above $\beta_t + 1$
+  (0 of 778,613,440), as {{< xref "prop:kmv-count" "full" >}} guarantees: a check of the
+  decoding.
+- **Counted exactly.** 11,289,797 records, 1.450%, have a whole sketch at $k = 1024$,
+  and 4,792,897 of them lie in the first 31.2M records. Their supports are small: in a
+  1-in-4001 sample of the records the median is 2 blocks, the 90th percentile 54 and
+  the largest 983. Under `pos` exactly as many sketches are full as under `sets`.
+- **The file.** The seed-1 stream compresses to 1,842,558,077 bytes, 2.37 B a record,
+  8.45 times less than its 15,572,268,872 raw bytes; it is the production count file of
+  §10.10.
+
+Panel (c) of {{< xref "fig:count" "full" >}} follows the counts down the chain. Where
+the exact sizes exist, a bucket's median $\hat n$ is within 0.5% of the exact median
+(0.9965, 1.0008 and 1.0047 in the first three 10M-record buckets). The median support
+grows from 131,000 blocks in the first 10M records to 708,000 in the last 8.6M, and
+fills more of its universe as it grows: the median of $\hat n / (\beta_t + 1)$ is 0.85
+over the first 100M records and 0.93 over the last 78.6M. The share counted exactly is
+30% of the first 10M records, 6.1% of the first 100M, and between 0.25% and 1.9% of
+every 10M bucket after the first 60M. The finite-population factor shrinks as the
+supports fill their universe, so the theory RSE falls with depth: over the full records
+its median is 1.21% in the first 100M, 0.92% over the chain (10th and 90th percentiles
+0.82% and 1.19%) and 0.81% in the last 78.6M. $\hat n_M$, over $2^{20}$, has a median
+RSE of 2.25% over the chain, about 2.4 times that of $\hat n$.
+
+**Matrices.** R5 folded the stores of the selected records over the whole chain, and R6
+read the production `varopt` sketches of the same records out of
+`colors.sketch-varopt512.zst`. The selections were drawn from R4's seed-1 stream; a
+record is deep when its $k = 1024$ sketch is full, so $\lvert S \rvert > 1024$ exactly
+by {{< xref "thm:kmv-dag" "full" >}}.
+
+- `w2013` and `w2017`: the first 256 deep records from blocks 240,000 and 470,000
+  (records 19,031,618 to 19,031,920 in blocks 240,000 to 240,002, and records
+  229,491,548 to 229,491,813, all in block 470,000). `w2022`: the last 256 deep records
+  of the chain, which are its last 256 records, all in block 762,260.
+- `chain`: 512 target blocks evenly spaced from 50,000 to 762,260; each takes a deep
+  record not already selected, from the first block at or after the target that has
+  one (40 picks moved past their target). All 512 targets found a record: records
+  51,126 to 778,611,720, in blocks 50,299 to 762,260, with $\hat n$ from 1,254 to 711,490
+  (median 354,641).
+- R5 folded seven stores, four KMV ($k = 1024$ at seeds 1, 2 and 3, and seed 1 under
+  `pos`) and three L1 ($m = 1024$ at seed 1 in `f32` and in `f64`, $m = 512$ at seed 2),
+  over all 778,613,440 records, and dumped the 1,280 selected: 1 h 10 min 05 s at 607%
+  of a core, and 249.8 GB, 4% below the 260.1 GB that a memory model fitted to R4
+  predicted. A KMV store was busy 3,872 to 3,969 s and reproduced R4's peaks and counts
+  of cut records exactly; the L1 stores were busy 2,667 s ($m = 1024$, `f32`), 3,374 s
+  (`f64`) and 2,348 s ($m = 512$).
+- R6 cut the 1,280 records out of the production file, beside R5.
+- R7 computed the 228,736 pairs (130,816 in `chain`, 32,640 in each window) in 3.84 s and
+  0.2 GB.
+
+The checks on these pairs (`r7_checks.py`):
+
+- **$\hat J$ across seeds 1, 2 and 3.** For each cell, $s$ is the standard deviation of
+  the three seeds' $\hat J$ and $\sigma$ the hypergeometric SD of
+  {{< xref "prop:kmv-jaccard" "full" >}} at their mean $\hat J$ and union count. If the
+  estimates were independent and normal, $s^2/\sigma^2$ would be distributed as
+  $\chi^2_2/2$: mean 1, and $s \le \sqrt 3\,\sigma$ with probability
+  $1 - e^{-3} = 0.95$. The gate, a mean $(s/\sigma)^2$ in $[1/3, 3]$, passed in every
+  group: 0.933 in `chain`, 0.876 in `w2013`, 1.154 in `w2017`, 1.134 in `w2022`. The
+  share of cells with $s \le \sqrt 3\,\sigma$, among those with $kJ$ and $k(1 - J)$ at
+  least 10, is reported, not gated: 0.976, 0.991, 0.963 and 0.699. The low one is a
+  single offset: in `w2022` the difference between seeds 1 and 2 has mean
+  $-1.55 \sqrt 2\,\sigma$ and a mean $(\Delta \hat J)^2 / (2\sigma^2)$ of 3.73, against
+  0.99 and 1.50 for the other two pairs of seeds. Its 32,640 cells share one permutation
+  per seed, so one unlucky pair of permutations moves them all. No pair in these groups
+  has two whole sketches, so no cell is exact.
+- **L1 in `f32` against `f64`.** The two gave the same $\widehat{\mathrm{TV}}$ to
+  $7.8 \times 10^{-5}$ relative at worst (in `w2013`; $1.9 \times 10^{-5}$ in `chain`),
+  with a 99th percentile of at most $3.2 \times 10^{-7}$ in every group, and a pair at 0
+  in `f64` was 0 in `f32`: below the $10^{-4}$ that the check allows. The figures use
+  `f64` all the same.
+- **L1 against the exact $J_w$** could not be checked at full depth. It needs pairs whose
+  two `varopt` sketches are unreduced, and so *are* the colours, up to `f32`; every
+  selected record has more than 1,024 blocks, so its `varopt:512` sketch is always
+  reduced. The check stands on the prefix (§10.8).
+- TODO(iv): the band bound,
+  $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
+  in at least 99% of the pairs, with $\mathrm{TV}_{1024}$ the exact TV of the two colours
+  binned into 1,024 bands (binning can only lower it), read from `colors.bands1024.zst`.
+  The extraction of the selected records from that file was still running when this was
+  written.
+
+Across time, in the whole-chain matrix of {{< xref "fig:jchain" "full" >}}, the upper
+triangle has no exact $J$ to show, as the prefix's has, and a containment drawn on
+$[0, 1]$ would be a flat field. On the prefix `deep` pairs, the containment of the older
+support in the newer is exactly 1 in 81.6% of the cells and at least 0.9 in 90.9%, and
+the share of cells at 1 grows with the gap: 41% under 5,000 blocks apart, 63% at
+5,000–20,000, 86% at 20,000–60,000 and 97% beyond. For nested pairs $J$ is just the
+ratio of the two sizes, which the $\log_{10} \hat n$ strip already shows. What is
+informative is the 18.4% of cells that are *not* nested (5,968 of 32,385), whose
+$\log_{10}(1 - c)$ spreads from $-2.7$ (p10) through $-1.0$ (p50) to $-0.01$ (p90), and
+the KMV estimate tracks the exact value there (721 cells fall below the resolution of
+$k = 1024$). So the upper triangle of the whole-chain matrix shows
+$\log_{10}(1 - \hat c_{\text{old} \subseteq \text{new}})$, clipped to $[-3, 0]$: its
+floor colour means "nested, to the resolution of $k$".
+
+Over the whole chain the field is flatter still. The containment is defined in 129,791
+of the 130,816 cells of `chain`, and 98.5% of those are at the floor ($\hat c = 1$
+exactly); only 1,970 cells, 1.5%, are not nested to the resolution of $k$, with
+$\log_{10}(1 - \hat c)$ at $-2.04$, $-0.97$ and $-0.39$ (p10, p50, p90), and 316 of them
+in one row: record 102,455, of block 73,701, with 1,623 blocks, whose median containment
+in the later supports is 0.917. The containment is undefined in 1,025 cells (0.78%):
+small early supports (1,250 to 2,400 blocks, in blocks 75,115 to 116,905) against late
+ones (from block 554,576), where no sampled element of the older support ranks below
+the newer one's threshold. The fallback $\hat J \hat n_u / \hat n_A$ is 0 in all of them,
+since $\hat J$ is, and 0 would read as "disjoint", so they are drawn hatched instead.
+$\hat J$ has percentiles 0.016, 0.48 and 0.90 (p10, p50, p90), and its median by block
+gap tracks the ratio of the smaller count to the larger (0.989 against 0.990 under
+5,000 blocks apart, 0.413 against 0.412 beyond 60,000): nested pairs, as the
+containment says.
+
+{{< fig src="jaccard-chain.svg" type="fullwidth" label="fig:jchain" alt="Two matrices for 512 deep transactions spread over the whole chain in time order, 2010 to 2022, with a strip of support sizes at the left. Left: the estimated Jaccard similarity below the diagonal, falling with the time between two transactions; above it the containment of the older support in the newer, at the nested floor nearly everywhere, with a few hatched undefined cells near the top right. Right: the Wasserstein distance between the production VarOpt sketches in years, small near the diagonal and growing with the time between two transactions." >}}
+The `chain` selection: 512 deep transactions, one per evenly spaced target block from
+block 50,000 to the end of the chain, in time order (blocks 50,299 to 762,260); `sets`,
+$k = 1024$, seed 1. (a) Below the diagonal, $\hat J$. Above it,
+$\log_{10}(1 - \hat c)$ for the containment $\hat c$ of the older support in the newer,
+clipped to $[-3, 0]$: the floor colour, $-3$ or less, means nested to the resolution of
+$k$ (98.5% of the defined cells); grey and hatched, undefined (1,025 cells): no sampled
+element of the older support ranks below the newer one's threshold. The strip at the
+left: $\log_{10} \hat n$, from 3 (dark) to 6 (light). (b) $W_1$ between the production
+`varopt:512` sketches of the same records, read out of the production file without a
+new fold, in years of 144 blocks a day, on a log scale clipped to $[0.13, 9]$. Year
+ticks, every other year, where the rows cross 1 January. $J_w$ is not drawn; its
+quantiles are in the text. Errors share one permutation, so they are correlated across
+cells; the honest spread is across seeds.
+{{< /fig >}}
+
+$W_1$, the "temporal distance", has percentiles 0.48, 1.86 and 4.26 years (p10, p50,
+p90), and a Spearman correlation of 0.82 with the gap in blocks and of 0.77 with
+$1 - \hat J$. The weighted similarity is far from the floor across the whole chain, unlike
+on the prefix: L1 $\hat J_w$ ($m = 1024$, `f64`) has percentiles 0, 0.21 and 0.59 (p10,
+p50, p90), only 20.5% of the pairs lie below the floor of 0.0088, and its median falls
+with the gap from 0.55 under 5,000 blocks to 0.18 beyond 60,000. The independent store
+at $m = 512$, seed 2, agrees (median 0.18, p90 0.59). On the prefix, deep pairs across
+time had a median $J_w$ of $1.4 \times 10^{-4}$ (§10.1): what holds for the first 3M
+records does not hold for the chain as a whole.
+
+Inside a window, where $J$ is close to 1, the weighted similarity is what tells
+transactions apart, and the three windows differ ({{< xref "fig:jeras" "full" >}}):
+
+{{< fig src="jaccard-eras.svg" type="fullwidth" label="fig:jeras" alt="Six matrices in two rows and three columns, for 256 transactions each in 2013, 2017 and 2022, each column clustered. Top row: the estimated set distance on a log scale, mostly a few thousandths or less (median 2 in 1024), with a few bands of larger distance. Bottom row: the weighted Jaccard estimate on a scale from 0 to 1, low and mixed in 2013, mostly between 0.6 and 0.9 in 2017 and 2022." >}}
+Three windows of the whole chain, 256 deep transactions each: 2013, the first from
+block 240,000 (blocks 240,000 to 240,002); 2017, the first from block 470,000 (all in
+that block); 2022, the last 256 records of the chain (all in block 762,260). Each column
+is ordered by average-linkage clustering on $1 - \hat J$ with optimal leaf ordering, and
+both rows follow that order. No exact values exist here, so both triangles show the
+estimate. Top: the set distance $1 - \hat J$, `sets`, $k = 1024$, seed 1, on a log
+scale; $10^{-3}$ or less, identical sketches included, takes the end colour. Bottom:
+$\hat J_w$ from L1, $m = 1024$, seed 1, `f64`, on $[0, 1]$.
+{{< /fig >}}
+
+In all three the median $1 - \hat J$ is $2/1024$, two sampled elements apart, and
+$\hat J = 1$ in 21.9%, 32.4% and 36.9% of the pairs. The weighted similarity rises from
+era to era: $\hat J_w$ has percentiles 0.11, 0.44 and 0.72 (p10, p50, p90) in 2013,
+0.40, 0.75 and 0.85 in 2017, and 0.58, 0.78 and 0.87 in 2022, below the floor in 2.7%,
+1.6% and 0.02% (5 pairs) of the pairs. The median $W_1$ between two transactions of a
+window is 0.19, 0.25 and 0.35 years. Under `pos`, every $\hat J$ of the four groups
+equals the `sets` one.
+
+### 10.10 The production count file {#sec:kmv-file}
+
+`colors.kmv1024.counts.zst`, 1,842,558,077 bytes (SHA-256
+`c8d38950e06278e86b4affc86f1906bbb59712746aba29d2e1d9fce9485a7a7d`), is R4's seed-1
+stream, copied after R4's checks passed. It is one zstd frame with a 4 MiB window, so
+a plain `zstd -d` reads it.
+
+It holds, for each of the 778,613,440 transactions in record order, the 20-byte record of
+§10.7 for the $k = 1024$, seed-1, `sets` sketch of its support. Read it with
+
+```text
+zstd -dc colors.kmv1024.counts.zst | sketch decode
+```
+
+which verifies the trailer and writes a comment line naming the stream
+(`# kmv-k1024-s1-sets k=1024 seed=1 support=sets bits=20 M=1048576`) and then
+`rec tx block univ full m n_hat se n_hat_M se_M`, one line a record. Or read the raw
+records with numpy, dtype `[('tx','<u8'),('block','<u4'),('m','<u4'),('rk','<u4')]` at
+offset 48 with `count = (size - 48 - 24) // 20` (the last 24 bytes are the trailer):
+then `m & 0x7fffffff` is the sketch's length, bit 31 says *full*, and
+$\hat n_M = 1023 \cdot 2^{20} / \texttt{rk}$ follows directly, while the restricted
+$\hat n$ needs the permutation, which `decode` rebuilds from the header.
+
+What an $\hat n$ means: when *full* is clear (every support of at most 1024 blocks, 1.45%
+of the records) it *is* $\lvert S_t \rvert$, the number of blocks the transaction
+descends from, through zero-amount inputs too. Otherwise it is an exactly unbiased
+estimate with an RSE of about
+$\sqrt{(n - k + 1)/(n(k - 2)) \cdot (N - n)/(N - 1)}$, written as `se`: a median of
+0.92% over the chain, 1.2% over its first 100M records and 0.8% over its last 78.6M. All
+records share one permutation, so their errors are correlated, by design: two records
+with nearly the same support get nearly the same error. A second seed's file is the
+way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped.
+
+
+## 11. What Is Left {#sec:left}
 
 - **Bias at $k \ge 512$.** Pass B ran one seed; the 3-seed test covers $k = 64$ and
   $256$ only, and its 95% bounds (11.4% and 16.7% of the mean absolute error) are loose.
@@ -2224,11 +3614,51 @@ plain `zstd -d` decodes it; a 128 MB window needs no flag.
   corrected ones.
 - **`--long=27` sizes** at $k = 64$, $256$ and $1024$ are estimates from the $k = 128$
   saving; at $k = 512$ the production run measured 172.7 GB, just below its estimate.
+- **The permutation is pseudo-random.** The exact unbiasedness of §10.4–10.5 is a
+  theorem about a uniform permutation; the code draws a Fisher–Yates shuffle from a
+  hash. The seed tests of §10.8 and the uniformity test T-K1 are the evidence that the
+  difference is harmless, and a change to the shuffle or the hash must rerun them.
+- **One permutation per run.** Every count and every cell of a matrix shares it, so
+  errors are correlated across records and cells, and a single run can say nothing
+  about bias. The production count file is one seed; R4 computed seeds 2 and 3 beside it
+  but they are not shipped.
+- **Weighted similarity near the floor.** The L1 store's floor is 0.0088 at
+  $m = 1024$, so pairs with smaller $J_w$ cannot be told apart one by one; a larger $m$
+  lowers the floor only as $1/\sqrt m$. On the prefix that is most deep pairs across
+  time (92% below 0.01); over the whole chain it is a fifth of the `chain` pairs and
+  almost none inside a window. The `f32` fold was checked against `f64` on the first 3M
+  records and, at full depth, only on the 1,280 records R5 selected
+  ($7.8 \times 10^{-5}$ relative at worst). L1 against the exact $J_w$ was checked on the
+  prefix only: no record of the whole-chain selections has an unreduced `varopt`
+  sketch to compare with.
+- **A weighted sample that keeps the subset lemma.** Ranks $u_b / g(b)$ with a fixed
+  function $g$ of the block keep {{< xref "lem:kmv-sub" "full" >}}, so they would fold
+  exactly with exact weights, sampling blocks by a prior rather than by the colour. Which
+  $g$ (recency, minted value) would serve $J_w$ or the functionals of §5.1 is open, and
+  so is whether a weighted MinHash outside the class of
+  {{< xref "prop:no-sum-merge" "full" >}} can compose under sums. The probability
+  Jaccard index of Moulton and Jiang is not a function of L1, and no composing sketch
+  for it is known here.
+- **Containment is often undefined** for a small support against a large one (27% of
+  the ordered `even` pairs of the prefix one way, 14% the other; 0.78% of the cells of
+  the whole-chain matrix), and its estimate is consistent but not unbiased: the
+  inclusive threshold of the code biases it up by about $c(1 - c)/k$. A strict threshold
+  showed no bias in simulation; adopting it changes the output of `pairs`, so it waits
+  for a new version. The fallback $\hat J \hat n_u / \hat n_A$ is a biased ratio and
+  is flagged.
+- **More of the sketch for Jaccard.** Both sketches are complete below the smaller
+  threshold, so up to $2k$ elements of the union are known; an estimator that uses them
+  could lower the variance at small $J$.
+- **Sketches of every record are not stored.** At $k = 1024$ they would take about
+  3.2 TB. The counts are stored; sketches exist only for selections, and a new
+  selection needs a new fold (about 70 minutes, as R5 took).
+- **The universe.** Blocks must stay below $2^{20} = 1{,}048{,}576$, which at 144 blocks a
+  day the chain passes in about 2028; `:bits=21` doubles the tables to 16 MiB.
 
 
-## 11. Notes and References {#sec:references}
+## 12. Notes and References {#sec:references}
 
-### 11.1 Further reading
+### 12.1 Further reading
 
 - **Sampling theory.** {{< cite keys="horvitz1952generalization" mode="text" >}}
   introduced the estimator that weights each sampled item by the inverse of its
@@ -2275,11 +3705,21 @@ plain `zstd -d` decodes it; a 128 MB window needs no flag.
   assignments over the same keys through shared ranks, as `coord` does over the blocks
   in §6.6.
 - **Weighted similarity of distributions.**
-  {{< cite keys="ioffe2010improved" mode="text" >}} gives consistent weighted sampling,
-  a MinHash whose collision probability is the weighted Jaccard similarity, in constant
-  time per nonzero weight. {{< cite keys="moulton2018maximally" mode="text" >}} argue
-  that for probability distributions, such as two colours, the natural generalisation of
-  the Jaccard index is a different one, and give a MinHash for it.
+  {{< cite keys="manasse2010consistent" mode="text" >}} define consistent weighted
+  sampling, a MinHash for vectors whose collision probability is the weighted Jaccard
+  similarity, and {{< cite keys="ioffe2010improved" mode="text" >}} makes it run in
+  constant time per nonzero weight. {{< cite keys="moulton2018maximally" mode="text" >}}
+  argue that for probability distributions, such as two colours, the natural
+  generalisation of the Jaccard index is a different one, and give a MinHash for it,
+  P-MinHash, whose ranks are those of {{< xref "prop:no-sum-merge" "full" >}}. None of
+  them composes through the sums of the colour recurrence; §10.6 uses instead that for
+  distributions the weighted Jaccard similarity is a function of the L1 distance.
+- **Stable projections.** {{< cite keys="indyk2006stable" mode="text" >}} sketches the
+  L1 distance of streamed vectors by projections with Cauchy entries, which are linear
+  and therefore follow any sequence of updates, including the mixtures of §5.1;
+  {{< cite keys="li2007nonlinear" mode="text" >}} study estimators of the scale from
+  Cauchy projections, among them the maximum likelihood estimator of §10.6, and their
+  tail bounds.
 - **Martingales.** {{< cite keys="williams1991probability" mode="text" >}} covers what
   §6.2–6.3 use: conditional expectation, the tower property, and the orthogonality of
   martingale differences.
@@ -2291,8 +3731,10 @@ plain `zstd -d` decodes it; a 128 MB window needs no flag.
   first-in-first-out tracing instead, which in their case studies taints far fewer
   addresses than haircut.
 - **Randomness.** {{< cite keys="steele2014fast" mode="text" >}} is the SplitMix
-  generator whose output function hashes every draw of §7.3.
+  generator whose output function hashes every draw of §7.3. The permutation of §10.7 is
+  the shuffle of Fisher and Yates in Durstenfeld's in-place form, Algorithm P of Knuth's
+  §3.4.2.{{< cite "knuth1997taocp2" >}}
 
-### 11.2 References
+### 12.2 References
 
 {{< bibliography heading="" >}}
