@@ -1,6 +1,6 @@
 +++
 date = '2026-11-12T10:30:00+01:00'
-lastmod = '2026-11-14T10:03:00+01:00'
+lastmod = '2026-11-15T16:27:00+01:00'
 title = 'Comprehensive Guide to Bottom-$k$ Sketches'
 subtitle = 'Unweighted, Weighted, Proofs & Implementations; and VarOpt Sketches of a Recurrence on the Bitcoin Chain'
 description = 'Bottom-k (KMV) sketches: cardinality, unions and Jaccard similarity; the weighted extension by priority sampling and exponential scaling with the Horvitz-Thompson estimator; the proof of unbiasedness; Rust and C99 implementations. Then a recurrence sketched: the colour of every transaction of the Bitcoin chain up to 2022 as a VarOpt sketch of at most k blocks, with proofs, the Rust implementation and measurements over 778 million records; and count-distinct and Jaccard similarity of the colours by a coordinated bottom-k of their supports, exact through the DAG, with a weighted similarity by a Cauchy linear sketch.'
@@ -2508,7 +2508,7 @@ block $b_2$ ranks 0.8 in $D$, inside the merged threshold $0.889$, and 4 in $A$,
 $A$'s sketch, so its share from $A$ is unknown. Ranks that depend on the block alone
 keep the lemma, and so would block-level priorities $u_b / g(b)$ for any *fixed*
 function $g$ of the block: a sample weighted by a prior rather than by the colour, which
-§12 leaves open.
+§13 leaves open.
 {{< /remark >}}
 
 The exact weights were not shipped.{{< sidenote >}}The design-phase prototype stored
@@ -3789,7 +3789,232 @@ sketches, a little over $\tau = 1/512$. That is allowed: the bound $\tau$ of
 the recurrence the errors of the earlier reductions add to it (§6.3).
 
 
-## 12. What Is Left {#sec:left}
+## 12. The Colour Surface {#sec:surface}
+
+A colour is a probability distribution over the blocks (§5.1), and so is its sketch: the
+coefficients are nonnegative and sum to one (point 4 of {{< xref "thm:varopt" "full" >}}).
+Set side by side in the order of the chain, the 778 million sketches make a surface over
+two time axes. One axis is the block a transaction is in, when its coins are spent. The
+other is the block they were minted in. The height is the share of the transaction's
+colour minted there. This section draws that surface for the whole chain and reads it.
+
+Too many transactions share a block for the surface to be drawn one transaction at a
+time, so it is drawn as an average. With $B_m$ band $m$ of 745 blocks (the 1,024 bands
+of `colors.bands1024.zst`) and $T_s$ the transactions in the blocks of band $s$, less the
+coinbases,
+
+$$
+\hat P(s, m) = \frac{1}{\lvert T_s \rvert} \sum_{t \in T_s} \; \sum_{b \in B_m} \hat c_t(b),
+$$
+
+with $\hat c_t(b)$ the coefficient of $x^b$ in the production sketch of $t$. Each column
+$\hat P(s, \cdot)$ is a probability distribution over minting bands. By
+{{< xref "thm:dag" "full" >}} and linearity it is an unbiased estimate of $P(s, m)$, the
+same average of the exact colours. Its error does not shrink like
+$1 / \sqrt{\lvert T_s \rvert}$, though. The transactions of one band share ancestors, and
+the sketch of an ancestor was reduced once and then handed down to all of them, so their
+errors are correlated. §12.6 measures the error against the exact colours.
+
+Three things the average is not:
+
+- **It is not weighted by value.** Each transaction counts once, whatever it moves, so a
+  column is the colour of a transaction drawn at random from its band, not the colour of
+  the bitcoin that moved in it. Value weights need the transactions' amounts, which
+  neither the sketch file nor the count file holds.
+- **"Minted in $b$" means paid out by the coinbase of block $b$**, fees included, as in
+  §5.1: a coinbase has the colour $x^{b}$ whatever part of it is fees.
+- **The age is the time since minting**, measured through every transaction since the
+  coinbase. It is not the time since the coins last moved, which is what the coin-age
+  charts of chain analytics (HODL waves, coin days destroyed) measure.
+
+### 12.1 How it was computed
+
+Two small Rust programs, outside the crate, read the files once each.
+
+- **The sketched surface.** `surface-aggb` reads the production file
+  `colors.sketch-varopt512.zst` through a copy of the crate's decoder (`encode.rs`).
+  Beside it, it reads the count file of §10.10 for each record's block. It skips the
+  first record of each block, the coinbase (762,261 of them), and adds every other
+  sketch, divided by its mass, to the row of its band. It read 778,613,440 records and
+  kept 777,851,179, in 2 h 00 min and 7 MB of memory. No coefficient sits at a block
+  later than its transaction's own, a check that the two files line up.
+- **The exact surface.** `surface-aggxp` does the same with the exact colours of
+  `colors.bands1024.zst`, already binned in the same bands, with 16 threads parsing the
+  text: 4 h 22 min and 0.2 GB of memory, with zstd's single-threaded decompression as the limit. Both runs kept the same records in every row.
+- **A cross-check of the reader.** On the first 3M records, a version that reads the
+  text of `sketch decode` agreed with `surface-aggb` to $1.3 \times 10^{-11}$.
+
+### 12.2 The surface
+
+{{< fig src="surface-heatmap.svg" type="fullwidth" label="fig:surface" alt="Two heatmaps over spending time from 2009 to 2022 on the horizontal axis. Left: minting time on the vertical axis; the colour fills the triangle below the diagonal, dark along the diagonal before 2012, then an even blue with horizontal steps at the halvings of 2012, 2016 and 2020 and a pale band along the bottom for coins minted in 2009 and early 2010. Right: the same data with the age of the coins, up to 14 years, on the vertical axis; the halvings become diagonal lines." >}}
+The colour surface of the whole chain, from the production sketches: the share of a
+transaction's colour minted in each band of 745 blocks (about five days), averaged over
+the transactions of each spending band (coinbases left out), on a log scale. Each column
+sums to 1. (a) By minting time. (b) By age, spending time less minting time.
+{{< /fig >}}
+
+{{< xref "fig:surface" "full" >}} reads from left to right.
+
+- **Before 2012, what is spent was just minted.** The mass sits on the diagonal. Of the
+  colour of a transaction of 2011, 59% was minted in the week before and 92% in the year
+  before.
+- **Then the mass spreads over the whole past.** From 2012 each column covers nearly the
+  whole triangle below the diagonal, at between $10^{-4}$ and $10^{-2}$ per band. By
+  2022 the median age is 8.1 years, and three quarters of the colour is older than four
+  years (§12.4).
+- **The halvings are horizontal steps**, at minting blocks 210,000 (November 2012),
+  420,000 (July 2016) and 630,000 (May 2020). A block after a halving mints half as
+  much, so it is half as large a share of everything that mixes it in. In (b), the same
+  steps run along diagonals.
+- **The coins of 2009 and early 2010 stay pale** along the bottom of (a), all the way to
+  2022. They are spent far less often than their share of the supply (§12.5).
+- **Dark patches in 2010 and 2011** are single holdings moving, such as the coins minted
+  around blocks 20,000 to 35,000 and spent in late 2010. With few transactions per band
+  in those years, one large holding is visible on its own.
+
+### 12.3 In three dimensions
+
+{{< fig src="surface-3d.svg" label="fig:surface3d" alt="A 3D surface over spending time and minting time, with a logarithmic height from one in a million to one. A sharp ridge rises along the diagonal at the early end, and a broad plateau slopes down toward the late end." >}}
+The surface of {{< xref "fig:surface" "full" >}}(a) as a height, on cells of
+2,980 × 2,980 blocks.
+{{< /fig >}}
+
+The same numbers as a height ({{< xref "fig:surface3d" "full" >}}) show the shape at a
+glance: a ridge along the diagonal in the first years, then a plateau that falls slowly
+with age. The rest is hard to read. The near side hides the far one, the perspective
+changes how high things look, and no value can be read off. The halving steps, clear in
+{{< xref "fig:surface" "full" >}}, are hard to find. The rest of the section reads the
+surface from the heatmap and from its slices; the 3D view is better suited to exploring
+the surface interactively than to a page.
+
+### 12.4 The age of the coins that move
+
+{{< fig src="surface-age.svg" type="fullwidth" label="fig:surface-age" alt="Left: one cumulative curve per year from 2011 to 2022 of the share of a transaction's colour younger than a given age, on a log age axis from one week to 13 years; the curves move right year by year. Right: the median, mean and 25-75 and 10-90 percent bands of the age against spending time; the median rises from near zero in 2012 to about 8.5 years at the end of 2022, with the exact median and mean drawn over the sketched ones." >}}
+The columns of {{< xref "fig:surface" "full" >}}(b) as distributions of age. (a) For
+each year, the share of a transaction's colour younger than a given age, averaged over
+the year's transactions. (b) Quantiles and mean of the age in each spending band of 745
+blocks, from the sketches; the dotted lines are the exact median and mean, from the
+exact surface, whose ages are differences of bands (§12.6).
+{{< /fig >}}
+
+| year spent | transactions | mean age | median age | under a week | under a year | over 4 years |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 2010 | 117,811 | 0.29 | 0.16 | 22.0% | 91.9% | 0.0% |
+| 2011 | 1,845,990 | 0.19 | 0.01 | 58.8% | 92.1% | 0.0% |
+| 2012 | 8,393,844 | 0.75 | 0.35 | 18.7% | 72.0% | 0.0% |
+| 2013 | 19,550,074 | 1.39 | 1.11 | 9.3% | 47.0% | 3.8% |
+| 2014 | 25,171,092 | 1.79 | 1.36 | 7.7% | 45.2% | 13.6% |
+| 2015 | 45,625,103 | 2.17 | 1.47 | 4.5% | 42.7% | 22.7% |
+| 2016 | 82,934,251 | 2.83 | 2.23 | 2.8% | 32.0% | 34.5% |
+| 2017 | 103,963,956 | 3.94 | 3.82 | 1.7% | 17.8% | 48.4% |
+| 2018 | 81,173,269 | 4.61 | 4.75 | 2.6% | 19.2% | 56.2% |
+| 2019 | 119,946,976 | 4.88 | 4.91 | 2.4% | 22.0% | 57.1% |
+| 2020 | 111,939,087 | 5.62 | 5.78 | 1.5% | 17.0% | 63.3% |
+| 2021 | 98,075,965 | 6.81 | 7.28 | 1.3% | 9.9% | 72.4% |
+| 2022 | 79,113,540 | 7.42 | 8.12 | 1.5% | 12.0% | 74.6% |
+{#tab:surface-age caption="The age of the coins spent, per year: the columns of the surface averaged over the year's transactions, coinbases left out. Ages in years since minting, from the block of each term of the sketches, binned in bands of 745 blocks (5.2 days); the shares at one week, one year and four years are interpolated inside a band. 2009, with no transactions but coinbases, is left out."}
+
+- **Coins get older.** The median age rose from 1.1 years in 2013 to 8.1 in 2022, when
+  the chain was 13 years old. The rise was uneven: fastest from 2016 to 2017 and from
+  2020 to 2021, slowest from 2018 to 2019.
+- **Young coins don't disappear.** The share under a week old falls from 59% in 2011 to
+  1.3–2.6% from 2017 on, and the share under a year old falls to 10–22%. Since 2018 the
+  mean has been below the median: the young part is small but pulls the mean down.
+- **The jump at the turn of 2018** in (b), where the median moves from about 4 to 5 years
+  within weeks, coincides with the rise and fall of the price in December 2017 and
+  January 2018. The coins spent then were older than in the months around them.
+
+### 12.5 What moves against what exists
+
+Coins of every age exist, in known amounts: block $b$ mints a subsidy of
+$50 \cdot 2^{-\lfloor b / 210{,}000 \rfloor}$ BTC. If the coins that move were a fair
+draw from the coins that exist, the colours of a year would put on each minting band its
+share of the supply. {{< xref "fig:surface-ratio" "full" >}} divides the one by the
+other.
+
+{{< fig src="surface-ratio.svg" type="fullwidth" label="fig:surface-ratio" alt="Six curves, for the years spent 2012 to 2022 in steps of two, of the ratio of a minting band's share in the colours to its share in the supply, on a log axis against minting time. All start near 0.1 for 2009, cross 1 around 2012, stay between 1 and 2 in the middle years, and rise to between 4 and 8 for the months just before the year spent." >}}
+For the transactions of a year: each minting band's share of their colour (restricted to
+the bands minted before the year began, and renormalised) over its share of the coins
+those bands minted. The supply counts subsidies only; fees, a small part of most
+coinbases, are left out of it. Above 1, a band's coins are spent more than their share;
+below 1, less.
+{{< /fig >}}
+
+| year spent | minted before 2010: colour / supply | before 2011 | before block 210,000 | in the 12 months before the year |
+| :--- | :--- | :--- | :--- | :--- |
+| 2012 | 8.4% / 20.1% | 38.2% / 62.6% | 100.0% / 100.0% | 57.6% / 32.7% |
+| 2013 | 4.2% / 15.1% | 23.0% / 47.0% | 96.3% / 98.6% | 44.2% / 23.5% |
+| 2014 | 3.6% / 13.1% | 21.9% / 40.9% | 69.7% / 85.8% | 25.1% / 10.7% |
+| 2015 | 3.0% / 11.7% | 17.1% / 36.5% | 51.8% / 76.6% | 29.3% / 9.5% |
+| 2016 | 2.6% / 10.7% | 14.9% / 33.2% | 44.2% / 69.7% | 26.0% / 8.7% |
+| 2017 | 2.7% / 10.0% | 16.0% / 31.1% | 45.2% / 65.1% | 14.5% / 6.1% |
+| 2018 | 2.8% / 9.6% | 16.5% / 29.8% | 46.8% / 62.4% | 9.8% / 3.9% |
+| 2019 | 2.6% / 9.2% | 14.7% / 28.6% | 41.8% / 60.0% | 12.5% / 3.7% |
+| 2020 | 2.3% / 8.8% | 13.3% / 27.5% | 38.2% / 57.7% | 12.3% / 3.6% |
+| 2021 | 2.3% / 8.6% | 13.9% / 26.9% | 39.6% / 56.3% | 5.6% / 2.4% |
+| 2022 | 2.3% / 8.5% | 13.8% / 26.4% | 39.3% / 55.3% | 5.9% / 1.7% |
+{#tab:surface-ratio caption="Shares of the colour (averaged over the year's transactions) and of the supply, both over the coins minted before the year began."}
+
+The curves have three parts, and those of 2018, 2020 and 2022 lie almost on top of each
+other up to 2017:
+
+- **The first year is spent least.** In the colours of every year from 2013 on, coins
+  minted in 2009 get about a quarter of their share of the supply (0.24 to 0.30 of
+  it), and the oldest bands less than that. In 2022, coins minted before 2010 are 8.5% of
+  the supply but 2.3% of a transaction's colour. A coin enters a colour
+  only once it moves, and many of the earliest coins never have: lost keys, or coins
+  held since the first year, among them those of the earliest miners.
+- **The middle is well mixed.** Coins minted from 2012 to about two years before the
+  year spent sit near their share, between about 1 and 2 times it.
+- **The last months are spent most.** The coins of the last month before the year get
+  2.8 to 6.2 times their share, and the curves rise toward it over the year before. In 2022, the twelve months before the year are 1.7% of the supply and 5.9% of a
+  transaction's colour. New coins pass through exchanges and payments before they come
+  to rest.
+
+The comparison is between two different things: the supply counts bitcoin, and the
+colour is averaged over transactions. A value-weighted surface would compare like with
+like, and would need the amounts (§13).
+
+### 12.6 Sketched against exact
+
+{{< fig src="surface-check.svg" type="fullwidth" label="fig:surface-check" alt="Left: total variation distance between the sketched and the exact column, one point per spending band, on a log axis from about 1e-16 to 1e-1; tiny before 2011, rising to about 1e-2 from 2012 on. Right: the difference sketched minus exact for every cell of the triangle, on a symmetric log colour scale from -0.01 to 0.01; mostly pale, with horizontal stripes." >}}
+The sketched surface against the exact one, from `colors.bands1024.zst`. (a) The total
+variation distance between each sketched column and the exact column. (b) The difference
+per cell, on a symmetric log scale (linear below $10^{-5}$).
+{{< /fig >}}
+
+The two surfaces were computed from the same 777,851,179 transactions, row for row, so
+any difference comes from the sketches.
+
+- **Columns.** The total variation distance between a sketched column and the exact one
+  is at most 0.0029 before 2011, with few transactions and small colours. From 2012 on
+  it is between 0.006 and 0.040, and it grows slowly with time: the median column is at
+  0.013 in 2013 and at 0.034 in 2022. Each of those columns averages at least 27,512 sketches. A single
+  sketch is much further from its binned colour: 0.42 for the tenth sketch of §11.
+- **Cells.** No cell differs by more than $1.2 \times 10^{-3}$, and 99% of the cells
+  where the exact surface is not zero differ by less than $2.4 \times 10^{-4}$.
+- **Ages.** Read the same way from both surfaces, as differences of bands, the mean age
+  of a column is within 0.0028 years (one day) of the exact one in every column. The
+  median is within 0.0044 years from 2012 on, and within 0.043 years before, where
+  columns are small. The shares of {{< xref "tab:surface-age" "full" >}} read from both
+  surfaces this way agree to three decimal places. So does the 2009 ratio of
+  {{< xref "tab:surface-ratio" "full" >}}: 0.273 sketched against 0.275 exact in 2022.
+  (The table itself reads ages from the blocks of the sketches' terms, which the exact
+  file, binned, cannot give. Read from band differences, "under a week" is smaller,
+  44.8% against 58.8% in 2011: a coin minted at the end of a band and spent at the start
+  of the next is one band old, however few blocks apart the two are.)
+
+The errors do not cancel as they would if the sketches were independent.
+{{< xref "fig:surface-check" "full" >}}(b) is striped along the spending axis: a minting
+band that a column overstates tends to be overstated in the columns after it too. That
+is what inherited sampling decisions do. When a reduction keeps or drops a light block
+for some transaction, every later transaction that spends those coins inherits the
+choice (§6.3). The surface is accurate to a few parts in a thousand for the questions of
+§12.4 and §12.5, which sum many cells. It is less accurate for a single cell, where the
+error can be a sizable fraction of the value.
+
+
+## 13. What Is Left {#sec:left}
 
 - **Bias at $k \ge 512$.** Pass B ran one seed; the 3-seed test covers $k = 64$ and
   $256$ only, and its 95% bounds (11.4% and 16.7% of the mean absolute error) are loose.
@@ -3854,13 +4079,19 @@ the recurrence the errors of the earlier reductions add to it (§6.3).
 - **Sketches of every record are not stored.** At $k = 1024$ they would take about
   3.2 TB. The counts are stored; sketches exist only for selections, and a new
   selection needs a new fold (about 70 minutes, as R5 took).
+- **A value-weighted surface.** The surface of §12 counts every transaction once.
+  Weighted by the amounts, it would be the colour of the bitcoin that moved, and its
+  comparison with the supply in §12.5 would be like with like. The amounts are not in
+  the sketch file or the count file, so it needs one more pass over the chain with them.
+  The time since coins last moved, which coin-age charts use, is a different recurrence
+  and is not in the colours at all.
 - **The universe.** Blocks must stay below $2^{20} = 1{,}048{,}576$, which at 144 blocks a
   day the chain passes in about 2028; `:bits=21` doubles the tables to 16 MiB.
 
 
-## 13. Notes and References {#sec:references}
+## 14. Notes and References {#sec:references}
 
-### 13.1 Further reading
+### 14.1 Further reading
 
 - **Sampling theory.** {{< cite keys="horvitz1952generalization" mode="text" >}}
   introduced the estimator that weights each sampled item by the inverse of its
@@ -3937,6 +4168,6 @@ the recurrence the errors of the earlier reductions add to it (§6.3).
   the shuffle of Fisher and Yates in Durstenfeld's in-place form, Algorithm P of Knuth's
   §3.4.2.{{< cite "knuth1997taocp2" >}}
 
-### 13.2 References
+### 14.2 References
 
 {{< bibliography heading="" >}}
