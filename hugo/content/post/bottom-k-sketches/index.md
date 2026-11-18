@@ -114,8 +114,9 @@ $|A \cap B| \approx \hat{J}(A, B) \cdot \hat{N}_{A \cup B}$, consistently but no
 unbiasedly, and the *containment* $|A \cap B| / |A|$ by the elements of $S(A)$ that hash
 at or below the $k$-th hash of $S(B)$ (all of $S(A)$ when $S(B)$ holds the whole of
 $B$): the fraction of them found in $S(B)$. That $k$-th element belongs to $B$, so when
-it is also in $A$ it is a sure hit, which biases the fraction up by about $c(1 - c)/k$
-for a containment $c$ (at most 0.00025 at $k = 1024$). The fraction is undefined when no
+it is also in $A$ it is a sure hit, which biases the fraction up by up to about
+$c(1 - c)/k$ for a containment $c$ (the full amount when $A$ is smaller than $B$, none
+when it is much larger; at most 0.00025 at $k = 1024$). The fraction is undefined when no
 element of $S(A)$ is that small, which is common when $A$ is much smaller than
 $B$.{{< sidenote >}}These estimates ask little of the hash function. Thorup shows that
 with a merely 2-independent $h$ the expected relative error of estimating a fraction $f$
@@ -774,19 +775,20 @@ measured against in section 8.
 
 ### 5.2 Why the exact colours do not fit
 
-The support of $C_t$ is the union of its parents' supports, so colours only grow. On the
-2022 chain they grow fast: an exact fold of the set colours (the same supports, without
-the weights) was stopped by a memory guard at 480 GiB of resident memory around record
-31.1M, 4% of the way through the chain, holding $1.24 \times 10^{11}$ block ids in 1.45M
-live colours, about 85,000 blocks a colour on average. Counted over transactions rather
-than live colours, the median transaction among those first 31.2M records has a colour
-of about 174,000 blocks, and about 234,000 for the last million of them
-(`finalBCUTXO_2022.sets-counts.31187785`). The weighted store is heavier still: it holds
-about 43 GB at 1.5M records. The release oracle, which frees a colour as soon as its
-last spender has read it, already cuts the live colours from 92.7M to 19.4M over the
-chain, and the distinct live colours still peak at about 7.6M (7,593,630 distinct live
-sketches in the stores of pass B, §8.1). Multiplied by hundreds of thousands of blocks,
-that does not fit in any memory.
+The support of $C_t$ is the union of the supports of its parents with a positive share
+(every parent but a zero-amount input, §10.1), so colours only grow. On the 2022 chain
+they grow fast: an exact fold of the set colours (the `sets` supports of §10.1, which
+also keep zero-amount inputs, without the weights) was stopped by a memory guard at 480
+GiB of resident memory around record 31.1M, 4% of the way through the chain, holding
+$1.24 \times 10^{11}$ block ids in 1.45M live colours, about 85,000 blocks a colour on
+average. Counted over transactions rather than live colours, the median transaction among
+those first 31.2M records has a colour of about 174,000 blocks, and about 234,000 for the
+last million of them (`finalBCUTXO_2022.sets-counts.31187785`). The weighted store is
+heavier still: it holds about 43 GB at 1.5M records. The release oracle, which frees a
+colour as soon as its last spender has read it, already cuts the live colours from 92.7M
+to 19.4M over the chain, and the distinct live colours still peak at about 7.6M
+(7,593,630 distinct live sketches at the peak of the production run, §9). Multiplied by
+hundreds of thousands of blocks, that does not fit in any memory.
 
 ### 5.3 Sketching the recurrence
 
@@ -848,7 +850,9 @@ its weight exceeds $\tau$, and kept lights are carried at weight $\tau$, so this
 plays the part of §2's $1/\tau$. §6.6 returns to §2's rank convention for `coord`. Also,
 $S_j$ below is a cumulative light mass, not a sketch; $h$ counts heavy items, not a
 hash; $W$ is a total mass and $W_1$ the Wasserstein distance; and the mixing shares are
-always $s$.
+always $s$ ($s_{t,i}$, $s_a$, $s_b$, or a bare $s$, $s'$), except in $\Lambda_s$ and
+$e^{-sb/L}$ in {{< xref "cor:bv" "full" >}} and its proof, where $s$ is the Laplace
+parameter of §5.1.
 
 ### 6.1 VarOpt$_k$ by systematic threshold sampling {#sec:varopt}
 
@@ -1010,6 +1014,11 @@ $t_{i+1} \le t_i$.
 *Stopping.* If every item counted in $M_i$ is at most $t_{i+1}$, and the others exceed
 $t_i \ge t_{i+1}$, then $f(t_{i+1}) = h_i + M_i / t_{i+1} = k$, and $t_{i+1} = \tau$ by
 uniqueness.
+
+*Termination.* Otherwise some item counted in $M_i$ exceeds $t_{i+1}$; it is at most
+$t_i$, so it is counted among the heavies at the next pass, and $h_{i+1} \ge h_i + 1$.
+Since $h_i \le h \le k - 1$, the stopping condition holds within $h + 1 \le k$ passes
+(in exact arithmetic).
 {{< /proof >}}
 
 ### 6.2 Unbiasedness through the DAG, with fresh randomness {#sec:unbiased}
@@ -1054,22 +1063,25 @@ seed-replicate tests of §8.5 are the check that it is harmless.
 
 **Record mode against the literal fold.** `run()` folds a record's inputs pairwise, from
 the last to the first. Applied literally to sketches (`reduce=step`), that is
-$A_1 = s_1 \hat C_{p_1}$ and $A_j = R_{t,j}(s_j \hat C_{p_j} + A_{j-1})$, a reduction
-after every combine, with a fresh $U_{t,j}$ each. The same tower argument shows it is
+$A_n = s_n \hat C_{p_n}$ and $A_i = R_{t,i}(s_i \hat C_{p_i} + A_{i+1})$ for
+$i = n - 1, \dots, 1$, with $\hat C_t = A_1$, a reduction after every combine, with a
+fresh $U_{t,i}$ each. The same tower argument shows it is
 unbiased too. The default (`reduce=record`) merges a record's operands exactly and
 reduces once. Both compute the recurrence {{< eqref "eq:recurrence" >}}; they differ
 only in how often noise is injected. In step mode a record of $n$ inputs is reduced up
 to $n - 1$ times, and the mass folded early is resampled again at every later step. §6.3
 shows that every reduction adds a nonnegative term to the variance, so this is the
 expected direction, though not a proof that step mode must lose (its intermediate
-reductions have smaller thresholds, $\tau_{t,j} \le (s_1 + \dots + s_j)/k$). Measured,
+reductions have smaller thresholds, $\tau_{t,i} \le (s_i + \dots + s_n)/k$). Measured,
 it loses everywhere: 1.24–1.72 times the error of record mode at $k = 64$, with 6.15
 times as many reductions (§8.6).
 
 ### 6.3 How the error propagates {#sec:propagation}
 
 Let $\delta_r = \hat C_r - X_r$ be the noise injected by the reduction at record $r$
-($\delta_r = 0$ when the record is not reduced).
+($\delta_r = 0$ when the record is not reduced, i.e. $X_r$ has at most $k$ blocks; we
+then set $\tau_r = 0$, as the code does, so the sums over $r \preceq t$ below may run
+over all ancestors).
 
 {{< theorem note="error decomposition" label="thm:decomp" >}}
 For every record $t$,
@@ -1132,7 +1144,7 @@ error is $\tau(\lfloor U + f \rfloor - f)$, and $\lfloor U + f \rfloor = 1$ exac
 $U \ge 1 - f$, which has probability $f$. Its conditional variance is
 $\tau^2 f(1-f) \le \tau^2/4$. Combine with {{< xref "cor:orth" "full" >}}. In record
 mode every candidate has mass $1$, so $\tau_r \le 1/k$ by
-{{< xref "lem:threshold" "full" >}}.
+{{< xref "lem:threshold" "full" >}} when $r$ is reduced, and $\tau_r = 0$ otherwise.
 {{< /proof >}}
 
 The same argument gives the rate in $k$ through the whole recursion, for every
@@ -1221,8 +1233,11 @@ $\tau^2 (v_b/\tau)(1 - v_b/\tau) = v_b(\tau - v_b)$. Sum over the lights up to $
 
 Priority sampling (`prio`) is not Poisson sampling, but its Horvitz–Thompson weights
 have zero pairwise covariance (§3.5), and conditionally on the leave-one-out threshold
-$T_b$ its weight $\max(v_b, T_b)\,\mathbf{1}\{\text{kept}\}$ has variance
-$v_b\,(T_b - v_b)^{+}$, so
+$T_b$, the $k$-th largest of the priorities $v_c/u_c$ of the other blocks $c \ne b$
+(§6.5's convention; it is $1/\tau_{-b}$ of §3.1 with $k$ shifted by one, and it equals
+$\tau_q$ whenever $b$ is kept), its raw weight
+$\max(v_b, T_b)\,\mathbf{1}\{v_b/u_b > T_b\}$ has variance $v_b\,(T_b - v_b)^{+}$. So,
+for one reduction with unnormalised weights,
 $\operatorname{Var}\hat F(x) = \sum_{b \le x} \mathbb{E}[v_b (T_b - v_b)^{+}]$. With
 $T_b \approx W/k$ this is the same $F(x)/k$ order. That last step, the concentration of
 $T_b$, is argued and not proved here; the measured slope of `prio`'s errors against $k$
@@ -1257,8 +1272,10 @@ sampling's $-0.84$, against $-1.32$ for the block-ordered one. Streamed deeper, 
 records its mean-block error was 4,457 and 3,182 blocks at $k = 64$ and $128$, against
 932 and 479; and in the 10–30M window its median
 $\lvert\Delta\text{mean}\rvert/\text{sd}$ was $0.074$ and $0.052$, against $0.016$ and
-$0.0082$. Without the block order, VarOpt behaves like priority sampling, at about
-$1/\sqrt{k}$.
+$0.0082$. Without the block order, VarOpt behaves like priority sampling:
+both share the same slope on the shallow 1.1M prefix (about $k^{-0.85}$) and both settle
+to about $1/\sqrt{k}$ at depth ($4{,}457 / 3{,}182 = 1.40$ and $0.074 / 0.052 = 1.42$
+across the doubling from $k = 64$ to $128$).
 {{< /remark >}}
 
 ### 6.5 Priority bottom-$k$ on the recursion {#sec:prio}
@@ -1304,16 +1321,17 @@ asserts unbiasedness of `prio`'s raw weights, not of its output.)
 
 Fresh randomness is not optional either. The design phase also tried *coordinated*
 priority sampling with Horvitz–Thompson re-estimation, one $u_b$ per block for the whole
-run, and it diverged: raw masses of $10^{10}$ to $10^{28}$. The proof of §3.2 needs the
-rank $r_b$ to be independent of the threshold *and* of the weight $v_b$ it is applied
-to. With shared keys, the blocks present in a node's input were themselves selected
-because their $u_b$ was small, so $u_b$ given the input is no longer uniform but biased
-small. The nominal inclusion probability $\min(1, v_b/\tau)$ then *understates* how
-likely the block is to be kept again, the Horvitz–Thompson weight $v_b/\pi$
-over-inflates it, and the inflation compounds multiplicatively along the DAG: a block
-with a small key is kept and inflated to the threshold, its small key gives it a high
-priority at the next node, so it is kept and inflated again. (This is the mechanism as
-we understand it; the divergence itself is what was measured.)
+run, and it diverged: in one prototype the raw mass reached $10^{7}$ to $10^{28}$, and in
+another its mean distance from 1, $\lvert\text{mass} - 1\rvert$, was about $10^{10}$. The
+proof of §3.2 needs the rank $r_b$ to be independent of the threshold *and* of the weight
+$v_b$ it is applied to. With shared keys, the blocks present in a node's input were
+themselves selected because their $u_b$ was small, so $u_b$ given the input is no longer
+uniform but biased small. The nominal inclusion probability $\min(1, v_b/\tau)$ then
+*understates* how likely the block is to be kept again, the Horvitz–Thompson weight
+$v_b/\pi$ over-inflates it, and the inflation compounds multiplicatively along the DAG: a
+block with a small key is kept and inflated to the threshold, its small key gives it a
+high priority at the next node, so it is kept and inflated again. (This is the mechanism
+as we understand it; the divergence itself is what was measured.)
 
 ### 6.6 Coordinated bottom-$k$: exact on disjoint supports, biased under overlap {#sec:coord}
 
@@ -1723,9 +1741,14 @@ in a way that matters: a merge can have a few items holding nearly all the mass 
 tail of thousands of tiny ones, and $W$ minus the heavies is then the cancellation
 residue of two nearly equal numbers. It came out *negative* in half of the trials of a
 simulation run during the design, which made every candidate heavy. One to three passes
-is the rule; geometrically decaying weights, the shape near-copy chains make, drop the
-threshold by a factor of about $k(1 - r)$ a pass. After `MAX_PASSES` $= 24$ the code
-falls back to `threshold_sorted`, which partially sorts the top $k$ (only they can be
+is the rule, and by {{< xref "lem:fixedpoint" "full" >}} the loop never needs more than
+$h + 1 \le k$ passes. Geometrically decaying weights (ratio $r$), the shape near-copy chains
+make, are the slow case. Pass $i$ lowers the threshold by a factor of about
+$(1 - r)(k - h_i)$, which starts near $k(1 - r)$ and falls towards 1 as $h_i$ nears
+$k - 1/(1 - r)$, and each pass adds only about
+$\log_{1/r}\big((1 - r)(k - h_i)\big)$ heavies. With $k = 64$, $r = 0.5$ that is 16
+passes; with $k = 1024$, $r = 0.9$ it is 32. After `MAX_PASSES` $= 24$ the code falls
+back to `threshold_sorted`, which partially sorts the top $k$ (only they can be
 heavy, since $h \le k - 1$) and builds the tail sums from the small end, again without
 differences. The result is clamped to at least the largest light weight, which only
 rounding can violate and which keeps every $v/\tau \le 1$.
@@ -1835,9 +1858,12 @@ fn emit(&self, c: &Handle, out: &mut Vec<(u32, f64)>) {
 }
 ```
 
-For `varopt` the normalisation is the identity up to `f32` rounding
-({{< xref "thm:varopt" "full" >}}(4)); the DAG test bounds the drift of its mass by
-$10^{-5}$.
+For `varopt` the normalisation is the identity up to `f32` rounding whenever the
+reduction keeps $k$ points ({{< xref "thm:varopt" "full" >}}(1), (4)); on the synthetic
+DAG of §7.11 (where no $k \pm 1$ event occurs) `mass_raw` stays within $10^{-5}$ of $1$.
+In a $k \pm 1$ event (§7.6) one light more or one fewer is kept at weight $\tau$, the
+raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
+`raw_mass - 1` (§7.10); no such event occurred on the chain.
 
 ### 7.8 Numerical care, in one place
 
@@ -1859,7 +1885,10 @@ $10^{-5}$.
   memory caps it at a prefix: 3M records without `--force-exact`.
 - **`chain`** runs the whole chain, one store thread per configuration, and compares
   each sampled record's estimate with the exact Laplace values, moments and (optionally)
-  1024-band binned colours on disk. Reference threads run `zstd -dc` on those files and
+  1024-band binned colours on disk. `--every 16` samples every 16th record into the
+  per-bucket summaries (`buckets.tsv`); `--rows-every 16` also writes every 16th of
+  those sampled records, so every 256th record of the chain, to the per-record row
+  files `rows.<config>.tsv`. Reference threads run `zstd -dc` on those files and
   cut them into batches on the same boundaries as the records (8,192 records a batch),
   checking every line's transaction id. The bounded channels (8 batches) keep the
   fastest store from running away from the slowest. Errors are aggregated per 10M-record
@@ -1951,14 +1980,16 @@ assert:
 - **Randomness (T1).** `splitmix64`'s golden value; `unit` strictly inside $(0, 1)$ at
   both ends and over a million draws; streams deterministic and distinct across salts
   and seeds.
-- **VarOpt, deterministic (T2).** Over 1,000 random cases $\times$ 64 offsets: output
+- **VarOpt, deterministic (T2).** Over 1,000 random draws $\times$ 64 offsets (61,056
+  reductions; the draws with $n \le k$ are skipped, since the caller stores those
+  untouched): output
   ascending, a subset of the input, heavies kept with their weight, lights at $\tau$,
   $\sum_b \min(1, v_b/\tau) = k$ to $10^{-9}$ relative, and, except in $k \pm 1$ events,
   exactly $k$ points, the mass to $10^{-12}$ and every CDF gap below $\tau$
-  ({{< xref "thm:varopt" "full" >}}); fewer than 64 $k \pm 1$ events in 64,000
-  reductions. The iterated threshold equals the sorted one on 3,000 cases, including
-  geometric weights and many-way ties; a few items holding all but $10^{-17}$ of the
-  mass never overflow $k + 1$.
+  ({{< xref "thm:varopt" "full" >}}); fewer than 64 $k \pm 1$ events in those 61,056
+  reductions. The iterated threshold equals the sorted one on 2,764 cases (3,000 draws,
+  $n \le k$ skipped), including geometric weights and many-way ties; a few items holding
+  all the mass but a tail of weights near $10^{-300}$ never overflow $k + 1$.
 - **VarOpt, statistical (T3).** Over 200,000 offsets, every coordinate's mean estimate
   is its weight, every light's inclusion frequency is $v/\tau$, and the mean Laplace
   value at $s = 4$ is exact, all within 5 standard errors.
@@ -1999,8 +2030,8 @@ assert:
   `full` holds exactly when the support exceeds $k$, a whole sketch's count is the
   support's size, the `sets` support equals the exact store's terms and the `pos`
   support its positive-share reachability; permuting or splitting operands changes no
-  byte. A block diluted $10^{18}$-fold over 30 steps, whose coefficient underflows to
-  0, stays in the `pos` support.
+  byte. A block diluted $10^{18}$-fold at each of 30 steps ($10^{-540}$ in
+  all), whose `f64` coefficient underflows to 0, stays in the `pos` support.
 - **Estimators over 2,000 seeds (T-K6 to T-K8).** The count over both universes
   (including dense subsets of $[0, \beta]$) and the restricted union count are
   unbiased within 4 SE, with RMS within 10% of the formula; Jaccard is exact when both
@@ -2044,9 +2075,10 @@ assert:
   `zstd -T16 -12`, §7.9): `varopt` at $k = 64, 128, 256$ over the whole chain, and at
   $k = 512$ until it was stopped at about 400M records; two more with `--long=27`.
 
-The accuracy tables use every 256th record (3.04M rows), restricted to *reduced* rows: a
-larger $k$ keeps more early colours exact, which would lower an all-rows average for a
-reason that has nothing to do with how well a sketch approximates. Errors in blocks are
+The accuracy tables use every 256th record (`--every 16 --rows-every 16`, §7.9; 3.04M
+rows), restricted to *reduced* rows: a larger $k$ keeps more early colours exact, which
+would lower an all-rows average for a reason that has nothing to do with how well a
+sketch approximates. Errors in blocks are
 converted from fractions of $L$; a day is about 144 blocks. Labels: **[M]** measured,
 **[P]** projected from measurements, **[E]** a rougher estimate (an extrapolated
 compression ratio). Every number below comes from the analysis of those runs, checked by
@@ -2166,10 +2198,12 @@ whole-chain count-weighted signed means, $t$ with 2 degrees of freedom.
 
 {{< fig src="step-vs-record.svg" label="fig:step" alt="Ratio of step-mode to record-mode error per bucket for three metrics at k 64." >}}
 `varopt` at $k = 64$: the error of the literal pairwise fold (a reduction after every
-combine) over that of one reduction per record, per bucket.
+combine, seed 1) over the mean error of one reduction per record at seeds 1–3, per
+bucket.
 {{< /fig >}}
 
-Step mode is worse at every depth ({{< xref "fig:step" "full" >}}): over the whole chain 1.49× for
+Step mode is worse at every depth ({{< xref "fig:step" "full" >}}): over the whole
+chain, against the mean of three record-mode seeds, 1.49× for
 $\lvert\Delta\text{mean}\rvert$, 1.72× for $\lvert\Delta\text{sd}\rvert$, 1.34× for the
 largest Laplace error, 1.24× for $\Lambda_8$, 1.46× for binned $W_1$ and 1.51× for the
 band-edge KS, between 1.18× and 2.02× per stretch, with $\lvert\Delta\text{sd}\rvert$
@@ -2195,9 +2229,10 @@ colour. Right: how much the recursion adds for `varopt`, in percent.
 {#tab:ideal caption="eval3m, varopt, colours with more than 32,768 blocks: excess of the recursive sketch over the single-shot reduction of the exact colour (paired, every 200th record of the first 3M)."}
 
 The recursion has a price ({{< xref "fig:ideal" "full" >}} and the table above), and it
-grows slowly with $k$, but both errors keep falling:
-the recursive KS and $W_1$ fall as $k^{-1.05}$ and $k^{-1.07}$, the single shot as
-$k^{-1.17}$ and $k^{-1.14}$. For colours of 4,097 to 32,768 blocks the $W_1$ excess is
+grows slowly with $k$, but all three errors keep falling:
+the recursive KS, $W_1$ and largest Laplace error fall as $k^{-1.05}$, $k^{-1.07}$ and
+$k^{-1.05}$ over $k = 16$ to $4096$, the single shot as $k^{-1.17}$, $k^{-1.14}$ and
+$k^{-1.12}$. For colours of 4,097 to 32,768 blocks the $W_1$ excess is
 only +2% to +28%. And the price does not grow with depth (§8.3).
 
 ### 8.8 Floors: what TV1024 cannot say
@@ -2209,7 +2244,9 @@ the measured 0.919, 0.818 and 0.540 at $k = 16, 64, 256$: at least 96%, 91% and 
 the measured TV1024 is sampling floor, so it does not measure the recursion at
 $k \le 256$ and is left out of the comparisons. The band-edge KS has a floor of about
 $0.75\,\tau$ (the remark after {{< xref "cor:bv" "full" >}}; single-shot KS$/\tau$
-measured at 0.741–0.750 for $k = 16$ to $4096$), which is 50–70% of the measured value.
+measured at 0.741–0.750 for $k = 16$ to $4096$), which on eval3m is about 60% of the
+measured value at $k = 16$, falling to about 40% at $k = 512$ and 30% at $k = 4096$ (one
+over one plus the KS excess of {{< xref "tab:ideal" "full" >}}).
 The binned $W_1$ has no hard floor (on eval3m the single shot is 60–77% of the measured
 value for $k \le 1024$, falling to about 51% at $k = 4096$). So $k$ is chosen on
 $\lvert\Delta\text{mean}\rvert$, its p90, the Laplace errors and $W_1$.
@@ -2251,7 +2288,8 @@ halves the error and roughly doubles the bytes and the time: there is no knee.
   without it. The $k = 64$, $256$ and $1024$ figures with it are estimates. Compressed
   bytes peak at 580–650M records (238.2 B a record at $k = 256$ for 600–610M), not at
   the slowest stretch (290–330M).
-- **Memory.** Peak RSS 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$; the
+- **Memory.** Peak RSS (the VmHWM of `/usr/bin/time -v`, reported in KiB and given here
+  in GB of $10^9$ bytes) 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$; the
   fit $\text{VmHWM} \approx 4.5\ \text{GB} + 8.3\ \text{B} \times$ peak entries, with
   peak entries $\approx 7.485\text{M} \times k$, projects about 68 GB at $k = 1024$,
   consistent with pass B. Live sketches hold about $0.985\,k$ entries each at the peak.
@@ -2318,7 +2356,7 @@ It ran from 07:39 to 12:45, and the pipeline exited with status 0.
 | | measured | projected before the run |
 | :--- | :--- | :--- |
 | wall time | 5 h 05 min 56 s (fold busy 15,797 s; 131% of a core) | 6.3–6.6 h [P] |
-| peak RSS (VmHWM) | 35,480,448 kB = 36.3 GB | 36.3 GB (measured on 0–400M) |
+| peak RSS (VmHWM) | 35,480,448 KiB = 36.33 GB | 36.34 GB (measured on 0–400M) |
 | `colors.sketch-varopt512.zst` | 172,702,042,699 bytes, 221.8 B a record | about 175–190 GB [E]; about 312 GB [P] without `--long=27` |
 | reductions | 198,939,818 | – |
 | peak distinct live sketches | 7,593,630 | – |
@@ -2336,8 +2374,8 @@ zstd -dc colors.sketch-varopt512.zst \
       --laplace-ref colors.laplace.zst --moments-ref colors.moments.zst
 ```
 
-It took 1 h 03 min in 131 MB, read all 778,613,440 records, and found the count and
-checksum of the file's trailer correct. Its per-record error rows (3,041,460 of them,
+It took 1 h 03 min in 138 MB, read all 778,613,440 records, and found the count and
+checksum of the file's trailer correct. Its per-record error rows (3,041,459 of them,
 every 256th record) and its 2,496 bucket rows are byte for byte those of the
 `varopt-k512-s1-rec` store of pass B, which computed them in memory while folding. So
 the file holds exactly the sketches whose accuracy section 8 reports: over the whole
@@ -2461,8 +2499,9 @@ serves below as a "temporal distance" between transactions.
 
 ### 10.3 A coordinated bottom-$k$ of the support is exact through the DAG
 
-A word on notation, as in §6. From here on $\tau$ is a threshold on *ranks*, small ranks
-kept, as in §2 and §6.6, not the weight threshold of §6.1–6.5 and §10.2; and $M$ is the
+A word on notation, as in §6. In the rest of §10, $\tau$ is a threshold on *ranks*,
+small ranks kept, as in §2 and §6.6, not the weight threshold of §6.1–6.5 and §10.2, to
+which §11 returns; and $M$ is the
 size of the permutation, the universe of §1.2.1.
 
 Number the blocks $0, \dots, M - 1$ with $M = 2^{20} = 1{,}048{,}576 > L$, and let $\rho$
@@ -2716,9 +2755,12 @@ ranked at most $\min(\tau_A, \tau_B)$, and for each of them membership in $B$ is
 because $B$'s sketch holds every element of $B$ up to $\tau_B$. So the estimate is a
 ratio over a random subset of $A$ whose memberships are known exactly: consistent. It is
 not unbiased, because $\tau_B$ depends on the ranks of $B$, and with them on those of
-$A \cap B$; in particular the element at $\tau_B$ belongs to $B$, so when it is in $T$
-it is a sure hit. That biases the ratio up by about $c(1 - c)/k$ for a containment $c$:
-0.004 at $k = 64$ in a simulation, and at most 0.00025 at $k = 1024$. With a strict
+$A \cap B$; in particular the element at $\tau_B$ belongs to $B$, so when
+$\tau_B \le \tau_A$ and that element is in $A$, it is a sure hit in $T$. That biases
+the ratio up by about $\Pr(\tau_B \le \tau_A)\, c(1 - c)/k$ for a containment $c$: the
+full $c(1 - c)/k$ when $A$ is smaller than $B$ (0.004 at $k = 64$ in a simulation),
+about half of it when the two are the same size, and none when $A$ is much larger. At
+$k = 1024$ it is at most about 0.00025. With a strict
 threshold, $\rho(x) < \tau_B$, the same simulation (20,000 permutations per case) showed
 no bias within its standard error. The code keeps $\le$: at $k = 1024$ its bias is far
 below every error measured in §10.8. The estimate is undefined when $T$ is empty, which
@@ -3270,7 +3312,7 @@ $\hat n_M$ at $k = 1024$), all inside the variance bands. Panels (a) and (b) of
 100,000, where the ratio reaches 1.24 for $\hat n$ at $k = 64$ (1.22 for $\hat n_M$) and
 0.78 for $\hat n$ at $k = 1024$. A per-run accuracy band is not a test, and none is used.
 
-{{< fig src="count-accuracy.svg" type="fullwidth" label="fig:count" alt="Four panels. Top left: pooled RMS relative error of the count against the support size over k, for k 64, 256 and 1024, with theory curves, for the restricted and the full-universe estimator. Top right: mean relative error of the restricted count with across-seed error bars, all near zero. Third, across the full width: the median count per 10 million records over the whole chain, rising from about 130 to 710 thousand blocks, with its 10th and 90th percentiles, the exact quantiles on the first 31.2 million records, the most a count can be. Fourth, below it on a log scale: the share of records counted exactly, 30 percent at first and between about 0.25 and 2 percent after 60 million records." >}}
+{{< fig src="count-accuracy.svg" type="fullwidth" label="fig:count" alt="Four panels. Top left: pooled RMS relative error of the count against the support size over k, for k 64, 256 and 1024, with theory curves, for the restricted and the full-universe estimator. Top right: mean relative error of the restricted count with across-seed error bars, all near zero. Third, across the full width: the median count per 10 million records over the whole chain, rising from about 130 to 710 thousand blocks, with its 10th and 90th percentiles, the exact quantiles on the first 31.2 million records, and the median of the newest block plus one, the most a count can be. Fourth, below it on a log scale: the share of records counted exactly, 30 percent at first and between about 0.25 and 2 percent after 60 million records." >}}
 Counts against their exact sizes, then over the whole chain; `sets`. (a) and (b): the
 first 31,187,785 records, 16 seeds per $k$, by stratum of $\lvert S \rvert / k$ (log 2),
 strata with at least 1,000 records. (a) RMS relative error pooled over the seeds, with
@@ -3497,10 +3539,11 @@ by {{< xref "thm:kmv-dag" "full" >}}.
 - R5 folded seven stores, four KMV ($k = 1024$ at seeds 1, 2 and 3, and seed 1 under
   `pos`) and three L1 ($m = 1024$ at seed 1 in `f32` and in `f64`, $m = 512$ at seed 2),
   over all 778,613,440 records, and dumped the 1,280 selected: 1 h 10 min 05 s at 607%
-  of a core, and 249.8 GB, 4% below the 260.1 GB that a memory model fitted to R4
-  predicted. A KMV store was busy 3,872 to 3,969 s and reproduced R4's peaks and counts
-  of cut records exactly; the L1 stores were busy 2,667 s ($m = 1024$, `f32`), 3,374 s
-  (`f64`) and 2,348 s ($m = 512$).
+  of a core, and 249.8 GB, 0.6% below the 251.2 GB that a memory model fitted to R4
+  predicted (chain.log prints 242.2 GB: its run-time check compared R4's VmHWM in GiB
+  with the model in GB and so left the model unscaled). A KMV store was busy 3,872 to
+  3,969 s and reproduced R4's peaks and counts of cut records exactly; the L1 stores
+  were busy 2,667 s ($m = 1024$, `f32`), 3,374 s (`f64`) and 2,348 s ($m = 512$).
 - R6 cut the 1,280 records out of the production file, beside R5.
 - R7 computed the 228,736 pairs (130,816 in `chain`, 32,640 in each window) in 3.84 s and
   0.2 GB.
@@ -3646,9 +3689,11 @@ $\hat n$ needs the permutation, which `decode` rebuilds from the header.
 What an $\hat n$ means: when *full* is clear (every support of at most 1024 blocks, 1.45%
 of the records) it *is* $\lvert S_t \rvert$, the number of blocks the transaction
 descends from, through zero-amount inputs too. Otherwise it is an exactly unbiased
-estimate with an RSE of about
-$\sqrt{(n - k + 1)/(n(k - 2)) \cdot (N - n)/(N - 1)}$, written as `se`: a median of
-0.92% over the chain, 1.2% over its first 100M records and 0.8% over its last 78.6M. All
+estimate with a standard error of about
+$\sqrt{n(n - k + 1)/(k - 2) \cdot (N - n)/(N - 1)}$ blocks, written as `se` (and as
+`se_M` for $\hat n_M$, with $M = 2^{20}$ in place of $N$). The relative error
+`se / n_hat` has a median of 0.92% over the chain, 1.2% over its first 100M records and
+0.8% over its last 78.6M. All
 records share one permutation, so their errors are correlated, by design: two records
 with nearly the same support get nearly the same error. A second seed's file is the
 way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped.
@@ -3666,7 +3711,7 @@ exactly 512 terms, and its coefficients sum to 1 to seven digits, as point 4 of
 subscript is the record number.
 
 Terms with equal coefficients are grouped, heaviest group first, and only the first
-four groups are written out; $\rho(x)$ is the rest, $\rho(1)$ its mass. The
+four groups are written out; $\eta(x)$ is the rest, $\eta(1)$ its mass. The
 coefficients are rounded to six digits. All 5,120 terms, as stored, are in
 [`ten-colours.txt`](ten-colours.txt).
 
@@ -3688,10 +3733,13 @@ The ten, in the order of the table:
 
 1. **The first `chain` record.** It is the first deep record at or after block 50,000;
    the first deep record of the chain is earlier, record 44,447 in block 44,006. Its 512
-   terms take only 8 values. Equal coefficients are lights of some earlier reduction,
-   which set every light it kept to its own $\tau$, carried down to this record by the
-   same shares; 263 of them are heavy at the last reduction, which kept them as they
-   came.
+   terms take only 8 values: whole groups of blocks reach it along the same paths
+   through the DAG, so they share one product of shares. The four groups shown, 222
+   terms, are all above $1/512$, which no reduction's $\tau$ can exceed
+   ({{< xref "lem:threshold" "full" >}}), so every reduction on the way kept them as
+   they came. Of the 290 terms in $\eta(x)$, 41 are heavy too, and the other 249 are
+   the lights of this record's own last reduction, all equal to its
+   $\tau = 1.49 \times 10^{-9}$.
 
 $$
 \begin{aligned}
@@ -3699,7 +3747,7 @@ $$
 &+ 0.0123652\,(x^{30732} + x^{33941} + x^{34409}) \\
 &+ 0.00368812\,(x^{13316} + x^{24451} + x^{35892}) \\
 &+ 0.00355412\,\underbrace{(x^{36099} + x^{36101} + \dots + x^{41649})}_{200\ \text{terms}} \\
-&+ \rho(x), \quad \text{290 terms with 4 coefficients},\ \rho(1) = 0.000216719
+&+ \eta(x), \quad \text{290 terms with 4 coefficients},\ \eta(1) = 0.000216719
 \end{aligned}
 $$
 
@@ -3713,7 +3761,7 @@ $$
 &+ 8.25445 \times 10^{-5}\,x^{70186} \\
 &+ 8.2528 \times 10^{-5}\,x^{70566} \\
 &+ 8.25116 \times 10^{-5}\,\underbrace{(x^{70432} + x^{70627} + \dots + x^{71402})}_{8\ \text{terms}} \\
-&+ \rho(x), \quad \text{501 terms with 22 coefficients},\ \rho(1) = 0.00492931
+&+ \eta(x), \quad \text{501 terms with 22 coefficients},\ \eta(1) = 0.00492931
 \end{aligned}
 $$
 
@@ -3726,7 +3774,7 @@ $$
 &+ 0.0178931\,x^{99327} \\
 &+ 0.00582011\,(x^{93408} + x^{93446} + x^{93795}) \\
 &+ 0.00133668\,(x^{99223} + x^{99305} + x^{99466}) \\
-&+ \rho(x), \quad \text{504 terms with 29 coefficients},\ \rho(1) = 0.0106228
+&+ \eta(x), \quad \text{504 terms with 29 coefficients},\ \eta(1) = 0.0106228
 \end{aligned}
 $$
 
@@ -3739,7 +3787,7 @@ $$
 &+ 0.00832812\,\underbrace{(x^{2775} + x^{3549} + \dots + x^{7312})}_{4\ \text{terms}} \\
 &+ 0.00831587\,(x^{1025} + x^{2148}) \\
 &+ 0.0083124\,x^{80654} \\
-&+ \rho(x), \quad \text{503 terms with 50 coefficients},\ \rho(1) = 0.925087
+&+ \eta(x), \quad \text{503 terms with 50 coefficients},\ \eta(1) = 0.925087
 \end{aligned}
 $$
 
@@ -3751,7 +3799,7 @@ $$
 &+ 0.0087706\,x^{235587} \\
 &+ 0.00719864\,x^{234980} \\
 &+ 0.00359045\,x^{237394} \\
-&+ \rho(x), \quad \text{508 terms with 103 coefficients},\ \rho(1) = 0.0711136
+&+ \eta(x), \quad \text{508 terms with 103 coefficients},\ \eta(1) = 0.0711136
 \end{aligned}
 $$
 
@@ -3766,7 +3814,7 @@ $$
 &+ 0.00999311\,x^{357928} \\
 &+ 0.00997362\,x^{357875} \\
 &+ 0.0099514\,x^{357858} \\
-&+ \rho(x), \quad \text{508 terms with 433 coefficients},\ \rho(1) = 0.960078
+&+ \eta(x), \quad \text{508 terms with 433 coefficients},\ \eta(1) = 0.960078
 \end{aligned}
 $$
 
@@ -3781,7 +3829,7 @@ $$
 &+ 0.0335747\,x^{366239} \\
 &+ 0.0335313\,x^{366088} \\
 &+ 0.0334709\,x^{366001} \\
-&+ \rho(x), \quad \text{508 terms with 304 coefficients},\ \rho(1) = 0.865758
+&+ \eta(x), \quad \text{508 terms with 304 coefficients},\ \eta(1) = 0.865758
 \end{aligned}
 $$
 
@@ -3795,7 +3843,7 @@ $$
 &+ 0.05\,x^{197851} \\
 &+ 0.0499097\,x^{210667} \\
 &+ 0.048659\,x^{192682} \\
-&+ \rho(x), \quad \text{508 terms with 31 coefficients},\ \rho(1) = 0.801341
+&+ \eta(x), \quad \text{508 terms with 31 coefficients},\ \eta(1) = 0.801341
 \end{aligned}
 $$
 
@@ -3816,9 +3864,9 @@ $$
 10. **The largest support.** About 711,490 distinct blocks, 93% of the 762,261 that
     existed then, also as a flat sketch. Its 512 blocks are a sample of the whole
     chain: binned, it puts mass in 498 of the 1,023 bands where the colour has some,
-    and its total variation distance from the binned colour is 0.42, yet its CDF is
-    within 0.0025 of the exact one everywhere, and its $W_1$ is 524 blocks, under four
-    days.
+    and its total variation distance from the binned colour is 0.42, yet at every one of
+    the 1,024 band edges its CDF is within 0.0025 of the exact one, and its $W_1$ is
+    524 blocks, under four days.
 
 $$
 \begin{aligned}
@@ -3949,8 +3997,8 @@ the surface interactively than to a page.
 The columns of {{< xref "fig:surface" "full" >}}(b) as distributions of age. (a) For
 each year, the share of a transaction's colour younger than a given age, averaged over
 the year's transactions. (b) Quantiles and mean of the age in each spending band of 745
-blocks, from the sketches; the dotted lines are the exact median and mean, from the
-exact surface, whose ages are differences of bands (§12.6).
+blocks from block 50,000 on, from the sketches; the dotted lines are the exact median
+and mean, from the exact surface, whose ages are differences of bands (§12.6).
 {{< /fig >}}
 
 | year spent | transactions | mean age | median age | under a week | under a year | over 4 years |
@@ -3968,11 +4016,12 @@ exact surface, whose ages are differences of bands (§12.6).
 | 2020 | 111,939,087 | 5.62 | 5.78 | 1.5% | 17.0% | 63.3% |
 | 2021 | 98,075,965 | 6.81 | 7.28 | 1.3% | 9.9% | 72.4% |
 | 2022 | 79,113,540 | 7.42 | 8.12 | 1.5% | 12.0% | 74.6% |
-{#tab:surface-age caption="The age of the coins spent, per year: the columns of the surface averaged over the year's transactions, coinbases left out. Ages in years since minting, from the block of each term of the sketches, binned in bands of 745 blocks (5.2 days); the shares at one week, one year and four years are interpolated inside a band. 2009, with no transactions but coinbases, is left out."}
+{#tab:surface-age caption="The age of the coins spent, per year: the columns of the surface averaged over the year's transactions, coinbases left out. Ages in years since minting, from the block of each term of the sketches, binned in bands of 745 blocks (5.2 days); the shares at one week, one year and four years are interpolated inside a band. 2009, with only about 220 transactions besides its coinbases, is left out."}
 
 - **Coins get older.** The median age rose from 1.1 years in 2013 to 8.1 in 2022, when
   the chain was 13 years old. The rise was uneven: fastest from 2016 to 2017 and from
-  2020 to 2021, slowest from 2018 to 2019.
+  2020 to 2021 (+1.6 and +1.5 years), slowest from 2014 to 2015 and from 2018 to 2019
+  (+0.11 and +0.16).
 - **Young coins don't disappear.** The share under a week old falls from 59% in 2011 to
   1.3–2.6% from 2017 on, and the share under a year old falls to 10–22%. Since 2018 the
   mean has been below the median: the young part is small but pulls the mean down.
@@ -3988,7 +4037,7 @@ draw from the coins that exist, the colours of a year would put on each minting 
 share of the supply. {{< xref "fig:surface-ratio" "full" >}} divides the one by the
 other.
 
-{{< fig src="surface-ratio.svg" type="fullwidth" label="fig:surface-ratio" alt="Six curves, for the years spent 2012 to 2022 in steps of two, of the ratio of a minting band's share in the colours to its share in the supply, on a log axis against minting time. All start near 0.1 for 2009, cross 1 around 2012, stay between 1 and 2 in the middle years, and rise to between 4 and 8 for the months just before the year spent." >}}
+{{< fig src="surface-ratio.svg" type="fullwidth" label="fig:surface-ratio" alt="Six curves, for the years spent 2012 to 2022 in steps of two, of the ratio of a minting band's share in the colours to its share in the supply, on a log axis against minting time. All start near 0.1 for 2009, cross 1 around 2012, stay between 1 and 2 in the middle years, and rise to between about 3 and 7.5 for the months just before the year spent." >}}
 For the transactions of a year: each minting band's share of their colour (restricted to
 the bands minted before the year began, and renormalised) over its share of the coins
 those bands minted. The supply counts subsidies only; fees, a small part of most
@@ -3996,18 +4045,18 @@ coinbases, are left out of it. Above 1, a band's coins are spent more than their
 below 1, less.
 {{< /fig >}}
 
-| year spent | minted before 2010: colour / supply | before 2011 | before block 210,000 | in the 12 months before the year |
+| year spent | minted before 2010: colour / supply | before 2011 | before block 210,000 | minted in the year before |
 | :--- | :--- | :--- | :--- | :--- |
-| 2012 | 8.4% / 20.1% | 38.2% / 62.6% | 100.0% / 100.0% | 57.6% / 32.7% |
-| 2013 | 4.2% / 15.1% | 23.0% / 47.0% | 96.3% / 98.6% | 44.2% / 23.5% |
-| 2014 | 3.6% / 13.1% | 21.9% / 40.9% | 69.7% / 85.8% | 25.1% / 10.7% |
-| 2015 | 3.0% / 11.7% | 17.1% / 36.5% | 51.8% / 76.6% | 29.3% / 9.5% |
-| 2016 | 2.6% / 10.7% | 14.9% / 33.2% | 44.2% / 69.7% | 26.0% / 8.7% |
-| 2017 | 2.7% / 10.0% | 16.0% / 31.1% | 45.2% / 65.1% | 14.5% / 6.1% |
-| 2018 | 2.8% / 9.6% | 16.5% / 29.8% | 46.8% / 62.4% | 9.8% / 3.9% |
-| 2019 | 2.6% / 9.2% | 14.7% / 28.6% | 41.8% / 60.0% | 12.5% / 3.7% |
-| 2020 | 2.3% / 8.8% | 13.3% / 27.5% | 38.2% / 57.7% | 12.3% / 3.6% |
-| 2021 | 2.3% / 8.6% | 13.9% / 26.9% | 39.6% / 56.3% | 5.6% / 2.4% |
+| 2012 | 8.4% / 20.1% | 38.2% / 62.6% | 100.0% / 100.0% | 61.8% / 37.4% |
+| 2013 | 4.2% / 15.1% | 23.0% / 47.0% | 96.3% / 98.6% | 46.2% / 24.9% |
+| 2014 | 3.6% / 13.1% | 21.9% / 40.9% | 69.7% / 85.8% | 28.6% / 13.0% |
+| 2015 | 3.0% / 11.7% | 17.1% / 36.5% | 51.8% / 76.6% | 31.6% / 10.8% |
+| 2016 | 2.6% / 10.7% | 14.9% / 33.2% | 44.2% / 69.7% | 26.8% / 9.0% |
+| 2017 | 2.7% / 10.0% | 16.0% / 31.1% | 45.2% / 65.1% | 15.2% / 6.5% |
+| 2018 | 2.8% / 9.6% | 16.5% / 29.8% | 46.8% / 62.4% | 10.3% / 4.2% |
+| 2019 | 2.6% / 9.2% | 14.7% / 28.6% | 41.8% / 60.0% | 13.0% / 3.9% |
+| 2020 | 2.3% / 8.8% | 13.3% / 27.5% | 38.2% / 57.7% | 12.7% / 3.8% |
+| 2021 | 2.3% / 8.6% | 13.9% / 26.9% | 39.6% / 56.3% | 5.8% / 2.5% |
 | 2022 | 2.3% / 8.5% | 13.8% / 26.4% | 39.3% / 55.3% | 5.9% / 1.7% |
 {#tab:surface-ratio caption="Shares of the colour (averaged over the year's transactions) and of the supply, both over the coins minted before the year began."}
 
@@ -4023,7 +4072,8 @@ other up to 2017:
 - **The middle is well mixed.** Coins minted from 2012 to about two years before the
   year spent sit near their share, between about 1 and 2 times it.
 - **The last months are spent most.** The coins of the last month before the year get
-  2.8 to 6.2 times their share, and the curves rise toward it over the year before. In 2022, the twelve months before the year are 1.7% of the supply and 5.9% of a
+  2.8 to 6.2 times their share, and the curves rise toward it over the year before. In
+  2022, the coins minted in the year before, 2021, are 1.7% of the supply and 5.9% of a
   transaction's colour. New coins pass through exchanges and payments before they come
   to rest.
 
@@ -4033,7 +4083,7 @@ like, and would need the amounts (§13).
 
 ### 12.6 Sketched against exact
 
-{{< fig src="surface-check.svg" type="fullwidth" label="fig:surface-check" alt="Left: total variation distance between the sketched and the exact column, one point per spending band, on a log axis from about 1e-16 to 1e-1; tiny before 2011, rising to about 1e-2 from 2012 on. Right: the difference sketched minus exact for every cell of the triangle, on a symmetric log colour scale from -0.01 to 0.01; mostly pale, with horizontal stripes." >}}
+{{< fig src="surface-check.svg" type="fullwidth" label="fig:surface-check" alt="Left: total variation distance between the sketched and the exact column, one point per spending band, on a log axis from about 1e-16 to 1e-1; tiny before 2011, up to about 1e-2 in 2011, and between about 6e-3 and 4e-2 from 2012 on. Right: the difference sketched minus exact for every cell of the triangle, on a symmetric log colour scale from -0.01 to 0.01; mostly pale, with horizontal stripes." >}}
 The sketched surface against the exact one, from `colors.bands1024.zst`. (a) The total
 variation distance between each sketched column and the exact column. (b) The difference
 per cell, on a symmetric log scale (linear below $10^{-5}$).
@@ -4043,18 +4093,23 @@ The two surfaces were computed from the same 777,851,179 transactions, row for r
 any difference comes from the sketches.
 
 - **Columns.** The total variation distance between a sketched column and the exact one
-  is at most 0.0029 before 2011, with few transactions and small colours. From 2012 on
-  it is between 0.006 and 0.040, and it grows slowly with time: the median column is at
-  0.013 in 2013 and at 0.034 in 2022. Each of those columns averages at least 27,512 sketches. A single
-  sketch is much further from its binned colour: 0.42 for the tenth sketch of §11.
+  is at most 0.0029 before 2011 and at most 0.010 in 2011, with few transactions and
+  small colours. From 2012 on, where every column averages at least 27,512 sketches, it
+  is between 0.006 and 0.040, and it grows slowly with time: the median column is at
+  0.013 in 2013 and at 0.034 in 2022. A single sketch is much further from its binned
+  colour: 0.42 for the tenth sketch of §11.
 - **Cells.** No cell differs by more than $1.2 \times 10^{-3}$, and 99% of the cells
   where the exact surface is not zero differ by less than $2.4 \times 10^{-4}$.
 - **Ages.** Read the same way from both surfaces, as differences of bands, the mean age
   of a column is within 0.0028 years (one day) of the exact one in every column. The
-  median is within 0.0044 years from 2012 on, and within 0.043 years before, where
-  columns are small. The shares of {{< xref "tab:surface-age" "full" >}} read from both
-  surfaces this way agree to three decimal places. So does the 2009 ratio of
-  {{< xref "tab:surface-ratio" "full" >}}: 0.273 sketched against 0.275 exact in 2022.
+  median is within 0.0044 years from 2012 on, and within 0.00014 years before, except in
+  one 2009 column of two transactions. There the colour's cumulative share is exactly
+  one half over three empty bands, so the median is not unique and the two surfaces
+  settle on ends 0.042 years (three bands) apart, although the columns themselves agree
+  to within $10^{-8}$. The shares of {{< xref "tab:surface-age" "full" >}} read from both
+  surfaces this way agree to three decimal places, and so do the 2009 colour shares
+  behind {{< xref "tab:surface-ratio" "full" >}}. Divided by the supply share, they give
+  a ratio of 0.273 sketched against 0.275 exact in 2022.
   (The table itself reads ages from the blocks of the sketches' terms, which the exact
   file, binned, cannot give. Read from band differences, "under a week" is smaller,
   44.8% against 58.8% in 2011: a coin minted at the end of a band and spent at the start
@@ -4094,8 +4149,11 @@ error can be a sizable fraction of the value.
 - **The band-based floors.** The figure of TV1024 against its floor has to be redrawn
   with each row's own $\tau$ before it can be shown; the numbers in §8.8 are the
   corrected ones.
-- **`--long=27` sizes** at $k = 64$, $256$ and $1024$ are estimates from the $k = 128$
-  saving; at $k = 512$ the production run measured 172.7 GB, just below its estimate.
+- **`--long=27` sizes** at $k = 64$, $256$ and $1024$ are estimates: at $k = 64$ from
+  the 36.4% saving measured at $k = 128$, at $k = 256$ from its own 40.7% measured over
+  0–350M, and at $k = 1024$ from an assumed saving of about 42%, extrapolated from the
+  rise with $k$. At $k = 512$ the production run measured 172.7 GB, just below its
+  estimate of 175–190 GB.
 - **The permutation is pseudo-random.** The exact unbiasedness of §10.4–10.5 is a
   theorem about a uniform permutation; the code draws a Fisher–Yates shuffle from a
   hash. The seed tests of §10.8 and the uniformity test T-K1 are the evidence that the
@@ -4125,16 +4183,18 @@ error can be a sizable fraction of the value.
 - **Containment is often undefined** for a small support against a large one (27% of
   the ordered `even` pairs of the prefix one way, 14% the other; 0.78% of the cells of
   the whole-chain matrix), and its estimate is consistent but not unbiased: the
-  inclusive threshold of the code biases it up by about $c(1 - c)/k$. A strict threshold
+  inclusive threshold of the code biases it up by up to about $c(1 - c)/k$ (the full
+  amount when $A$ is smaller than $B$). A strict threshold
   showed no bias in simulation; adopting it changes the output of `pairs`, so it waits
   for a new version. The fallback $\hat J \hat n_u / \hat n_A$ is a biased ratio and
   is flagged.
 - **More of the sketch for Jaccard.** Both sketches are complete below the smaller
   threshold, so up to $2k$ elements of the union are known; an estimator that uses them
   could lower the variance at small $J$.
-- **Sketches of every record are not stored.** At $k = 1024$ they would take about
-  3.2 TB. The counts are stored; sketches exist only for selections, and a new
-  selection needs a new fold (about 70 minutes, as R5 took).
+- **KMV and L1 sketches of every record are not stored.** At $k = 1024$ the KMV ones
+  would take about 3.2 TB. The counts are stored, and so is the `varopt:512` colour of
+  every record (§9); KMV and L1 sketches exist only for selections, and a new selection
+  needs a new fold (about 70 minutes, as R5 took).
 - **A value-weighted surface.** The surface of §12 counts every transaction once.
   Weighted by the amounts, it would be the colour of the bitcoin that moved, and its
   comparison with the supply in §12.5 would be like with like. The amounts are not in
@@ -4151,13 +4211,18 @@ error can be a sizable fraction of the value.
 
 - **Sampling theory.** {{< cite keys="horvitz1952generalization" mode="text" >}}
   introduced the estimator that weights each sampled item by the inverse of its
-  inclusion probability; every estimate in this post, from $\max(w_i, 1/\tau)$ to the
-  $\tau$ carried by a kept light, is one of them.
+  inclusion probability; every weight and linear-functional estimate of the priority and
+  VarOpt sketches in this post, from priority sampling's $\max(w_i, 1/\tau)$ (§2.3, with
+  rank threshold $\tau$) to the weight threshold $\tau$ carried by a kept light in
+  VarOpt (§6.1), is one of them (the KMV counts, the Jaccard and containment ratios,
+  and the Cauchy-scale L1 estimates of §1 and §10 are not).
   {{< cite keys="madow1949theory" mode="text" >}} belongs to the classical theory of
   systematic sampling, the design that §6.1 runs along the block axis.
   {{< cite keys="chao1982general" mode="text" >}} is a fixed-size plan with unequal
-  probabilities in which units enter the sample one at a time, and VarOpt's recurrence
-  draws exactly the same distribution of samples.
+  probabilities in which units enter the sample one at a time; the stream VarOpt$_k$ of
+  Cohen et al.{{< cite "cohen2009stream" >}} (one random eviction per arrival) draws
+  exactly the same distribution of samples, while the systematic scheme of §6.1 keeps
+  its inclusion probabilities but not its joint distribution.
 - **Order sampling.** {{< cite keys="rosen1997asymptotic" mode="text" >}} studies the
   designs that give every unit an independent random ranking variable and keep the $n$
   smallest: both rank families of §2.2 are of this kind. With the uniform ranks
