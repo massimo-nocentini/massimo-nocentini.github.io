@@ -727,11 +727,20 @@ bottom-$k$. The sketch that won is **not** literally a bottom-$k$ sketch. It is
 VarOpt$_k$ with its light items chosen by *systematic* sampling in block order: a
 threshold sampler, the sibling of the priority sampling of §2 rather than one of its
 members. The literal weighted bottom-$k$ sketch of §2 was built too (`prio` below) and
-measured beside it; it lost by a factor of 6 to 21 at the same size. Section 6 proves
-what each variant guarantees, section 7 shows the code, section 8 the measurements, and
-the reasons the threshold sampler wins run through all three. Section 10 turns to two
-questions that no sketch of a colour answers: from how many blocks a transaction
-descends, and how much two transactions share.
+measured beside it; it lost by a factor of 6 to 21 at the same size (§8.4). Section 6
+proves what each variant guarantees, section 7 shows the code, section 8 the
+measurements, and the reasons the threshold sampler wins run through all three. Section
+10 turns to two questions that no sketch of a colour answers: from how many blocks a
+transaction descends, and how much two transactions share.
+
+Every result of a run quoted below can be recomputed from files on disk by a mode of
+`sketch`. Most come from modes that fold nothing and only read what the runs wrote:
+`sketch summarize` turns the outputs of `chain` and `eval` into the tables of section 8
+(the factor above is the column `abs_dmean_over_varopt` of its `errors.tsv`, at
+$k = 64$, $256$ and $1024$), and `sketch summary` reads count streams back into the
+counts of sections 5.2 and 10. Section 7.9 lists the modes and the runs. What no mode
+computes is labelled where it appears: the prototypes and simulations of the design
+phase, benchmarks, wall-clock times from `/usr/bin/time`, and hand projections.
 
 ### 5.1 Colours
 
@@ -781,14 +790,19 @@ they grow fast: an exact fold of the set colours (the `sets` supports of §10.1,
 also keep zero-amount inputs, without the weights) was stopped by a memory guard at 480
 GiB of resident memory around record 31.1M, 4% of the way through the chain, holding
 $1.24 \times 10^{11}$ block ids in 1.45M live colours, about 85,000 blocks a colour on
-average. Counted over transactions rather than live colours, the median transaction among
-those first 31.2M records has a colour of about 174,000 blocks, and about 234,000 for the
-last million of them (`finalBCUTXO_2022.sets-counts.31187785`). The weighted store is
-heavier still: it holds about 43 GB at 1.5M records. The release oracle, which frees a
+average (a run of the main binary's `--sets` fold, not of `sketch`). Counted over
+transactions rather than live colours, the median transaction among those first 31.2M
+records has a colour of about 174,000 blocks, and about 234,000 for the last million of
+them: the exact sizes are in `finalBCUTXO_2022.sets-counts.31187785.txt`, and
+`sketch summary --sets-counts` with `--range 0:31187785 --range 30187785:31187785`
+reports their median as the column `ref_p50` of its `summary.tsv`. The weighted store
+is heavier still: it holds about 43 GB at 1.5M records. The release oracle, which frees a
 colour as soon as its last spender has read it, already cuts the live colours from 92.7M
-to 19.4M over the chain, and the distinct live colours still peak at about 7.6M
-(7,593,630 distinct live sketches at the peak of the production run, §9). Multiplied by
-hundreds of thousands of blocks, that does not fit in any memory.
+to 19.4M over the chain (the 43 GB, 92.7M and 19.4M are from the code's documentation,
+not from a logged run), and the distinct live colours still peak at about 7.6M (7,593,630
+distinct live sketches at the peak of the production run, `peak sketches` in its
+`--stats`, §9). Multiplied by hundreds of thousands of blocks, that does not fit in any
+memory.
 
 ### 5.3 Sketching the recurrence
 
@@ -815,7 +829,8 @@ it is exact because an item has the same weight in $A$, in $B$ and in $A \cup B$
 the operation is a *linear combination*: the child's weight of block $b$ is
 $\sum_i s_i\, c_{p_i}(b)$, a sum of weights that may each be present in one parent's
 sketch and absent from another's. And the parents overlap heavily. Counted over records
-1.4–1.5M of the chain, 97% of the terms a merge writes arrive in runs, the one-sided
+1.4–1.5M of the chain by a prototype of the design phase (not a crate run), 97% of the
+terms a merge writes arrive in runs, the one-sided
 runs averaging 1,900 blocks and the shared runs 140: colours at depth are near-copies of
 a few common ancestors, not independent mixtures.
 
@@ -983,7 +998,8 @@ are all tiny against $\tau$, the fractional parts of the $S_j$ run densely throu
 $[0, 1)$, so the largest CDF error over all cuts is close to $\tau \max(U, 1 - U)$,
 whose expectation is $\tfrac34 \tau$. The single-shot KS distance of `varopt` measured
 on the exact colours was between $0.741\tau$ and $0.750\tau$ for $k = 16$ to $4096$, a
-little lower at small $k$ (§8.8).{{< /remark >}}
+little lower at small $k$ (§8.8; the column `ideal_ks_over_tau` of
+`sketch summarize`'s `floors_eval.tsv`).{{< /remark >}}
 
 The code never sorts to find $\tau$; it iterates.
 
@@ -1074,7 +1090,7 @@ shows that every reduction adds a nonnegative term to the variance, so this is t
 expected direction, though not a proof that step mode must lose (its intermediate
 reductions have smaller thresholds, $\tau_{t,i} \le (s_i + \dots + s_n)/k$). Measured,
 it loses everywhere: 1.24–1.72 times the error of record mode at $k = 64$, with 6.15
-times as many reductions (§8.6).
+times as many reductions (§8.6; `step.tsv` and `cost.tsv` of `sketch summarize`).
 
 ### 6.3 How the error propagates {#sec:propagation}
 
@@ -1201,7 +1217,9 @@ What the recursion costs can be read against a single reduction. A single-shot s
 the exact colour (the "IDEAL" of §8.7) has one term in the sum. On the first 3M records,
 where exact colours are available, the recursive sketch's mean
 $\lvert\Delta\text{mean}\rvert$ was 29% to 67% above the single shot's, for $k = 16$ to
-$4096$, in the stratum of colours with more than 32,768 blocks. If both errors had the
+$4096$, in the stratum of colours with more than 32,768 blocks (the `eval3m` run of §8.7,
+read by `sketch summarize` into `ideal.tsv`: metric `abs_dmean_L`, stratum
+`fix:>32768`, column `excess`). If both errors had the
 same shape, those ratios would correspond to variance ratios of $1.29^2 \approx 1.66$ to
 $1.67^2 \approx 2.79$: the whole ancestry contributes between about two-thirds of a
 single-reduction term and two such terms ($0.66$ to $1.79$) beyond the record's own.
@@ -1241,7 +1259,8 @@ for one reduction with unnormalised weights,
 $\operatorname{Var}\hat F(x) = \sum_{b \le x} \mathbb{E}[v_b (T_b - v_b)^{+}]$. With
 $T_b \approx W/k$ this is the same $F(x)/k$ order. That last step, the concentration of
 $T_b$, is argued and not proved here; the measured slope of `prio`'s errors against $k$
-is $-0.49$ to $-0.54$ (§8.4).
+is $-0.49$ to $-0.54$ (§8.4; `sketch summarize`'s `slopes.tsv`, every metric but
+TV1024).
 
 The two estimators differ in how the lights are spread. Systematic sampling takes
 exactly one light per interval of $\tau$ of light mass along the block axis: a
@@ -1259,12 +1278,14 @@ $\sqrt{A_t/k}$. What is not proved is uniformity in depth, since $A_t$ can grow 
 Measured: local log-log slopes of $-0.93$ to $-0.97$ for the recursive sketch's
 $\lvert\Delta\text{mean}\rvert$ from $k = 16$ to $1024$ over the whole chain (§8.2),
 and, for the single-shot IDEAL on exact colours, $-1.17$ for KS, $-1.14$ for $W_1$ and
-$-1.12$ for the largest Laplace error (§8.7).
+$-1.12$ for the largest Laplace error (§8.7), from `slopes.tsv` and `ideal_slopes.tsv`
+of `sketch summarize`.
 
 That the difference comes from the systematic pass, and not from the thresholds, was
-checked in the design phase with a prototype (not the final binary, and on a prefix of
-the chain): a VarOpt with the same thresholds whose lights were chosen in random order
-rather than along the block axis, run through the real recursion. On the first 1.1M
+checked in the design phase with a prototype (not the final binary and not a crate run,
+and on a prefix of the chain): a VarOpt with the same thresholds whose lights were
+chosen in random order rather than along the block axis, run through the real
+recursion. On the first 1.1M
 records its mean $W_1$ over colours wider than $k$ went from 1,883 to 70 blocks for
 $k = 16$ to $1024$, against 898 to 5.3 for the block-ordered prototype, and on the
 colours wider than 1024 blocks its log-log slope was $-0.88$, like fresh priority
@@ -1429,7 +1450,9 @@ smallest of them. The shrinkage comes from the candidates whose weights are lowe
 bounds: their ranks are inflated, sit above the tighter cap and are dropped (in the
 design-phase prototype the sketches fell to 45–55% of $k$ by 100M records). Measured on
 the first 3M records at $k = 64$ it changed nothing (KS $0.0632$ against $0.0631$ for
-`cap=min` on colours above 32,768 blocks, with 2.3% fewer peak entries), so the default
+`cap=min` on colours above 32,768 blocks, with 2.3% fewer peak entries: the column
+`measured` of `sketch summarize`'s `ideal.tsv` and `peak_entries` of `eval`'s
+`cost.tsv`, both of `eval3m`), so the default
 stayed `cap=min`. Neither cap removes the bias of the zero rule, which is why `coord`
 lost: its error is almost all bias (§8.4) and does not fall with $k$.
 
@@ -1438,7 +1461,8 @@ lost: its error is almost all bias (§8.4) and does not fall with $k$.
 
 The code below is excerpted from the `sketch` binary of `coloring-bt-transactions-rs`,
 trimmed (`// …` marks a cut) but not rewritten. It is about 6,500 lines with its tests
-(about 12,700 with the stores of section 10), adds no dependency, and reuses the
+(about 12,700 with the stores of section 10, and about 22,700 at commit 1a27649 with the
+modes that read the runs' outputs back, §7.9), adds no dependency, and reuses the
 repository's record parser, release oracle, exact weighted store and Laplace tables
 through `#[path]` modules.
 
@@ -1459,6 +1483,8 @@ through `#[path]` modules.
 | `kmv.rs` | the coordinated bottom-$k$ of the support: store, capped merges, estimators, count stream |
 | `l1.rs` | the Cauchy projection of the colour: store, scale MLE, weighted Jaccard |
 | `count.rs`, `pick.rs`, `pairs.rs` | the modes `count`, `pick`, `pairs` |
+| `summarize.rs`, `summary.rs`, `select.rs`, `pairstats.rs`, `describe.rs` | the modes that read other runs' outputs: `summarize`, `summary`, `select`, `pairs-stats`, `describe` |
+| `surface.rs`, `surface_report.rs` | the colour surface of section 12 and its report |
 | `tests.rs` | tests through the whole pipeline |
 
 ### 7.2 A sketch in memory
@@ -1675,9 +1701,10 @@ pub fn merge_two(a: &[Entry], sa: f64, b: &[Entry], sb: f64, out: &mut Vec<(u32,
 }
 ```
 
-A heap-based $k$-way merge has the same bound and was measured much slower: over the
-first 6M records at $k = 256$ it cost 21 ns a candidate for 3–8 groups and 50 ns above
-that, against 4.5 ns for a two-pointer pass, because a heap's sift is a chain of
+A heap-based $k$-way merge has the same bound and was much slower in a benchmark (not a
+mode of the crate): over the first 6M records at $k = 256$ it cost 21 ns a candidate
+for 3–8 groups and 50 ns above that, against 4.5 ns for a two-pointer pass, because a
+heap's sift is a chain of
 unpredictable branches and the pass is one predictable compare. The tree fixes the
 summation order, so the result is deterministic. Its scratch vectors are pooled between
 records and trimmed to 32 MB after a consolidation of thousands of parents.
@@ -1783,7 +1810,8 @@ In exact arithmetic it keeps exactly $k$ points ({{< xref "thm:varopt" "full" >}
 in floating point the last crossing can land on either side of an integer, giving
 $k \pm 1$. The output is never trimmed back to $k$, because trimming would bias it; such
 events are only counted (`k+-1` in `--stats`), and the code asserts at most $k + 1$
-points. Over the whole chain at $k = 512$ and $1024$ the count was zero.
+points. Over the whole chain at $k = 512$ and $1024$ the count was zero (the column
+`off_by_one` of pass B's `cost.tsv`, and `k+-1 0` in the production run's `--stats`).
 
 ### 7.7 `prio` and `coord`
 
@@ -1899,6 +1927,33 @@ raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
   a stored production file can be validated after the fact; **`decode`** turns the
   binary format into text.
 
+The modes added since (commits 159874d to 1a27649) fold nothing. They read files that
+the runs wrote and compute from them the numbers the post states, and each was checked
+against the script or ad-hoc program it replaces; their commands are given where their
+results are.
+
+- **`summarize`** reads what `chain` and `eval` wrote and computes the tables of section
+  8: error against $k$ and against depth, slopes, bias across seeds, step against record
+  mode, the recursion against one reduction and, with `--moments`, the floors. It
+  follows the conventions of the Python analysis it replaces, whose means and quantiles
+  of the reduced rows it matches to $2.4 \times 10^{-12}$ relative.
+- **`summary`** reads count streams back into what a whole-chain count is judged by:
+  exactness, quantiles per bucket and per `--range`, the seeds against each other, and
+  the exact sizes where they exist (§5.2, §10.9, §10.10). Every cell of the `mawk` and
+  Python passes it replaces comes out equal, except one p90 that Python printed rounded
+  (54 for 53.5).
+- **`select prefix|chain`** chooses the records worth comparing from a count stream and
+  writes the file `pick --select` reads, byte-identical to the Python `select.py`'s.
+- **`pairs-stats`** reduces one or more `pairs` outputs to the bias, variance, agreement
+  and quantile tables of §10.8 and §10.9, pooling the seeds of runs over the same rows.
+- **`describe`** says what each production sketch cut out by `decode --select` is and
+  compares it with its exact colour binned in 1024 bands (section 11). Beside it,
+  `pick --bands-ref` copies those binned colours during a fold, and `pairs --bands` adds
+  the binned TV of every pair.
+- **`surface`** averages the production sketches, or the binned exact colours, into the
+  matrices of section 12, bit-identical on prefixes to the two programs first used, and
+  **`surface-report`** turns them into that section's tables and checks.
+
 The global allocator is jemalloc (the repository's default feature): a fold's heap is
 millions of small blocks freed and reallocated at every merge, the shape glibc's malloc
 degrades on.
@@ -1927,9 +1982,12 @@ sketch chain --config varopt:512 --config varopt:1024 --config prio:1024 \
   --oracle lastspend-2022.u32 --out B --limit all --every 16 --rows-every 16 --bucket 10000000 \
   --laplace-ref colors.laplace.zst --moments-ref colors.moments.zst --stats < finalBCUTXO_2022.scm
 
+# section 8's tables from the three passes above (reads files only, refolds nothing)
+sketch summarize --chain A --chain B --eval eval3m --moments colors.moments.zst --out tables
+
 # the cost emits (k = 64, 128, 256; and k = 512, stopped at about 400M records):
-# splitcount, a small C helper, cuts the binary stream at record boundaries into
-# 10M-record stretches and pipes each through its own `zstd -q -T16 -12`,
+# splitcount, a small C helper outside the crate, cuts the binary stream at record
+# boundaries into 10M-record stretches and pipes each through its own `zstd -q -T16 -12`,
 # writing raw and compressed bytes per stretch; nothing is stored
 sketch emit --config varopt:256 --oracle lastspend-2022.u32 --limit all --stats \
   < finalBCUTXO_2022.scm 2> emit.k256.err | splitcount 10000000 tmp256 > stretches.k256.tsv
@@ -1974,7 +2032,10 @@ production uses it. Those notes, and the production line in `sketch.rs`'s docume
 ### 7.11 The tests
 
 `cargo test --release --bin sketch -- --include-ignored` passed 106 of 106 at the time
-of the runs of section 8, and 139 of 139 with the stores of section 10. What they
+of the runs of section 8, and 139 of 139 with the stores of section 10. At commit
+1a27649, with the modes that read the runs back, `cargo test --release --bin sketch`
+passes 194 and ignores 4: the two integration tests that read the chain's files, the
+`coord` bias test below and a benchmark, which `--include-ignored` runs. What they
 assert:
 
 - **Randomness (T1).** `splitmix64`'s golden value; `unit` strictly inside $(0, 1)$ at
@@ -2056,6 +2117,11 @@ assert:
 - **Integration (T-I1).** The first 1,000,000 records of the chain at $k = 1024$
   against the exact support sizes: exact wherever the support has at most $k$ blocks,
   and every seed gate of a 16-seed family at $k = 256$ passes.
+- **The modes that read runs back.** Their sums, medians and linear quantiles equal
+  numpy's on values numpy printed; `summarize` and `pairs-stats` reduce a small sweep
+  and a small `pairs` run end to end, and `select`'s file reads back; the exact
+  surface is the same at any thread count; and the old modes refuse the new modes'
+  options.
 
 
 ## 8. Results {#sec:results}
@@ -2066,8 +2132,9 @@ assert:
   $k = 16, 32, 64, 128, 256$; seeds 2 and 3 at $k = 64$ and $256$; step mode at
   $k = 64$; `prio` and `coord` at $k = 64$ and $256$; with the 1024-band reference.
 - **Pass B** (`chain`, the whole chain): `varopt` at $k = 512$ and $1024$ and `prio` at
-  $1024$, one seed, without the band reference. It took 11 h 43 min and peaked at 164.4
-  GB of resident memory for the three stores together.
+  $1024$, one seed, without the band reference. It took 11 h 43 min (wall time from
+  `/usr/bin/time -v`) and peaked at 164.4 GB of resident memory for the three stores
+  together (the `vm_hwm` column of its `cost.tsv`).
 - **eval3m** (`eval`, the first 3M records, every 200th record, 15,000 rows a
   configuration): every sketch against its whole exact colour and against the same
   variant's single-shot reduction of it.
@@ -2081,8 +2148,23 @@ would lower an all-rows average for a reason that has nothing to do with how wel
 sketch approximates. Errors in blocks are
 converted from fractions of $L$; a day is about 144 blocks. Labels: **[M]** measured,
 **[P]** projected from measurements, **[E]** a rougher estimate (an extrapolated
-compression ratio). Every number below comes from the analysis of those runs, checked by
-an independent pass.
+compression ratio). Every number below comes from those runs, whose commands are in §7.9.
+
+One more mode turns their outputs into the tables of this section: `sketch summarize`
+reads each pass's per-record rows, `buckets.tsv`, `seeds.tsv` and `cost.tsv`, and
+eval3m's `rows.tsv` and `summary.tsv`, groups the rows by 100M-record stretch (`S0` to
+`S7`, `S0-2` for the first 300M, `pooled` for the whole chain) and writes one TSV per
+kind of table, without rerunning a fold (`--moments` adds the floors of §8.8):
+
+```sh
+sketch summarize --chain A --chain B --eval eval3m --moments colors.moments.zst \
+  --out tables
+```
+
+The Python scripts that first made these tables agree with it at every digit printed
+here (the means and quantiles of the reduced rows to $2.4 \times 10^{-12}$ relative; the
+rest differ only by how pandas parses long decimals). Each subsection names the file of
+`tables/` its results come from.
 
 ### 8.2 Error against $k$
 
@@ -2097,7 +2179,7 @@ an independent pass.
 | 1024 | **178** | **372** | 0.114 | 0.338 | 0.070 |
 | `prio` 64 / 256 / 1024 | 15,303 / 7,585 / 3,731 | 33,373 / 16,500 / 8,158 | 9.74 / 4.80 / 2.35 | 24.1 / 12.0 / 5.92 | 9.69 / 4.60 / 2.25 |
 | `coord` 64 / 256 | 67,482 / 59,072 | 121,513 / 105,765 | 39.4 / 34.5 | 71.0 / 61.6 | 12.2 / 13.4 |
-{#tab:k .fullwidth caption="Error of the sketched colour against the exact one, whole chain, reduced rows, seed 1, record mode. Rows without a variant name are varopt. All measured."}
+{#tab:k .fullwidth caption="Error of the sketched colour against the exact one, whole chain, reduced rows, seed 1, record mode. Rows without a variant name are varopt. All measured. From `sketch summarize`, `errors.tsv`, group `pooled`."}
 
 {{< fig src="error-vs-k.svg" type="fullwidth" label="fig:k" alt="Two log-log panels of mean error against k for varopt, prio and coord, with 1/k and 1/sqrt(k) guides." >}}
 Error against $k$ on the whole chain, reduced rows: the mean absolute error of the mean
@@ -2116,7 +2198,8 @@ local slopes steepen with $k$: about $-0.97$ for $\lvert\Delta\text{mean}\rvert$
 law is
 $\lvert\Delta\text{mean}\rvert \approx (1.0 \text{ to } 1.2)\cdot \text{sd}_{\text{exact}}/k$:
 the product $k \cdot \lvert\Delta\text{mean}\rvert/\text{sd}$ drifts from $0.99$ at
-$k = 16$ to $1.17$ at $k = 1024$.
+$k = 16$ to $1.17$ at $k = 1024$. The slopes are `slopes.tsv` (an OLS fit per metric and
+run of consecutive $k$), the product is `errors.tsv`'s `k_times_mean_abs_dmean_over_sd`.
 
 ### 8.3 Error against depth
 
@@ -2130,13 +2213,13 @@ $k = 16$ to $1.17$ at $k = 1024$.
 | 500–600M | 1,561 | 803 | 409 | 209 | 187,386 | 0.219 | 0.111 |
 | 600–700M | 1,661 | 853 | 434 | 221 | 190,819 | 0.228 | 0.116 |
 | 700–778.6M | 1,835 | 940 | 481 | 249 | 210,306 | 0.230 | 0.119 |
-{#tab:depth caption="varopt, mean absolute error of the mean block (in blocks) by stretch of the chain, reduced rows; the exact spread of the same rows; and the error relative to it."}
+{#tab:depth caption="varopt, mean absolute error of the mean block (in blocks) by stretch of the chain, reduced rows; the exact spread of the reduced rows (shown for k = 64; k = 128 to 1024 differ by at most 0.23%); and the error relative to it. From `errors.tsv`, groups `S0` to `S7`."}
 
 {{< fig src="error-vs-depth.svg" type="fullwidth" label="fig:depth" alt="Two panels of error per 10-million-record bucket along the chain for varopt at seven k, prio and coord." >}}
 Error along the chain, per 10M-record bucket, reduced rows. In blocks (left) `varopt`'s
 error grows by about 1.8× from 100–200M to the end, exactly as the colours' own spread
 does; relative to that spread (right) it is flat at every $k$. `coord`'s relative error
-keeps growing.
+keeps growing. Drawn from `buckets.tsv` of passes A and B.
 {{< /fig >}}
 
 There is no accumulation with depth ({{< xref "fig:depth" "full" >}}). The error in blocks grows, by about 1.8× from
@@ -2146,7 +2229,8 @@ the last stretch to 100–200M is 1.01–1.02 for $k = 16..256$, 1.03 at $k = 51
 at $k = 1024$. The deepest stretch is still the one to plan against: its p90 is 3,677 /
 1,896 / 978 / 503 blocks for $k = 128 / 256 / 512 / 1024$. One thing does grow:
 `varopt`'s $\lvert\Delta\text{sd}\rvert$, by 1.12–1.28× with depth at $k \le 256$
-(`prio`'s by 1.8×). As §6.3 explains, the flatness is measured, not proved.
+(`prio`'s by 1.8×). As §6.3 explains, the flatness is measured, not proved. The ratios
+are in `depth.tsv`, the p90s in `errors.tsv` at `S7`.
 
 ### 8.4 The variants compared
 
@@ -2165,21 +2249,27 @@ at $k = 1024$. The deepest stretch is still the one to plan against: its p90 is 
   colours are systematically too late. On eval3m its excess over its own single shot
   *grows* with $k$ (KS $+120\%$ and $W_1$ $+98\%$ at $k = 1024$). This is §6.6 at scale.
 
+The slopes are in `slopes.tsv` (the ranges leave out TV1024, §8.8), the multiples of
+`varopt` in `errors.tsv`, `coord`'s depth in `depth.tsv` and its signed ratios in
+`signed.tsv`, the eval3m excesses in `ideal.tsv`.
+
 ### 8.5 Bias
 
 {{< fig src="bias.svg" type="fullwidth" label="fig:bias" alt="Left: signed mean error of the mean per bucket for three varopt seeds and prio at k 256. Right: signed mean over mean absolute error per bucket for varopt, prio and coord." >}}
 Signed error per 10M-record bucket at $k = 256$. Left, in blocks: three `varopt` seeds
 stay within a few hundred blocks of zero (RMS about 70 blocks over the 78 buckets),
 while `prio` swings by up to about 1,800. Right, signed mean over mean absolute error:
-`coord` sits at $+1$, all bias.
+`coord` sits at $+1$, all bias. Drawn from pass A's `buckets.tsv`; the RMS and the
+largest swing are in `signed.tsv`.
 {{< /fig >}}
 
 `varopt` is unbiased by {{< xref "thm:dag" "full" >}}, and the chain does not contradict
 it ({{< xref "fig:bias" "full" >}}), but the test is weak. Rows of one run share sketches and ancestry, so per-row
 standard errors understate the spread of a mean many times over (by 3× to 35× on the
 first 600k records; that produced "biases" at $z = 24$ that 16 seeds showed were not
-there). The honest test uses independent seeds: three at $k = 64$ and at $k = 256$,
-whole-chain count-weighted signed means, $t$ with 2 degrees of freedom.
+there; design-phase prefix runs, not a crate run). The honest test uses independent
+seeds: three at $k = 64$ and at $k = 256$, whole-chain count-weighted signed means, $t$
+with 2 degrees of freedom.
 
 - $\lvert t \rvert \le 2.18$ at $k = 64$ and $\le 0.94$ at $k = 256$ over $\Delta$mean
   and the seven Laplace values ($p \ge 0.16$).
@@ -2194,12 +2284,20 @@ whole-chain count-weighted signed means, $t$ with 2 degrees of freedom.
   $\lvert z \rvert \le 1.21$.
 - $k = 512$ and $1024$ were run with one seed and were **not** tested for bias.
 
+The tests are `bias.tsv` (with the bound as `bound_over_abs`) and `bias_buckets.tsv`; the
+eval3m $z$ are `eval`'s own `seeds.tsv`; the 12-seed check is the same mode over the
+verification's 10M-record prefix run:
+
+```sh
+sketch summarize --chain chain10m-seeds --stretch 5000000 --out verify10m
+```
+
 ### 8.6 Record mode against step mode
 
 {{< fig src="step-vs-record.svg" label="fig:step" alt="Ratio of step-mode to record-mode error per bucket for three metrics at k 64." >}}
 `varopt` at $k = 64$: the error of the literal pairwise fold (a reduction after every
 combine, seed 1) over the mean error of one reduction per record at seeds 1–3, per
-bucket.
+bucket, from pass A's `buckets.tsv`.
 {{< /fig >}}
 
 Step mode is worse at every depth ({{< xref "fig:step" "full" >}}): over the whole
@@ -2210,14 +2308,18 @@ band-edge KS, between 1.18× and 2.02× per stretch, with $\lvert\Delta\text{sd}
 the least uniform (1.26× before 100M, 1.75–2.02× after 200M). It did 6.15× the
 reductions (1,219,272,266 against 198,333,465) for about the same CPU time (3,951 s
 against 4,048 s of fold time), and on eval3m it multiplied the KS and $W_1$ excess over
-the single shot by 2.2–2.6×.
+the single shot by 2.2–2.6×. The ratios are in `step.tsv`, the reductions and fold
+times in `cost.tsv`, and the eval3m factors are step mode's `paired` excess in
+`ideal.tsv` over that of record-mode seed 1, in stratum `fix:>32768` at $k = 64$ and
+$256$.
 
 ### 8.7 The recursion against a single reduction
 
 {{< fig src="recursion-vs-single-shot.svg" type="fullwidth" label="fig:ideal" alt="Left: W1 against k for recursive and single-shot varopt and prio. Right: percentage excess of recursive varopt over single shot for KS, W1, TV1024 and the mean." >}}
 The first 3M records, colours with more than 32,768 blocks, against the exact colours.
 Left: $W_1$ of the recursive sketch and of the same reduction applied once to the exact
-colour. Right: how much the recursion adds for `varopt`, in percent.
+colour. Right: how much the recursion adds for `varopt`, in percent. Drawn from eval3m's
+`summary.tsv` and `rows.tsv`.
 {{< /fig >}}
 
 | metric | excess at $k = 16$ | excess at $k = 4096$ |
@@ -2226,14 +2328,15 @@ colour. Right: how much the recursion adds for `varopt`, in percent.
 | $W_1$ | +31% | +97% |
 | TV over 1024 bands | +1% | +52% |
 | \|Δmean\| | +29% | +67% |
-{#tab:ideal caption="eval3m, varopt, colours with more than 32,768 blocks: excess of the recursive sketch over the single-shot reduction of the exact colour (paired, every 200th record of the first 3M)."}
+{#tab:ideal caption="eval3m, varopt, colours with more than 32,768 blocks: excess of the recursive sketch over the single-shot reduction of the exact colour (paired, every 200th record of the first 3M). From `ideal.tsv`, stratum `fix:>32768`."}
 
 The recursion has a price ({{< xref "fig:ideal" "full" >}} and the table above), and it
 grows slowly with $k$, but all three errors keep falling:
 the recursive KS, $W_1$ and largest Laplace error fall as $k^{-1.05}$, $k^{-1.07}$ and
 $k^{-1.05}$ over $k = 16$ to $4096$, the single shot as $k^{-1.17}$, $k^{-1.14}$ and
-$k^{-1.12}$. For colours of 4,097 to 32,768 blocks the $W_1$ excess is
-only +2% to +28%. And the price does not grow with depth (§8.3).
+$k^{-1.12}$. For colours of 4,097 to 32,768 blocks the $W_1$ excess is only +2% to +28%
+(stratum `fix:(4096,32768]`); the exponents are `ideal_slopes.tsv`. And the price does
+not grow with depth (§8.3).
 
 ### 8.8 Floors: what TV1024 cannot say
 
@@ -2250,6 +2353,10 @@ over one plus the KS excess of {{< xref "tab:ideal" "full" >}}).
 The binned $W_1$ has no hard floor (on eval3m the single shot is 60–77% of the measured
 value for $k \le 1024$, falling to about 51% at $k = 4096$). So $k$ is chosen on
 $\lvert\Delta\text{mean}\rvert$, its p90, the Laplace errors and $W_1$.
+
+The floors are in the tables `--moments` adds: `floors_chain.tsv` (`floor_lb_own_tau`,
+and its share of the measured `tv`) and `floors_eval.tsv` (`ideal_ks_over_tau`,
+`ideal_w1_over_w1`); the KS shares are one over one plus `ideal.tsv`'s `excess`.
 
 ### 8.9 Cost
 
@@ -2271,37 +2378,46 @@ $\lvert\Delta\text{mean}\rvert$, its p90, the Laplace errors and $W_1$.
 {{< fig src="pareto.svg" type="fullwidth" label="fig:pareto" alt="Two log-log panels: mean and p90 error of the mean against compressed size and against wall time, for varopt k 64 to 1024; measured points filled, projected hollow." >}}
 `varopt`, error against cost for $k = 64$ to $1024$. Filled markers are measured, hollow
 ones projected or estimated; the horizontal bars are ranges. Every doubling of $k$
-halves the error and roughly doubles the bytes and the time: there is no knee.
+halves the error and roughly doubles the bytes and the time: there is no knee. The points
+are the table's cells, written into the plotting script by hand.
 {{< /fig >}}
+
+Only the errors (`errors.tsv`) and the fold-time ratios (`cost.tsv`'s
+`busy_over_reference`) come from `sketch summarize`. The rest was measured on the cost
+emits of §7.9: peak memory by their `--stats`, and, outside the crate, wall times and CPU
+shares by `/usr/bin/time -v` and bytes per 10M-record stretch by `splitcount` and a small
+Python script. The [P] and [E] cells and the memory fit are hand projections.
 
 - **Size.** Measured with `zstd -T16 -12` over the whole chain: 31.3, 65.6 and 144.5 GB
   at $k = 64, 128, 256$ (raw 114.7, 212.8 and 411.9 GB), and 151.2 GB for the first 400M
   records at $k = 512$ (raw 410.5 GB). Every run parsed all 778,613,440 records with a
-  matching trailer, and repeated runs wrote byte-identical output. The whole-chain
-  $k = 512$ size is projected by scaling the $k = 256$ tail (400M records to the end) by
-  the $k = 512 / k = 256$ ratio: measured over 300–400M, that gives 313.6 GB (403 B a
-  record; raw about 806 GB), and measured over 0–400M, 310.7 GB; $k = 1024$ at 659–721
-  GB (raw about 1.59 TB, which would not fit on the disk: the raw stream must never be
-  written). `--long=27` (a 128 MB window) saved 36.4% at $k = 128$ over the whole chain
-  and 40.7% at $k = 256$ over 0–350M; at $k = 512$ the production run measured it over
-  the whole chain, 172.7 GB (221.8 B a record), about 45% below the 312 GB projected
-  without it. The $k = 64$, $256$ and $1024$ figures with it are estimates. Compressed
-  bytes peak at 580–650M records (238.2 B a record at $k = 256$ for 600–610M), not at
-  the slowest stretch (290–330M).
-- **Memory.** Peak RSS (the VmHWM of `/usr/bin/time -v`, reported in KiB and given here
-  in GB of $10^9$ bytes) 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$; the
+  matching trailer (`splitcount` checks it), and repeated runs wrote byte-identical
+  output. The whole-chain $k = 512$ size is projected by scaling the $k = 256$ tail
+  (400M records to the end) by the $k = 512 / k = 256$ ratio: measured over 300–400M,
+  that gives 313.6 GB (403 B a record; raw about 806 GB), and measured over 0–400M,
+  310.7 GB; $k = 1024$ at 659–721 GB (raw about 1.59 TB, which would not fit on the
+  disk: the raw stream must never be written). `--long=27` (a 128 MB window) saved 36.4%
+  at $k = 128$ over the whole chain and 40.7% at $k = 256$ over 0–350M; at $k = 512$ the
+  production run measured it over the whole chain, 172.7 GB (221.8 B a record), about 45%
+  below the 312 GB projected without it. The $k = 64$, $256$ and $1024$ figures with it
+  are estimates. Compressed bytes peak at 580–650M records (238.2 B a record at $k = 256$
+  for 600–610M), not at the slowest stretch (290–330M).
+- **Memory.** Peak RSS (the VmHWM of `emit --stats`, equal to `/usr/bin/time -v`'s, which
+  alone gives the stopped $k = 512$ emit's; reported in KiB and given here in GB of
+  $10^9$ bytes) 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$; the
   fit $\text{VmHWM} \approx 4.5\ \text{GB} + 8.3\ \text{B} \times$ peak entries, with
-  peak entries $\approx 7.485\text{M} \times k$, projects about 68 GB at $k = 1024$,
-  consistent with pass B. Live sketches hold about $0.985\,k$ entries each at the peak.
-  The machine has 503 GB, so memory constrains no $k$ here.
+  peak entries (from `--stats`) $\approx 7.485\text{M} \times k$, projects about 68 GB
+  at $k = 1024$, consistent with pass B. Live sketches hold about $0.985\,k$ entries
+  each at the peak. The machine has 503 GB, so memory constrains no $k$ here.
 - **Time.** 1 h 07 min, 1 h 47 min to 2 h 00 min, and 3 h 23 min at $k = 64, 128, 256$;
   about 2 h 52 min to 400M records at $k = 512$, projected to 6.3–6.6 h for the whole
-  chain (the tail runs 1.22–1.28× slower than the head, more so at larger $k$); the
+  chain (in pass A's `bucket_cost.tsv`, the 378.6M-record tail takes 1.22–1.28× the
+  fold time of the first 400M at $k = 64$ to $256$, rising with $k$); the
   production run, with almost nothing beside it, took 5 h 06 min, so the projection,
   made from emits that shared the machine, was about 25% high. $k = 1024$ is projected
   at 11.4–11.9 h by the same method, and is probably high by a similar margin. The emit
-  uses 120–135% of a core; `zstd -12` with 16 threads runs at 230–290 MB/s against at
-  most about 55 MB/s of output, so it is never the bottleneck.
+  uses 120–135% of a core; `zstd -12` with 16 threads runs at 230–290 MB/s (a
+  benchmark) against at most about 55 MB/s of output, so it is never the bottleneck.
 
 ### 8.10 The choice of $k$ {#sec:choice}
 
@@ -2315,23 +2431,24 @@ a downstream analysis can accept for one transaction's mean colour.
 | 1,896 blocks | 13 | 256 |
 | 978 blocks | 6.8 | **512** |
 | 503 blocks | 3.5 | 1024 |
-{#tab:rule caption="The decision rule: deep-chain p90 error of the mean block, by k."}
+{#tab:rule caption="The decision rule: deep-chain p90 error of the mean block, by k. From `errors.tsv`, group `S7`."}
 
 Relative to a colour's own spread the mean $\lvert\Delta\text{mean}\rvert/\text{sd}$ is
 0.45%, 0.23% and 0.11% for $k = 256, 512, 1024$, at every depth. With no stated
 tolerance, $k = 512$ is the default: it halves every error of $k = 256$, its memory is
-measured, its output takes under a quarter of the 1,291 GB free on the disk even without
-`--long`, and it runs overnight. $k = 1024$ is feasible and halves the error once more,
-but costs half the free disk at `-12`, a 12-hour run, and an emit whose size, time and
-memory are all projected. $k = 256$, the only $k$ with everything measured, is the
-fallback.
+measured, its output takes under a quarter of the 1,291 GB free on the disk (`df`) even
+without `--long`, and it runs overnight. $k = 1024$ is feasible and halves the error
+once more, but costs half the free disk at `-12`, a 12-hour run, and an emit whose size,
+time and memory are all projected. $k = 256$, the only $k$ with everything measured, is
+the fallback.
 
 Pass B finished after this choice was made and confirmed it. The whole-chain
 $\lvert\Delta\text{mean}\rvert$ is 349 and 178 blocks for $k = 512$ and $1024$ (a ratio
 of 0.51); the ratio of $\lvert\Delta\text{mean}\rvert/\text{sd}$ between the last
 stretch and 100–200M is 1.03 and 1.05; pass B's peak resident memory was 164.4 GB for
 its three stores; its fold time at $k = 1024$ was 1.90× that at $k = 512$, and its wall
-time 11 h 43 min; and `prio` at 1024 is 20.9× worse than `varopt` at 1024.
+time 11 h 43 min; and `prio` at 1024 is 20.9× worse than `varopt` at 1024. All but the
+wall time are in the files above (memory and fold times in `cost.tsv`).
 
 
 ## 9. The Production Run {#sec:production}
@@ -2361,7 +2478,7 @@ It ran from 07:39 to 12:45, and the pipeline exited with status 0.
 | reductions | 198,939,818 | – |
 | peak distinct live sketches | 7,593,630 | – |
 | $k \pm 1$ events | 0 | – |
-{#tab:production caption="The production run. It shared the machine only with the end of pass B and a site build, which is why it beat the projection, made from emits that ran beside other jobs."}
+{#tab:production caption="The production run. It shared the machine only with the end of pass B and a site build, which is why it beat the projection, made from emits that ran beside other jobs. Wall time and CPU share from `/usr/bin/time -v`, the size from the file, the rest from the last line `emit --stats` wrote."}
 
 No reduction rounded to $k \pm 1$: every sketch in the file has at most 512 entries.
 
@@ -2374,10 +2491,11 @@ zstd -dc colors.sketch-varopt512.zst \
       --laplace-ref colors.laplace.zst --moments-ref colors.moments.zst
 ```
 
-It took 1 h 03 min in 138 MB, read all 778,613,440 records, and found the count and
-checksum of the file's trailer correct. Its per-record error rows (3,041,459 of them,
-every 256th record) and its 2,496 bucket rows are byte for byte those of the
-`varopt-k512-s1-rec` store of pass B, which computed them in memory while folding. So
+It took 1 h 03 min in 138 MB (from `/usr/bin/time -v`), read all 778,613,440 records,
+and found the count and checksum of the file's trailer correct. Its per-record error rows
+(`rows.varopt-k512-s1-rec.tsv`, 3,041,459 of them, every 256th record) and its 2,496
+bucket rows (`buckets.tsv`) are byte for byte those of the `varopt-k512-s1-rec` store of
+pass B, which computed them in memory while folding. So
 the file holds exactly the sketches whose accuracy section 8 reports: over the whole
 chain, 349 blocks mean and 729 blocks p90 error on the mean block (Table 1, §8.2). A
 plain `zstd -d` decodes it; a 128 MB window needs no flag.
@@ -2443,7 +2561,9 @@ apart in time do not share. Inside a window of three blocks (the `window` select
 median $J$ is 0.994 and the median $J_w$ is 0.18. Over the whole chain the weights
 overlap more: among 512 deep transactions spread from 2010 to 2022 (§10.9) the median
 $J$ of a pair is 0.48 and the median estimated $J_w$ is 0.21, still 0.18 for pairs more
-than 60,000 blocks apart.
+than 60,000 blocks apart. These medians are read off the pair runs R3 and R7 of §10.8 and
+§10.9 by `sketch pairs-stats` (§10.7), in its `quantiles.tsv` (the 92% in
+`jw-strata.tsv`).
 
 ### 10.2 Why the VarOpt sketches cannot answer
 
@@ -2479,15 +2599,16 @@ so the bias depends on how many fresh reductions separate a pair from its common
 ancestry, and it grows with depth. Measured:
 
 - Two independent `varopt` sketches ($k = 512$, seeds 1 and 2) of the *same* colour
-  give a plug-in $J_w$ with mean 0.963 and minimum 0, against the truth 1 (design-phase
-  prototype, colours of the first 2M records).
+  give a plug-in $J_w$ with mean 0.963 and minimum 0, against the truth 1 (a
+  design-phase prototype on the colours of the first 2M records, not a crate run).
 - On pairs of reduced colours with $J_w \in [0.1, 0.5)$, the bias of the same-run
   plug-in grows from $-0.014$ over records 0–1M to $-0.079$ over 1–1.5M and $-0.111$
   over 1.5–2M (same prototype).
 - On the prefix runs of §10.8 the same-run plug-in of `varopt:512` underestimates $J_w$
   by 0.171 on average over the 32,640 pairs of the `window` selection (mean 0.029 against
   0.200), by 0.268 for $J_w \in [0.2, 0.5)$ and by 0.430 for $J_w \in [0.5, 0.9)$
-  (the table of weighted errors in §10.8).
+  (the table of weighted errors in §10.8, from the `jw-strata.tsv` of
+  `sketch pairs-stats`, whose strata, weighted by their pairs, give the overall mean).
 
 The plug-in is therefore not shipped; `pairs` writes it only to document this. The
 Wasserstein distance between two `varopt` sketches has no such problem. It is a metric
@@ -2674,8 +2795,9 @@ $$
 
 the continuous-hash value of §1.2.1 times the finite-population factor (§1.2.1 writes
 $N$ for the set size and $M$ for the universe). The approximation slightly overstates
-it: summed exactly over the law of $R$, for $n/N \le 0.9$ the variance is below it by
-under 1% at $k \ge 256$, under 3% at $k = 64$ and up to 11.5% at $k = 16$. The seed
+it: summed exactly over the law of $R$ (a numerical summation of the theory, outside the
+crate), for $n/N \le 0.9$ the variance is below it by under 1% at $k \ge 256$, under 3%
+at $k = 64$ and up to 11.5% at $k = 16$. The seed
 tests of §10.8 check it on the chain.
 
 The proposition leaves the universe $V$ free, and the choice matters. The textbook
@@ -2732,7 +2854,8 @@ When neither sketch is full but their union exceeds $k$, the textbook formula ov
 is still an estimate (it deviated by up to 0.0035 in the design-phase prototype); the
 exact value is in hand, so it is used. In the `even` selection of §10.8, 208,335 of the
 499,500 pairs have both sketches whole at $k = 1024$ and are computed exactly; in 57 of
-them the union exceeds $k$, where the textbook formula would have been an estimate.
+them the union exceeds $k$, where the textbook formula would have been an estimate
+(both counts are columns of `errors.tsv` from `sketch pairs-stats` on R3).
 Neither estimator uses everything: both sketches are complete below the smaller of their
 two thresholds, so the union is known there, with between $k$ and $2k$ elements, which
 could lower the variance for small $J$.{{< sidenote >}}Cohen and Kaplan's estimators
@@ -2758,7 +2881,8 @@ not unbiased, because $\tau_B$ depends on the ranks of $B$, and with them on tho
 $A \cap B$; in particular the element at $\tau_B$ belongs to $B$, so when
 $\tau_B \le \tau_A$ and that element is in $A$, it is a sure hit in $T$. That biases
 the ratio up by about $\Pr(\tau_B \le \tau_A)\, c(1 - c)/k$ for a containment $c$: the
-full $c(1 - c)/k$ when $A$ is smaller than $B$ (0.004 at $k = 64$ in a simulation),
+full $c(1 - c)/k$ when $A$ is smaller than $B$ (0.004 at $k = 64$ in a design-phase
+simulation, not a crate run),
 about half of it when the two are the same size, and none when $A$ is much larger. At
 $k = 1024$ it is at most about 0.00025. With a strict
 threshold, $\rho(x) < \tau_B$, the same simulation (20,000 permutations per case) showed
@@ -2982,8 +3106,9 @@ pub fn merge_cap(a: &[u32], b: &[u32], k: usize, out: &mut Vec<u32>) -> bool {
 and a record is {{< xref "thm:kmv-dag" "full" >}} in code. `union_cap` runs a balanced
 tree of `merge_cap`s, or a heap from 2,048 groups on; supports here are nested, so the
 parents' sketches nearly coincide and the heap, which pops every duplicate, was slower
-than the tree below that (measured over the first 15M records at $k = 1024$: 106 s of
-store time with a heap from 3 groups, 26–28 s with the tree).
+than the tree below that (a benchmark during the implementation, over the first 15M
+records at $k = 1024$: 106 s of store time with a heap from 3 groups, 26–28 s with the
+tree).
 
 ```rust
 fn record(&mut self, ops: &[(KHandle, f64)], rec: u64) -> KHandle {
@@ -3168,7 +3293,8 @@ pub fn cauchy_scale_mle(d: &[f64]) -> f64 {
 }
 ```
 
-**Modes.** Three modes use the stores, and `eval` and `decode` learn them:
+**Modes.** Three modes use the stores, `eval` and `decode` learn them, and three more read
+what they wrote, with no fold:
 
 - **`count`** folds one store per `--kmv` and writes every record's count as a
   fixed-width stream, comparing as it goes with the exact sizes of `--sets-counts`
@@ -3178,8 +3304,9 @@ pub fn cauchy_scale_mle(d: &[f64]) -> f64 {
 - **`pick`** folds any stores once (`--config`, `--kmv`, `--l1`, and the exact store
   with `--exact` on a prefix) and dumps the sketches of the records listed in a
   selection file. Which records are worth comparing (deep ones, a window, an even
-  spread) is known only after a `count` run, so selection is a second pass, and
-  sketches of every record are never stored: at $k = 1024$ they would be about 3.2 TB.
+  spread) is known only after a `count` run, so selection is a second pass (`select`,
+  below), and sketches of every record are never stored: at $k = 1024$ they would be
+  about 3.2 TB.
 - **`pairs`** reads a `pick` directory and computes every pair of each group, by every
   measure it finds, with the exact values beside them when the exact store was dumped;
   it writes a long table and a square matrix per group and measure, byte-identical at
@@ -3188,6 +3315,27 @@ pub fn cauchy_scale_mle(d: &[f64]) -> f64 {
   **`decode`** reads a count stream; with `--select` it cuts the records of a selection
   out of a `SKETCH01` file, which is how the production `varopt` sketches of selected
   records are read without a new fold.
+- **`select`** reads a count stream and writes the selection file that `pick --select`
+  reads: `select prefix` the `deep`, `window` and `even` groups of §10.8 from a prefix's
+  stream and the exact sizes, `select chain` the four groups of §10.9 from the whole
+  stream. It replaced the Python script that made the selections of R3 and R5, and
+  writes the same two selection files byte for byte, in about 40 s where the script took
+  56 min on the whole stream (wall times).
+- **`summary`** reads stored count streams back, several of one run in lock-step, and
+  writes what a whole-chain count is judged by once no reference is left: per stream and
+  per range or bucket of records, the counts and their quantiles (beside the exact ones
+  where `--sets-counts` reaches), the records counted exactly, the relative standard
+  error `se / n_hat`, and the seeds against each other (§10.9, §10.10).
+- **`pairs-stats`** reads one or more `pairs` outputs over the same rows, pooling their
+  seeds, and reduces them to the bias, variance, agreement and quantile tables of §10.8
+  and §10.9, seeds as the unit.
+
+On the whole chain the exact colours exist only binned, in `colors.bands1024.zst`, and
+three commands read them for a selection: `pick --bands-ref` copies the selected records'
+lines of that file beside the fold, `pairs --bands` adds each pair's binned TV, an exact
+lower bound on the TV the L1 store estimates, and checks the L1 estimates against it
+(§10.9), and `describe` compares the production `varopt` sketches that `decode --select`
+cut out with their binned colours (§11).
 
 The count stream (`kmv.rs`):
 
@@ -3218,8 +3366,8 @@ sketch count $K --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --oracle
 # R3: the prefix selections from R2's seed-1 stream, one fold with the exact store, then all pairs
 #   $K: k = 1024 at seeds 1..16, k = 128, 512, 2048 at seeds 1..4
 #   $L: m = 1024 at seeds 1..8, m = 256, 512 at seeds 1..4
-python3 select.py prefix --bin sketch --counts R2-count31m/counts.kmv-k1024-s1-sets.bin.zst \
-  --sc finalBCUTXO_2022.sets-counts.31187785.txt --limit 3000000 --out sel/prefix
+sketch select prefix --counts R2-count31m/counts.kmv-k1024-s1-sets.bin.zst \
+  --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --limit 3000000 --out sel
 sketch pick --select sel/prefix.txt --config varopt:512 $K --kmv 1024:support=pos $L --l1 1024:prec=f64 \
   --exact --oracle lastspend-2022.u32 --limit 3000000 --out R3-pick3m --stats < finalBCUTXO_2022.scm
 sketch pairs --in R3-pick3m --out R3-pairs3m --threads 64
@@ -3233,7 +3381,7 @@ sketch count --kmv 1024 --kmv 1024:seed=2 --kmv 1024:seed=3 --kmv 256 --kmv 1024
 
 # R5 to R7: the whole-chain selections from R4's seed-1 stream, one fold, the production
 # varopt sketches of the same records, and all pairs
-python3 select.py chain --bin sketch --counts R4-countall/counts.kmv-k1024-s1-sets.bin.zst --out sel/chain
+sketch select chain --counts R4-countall/counts.kmv-k1024-s1-sets.bin.zst --out sel
 sketch pick --select sel/chain.txt --kmv 1024 --kmv 1024:seed=2 --kmv 1024:seed=3 \
   --l1 1024 --l1 1024:prec=f64 --l1 512:seed=2 --kmv 1024:support=pos \
   --oracle lastspend-2022.u32 --limit all --out R5-pickall --stats < finalBCUTXO_2022.scm
@@ -3252,8 +3400,9 @@ Four runs on prefixes of the chain, where exact answers exist, with the binary o
   `pos`) and three L1 stores against the exact store.
 - **R2** (`count`, the first 31,187,785 records, all of them): 48 KMV stores
   ($k = 64, 256, 1024$ at 16 seeds) against the exact sizes.
-- **R3** (`pick` and `pairs`, the first 3M records): three selections, with the exact
-  store, `varopt:512` and L1 stores beside the KMV ones. `deep`: records with supports
+- **R3** (`pick` and `pairs`, the first 3M records): three selections, made by
+  `sketch select prefix` from R2's seed-1 stream, with the exact store, `varopt:512`
+  and L1 stores beside the KMV ones. `deep`: records with supports
   of at least 1,024 blocks, one for each of 256 target blocks evenly spaced from the
   first such record's block, 44,006, to block 178,609; each target takes such a record
   of its own block or of the next block that has one (118 moved), and the last target
@@ -3263,6 +3412,33 @@ Four runs on prefixes of the chain, where exact answers exist, with the binary o
   `even`: 1,000 records evenly spaced over the 3M, with no depth condition, 499,500
   pairs. **R3b** added seeds on the same selection, so that $k = 1024$ has 64 seeds and
   $k = 128, 512, 2048$ have 16.
+
+`eval` and `count` write their tables as they run: the exactness checks and the count
+results below are R1's `kmv-rows.tsv` (column `set_ok`), `kmv-seeds.tsv` and
+`l1-summary.tsv`, and R2's `count-check.tsv`, `count-seeds.tsv` and `count-strata.tsv`.
+The pair results are read back from R3's and R3b's `pairs` outputs by
+`sketch pairs-stats`, in seconds:
+
+```text
+sketch pairs-stats --in R3-pairs3m --out R3-stats    # R3's 16 seeds: containment, L1
+sketch pairs-stats --in R3-pairs3m --in R3b-pairs3m --out R3all-stats \
+  --group deep --group window --group even --group deep+even --group deep+even+window
+```
+
+The second run pools R3b's seeds with R3's and gives {{< xref "tab:jaccard" "full" >}}
+and the paragraph after it (`jaccard-seeds.tsv`) and panels (a), (b) and (c) of
+{{< xref "fig:jerror" "full" >}} (`jaccard-bins.tsv`, `jw-bins.tsv`); the first gives
+the exact whole pairs and the sidenote (`errors.tsv`), the containment
+(`containment.tsv`), {{< xref "tab:jw" "full" >}} and the L1 paragraph
+(`jw-strata.tsv`, `l1-precision.tsv`), and the numbers of the captions of
+{{< xref "fig:jprefix" "full" >}} and {{< xref "fig:jwindow" "full" >}} (`groups.tsv`,
+`errors.tsv`, `quantiles.tsv`). The Python scripts that first computed these tables
+agree with them to the digits they printed: 619 numbers of R3's analysis, none
+different, and the across-seed tables to $1.2 \times 10^{-5}$ relative where R3b's seeds
+are read from its `f32` matrices. Three `even` figures need columns that only R3's
+`pairs.even.tsv` held, which is no longer on disk, and stay the scripts' own: the
+sidenote's 24.8% and 3.8%, the `f32` against `f64` difference of
+$1.08 \times 10^{-5}$, and the plug-in curve of panel (c).
 
 Within one run every record and every pair shares one permutation (or one projection),
 so their errors are correlated: within a 10M-record bucket, the error of a count is
@@ -3301,7 +3477,7 @@ $[0.19, 2.76]$.
 | 256 | $\hat n_M$ | $+0.0045 \pm 0.0151$ | 0.29 | 0.0667 | 0.0568 | 1.17 |
 | 1024 | $\hat n$ | $+0.0019 \pm 0.0035$ | 0.55 | 0.0152 | 0.0144 | 1.05 |
 | 1024 | $\hat n_M$ | $+0.0097 \pm 0.0055$ | 1.76 | 0.0266 | 0.0283 | 0.94 |
-{#tab:count .fullwidth caption="R2, support=sets, the first 31,187,785 records, 16 seeds per k. Mean relative error of the count over every record whose support exceeds k (26.6M, 26.5M and 26.4M records), as the mean of the 16 seeds' means plus or minus the standard error across seeds, and its t. RMS: pooled over the 16 seeds, in the deepest stratum (supports of 131,072 to 262,144 blocks, 24,334,496 records), against the theory RSE of section 10.4 with each estimator's universe."}
+{#tab:count .fullwidth caption="R2, support=sets, the first 31,187,785 records, 16 seeds per k. Mean relative error of the count over every record whose support exceeds k (26.6M, 26.5M and 26.4M records), as the mean of the 16 seeds' means plus or minus the standard error across seeds, and its t. RMS: pooled over the 16 seeds, in the deepest stratum (supports of 131,072 to 262,144 blocks, 24,334,496 records), against the theory RSE of section 10.4 with each estimator's universe. Bias and t from R2's count-seeds.tsv; RMS and theory from its count-strata.tsv, the RMS as the root mean square of the 16 seeds' rows."}
 
 The ratios are those of 16 draws of a stratum that moves as a whole within a run. One
 seed's RMS over theory, in a stratum of more than 100,000 records, ranged from 0.22 to
@@ -3325,7 +3501,10 @@ and band), in thousands of blocks; the exact quantiles (crosses) in the three bu
 wholly inside the first 31.2M records; the median $\beta_t + 1$ (grey, dotted), the most
 an $\hat n$ can be. Years along the top. (d) The share of the same buckets' records
 whose sketch is whole and counted exactly, on a log scale. Records of one seed share one permutation, so
-their errors are correlated; the spread that counts is across seeds.
+their errors are correlated; the spread that counts is across seeds. Drawn from `count`'s
+own tables: R2's `count-strata.tsv` and `count-seeds.tsv` for (a) and (b), R4's
+`count-buckets.tsv` for (c) and (d), with $\beta_t + 1$ from R4's 1-in-4001
+`count-rows` sample.
 {{< /fig >}}
 
 **Jaccard similarity.** No bias gate failed (0 of 52, groups $\times$ $k$ $\times$
@@ -3354,13 +3533,15 @@ distinct support sizes, nested within three blocks, so a seed's error moves almo
 of its pairs together and the per-seed spread is heavy-tailed. Its stratum
 $J \in (0.9, 1)$ came out at a ratio of 0.83 with 64 seeds (ratio squared
 $0.70 \pm 0.07$); recomputed by brute force from the exact supports with 200 fresh seeds
-on 3,000 of its 26,899 pairs, the ratio squared was $0.955 \pm 0.066$ (in batches of 50
+on 3,000 of its 26,899 pairs (a design-phase computation, not a crate run), the ratio
+squared was $0.955 \pm 0.066$ (in batches of 50
 seeds: 1.040, 1.027, 0.700, 1.053). The $k = 2048$ shortfall in the window (ratios 0.81–0.86
 over 16 seeds; ratio squared $0.73 \pm 0.28$, $0.66 \pm 0.18$ and $0.67 \pm 0.11$, 1.0
 to 3.0 standard errors below 1) reflects the same within-window correlation across
 seeds. Within one seed
 the fraction of pairs off by more than two hypergeometric SDs was mostly 2–6% per
-stratum (extremes 0.7% and 12.5%, in the window's smallest strata).{{< sidenote >}}The
+stratum (extremes 0.7% and 12.5%, both in the window, in its $(0.5, 0.9]$ and $(0.2, 0.5]$
+strata).{{< sidenote >}}The
 SE that `pairs` writes per pair is the plug-in
 $\sqrt{\hat J(1 - \hat J)/k \cdot (\hat n_u - k)/(\hat n_u - 1)}$, which is 0 whenever
 $\hat J$ is 0 or 1. Against it, 18.5% of the window's pairs and 24.8% of the even
@@ -3375,10 +3556,11 @@ $k = 1024$ no stratum showed a bias ($\lvert t \rvert \le 2.55$ against a thresh
 3.62); the RMS error per stratum was 0.002 to 0.016 in `deep` and `window`, and up to
 0.131 in the `even` pairs whose containment lies in $[0.5, 0.9)$.
 
-**Union counts** (the restricted universe of the pair) were unbiased in a separate check
-with 32 seeds on 2.5M records: relative bias $-0.0026$ ($t = -0.82$) and RMS over theory
-1.01 at $k = 1024$ on deep pairs. {{< xref "fig:jprefix" "full" >}} draws one seed's
-$\hat J$ for the `deep` selection against the exact values.
+**Union counts** (the restricted universe of the pair) were unbiased in a separate
+design-phase check, not a crate run, with 32 seeds on 2.5M records: relative bias
+$-0.0026$ ($t = -0.82$) and RMS over theory 1.01 at $k = 1024$ on deep pairs.
+{{< xref "fig:jprefix" "full" >}} draws one seed's $\hat J$ for the `deep` selection
+against the exact values.
 
 {{< fig src="jaccard-prefix.svg" type="fullwidth" label="fig:jprefix" alt="For 255 deep transactions of the first 3M records in time order, 2010 to 2012: a strip of support sizes at the left; a matrix with the estimated Jaccard similarity below the diagonal and the exact one above, nearly mirror images; and a triangle of the estimation error below the diagonal, within a few hundredths, in stripes." >}}
 The `deep` selection: 255 transactions with supports of 1,046 to 123,230 blocks, one
@@ -3445,14 +3627,16 @@ $1 - \hat J$ with optimal leaf ordering (on the estimate, since production has n
 values). (a) The set distance $1 - J$ on a log scale, `sets`, $k = 1024$ seed 1 below
 the diagonal, exact above; values of $10^{-3}$ or less, including identical supports
 (8.9% of the pairs), take the end colour. (b) $J_w$ on a linear scale to 0.6 (0.45% of
-the exact values lie above), L1 $m = 1024$ seed 1 below, exact above. The strip at the
-left: $\log_{10}$ of the exact support size, from 4.79 (dark) to 5.10 (light). The two
+the exact values lie above, counted by the figure script), L1 $m = 1024$ seed 1 below,
+exact above. The strip at the left: $\log_{10}$ of the exact support size, from 4.79
+(dark) to 5.10 (light). The two
 matrices say different things: nearly the whole history is shared (median $J$ 0.994),
 while the shared *value* is a few tenths at most (median $J_w$ 0.18).
 {{< /fig >}}
 
-**Cost.** Peak memory is the VmHWM of `/usr/bin/time -v`, in GB of $10^9$ bytes as in
-§8.9. R1 took 8 min 24 s and 100.2 GB, almost all of it the exact store. R2 folded
+**Cost.** Wall times and peak memory are those of `/usr/bin/time -v` (VmHWM, in GB of
+$10^9$ bytes as in §8.9); the busy times and peaks of single stores are each run's
+`cost.tsv`. R1 took 8 min 24 s and 100.2 GB, almost all of it the exact store. R2 folded
 48 KMV stores over 31.2M records in 2 min 55 s and 68.0 GB; a $k = 1024$ store was busy
 146.7 s and peaked at 617,119,725 ranks in 733,466 live sketches. In R3, which folded
 the exact store and 29 KMV, 17 L1 and one `varopt` store in one pass (7 min 36 s,
@@ -3463,7 +3647,7 @@ $m = 1024$ 14.3 s and `varopt:512` 23.9 s; `pairs` took 56 s for the 564,525 pai
 
 **Counts.** R4 counted every one of the 778,613,440 records with five stores in one
 pass: $k = 1024$ at seeds 1, 2 and 3, $k = 256$, and $k = 1024$ under `pos`. It took
-1 h 09 min 47 s, at 544% of a core, and 144.2 GB.
+1 h 09 min 47 s, at 544% of a core, and 144.2 GB (`/usr/bin/time -v`).
 
 | store | busy | peak ranks | peak live sketches | records cut to $k$ |
 | :--- | ---: | ---: | ---: | ---: |
@@ -3472,19 +3656,20 @@ pass: $k = 1024$ at seeds 1, 2 and 3, $k = 256$, and $k = 1024$ under `pos`. It 
 | $k = 1024$, seed 3 | 3,910 s | 7,660,615,688 | 7,593,632 | 135,305,680 |
 | $k = 256$, seed 1 | 2,143 s | 1,916,423,324 | 7,593,632 | 102,302,532 |
 | $k = 1024$, seed 1, `pos` | 3,777 s | 7,660,613,640 | 7,593,630 | 137,238,132 |
-{#tab:r4 caption="R4, all 778,613,440 records: per store, the time its thread was busy, the peaks of ranks held and of live sketches, and the number of records whose merge had elements left over. The seed changes the peaks not at all and the last column by about 1 percent."}
+{#tab:r4 caption="R4, all 778,613,440 records: per store, the time its thread was busy, the peaks of ranks held and of live sketches, and the number of records whose merge had elements left over. The seed changes the peaks not at all and the last column by about 1 percent. From R4's cost.tsv."}
 
 At the peak a $k = 1024$ store holds about 1,009 ranks in each of 7.59M live sketches,
 as many as the production run of §9 keeps alive: 30.6 GB of ranks.
 
 - **Against the exact sizes.** On the first 31,187,785 records every hard counter of
-  every store was 0: no whole sketch of the wrong size, no full sketch of a support of at
-  most $k$, no whole sketch of a larger one, no sketch of more than $k$ ranks. The whole
+  every store was 0 (R4's `count-check.tsv`): no whole sketch of the wrong size, no
+  full sketch of a support of at most $k$, no whole sketch of a larger one, no sketch of
+  more than $k$ ranks. The whole
   sketches of exactly the reference size were R2's: 4,792,897 at $k = 1024$, at every
   seed, and 4,715,656 at $k = 256$.
 - **Determinism.** The first 623,755,748 bytes of R4's seed-1 stream,
-  $48 + 20 \cdot 31{,}187{,}785$, equal R2's: the whole-chain stream extends the one
-  validated against the exact sizes.
+  $48 + 20 \cdot 31{,}187{,}785$, equal R2's (by `cmp`): the whole-chain stream extends
+  the one validated against the exact sizes.
 - **Seeds against each other.** Past record 31,187,785 there is no reference, so the
   three $k = 1024$ seeds were compared with each other: per 10M-record bucket and per
   pair of seeds, the RMS of the relative difference of their $\hat n$ over $\sqrt 2$,
@@ -3496,20 +3681,44 @@ as many as the production run of §9 keeps alive: 30.6 GB of ranks.
   permutation per seed and heavily overlapping supports make it. The pooled ratios are
   therefore a handful of effective draws, not 767M, and should scatter around 1 by a
   factor of about 2. Seeds 1 and 2 sit low all along, as on R2, where seed 1 had the
-  smallest error (RMS over theory 0.37, 0.70 and 0.76 for seeds 1 to 3, and 0.50 for
-  the pair 1–2); without a reference this cannot be told from two close offsets.
-  Reported, not gated. The seed gates of the first 31.2M records passed (0 of 52 failed;
-  with 3 seeds they are weak, a $t$ threshold of 36).
+  smallest error (RMS over theory 0.37, 0.70 and 0.76 for seeds 1 to 3, in R2's
+  `count-strata.tsv`, and 0.50 for the pair 1–2); without a reference this cannot be
+  told from two close offsets. Reported, not gated. The seed gates of the first 31.2M
+  records passed (0 of 52 failed, in R4's `count-seeds.tsv`; with 3 seeds they are weak,
+  a $t$ threshold of 36).
 - **Never above the universe.** No record has a restricted $\hat n$ above $\beta_t + 1$
-  (0 of 778,613,440), as {{< xref "prop:kmv-count" "full" >}} guarantees: a check of the
-  decoding.
+  (0 of 778,613,440, in each of the five streams), as
+  {{< xref "prop:kmv-count" "full" >}} guarantees: a check of the decoding.
 - **Counted exactly.** 11,289,797 records, 1.450%, have a whole sketch at $k = 1024$,
   and 4,792,897 of them lie in the first 31.2M records. Their supports are small: in a
   1-in-4001 sample of the records the median is 2 blocks, the 90th percentile 54 and
   the largest 983. Under `pos` exactly as many sketches are full as under `sets`.
-- **The file.** The seed-1 stream compresses to 1,842,558,077 bytes, 2.37 B a record,
-  8.45 times less than its 15,572,268,872 raw bytes; it is the production count file of
-  §10.10.
+- **The file.** The seed-1 stream compresses to 1,842,558,077 bytes (`ls`), 2.37 B a
+  record, 8.45 times less than its 15,572,268,872 raw bytes; it is the production count
+  file of §10.10.
+
+The comparison of seeds, the check against the universe and the records counted exactly
+are read back from R4's streams by `sketch summary` (§10.7), with no fold:
+
+```text
+R="--range 0:31187785 --range 30187785:31187785 --range 0:100000000 --range 100000000:200000000 \
+   --range 200000000:300000000 --range 300000000:400000000 --range 400000000:500000000 \
+   --range 500000000:600000000 --range 600000000:700000000 --range 700000000:"
+S=R4-countall/counts.kmv-k1024
+sketch summary --in $S-s1-sets.bin.zst --in $S-s2-sets.bin.zst --in $S-s3-sets.bin.zst \
+  --in R4-countall/counts.kmv-k256-s1-sets.bin.zst --in $S-s1-pos.bin.zst \
+  --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --bucket 10000000 $R --out R4-summary
+sketch summary --in $S-s1-sets.bin.zst --every 4001 --bucket 10000000 $R --out R4-sample
+```
+
+The pooled and per-bucket ratios between seeds are `R4-summary/dispersion.tsv`; the
+check against the universe, the records counted exactly and their share are the
+`over_univ`, `whole`, `frac_whole` and `full` columns of `summary.tsv`, and the
+supports of the whole records in the sample its `whole_p50`, `whole_p90` and
+`whole_max` in `R4-sample`. The first run takes about 5 minutes of wall time. It
+replaced a `mawk` pass over three decoded streams, whose 1,404 per-bucket cells it
+reproduces as `mawk` printed them, and a Python pass over the 1-in-4001 sample, whose
+depth table it reproduces up to the rounding of one percentile that falls on a tie.
 
 Panel (c) of {{< xref "fig:count" "full" >}} follows the counts down the chain. Where
 the exact sizes exist, a bucket's median $\hat n$ is within 0.5% of the exact median
@@ -3522,14 +3731,19 @@ every 10M bucket after the first 60M. The finite-population factor shrinks as th
 supports fill their universe, so the theory RSE falls with depth: over the full records
 its median is 1.21% in the first 100M, 0.92% over the chain (10th and 90th percentiles
 0.82% and 1.19%) and 0.81% in the last 78.6M. $\hat n_M$, over $2^{20}$, has a median
-RSE of 2.25% over the chain, about 2.5 times the median RSE of $\hat n$ (the median
-per-record ratio is 2.4).
+RSE of 2.25% over the chain, about 2.5 times that of $\hat n$. These are columns of
+`R4-summary/summary.tsv`: `n_p50` against `ref_p50` per bucket,
+`n_p50` alone for the median support, `fill_p50`, `frac_whole`, and `rse_p10`,
+`rse_p50`, `rse_p90` and `rse_M_p50` over the ranges of the command above. (Its
+quantiles are numpy's linear ones; `count`'s `count-buckets.tsv`, drawn in the figure,
+takes the lower order statistic, and the two differ in about the sixth digit.)
 
 **Matrices.** R5 folded the stores of the selected records over the whole chain, and R6
 read the production `varopt` sketches of the same records out of
-`colors.sketch-varopt512.zst`. The selections were drawn from R4's seed-1 stream; a
-record is deep when its $k = 1024$ sketch is full, so $\lvert S \rvert > 1024$ exactly
-by {{< xref "thm:kmv-dag" "full" >}}.
+`colors.sketch-varopt512.zst`. The selections were drawn from R4's seed-1 stream by
+`sketch select chain` (§10.7), which prints the ranges below; a record is deep when its
+$k = 1024$ sketch is full, so $\lvert S \rvert > 1024$ exactly by
+{{< xref "thm:kmv-dag" "full" >}}.
 
 - `w2013` and `w2017`: the first 256 deep records from blocks 240,000 and 470,000
   (records 19,031,618 to 19,031,920 in blocks 240,000 to 240,002, and records
@@ -3543,16 +3757,31 @@ by {{< xref "thm:kmv-dag" "full" >}}.
 - R5 folded seven stores, four KMV ($k = 1024$ at seeds 1, 2 and 3, and seed 1 under
   `pos`) and three L1 ($m = 1024$ at seed 1 in `f32` and in `f64`, $m = 512$ at seed 2),
   over all 778,613,440 records, and dumped the 1,280 selected: 1 h 10 min 05 s at 607%
-  of a core, and 249.8 GB, 0.6% below the 251.2 GB that a memory model fitted to R4
-  predicted (chain.log prints 242.2 GB: its run-time check compared R4's VmHWM in GiB
-  with the model in GB and so left the model unscaled). A KMV store was busy 3,872 to
+  of a core, and 249.8 GB (`/usr/bin/time -v`), 0.6% below the 251.2 GB that a memory
+  model fitted to R4, outside the crate, predicted (chain.log prints 242.2 GB: its
+  run-time check compared R4's VmHWM in GiB with the model in GB and so left the model
+  unscaled). A KMV store was busy 3,872 to
   3,969 s and reproduced R4's peaks and counts of cut records exactly; the L1 stores
-  were busy 2,667 s ($m = 1024$, `f32`), 3,374 s (`f64`) and 2,348 s ($m = 512$).
+  were busy 2,667 s ($m = 1024$, `f32`), 3,374 s (`f64`) and 2,348 s ($m = 512$), in
+  R5's `cost.tsv`.
 - R6 cut the 1,280 records out of the production file, beside R5.
 - R7 computed the 228,736 pairs (130,816 in `chain`, 32,640 in each window) in 3.84 s and
-  0.2 GB.
+  0.2 GB (`/usr/bin/time -v`).
 
-The checks on these pairs (`r7_checks.py`):
+The checks on these pairs were first made by a Python script, `r7_checks.py`. The crate
+now makes them from R7's output, with the same results to the six digits the script
+printed (at worst $1.1 \times 10^{-8}$ relative): the first two by `pairs-stats`
+(`seed-agreement.tsv`, `seed-pairs.tsv`, `l1-precision.tsv`), the fourth by running
+`pairs` again with the binned colours of the selected records (`bands-check.tsv`), in
+seconds and without a fold:
+
+```text
+sketch pairs-stats --in R7-pairsall --out R7-stats
+sketch pairs --in R5-pickall --varopt-text varopt512.sel.txt --bands bands1024.sel.txt \
+  --out R7-bands --threads 32
+```
+
+The checks:
 
 - **$\hat J$ across seeds 1, 2 and 3.** For each cell, $s$ is the standard deviation of
   the three seeds' $\hat J$ and $\sigma$ the hypergeometric SD of
@@ -3580,15 +3809,17 @@ The checks on these pairs (`r7_checks.py`):
 - **L1 against an exact lower bound.** Binning two colours into the same 1,024 bands
   can only lower their TV, and `colors.bands1024.zst` holds every record's exact binned
   colour; so $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
-  should hold in at least 99% of the pairs. Read for the 1,280 selected records (a
-  streaming pass over the 1.67 TB file that took 3 h 42 min), it holds in
+  should hold in at least 99% of the pairs. Read for the 1,280 selected records into
+  `bands1024.sel.txt` (a separate Python and `mawk` pass over the 1.67 TB file, 3 h
+  42 min of wall time; `pick --bands-ref` now copies the same lines during the fold,
+  which R5 predates), it holds in
   99.985% of the 130,816 `chain` pairs at $m = 1024$, in 100%, 99.97% and 99.997% of the
   32,640 pairs of `w2013`, `w2017` and `w2022`, and likewise at $m = 512$ and in `f64`;
   every band line's transaction matched the selection. The bound is far from tight
   inside a window: the median of $\widehat{\mathrm{TV}} / \mathrm{TV}_{1024}$ (over
-  pairs with $\mathrm{TV}_{1024} > 0.01$) is 1.10 in `chain` but 1.36 to 1.82 in the
-  windows, whose colours differ mostly within bands of 745 blocks. A check that passes,
-  then, and not an exact reference.
+  pairs with $\mathrm{TV}_{1024} > 0.01$, at $m = 1024$) is 1.10 in `chain` but 1.36 to
+  1.82 in the windows, whose colours differ mostly within bands of 745 blocks. A check
+  that passes, then, and not an exact reference.
 
 Across time, in the whole-chain matrix of {{< xref "fig:jchain" "full" >}}, the upper
 triangle has no exact $J$ to show, as the prefix's has, and a containment drawn on
@@ -3667,6 +3898,13 @@ era to era: $\hat J_w$ has percentiles 0.11, 0.44 and 0.72 (p10, p50, p90) in 20
 window is 0.19, 0.25 and 0.35 years. Under `pos`, every $\hat J$ of the four groups
 equals the `sets` one.
 
+The numbers given since the checks, in the text and in the captions, are tables of
+`pairs-stats`: of `R3-stats` for the prefix's `deep` pairs, of `R7-stats` for the
+whole chain. The percentiles, the
+shares at 1, at the floor and below the L1 floor, and their split by block gap are in
+`quantiles.tsv`; the row of record 102,455 and the undefined cells in `cont-rows.tsv`;
+the Spearman correlations in `spearman.tsv`; `pos` against `sets` in `support.tsv`.
+
 ### 10.10 The production count file {#sec:kmv-file}
 
 `colors.kmv1024.counts.zst`, 1,842,558,077 bytes (SHA-256
@@ -3697,8 +3935,17 @@ estimate with a standard error of about
 $\sqrt{n(n - k + 1)/(k - 2) \cdot (N - n)/(N - 1)}$ blocks, written as `se` (and as
 `se_M` for $\hat n_M$, with $M = 2^{20}$ in place of $N$). The relative error
 `se / n_hat` has a median of 0.92% over the chain, 1.2% over its first 100M records and
-0.8% over its last 78.6M. All
-records share one permutation, so their errors are correlated, by design: two records
+0.8% over its last 78.6M. These figures, and the 1.45%, are what `sketch summary` writes
+for the file itself, the same as for R4's stream, of which it is a byte copy (`cmp`):
+
+```text
+sketch summary --in colors.kmv1024.counts.zst \
+  --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --bucket 10000000 $R --out prod-summary
+```
+
+with the ranges `$R` of §10.9; it reads the 778,613,440 records in about 3.5 minutes of
+wall time. All records share one permutation, so their errors are correlated, by
+design: two records
 with nearly the same support get nearly the same error. A second seed's file is the
 way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped.
 
@@ -3719,6 +3966,28 @@ four groups are written out; $\eta(x)$ is the rest, $\eta(1)$ its mass. The
 coefficients are rounded to six digits. All 5,120 terms, as stored, are in
 [`ten-colours.txt`](ten-colours.txt).
 
+All of this section is read by `sketch describe`. It takes the 1,280 sketches as
+`sketch decode --select` prints them, their exact colours binned in the 1,024 bands (the
+lines of `colors.bands1024.zst` read for the check of §10.9) and their $\hat n$. It
+writes a row per record to `describe.tsv`, with the columns of
+{{< xref "tab:ten" "full" >}} and a few more, and totals over the 1,280 to
+`summary.tsv`; for the records given by `--records`, also the table's rows (`table.md`),
+the displays below (`displays.md`) and `ten-colours.txt` (`colours.txt`). The Python
+scripts that did this first gave the same rows and displays, and the same band
+comparisons to the bit. Several of the ten are extremes of one column of `describe.tsv`:
+the second has the largest coefficient, the sixth the most distinct ones, the seventh
+the smallest age, the tenth the largest $\hat n$.
+
+```text
+# the 1,280 records of §10.9's selection: their sketches (R6) and their counts
+zstd -dc --long=27 < colors.sketch-varopt512.zst \
+  | sketch decode --select sel/chain.txt > varopt512.sel.txt
+zstd -dc colors.kmv1024.counts.zst | sketch decode --select sel/chain.txt > counts.sel.tsv
+TEN=51126,99576,243275,456104,19031745,69818050,77146563,229491784,778613383,778611720
+sketch describe --in varopt512.sel.txt --bands bands1024.sel.txt --counts counts.sel.tsv \
+  --select sel/chain.txt --records $TEN --out describe
+```
+
 | record | block | group | distinct coefficients | heavy entries | largest coefficient | mean block | newest block | $\hat n$ | KS | $W_1$ (blocks) |
 | ---: | ---: | :--- | ---: | ---: | :--- | ---: | ---: | ---: | ---: | ---: |
 | 51,126 | 50,299 | `chain` | 8 | 263 | 0.0150 at each of 16 | 39,923 | 47,918 | 1,506 | $2 \times 10^{-8}$ | 0 |
@@ -3731,12 +4000,13 @@ coefficients are rounded to six digits. All 5,120 terms, as stored, are in
 | 229,491,784 | 470,000 | `w2017` | 35 | 48 | 0.0501 at 210,595 | 165,048 | 229,223 | 183,586 | 0.0016 | 142 |
 | 778,613,383 | 762,260 | `w2022` | 1 | 0 | $1/512$ at each of 512 | 175,122 | 391,528 | 443,316 | 0.0025 | 262 |
 | 778,611,720 | 762,260 | `chain` | 1 | 0 | $1/512$ at each of 512 | 351,468 | 761,472 | 711,490 | 0.0025 | 524 |
-{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of section 10.10. KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks."}
+{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of section 10.10. KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks. From sketch describe, table.md; describe.tsv has the same columns for all 1,280 records."}
 
 The ten, in the order of the table:
 
 1. **The first `chain` record.** It is the first deep record at or after block 50,000;
-   the first deep record of the chain is earlier, record 44,447 in block 44,006. Its 512
+   the first deep record of the chain is earlier, record 44,447 in block 44,006, as
+   `sketch select chain` reports when it makes the selection. Its 512
    terms take only 8 values: whole groups of blocks reach it along the same paths
    through the DAG, so they share one product of shares. The four groups shown, 222
    terms, are all above $1/512$, which no reduction's $\tau$ can exceed
@@ -3878,7 +4148,8 @@ $$
 \end{aligned}
 $$
 
-**Flat sketches.** 543 of the 1,280 sketches of §10.9 are flat, as 9 and 10 are: 512
+**Flat sketches.** 543 of the 1,280 sketches of §10.9 are flat (`flat` in
+`summary.tsv`), as 9 and 10 are: 512
 coefficients all equal to $1/512$. A sketch is flat when no entry of the merged parents'
 sketch exceeds the threshold $\tau$ of the last reduction
 ({{< xref "def:varopt" "full" >}}). Every entry is then light, each is kept with
@@ -3937,21 +4208,55 @@ Three things the average is not:
 
 ### 12.1 How it was computed
 
-Two small Rust programs, outside the crate, read the files once each.
+Two modes of the crate compute this section. `sketch surface` reads the files once and
+writes a surface as sums, by minting band and by age band (`<prefix>.mint.f64`,
+`<prefix>.age.f64`), the transactions of each row (`<prefix>.rows.f64`) and its
+counters (`<prefix>.surface.tsv`). `sketch surface-report` turns a sketched and an exact
+surface into the tables and numbers of §12.2 to §12.6 and the series the figures draw,
+with the calendar from a file of each year's first block.
 
-- **The sketched surface.** `surface-aggb` reads the production file
-  `colors.sketch-varopt512.zst` through a copy of the crate's decoder (`encode.rs`).
-  Beside it, it reads the count file of §10.10 for each record's block. It skips the
-  first record of each block, the coinbase (762,261 of them), and adds every other
-  sketch, divided by its mass, to the row of its band. It read 778,613,440 records and
-  kept 777,851,179, in 2 h 00 min and 7 MB of memory. No coefficient sits at a block
-  later than its transaction's own, a check that the two files line up.
-- **The exact surface.** `surface-aggxp` does the same with the exact colours of
-  `colors.bands1024.zst`, already binned in the same bands, with 16 threads parsing the
-  text: 4 h 22 min and 0.2 GB of memory, with zstd's single-threaded decompression as the limit. Both runs kept the same records in every row.
-- **A cross-check of the reader.** On the first 3M records, a version that reads the
-  text of `sketch decode` agreed with `surface-aggb` to $10^{-15}$ in the averaged surface
-  ($1.3 \times 10^{-11}$ in the raw sums).
+- **The sketched surface.** `sketch surface` reads the production file
+  `colors.sketch-varopt512.zst` on its input and, beside it, the count file of §10.10
+  for each record's block. It skips the first record of each block, the coinbase, and
+  adds every other sketch, divided by its mass, to the row of its band. A coefficient at
+  a block later than its transaction's own would mean that the two files do not line
+  up, and the mode fails on one.
+- **The exact surface.** With `--bands-ref`, the same mode reads the exact colours of
+  `colors.bands1024.zst`, already binned in the same bands, parses the text on
+  `--threads` and adds the lines in record order, so the sums do not depend on the
+  number of threads.
+
+```text
+zstd -dc --long=27 < colors.sketch-varopt512.zst \
+  | sketch surface --counts colors.kmv1024.counts.zst --out all
+sketch surface --counts colors.kmv1024.counts.zst --bands-ref colors.bands1024.zst \
+  --threads 16 --out xall
+sketch surface-report --sketched all --exact xall --years years.tsv --out report
+```
+
+The whole-chain surfaces `all` and `xall` were computed before these modes existed, by
+two small Rust programs outside the crate that do the same: `surface-aggb`, through a
+copy of the crate's decoder, and `surface-aggxp`, with 16 threads parsing the text.
+`surface-aggb` read 778,613,440 records, skipped 762,261 coinbases and kept 777,851,179,
+in 2 h 00 min and 7 MB of memory; `surface-aggxp` took 4 h 22 min and 0.2 GB, with
+zstd's single-threaded decompression as the limit (wall times and peak memory from
+`/usr/bin/time`). Both runs kept the same records in every row, and no coefficient sat
+at a block later than its transaction's own. `sketch surface` gives the matrices of
+`surface-aggb` bit for bit on the first 3M and 30M records, and on the first 30M those
+of the single-threaded first version of `surface-aggxp`; the 16-thread version added in
+the order its threads finished, and differs from them by at most $2 \times 10^{-12}$
+relative. `sketch surface-report`, run on the whole-chain `all` and `xall`, reproduces
+every table and number of §12.2 to §12.6, to the last digit of the Python scripts that
+first computed them, and refuses two surfaces whose rows differ. As a cross-check of the
+reader, on the first 3M records a version that reads the text of `sketch decode` agreed
+with the sketched surface to $10^{-15}$ in the averaged surface ($1.3 \times 10^{-11}$
+in the raw sums).
+
+The figures are drawn by a Python script outside the crate, from the two surfaces; the
+report's `surface-age-cdf.tsv`, `surface-columns.tsv` and `surface-ratio-curves.tsv`
+hold the series of {{< xref "fig:surface-age" "full" >}},
+{{< xref "fig:surface-check" "full" >}}(a) and {{< xref "fig:surface-ratio" "full" >}},
+equal to the script's to the bit.
 
 ### 12.2 The surface
 
@@ -3980,6 +4285,12 @@ sums to 1. (a) By minting time. (b) By age, spending time less minting time.
 - **Dark patches in 2010 and 2011** are single holdings moving, such as the coins minted
   around blocks 20,000 to 35,000 and spent in late 2010. With few transactions per band
   in those years, one large holding is visible on its own.
+
+The shares of 2011 and 2022 are rows of {{< xref "tab:surface-age" "full" >}}, and
+`surface-check.tsv` holds the checks behind the second and third readings: from 2012 on
+every cell below the diagonal is above zero, 99.3% of them between $10^{-4}$ and
+$10^{-2}$, and in the colour of 2022 the ten bands before each halving carry 1.94 to
+1.97 times the share of the ten after it.
 
 ### 12.3 In three dimensions
 
@@ -4021,7 +4332,7 @@ and mean, from the exact surface, whose ages are differences of bands (§12.6).
 | 2020 | 111,939,087 | 5.62 | 5.78 | 1.5% | 17.0% | 63.3% |
 | 2021 | 98,075,965 | 6.81 | 7.28 | 1.3% | 9.9% | 72.4% |
 | 2022 | 79,113,540 | 7.42 | 8.12 | 1.5% | 12.0% | 74.6% |
-{#tab:surface-age caption="The age of the coins spent, per year: the columns of the surface averaged over the year's transactions, coinbases left out. Ages in years since minting, from the block of each term of the sketches, binned in bands of 745 blocks (5.2 days); the shares at one week, one year and four years are interpolated inside a band. 2009, with only about 220 transactions besides its coinbases, is left out."}
+{#tab:surface-age caption="The age of the coins spent, per year: the columns of the surface averaged over the year's transactions, coinbases left out. Ages in years since minting, from the block of each term of the sketches, binned in bands of 745 blocks (5.2 days); the shares at one week, one year and four years are interpolated inside a band. 2009, with only about 220 transactions besides its coinbases, is left out. From sketch surface-report, surface-age.tsv (the rows of the sketched surface); surface-tables.md prints the table as here."}
 
 - **Coins get older.** The median age rose from 1.1 years in 2013 to 8.1 in 2022, when
   the chain was 13 years old. The rise was uneven: fastest from 2016 to 2017 and from
@@ -4063,7 +4374,7 @@ below 1, less.
 | 2020 | 2.3% / 8.8% | 13.3% / 27.5% | 38.2% / 57.7% | 12.7% / 3.8% |
 | 2021 | 2.3% / 8.6% | 13.9% / 26.9% | 39.6% / 56.3% | 5.8% / 2.5% |
 | 2022 | 2.3% / 8.5% | 13.8% / 26.4% | 39.3% / 55.3% | 5.9% / 1.7% |
-{#tab:surface-ratio caption="Shares of the colour (averaged over the year's transactions) and of the supply, both over the coins minted before the year began."}
+{#tab:surface-ratio caption="Shares of the colour (averaged over the year's transactions) and of the supply, both over the coins minted before the year began. From sketch surface-report, surface-ratio.tsv (the colour and supply columns; the last column is prev_year)."}
 
 The curves have three parts, and those of 2018, 2020 and 2022 lie almost on top of each
 other up to 2017:
@@ -4082,6 +4393,10 @@ other up to 2017:
   transaction's colour. New coins pass through exchanges and payments before they come
   to rest.
 
+The ratios are columns of `surface-ratio.tsv` too: `ratio_before_2010` for the first
+year, the `mixed_*` spread of the bands in the middle, and `ratio_last6` for the last
+month.
+
 The comparison is between two different things: the supply counts bitcoin, and the
 colour is averaged over transactions. A value-weighted surface would compare like with
 like, and would need the amounts (§13).
@@ -4095,7 +4410,10 @@ per cell, on a symmetric log scale (linear below $10^{-5}$).
 {{< /fig >}}
 
 The two surfaces were computed from the same 777,851,179 transactions, row for row, so
-any difference comes from the sketches.
+any difference comes from the sketches. The numbers below are in `surface-check.tsv`,
+with the medians by year in `surface-tv-years.tsv` and the ages read from bands in the
+`sketched-bands` and `exact-bands` rows of `surface-age.tsv`; the 0.42 of a single
+sketch is from §11's `describe.tsv`.
 
 - **Columns.** The total variation distance between a sketched column and the exact one
   is at most 0.0029 before 2011 and at most 0.010 in 2011, with few transactions and
