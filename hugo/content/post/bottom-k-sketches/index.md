@@ -55,12 +55,15 @@ value $v_{(k)}$ has expected value:
 
 $$\mathbb{E}[v_{(k)}] = \frac{k}{N + 1}$$
 
-Inverting this yields the unbiased cardinality estimator $\hat{N}$:
+Inverting this suggests $N \approx k/v_{(k)} - 1$; the estimator that is exactly unbiased,
+for $N \ge k \ge 2$ (with fewer than $k$ items the sketch holds them all and counts them
+exactly), is:
 
 $$\hat{N} = \frac{k - 1}{v_{(k)}}$$
 
 The relative standard error of this estimate is approximately
-$\frac{1}{\sqrt{k - 2}}$.{{< sidenote >}}The variance is exactly $N(N - k + 1)/(k - 2)$.
+$\frac{1}{\sqrt{k - 2}}$.{{< sidenote >}}The variance is exactly $N(N - k + 1)/(k - 2)$ for $k \ge 3$; at
+$k = 2$ it is infinite.
 Inverting $\mathbb{E}[v_{(k)}]$ is only the heuristic: by Jensen's inequality the plain
 $k/v_{(k)}$ overestimates, and what makes $(k - 1)/v_{(k)}$ exactly unbiased is
 $\mathbb{E}[1/v_{(k)}] = N/(k - 1)$. Keeping the $k$ smallest hash values goes back to
@@ -71,19 +74,22 @@ $N = 10^4$ or $N = 10^{10}$.
 
 The same estimator is exactly unbiased in a finite model as well. If the hash is a
 uniformly random *permutation* of a universe of $M$ items, with ranks $0, \dots, M - 1$,
-and $R$ is the $k$-th smallest rank of the $N$ items as an integer, then
+and $R$ is the $k$-th smallest rank of the $N$ items as an integer (0-based, so the
+number of universe items ranked strictly below it), then
 $\hat N = (k - 1)M / R$ has $\mathbb{E}[\hat N] = N$, and its variance is slightly below
 $N(N - k + 1)/(k - 2) \cdot (M - N)/(M - 1)$, within 1% for $k \ge 256$: the
 finite-population factor $(M - N)/(M - 1)$ is a free gain when the set fills a good part
-of its universe. Section 10.4 proves this, writing $n$ for the set size and $N$ for the
-universe, and uses it with a smaller universe chosen for each record.
+of its universe. Section 10.4 proves the unbiasedness and computes the variance exactly
+over the law of $R$, writing $n$ for the set size and $N$ for the universe, and uses it
+with a smaller universe chosen for each record.
 
 ### 1.2.2 Set Merging (Unions)
 
 Given sketch $S(A)$ and sketch $S(B)$ built with the same hash function $h$, the exact
 bottom-$k$ sketch of $A \cup B$ is:{{< sidenote >}}This is why KMV sketches merge
-exactly, in any order and over any partition of the data: the $k$ smallest hashes of a
-union are among the $k$ smallest of each of its parts.{{< /sidenote >}}
+exactly, in any order and over any partition of the data: each of the $k$ smallest hashes
+of a union is among the $k$ smallest of the part that contains it, so the union's
+bottom-$k$ lies inside the union of the parts' sketches.{{< /sidenote >}}
 
 $$S(A \cup B) = \text{bottom-}k\big(S(A) \cup S(B)\big)$$
 
@@ -127,8 +133,12 @@ HyperLogLog:{{< cite "flajolet2007hyperloglog" >}}
 | :--- | :--- | :--- | :--- |
 | **Hash Functions per Item** | $1$ | $k$ | $1$ |
 | **Update Time Complexity** | $O(1)$ expected, $O(\log k)$ worst | $O(k)$ | $O(1)$ |
-| **Memory Footprint** | $O(k \log u)$ bits | $O(k \log u)$ bits | $O(m \log \log u)$ bits (~5–6 bits/register) |
+| **Memory Footprint** | $O(k \log M)$ bits | $O(k \log M)$ bits | $O(m \log \log M)$ bits (~5–6 bits/register) |
 | **Best Use Case** | Fast updates + set intersections, Jaccard, & subset sums | Locality-Sensitive Hashing (LSH) | Pure `COUNT(DISTINCT)` at minimal memory |
+
+Here $M$ is the size of the hashed universe, as in §1.2.1, so a hash value takes
+$\log M$ bits, and $m$ is the number of HLL registers (standard error about
+$1.04/\sqrt{m}$, §14).
 
 
 ## 2. Weighted Extension: Priority Sampling & Exponential Scaling
@@ -148,8 +158,14 @@ and taking the minimum:
 $$r_i = \min_{1 \le j \le w_i} h(x_i, j)$$
 
 Computing $w_i$ hashes directly requires $O(w_i)$ work and fails for continuous
-non-integer weights. We can simulate this minimum in **$O(1)$ time** using logarithmic
-transformations or priority scaling.
+non-integer weights. Exponential scaling (§2.2.1) reproduces this minimum exactly in
+**$O(1)$ time**, up to an increasing transformation:
+$-\ln(1 - \min_j h(x_i, j)) \sim \text{Exp}(w_i)$, which is also the law of
+$-\ln(u_i)/w_i$, and it extends to any real $w_i > 0$. Priority scaling $u_i/w_i$
+(§2.2.2) matches it only for small ranks, since
+$\Pr(u_i/w_i < t) = w_i t \approx 1 - (1 - t)^{w_i}$; under priority scaling the
+probability of holding the minimum is therefore not $w_i/\sum_j w_j$. This does not
+affect §3, whose unbiasedness proof uses only each rank's CDF $F_i$.
 
 ### 2.2 Mathematical Formulations
 
@@ -186,7 +202,8 @@ items.{{< cite "szegedy2006dlt" >}}{{< /sidenote >}}
 
 ### 2.3 Horvitz-Thompson Estimator
 
-Let $\tau = r_{(k)}$ be the $k$-th smallest rank in the sketch. The first $k - 1$ items
+Assume $N \ge k \ge 2$ (otherwise every item is kept, with $\hat{w}_i = w_i$). Let
+$\tau = r_{(k)}$ be the $k$-th smallest rank in the sketch. The first $k - 1$ items
 ($r_{(1)}, \dots, r_{(k-1)}$) are retained as active samples, while the $k$-th item sets
 the threshold $\tau$.
 
@@ -240,7 +257,8 @@ light items.
 ### 3.1 The Leave-One-Out Threshold $\tau_{-i}$
 
 Let $r_1, \dots, r_N$ be independent continuous random variables with CDFs
-$F_i(t) = \Pr(r_i < t)$. Let $r_{(1)} < \dots < r_{(k)}$ be the sorted ranks, and set
+$F_i(t) = \Pr(r_i < t)$, and $N \ge k \ge 2$ (with fewer items every one is kept, with
+$\hat{w}_i = w_i$). Let $r_{(1)} < \dots < r_{(k)}$ be the sorted ranks, and set
 global threshold $\tau = r_{(k)}$.
 
 For any item $i$, define the **leave-one-out threshold** $\tau_{-i}$ as the $(k-1)$-th
@@ -308,11 +326,13 @@ Evaluating $F_i(t) = \Pr(r_i < t)$ for specific rank transformations:
 
 ### 3.4 Why the $k$-th Item acts as a Threshold Setter
 
-Evaluating $\hat{w}_{(k)}$ using $\tau = r_{(k)}$ would require knowing
-$r_{(k)}^{(-i)}$, which corresponds to the $(k+1)$-th rank in the full stream. Because a
-sketch of capacity $k$ discards all ranks beyond $k$, $r_{(k+1)}$ is unobserved. The
-$k$-th item must therefore serve solely as the threshold boundary $\tau$, yielding
-$\hat{w}_{(k)} = 0$.
+Let $i$ be the item at position $k$, so $r_i = r_{(k)} = \tau$. Then
+$\mathbb{I}(r_i < \tau) = 0$, and the estimator of §3.2 gives $\hat{w}_{(k)} = 0$ by
+itself: its leave-one-out threshold $\tau_{-i} = r_{(k-1)}^{(-i)} = r_{(k-1)}$ lies below
+$r_i$. Counting the $k$-th item as a sample would mean a sample of size $k$, whose
+leave-one-out threshold would be the $k$-th smallest of the other ranks,
+$r_{(k)}^{(-i)} = r_{(k+1)}$, which a sketch of capacity $k$ discards (this is the shifted
+convention of §6.5). So the $k$-th item serves only as the threshold $\tau$.
 
 ### 3.5 Pairwise Zero Covariance Property
 
@@ -332,10 +352,17 @@ $$\text{Var}(\hat{W}_Q) = \sum_{i \in Q} \text{Var}(\hat{w}_i)$$
 
 1. **$O(1)$ Branch-Light Fast-Path Rejection:** Cache $\tau = r_{(k)}$ in a dedicated
    field. Over $99\%$ of items in large streams fail $r_i < \tau$ and are rejected
-   immediately without touching heap memory.
+   immediately without touching heap memory, as long as the weights do not trend upward
+   along the stream (equal or i.i.d. weights, or items in random order; see §4.4).
 2. **IEEE-754 Bit-Level Floating Point Generation:** Construct uniform $u_i \in (0, 1)$
-   by masking 52 hash bits into the mantissa of double `1.0` (`0x3FF0000000000000`) and
-   subtracting `1.0`.
+   by ORing `z >> 12` into the mantissa of double `1.0` (`0x3FF0000000000000`), forcing
+   the lowest mantissa bit to 1, and subtracting `1.0`. 51 hash bits survive, and $u_i$ is
+   an odd multiple of $2^{-52}$ between $2^{-52}$ and $1 - 2^{-52}$: the forced bit is
+   what keeps $u_i$ from being $0$. (The crate's hash, §7.3, keeps all 52 bits on the
+   midpoint grid instead.)
+4. **Preconditions:** each `id` is offered at most once, with its weight already
+   aggregated per key (a repeated `id` is a repeated item), and weights are positive and
+   finite; `update` drops any other weight.
 3. **In-Place Heap Replacement:** Overwrite root `heap[0]` directly and run
    `sift_down(0)` instead of executing sequential `pop()` and `push()` calls.
 
@@ -378,9 +405,21 @@ impl Ord for SketchEntry {
     }
 }
 
+/// SplitMix64's finalizer, applied to the seed once, so that seeds `s` and `s + 1` do not
+/// hash `id` and `id + 1` alike.
+fn mix_seed(seed: u64) -> u64 {
+    let mut z = seed.wrapping_add(0x9E3779B97F4A7C15);
+    z = (z ^ (z >> 30)).wrapping_mul(0xBF58476D1CE4E5B9);
+    z = (z ^ (z >> 27)).wrapping_mul(0x94D049BB133111EB);
+    z ^ (z >> 31)
+}
+
+/// Each `id` is offered at most once, with its weight already aggregated per key: a
+/// repeated `id` is a repeated item, and `merge` assumes an `id` in both sketches
+/// carries the same weight (so its two copies have equal ranks and sort adjacent).
 pub struct PrioritySketch {
     k: usize,
-    seed: u64,
+    seed: u64, // mix_seed(seed): independent seeds give unrelated hashes
     threshold: f64, // Cached r_(k) for O(1) fast-path rejection
     heap: Vec<SketchEntry>,
 }
@@ -390,7 +429,7 @@ impl PrioritySketch {
         assert!(k >= 2, "Capacity k must be >= 2");
         Self {
             k,
-            seed,
+            seed: mix_seed(seed),
             threshold: f64::INFINITY,
             heap: Vec::with_capacity(k),
         }
@@ -398,7 +437,7 @@ impl PrioritySketch {
 
     #[inline(always)]
     fn hash_to_unit_float(&self, id: u64) -> f64 {
-        let mut z = id.wrapping_add(self.seed).wrapping_add(0x9E3779B97F4A7C15);
+        let mut z = (id ^ self.seed).wrapping_add(0x9E3779B97F4A7C15);
         z = (z ^ (z >> 30)).wrapping_mul(0xBF58476D1CE4E5B9);
         z = (z ^ (z >> 27)).wrapping_mul(0x94D049BB133111EB);
         z ^= z >> 31;
@@ -409,8 +448,8 @@ impl PrioritySketch {
 
     #[inline]
     pub fn update(&mut self, id: u64, weight: f64, payload: u32) {
-        if weight <= 0.0 {
-            return;
+        if !(weight > 0.0 && weight.is_finite()) {
+            return; // also drops NaN, which every comparison would let through
         }
 
         let u = self.hash_to_unit_float(id);
@@ -547,8 +586,17 @@ typedef struct {
     SketchEntry heap[];    // Flexible array member
 } PrioritySketch;
 
+/* SplitMix64's finalizer, applied to the seed once in ps_create. */
+static inline uint64_t mix_seed(uint64_t seed) {
+    uint64_t z = seed + 0x9E3779B97F4A7C15ULL;
+    z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ULL;
+    z = (z ^ (z >> 27)) * 0x94D049BB133111EBULL;
+    return z ^ (z >> 31);
+}
+
+/* seed is the mixed seed: ids are offered once each, weights aggregated per key. */
 static inline double hash_to_unit_float(uint64_t id, uint64_t seed) {
-    uint64_t z = id + seed + 0x9E3779B97F4A7C15ULL;
+    uint64_t z = (id ^ seed) + 0x9E3779B97F4A7C15ULL;
     z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ULL;
     z = (z ^ (z >> 27)) * 0x94D049BB133111EBULL;
     z ^= z >> 31;
@@ -568,7 +616,7 @@ PrioritySketch *ps_create(size_t k, uint64_t seed) {
     if (!ps) return NULL;
     ps->k = k;
     ps->len = 0;
-    ps->seed = seed;
+    ps->seed = mix_seed(seed);
     ps->threshold = INFINITY;
     return ps;
 }
@@ -601,7 +649,7 @@ static inline void sift_down(SketchEntry *restrict heap, size_t len, size_t idx)
 }
 
 void ps_update(PrioritySketch *restrict ps, uint64_t id, double weight, uint32_t payload) {
-    if (weight <= 0.0) return;
+    if (!(weight > 0.0 && isfinite(weight))) return; /* drops NaN too */
 
     double u = hash_to_unit_float(id, ps->seed);
     double rank = u / weight;
@@ -650,9 +698,17 @@ double ps_estimate_subset(const PrioritySketch *restrict ps, ps_predicate_fn pre
 
 * **Memory Usage:** $32 \times k$ bytes. For $k = 1024$, total memory is $32\text{ KB}$,
   fitting inside standard CPU L1 data caches.
-* **Stream Update Throughput:** $\sim 2.5\text{ ns/item}$ (Branch-light $O(1)$ fast rejection path).
-* **Heap Replacements:** Expected count is $\approx k \ln(N / k)$. For $N = 10^8$ items
-  and $k = 1024$, fewer than $12,000$ items trigger heap re-sorting.
+* **Stream Update Throughput:** a few ns per item, dominated by one hash and one division
+  on the fast rejection path: about 3.2 ns/item for the Rust code above with weights
+  computed on the fly, and about 4.1 ns/item with weights read from an 800 MB array
+  ($N = 10^8$, $k = 1024$, `rustc -O`, one core of a 2.2 GHz Xeon Gold 6238R; a
+  benchmark, not a crate command).
+* **Heap Replacements:** When the ranks are exchangeable along the stream (equal or i.i.d.
+  weights, or items in random order), item $j$ enters with probability $k/j$, so the
+  expected count is $k(H_N - H_k) \approx k \ln(N / k)$. For $N = 10^8$ items and
+  $k = 1024$, fewer than $12,000$ items trigger heap re-sorting. If the weights trend
+  upward along the stream, the ranks $u_i/w_i$ trend downward and there are more
+  replacements, up to one per item.
 
 
 ## 5. Sketching a Recurrence: the Colours of Bitcoin Transactions {#sec:colours}
