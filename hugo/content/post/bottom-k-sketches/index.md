@@ -2207,7 +2207,7 @@ chain, against the mean of three record-mode seeds, 1.49× for
 $\lvert\Delta\text{mean}\rvert$, 1.72× for $\lvert\Delta\text{sd}\rvert$, 1.34× for the
 largest Laplace error, 1.24× for $\Lambda_8$, 1.46× for binned $W_1$ and 1.51× for the
 band-edge KS, between 1.18× and 2.02× per stretch, with $\lvert\Delta\text{sd}\rvert$
-the least uniform (1.26× before 100M, 1.80–2.02× after 200M). It did 6.15× the
+the least uniform (1.26× before 100M, 1.75–2.02× after 200M). It did 6.15× the
 reductions (1,219,272,266 against 198,333,465) for about the same CPU time (3,951 s
 against 4,048 s of fold time), and on eval3m it multiplied the KS and $W_1$ excess over
 the single shot by 2.2–2.6×.
@@ -3337,7 +3337,7 @@ strata of $J$). Pooled over seeds, the RMS error matches the hypergeometric SD o
 | :--- | ---: | :--- | ---: | ---: | :--- |
 | `deep` | 31,969 | 128 (16) | 1.08 | 3.73 | 0.93–1.05 |
 | | | 512 (16) | 0.82 | 3.73 | 0.89–1.04 |
-| | | 1024 (64) | 2.37 | 3.23 | 0.98–1.03 |
+| | | 1024 (64) | 2.37 | 3.22 | 0.98–1.03 |
 | | | 2048 (16) | 0.99 | 3.73 | 0.93–1.01 |
 | `window` | 29,749 | 128 (16) | 0.38 | 3.48 | 0.87–1.26 |
 | | | 512 (16) | 2.22 | 3.48 | 0.94–1.29 |
@@ -3345,7 +3345,7 @@ strata of $J$). Pooled over seeds, the RMS error matches the hypergeometric SD o
 | | | 2048 (16) | 2.06 | 3.48 | 0.81–0.86 |
 | `even` | 200,021 | 128 (16) | 1.62 | 3.73 | 0.87–1.12 |
 | | | 512 (16) | 1.79 | 3.73 | 0.87–1.13 |
-| | | 1024 (64) | 2.20 | 3.23 | 0.94–1.03 |
+| | | 1024 (64) | 2.20 | 3.22 | 0.94–1.03 |
 | | | 2048 (16) | 1.52 | 3.73 | 0.92–1.02 |
 {#tab:jaccard .fullwidth caption="R3 and R3b, support=sets, the first 3M records. Strata of the exact J: (0, 0.05], (0.05, 0.2], (0.2, 0.5], (0.5, 0.9], (0.9, 1); the window has no pairs below 0.2. Largest |t| of the across-seed bias test over the strata, with its Bonferroni threshold; range over the strata of the RMS error pooled over seeds, over the hypergeometric SD."}
 
@@ -3355,8 +3355,10 @@ of its pairs together and the per-seed spread is heavy-tailed. Its stratum
 $J \in (0.9, 1)$ came out at a ratio of 0.83 with 64 seeds (ratio squared
 $0.70 \pm 0.07$); recomputed by brute force from the exact supports with 200 fresh seeds
 on 3,000 of its 26,899 pairs, the ratio squared was $0.955 \pm 0.066$ (in batches of 50
-seeds: 1.040, 1.027, 0.700, 1.053). The $k = 2048$ shortfall in the window (0.81–0.86
-over 16 seeds) is within about two standard errors of its ratio as well. Within one seed
+seeds: 1.040, 1.027, 0.700, 1.053). The $k = 2048$ shortfall in the window (ratios 0.81–0.86
+over 16 seeds; ratio squared $0.73 \pm 0.28$, $0.66 \pm 0.18$ and $0.67 \pm 0.11$, 1.0
+to 3.0 standard errors below 1) reflects the same within-window correlation across
+seeds. Within one seed
 the fraction of pairs off by more than two hypergeometric SDs was mostly 2–6% per
 stratum (extremes 0.7% and 12.5%, in the window's smallest strata).{{< sidenote >}}The
 SE that `pairs` writes per pair is the plug-in
@@ -3397,9 +3399,9 @@ $m = 256$ and $512$ with 4 each.
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | $< 0.01$ | 3,410 | $+0.014$ / 0.028 | $+0.014$ / 0.024 | $+0.008$ / 0.017 | $-0.003$ / 0.004 |
 | $[0.01, 0.05)$ | 2,553 | $+0.004$ / 0.031 | $+0.006$ / 0.024 | $+0.002$ / 0.019 | $-0.020$ / 0.023 |
-| $[0.05, 0.2)$ | 12,230 | $-0.004$ / 0.041 | $+0.002$ / 0.029 | $-0.003$ / 0.021 | $-0.121$ / 0.127 |
+| $[0.05, 0.2)$ | 12,230 | $-0.004$ / 0.041 | $+0.002$ / 0.028 | $-0.003$ / 0.021 | $-0.121$ / 0.127 |
 | $[0.2, 0.5)$ | 13,376 | $+0.002$ / 0.035 | $+0.003$ / 0.025 | $-0.003$ / 0.019 | $-0.268$ / 0.275 |
-| $[0.5, 0.9)$ | 1,050 | $+0.006$ / 0.026 | $+0.006$ / 0.019 | $-0.003$ / 0.015 | $-0.430$ / 0.434 |
+| $[0.5, 0.9)$ | 1,050 | $+0.006$ / 0.026 | $+0.006$ / 0.019 | $-0.002$ / 0.015 | $-0.430$ / 0.434 |
 | $\ge 0.9$ | 21 | $+0.000$ / 0.002 | $+0.000$ / 0.001 | $-0.000$ / 0.001 | $-0.017$ / 0.032 |
 {#tab:jw .fullwidth caption="R3, the window selection (32,640 pairs, records 2,999,685 to 2,999,999): bias / RMS error of the weighted Jaccard similarity by stratum of its exact value. L1 estimates averaged over 4, 4 and 8 seeds; the varopt plug-in is the one production run's (k = 512, seed 1)."}
 
@@ -3424,7 +3426,8 @@ and $0 < J < 1$ (the others are exact); 64 seeds at $k = 1024$, 16 at $k = 128$,
 and 2048. Measured over predicted runs from 0.82 to 1.15 across the bins. (b) The mean of
 $\hat J - J$ in the same bins, with $\pm 2$ standard errors across seeds, in units of
 $10^{-2}$, the four $k$ slightly offset; the largest $\lvert t \rvert$ is 2.87
-($k = 1024$), against a Bonferroni threshold of 3.0 for 13 bins. (c) The weighted
+($k = 1024$), against a Bonferroni threshold of 3.54 for 13 bins at a family-wise 0.01 (3.00 at
+0.05). (c) The weighted
 similarity over the 564,525 pairs of all three selections, in 11 bins of the exact $J_w$
 (the first, $J_w < 10^{-3}$, at the left edge): the mean $\hat J_w$ of the L1 store at
 $m = 256$ and 512 (4 seeds each) and 1024 (8 seeds), with $\pm 2$ standard errors across
@@ -3519,7 +3522,8 @@ every 10M bucket after the first 60M. The finite-population factor shrinks as th
 supports fill their universe, so the theory RSE falls with depth: over the full records
 its median is 1.21% in the first 100M, 0.92% over the chain (10th and 90th percentiles
 0.82% and 1.19%) and 0.81% in the last 78.6M. $\hat n_M$, over $2^{20}$, has a median
-RSE of 2.25% over the chain, about 2.4 times that of $\hat n$.
+RSE of 2.25% over the chain, about 2.5 times the median RSE of $\hat n$ (the median
+per-record ratio is 2.4).
 
 **Matrices.** R5 folded the stores of the selected records over the whole chain, and R6
 read the production `varopt` sketches of the same records out of
@@ -3578,7 +3582,7 @@ The checks on these pairs (`r7_checks.py`):
   colour; so $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
   should hold in at least 99% of the pairs. Read for the 1,280 selected records (a
   streaming pass over the 1.67 TB file that took 3 h 42 min), it holds in
-  99.986% of the 130,816 `chain` pairs at $m = 1024$, in 100%, 99.97% and 99.997% of the
+  99.985% of the 130,816 `chain` pairs at $m = 1024$, in 100%, 99.97% and 99.997% of the
   32,640 pairs of `w2013`, `w2017` and `w2022`, and likewise at $m = 512$ and in `f64`;
   every band line's transaction matched the selection. The bound is far from tight
   inside a window: the median of $\widehat{\mathrm{TV}} / \mathrm{TV}_{1024}$ (over
@@ -3610,7 +3614,7 @@ small early supports (1,250 to 2,400 blocks, in blocks 75,115 to 116,905) agains
 ones (from block 554,576), where no sampled element of the older support ranks below
 the newer one's threshold. The fallback $\hat J \hat n_u / \hat n_A$ is 0 in all of them,
 since $\hat J$ is, and 0 would read as "disjoint", so they are drawn hatched instead.
-$\hat J$ has percentiles 0.016, 0.48 and 0.90 (p10, p50, p90), and its median by block
+$\hat J$ has percentiles 0.016, 0.48 and 0.89 (p10, p50, p90), and its median by block
 gap tracks the ratio of the smaller count to the larger (0.989 against 0.990 under
 5,000 blocks apart, 0.413 against 0.412 beyond 60,000): nested pairs, as the
 containment says.
@@ -3865,7 +3869,7 @@ $$
     existed then, also as a flat sketch. Its 512 blocks are a sample of the whole
     chain: binned, it puts mass in 498 of the 1,023 bands where the colour has some,
     and its total variation distance from the binned colour is 0.42, yet at every one of
-    the 1,024 band edges its CDF is within 0.0025 of the exact one, and its $W_1$ is
+    the 1,024 band edges its CDF is within 0.0026 of the exact one (band-edge KS 0.00254), and its $W_1$ is
     524 blocks, under four days.
 
 $$
@@ -3946,7 +3950,8 @@ Two small Rust programs, outside the crate, read the files once each.
   `colors.bands1024.zst`, already binned in the same bands, with 16 threads parsing the
   text: 4 h 22 min and 0.2 GB of memory, with zstd's single-threaded decompression as the limit. Both runs kept the same records in every row.
 - **A cross-check of the reader.** On the first 3M records, a version that reads the
-  text of `sketch decode` agreed with `surface-aggb` to $1.3 \times 10^{-11}$.
+  text of `sketch decode` agreed with `surface-aggb` to $10^{-15}$ in the averaged surface
+  ($1.3 \times 10^{-11}$ in the raw sums).
 
 ### 12.2 The surface
 
@@ -4070,7 +4075,7 @@ other up to 2017:
   only once it moves, and many of the earliest coins never have: lost keys, or coins
   held since the first year, among them those of the earliest miners.
 - **The middle is well mixed.** Coins minted from 2012 to about two years before the
-  year spent sit near their share, between about 1 and 2 times it.
+  year spent sit near their share, between about 0.8 and 2 times it.
 - **The last months are spent most.** The coins of the last month before the year get
   2.8 to 6.2 times their share, and the curves rise toward it over the year before. In
   2022, the coins minted in the year before, 2021, are 1.7% of the supply and 5.9% of a
