@@ -479,6 +479,18 @@ broder1997resemblance:
   doi: "10.1109/SEQUEN.1997.666900"
   url: "https://doi.org/10.1109/SEQUEN.1997.666900"
 
+carpenter1999improved:
+  type: article
+  author: "James Carpenter and Peter Clifford and Paul Fearnhead"
+  title: "Improved particle filter for nonlinear problems"
+  journal: "IEE Proceedings – Radar, Sonar and Navigation"
+  volume: "146"
+  number: "1"
+  pages: "2–7"
+  year: "1999"
+  doi: "10.1049/ip-rsn:19990255"
+  url: "https://doi.org/10.1049/ip-rsn:19990255"
+
 chao1982general:
   type: article
   author: "M. T. Chao"
@@ -490,6 +502,18 @@ chao1982general:
   year: "1982"
   doi: "10.1093/biomet/69.3.653"
   url: "https://doi.org/10.1093/biomet/69.3.653"
+
+cohen1997size:
+  type: article
+  author: "Edith Cohen"
+  title: "Size-estimation framework with applications to transitive closure and reachability"
+  journal: "Journal of Computer and System Sciences"
+  volume: "55"
+  number: "3"
+  pages: "441–453"
+  year: "1997"
+  doi: "10.1006/jcss.1997.1534"
+  url: "https://doi.org/10.1006/jcss.1997.1534"
 
 cohen2007summarizing:
   type: inproceedings
@@ -563,6 +587,16 @@ cohen2011structure:
   doi: "10.14778/3402707.3402721"
   url: "https://doi.org/10.14778/3402707.3402721"
 
+delmoral2004feynman:
+  type: book
+  author: "Pierre Del Moral"
+  title: "Feynman-Kac Formulae: Genealogical and Interacting Particle Systems with Applications"
+  publisher: "Springer"
+  series: "Probability and Its Applications"
+  year: "2004"
+  doi: "10.1007/978-1-4684-9393-1"
+  url: "https://doi.org/10.1007/978-1-4684-9393-1"
+
 duffield2007priority:
   type: article
   author: "Nick Duffield and Carsten Lund and Mikkel Thorup"
@@ -577,6 +611,18 @@ duffield2007priority:
   doi: "10.1145/1314690.1314696"
   url: "https://doi.org/10.1145/1314690.1314696"
 
+fearnhead2003online:
+  type: article
+  author: "Paul Fearnhead and Peter Clifford"
+  title: "On-line inference for hidden Markov models via particle filters"
+  journal: "Journal of the Royal Statistical Society: Series B (Statistical Methodology)"
+  volume: "65"
+  number: "4"
+  pages: "887–899"
+  year: "2003"
+  doi: "10.1111/1467-9868.00421"
+  url: "https://doi.org/10.1111/1467-9868.00421"
+
 flajolet2007hyperloglog:
   type: inproceedings
   author: "Philippe Flajolet and Éric Fusy and Olivier Gandouet and Frédéric Meunier"
@@ -588,6 +634,30 @@ flajolet2007hyperloglog:
   year: "2007"
   doi: "10.46298/dmtcs.3545"
   url: "https://doi.org/10.46298/dmtcs.3545"
+
+gerber2015sequential:
+  type: article
+  author: "Mathieu Gerber and Nicolas Chopin"
+  title: "Sequential quasi Monte Carlo"
+  journal: "Journal of the Royal Statistical Society: Series B (Statistical Methodology)"
+  volume: "77"
+  number: "3"
+  pages: "509–579"
+  year: "2015"
+  doi: "10.1111/rssb.12104"
+  url: "https://doi.org/10.1111/rssb.12104"
+
+gerber2019negative:
+  type: article
+  author: "Mathieu Gerber and Nicolas Chopin and Nick Whiteley"
+  title: "Negative association, ordering and convergence of resampling methods"
+  journal: "The Annals of Statistics"
+  volume: "47"
+  number: "4"
+  pages: "2236–2260"
+  year: "2019"
+  doi: "10.1214/18-AOS1746"
+  url: "https://doi.org/10.1214/18-AOS1746"
 
 horvitz1952generalization:
   type: article
@@ -631,6 +701,30 @@ ioffe2010improved:
 # ISBN 0-201-89684-2") and the publisher's
 # https://www.informit.com/store/art-of-computer-programming-volume-2-seminumerical-9780201896848
 # (ISBN-13 978-0-201-89684-8). Algorithm P (Shuffling) is in section 3.4.2.
+jowhari2011tight:
+  type: inproceedings
+  author: "Hossein Jowhari and Mert Sağlam and Gábor Tardos"
+  title: "Tight bounds for Lp samplers, finding duplicates in streams, and related problems"
+  booktitle: "Proceedings of the 30th ACM SIGMOD-SIGACT-SIGART Symposium on Principles of Database Systems"
+  series: "PODS '11"
+  pages: "49–58"
+  publisher: "Association for Computing Machinery"
+  year: "2011"
+  doi: "10.1145/1989284.1989289"
+  url: "https://doi.org/10.1145/1989284.1989289"
+
+kitagawa1996monte:
+  type: article
+  author: "Genshiro Kitagawa"
+  title: "Monte Carlo filter and smoother for non-Gaussian nonlinear state space models"
+  journal: "Journal of Computational and Graphical Statistics"
+  volume: "5"
+  number: "1"
+  pages: "1–25"
+  year: "1996"
+  doi: "10.1080/10618600.1996.10474692"
+  url: "https://doi.org/10.1080/10618600.1996.10474692"
+
 knuth1997taocp2:
   type: book
   author: "Donald E. Knuth"

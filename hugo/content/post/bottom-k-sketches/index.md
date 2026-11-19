@@ -727,7 +727,8 @@ bottom-$k$. The sketch that won is **not** literally a bottom-$k$ sketch. It is
 VarOpt$_k$ with its light items chosen by *systematic* sampling in block order: a
 threshold sampler, the sibling of the priority sampling of §2 rather than one of its
 members. The literal weighted bottom-$k$ sketch of §2 was built too (`prio` below) and
-measured beside it; it lost by a factor of 6 to 21 at the same size (§8.4). Section 6
+measured beside it; it lost by a factor of 6 to 21 at the same size (§8.4). Section 5.5
+says which of what follows is known and which is new. Section 6
 proves what each variant guarantees, section 7 shows the code, section 8 the
 measurements, and the reasons the threshold sampler wins run through all three. Section
 10 turns to two questions that no sketch of a colour answers: from how many blocks a
@@ -849,6 +850,79 @@ Three consequences shape everything below.
    that needs independent parents fails here; the ones below use linearity and
    conditional expectations only.
 
+### 5.5 What is known and what is new {#sec:novelty}
+
+The tools of sections 6 and 10 are known. What is new is the problem they are put to and
+a few results that come from putting them together. Here is the line between the two, so
+that the proofs below are read for what they are. "New" means that a search of the
+literature at review time found no earlier statement, not that none exists.
+
+**Known.**
+
+- *The reduction.* VarOpt$_k$ with its lights chosen systematically
+  ({{< xref "def:varopt" "full" >}}, {{< xref "thm:varopt" "full" >}}) is a classical
+  design of survey sampling (Madow, Chao). It is the VarOpt$_k$ of Cohen et al. with one
+  of their requirements traded for the block order. In particle filtering it is the
+  *optimal resampling* of Fearnhead and Clifford. Its bound on every cut, point 5, is
+  the interval property of systematic sampling that Cohen, Cormode and Duffield set
+  beside structure-aware VarOpt.{{< cite "madow1949theory,chao1982general,cohen2011efficient,fearnhead2003online,cohen2011structure" >}}
+  {{< xref "cor:bv" "full" >}} is summation by parts.
+- *Unbiasedness and the error decomposition.* {{< xref "thm:dag" "full" >}} is the tower
+  property. {{< xref "thm:decomp" "full" >}} and {{< xref "cor:orth" "full" >}} split
+  the error into the noise of each reduction, as the error of a particle filter is split
+  into the noise of its resampling steps.{{< cite "delmoral2004feynman" >}} The
+  difference is that the Markov kernels are replaced by the fixed path coefficients
+  $\alpha$ of the DAG.
+- *Order against independence.* In one dimension it is known that ordering the particles
+  before a stratified or systematic resampling beats the Monte Carlo rate
+  $N^{-1/2}$.{{< cite "gerber2015sequential,gerber2019negative" >}}
+  {{< xref "prop:poisson" "full" >}} is the textbook variance of Poisson sampling, and
+  {{< xref "prop:prio-raw" "full" >}} is the unbiasedness of priority sampling
+  passed through {{< xref "thm:dag" "full" >}}.
+- *The support.* Folding bottom-$k$ sketches exactly through a graph
+  ({{< xref "lem:kmv-union" "full" >}}, {{< xref "lem:kmv-sub" "full" >}},
+  {{< xref "thm:kmv-dag" "full" >}}) is Cohen's size estimation for reachability
+  sets.{{< cite "cohen1997size" >}} The count estimator of
+  {{< xref "prop:kmv-count" "full" >}} is the one of inverse sampling without
+  replacement. The Jaccard estimate of {{< xref "prop:kmv-jaccard" "full" >}} is
+  Broder's and Beyer et al.'s, and $J_w = (1 - \mathrm{TV})/(1 + \mathrm{TV})$
+  ({{< xref "lem:jw-tv" "full" >}}) is an identity. The Cauchy projection of
+  {{< xref "prop:l1-linear" "full" >}} is Indyk's, and it follows the recurrence because
+  a linear sketch commutes with any linear map.
+
+**New.**
+
+- *The problem.* The post sketches a linear recurrence of probability distributions over
+  a DAG: the colour of every transaction of the chain, the haircut taint of every
+  coinbase at once. It does so by an unbiased, mass-preserving reduction at every node
+  with fresh randomness, and adds sketches of the support and of the L1 distance for the
+  questions that reduction cannot answer (§10.2).
+- *The rate through the recursion*, {{< xref "cor:rate" "full" >}}. Through any DAG of
+  convex mixtures, every functional of bounded variation has a root-mean-square error at
+  most $V(g)\sqrt{A_t}/k$ at every node, with $A_t \le 1 + d_t$. Independent inclusion
+  gives only $\sqrt{A_t/k}$. The result is modest, and its proof is elementary once the
+  known pieces are in place. Two things it does not settle are measured instead. The
+  error stays flat with depth (§8.3), an open question (§13). Priority sampling and
+  VarOpt with lights in random order fall at about $k^{-1/2}$ at depth (§6.4, §8.4).
+- *The universe of each count*, §10.4. Every block of a support is at most $\beta_t$,
+  and $\beta_t$ depends on the chain and not on the permutation, so $[0, \beta_t]$ is a
+  valid universe. That brings a finite-population factor. On the deepest supports of the
+  first 31.2M records it halves the theoretical error of a count that stays exactly
+  unbiased; measured over 16 seeds, the error falls to 57%. The result is small but
+  practical.
+- *Three minor lemmas.*
+  - {{< xref "lem:kmv-weights" "full" >}}: ranks that depend on the block alone fold
+    the colour weights of the kept blocks exactly.
+  - {{< xref "prop:harm" "full" >}}: the harmonic cap of overlapping threshold samples.
+  - {{< xref "prop:no-sum-merge" "full" >}}: samplers with ranks $E_b/x_b$, P-MinHash
+    among them, have no merge under sums.
+- *The measurements.*
+  - On the 2022 chain, VarOpt in block order beats the literal bottom-$k$ sketch by 6
+    to 21 times at the same size.
+  - Its error is flat in depth over 778M records.
+  - Every result of a run can be recomputed from files on disk by a mode of the crate,
+    and what cannot is labelled.
+
 
 ## 6. Proofs {#sec:proofs}
 
@@ -891,7 +965,12 @@ Kaplan, Lund and Thorup{{< cite "cohen2009stream,cohen2011efficient" >}}), with 
 lights chosen by one systematic pass along the block axis instead of a sequence of
 random evictions.{{< sidenote >}}One random start along the cumulated sizes is the
 classical systematic design of survey sampling with unequal probabilities, usually
-traced to Madow.{{< cite "madow1949theory" >}}{{< /sidenote >}} Systematic selection
+traced to Madow.{{< cite "madow1949theory" >}} Particle filters use it as *systematic
+resampling*.{{< cite "kitagawa1996monte,carpenter1999improved" >}}{{< /sidenote >}}
+Fearnhead and Clifford's optimal resampling for particle filters works the same way. It
+solves for the same threshold, keeps the heavies at their weight, resamples the lights
+at weight $\tau$ by a stratified pass, and is optimal among unbiased resampling schemes
+for a squared-error loss.{{< cite "fearnhead2003online" >}} Systematic selection
 gives up one property that Cohen et al. include in their definition of VarOpt$_k$: no
 positive covariances between the estimates.{{< sidenote >}}Cohen, Cormode and Duffield
 make the trade explicit for ordered keys: systematic sampling keeps the number of
@@ -1142,6 +1221,11 @@ Expand the square; the $\alpha$ are constants. (Every term is bounded, by
 {{< xref "cor:bv" "full" >}}, so the expectations exist.)
 {{< /proof >}}
 
+The same split, of the error into the orthogonal noises of the resampling steps, is the
+standard analysis of particle filters.{{< cite "delmoral2004feynman" >}} There the noise
+is carried forward by Markov kernels; here it is carried by the fixed coefficients
+$\alpha_{t,r}$ of the DAG.
+
 {{< proposition label="prop:cutvar" >}}
 For VarOpt in record mode and a cut $x$, let $f_r(x)$ be the fractional part of $S_{j}$
 at the cut in reduction $r$. Conditionally on $\mathcal{F}_{r-1}$, the cut error
@@ -1266,7 +1350,10 @@ The two estimators differ in how the lights are spread. Systematic sampling take
 exactly one light per interval of $\tau$ of light mass along the block axis: a
 stratified sample whose strata are consecutive slices of the colour. Its errors cannot
 pile up along the axis; at every cut they are bounded by one stratum's mass. Independent
-inclusion lets them pile up, as a random walk does.
+inclusion lets them pile up, as a random walk does. Sequential Monte Carlo knows this
+gain: ordering the particles before a stratified or systematic resampling beats the
+$N^{-1/2}$ rate.{{< cite "gerber2015sequential,gerber2019negative" >}} What
+{{< xref "cor:rate" "full" >}} adds is that the gain composes through a DAG of mixtures.
 
 {{< remark >}}
 What is proved for the recursion is the rate: {{< xref "cor:rate" "full" >}} bounds the
@@ -2690,6 +2777,9 @@ read it and never changes which colour an input reads, and a BIP-30 duplicate di
 the older colour as in `run()`, the same for the support as for the colour.
 {{< /proof >}}
 
+This is Cohen's size-estimation framework for reachability, in which min-rank sketches
+of the sets reachable from every node of a graph are computed by merges along its
+edges.{{< cite "cohen1997size" >}} Here the sets are a transaction's ancestor blocks.
 So the fold has **no recursion error**. The sketch of a record at any depth is the
 one-shot bottom-$k$ of its support, a deterministic function of $\rho$ and $S_t$, and
 every estimate read from it has exactly the law of a one-shot KMV estimate. This is the
@@ -3025,7 +3115,11 @@ $E_b / \max(x_b, y_b) = \min(E_b/x_b, E_b/y_b)$, so the bottom-$k$ of $\max(x, y
 bottom-$k$ of the two samples merged. A union is a maximum of indicator vectors, and the
 support of a positive mixture is the support of the maximum, which is why the KMV of
 the support folds exactly and the weighted samples do not. Linearity is what survives
-the sum.
+the sum. Weighted *sampling* under sums is possible too, but only from a linear sketch.
+An $L_1$ sampler draws a block with probability about $x_b / \lVert x \rVert_1$ from a
+linear sketch of $x$, so it folds through the recurrence as $\Pi$
+does.{{< cite "jowhari2011tight" >}} Two such samplers, however, do not collide with
+probability $J_w$, and for $J_w$ the L1 distance is all that is needed.
 
 ### 10.7 Implementation {#sec:kmv-impl}
 
@@ -4463,7 +4557,10 @@ error can be a sizable fraction of the value.
   measured, is not proved (§6.3). The control for the stratification explanation, VarOpt
   with its lights chosen in random order, was run only with the design-phase prototype
   on a prefix of the chain (§6.4); repeating it with the final binary over the whole
-  chain is open.
+  chain is open. So is a direct look at the bound. On the first 3M records, where the
+  exact colours are known, $A_t$ and $\sum_r \alpha_{t,r}^2 \tau_r^2$ could be computed
+  record by record. That would show whether the error stays flat because these sums
+  stay small under mixing, or because the errors of different reductions cancel.
 - **Literal bottom-$k$ against VarOpt.** The literal weighted bottom-$k$ sketch of
   sections 2–4 is `prio`, and here it loses by 6–21×; the exponential (PPSWOR) ranks of
   §2.2 were tried in the design phase and were no different from priority ranks. Whether
@@ -4546,6 +4643,18 @@ error can be a sizable fraction of the value.
   Cohen et al.{{< cite "cohen2009stream" >}} (one random eviction per arrival) draws
   exactly the same distribution of samples, while the systematic scheme of §6.1 keeps
   its inclusion probabilities but not its joint distribution.
+- **Resampling in particle filters.** {{< cite keys="kitagawa1996monte" mode="text" >}}
+  and {{< cite keys="carpenter1999improved" mode="text" >}} introduced stratified and
+  systematic resampling. {{< cite keys="fearnhead2003online" mode="text" >}} keep the
+  particles above a threshold and resample the rest at the threshold's weight. That is
+  the reduction of §6.1, which they prove optimal among unbiased resampling schemes.
+  {{< cite keys="delmoral2004feynman" mode="text" >}} analyses particle systems through
+  the decomposition of their error into the noises of the resampling steps, the analogue
+  of §6.3.
+  {{< cite keys="gerber2015sequential" mode="text" >}} beat the Monte Carlo rate by
+  ordering the particles and using quasi-random points, and
+  {{< cite keys="gerber2019negative" mode="text" >}} prove that ordering speeds up
+  stratified resampling. That is the gain of the block order in §6.4.
 - **Order sampling.** {{< cite keys="rosen1997asymptotic" mode="text" >}} studies the
   designs that give every unit an independent random ranking variable and keep the $n$
   smallest: both rank families of §2.2 are of this kind. With the uniform ranks
@@ -4566,6 +4675,8 @@ error can be a sizable fraction of the value.
   estimators by rank conditioning, the argument of §3.
   {{< cite keys="thorup2013bottom" mode="text" >}} shows how little independence the
   hash function needs, for bottom-$k$ and for priority sampling alike.
+  {{< cite keys="cohen1997size" mode="text" >}} folds min-rank sketches through a graph
+  to estimate the size of every node's reachability set, the fold of §10.3.
 - **Counting distinct elements.** {{< cite keys="baryossef2002counting" mode="text" >}}
   keep the $k$ smallest hash values; {{< cite keys="beyer2007synopses" mode="text" >}}
   name the KMV synopsis, prove the $(k - 1)/v_{(k)}$ estimator of §1.2 unbiased, and
@@ -4596,7 +4707,9 @@ error can be a sizable fraction of the value.
   and therefore follow any sequence of updates, including the mixtures of §5.1;
   {{< cite keys="li2007nonlinear" mode="text" >}} study estimators of the scale from
   Cauchy projections, among them the maximum likelihood estimator of §10.6, and their
-  tail bounds.
+  tail bounds. {{< cite keys="jowhari2011tight" mode="text" >}} give $L_p$ samplers,
+  linear sketches from which a coordinate can be drawn in proportion to its weight, the
+  weighted sampling that does compose under sums (§10.6).
 - **Martingales.** {{< cite keys="williams1991probability" mode="text" >}} covers what
   §6.2–6.3 use: conditional expectation, the tower property, and the orthogonality of
   martingale differences.
