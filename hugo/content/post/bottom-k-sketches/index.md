@@ -105,13 +105,22 @@ Membership is read off exactly: an element of $S(A \cup B)$ that belongs to $A$ 
 than $k$ elements of $A$ hashed below it, so it is in $S(A)$. When $|A \cup B| > k$,
 $S(A \cup B)$ is a uniformly random $k$-subset of $A \cup B$, the count in the numerator
 is hypergeometric, and $\hat J$ is exactly unbiased, with variance
-$J(1 - J)/k \cdot (|A \cup B| - k)/(|A \cup B| - 1) \le 1/(4k)$. When both sketches hold
+
+$$
+\operatorname{Var}(\hat J) = \frac{J(1 - J)}{k} \cdot \frac{|A \cup B| - k}{|A \cup B| - 1} \le \frac{1}{4k}.
+$$
+
+When both sketches hold
 their whole sets (each set has at most $k$ items), compute $J$ exactly from them: the
 formula above is then still an estimate whenever the union exceeds $k$ ([§10.5](#sec:kmv-pairs)).
 
 The intersection size is then estimated as
-$|A \cap B| \approx \hat{J}(A, B) \cdot \hat{N}_{A \cup B}$, consistently but not
-unbiasedly, and the *containment* $|A \cap B| / |A|$ by the elements of $S(A)$ that hash
+
+$$
+|A \cap B| \approx \hat{J}(A, B) \cdot \hat{N}_{A \cup B},
+$$
+
+consistently but not unbiasedly, and the *containment* $|A \cap B| / |A|$ by the elements of $S(A)$ that hash
 at or below the $k$-th hash of $S(B)$ (all of $S(A)$ when $S(B)$ holds the whole of
 $B$): the fraction of them found in $S(B)$. That $k$-th element belongs to $B$, so when
 it is also in $A$ it is a sure hit, which biases the fraction up by up to about
@@ -165,7 +174,7 @@ $-\ln(1 - \min_j h(x_i, j)) \sim \text{Exp}(w_i)$, which is also the law of
 $-\ln(u_i)/w_i$, and it extends to any real $w_i > 0$. Priority scaling $u_i/w_i$
 ([§2.2.2](#sec:method-b-priority-sampling)) matches it only for small ranks, since
 $\Pr(u_i/w_i < t) = w_i t \approx 1 - (1 - t)^{w_i}$; under priority scaling the
-probability of holding the minimum is therefore not $w_i/\sum_j w_j$. This does not
+probability of holding the minimum is therefore not $w_i/\sum_{j \in S} w_j$. This does not
 affect [§3](#sec:mathematical-proof-unbiasedness), whose unbiasedness proof uses only each rank's CDF $F_i$.
 
 ### 2.2 Mathematical Formulations {#sec:mathematical-formulations}
@@ -750,7 +759,7 @@ Number the blocks of the chain $0, 1, \dots, L - 1$, with $L = 762{,}261$ for 20
 polynomial
 
 $$
-C_t = \sum_{b} c_t(b)\, x^{b}, \qquad c_t(b) \ge 0, \quad \sum_b c_t(b) = 1,
+C_t = \sum_{b=0}^{L-1} c_t(b)\, x^{b}, \qquad c_t(b) \ge 0, \quad \sum_{b=0}^{L-1} c_t(b) = 1,
 $$
 
 where $c_t(b)$ is the fraction of $t$'s value that was minted in block $b$. A coinbase
@@ -759,7 +768,7 @@ $i = 1, \dots, n$ with amounts $a_i$, taken from earlier transactions $p_1, \dot
 and its colour is the amount-weighted mixture of theirs:
 
 $$
-C_t = \sum_{i=1}^{n} s_{t,i}\, C_{p_i}, \qquad s_{t,i} = \frac{a_i}{\sum_{j} a_j} \label{eq:recurrence}
+C_t = \sum_{i=1}^{n} s_{t,i}\, C_{p_i}, \qquad s_{t,i} = \frac{a_i}{\sum_{j=1}^{n} a_j} \label{eq:recurrence}
 $$
 
 with equal shares $s_{t,i} = 1/n$ when the amounts sum to zero. The shares are
@@ -776,9 +785,13 @@ pass. The repository's main binary does exactly that with `--weighted` (the loop
 `src/main.rs`'s `run()`).
 
 A colour is read through linear functionals: its mean block and its spread, its CDF
-$F_t(x) = \sum_{b \le x} c_t(b)$ ("how much of this is older than block $x$"), and its
-Laplace values $\Lambda_s(C_t) = \sum_b c_t(b)\, e^{-s b / L}$ at
-$s \in \{0.5, 1, 2, 4, 8, 16, 32\}$. All of these are on disk, computed exactly, for
+("how much of this is older than block $x$") and its Laplace values,
+
+$$
+F_t(x) = \sum_{b=0}^{x} c_t(b), \qquad \Lambda_s(C_t) = \sum_{b=0}^{L-1} c_t(b)\, e^{-s b / L},
+$$
+
+at $s \in \{0.5, 1, 2, 4, 8, 16, 32\}$. All of these are on disk, computed exactly, for
 every transaction of the chain (`colors.laplace.zst`, `colors.moments.zst`, and the
 1024-band binned colours `colors.bands1024.zst`), and they are what the sketches are
 measured against in [section 8](#sec:results).
@@ -828,7 +841,7 @@ as the recurrence goes deeper into the chain.
 In sections [1](#sec:introduction-bottom-k-sketches)–[4](#sec:high-performance-implementations) a merge is a union, $S(A \cup B) = \text{bottom-}k(S(A) \cup S(B))$, and
 it is exact because an item has the same weight in $A$, in $B$ and in $A \cup B$. Here
 the operation is a *linear combination*: the child's weight of block $b$ is
-$\sum_i s_i\, c_{p_i}(b)$, a sum of weights that may each be present in one parent's
+$\sum_{i=1}^{n} s_{t,i}\, c_{p_i}(b)$, a sum of weights that may each be present in one parent's
 sketch and absent from another's. And the parents overlap heavily. Counted over records
 1.4–1.5M of the chain by a prototype of the design phase (not a crate run), 97% of the
 terms a merge writes arrive in runs, the one-sided
@@ -928,9 +941,13 @@ literature at review time found no earlier statement, not that none exists.
 
 Throughout this section a reduction acts on a vector of *candidates*
 $v = (v_b)_{b \in B}$ over a set $B = \{b_1 < b_2 < \dots < b_n\}$ of blocks, with every
-$v_b > 0$, total $W = \sum_b v_b$ and $n > k \ge 1$. In the recurrence $W = 1$ (record
-mode, [§6.2](#sec:unbiased)). For a block $x$ the *cut* at $x$ is $F(x) = \sum_{b \le x} v_b$, and hats
-denote the reduced vector: $\hat v_b$, $\hat F(x) = \sum_{b \le x} \hat v_b$.
+$v_b > 0$, total $W = \sum_{b \in B} v_b$ and $n > k \ge 1$. In the recurrence $W = 1$
+(record mode, [§6.2](#sec:unbiased)). Hats denote the reduced vector $\hat v_b$, and for a
+block $x$ the *cut* at $x$ and its estimate are
+
+$$
+F(x) = \sum_{\substack{b \in B \\ b \le x}} v_b, \qquad \hat F(x) = \sum_{\substack{b \in B \\ b \le x}} \hat v_b .
+$$
 
 A word on notation, because some letters change meaning from sections [2](#sec:weighted-extension-priority-sampling)–[3](#sec:mathematical-proof-unbiasedness). There $\tau$
 is a threshold on *ranks* $u/w$, small ranks are kept, and a kept item is carried at
@@ -946,10 +963,10 @@ parameter of [§5.1](#sec:colour-def).
 ### 6.1 VarOpt$_k$ by systematic threshold sampling {#sec:varopt}
 
 {{< definition label="def:varopt" >}}
-Let $\tau > 0$ solve $\sum_{b} \min(1, v_b/\tau) = k$. Call $b$ *heavy* if $v_b > \tau$
+Let $\tau > 0$ solve $\sum_{b \in B} \min(1, v_b/\tau) = k$. Call $b$ *heavy* if $v_b > \tau$
 and *light* otherwise; let $H$ be the heavy set, $h = \lvert H \rvert$, and
 $\ell_1 < \dots < \ell_m$ the lights in block order. Put $S_0 = 0$ and
-$S_j = \tau^{-1} \sum_{i \le j} v_{\ell_i}$. Draw $U$ uniform on $(0, 1)$, and keep
+$S_j = \tau^{-1} \sum_{i=1}^{j} v_{\ell_i}$ for $j = 1, \dots, m$. Draw $U$ uniform on $(0, 1)$, and keep
 light $\ell_j$ if and only if $\lfloor U + S_j \rfloor > \lfloor U + S_{j-1} \rfloor$.
 The output is
 
@@ -992,13 +1009,13 @@ is light, the lights hold exactly $(k - h)\tau$ of the mass, and $\tau \le W / k
 {{< /lemma >}}
 
 {{< proof >}}
-Let $f(t) = \sum_b \min(1, v_b/t)$. It is continuous and nonincreasing, equal to $n > k$
+Let $f(t) = \sum_{b \in B} \min(1, v_b/t)$. It is continuous and nonincreasing, equal to $n > k$
 for $t \le \min_b v_b$, strictly decreasing for $t > \min_b v_b$ (at least one term is
 $v_b/t$ there), and tends to $0$. So $f(t) = k$ has exactly one solution, and it lies
-above $\min_b v_b$. At $t = \tau$, $f(\tau) = h + \tau^{-1}\sum_{\text{light}} v_b = k$.
+above $\min_b v_b$. At $t = \tau$, $f(\tau) = h + \tau^{-1}\sum_{j=1}^{m} v_{\ell_j} = k$.
 If $h = k$ the light sum would be $0$, so there would be no lights and $n = h = k$, a
 contradiction; hence $h \le k - 1$, a light exists, and
-$\sum_{\text{light}} v_b = (k - h)\tau$. Finally $f(W/k) \le \sum_b v_b k / W = k < n$,
+$\sum_{j=1}^{m} v_{\ell_j} = (k - h)\tau$. Finally $f(W/k) \le \sum_{b \in B} v_b k / W = k < n$,
 so $W/k > \min_b v_b$ lies where $f$ is strictly decreasing; if $\tau > W/k$ we would
 have $k = f(\tau) < f(W/k) \le k$. Hence $\tau \le W/k$.
 {{< /proof >}}
@@ -1011,8 +1028,13 @@ Under {{< xref "def:varopt" "full" >}}:
    $\hat v_b = v_b / \pi_b$ when kept: every estimate is a Horvitz–Thompson weight,
    equal to $v_b$ or to $\tau$;
 3. $\mathbb{E}[\hat v_b] = v_b$ for every $b$;
-4. $\sum_b \hat v_b = W$ for every value of $U$: the mass is preserved exactly;
-5. for every cut $x$, $\hat F(x) - F(x) = \tau\,(\lfloor U + S_{j} \rfloor - S_{j})$,
+4. $\sum_{b \in B} \hat v_b = W$ for every value of $U$: the mass is preserved exactly;
+5. for every cut $x$,
+
+   $$
+   \hat F(x) - F(x) = \tau\,(\lfloor U + S_{j} \rfloor - S_{j}),
+   $$
+
    where $j$ is the number of lights $\le x$; hence
    $\tau(U - 1) < \hat F(x) - F(x) \le \tau U$ and
    $\lvert \hat F(x) - F(x) \rvert < \tau$, deterministically.
@@ -1033,14 +1055,21 @@ $\lambda$. So $\pi_{\ell_j} = v_{\ell_j}/\tau$, and $v/\pi = \tau$.
 (3) For a heavy, $\hat v_b = v_b$. For a light,
 $\mathbb{E}[\hat v_b] = \tau \cdot v_b / \tau = v_b$.
 
-(4)
-$\sum_b \hat v_b = \sum_{H} v_b + (k - h)\tau = \sum_H v_b + \sum_{\text{light}} v_b = W$,
-by (1) and {{< xref "lem:threshold" "full" >}}.
+(4) By (1) and {{< xref "lem:threshold" "full" >}},
+
+$$
+\sum_{b \in B} \hat v_b = \sum_{b \in H} v_b + (k - h)\tau = \sum_{b \in H} v_b + \sum_{j=1}^{m} v_{\ell_j} = W .
+$$
 
 (5) Heavies contribute the same amount to $F(x)$ and $\hat F(x)$. The lights $\le x$ are
 $\ell_1, \dots, \ell_j$, with true mass $\tau S_j$ and estimated mass $\tau$ times the
 number kept,
-$\tau(\lfloor U + S_j\rfloor - \lfloor U \rfloor) = \tau \lfloor U + S_j \rfloor$. Since
+
+$$
+\tau\,\big(\lfloor U + S_j\rfloor - \lfloor U \rfloor\big) = \tau \lfloor U + S_j \rfloor .
+$$
+
+Since
 $y - 1 < \lfloor y \rfloor \le y$, the difference $\lfloor U + S_j \rfloor - S_j$ lies
 in $(U - 1, U]$, and $0 < U < 1$ gives the strict bound.
 {{< /proof >}}
@@ -1050,10 +1079,13 @@ of a record has mass one, and so has its reduction, for every draw. Point 5 is t
 property that matters for colours, which are read through their CDF.
 
 {{< corollary label="cor:bv" >}}
-For any function $g$ of the block, with variation
-$V(g) = \sum_{j<n} \lvert g(b_{j+1}) - g(b_j) \rvert$ over $B$,
-$\big\lvert \sum_b g(b)\,(\hat v_b - v_b) \big\rvert \le \tau\, V(g)$, with strict
-inequality when $V(g) > 0$. In particular, for one reduction of a colour ($W = 1$): the
+For any function $g$ of the block, with variation $V(g)$ over $B$,
+
+$$
+\Big\lvert \sum_{b \in B} g(b)\,(\hat v_b - v_b) \Big\rvert \le \tau\, V(g), \qquad V(g) = \sum_{j=1}^{n-1} \lvert g(b_{j+1}) - g(b_j) \rvert,
+$$
+
+with strict inequality when $V(g) > 0$. In particular, for one reduction of a colour ($W = 1$): the
 KS distance is below $\tau$; the mean block moves by less than
 $\tau\,(b_n - b_1) < \tau L$; each Laplace value $\Lambda_s$ moves by less than $\tau$;
 and the Wasserstein distance $W_1$ is below $\tau\,(b_n - b_1)$.
@@ -1061,14 +1093,21 @@ and the Wasserstein distance $W_1$ is below $\tau\,(b_n - b_1)$.
 
 {{< proof >}}
 Let $d_j = \hat v_{b_j} - v_{b_j}$ and
-$D_j = \sum_{i \le j} d_i = \hat F(b_j) - F(b_j)$, with $D_0 = 0$ and $D_n = 0$ by point 4.
-Summing by parts,
-$\sum_j g(b_j)\, d_j = g(b_n) D_n - \sum_{j < n} D_j\, (g(b_{j+1}) - g(b_j)) = -\sum_{j<n} D_j\,(g(b_{j+1}) - g(b_j))$,
+$D_j = \sum_{i=1}^{j} d_i = \hat F(b_j) - F(b_j)$ for $j = 1, \dots, n$, with $D_0 = 0$ and
+$D_n = 0$ by point 4. Summing by parts,
+
+$$
+\sum_{j=1}^{n} g(b_j)\, d_j = g(b_n) D_n - \sum_{j=1}^{n-1} D_j\, \big(g(b_{j+1}) - g(b_j)\big) = -\sum_{j=1}^{n-1} D_j\,\big(g(b_{j+1}) - g(b_j)\big),
+$$
+
 whose absolute value is at most $\max_j \lvert D_j \rvert\, V(g) \le \tau V(g)$,
 strictly when $V(g) > 0$ because $\max_j \lvert D_j \rvert < \tau$. The mean is
 $g(b) = b$; $e^{-sb/L}$ is monotone with values in $(0, 1]$, so its variation is below
 $1$; KS is $\max_j \lvert D_j \rvert$; and
-$W_1 = \sum_{j<n} \lvert D_j \rvert\,(b_{j+1} - b_j)$.
+
+$$
+W_1 = \sum_{j=1}^{n-1} \lvert D_j \rvert\,(b_{j+1} - b_j).
+$$
 {{< /proof >}}
 
 {{< remark >}}
@@ -1093,18 +1132,30 @@ item counted in $M_i$ exceeds $t_{i+1}$, then $t_{i+1} = \tau$.
 *Lower bound.* $t_0 \ge \tau$ by {{< xref "lem:threshold" "full" >}}. Suppose
 $t_i \ge \tau$. The items above $t_i$ are above $\tau$, so they contribute $h_i$ to
 $f(\tau) = k$, and the rest contribute
-$k - h_i = \sum_{v_b \le t_i} \min(1, v_b/\tau) \le M_i/\tau$, so
-$t_{i+1} = M_i/(k - h_i) \ge \tau$. (Also $h_i \le h \le k - 1$, so the division is
+
+$$
+k - h_i = \sum_{\substack{b \in B \\ v_b \le t_i}} \min(1, v_b/\tau) \le \frac{M_i}{\tau},
+$$
+
+so $t_{i+1} = M_i/(k - h_i) \ge \tau$. (Also $h_i \le h \le k - 1$, so the division is
 defined.)
 
 *Monotonicity.* Each of the $h_0$ items above $t_0 = W/k$ exceeds $W/k$, so
-$M_0 = W - \sum_{v_b > t_0} v_b \le W - h_0 W/k = (k - h_0)\,t_0$, that is
-$t_1 \le t_0$. Suppose $t_i \le t_{i-1}$. The items above $t_{i-1}$ are above $t_i$, so
+
+$$
+M_0 = W - \sum_{\substack{b \in B \\ v_b > t_0}} v_b \le W - h_0 \frac{W}{k} = (k - h_0)\,t_0,
+$$
+
+that is $t_1 \le t_0$. Suppose $t_i \le t_{i-1}$. The items above $t_{i-1}$ are above $t_i$, so
 $h_i \ge h_{i-1}$, and $M_i$ is $M_{i-1}$ less the $h_i - h_{i-1}$ items in
 $(t_i, t_{i-1}]$, each larger than $t_i$. With $M_{i-1} = (k - h_{i-1})\,t_i$, the
 definition of $t_i$, this gives
-$M_i \le (k - h_{i-1})\,t_i - (h_i - h_{i-1})\,t_i = (k - h_i)\,t_i$, that is
-$t_{i+1} \le t_i$.
+
+$$
+M_i \le (k - h_{i-1})\,t_i - (h_i - h_{i-1})\,t_i = (k - h_i)\,t_i,
+$$
+
+that is $t_{i+1} \le t_i$.
 
 *Stopping.* If every item counted in $M_i$ is at most $t_{i+1}$, and the others exceed
 $t_i \ge t_{i+1}$, then $f(t_{i+1}) = h_i + M_i / t_{i+1} = k$, and $t_{i+1} = \tau$ by
@@ -1132,12 +1183,20 @@ every reduction preserves mass, every $\hat C_t$ has mass exactly one.
 {{< proof of="thm:dag" >}}
 $X_t$ is a function of the parents' sketches, which are $\mathcal{F}_{t-1}$-measurable
 because parents come earlier in the file. So
-$\mathbb{E}[\hat C_t \mid \mathcal{F}_{t-1}] = \mathbb{E}[R_t(X_t) \mid \mathcal{F}_{t-1}] = X_t$
+
+$$
+\mathbb{E}[\hat C_t \mid \mathcal{F}_{t-1}] = \mathbb{E}[R_t(X_t) \mid \mathcal{F}_{t-1}] = X_t
+$$
+
 (and trivially so when no reduction happens). By induction in file order, assuming
-$\mathbb{E}[\hat C_p] = C_p$ for every earlier $p$:
-$\mathbb{E}[\hat C_t] = \mathbb{E}[X_t] = \sum_i s_{t,i}\, \mathbb{E}[\hat C_{p_i}] = \sum_i s_{t,i}\, C_{p_i} = C_t$.
+$\mathbb{E}[\hat C_p] = C_p$ for every earlier $p$,
+
+$$
+\mathbb{E}[\hat C_t] = \mathbb{E}[X_t] = \sum_{i=1}^{n} s_{t,i}\, \mathbb{E}[\hat C_{p_i}] = \sum_{i=1}^{n} s_{t,i}\, C_{p_i} = C_t .
+$$
+
 The base case is a coinbase, $\hat C_t = C_t = x^{\beta}$. Mass: the candidate has mass
-$\sum_i s_{t,i} \cdot 1 = 1$, and the reduction keeps it.
+$\sum_{i=1}^{n} s_{t,i} \cdot 1 = 1$, and the reduction keeps it.
 {{< /proof >}}
 
 Nothing in the proof asks the parents to be independent. They are not: they share
@@ -1186,7 +1245,8 @@ $$
 $$
 
 where $r \preceq t$ ranges over $t$ and its ancestors, $\alpha_{t,t} = 1$, and
-$\alpha_{t,r} = \sum_i s_{t,i}\, \alpha_{p_i, r}$: the sum, over all paths from $r$ to
+$\alpha_{t,r} = \sum_{i=1}^{n} s_{t,i}\, \alpha_{p_i, r}$ for $r \ne t$ (with $\alpha_{p,r} = 0$
+when $r$ is not $p$ or an ancestor of $p$): the sum, over all paths from $r$ to
 $t$ in the DAG, of the product of the shares along the path. The coefficients are
 deterministic and lie in $[0, 1]$; $\alpha_{t,r}$ is the fraction of $t$'s value that
 flowed through $r$.
@@ -1194,11 +1254,20 @@ flowed through $r$.
 
 {{< proof of="thm:decomp" >}}
 For a coinbase both sides are $0$. Otherwise
-$\hat C_t - C_t = (X_t - C_t) + \delta_t = \sum_i s_{t,i}(\hat C_{p_i} - C_{p_i}) + \delta_t$,
-and the induction hypothesis on the parents gives
-$\sum_i s_{t,i} \sum_{r \preceq p_i} \alpha_{p_i, r}\, \delta_r + \delta_t$, which is
-the claim with the stated recursion for $\alpha$. The $\alpha$ are built from shares
-only, so they are deterministic, and $\alpha_{t,r} \le \sum_i s_{t,i} = 1$ by induction.
+
+$$
+\hat C_t - C_t = (X_t - C_t) + \delta_t = \sum_{i=1}^{n} s_{t,i}\,(\hat C_{p_i} - C_{p_i}) + \delta_t,
+$$
+
+and the induction hypothesis on the parents turns this into
+
+$$
+\sum_{i=1}^{n} s_{t,i} \sum_{r \preceq p_i} \alpha_{p_i, r}\, \delta_r + \delta_t,
+$$
+
+which is the claim with the stated recursion for $\alpha$. The $\alpha$ are built from
+shares only, so they are deterministic, and $\alpha_{t,r} \le \sum_{i=1}^{n} s_{t,i} = 1$
+by induction.
 {{< /proof >}}
 
 {{< corollary label="cor:orth" >}}
@@ -1216,7 +1285,11 @@ $$
 $\varphi(\delta_r)$ is $\mathcal{F}_r$-measurable and
 $\mathbb{E}[\varphi(\delta_r) \mid \mathcal{F}_{r-1}] = 0$ by conditional unbiasedness.
 For $r < r'$,
-$\mathbb{E}[\varphi(\delta_r)\varphi(\delta_{r'})] = \mathbb{E}\big[\varphi(\delta_r)\, \mathbb{E}[\varphi(\delta_{r'}) \mid \mathcal{F}_{r'-1}]\big] = 0$.
+
+$$
+\mathbb{E}[\varphi(\delta_r)\varphi(\delta_{r'})] = \mathbb{E}\big[\varphi(\delta_r)\, \mathbb{E}[\varphi(\delta_{r'}) \mid \mathcal{F}_{r'-1}]\big] = 0 .
+$$
+
 Expand the square; the $\alpha$ are constants. (Every term is bounded, by
 {{< xref "cor:bv" "full" >}}, so the expectations exist.)
 {{< /proof >}}
@@ -1252,7 +1325,7 @@ functional of bounded variation.
 
 {{< corollary note="the 1/k rate through the recursion" label="cor:rate" >}}
 In record mode, let $g$ be a function of the block with variation $V(g)$ over all the
-blocks $0, \dots, L - 1$ in order, and $\varphi(v) = \sum_b g(b)\, v_b$. For every
+blocks $0, \dots, L - 1$ in order, and $\varphi(v) = \sum_{b=0}^{L-1} g(b)\, v_b$. For every
 record $t$,
 
 $$
@@ -1269,7 +1342,11 @@ The variation of $g$ over the blocks of one candidate, taken in order, is at mos
 $\tau_r \le 1/k$ give $\lvert\varphi(\delta_r)\rvert \le \tau_r V(g) \le V(g)/k$ for
 every reduced record $r$, and $\delta_r = 0$ for the others.
 {{< xref "cor:orth" "full" >}} then gives
-$\mathbb{E}[\varphi(\hat C_t - C_t)^2] \le (V(g)/k)^2 \sum_{r \preceq t} \alpha_{t,r}^2$.
+
+$$
+\mathbb{E}\big[\varphi(\hat C_t - C_t)^2\big] \le \Big(\frac{V(g)}{k}\Big)^2 \sum_{r \preceq t} \alpha_{t,r}^2 .
+$$
+
 The $\alpha$ come from the shares alone. For the bound on $A_t$:
 $\alpha_{t,r} \in [0, 1]$, so $\alpha_{t,r}^2 \le \alpha_{t,r}$, and $\alpha_{t,r}$ is
 the probability that a walk from $t$, stepping to parent $p_i$ with probability
@@ -1293,9 +1370,15 @@ every $k$ from 16 to 1024 ([§8.3](#sec:error-against-depth)). Two things in the
 without proving it. Most records do not reduce at all (a record whose operands are one
 parent returns that parent's sketch), so most ancestors contribute $\delta_r = 0$. And
 mixing spreads $\alpha$: the $\alpha_{t,r}$ over a generation of ancestors sum to at
-most one, so when value comes from many ancestors $\sum_r \alpha_{t,r}^2$ is much
-smaller than $\sum_r \alpha_{t,r}$. The measured flatness says that, on this chain, the
-effective $\sum_r \alpha_{t,r}^2 \mathbb{E}[\tau_r^2 f_r(1-f_r)]$ stays bounded.
+most one, so when value comes from many ancestors $\sum_{r \preceq t} \alpha_{t,r}^2$ is
+much smaller than $\sum_{r \preceq t} \alpha_{t,r}$. The measured flatness says that, on
+this chain, the effective sum
+
+$$
+\sum_{r \preceq t} \alpha_{t,r}^2\, \mathbb{E}\big[\tau_r^2 f_r(x)\,(1 - f_r(x))\big]
+$$
+
+stays bounded.
 
 What the recursion costs can be read against a single reduction. A single-shot sketch of
 the exact colour (the "IDEAL" of [§8.7](#sec:recursion-against-single-reduction)) has one term in the sum. On the first 3M records,
@@ -1322,7 +1405,8 @@ deterministically, by {{< xref "thm:varopt" "full" >}}(5).
 {{< proposition label="prop:poisson" >}}
 If instead each light $b$ is kept *independently* with probability $v_b/\tau$ and weight
 $\tau$ (Poisson sampling with Horvitz–Thompson weights), the cut error is unbiased with
-variance $\sum_{\text{light}\, b \le x} v_b(\tau - v_b)$. For a diffuse colour, whose
+variance $\sum_{i=1}^{j} v_{\ell_i}(\tau - v_{\ell_i})$, where $j$ is the number of lights
+$\le x$. For a diffuse colour, whose
 lights are all small against $\tau \approx W/k$, this is about
 $\tau F(x) \approx F(x)/k$, so the error's standard deviation is of order $1/\sqrt{k}$.
 {{< /proposition >}}
@@ -1340,7 +1424,12 @@ $T_b$, the $k$-th largest of the priorities $v_c/u_c$ of the other blocks $c \ne
 $\tau_q$ whenever $b$ is kept), its raw weight
 $\max(v_b, T_b)\,\mathbf{1}\{v_b/u_b > T_b\}$ has variance $v_b\,(T_b - v_b)^{+}$. So,
 for one reduction with unnormalised weights,
-$\operatorname{Var}\hat F(x) = \sum_{b \le x} \mathbb{E}[v_b (T_b - v_b)^{+}]$. With
+
+$$
+\operatorname{Var}\hat F(x) = \sum_{\substack{b \in B \\ b \le x}} \mathbb{E}\big[v_b\, (T_b - v_b)^{+}\big].
+$$
+
+With
 $T_b \approx W/k$ this is the same $F(x)/k$ order. That last step, the concentration of
 $T_b$, is argued and not proved here; the measured slope of `prio`'s errors against $k$
 is $-0.49$ to $-0.54$ ([§8.4](#sec:variants-compared); `sketch summarize`'s `slopes.tsv`, every metric but
@@ -1412,7 +1501,7 @@ Two things are lost against VarOpt. The mass is no longer preserved: the raw tot
 node is a random variable with mean one, and along the DAG it wanders as a martingale
 (from 0.66 to 1.48 between the 5th and 95th percentiles, in one simulation of the design
 phase). And what is emitted must be a distribution, so it is normalised,
-$\hat p_b = \hat v_b / \sum_c \hat v_c$, which is a *ratio* estimator: consistent, with
+$\hat p_b = \hat v_b / \sum_{c \in B} \hat v_c$, which is a *ratio* estimator: consistent, with
 a bias that vanishes as $k$ grows (of order $1/k$ at a single node; its size deep in the
 recursion, where the raw total wanders, was not analysed), but not unbiased.
 {{< xref "ex:prio-bias" "full" >}} is the one measurement of it.
@@ -1458,8 +1547,12 @@ Let $A$ and $B$ have disjoint supports, with exact threshold samples
 $S_A = T_{\tau_A}(A)$ and $S_B = T_{\tau_B}(B)$, and let $D = s_a A + s_b B$ with
 $s_a, s_b > 0$. Put $c = \min(\tau_A/s_a,\ \tau_B/s_b)$. For every $\tau \le c$, the
 threshold sample $T_\tau(D)$ is obtained from the scaled union
-$\{(b, s_a A_b) : (b, A_b) \in S_A\} \cup \{(b, s_b B_b) : (b, B_b) \in S_B\}$ by
-keeping the entries ranked below $\tau$. Hence the merge that keeps the candidates
+
+$$
+\{(b, s_a A_b) : (b, A_b) \in S_A\} \cup \{(b, s_b B_b) : (b, B_b) \in S_B\}
+$$
+
+by keeping the entries ranked below $\tau$. Hence the merge that keeps the candidates
 ranked below $\tau' = \min(c, r_{(k+1)})$, with $r_{(k+1)}$ the $(k+1)$-th smallest
 candidate rank, returns $T_{\tau'}(D)$ exactly, with at most $k$ entries; and when
 $c > r_{(k+1)}$ it returns the bottom-$k$ sketch of $D$ itself.
@@ -1518,7 +1611,10 @@ $c_H \le c$.
 A block absent from $S_A$ has $A_b = 0$ or $u_b/A_b \ge \tau_A$, so $A_b \le u_b/\tau_A$
 either way; likewise $B_b \le u_b/\tau_B$. Then $D_b \le u_b (s_a/\tau_A + s_b/\tau_B)$,
 that is $u_b/D_b \ge c_H$. And
-$1/c_H = s_a/\tau_A + s_b/\tau_B \ge \max(s_a/\tau_A, s_b/\tau_B) = 1/c$.
+
+$$
+\frac{1}{c_H} = \frac{s_a}{\tau_A} + \frac{s_b}{\tau_B} \ge \max\Big(\frac{s_a}{\tau_A}, \frac{s_b}{\tau_B}\Big) = \frac{1}{c}.
+$$
 {{< /proof >}}
 
 So, when the operands are exact threshold samples, the harmonic cap (`cap=harm`) is safe
@@ -2132,7 +2228,7 @@ assert:
   reductions; the draws with $n \le k$ are skipped, since the caller stores those
   untouched): output
   ascending, a subset of the input, heavies kept with their weight, lights at $\tau$,
-  $\sum_b \min(1, v_b/\tau) = k$ to $10^{-9}$ relative, and, except in $k \pm 1$ events,
+  $\sum_{b \in B} \min(1, v_b/\tau) = k$ to $10^{-9}$ relative, and, except in $k \pm 1$ events,
   exactly $k$ points, the mass to $10^{-12}$ and every CDF gap below $\tau$
   ({{< xref "thm:varopt" "full" >}}); fewer than 64 $k \pm 1$ events in those 61,056
   reductions. The iterated threshold equals the sorted one on 2,764 cases (3,000 draws,
@@ -2283,7 +2379,11 @@ $\Lambda_{16}$ and $\Lambda_{32}$, the far tail that small sketches undersample.
 local slopes steepen with $k$: about $-0.97$ for $\lvert\Delta\text{mean}\rvert$ from
 256 to 512 and from 512 to 1024 over the whole chain ($-0.98$ on 0–300M). An approximate
 law is
-$\lvert\Delta\text{mean}\rvert \approx (1.0 \text{ to } 1.2)\cdot \text{sd}_{\text{exact}}/k$:
+
+$$
+\lvert\Delta\text{mean}\rvert \approx (1.0 \text{ to } 1.2)\cdot \frac{\text{sd}_{\text{exact}}}{k}:
+$$
+
 the product $k \cdot \lvert\Delta\text{mean}\rvert/\text{sd}$ drifts from $0.99$ at
 $k = 16$ to $1.17$ at $k = 1024$. The slopes are `slopes.tsv` (an OLS fit per metric and
 run of consecutive $k$), the product is `errors.tsv`'s `k_times_mean_abs_dmean_over_sd`.
@@ -2491,10 +2591,13 @@ Python script. The [P] and [E] cells and the memory fit are hand projections.
   for 600–610M), not at the slowest stretch (290–330M).
 - **Memory.** Peak RSS (the VmHWM of `emit --stats`, equal to `/usr/bin/time -v`'s, which
   alone gives the stopped $k = 512$ emit's; reported in KiB and given here in GB of
-  $10^9$ bytes) 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$; the
-  fit $\text{VmHWM} \approx 4.5\ \text{GB} + 8.3\ \text{B} \times$ peak entries, with
-  peak entries (from `--stats`) $\approx 7.485\text{M} \times k$, projects about 68 GB
-  at $k = 1024$, consistent with pass B. Live sketches hold about $0.985\,k$ entries
+  $10^9$ bytes) 8.51, 12.39, 20.32 and 36.34 GB at $k = 64, 128, 256, 512$. The fit
+
+  $$
+  \text{VmHWM} \approx 4.5\ \text{GB} + 8.3\ \text{B} \times \text{peak entries}, \qquad \text{peak entries} \approx 7.485\text{M} \times k
+  $$
+
+  (peak entries from `--stats`) projects about 68 GB at $k = 1024$, consistent with pass B. Live sketches hold about $0.985\,k$ entries
   each at the peak. The machine has 503 GB, so memory constrains no $k$ here.
 - **Time.** 1 h 07 min, 1 h 47 min to 2 h 00 min, and 3 h 23 min at $k = 64, 128, 256$;
   about 2 h 52 min to 400M records at $k = 512$, projected to 6.3–6.6 h for the whole
@@ -2632,12 +2735,17 @@ Three measures are asked of it.
 - **Count**, $\lvert S_t \rvert$: the number of blocks a transaction's coins descend
   from (under `sets`, through zero-amount inputs too). [§5.2](#sec:exact-colours-do-not) gives its scale: a median of
   about 174,000 blocks over the first 31.2M records.
-- **Jaccard similarity**,
-  $J(x, y) = \lvert S_x \cap S_y \rvert / \lvert S_x \cup S_y \rvert$, and the
-  **containment** $\lvert S_x \cap S_y \rvert / \lvert S_x \rvert$: shared *ancestry*.
-- **Weighted Jaccard similarity**,
-  $J_w(x, y) = \sum_b \min(c_x(b), c_y(b)) / \sum_b \max(c_x(b), c_y(b))$: shared
-  *value*.
+- **Jaccard similarity** and **containment**, shared *ancestry*:
+
+  $$
+  J(x, y) = \frac{\lvert S_x \cap S_y \rvert}{\lvert S_x \cup S_y \rvert}, \qquad \frac{\lvert S_x \cap S_y \rvert}{\lvert S_x \rvert} .
+  $$
+
+- **Weighted Jaccard similarity**, shared *value*:
+
+  $$
+  J_w(x, y) = \frac{\sum_{b=0}^{L-1} \min\big(c_x(b), c_y(b)\big)}{\sum_{b=0}^{L-1} \max\big(c_x(b), c_y(b)\big)} .
+  $$
 
 On this chain the last two say very different things. Among 255 deep transactions spread
 over the first 3M records (the `deep` selection of [§10.8](#sec:kmv-results), every support of at least
@@ -2662,7 +2770,7 @@ counts and similarities off it. It cannot be done, for four reasons.
    and the overlap of two kept sets does not estimate the overlap of the supports.
 2. **Kept lights are carried at $\tau$** ({{< xref "def:varopt" "full" >}}), so a kept
    light's true weight, and with it its inclusion probability $v_b/\tau$, is not in the
-   sketch: a Horvitz–Thompson count $\sum 1/\pi_b$ cannot be formed from it, even
+   sketch: a Horvitz–Thompson count $\sum_{b \in K} 1/\pi_b$ over the kept set $K$ cannot be formed from it, even
    after a single reduction.
 3. **A block dropped at an ancestor is gone for every descendant**: the candidate of a
    record holds only blocks its parents' sketches kept.
@@ -2672,9 +2780,13 @@ counts and similarities off it. It cannot be done, for four reasons.
 The weighted similarity has a natural plug-in,
 $(1 - \widehat{\mathrm{TV}})/(1 + \widehat{\mathrm{TV}})$ of the two sketches ($J_w$ is
 a function of TV, [§10.6](#sec:l1)), and it is biased low. With $Q_x, Q_y$ the two sketches, $\min$
-is concave, so by Jensen
-$\mathbb{E}[\min(Q_x(b), Q_y(b))] \le \min(\mathbb{E} Q_x(b), \mathbb{E} Q_y(b)) = \min(x_b, y_b)$
-block by block: the sum of minima, $1 - \widehat{\mathrm{TV}}$, is biased low, and
+is concave, so by Jensen, block by block,
+
+$$
+\mathbb{E}\big[\min(Q_x(b), Q_y(b))\big] \le \min\big(\mathbb{E} Q_x(b), \mathbb{E} Q_y(b)\big) = \min(x_b, y_b).
+$$
+
+The sum of minima, $1 - \widehat{\mathrm{TV}}$, is biased low, and
 $\widehat{\mathrm{TV}}$ high. That alone does not sign the bias of the plug-in, a convex
 function of $\widehat{\mathrm{TV}}$; what does is the size of the loss on the light
 blocks. Heavy blocks are exact; a light block shared by two independent reductions is
@@ -2735,8 +2847,12 @@ $K_k(S) \subseteq T \subseteq S$ with $T = \bigcup_i K_k(S_i)$. For any such $T$
 $K_k(T) = K_k(S)$: if $\lvert S \rvert \le k$ then $K_k(S) = S$ and $T = S$; otherwise
 $T$ contains the $k$ smallest elements of $S$, and every other element of $T$ is an
 element of $S$ ranked above all of them, so the $k$ smallest of $T$ are those. The tree:
-by induction on its height, a node over the leaves $S_i, i \in I$, outputs
-$K_k\big(K_k(\bigcup_{I_1}) \cup K_k(\bigcup_{I_2})\big) = K_k(\bigcup_I S_i)$.
+by induction on its height, a node over the leaves $S_i$, $i \in I$, whose two subtrees
+hold the leaves $I_1$ and $I_2$, outputs
+
+$$
+K_k\Big(K_k\big(\textstyle\bigcup_{i \in I_1} S_i\big) \cup K_k\big(\bigcup_{i \in I_2} S_i\big)\Big) = K_k\big(\textstyle\bigcup_{i \in I} S_i\big).
+$$
 {{< /proof >}}
 
 {{< lemma note="subsets" label="lem:kmv-sub" >}}
@@ -2793,12 +2909,16 @@ exact weights.
 {{< lemma note="kept weights" label="lem:kmv-weights" >}}
 Let each sketch also store the colour weight $c_t(b)$ of every kept block. Then for
 every record $t$ and every $b \in K_k(S_t)$,
-$c_t(b) = \sum_{i : b \in K_k(S_{p_i})} s_{t,i}\, c_{p_i}(b)$: the child's kept weights
-are computed exactly from the parents' sketches.
+
+$$
+c_t(b) = \sum_{\substack{1 \le i \le n \\ b \in K_k(S_{p_i})}} s_{t,i}\, c_{p_i}(b):
+$$
+
+the child's kept weights are computed exactly from the parents' sketches.
 {{< /lemma >}}
 
 {{< proof >}}
-$c_t(b) = \sum_i s_{t,i}\, c_{p_i}(b)$ by {{< eqref "eq:recurrence" >}}. A term with
+$c_t(b) = \sum_{i=1}^{n} s_{t,i}\, c_{p_i}(b)$ by {{< eqref "eq:recurrence" >}}. A term with
 $s_{t,i}\, c_{p_i}(b) > 0$ has $b$ in the support of $C_{p_i}$, which is contained in
 $S_{p_i} \subseteq S_t$ (in $S^+_{p_i} \subseteq S^+_t$ under `pos`, since
 $s_{t,i} > 0$), so $b \in K_k(S_{p_i})$ by {{< xref "lem:kmv-sub" "full" >}}: every
@@ -2822,7 +2942,7 @@ them and, summing in the exact store's order, matched the exact colour bit for b
 the kept blocks (14,219 sampled records of the first 3M, four values of $k$: maximum
 difference 0). As an estimator of $J_w$, though, a uniform sample of the support misses
 the few heavy recent blocks that hold most of the mass: the ratio
-$\sum_K \min / \sum_K \max$ over the kept blocks was biased upward by 0.051, 0.030 and
+$\sum_{b \in K} \min / \sum_{b \in K} \max$ over the kept blocks $K$ was biased upward by 0.051, 0.030 and
 0.015 at $k = 64$, 256 and 1024 for pairs with $J_w \ge 0.9$. Weights also double the
 memory. [§10.6](#sec:l1) has a better tool for $J_w$.{{< /sidenote >}} The store keeps ranks only.
 
@@ -2862,15 +2982,24 @@ $$
 Since $\frac{k-1}{r}\binom{r}{k-1} = \binom{r-1}{k-2}$,
 
 $$
-\mathbb{E}\Big[\frac{k-1}{R}\Big] = \sum_r \binom{r-1}{k-2}\binom{N-1-r}{n-k} \Big/ \binom{N}{n} = \binom{N-1}{n-1} \Big/ \binom{N}{n} = \frac{n}{N},
+\mathbb{E}\Big[\frac{k-1}{R}\Big] = \sum_{r=k-1}^{N-n+k-1} \binom{r-1}{k-2}\binom{N-1-r}{n-k} \Big/ \binom{N}{n} = \binom{N-1}{n-1} \Big/ \binom{N}{n} = \frac{n}{N},
 $$
 
 where the middle sum counts the $(n-1)$-subsets of an $(N-1)$-set by the position
 $r - 1$ of their $(k-1)$-th smallest element. Multiplying by $N$ gives
 $\mathbb{E}[\hat n] = n$. In the same way
-$\frac{(k-1)(k-2)}{r(r-1)}\binom{r}{k-1} = \binom{r-2}{k-3}$, and the sum of
-$\binom{r-2}{k-3}\binom{N-1-r}{n-k}$ is $\binom{N-2}{n-2}$, which gives
-$\mathbb{E}\big[\frac{(k-1)(k-2)}{R(R-1)}\big] = \frac{n(n-1)}{N(N-1)}$.
+
+$$
+\frac{(k-1)(k-2)}{r(r-1)}\binom{r}{k-1} = \binom{r-2}{k-3},
+$$
+
+and the $(n-2)$-subsets of
+an $(N-2)$-set, counted by the position $r - 2$ of their $(k-2)$-th smallest element, give
+
+$$
+\mathbb{E}\Big[\frac{(k-1)(k-2)}{R(R-1)}\Big] = \sum_{r=k-1}^{N-n+k-1} \binom{r-2}{k-3}\binom{N-1-r}{n-k} \Big/ \binom{N}{n} = \binom{N-2}{n-2} \Big/ \binom{N}{n} = \frac{n(n-1)}{N(N-1)} .
+$$
+
 ($R \ge k - 1 \ge 1$ throughout.)
 {{< /proof >}}
 
@@ -2989,8 +3118,13 @@ The support's sketch says nothing about weights. The weighted Jaccard similarity
 different tool, and the shape of the colours makes it simple.
 
 {{< lemma label="lem:jw-tv" >}}
-For probability vectors $x$ and $y$, with $\mathrm{TV} = \tfrac12 \lVert x - y \rVert_1$,
-$\sum_b \min(x_b, y_b) = 1 - \mathrm{TV}$ and $\sum_b \max(x_b, y_b) = 1 + \mathrm{TV}$,
+For probability vectors $x$ and $y$ over the blocks $0, \dots, L - 1$, with
+$\mathrm{TV} = \tfrac12 \lVert x - y \rVert_1$,
+
+$$
+\sum_{b=0}^{L-1} \min(x_b, y_b) = 1 - \mathrm{TV}, \qquad \sum_{b=0}^{L-1} \max(x_b, y_b) = 1 + \mathrm{TV},
+$$
+
 so
 
 $$
@@ -3000,9 +3134,11 @@ $$
 {{< /lemma >}}
 
 {{< proof >}}
-Coordinate by coordinate $\min + \max = x_b + y_b$ and
-$\max - \min = \lvert x_b - y_b \rvert$. Summing, $\sum \min + \sum \max = 2$ and
-$\sum \max - \sum \min = 2\,\mathrm{TV}$.
+Coordinate by coordinate $\min(x_b, y_b) + \max(x_b, y_b) = x_b + y_b$ and
+$\max(x_b, y_b) - \min(x_b, y_b) = \lvert x_b - y_b \rvert$. Summing over
+$b = 0, \dots, L - 1$, the sum of minima and the sum of maxima add up to
+$\sum_{b=0}^{L-1} (x_b + y_b) = 2$ and differ by
+$\sum_{b=0}^{L-1} \lvert x_b - y_b \rvert = 2\,\mathrm{TV}$.
 {{< /proof >}}
 
 So $J_w$ of two colours depends on their L1 distance alone, and L1 distance has a
@@ -3015,17 +3151,26 @@ for every colour.
 {{< proposition note="the projection commutes with the recurrence" label="prop:l1-linear" >}}
 Fold $v$ through the driver: a coinbase of block $\beta$ is the column
 $(\Pi_{j\beta})_j$; a record groups its operands by parent, skipping those of share 0,
-with $q_g$ the parent of group $g$ and $\bar s_g = \sum_{i : p_i = q_g} s_{t,i}$ its
-summed share, answers the parent's own vector when one group is left, and otherwise
-stores $\sum_g \bar s_g\, v_{q_g}$. Then in exact arithmetic $v_t = \Pi\,C_t$ for every
+with $G$ groups, $q_g$ the parent of group $g$ and
+
+$$
+\bar s_g = \sum_{\substack{1 \le i \le n \\ p_i = q_g}} s_{t,i}
+$$
+
+its summed share, for $g = 1, \dots, G$; it answers the parent's own vector when one group
+is left ($G = 1$), and otherwise stores $\sum_{g=1}^{G} \bar s_g\, v_{q_g}$. Then in exact arithmetic $v_t = \Pi\,C_t$ for every
 record $t$, at any depth.
 {{< /proposition >}}
 
 {{< proof >}}
 By induction in file order: a coinbase of block $\beta$ has the colour $e_\beta$, all
 its mass on $\beta$, and $\Pi\,e_\beta$ is column $\beta$; otherwise
-$\sum_g \bar s_g\, \Pi\,C_{q_g} = \Pi \sum_i s_{t,i}\, C_{p_i} = \Pi\,C_t$ by
-linearity, where grouping only reassociates the sum, share-0 operands contribute 0, and
+
+$$
+\sum_{g=1}^{G} \bar s_g\, \Pi\,C_{q_g} = \Pi \sum_{i=1}^{n} s_{t,i}\, C_{p_i} = \Pi\,C_t
+$$
+
+by linearity, where grouping only reassociates the sum, share-0 operands contribute 0, and
 one group has $\bar s_g = 1$ and $C_t = C_{q_g}$.
 {{< /proof >}}
 
@@ -3035,12 +3180,22 @@ first 3M records the stored vector matched $\Pi\,C_t$ computed from the exact co
 $6.8 \times 10^{-7}$ relative in `f32` and $5.7 \times 10^{-14}$ in `f64` ([§10.8](#sec:kmv-results)).
 
 For two fixed colours $x$ and $y$, which are functions of the chain and independent of
-$\Pi$, the differences $d_j = v_j(x) - v_j(y) = \sum_b \Pi_{jb}(x_b - y_b)$ are
-independent over $j$ and, by 1-stability, each is Cauchy with scale
+$\Pi$, the differences
+
+$$
+d_j = v_j(x) - v_j(y) = \sum_{b=0}^{M-1} \Pi_{jb}\,(x_b - y_b), \qquad j = 1, \dots, m,
+$$
+
+are independent over $j$ and, by 1-stability, each is Cauchy with scale
 $\sigma = \lVert x - y \rVert_1 = 2\,\mathrm{TV}$. The scale is estimated by maximum
 likelihood, one of the estimators of a Cauchy scale that Li, Hastie and Church
 compare:{{< cite "li2007nonlinear" >}} the log-likelihood
-$\sum_j \big[\ln \sigma - \ln(\sigma^2 + d_j^2)\big]$ is stationary where
+
+$$
+\ell(\sigma) = \sum_{j=1}^{m} \big[\ln \sigma - \ln(\sigma^2 + d_j^2)\big]
+$$
+
+is stationary where
 
 $$
 \sum_{j=1}^{m} \frac{\sigma^2}{\sigma^2 + d_j^2} = \frac{m}{2},
@@ -3051,8 +3206,11 @@ $\hat\sigma$ is unique (and $\hat\sigma = 0$ when at least half the $d_j$ are 0,
 equal colours). The Fisher information of a Cauchy scale is $1/(2\sigma^2)$ per
 observation, so $\hat\sigma$ has relative SD about $\sqrt{2/m}$: 0.0625 at $m = 512$,
 0.0442 at $m = 1024$. The estimates are
-$\widehat{\mathrm{TV}} = \hat\sigma/2$ and
-$\hat J_w = (1 - \min(\widehat{\mathrm{TV}}, 1))/(1 + \min(\widehat{\mathrm{TV}}, 1))$,
+
+$$
+\widehat{\mathrm{TV}} = \frac{\hat\sigma}{2}, \qquad \hat J_w = \frac{1 - \min(\widehat{\mathrm{TV}}, 1)}{1 + \min(\widehat{\mathrm{TV}}, 1)},
+$$
+
 whose SD is, by the delta method, about
 $2\,\mathrm{TV}/(1 + \mathrm{TV})^2 \cdot \sqrt{2/m}$, at most $\tfrac12\sqrt{2/m}$
 (0.022 at $m = 1024$). The mean of $\lvert d_j \rvert$ would be the obvious estimator and
@@ -3088,8 +3246,12 @@ ranks $r_b = E_b / x_b$ ($+\infty$ when $x_b = 0$) and $b^* = \arg\min_b r_b$, w
 $E_b$ are independent and identically distributed with a positive density on an interval
 $(0, c)$: exponential for P-MinHash, uniform for priority sampling and for `coord`'s
 $u_b / v$. Then no function $f$ satisfies
-$\mathrm{sk}(\tfrac12 x + \tfrac12 y) = f(\mathrm{sk}(x), \mathrm{sk}(y))$ almost surely
-for all probability vectors $x, y$.
+
+$$
+\mathrm{sk}\big(\tfrac12 x + \tfrac12 y\big) = f\big(\mathrm{sk}(x), \mathrm{sk}(y)\big)
+$$
+
+almost surely for all probability vectors $x, y$.
 {{< /proposition >}}
 
 {{< proof >}}
@@ -3551,7 +3713,7 @@ every whole sketch had exactly the reference size: 4,615,915, 4,715,656 and 4,79
 records at $k = 64$, 256 and 1024, for every seed, and no full sketch had a support of
 $k$ or fewer blocks. The L1 projection matched $\Pi\,C_t$ from the exact colour on 3,010
 records with a worst deviation per coordinate, relative to
-$\sum_b \lvert \Pi_{jb} \rvert c_t(b)$, of $5.1 \times 10^{-7}$ ($m = 512$, `f32`),
+$\sum_{b=0}^{L-1} \lvert \Pi_{jb} \rvert c_t(b)$, of $5.1 \times 10^{-7}$ ($m = 512$, `f32`),
 $6.8 \times 10^{-7}$ ($m = 1024$, `f32`) and $5.7 \times 10^{-14}$ ($m = 1024$, `f64`).
 In R3, at every $k$, the pairs whose sketches were both whole had $\hat J$ equal to the
 exact $J$ in every case: 208,335 `even` pairs at $k = 1024$ (and 190,653, 205,120 and
@@ -3902,7 +4064,12 @@ The checks:
   reduced. The check stands on the prefix ([§10.8](#sec:kmv-results)).
 - **L1 against an exact lower bound.** Binning two colours into the same 1,024 bands
   can only lower their TV, and `colors.bands1024.zst` holds every record's exact binned
-  colour; so $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
+  colour; so
+
+  $$
+  \widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\;\widehat{\mathrm{TV}}
+  $$
+
   should hold in at least 99% of the pairs. Read for the 1,280 selected records into
   `bands1024.sel.txt` (a separate Python and `mawk` pass over the 1.67 TB file, 3 h
   42 min of wall time; `pick --bands-ref` now copies the same lines during the fold,
@@ -4558,7 +4725,7 @@ error can be a sizable fraction of the value.
   with its lights chosen in random order, was run only with the design-phase prototype
   on a prefix of the chain ([§6.4](#sec:rates)); repeating it with the final binary over the whole
   chain is open. So is a direct look at the bound. On the first 3M records, where the
-  exact colours are known, $A_t$ and $\sum_r \alpha_{t,r}^2 \tau_r^2$ could be computed
+  exact colours are known, $A_t$ and $\sum_{r \preceq t} \alpha_{t,r}^2 \tau_r^2$ could be computed
   record by record. That would show whether the error stays flat because these sums
   stay small under mixing, or because the errors of different reductions cancel.
 - **Literal bottom-$k$ against VarOpt.** The literal weighted bottom-$k$ sketch of
