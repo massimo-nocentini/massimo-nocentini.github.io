@@ -14,7 +14,7 @@ mathFont = 'euler'
 <!--more-->
 
 
-## 1. Introduction to Bottom-$k$ Sketches
+## 1. Introduction to Bottom-$k$ Sketches {#sec:introduction-bottom-k-sketches}
 
 A **bottom-$k$ sketch** (also known as a **K-Minimum Values (KMV)** sketch or a
 single-hash **MinHash**
@@ -29,7 +29,7 @@ From those $k$ values alone, one can estimate:
 * The similarity between two sets (**Jaccard similarity**), and
 * Set operations (unions and intersections) without re-scanning raw data.
 
-### 1.1 Overview & Construction
+### 1.1 Overview & Construction {#sec:overview-construction}
 
 Suppose you have a stream of elements and a uniform random hash function $h(x) \to [0, 1]$.
 
@@ -45,9 +45,9 @@ Suppose you have a stream of elements and a uniform random hash function $h(x) \
 Because updates only require computing a hash and comparing against $v_{(k)}$,
 processing each item takes $O(1)$ expected time or $O(\log k)$ worst-case time.
 
-### 1.2 Primary Applications
+### 1.2 Primary Applications {#sec:primary-applications}
 
-### 1.2.1 Cardinality Estimation (Count-Distinct)
+### 1.2.1 Cardinality Estimation (Count-Distinct) {#sec:cardinality-estimation-count-distinct}
 
 If $N$ distinct items are hashed uniformly into $[0, 1]$, they divide the interval into
 $N + 1$ sub-intervals of expected length $\frac{1}{N + 1}$. The $k$-th smallest hash
@@ -79,11 +79,11 @@ number of universe items ranked strictly below it), then
 $\hat N = (k - 1)M / R$ has $\mathbb{E}[\hat N] = N$, and its variance is slightly below
 $N(N - k + 1)/(k - 2) \cdot (M - N)/(M - 1)$, within 1% for $k \ge 256$: the
 finite-population factor $(M - N)/(M - 1)$ is a free gain when the set fills a good part
-of its universe. Section 10.4 proves the unbiasedness and computes the variance exactly
+of its universe. [Section 10.4](#sec:kmv-count) proves the unbiasedness and computes the variance exactly
 over the law of $R$, writing $n$ for the set size and $N$ for the universe, and uses it
 with a smaller universe chosen for each record.
 
-### 1.2.2 Set Merging (Unions)
+### 1.2.2 Set Merging (Unions) {#sec:set-merging-unions}
 
 Given sketch $S(A)$ and sketch $S(B)$ built with the same hash function $h$, the exact
 bottom-$k$ sketch of $A \cup B$ is:{{< sidenote >}}This is why KMV sketches merge
@@ -93,7 +93,7 @@ bottom-$k$ lies inside the union of the parts' sketches.{{< /sidenote >}}
 
 $$S(A \cup B) = \text{bottom-}k\big(S(A) \cup S(B)\big)$$
 
-### 1.2.3 Jaccard Similarity & Intersections
+### 1.2.3 Jaccard Similarity & Intersections {#sec:jaccard-similarity-intersections}
 
 The Jaccard similarity $J(A, B) = \frac{|A \cap B|}{|A \cup B|}$ is estimated from the
 bottom-$k$ sketch of the union, $S(A \cup B) = \text{bottom-}k\big(S(A) \cup S(B)\big)$,
@@ -107,7 +107,7 @@ $S(A \cup B)$ is a uniformly random $k$-subset of $A \cup B$, the count in the n
 is hypergeometric, and $\hat J$ is exactly unbiased, with variance
 $J(1 - J)/k \cdot (|A \cup B| - k)/(|A \cup B| - 1) \le 1/(4k)$. When both sketches hold
 their whole sets (each set has at most $k$ items), compute $J$ exactly from them: the
-formula above is then still an estimate whenever the union exceeds $k$ (§10.5).
+formula above is then still an estimate whenever the union exceeds $k$ ([§10.5](#sec:kmv-pairs)).
 
 The intersection size is then estimated as
 $|A \cap B| \approx \hat{J}(A, B) \cdot \hat{N}_{A \cup B}$, consistently but not
@@ -125,7 +125,7 @@ truly random hashing when $fk = \Omega(1)$. Bottom-$k$ estimators of Jaccard and
 containment from two sketches are treated by Cohen and
 Kaplan.{{< cite "thorup2013bottom,cohen2007summarizing" >}}{{< /sidenote >}}
 
-### 1.3 Comparison: Bottom-$k$ vs. MinHash vs. HyperLogLog
+### 1.3 Comparison: Bottom-$k$ vs. MinHash vs. HyperLogLog {#sec:comparison-bottom-k-minhash}
 
 The two usual alternatives are $k$-hash MinHash{{< cite "broder1997resemblance" >}} and
 HyperLogLog:{{< cite "flajolet2007hyperloglog" >}}
@@ -137,12 +137,12 @@ HyperLogLog:{{< cite "flajolet2007hyperloglog" >}}
 | **Memory Footprint** | $O(k \log M)$ bits | $O(k \log M)$ bits | $O(m \log \log M)$ bits (~5–6 bits/register) |
 | **Best Use Case** | Fast updates + set intersections, Jaccard, & subset sums | Locality-Sensitive Hashing (LSH) | Pure `COUNT(DISTINCT)` at minimal memory |
 
-Here $M$ is the size of the hashed universe, as in §1.2.1, so a hash value takes
+Here $M$ is the size of the hashed universe, as in [§1.2.1](#sec:cardinality-estimation-count-distinct), so a hash value takes
 $\log M$ bits, and $m$ is the number of HLL registers (standard error about
-$1.04/\sqrt{m}$, §14).
+$1.04/\sqrt{m}$, [§14](#sec:references)).
 
 
-## 2. Weighted Extension: Priority Sampling & Exponential Scaling
+## 2. Weighted Extension: Priority Sampling & Exponential Scaling {#sec:weighted-extension-priority-sampling}
 
 A **weighted bottom-$k$ sketch** generalizes count-distinct sketching to items with
 positive weights $w_i > 0$ (e.g., revenue, byte volume, or duration). It samples heavy
@@ -150,7 +150,7 @@ items with higher probability and yields unbiased
 Horvitz-Thompson{{< cite "horvitz1952generalization" >}} estimates for total stream
 weight and arbitrary subset sums.
 
-### 2.1 Core Intuition: Virtual Replication
+### 2.1 Core Intuition: Virtual Replication {#sec:core-intuition-virtual-replication}
 
 If an item $x_i$ has integer weight $w_i = 100$, an unweighted sketch could conceptually
 split $x_i$ into 100 sub-items $(x_i, 1), \dots, (x_i, 100)$, hashing each to $[0, 1]$
@@ -159,20 +159,20 @@ and taking the minimum:
 $$r_i = \min_{1 \le j \le w_i} h(x_i, j)$$
 
 Computing $w_i$ hashes directly requires $O(w_i)$ work and fails for continuous
-non-integer weights. Exponential scaling (§2.2.1) reproduces this minimum exactly in
+non-integer weights. Exponential scaling ([§2.2.1](#sec:method-exponential-scaling-ppswor)) reproduces this minimum exactly in
 **$O(1)$ time**, up to an increasing transformation:
 $-\ln(1 - \min_j h(x_i, j)) \sim \text{Exp}(w_i)$, which is also the law of
 $-\ln(u_i)/w_i$, and it extends to any real $w_i > 0$. Priority scaling $u_i/w_i$
-(§2.2.2) matches it only for small ranks, since
+([§2.2.2](#sec:method-b-priority-sampling)) matches it only for small ranks, since
 $\Pr(u_i/w_i < t) = w_i t \approx 1 - (1 - t)^{w_i}$; under priority scaling the
 probability of holding the minimum is therefore not $w_i/\sum_j w_j$. This does not
-affect §3, whose unbiasedness proof uses only each rank's CDF $F_i$.
+affect [§3](#sec:mathematical-proof-unbiasedness), whose unbiasedness proof uses only each rank's CDF $F_i$.
 
-### 2.2 Mathematical Formulations
+### 2.2 Mathematical Formulations {#sec:mathematical-formulations}
 
 Given uniform random hashes $u_i = h(i) \in (0, 1)$ and weights $w_i > 0$:
 
-### 2.2.1 Method A: Exponential Scaling (PPSWOR)
+### 2.2.1 Method A: Exponential Scaling (PPSWOR) {#sec:method-exponential-scaling-ppswor}
 
 Transform $u_i \sim \text{Uniform}(0, 1)$ into an exponential variable
 $r_i \sim \text{Exp}(w_i)${{< cite "cohen2008tighter,rosen1997asymptotic" >}}:
@@ -184,14 +184,14 @@ proportional to its weight:
 
 $$\Pr\left(r_i = \min_{j \in S} r_j\right) = \frac{w_i}{\sum_{j \in S} w_j}$$
 
-### 2.2.2 Method B: Priority Sampling (Uniform Scaling)
+### 2.2.2 Method B: Priority Sampling (Uniform Scaling) {#sec:method-b-priority-sampling}
 
 Scale the uniform float directly{{< sidenote >}}Priority sampling is due to Duffield,
 Lund and Thorup. The same ranks $u_i / w_i$, keeping the $n$ smallest, define Ohlsson's
 *sequential Poisson sampling*, used for the Swedish Consumer Price Index since 1989,
 whose estimator Ohlsson showed to be asymptotically unbiased; the threshold estimator of
-§2.3 is exactly unbiased
-(§3).{{< cite "duffield2007priority,ohlsson1998sequential" >}}{{< /sidenote >}}:
+[§2.3](#sec:horvitz-thompson-estimator) is exactly unbiased
+([§3](#sec:mathematical-proof-unbiasedness)).{{< cite "duffield2007priority,ohlsson1998sequential" >}}{{< /sidenote >}}:
 
 $$r_i = \frac{u_i}{w_i}$$
 
@@ -201,7 +201,7 @@ conjectured, and Szegedy proved, that no unbiased scheme sampling $k$ items has 
 smaller total variance than priority sampling with $k + 1$
 items.{{< cite "szegedy2006dlt" >}}{{< /sidenote >}}
 
-### 2.3 Horvitz-Thompson Estimator
+### 2.3 Horvitz-Thompson Estimator {#sec:horvitz-thompson-estimator}
 
 Assume $N \ge k \ge 2$ (otherwise every item is kept, with $\hat{w}_i = w_i$). Let
 $\tau = r_{(k)}$ be the $k$-th smallest rank in the sketch. The first $k - 1$ items
@@ -221,14 +221,14 @@ the threshold $\tau$.
 In both schemes, the threshold-setting item $r_{(k)}$ receives an adjusted weight
 $\hat{w}_{(k)} = 0$.
 
-### 2.4 Subset Sum Queries
+### 2.4 Subset Sum Queries {#sec:subset-sum-queries}
 
 Let $S_{k-1}$ denote the active sample set of size $k - 1$. For any predicate $Q$ (e.g.,
 `region == 'EU'`):
 
 $$\hat{W}_Q = \sum_{i \in S_{k-1} \cap Q} \hat{w}_i \quad \text{where } \mathbb{E}[\hat{W}_Q] = \sum_{i \in Q} w_i$$
 
-### 2.5 Worked Numerical Example ($k = 3$)
+### 2.5 Worked Numerical Example ($k = 3$) {#sec:worked-numerical-example-k}
 
 Consider $N = 4$ items evaluated with Priority Sampling ($r_i = u_i / w_i$):
 
@@ -253,9 +253,9 @@ Heavy item A ($w_A > 1/\tau$) retains its exact weight ($100$), whereas light it
 light items.
 
 
-## 3. Mathematical Proof of Unbiasedness
+## 3. Mathematical Proof of Unbiasedness {#sec:mathematical-proof-unbiasedness}
 
-### 3.1 The Leave-One-Out Threshold $\tau_{-i}$
+### 3.1 The Leave-One-Out Threshold $\tau_{-i}$ {#sec:leave-out-threshold-k}
 
 Let $r_1, \dots, r_N$ be independent continuous random variables with CDFs
 $F_i(t) = \Pr(r_i < t)$, and $N \ge k \ge 2$ (with fewer items every one is kept, with
@@ -273,7 +273,7 @@ Kaplan's *rank conditioning*, which generalises the derivation Duffield, Lund an
 gave for priority sampling to any family of rank
 distributions.{{< cite "cohen2008tighter" >}}{{< /sidenote >}}
 
-### 3.1.1 Fundamental Equivalence
+### 3.1.1 Fundamental Equivalence {#sec:fundamental-equivalence}
 
 1. Item $i$ is inside the top $k-1$ overall ranks if and only if $r_i < \tau_{-i}$:
    $$r_i < \tau \iff r_i < \tau_{-i}$$
@@ -281,13 +281,13 @@ distributions.{{< cite "cohen2008tighter" >}}{{< /sidenote >}}
    to match $\tau_{-i}$:
    $$r_i < \tau_{-i} \implies \tau = \tau_{-i}$$
 
-### 3.2 General Unbiasedness Proof
+### 3.2 General Unbiasedness Proof {#sec:general-unbiasedness-proof}
 
 Define the indicator $\mathbb{I}(r_i < \tau)$ and the adjusted weight estimator:
 
 $$\hat{w}_i = \frac{w_i}{F_i(\tau)} \cdot \mathbb{I}(r_i < \tau)$$
 
-Using the equivalences from Section 3.1:
+Using the equivalences from [Section 3.1](#sec:leave-out-threshold-k):
 
 $$\hat{w}_i = \frac{w_i}{F_i(\tau_{-i})} \cdot \mathbb{I}(r_i < \tau_{-i})$$
 
@@ -315,7 +315,7 @@ By linearity of expectation, for any subset $Q \subseteq \{1, \dots, N\}$:
 
 $$\mathbb{E}[\hat{W}_Q] = \sum_{i \in Q} \mathbb{E}[\hat{w}_i] = \sum_{i \in Q} w_i = W_Q \quad \blacksquare$$
 
-### 3.3 Instantiating Distributions
+### 3.3 Instantiating Distributions {#sec:instantiating-distributions}
 
 Evaluating $F_i(t) = \Pr(r_i < t)$ for specific rank transformations:
 
@@ -325,17 +325,17 @@ Evaluating $F_i(t) = \Pr(r_i < t)$ for specific rank transformations:
 * **Exponential Scaling ($r_i = -\ln(u_i) / w_i$):**
   $$F_i(t) = \Pr(u_i > e^{-w_i t}) = 1 - e^{-w_i t} \implies \hat{w}_i = \frac{w_i}{1 - e^{-w_i \tau}}$$
 
-### 3.4 Why the $k$-th Item acts as a Threshold Setter
+### 3.4 Why the $k$-th Item acts as a Threshold Setter {#sec:k-th-item-acts}
 
 Let $i$ be the item at position $k$, so $r_i = r_{(k)} = \tau$. Then
-$\mathbb{I}(r_i < \tau) = 0$, and the estimator of §3.2 gives $\hat{w}_{(k)} = 0$ by
+$\mathbb{I}(r_i < \tau) = 0$, and the estimator of [§3.2](#sec:general-unbiasedness-proof) gives $\hat{w}_{(k)} = 0$ by
 itself: its leave-one-out threshold $\tau_{-i} = r_{(k-1)}^{(-i)} = r_{(k-1)}$ lies below
 $r_i$. Counting the $k$-th item as a sample would mean a sample of size $k$, whose
 leave-one-out threshold would be the $k$-th smallest of the other ranks,
 $r_{(k)}^{(-i)} = r_{(k+1)}$, which a sketch of capacity $k$ discards (this is the shifted
-convention of §6.5). So the $k$-th item serves only as the threshold $\tau$.
+convention of [§6.5](#sec:prio)). So the $k$-th item serves only as the threshold $\tau$.
 
-### 3.5 Pairwise Zero Covariance Property
+### 3.5 Pairwise Zero Covariance Property {#sec:pairwise-zero-covariance-property}
 
 For Priority Sampling, Duffield et al.{{< cite "duffield2007priority" >}} proved that
 for any two distinct items $i \ne j$:
@@ -347,19 +347,19 @@ As a result, the variance of a subset sum equals the sum of the individual varia
 $$\text{Var}(\hat{W}_Q) = \sum_{i \in Q} \text{Var}(\hat{w}_i)$$
 
 
-## 4. High-Performance Implementations
+## 4. High-Performance Implementations {#sec:high-performance-implementations}
 
-### 4.1 Systems Optimization Strategies
+### 4.1 Systems Optimization Strategies {#sec:systems-optimization-strategies}
 
 1. **$O(1)$ Branch-Light Fast-Path Rejection:** Cache $\tau = r_{(k)}$ in a dedicated
    field. Over $99\%$ of items in large streams fail $r_i < \tau$ and are rejected
    immediately without touching heap memory, as long as the weights do not trend upward
-   along the stream (equal or i.i.d. weights, or items in random order; see §4.4).
+   along the stream (equal or i.i.d. weights, or items in random order; see [§4.4](#sec:complexity-memory-profile)).
 2. **IEEE-754 Bit-Level Floating Point Generation:** Construct uniform $u_i \in (0, 1)$
    by ORing `z >> 12` into the mantissa of double `1.0` (`0x3FF0000000000000`), forcing
    the lowest mantissa bit to 1, and subtracting `1.0`. 51 hash bits survive, and $u_i$ is
    an odd multiple of $2^{-52}$ between $2^{-52}$ and $1 - 2^{-52}$: the forced bit is
-   what keeps $u_i$ from being $0$. (The crate's hash, §7.3, keeps all 52 bits on the
+   what keeps $u_i$ from being $0$. (The crate's hash, [§7.3](#sec:randomness), keeps all 52 bits on the
    midpoint grid instead.)
 4. **Preconditions:** each `id` is offered at most once, with its weight already
    aggregated per key (a repeated `id` is a repeated item), and weights are positive and
@@ -367,7 +367,7 @@ $$\text{Var}(\hat{W}_Q) = \sum_{i \in Q} \text{Var}(\hat{w}_i)$$
 3. **In-Place Heap Replacement:** Overwrite root `heap[0]` directly and run
    `sift_down(0)` instead of executing sequential `pop()` and `push()` calls.
 
-### 4.2 Rust Implementation
+### 4.2 Rust Implementation {#sec:rust-implementation}
 
 ```rust
 use std::cmp::Ordering;
@@ -562,7 +562,7 @@ impl PrioritySketch {
 }
 ```
 
-### 4.3 C99 Implementation
+### 4.3 C99 Implementation {#sec:c99-implementation}
 
 ```c
 #include <stdint.h>
@@ -695,7 +695,7 @@ double ps_estimate_subset(const PrioritySketch *restrict ps, ps_predicate_fn pre
 }
 ```
 
-### 4.4 Complexity & Memory Profile
+### 4.4 Complexity & Memory Profile {#sec:complexity-memory-profile}
 
 * **Memory Usage:** $32 \times k$ bytes. For $k = 1024$, total memory is $32\text{ KB}$,
   fitting inside standard CPU L1 data caches.
@@ -714,7 +714,7 @@ double ps_estimate_subset(const PrioritySketch *restrict ps, ps_predicate_fn pre
 
 ## 5. Sketching a Recurrence: the Colours of Bitcoin Transactions {#sec:colours}
 
-{{< newthought >}}Sections 1–4 sketch a stream{{< /newthought >}}: items arrive, each is
+{{< newthought >}}Sections [1](#sec:introduction-bottom-k-sketches)–[4](#sec:high-performance-implementations) sketch a stream{{< /newthought >}}: items arrive, each is
 seen once, and the sketch summarises the set seen so far. What follows uses the same
 ideas for a different job, and was built and measured in the Rust repository
 `coloring-bt-transactions-rs` as a new binary, `sketch` (`src/bin/sketch.rs` and the
@@ -725,25 +725,25 @@ the 2022 Bitcoin chain{{< cite "nakamoto2008bitcoin" >}}.
 One thing should be said at the start, because the title of this post promises
 bottom-$k$. The sketch that won is **not** literally a bottom-$k$ sketch. It is
 VarOpt$_k$ with its light items chosen by *systematic* sampling in block order: a
-threshold sampler, the sibling of the priority sampling of §2 rather than one of its
-members. The literal weighted bottom-$k$ sketch of §2 was built too (`prio` below) and
-measured beside it; it lost by a factor of 6 to 21 at the same size (§8.4). Section 5.5
-says which of what follows is known and which is new. Section 6
-proves what each variant guarantees, section 7 shows the code, section 8 the
+threshold sampler, the sibling of the priority sampling of [§2](#sec:weighted-extension-priority-sampling) rather than one of its
+members. The literal weighted bottom-$k$ sketch of [§2](#sec:weighted-extension-priority-sampling) was built too (`prio` below) and
+measured beside it; it lost by a factor of 6 to 21 at the same size ([§8.4](#sec:variants-compared)). [Section 5.5](#sec:novelty)
+says which of what follows is known and which is new. [Section 6](#sec:proofs)
+proves what each variant guarantees, [section 7](#sec:implementation) shows the code, [section 8](#sec:results) the
 measurements, and the reasons the threshold sampler wins run through all three. Section
 10 turns to two questions that no sketch of a colour answers: from how many blocks a
 transaction descends, and how much two transactions share.
 
 Every result of a run quoted below can be recomputed from files on disk by a mode of
 `sketch`. Most come from modes that fold nothing and only read what the runs wrote:
-`sketch summarize` turns the outputs of `chain` and `eval` into the tables of section 8
+`sketch summarize` turns the outputs of `chain` and `eval` into the tables of [section 8](#sec:results)
 (the factor above is the column `abs_dmean_over_varopt` of its `errors.tsv`, at
 $k = 64$, $256$ and $1024$), and `sketch summary` reads count streams back into the
-counts of sections 5.2 and 10. Section 7.9 lists the modes and the runs. What no mode
+counts of sections [5.2](#sec:exact-colours-do-not) and [10](#sec:counting). [Section 7.9](#sec:modes-threads-commands-that) lists the modes and the runs. What no mode
 computes is labelled where it appears: the prototypes and simulations of the design
 phase, benchmarks, wall-clock times from `/usr/bin/time`, and hand projections.
 
-### 5.1 Colours
+### 5.1 Colours {#sec:colour-def}
 
 Number the blocks of the chain $0, 1, \dots, L - 1$, with $L = 762{,}261$ for 2022. The
 *colour* of a transaction $t$ is a probability distribution over blocks, written as a
@@ -781,13 +781,13 @@ Laplace values $\Lambda_s(C_t) = \sum_b c_t(b)\, e^{-s b / L}$ at
 $s \in \{0.5, 1, 2, 4, 8, 16, 32\}$. All of these are on disk, computed exactly, for
 every transaction of the chain (`colors.laplace.zst`, `colors.moments.zst`, and the
 1024-band binned colours `colors.bands1024.zst`), and they are what the sketches are
-measured against in section 8.
+measured against in [section 8](#sec:results).
 
-### 5.2 Why the exact colours do not fit
+### 5.2 Why the exact colours do not fit {#sec:exact-colours-do-not}
 
 The support of $C_t$ is the union of the supports of its parents with a positive share
-(every parent but a zero-amount input, §10.1), so colours only grow. On the 2022 chain
-they grow fast: an exact fold of the set colours (the `sets` supports of §10.1, which
+(every parent but a zero-amount input, [§10.1](#sec:asked)), so colours only grow. On the 2022 chain
+they grow fast: an exact fold of the set colours (the `sets` supports of [§10.1](#sec:asked), which
 also keep zero-amount inputs, without the weights) was stopped by a memory guard at 480
 GiB of resident memory around record 31.1M, 4% of the way through the chain, holding
 $1.24 \times 10^{11}$ block ids in 1.45M live colours, about 85,000 blocks a colour on
@@ -802,10 +802,10 @@ colour as soon as its last spender has read it, already cuts the live colours fr
 to 19.4M over the chain (the 43 GB, 92.7M and 19.4M are from the code's documentation,
 not from a logged run), and the distinct live colours still peak at about 7.6M (7,593,630
 distinct live sketches at the peak of the production run, `peak sketches` in its
-`--stats`, §9). Multiplied by hundreds of thousands of blocks, that does not fit in any
+`--stats`, [§9](#sec:production)). Multiplied by hundreds of thousands of blocks, that does not fit in any
 memory.
 
-### 5.3 Sketching the recurrence
+### 5.3 Sketching the recurrence {#sec:sketching-recurrence}
 
 So every colour is replaced by a *sketch* $\hat C_t$ of at most about $k$ entries, and
 the sketches are computed by the *same* recurrence:
@@ -818,14 +818,14 @@ where $X_t$, the *candidate*, is the exact mixture of the parents' sketches, and
 is a randomised reduction back to about $k$ points, applied only when $X_t$ has more
 than $k$ points (otherwise $\hat C_t = X_t$; this holds for `varopt` and `prio`, while
 `coord` also applies the threshold inherited from its operands, which can drop terms
-even below $k$, §6.6 and §7.7). A coinbase is $\hat C_t = x^{\beta}$, exactly. What one
+even below $k$, [§6.6](#sec:coord) and [§7.7](#sec:prio-coord)). A coinbase is $\hat C_t = x^{\beta}$, exactly. What one
 wants from $R$ is that $\hat C_t$ be an unbiased estimate of $C_t$, still a probability
-distribution, and accurate on the functionals of §5.1, with an error that does not grow
+distribution, and accurate on the functionals of [§5.1](#sec:colour-def), with an error that does not grow
 as the recurrence goes deeper into the chain.
 
-### 5.4 Why a linear combination of sketches is the crux
+### 5.4 Why a linear combination of sketches is the crux {#sec:linear-combination-sketches-crux}
 
-In sections 1–4 a merge is a union, $S(A \cup B) = \text{bottom-}k(S(A) \cup S(B))$, and
+In sections [1](#sec:introduction-bottom-k-sketches)–[4](#sec:high-performance-implementations) a merge is a union, $S(A \cup B) = \text{bottom-}k(S(A) \cup S(B))$, and
 it is exact because an item has the same weight in $A$, in $B$ and in $A \cup B$. Here
 the operation is a *linear combination*: the child's weight of block $b$ is
 $\sum_i s_i\, c_{p_i}(b)$, a sum of weights that may each be present in one parent's
@@ -839,20 +839,20 @@ Three consequences shape everything below.
 
 1. A block's weight in the child is assembled from several parents' estimates. If a
    parent's sketch does not hold the block, its share of that block is simply unknown;
-   §6.6 shows that this alone breaks the exactness of a coordinated (same-hash) merge
+   [§6.6](#sec:coord) shows that this alone breaks the exactness of a coordinated (same-hash) merge
    whose ranks depend on the weights. With ranks that depend on the block alone it does
    not: a block kept in the child's sketch is kept in the sketch of every parent whose
-   support contains it, and its weight is assembled exactly (§10.3).
+   support contains it, and its weight is assembled exactly ([§10.3](#sec:coordinated-bottom-k-support)).
 2. Each node re-estimates an estimate. For the errors not to compound, each reduction
-   must be unbiased *conditionally on its inputs* (§6.2), and its randomness must be
-   fresh: independent of the randomness that chose the inputs (§6.5).
+   must be unbiased *conditionally on its inputs* ([§6.2](#sec:unbiased)), and its randomness must be
+   fresh: independent of the randomness that chose the inputs ([§6.5](#sec:prio)).
 3. Overlap means the parents' errors are correlated: they share ancestors. Any argument
    that needs independent parents fails here; the ones below use linearity and
    conditional expectations only.
 
 ### 5.5 What is known and what is new {#sec:novelty}
 
-The tools of sections 6 and 10 are known. What is new is the problem they are put to and
+The tools of sections [6](#sec:proofs) and [10](#sec:counting) are known. What is new is the problem they are put to and
 a few results that come from putting them together. Here is the line between the two, so
 that the proofs below are read for what they are. "New" means that a search of the
 literature at review time found no earlier statement, not that none exists.
@@ -896,15 +896,15 @@ literature at review time found no earlier statement, not that none exists.
   a DAG: the colour of every transaction of the chain, the haircut taint of every
   coinbase at once. It does so by an unbiased, mass-preserving reduction at every node
   with fresh randomness, and adds sketches of the support and of the L1 distance for the
-  questions that reduction cannot answer (§10.2).
+  questions that reduction cannot answer ([§10.2](#sec:varopt-sketches-cannot-answer)).
 - *The rate through the recursion*, {{< xref "cor:rate" "full" >}}. Through any DAG of
   convex mixtures, every functional of bounded variation has a root-mean-square error at
   most $V(g)\sqrt{A_t}/k$ at every node, with $A_t \le 1 + d_t$. Independent inclusion
   gives only $\sqrt{A_t/k}$. The result is modest, and its proof is elementary once the
   known pieces are in place. Two things it does not settle are measured instead. The
-  error stays flat with depth (§8.3), an open question (§13). Priority sampling and
-  VarOpt with lights in random order fall at about $k^{-1/2}$ at depth (§6.4, §8.4).
-- *The universe of each count*, §10.4. Every block of a support is at most $\beta_t$,
+  error stays flat with depth ([§8.3](#sec:error-against-depth)), an open question ([§13](#sec:left)). Priority sampling and
+  VarOpt with lights in random order fall at about $k^{-1/2}$ at depth ([§6.4](#sec:rates), [§8.4](#sec:variants-compared)).
+- *The universe of each count*, [§10.4](#sec:kmv-count). Every block of a support is at most $\beta_t$,
   and $\beta_t$ depends on the chain and not on the permutation, so $[0, \beta_t]$ is a
   valid universe. That brings a finite-population factor. On the deepest supports of the
   first 31.2M records it halves the theoretical error of a count that stays exactly
@@ -929,19 +929,19 @@ literature at review time found no earlier statement, not that none exists.
 Throughout this section a reduction acts on a vector of *candidates*
 $v = (v_b)_{b \in B}$ over a set $B = \{b_1 < b_2 < \dots < b_n\}$ of blocks, with every
 $v_b > 0$, total $W = \sum_b v_b$ and $n > k \ge 1$. In the recurrence $W = 1$ (record
-mode, §6.2). For a block $x$ the *cut* at $x$ is $F(x) = \sum_{b \le x} v_b$, and hats
+mode, [§6.2](#sec:unbiased)). For a block $x$ the *cut* at $x$ is $F(x) = \sum_{b \le x} v_b$, and hats
 denote the reduced vector: $\hat v_b$, $\hat F(x) = \sum_{b \le x} \hat v_b$.
 
-A word on notation, because some letters change meaning from sections 2–3. There $\tau$
+A word on notation, because some letters change meaning from sections [2](#sec:weighted-extension-priority-sampling)–[3](#sec:mathematical-proof-unbiasedness). There $\tau$
 is a threshold on *ranks* $u/w$, small ranks are kept, and a kept item is carried at
-$\max(w, 1/\tau)$. In §6.1–6.5 $\tau$ is a threshold on *weights*: an item is heavy when
+$\max(w, 1/\tau)$. In [§6.1](#sec:varopt)–[6.5](#sec:prio) $\tau$ is a threshold on *weights*: an item is heavy when
 its weight exceeds $\tau$, and kept lights are carried at weight $\tau$, so this $\tau$
-plays the part of §2's $1/\tau$. §6.6 returns to §2's rank convention for `coord`. Also,
+plays the part of [§2](#sec:weighted-extension-priority-sampling)'s $1/\tau$. [§6.6](#sec:coord) returns to [§2](#sec:weighted-extension-priority-sampling)'s rank convention for `coord`. Also,
 $S_j$ below is a cumulative light mass, not a sketch; $h$ counts heavy items, not a
 hash; $W$ is a total mass and $W_1$ the Wasserstein distance; and the mixing shares are
 always $s$ ($s_{t,i}$, $s_a$, $s_b$, or a bare $s$, $s'$), except in $\Lambda_s$ and
 $e^{-sb/L}$ in {{< xref "cor:bv" "full" >}} and its proof, where $s$ is the Laplace
-parameter of §5.1.
+parameter of [§5.1](#sec:colour-def).
 
 ### 6.1 VarOpt$_k$ by systematic threshold sampling {#sec:varopt}
 
@@ -984,7 +984,7 @@ subset sums that are not intervals of the block axis; it does not matter for the
 and the bounded-variation functionals read in this post, which
 {{< xref "thm:varopt" "full" >}}(5) bounds directly. The accumulator of the code, which
 starts at $U$, adds $v/\tau$ and keeps an item each time it crosses an integer, computes
-exactly this rule (§7.6).
+exactly this rule ([§7.6](#sec:varopt-reduction)).
 
 {{< lemma label="lem:threshold" >}}
 The threshold $\tau$ exists and is unique. At most $k - 1$ items are heavy, at least one
@@ -1072,12 +1072,12 @@ $W_1 = \sum_{j<n} \lvert D_j \rvert\,(b_{j+1} - b_j)$.
 {{< /proof >}}
 
 {{< remark >}}
-Point 5 also explains a number measured in section 8. For a diffuse colour, whose lights
+Point 5 also explains a number measured in [section 8](#sec:results). For a diffuse colour, whose lights
 are all tiny against $\tau$, the fractional parts of the $S_j$ run densely through
 $[0, 1)$, so the largest CDF error over all cuts is close to $\tau \max(U, 1 - U)$,
 whose expectation is $\tfrac34 \tau$. The single-shot KS distance of `varopt` measured
 on the exact colours was between $0.741\tau$ and $0.750\tau$ for $k = 16$ to $4096$, a
-little lower at small $k$ (§8.8; the column `ideal_ks_over_tau` of
+little lower at small $k$ ([§8.8](#sec:floors-tv1024-cannot-say); the column `ideal_ks_over_tau` of
 `sketch summarize`'s `floors_eval.tsv`).{{< /remark >}}
 
 The code never sorts to find $\tau$; it iterates.
@@ -1150,10 +1150,10 @@ that are the same parent are added before reducing ($s\,C + s'\,C = (s + s')\,C$
 exactly), and zero-share operands are skipped, which changes nothing in $X_t$.
 
 {{< remark >}}
-In code, $U_t$ is a hash of the seed and the record index (§7.3), so a run is a
+In code, $U_t$ is a hash of the seed and the record index ([§7.3](#sec:randomness)), so a run is a
 deterministic function of its input. The theorem treats the hash values as independent
 uniforms; that is an idealisation of a good counter-based generator, and the
-seed-replicate tests of §8.5 are the check that it is harmless.
+seed-replicate tests of [§8.5](#sec:bias) are the check that it is harmless.
 {{< /remark >}}
 
 **Record mode against the literal fold.** `run()` folds a record's inputs pairwise, from
@@ -1164,12 +1164,12 @@ fresh $U_{t,i}$ each. The same tower argument shows it is
 unbiased too. The default (`reduce=record`) merges a record's operands exactly and
 reduces once. Both compute the recurrence {{< eqref "eq:recurrence" >}}; they differ
 only in how often noise is injected. In step mode a record of $n$ inputs is reduced up
-to $n - 1$ times, and the mass folded early is resampled again at every later step. §6.3
+to $n - 1$ times, and the mass folded early is resampled again at every later step. [§6.3](#sec:propagation)
 shows that every reduction adds a nonnegative term to the variance, so this is the
 expected direction, though not a proof that step mode must lose (its intermediate
 reductions have smaller thresholds, $\tau_{t,i} \le (s_i + \dots + s_n)/k$). Measured,
 it loses everywhere: 1.24–1.72 times the error of record mode at $k = 64$, with 6.15
-times as many reductions (§8.6; `step.tsv` and `cost.tsv` of `sketch summarize`).
+times as many reductions ([§8.6](#sec:record-mode-against-step); `step.tsv` and `cost.tsv` of `sketch summarize`).
 
 ### 6.3 How the error propagates {#sec:propagation}
 
@@ -1289,7 +1289,7 @@ such reductions: the bound by itself only says that the error's standard deviati
 most of order $\sqrt{\text{depth}}/k$. It does not explain why the error does *not* grow
 with depth. Yet that is what the chain shows:
 $\lvert \Delta\text{mean} \rvert / \text{sd}$ is flat from 100M records to the end, at
-every $k$ from 16 to 1024 (§8.3). Two things in the decomposition make it plausible
+every $k$ from 16 to 1024 ([§8.3](#sec:error-against-depth)). Two things in the decomposition make it plausible
 without proving it. Most records do not reduce at all (a record whose operands are one
 parent returns that parent's sketch), so most ancestors contribute $\delta_r = 0$. And
 mixing spreads $\alpha$: the $\alpha_{t,r}$ over a generation of ancestors sum to at
@@ -1298,10 +1298,10 @@ smaller than $\sum_r \alpha_{t,r}$. The measured flatness says that, on this cha
 effective $\sum_r \alpha_{t,r}^2 \mathbb{E}[\tau_r^2 f_r(1-f_r)]$ stays bounded.
 
 What the recursion costs can be read against a single reduction. A single-shot sketch of
-the exact colour (the "IDEAL" of §8.7) has one term in the sum. On the first 3M records,
+the exact colour (the "IDEAL" of [§8.7](#sec:recursion-against-single-reduction)) has one term in the sum. On the first 3M records,
 where exact colours are available, the recursive sketch's mean
 $\lvert\Delta\text{mean}\rvert$ was 29% to 67% above the single shot's, for $k = 16$ to
-$4096$, in the stratum of colours with more than 32,768 blocks (the `eval3m` run of §8.7,
+$4096$, in the stratum of colours with more than 32,768 blocks (the `eval3m` run of [§8.7](#sec:recursion-against-single-reduction),
 read by `sketch summarize` into `ideal.tsv`: metric `abs_dmean_L`, stratum
 `fix:>32768`, column `excess`). If both errors had the
 same shape, those ratios would correspond to variance ratios of $1.29^2 \approx 1.66$ to
@@ -1334,16 +1334,16 @@ $\tau^2 (v_b/\tau)(1 - v_b/\tau) = v_b(\tau - v_b)$. Sum over the lights up to $
 {{< /proof >}}
 
 Priority sampling (`prio`) is not Poisson sampling, but its Horvitz–Thompson weights
-have zero pairwise covariance (§3.5), and conditionally on the leave-one-out threshold
+have zero pairwise covariance ([§3.5](#sec:pairwise-zero-covariance-property)), and conditionally on the leave-one-out threshold
 $T_b$, the $k$-th largest of the priorities $v_c/u_c$ of the other blocks $c \ne b$
-(§6.5's convention; it is $1/\tau_{-b}$ of §3.1 with $k$ shifted by one, and it equals
+([§6.5](#sec:prio)'s convention; it is $1/\tau_{-b}$ of [§3.1](#sec:leave-out-threshold-k) with $k$ shifted by one, and it equals
 $\tau_q$ whenever $b$ is kept), its raw weight
 $\max(v_b, T_b)\,\mathbf{1}\{v_b/u_b > T_b\}$ has variance $v_b\,(T_b - v_b)^{+}$. So,
 for one reduction with unnormalised weights,
 $\operatorname{Var}\hat F(x) = \sum_{b \le x} \mathbb{E}[v_b (T_b - v_b)^{+}]$. With
 $T_b \approx W/k$ this is the same $F(x)/k$ order. That last step, the concentration of
 $T_b$, is argued and not proved here; the measured slope of `prio`'s errors against $k$
-is $-0.49$ to $-0.54$ (§8.4; `sketch summarize`'s `slopes.tsv`, every metric but
+is $-0.49$ to $-0.54$ ([§8.4](#sec:variants-compared); `sketch summarize`'s `slopes.tsv`, every metric but
 TV1024).
 
 The two estimators differ in how the lights are spread. Systematic sampling takes
@@ -1361,11 +1361,11 @@ root-mean-square error of every bounded-variation functional by $V(g)\sqrt{A_t}/
 because each reduction's error is at most $\tau_r V(g)$, a per-reduction variance of
 order $\tau_r^2$. Under independent inclusion the per-reduction variance is of order
 $\tau_r$ ({{< xref "prop:poisson" "full" >}}), and the same decomposition gives only
-$\sqrt{A_t/k}$. What is not proved is uniformity in depth, since $A_t$ can grow (§6.3).
+$\sqrt{A_t/k}$. What is not proved is uniformity in depth, since $A_t$ can grow ([§6.3](#sec:propagation)).
 Measured: local log-log slopes of $-0.93$ to $-0.97$ for the recursive sketch's
-$\lvert\Delta\text{mean}\rvert$ from $k = 16$ to $1024$ over the whole chain (§8.2),
+$\lvert\Delta\text{mean}\rvert$ from $k = 16$ to $1024$ over the whole chain ([§8.2](#sec:error-against-k)),
 and, for the single-shot IDEAL on exact colours, $-1.17$ for KS, $-1.14$ for $W_1$ and
-$-1.12$ for the largest Laplace error (§8.7), from `slopes.tsv` and `ideal_slopes.tsv`
+$-1.12$ for the largest Laplace error ([§8.7](#sec:recursion-against-single-reduction)), from `slopes.tsv` and `ideal_slopes.tsv`
 of `sketch summarize`.
 
 That the difference comes from the systematic pass, and not from the thresholds, was
@@ -1388,12 +1388,12 @@ across the doubling from $k = 64$ to $128$).
 
 ### 6.5 Priority bottom-$k$ on the recursion {#sec:prio}
 
-`prio` is the weighted bottom-$k$ sketch of §2 applied at every node: priorities
+`prio` is the weighted bottom-$k$ sketch of [§2](#sec:weighted-extension-priority-sampling) applied at every node: priorities
 $q_b = v_b / u_b$ with fresh uniforms $u_b$ for this reduction, the $k$ largest kept,
 $\tau_q$ the $(k+1)$-th largest priority, and each kept block carried at
-$\max(v_b, \tau_q)$. Priorities are written $v/u$ here, the reciprocals of §2's ranks
-$u/w$, so the $k$ largest priorities are the $k$ smallest ranks and $\tau_q$ is §2's
-$1/\tau$. (Section 2 keeps $k - 1$ items and uses the $k$-th as the threshold; `prio`
+$\max(v_b, \tau_q)$. Priorities are written $v/u$ here, the reciprocals of [§2](#sec:weighted-extension-priority-sampling)'s ranks
+$u/w$, so the $k$ largest priorities are the $k$ smallest ranks and $\tau_q$ is [§2](#sec:weighted-extension-priority-sampling)'s
+$1/\tau$. ([Section 2](#sec:weighted-extension-priority-sampling) keeps $k - 1$ items and uses the $k$-th as the threshold; `prio`
 keeps $k$ and uses the $(k+1)$-th. They are the same scheme with $k$ shifted by one.)
 
 {{< proposition label="prop:prio-raw" >}}
@@ -1402,7 +1402,7 @@ unbiased at every node: $\mathbb{E}[\hat C_t(b)] = C_t(b)$.
 {{< /proposition >}}
 
 {{< proof >}}
-Conditionally on the candidate $X$, the proof of §3.2 applies with the leave-one-out
+Conditionally on the candidate $X$, the proof of [§3.2](#sec:general-unbiasedness-proof) applies with the leave-one-out
 threshold computed from the fresh priorities of the other candidates, which are
 independent of $u_b$: $\mathbb{E}[\hat v_b \mid X] = v_b$. That is the hypothesis of
 {{< xref "thm:dag" "full" >}}, whose proof uses nothing else.
@@ -1431,7 +1431,7 @@ Fresh randomness is not optional either. The design phase also tried *coordinate
 priority sampling with Horvitz–Thompson re-estimation, one $u_b$ per block for the whole
 run, and it diverged: in one prototype the raw mass reached $10^{7}$ to $10^{28}$, and in
 another its mean distance from 1, $\lvert\text{mass} - 1\rvert$, was about $10^{10}$. The
-proof of §3.2 needs the rank $r_b$ to be independent of the threshold *and* of the weight
+proof of [§3.2](#sec:general-unbiasedness-proof) needs the rank $r_b$ to be independent of the threshold *and* of the weight
 $v_b$ it is applied to. With shared keys, the blocks present in a node's input were
 themselves selected because their $u_b$ was small, so $u_b$ given the input is no longer
 uniform but biased small. The nominal inclusion probability $\min(1, v_b/\tau)$ then
@@ -1443,8 +1443,8 @@ as we understand it; the divergence itself is what was measured.)
 
 ### 6.6 Coordinated bottom-$k$: exact on disjoint supports, biased under overlap {#sec:coord}
 
-Here $\tau$ is again a threshold on ranks, as in §2, not the weight threshold of
-§6.1–6.5. `coord` keeps one key $u_b \in (0, 1)$ per block for the whole run, ranks a
+Here $\tau$ is again a threshold on ranks, as in [§2](#sec:weighted-extension-priority-sampling), not the weight threshold of
+[§6.1](#sec:varopt)–[6.5](#sec:prio). `coord` keeps one key $u_b \in (0, 1)$ per block for the whole run, ranks a
 weight $v$ at $u_b / v$, and stores *exact* weights rather than
 estimates.{{< sidenote >}}One key per item, shared by many weight assignments over the
 same items (here, all the colours over the blocks), is the coordinated weighted sampling
@@ -1477,7 +1477,7 @@ $D$ and the output is $D$'s bottom-$k$ sketch. Otherwise $\tau' = c$ and at most
 candidates rank below it.
 {{< /proof >}}
 
-This is test T5 of the code (§7.11), repeated through nested merges. Overlap breaks it,
+This is test T5 of the code ([§7.11](#sec:tests)), repeated through nested merges. Overlap breaks it,
 because a block held by one parent's sketch and not by the other's has only a *lower
 bound* on its weight: the missing parent's share is unknown and is taken as zero (the
 "zero rule").
@@ -1490,7 +1490,7 @@ block kept by the child is kept by every parent whose support holds it
 ({{< xref "lem:kmv-sub" "full" >}}), and the weights of a coordinated merge are then
 exact ({{< xref "lem:kmv-weights" "full" >}}). What such a sketch gives up is the
 weighting itself: it is a uniform sample of the support, which serves the count and the
-Jaccard similarity of §10 and not the functionals of §5.1.
+Jaccard similarity of [§10](#sec:counting) and not the functionals of [§5.1](#sec:colour-def).
 
 {{< example note="overlap" label="ex:overlap" >}}
 Two blocks $b_1, b_2$ with keys $u = (0.3, 0.4)$; $k = 1$; $A = (0.9, 0.1)$,
@@ -1541,24 +1541,24 @@ the first 3M records at $k = 64$ it changed nothing (KS $0.0632$ against $0.0631
 `measured` of `sketch summarize`'s `ideal.tsv` and `peak_entries` of `eval`'s
 `cost.tsv`, both of `eval3m`), so the default
 stayed `cap=min`. Neither cap removes the bias of the zero rule, which is why `coord`
-lost: its error is almost all bias (§8.4) and does not fall with $k$.
+lost: its error is almost all bias ([§8.4](#sec:variants-compared)) and does not fall with $k$.
 
 
 ## 7. Implementation {#sec:implementation}
 
 The code below is excerpted from the `sketch` binary of `coloring-bt-transactions-rs`,
 trimmed (`// …` marks a cut) but not rewritten. It is about 6,500 lines with its tests
-(about 12,700 with the stores of section 10, and about 22,700 at commit 1a27649 with the
-modes that read the runs' outputs back, §7.9), adds no dependency, and reuses the
+(about 12,700 with the stores of [section 10](#sec:counting), and about 22,700 at commit 1a27649 with the
+modes that read the runs' outputs back, [§7.9](#sec:modes-threads-commands-that)), adds no dependency, and reuses the
 repository's record parser, release oracle, exact weighted store and Laplace tables
 through `#[path]` modules.
 
-### 7.1 Where things are
+### 7.1 Where things are {#sec:where-things-are}
 
 | file | what it holds |
 | :--- | :--- |
 | `sketch.rs` | command line, global allocator, dispatch to the modes |
-| `hash.rs` | every random draw, as a hash of where it is drawn; the permutation of the blocks and the Cauchy draws of §10 |
+| `hash.rs` | every random draw, as a hash of where it is drawn; the permutation of the blocks and the Cauchy draws of [§10](#sec:counting) |
 | `algebra.rs` | the sketch type, the `Algebra` trait, operand grouping, the n-way merge |
 | `varopt.rs`, `prio.rs`, `coord.rs` | the three reductions |
 | `driver.rs` | the recurrence, driven exactly as `run()` drives it |
@@ -1571,10 +1571,10 @@ through `#[path]` modules.
 | `l1.rs` | the Cauchy projection of the colour: store, scale MLE, weighted Jaccard |
 | `count.rs`, `pick.rs`, `pairs.rs` | the modes `count`, `pick`, `pairs` |
 | `summarize.rs`, `summary.rs`, `select.rs`, `pairstats.rs`, `describe.rs` | the modes that read other runs' outputs: `summarize`, `summary`, `select`, `pairs-stats`, `describe` |
-| `surface.rs`, `surface_report.rs` | the colour surface of section 12 and its report |
+| `surface.rs`, `surface_report.rs` | the colour surface of [section 12](#sec:surface) and its report |
 | `tests.rs` | tests through the whole pipeline |
 
-### 7.2 A sketch in memory
+### 7.2 A sketch in memory {#sec:sketch-memory}
 
 A sketch is a boxed slice of 8-byte entries in strictly ascending block order, behind an `Rc`:
 
@@ -1613,7 +1613,7 @@ $k + 1$ output rounds up. The `Rc` matters more than the layout: most transactio
 one parent, or one parent several times, and their colour *is* the parent's, so the
 record answers the parent's `Rc` and costs a reference-count bump.
 
-### 7.3 Randomness
+### 7.3 Randomness {#sec:randomness}
 
 Every draw is a hash of its coordinates, so a run is a deterministic function of its
 input (the same seed over the same records writes the same bytes, which is what lets
@@ -1688,7 +1688,7 @@ pub fn coord_key(seed: u64, b: u32) -> f64 {
   {{< xref "thm:varopt" "full" >}}(5) needs $0 < U < 1$, and `prio` divides by its draw.
 - **Salts** keep the three variants' streams apart at equal seeds.
 
-### 7.4 The driver
+### 7.4 The driver {#sec:driver}
 
 `driver.rs` copies the loop of `src/main.rs`'s `run()` rather than sharing it (that loop
 is welded to the exact store), and keeps everything that decides *which* colour is
@@ -1733,7 +1733,7 @@ is done; without it the unspent-output counts decide, as in `run()`. The map is 
 transaction id with a multiplicative hash: SipHash's resistance to chosen keys buys
 nothing over a file of sequential integers.
 
-### 7.5 One record: grouping, the n-way merge, one reduction
+### 7.5 One record: grouping, the n-way merge, one reduction {#sec:record-grouping-n-way}
 
 ```rust
 fn record_mode(&mut self, ops: &[(Handle, f64)], rec: u64) -> Handle {
@@ -1818,7 +1818,7 @@ Variant::VarOpt => {
 `merge_two(&h.entries, *s, &acc.entries, 1.0, …)` and calling `finish` after every
 combine with step index $j$.
 
-### 7.6 The VarOpt reduction
+### 7.6 The VarOpt reduction {#sec:varopt-reduction}
 
 The threshold comes from {{< xref "lem:fixedpoint" "full" >}}: a few linear passes, each
 summing the lights *directly*.
@@ -1900,7 +1900,7 @@ events are only counted (`k+-1` in `--stats`), and the code asserts at most $k +
 points. Over the whole chain at $k = 512$ and $1024$ the count was zero (the column
 `off_by_one` of pass B's `cost.tsv`, and `k+-1 0` in the production run's `--stats`).
 
-### 7.7 `prio` and `coord`
+### 7.7 `prio` and `coord` {#sec:prio-coord}
 
 `prio` keeps the $k$ largest priorities $v/u$ and carries each kept block at $\max(v, \tau_q)$:
 
@@ -1975,12 +1975,12 @@ fn emit(&self, c: &Handle, out: &mut Vec<(u32, f64)>) {
 
 For `varopt` the normalisation is the identity up to `f32` rounding whenever the
 reduction keeps $k$ points ({{< xref "thm:varopt" "full" >}}(1), (4)); on the synthetic
-DAG of §7.11 (where no $k \pm 1$ event occurs) `mass_raw` stays within $10^{-5}$ of $1$.
-In a $k \pm 1$ event (§7.6) one light more or one fewer is kept at weight $\tau$, the
+DAG of [§7.11](#sec:tests) (where no $k \pm 1$ event occurs) `mass_raw` stays within $10^{-5}$ of $1$.
+In a $k \pm 1$ event ([§7.6](#sec:varopt-reduction)) one light more or one fewer is kept at weight $\tau$, the
 raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
-`raw_mass - 1` (§7.10); no such event occurred on the chain.
+`raw_mass - 1` ([§7.10](#sec:output-format)); no such event occurred on the chain.
 
-### 7.8 Numerical care, in one place
+### 7.8 Numerical care, in one place {#sec:numerical-care-place}
 
 - Sums in `f64`, storage in `f32`; zero and subnormal weights dropped at storage.
 - No light mass obtained as a difference, in either threshold routine.
@@ -1991,7 +1991,7 @@ raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
 - Draws strictly inside $(0, 1)$.
 - $k \pm 1$ outputs counted, never trimmed.
 
-### 7.9 Modes, threads and the commands that were run
+### 7.9 Modes, threads and the commands that were run {#sec:modes-threads-commands-that}
 
 - **`eval`** runs the exact store (`exact.rs`, bit-identical to `--weighted`) on its own
   thread beside one thread per sketch configuration, all fed by one parse, and measures
@@ -2026,19 +2026,19 @@ results are.
   of the reduced rows it matches to $2.4 \times 10^{-12}$ relative.
 - **`summary`** reads count streams back into what a whole-chain count is judged by:
   exactness, quantiles per bucket and per `--range`, the seeds against each other, and
-  the exact sizes where they exist (§5.2, §10.9, §10.10). Every cell of the `mawk` and
+  the exact sizes where they exist ([§5.2](#sec:exact-colours-do-not), [§10.9](#sec:kmv-chain), [§10.10](#sec:kmv-file)). Every cell of the `mawk` and
   Python passes it replaces comes out equal, except one p90 that Python printed rounded
   (54 for 53.5).
 - **`select prefix|chain`** chooses the records worth comparing from a count stream and
   writes the file `pick --select` reads, byte-identical to the Python `select.py`'s.
 - **`pairs-stats`** reduces one or more `pairs` outputs to the bias, variance, agreement
-  and quantile tables of §10.8 and §10.9, pooling the seeds of runs over the same rows.
+  and quantile tables of [§10.8](#sec:kmv-results) and [§10.9](#sec:kmv-chain), pooling the seeds of runs over the same rows.
 - **`describe`** says what each production sketch cut out by `decode --select` is and
-  compares it with its exact colour binned in 1024 bands (section 11). Beside it,
+  compares it with its exact colour binned in 1024 bands ([section 11](#sec:ten)). Beside it,
   `pick --bands-ref` copies those binned colours during a fold, and `pairs --bands` adds
   the binned TV of every pair.
 - **`surface`** averages the production sketches, or the binned exact colours, into the
-  matrices of section 12, bit-identical on prefixes to the two programs first used, and
+  matrices of [section 12](#sec:surface), bit-identical on prefixes to the two programs first used, and
   **`surface-report`** turns them into that section's tables and checks.
 
 The global allocator is jemalloc (the repository's default feature): a fold's heap is
@@ -2085,7 +2085,7 @@ sketch emit --config varopt:512 --oracle lastspend-2022.u32 --limit all --stats 
   < finalBCUTXO_2022.scm 2> emit.err | zstd -q -T16 -12 --long=27 -o colors.sketch-varopt512.zst
 ```
 
-### 7.10 The output format
+### 7.10 The output format {#sec:output-format}
 
 From `encode.rs`, integers as LEB128 varints, `z()` zigzag, floats little-endian:
 
@@ -2116,10 +2116,10 @@ window) avoids that, since it decodes with a plain `zstd -d` (verified with `cmp
 production uses it. Those notes, and the production line in `sketch.rs`'s documentation
 (`sketch emit ... | zstd -T16 -12`), predate this choice.
 
-### 7.11 The tests
+### 7.11 The tests {#sec:tests}
 
 `cargo test --release --bin sketch -- --include-ignored` passed 106 of 106 at the time
-of the runs of section 8, and 139 of 139 with the stores of section 10. At commit
+of the runs of [section 8](#sec:results), and 139 of 139 with the stores of [section 10](#sec:counting). At commit
 1a27649, with the modes that read the runs back, `cargo test --release --bin sketch`
 passes 194 and ignores 4: the two integration tests that read the chain's files, the
 `coord` bias test below and a benchmark, which `--include-ignored` runs. What they
@@ -2213,7 +2213,7 @@ assert:
 
 ## 8. Results {#sec:results}
 
-### 8.1 What was measured
+### 8.1 What was measured {#sec:was-measured}
 
 - **Pass A** (`chain`, the whole chain, 14 stores in one pass): `varopt` at
   $k = 16, 32, 64, 128, 256$; seeds 2 and 3 at $k = 64$ and $256$; step mode at
@@ -2226,22 +2226,22 @@ assert:
   configuration): every sketch against its whole exact colour and against the same
   variant's single-shot reduction of it.
 - **Cost emits** (`emit` cut into 10M-record stretches, each compressed by its own
-  `zstd -T16 -12`, §7.9): `varopt` at $k = 64, 128, 256$ over the whole chain, and at
+  `zstd -T16 -12`, [§7.9](#sec:modes-threads-commands-that)): `varopt` at $k = 64, 128, 256$ over the whole chain, and at
   $k = 512$ until it was stopped at about 400M records; two more with `--long=27`.
 
-The accuracy tables use every 256th record (`--every 16 --rows-every 16`, §7.9; 3.04M
+The accuracy tables use every 256th record (`--every 16 --rows-every 16`, [§7.9](#sec:modes-threads-commands-that); 3.04M
 rows), restricted to *reduced* rows: a larger $k$ keeps more early colours exact, which
 would lower an all-rows average for a reason that has nothing to do with how well a
 sketch approximates. Errors in blocks are
 converted from fractions of $L$; a day is about 144 blocks. Labels: **[M]** measured,
 **[P]** projected from measurements, **[E]** a rougher estimate (an extrapolated
-compression ratio). Every number below comes from those runs, whose commands are in §7.9.
+compression ratio). Every number below comes from those runs, whose commands are in [§7.9](#sec:modes-threads-commands-that).
 
 One more mode turns their outputs into the tables of this section: `sketch summarize`
 reads each pass's per-record rows, `buckets.tsv`, `seeds.tsv` and `cost.tsv`, and
 eval3m's `rows.tsv` and `summary.tsv`, groups the rows by 100M-record stretch (`S0` to
 `S7`, `S0-2` for the first 300M, `pooled` for the whole chain) and writes one TSV per
-kind of table, without rerunning a fold (`--moments` adds the floors of §8.8):
+kind of table, without rerunning a fold (`--moments` adds the floors of [§8.8](#sec:floors-tv1024-cannot-say)):
 
 ```sh
 sketch summarize --chain A --chain B --eval eval3m --moments colors.moments.zst \
@@ -2253,7 +2253,7 @@ here (the means and quantiles of the reduced rows to $2.4 \times 10^{-12}$ relat
 rest differ only by how pandas parses long decimals). Each subsection names the file of
 `tables/` its results come from.
 
-### 8.2 Error against $k$
+### 8.2 Error against $k$ {#sec:error-against-k}
 
 | $k$ | mean \|Δmean\| (blocks) | p90 \|Δmean\| (blocks) | mean \|Δmean\|/sd (%) | mean max \|ΔLaplace\| (×10⁻³) | mean \|Δsd\|/L (×10⁻³) |
 | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -2288,7 +2288,7 @@ the product $k \cdot \lvert\Delta\text{mean}\rvert/\text{sd}$ drifts from $0.99$
 $k = 16$ to $1.17$ at $k = 1024$. The slopes are `slopes.tsv` (an OLS fit per metric and
 run of consecutive $k$), the product is `errors.tsv`'s `k_times_mean_abs_dmean_over_sd`.
 
-### 8.3 Error against depth
+### 8.3 Error against depth {#sec:error-against-depth}
 
 | stretch (records) | $k = 128$ | $256$ | $512$ | $1024$ | exact sd (blocks) | $512$: \|Δmean\|/sd (%) | $1024$: \|Δmean\|/sd (%) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -2316,10 +2316,10 @@ the last stretch to 100–200M is 1.01–1.02 for $k = 16..256$, 1.03 at $k = 51
 at $k = 1024$. The deepest stretch is still the one to plan against: its p90 is 3,677 /
 1,896 / 978 / 503 blocks for $k = 128 / 256 / 512 / 1024$. One thing does grow:
 `varopt`'s $\lvert\Delta\text{sd}\rvert$, by 1.12–1.28× with depth at $k \le 256$
-(`prio`'s by 1.8×). As §6.3 explains, the flatness is measured, not proved. The ratios
+(`prio`'s by 1.8×). As [§6.3](#sec:propagation) explains, the flatness is measured, not proved. The ratios
 are in `depth.tsv`, the p90s in `errors.tsv` at `S7`.
 
-### 8.4 The variants compared
+### 8.4 The variants compared {#sec:variants-compared}
 
 - **`prio` falls as $1/\sqrt{k}$** (slopes $-0.49$ to $-0.54$; $-0.51$ from 256 to
   1024), as the argument after {{< xref "prop:poisson" "full" >}} predicts. Its error is
@@ -2334,13 +2334,13 @@ are in `depth.tsv`, the p90s in `errors.tsv` at `S7`.
   mean is 0.99 of its mean absolute error for $\Delta$mean and for $\Lambda_{0.5}$ and
   $\Lambda_2$ (0.94–0.95 for $\Lambda_8$, 0.61–0.80 for $\Lambda_{32}$). Its estimated
   colours are systematically too late. On eval3m its excess over its own single shot
-  *grows* with $k$ (KS $+120\%$ and $W_1$ $+98\%$ at $k = 1024$). This is §6.6 at scale.
+  *grows* with $k$ (KS $+120\%$ and $W_1$ $+98\%$ at $k = 1024$). This is [§6.6](#sec:coord) at scale.
 
-The slopes are in `slopes.tsv` (the ranges leave out TV1024, §8.8), the multiples of
+The slopes are in `slopes.tsv` (the ranges leave out TV1024, [§8.8](#sec:floors-tv1024-cannot-say)), the multiples of
 `varopt` in `errors.tsv`, `coord`'s depth in `depth.tsv` and its signed ratios in
 `signed.tsv`, the eval3m excesses in `ideal.tsv`.
 
-### 8.5 Bias
+### 8.5 Bias {#sec:bias}
 
 {{< fig src="bias.svg" type="fullwidth" label="fig:bias" alt="Left: signed mean error of the mean per bucket for three varopt seeds and prio at k 256. Right: signed mean over mean absolute error per bucket for varopt, prio and coord." >}}
 Signed error per 10M-record bucket at $k = 256$. Left, in blocks: three `varopt` seeds
@@ -2379,7 +2379,7 @@ verification's 10M-record prefix run:
 sketch summarize --chain chain10m-seeds --stretch 5000000 --out verify10m
 ```
 
-### 8.6 Record mode against step mode
+### 8.6 Record mode against step mode {#sec:record-mode-against-step}
 
 {{< fig src="step-vs-record.svg" label="fig:step" alt="Ratio of step-mode to record-mode error per bucket for three metrics at k 64." >}}
 `varopt` at $k = 64$: the error of the literal pairwise fold (a reduction after every
@@ -2400,7 +2400,7 @@ times in `cost.tsv`, and the eval3m factors are step mode's `paired` excess in
 `ideal.tsv` over that of record-mode seed 1, in stratum `fix:>32768` at $k = 64$ and
 $256$.
 
-### 8.7 The recursion against a single reduction
+### 8.7 The recursion against a single reduction {#sec:recursion-against-single-reduction}
 
 {{< fig src="recursion-vs-single-shot.svg" type="fullwidth" label="fig:ideal" alt="Left: W1 against k for recursive and single-shot varopt and prio. Right: percentage excess of recursive varopt over single shot for KS, W1, TV1024 and the mean." >}}
 The first 3M records, colours with more than 32,768 blocks, against the exact colours.
@@ -2423,9 +2423,9 @@ the recursive KS, $W_1$ and largest Laplace error fall as $k^{-1.05}$, $k^{-1.07
 $k^{-1.05}$ over $k = 16$ to $4096$, the single shot as $k^{-1.17}$, $k^{-1.14}$ and
 $k^{-1.12}$. For colours of 4,097 to 32,768 blocks the $W_1$ excess is only +2% to +28%
 (stratum `fix:(4096,32768]`); the exponents are `ideal_slopes.tsv`. And the price does
-not grow with depth (§8.3).
+not grow with depth ([§8.3](#sec:error-against-depth)).
 
-### 8.8 Floors: what TV1024 cannot say
+### 8.8 Floors: what TV1024 cannot say {#sec:floors-tv1024-cannot-say}
 
 A sketch of $k$ points of a colour spread over thousands of bands cannot have a small
 total variation over 1024 bands, however good it is. Recomputed with each row's own
@@ -2445,7 +2445,7 @@ The floors are in the tables `--moments` adds: `floors_chain.tsv` (`floor_lb_own
 and its share of the measured `tv`) and `floors_eval.tsv` (`ideal_ks_over_tau`,
 `ideal_w1_over_w1`); the KS shares are one over one plus `ideal.tsv`'s `excess`.
 
-### 8.9 Cost
+### 8.9 Cost {#sec:cost}
 
 | config | mean / p90 \|Δmean\| (blocks) | ≈ days (mean / p90) | peak RSS | wall time | `zstd -12` | `-12 --long=27` | status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -2460,7 +2460,7 @@ and its share of the measured `tv`) and `floors_eval.tsv` (`ideal_ks_over_tau`,
 | `prio` 1024 | 3,731 / 8,158 [M] | 26 / 57 | ~68 GB [P] | ≥ `varopt` 1024 | not measured | – | dominated |
 | `coord` 64 | 67,482 / 121,513 [M] | 469 / 844 | ≈ `varopt` 64 | fold time 0.77× `varopt` 64 [M] | not measured | – | dominated |
 | `coord` 256 | 59,072 / 105,765 [M] | 410 / 734 | ≈ `varopt` 256 | fold time 0.64× `varopt` 256 [M] | not measured | – | dominated |
-{#tab:cost .fullwidth caption="Error against cost over the whole chain. Wall times are of single-configuration emits run beside other jobs (good to about 12 percent), except k = 512, whose wall time and --long=27 size are those of the production run of section 9, which ran almost alone; for step mode, prio and coord only the fold time of pass A is known, given relative to varopt at the same k. Sizes are the emit compressed by zstd with 16 threads."}
+{#tab:cost .fullwidth caption="Error against cost over the whole chain. Wall times are of single-configuration emits run beside other jobs (good to about 12 percent), except k = 512, whose wall time and --long=27 size are those of the production run of [section 9](#sec:production), which ran almost alone; for step mode, prio and coord only the fold time of pass A is known, given relative to varopt at the same k. Sizes are the emit compressed by zstd with 16 threads."}
 
 {{< fig src="pareto.svg" type="fullwidth" label="fig:pareto" alt="Two log-log panels: mean and p90 error of the mean against compressed size and against wall time, for varopt k 64 to 1024; measured points filled, projected hollow." >}}
 `varopt`, error against cost for $k = 64$ to $1024$. Filled markers are measured, hollow
@@ -2471,7 +2471,7 @@ are the table's cells, written into the plotting script by hand.
 
 Only the errors (`errors.tsv`) and the fold-time ratios (`cost.tsv`'s
 `busy_over_reference`) come from `sketch summarize`. The rest was measured on the cost
-emits of §7.9: peak memory by their `--stats`, and, outside the crate, wall times and CPU
+emits of [§7.9](#sec:modes-threads-commands-that): peak memory by their `--stats`, and, outside the crate, wall times and CPU
 shares by `/usr/bin/time -v` and bytes per 10M-record stretch by `splitcount` and a small
 Python script. The [P] and [E] cells and the memory fit are hand projections.
 
@@ -2551,7 +2551,7 @@ sketch emit --config varopt:512 --oracle lastspend-2022.u32 --limit all --stats 
 It writes `colors.sketch-varopt512.zst`: for each of the 778,613,440 transactions, in
 record order, its colour as a `varopt` sketch of at most 512 blocks ($k \pm 1$ in rare
 rounding events), normalised to sum one, with the bit that says whether it is exact
-(and, when it is not, its $\tau$ and raw mass), in the format of §7.10. It decodes with
+(and, when it is not, its $\tau$ and raw mass), in the format of [§7.10](#sec:output-format). It decodes with
 a plain `zstd -d` piped into `sketch decode`, and `sketch check` recomputes from it the
 error tables of a `chain` run.
 
@@ -2583,27 +2583,27 @@ and found the count and checksum of the file's trailer correct. Its per-record e
 (`rows.varopt-k512-s1-rec.tsv`, 3,041,459 of them, every 256th record) and its 2,496
 bucket rows (`buckets.tsv`) are byte for byte those of the `varopt-k512-s1-rec` store of
 pass B, which computed them in memory while folding. So
-the file holds exactly the sketches whose accuracy section 8 reports: over the whole
-chain, 349 blocks mean and 729 blocks p90 error on the mean block (Table 1, §8.2). A
+the file holds exactly the sketches whose accuracy [section 8](#sec:results) reports: over the whole
+chain, 349 blocks mean and 729 blocks p90 error on the mean block (Table 1, [§8.2](#sec:error-against-k)). A
 plain `zstd -d` decodes it; a 128 MB window needs no flag.
 
 A second product sits beside it: `colors.kmv1024.counts.zst`, the size of every
-transaction's support, counted by the coordinated bottom-$k$ of section 10, exactly when
-the support has at most 1024 blocks and by an unbiased estimate otherwise. Section 10.10
+transaction's support, counted by the coordinated bottom-$k$ of [section 10](#sec:counting), exactly when
+the support has at most 1024 blocks and by an unbiased estimate otherwise. [Section 10.10](#sec:kmv-file)
 says how to read it.
 
 
 ## 10. Counting and Comparing Colours {#sec:counting}
 
-{{< newthought >}}Sections 5–9 read a colour{{< /newthought >}} through linear
+{{< newthought >}}Sections [5](#sec:colours)–[9](#sec:production) read a colour{{< /newthought >}} through linear
 functionals: its mean, its CDF, its Laplace values. Two questions about transactions are
 not of that kind. *From how many blocks does a transaction descend?* And *how much do two
-transactions share?* The `varopt` sketches cannot answer either (§10.2), and nothing about
+transactions share?* The `varopt` sketches cannot answer either ([§10.2](#sec:varopt-sketches-cannot-answer)), and nothing about
 them needs to change for the answers: two more stores, folded by the same driver beside
-or instead of `varopt`, answer them, one exactly through the whole DAG (§10.3–10.5) and
-one through a linear sketch (§10.6).
+or instead of `varopt`, answer them, one exactly through the whole DAG ([§10.3](#sec:coordinated-bottom-k-support)–[10.5](#sec:kmv-pairs)) and
+one through a linear sketch ([§10.6](#sec:l1)).
 
-### 10.1 What is asked
+### 10.1 What is asked {#sec:asked}
 
 Both questions are about the *support* of a colour, the blocks it descends from, and the
 support has a recurrence of its own, the set-valued shadow of
@@ -2630,7 +2630,7 @@ It comes with two semantics, and every number below names which one it is about:
 Three measures are asked of it.
 
 - **Count**, $\lvert S_t \rvert$: the number of blocks a transaction's coins descend
-  from (under `sets`, through zero-amount inputs too). §5.2 gives its scale: a median of
+  from (under `sets`, through zero-amount inputs too). [§5.2](#sec:exact-colours-do-not) gives its scale: a median of
   about 174,000 blocks over the first 31.2M records.
 - **Jaccard similarity**,
   $J(x, y) = \lvert S_x \cap S_y \rvert / \lvert S_x \cup S_y \rvert$, and the
@@ -2640,24 +2640,24 @@ Three measures are asked of it.
   *value*.
 
 On this chain the last two say very different things. Among 255 deep transactions spread
-over the first 3M records (the `deep` selection of §10.8, every support of at least
+over the first 3M records (the `deep` selection of [§10.8](#sec:kmv-results), every support of at least
 1,024 blocks), the median $J$ of a pair is 0.157 but the median $J_w$ is
 $1.4 \times 10^{-4}$, and 92% of the pairs have $J_w < 0.01$: old supports are largely
 shared, while a colour's weight sits on its recent blocks, which two transactions far
 apart in time do not share. Inside a window of three blocks (the `window` selection) the
 median $J$ is 0.994 and the median $J_w$ is 0.18. Over the whole chain the weights
-overlap more: among 512 deep transactions spread from 2010 to 2022 (§10.9) the median
+overlap more: among 512 deep transactions spread from 2010 to 2022 ([§10.9](#sec:kmv-chain)) the median
 $J$ of a pair is 0.48 and the median estimated $J_w$ is 0.21, still 0.18 for pairs more
-than 60,000 blocks apart. These medians are read off the pair runs R3 and R7 of §10.8 and
-§10.9 by `sketch pairs-stats` (§10.7), in its `quantiles.tsv` (the 92% in
+than 60,000 blocks apart. These medians are read off the pair runs R3 and R7 of [§10.8](#sec:kmv-results) and
+[§10.9](#sec:kmv-chain) by `sketch pairs-stats` ([§10.7](#sec:kmv-impl)), in its `quantiles.tsv` (the 92% in
 `jw-strata.tsv`).
 
-### 10.2 Why the VarOpt sketches cannot answer
+### 10.2 Why the VarOpt sketches cannot answer {#sec:varopt-sketches-cannot-answer}
 
-The production file of §9 holds a sketch of every colour, and it is tempting to read
+The production file of [§9](#sec:production) holds a sketch of every colour, and it is tempting to read
 counts and similarities off it. It cannot be done, for four reasons.
 
-1. **Its randomness is fresh at every reduction** (§6.2), so two sketches are not
+1. **Its randomness is fresh at every reduction** ([§6.2](#sec:unbiased)), so two sketches are not
    coordinated: a block in both supports is kept in both sketches only by coincidence,
    and the overlap of two kept sets does not estimate the overlap of the supports.
 2. **Kept lights are carried at $\tau$** ({{< xref "def:varopt" "full" >}}), so a kept
@@ -2667,11 +2667,11 @@ counts and similarities off it. It cannot be done, for four reasons.
 3. **A block dropped at an ancestor is gone for every descendant**: the candidate of a
    record holds only blocks its parents' sketches kept.
 4. **Blocks reached only through zero-amount inputs have weight 0** and are skipped
-   (§6.2), so they are in the `sets` support and in no weighted sketch.
+   ([§6.2](#sec:unbiased)), so they are in the `sets` support and in no weighted sketch.
 
 The weighted similarity has a natural plug-in,
 $(1 - \widehat{\mathrm{TV}})/(1 + \widehat{\mathrm{TV}})$ of the two sketches ($J_w$ is
-a function of TV, §10.6), and it is biased low. With $Q_x, Q_y$ the two sketches, $\min$
+a function of TV, [§10.6](#sec:l1)), and it is biased low. With $Q_x, Q_y$ the two sketches, $\min$
 is concave, so by Jensen
 $\mathbb{E}[\min(Q_x(b), Q_y(b))] \le \min(\mathbb{E} Q_x(b), \mathbb{E} Q_y(b)) = \min(x_b, y_b)$
 block by block: the sum of minima, $1 - \widehat{\mathrm{TV}}$, is biased low, and
@@ -2681,7 +2681,7 @@ blocks. Heavy blocks are exact; a light block shared by two independent reductio
 kept by both with probability $(x_b/\tau_x)(y_b/\tau_y)$ and then counts
 $\min(\tau_x, \tau_y)$, so it contributes about $x_b y_b / \max(\tau_x, \tau_y)$, far
 less than $\min(x_b, y_b)$, and the plug-in came out low in every stratum measured
-(§10.8). Within one run the two sketches share the reductions of their common ancestors,
+([§10.8](#sec:kmv-results)). Within one run the two sketches share the reductions of their common ancestors,
 so the bias depends on how many fresh reductions separate a pair from its common
 ancestry, and it grows with depth. Measured:
 
@@ -2691,26 +2691,26 @@ ancestry, and it grows with depth. Measured:
 - On pairs of reduced colours with $J_w \in [0.1, 0.5)$, the bias of the same-run
   plug-in grows from $-0.014$ over records 0–1M to $-0.079$ over 1–1.5M and $-0.111$
   over 1.5–2M (same prototype).
-- On the prefix runs of §10.8 the same-run plug-in of `varopt:512` underestimates $J_w$
+- On the prefix runs of [§10.8](#sec:kmv-results) the same-run plug-in of `varopt:512` underestimates $J_w$
   by 0.171 on average over the 32,640 pairs of the `window` selection (mean 0.029 against
   0.200), by 0.268 for $J_w \in [0.2, 0.5)$ and by 0.430 for $J_w \in [0.5, 0.9)$
-  (the table of weighted errors in §10.8, from the `jw-strata.tsv` of
+  (the table of weighted errors in [§10.8](#sec:kmv-results), from the `jw-strata.tsv` of
   `sketch pairs-stats`, whose strata, weighted by their pairs, give the overall mean).
 
 The plug-in is therefore not shipped; `pairs` writes it only to document this. The
 Wasserstein distance between two `varopt` sketches has no such problem. It is a metric
-under which each sketch is close to its colour (section 8 measures $W_1(Q_x, x)$: a
+under which each sketch is close to its colour ([section 8](#sec:results) measures $W_1(Q_x, x)$: a
 reduction moves mass only between nearby blocks), so by the triangle inequality it is
 off by at most those two errors. TV is a metric too, but under TV a sketch is far from
 its colour, since its kept lights are carried at $\tau$: that is the bias above. $W_1$
 serves below as a "temporal distance" between transactions.
 
-### 10.3 A coordinated bottom-$k$ of the support is exact through the DAG
+### 10.3 A coordinated bottom-$k$ of the support is exact through the DAG {#sec:coordinated-bottom-k-support}
 
-A word on notation, as in §6. In the rest of §10, $\tau$ is a threshold on *ranks*,
-small ranks kept, as in §2 and §6.6, not the weight threshold of §6.1–6.5 and §10.2, to
-which §11 returns; and $M$ is the
-size of the permutation, the universe of §1.2.1.
+A word on notation, as in [§6](#sec:proofs). In the rest of [§10](#sec:counting), $\tau$ is a threshold on *ranks*,
+small ranks kept, as in [§2](#sec:weighted-extension-priority-sampling) and [§6.6](#sec:coord), not the weight threshold of [§6.1](#sec:varopt)–[6.5](#sec:prio) and [§10.2](#sec:varopt-sketches-cannot-answer), to
+which [§11](#sec:ten) returns; and $M$ is the
+size of the permutation, the universe of [§1.2.1](#sec:cardinality-estimation-count-distinct).
 
 Number the blocks $0, \dots, M - 1$ with $M = 2^{20} = 1{,}048{,}576 > L$, and let $\rho$
 be a uniformly random permutation of $[0, M)$, drawn once per run and shared by every
@@ -2751,7 +2751,7 @@ converse is $K_k(A) \subseteq A$.
 {{< /proof >}}
 
 {{< theorem note="exact through the DAG" label="thm:kmv-dag" >}}
-Fold $K_k$ through the driver of §7.4: a coinbase of block $\beta$ is $\{\rho(\beta)\}$,
+Fold $K_k$ through the driver of [§7.4](#sec:driver): a coinbase of block $\beta$ is $\{\rho(\beta)\}$,
 not full; a record groups its operands by parent (under `pos` it skips those of share
 0), answers the parent's own sketch when one group is left, and otherwise merges the
 groups' sketches by capped merges, with *full* set when an operand is full or a merge
@@ -2783,11 +2783,11 @@ edges.{{< cite "cohen1997size" >}} Here the sets are a transaction's ancestor bl
 So the fold has **no recursion error**. The sketch of a record at any depth is the
 one-shot bottom-$k$ of its support, a deterministic function of $\rho$ and $S_t$, and
 every estimate read from it has exactly the law of a one-shot KMV estimate. This is the
-opposite of §6.3, where the whole difficulty was the error the recursion adds. What the
+opposite of [§6.3](#sec:propagation), where the whole difficulty was the error the recursion adds. What the
 records of one run do share is the permutation: their errors are correlated, and
-questions of bias are asked across seeds (§10.8).
+questions of bias are asked across seeds ([§10.8](#sec:kmv-results)).
 
-The same argument gives what §5.4 and §6.6 said a coordinated merge could not have:
+The same argument gives what [§5.4](#sec:linear-combination-sketches-crux) and [§6.6](#sec:coord) said a coordinated merge could not have:
 exact weights.
 
 {{< lemma note="kept weights" label="lem:kmv-weights" >}}
@@ -2814,7 +2814,7 @@ block $b_2$ ranks 0.8 in $D$, inside the merged threshold $0.889$, and 4 in $A$,
 $A$'s sketch, so its share from $A$ is unknown. Ranks that depend on the block alone
 keep the lemma, and so would block-level priorities $u_b / g(b)$ for any *fixed*
 function $g$ of the block: a sample weighted by a prior rather than by the colour, which
-§13 leaves open.
+[§13](#sec:left) leaves open.
 {{< /remark >}}
 
 The exact weights were not shipped.{{< sidenote >}}The design-phase prototype stored
@@ -2824,12 +2824,12 @@ difference 0). As an estimator of $J_w$, though, a uniform sample of the support
 the few heavy recent blocks that hold most of the mass: the ratio
 $\sum_K \min / \sum_K \max$ over the kept blocks was biased upward by 0.051, 0.030 and
 0.015 at $k = 64$, 256 and 1024 for pairs with $J_w \ge 0.9$. Weights also double the
-memory. §10.6 has a better tool for $J_w$.{{< /sidenote >}} The store keeps ranks only.
+memory. [§10.6](#sec:l1) has a better tool for $J_w$.{{< /sidenote >}} The store keeps ranks only.
 
 | | `kmv` store |
 | :--- | :--- |
 | rank | a Fisher–Yates permutation of $[0, 2^{20})$, seeded, 8 MiB of tables per seed (both directions) |
-| why a finite permutation | the count is then exactly unbiased in the model actually run, and it can be restricted to the blocks a support can hold (§10.4) |
+| why a finite permutation | the count is then exactly unbiased in the model actually run, and it can be restricted to the blocks a support can hold ([§10.4](#sec:kmv-count)) |
 | an entry | 4 bytes (a `u32` rank); the block is the inverse permutation of the rank |
 | a sketch | at most $k$ ranks plus the *full* bit, behind an `Rc` of about 40 bytes |
 | a record of $G$ distinct parents | $O(Gk)$ by a balanced tree of two-pointer merges, each capped at $k$; one parent costs a reference-count bump |
@@ -2883,12 +2883,12 @@ $$
 \operatorname{Var}(\hat n_V) \approx \frac{n(n - k + 1)}{k - 2} \cdot \frac{N - n}{N - 1},
 $$
 
-the continuous-hash value of §1.2.1 times the finite-population factor (§1.2.1 writes
+the continuous-hash value of [§1.2.1](#sec:cardinality-estimation-count-distinct) times the finite-population factor ([§1.2.1](#sec:cardinality-estimation-count-distinct) writes
 $N$ for the set size and $M$ for the universe). The approximation slightly overstates
 it: summed exactly over the law of $R$ (a numerical summation of the theory, outside the
 crate), for $n/N \le 0.9$ the variance is below it by under 1% at $k \ge 256$, under 3%
 at $k = 64$ and up to 11.5% at $k = 16$. The seed
-tests of §10.8 check it on the chain.
+tests of [§10.8](#sec:kmv-results) check it on the chain.
 
 The proposition leaves the universe $V$ free, and the choice matters. The textbook
 choice is the whole permutation, $V = [0, M)$, with $R$ the $k$-th smallest rank itself:
@@ -2911,7 +2911,7 @@ $\hat n_M$: half the error, the gain a $k$ nearly four times larger would bring.
 measured RMS over 16 seeds is 0.0152 against 0.0266, 57% of the error, the gain of a $k$
 about three times larger. $R_t$ costs one query of a Fenwick tree over rank space per
 full record, into which the blocks are inserted as the chain's newest block advances
-(§10.7). Both estimates are written; $\hat n$ is the primary one.
+([§10.7](#sec:kmv-impl)). Both estimates are written; $\hat n$ is the primary one.
 
 ### 10.5 Jaccard, containment and unions {#sec:kmv-pairs}
 
@@ -2942,7 +2942,7 @@ $k J (1 - J)(n_u - k)/(n_u - 1)$.
 
 When neither sketch is full but their union exceeds $k$, the textbook formula over $K$
 is still an estimate (it deviated by up to 0.0035 in the design-phase prototype); the
-exact value is in hand, so it is used. In the `even` selection of §10.8, 208,335 of the
+exact value is in hand, so it is used. In the `even` selection of [§10.8](#sec:kmv-results), 208,335 of the
 499,500 pairs have both sketches whole at $k = 1024$ and are computed exactly; in 57 of
 them the union exceeds $k$, where the textbook formula would have been an estimate
 (both counts are columns of `errors.tsv` from `sketch pairs-stats` on R3).
@@ -2977,7 +2977,7 @@ about half of it when the two are the same size, and none when $A$ is much large
 $k = 1024$ it is at most about 0.00025. With a strict
 threshold, $\rho(x) < \tau_B$, the same simulation (20,000 permutations per case) showed
 no bias within its standard error. The code keeps $\le$: at $k = 1024$ its bias is far
-below every error measured in §10.8. The estimate is undefined when $T$ is empty, which
+below every error measured in [§10.8](#sec:kmv-results). The estimate is undefined when $T$ is empty, which
 happens when $A$ is much smaller than $B$: $A$ then has few elements below $\tau_B$,
 about $k \lvert A \rvert / \lvert B \rvert$ on average. `pairs` writes the size of $T$
 beside every containment, and the ratio $\hat J \hat n_u / \hat n_A$ as a flagged
@@ -3032,7 +3032,7 @@ one group has $\bar s_g = 1$ and $C_t = C_{q_g}$.
 There is no reduction, no $k$, no per-record randomness: the only error is floating
 point. The fold accumulates in `f64` in group order and stores `f32` (or `f64`); on the
 first 3M records the stored vector matched $\Pi\,C_t$ computed from the exact colour to
-$6.8 \times 10^{-7}$ relative in `f32` and $5.7 \times 10^{-14}$ in `f64` (§10.8).
+$6.8 \times 10^{-7}$ relative in `f32` and $5.7 \times 10^{-14}$ in `f64` ([§10.8](#sec:kmv-results)).
 
 For two fixed colours $x$ and $y$, which are functions of the chain and independent of
 $\Pi$, the differences $d_j = v_j(x) - v_j(y) = \sum_b \Pi_{jb}(x_b - y_b)$ are
@@ -3070,8 +3070,8 @@ $$
 0.0176, 0.0125 and 0.0088 at $m = 256$, 512 and 1024. Pairs with $J_w$ below a few
 hundredths cannot be resolved one by one; the unclipped $\widehat{\mathrm{TV}}$ is
 written beside $\hat J_w$ for averages over many pairs. On the prefix, where the median
-$J_w$ of deep pairs across time is $1.4 \times 10^{-4}$ (§10.1), a weighted map would
-show only the floor. Over the whole chain it would not (§10.9: only a fifth of the pairs
+$J_w$ of deep pairs across time is $1.4 \times 10^{-4}$ ([§10.1](#sec:asked)), a weighted map would
+show only the floor. Over the whole chain it would not ([§10.9](#sec:kmv-chain): only a fifth of the pairs
 lie below the floor), but there the maps are drawn for windows of a few blocks, where
 $J$ is near 1 and $J_w$ is what tells transactions apart.
 
@@ -3124,7 +3124,7 @@ probability $J_w$, and for $J_w$ the L1 distance is all that is needed.
 ### 10.7 Implementation {#sec:kmv-impl}
 
 Both stores are `Algebra`s of their own, each on its own thread and fed by the same
-parse as every other store (§7.9); the `SKETCH01` format, the production file and the
+parse as every other store ([§7.9](#sec:modes-threads-commands-that)); the `SKETCH01` format, the production file and the
 `varopt` code are untouched, and the old modes write byte-identical output. That was
 checked during the implementation against two references: the build of the commit
 before the stores (`f09847c`), on `emit`, `decode`, `eval`, `chain`, `check` and the
@@ -3134,7 +3134,7 @@ file's `decode`. With the final binary, the one of every run below, the `emit` a
 `eval` checks were repeated.
 
 The permutation is a Fisher–Yates shuffle{{< cite "knuth1997taocp2" >}} driven by the
-hash of §7.3, built once per seed and shared by every store of that seed:
+hash of [§7.3](#sec:randomness), built once per seed and shared by every store of that seed:
 
 ```rust
 pub fn new(seed: u64, bits: u32) -> Perm {
@@ -3155,7 +3155,7 @@ pub fn new(seed: u64, bits: u32) -> Perm {
 
 The modulo bias of each swap is below $M / 2^{64}$. A Feistel network would also be a
 bijection and needs no table, but even with ideal round functions it is not a uniform
-permutation, and both counts of §10.4 are proved exactly unbiased under one;
+permutation, and both counts of [§10.4](#sec:kmv-count) are proved exactly unbiased under one;
 Fisher–Yates with ideal swaps is exactly uniform.
 
 The capped merge of two ascending runs of ranks stops as soon as it holds $k$:
@@ -3225,8 +3225,8 @@ fn record(&mut self, ops: &[(KHandle, f64)], rec: u64) -> KHandle {
 }
 ```
 
-`group` collects the operands by `Rc` pointer, as `Sketcher::group` does (§7.5), and
-under `pos` skips those of share 0. The restricted rank $R_t$ of §10.4 comes from a
+`group` collects the operands by `Rc` pointer, as `Sketcher::group` does ([§7.5](#sec:record-grouping-n-way)), and
+under `pos` skips those of share 0. The restricted rank $R_t$ of [§10.4](#sec:kmv-count) comes from a
 Fenwick tree over rank space, grown block by block as the chain's newest block advances,
 so a whole run costs one insertion per block and one query per full record:
 
@@ -3334,7 +3334,7 @@ fn record(&mut self, ops: &[(LHandle, f64)], rec: u64) -> LHandle {
 ```
 
 A coinbase is $m$ draws `tan(pi (u - 1/2))` with `u = unit(h3(seed, SALT_L1, b, j))`,
-always finite since `unit` is strictly inside $(0, 1)$ (§7.3). The scale MLE solves its
+always finite since `unit` is strictly inside $(0, 1)$ ([§7.3](#sec:randomness)). The scale MLE solves its
 equation by Newton's method on $\ln \sigma$, started at the median of $\lvert d_j \rvert$
 and safeguarded by a bisection bracket, so heavy Cauchy tails cannot throw it off:
 
@@ -3410,8 +3410,8 @@ what they wrote, with no fold:
   out of a `SKETCH01` file, which is how the production `varopt` sketches of selected
   records are read without a new fold.
 - **`select`** reads a count stream and writes the selection file that `pick --select`
-  reads: `select prefix` the `deep`, `window` and `even` groups of §10.8 from a prefix's
-  stream and the exact sizes, `select chain` the four groups of §10.9 from the whole
+  reads: `select prefix` the `deep`, `window` and `even` groups of [§10.8](#sec:kmv-results) from a prefix's
+  stream and the exact sizes, `select chain` the four groups of [§10.9](#sec:kmv-chain) from the whole
   stream. It replaced the Python script that made the selections of R3 and R5, and
   writes the same two selection files byte for byte, in about 40 s where the script took
   56 min on the whole stream (wall times).
@@ -3419,17 +3419,17 @@ what they wrote, with no fold:
   writes what a whole-chain count is judged by once no reference is left: per stream and
   per range or bucket of records, the counts and their quantiles (beside the exact ones
   where `--sets-counts` reaches), the records counted exactly, the relative standard
-  error `se / n_hat`, and the seeds against each other (§10.9, §10.10).
+  error `se / n_hat`, and the seeds against each other ([§10.9](#sec:kmv-chain), [§10.10](#sec:kmv-file)).
 - **`pairs-stats`** reads one or more `pairs` outputs over the same rows, pooling their
-  seeds, and reduces them to the bias, variance, agreement and quantile tables of §10.8
-  and §10.9, seeds as the unit.
+  seeds, and reduces them to the bias, variance, agreement and quantile tables of [§10.8](#sec:kmv-results)
+  and [§10.9](#sec:kmv-chain), seeds as the unit.
 
 On the whole chain the exact colours exist only binned, in `colors.bands1024.zst`, and
 three commands read them for a selection: `pick --bands-ref` copies the selected records'
 lines of that file beside the fold, `pairs --bands` adds each pair's binned TV, an exact
 lower bound on the TV the L1 store estimates, and checks the L1 estimates against it
-(§10.9), and `describe` compares the production `varopt` sketches that `decode --select`
-cut out with their binned colours (§11).
+([§10.9](#sec:kmv-chain)), and `describe` compares the production `varopt` sketches that `decode --select`
+cut out with their binned colours ([§11](#sec:ten)).
 
 The count stream (`kmv.rs`):
 
@@ -3443,8 +3443,8 @@ trailer:       "KMVEND01" | u64 records | u64 sum of (tx ^ m ^ (rk << 32)), wrap
 ```
 
 Record $i$ is at byte $48 + 20i$; its field `m` is the sketch's length, not the
-dimension $m$ of §10.6. Both counts are lossless from it: the header's seed and bits
-rebuild the permutation, and the running maximum of `block` is the universe of §10.4.
+dimension $m$ of [§10.6](#sec:l1). Both counts are lossless from it: the header's seed and bits
+rebuild the permutation, and the running maximum of `block` is the universe of [§10.4](#sec:kmv-count).
 
 The commands that were run (`$K` and `$L` are lists of `--kmv` and `--l1` specs):
 
@@ -3486,7 +3486,7 @@ sketch pairs --in R5-pickall --varopt-text varopt512.sel.txt --out R7-pairsall -
 
 ### 10.8 Results on the first 3M and 31.2M records {#sec:kmv-results}
 
-Four runs on prefixes of the chain, where exact answers exist, with the binary of §10.7
+Four runs on prefixes of the chain, where exact answers exist, with the binary of [§10.7](#sec:kmv-impl)
 (139 tests passing):
 
 - **R1** (`eval`, the first 3M records, every 97th record, 30,928 records): 49 KMV
@@ -3571,7 +3571,7 @@ $[0.19, 2.76]$.
 | 256 | $\hat n_M$ | $+0.0045 \pm 0.0151$ | 0.29 | 0.0667 | 0.0568 | 1.17 |
 | 1024 | $\hat n$ | $+0.0019 \pm 0.0035$ | 0.55 | 0.0152 | 0.0144 | 1.05 |
 | 1024 | $\hat n_M$ | $+0.0097 \pm 0.0055$ | 1.76 | 0.0266 | 0.0283 | 0.94 |
-{#tab:count .fullwidth caption="R2, support=sets, the first 31,187,785 records, 16 seeds per k. Mean relative error of the count over every record whose support exceeds k (26.6M, 26.5M and 26.4M records), as the mean of the 16 seeds' means plus or minus the standard error across seeds, and its t. RMS: pooled over the 16 seeds, in the deepest stratum (supports of 131,072 to 262,144 blocks, 24,334,496 records), against the theory RSE of section 10.4 with each estimator's universe. Bias and t from R2's count-seeds.tsv; RMS and theory from its count-strata.tsv, the RMS as the root mean square of the 16 seeds' rows."}
+{#tab:count .fullwidth caption="R2, support=sets, the first 31,187,785 records, 16 seeds per k. Mean relative error of the count over every record whose support exceeds k (26.6M, 26.5M and 26.4M records), as the mean of the 16 seeds' means plus or minus the standard error across seeds, and its t. RMS: pooled over the 16 seeds, in the deepest stratum (supports of 131,072 to 262,144 blocks, 24,334,496 records), against the theory RSE of [section 10.4](#sec:kmv-count) with each estimator's universe. Bias and t from R2's count-seeds.tsv; RMS and theory from its count-strata.tsv, the RMS as the root mean square of the 16 seeds' rows."}
 
 The ratios are those of 16 draws of a stratum that moves as a whole within a run. One
 seed's RMS over theory, in a stratum of more than 100,000 records, ranged from 0.22 to
@@ -3683,20 +3683,20 @@ $m = 256$ and $512$ with 4 each.
 
 On the window's pairs with $J_w \ge 0.05$ (26,677 of them) the L1 store at $m = 1024$
 has a bias of $-0.0029$ (SE across seeds 0.0029) and an RMS error of 0.0201, against
-0.0263 at $m = 512$ and 0.0379 at $m = 256$: the $\sqrt{2/m}$ law of §10.6. Below
+0.0263 at $m = 512$ and 0.0379 at $m = 256$: the $\sqrt{2/m}$ law of [§10.6](#sec:l1). Below
 $J_w = 0.01$ the mean estimate is the floor (panel (c) of
 {{< xref "fig:jerror" "full" >}}): 0.009–0.011 at $m = 1024$, 0.013–0.017 at $m = 512$,
 0.017–0.019 at $m = 256$ over the three selections, against 0.0088, 0.0125 and 0.0176
 predicted for $J_w = 0$. `f32` and `f64` stores gave the same $\widehat{\mathrm{TV}}$ to
 $9.6 \times 10^{-7}$ relative in the window and $1.9 \times 10^{-7}$ in `deep`; in
 `even` one pair reached $1.08 \times 10^{-5}$, at a TV of $2.1 \times 10^{-4}$ (an
-absolute difference of $2.3 \times 10^{-9}$). The plug-in column is §10.2's bias,
+absolute difference of $2.3 \times 10^{-9}$). The plug-in column is [§10.2](#sec:varopt-sketches-cannot-answer)'s bias,
 measured. {{< xref "fig:jwindow" "full" >}} draws the window's two matrices, the
 estimates against the exact values.
 
 {{< fig src="jaccard-error.svg" type="fullwidth" label="fig:jerror" alt="Three panels. Top left: RMS error of the Jaccard estimate against the exact J in 13 bins, for k 128, 512, 1024 and 2048, lying on the hypergeometric curves. Top right: mean error by bin with across-seed error bars, within a few thousandths of zero. Bottom: on log-log axes, the mean weighted Jaccard estimate against the exact value by bin, for L1 at three m, which follow the diagonal down to a floor between 0.01 and 0.02, and for the varopt plug-in, which lies far below the diagonal." >}}
 The first 3M records (R3 and R3b), `sets`. (a) RMS of $\hat J - J$ pooled over seeds
-(markers, with $\pm 2$ standard errors) and the hypergeometric SD of §10.5 (lines), in
+(markers, with $\pm 2$ standard errors) and the hypergeometric SD of [§10.5](#sec:kmv-pairs) (lines), in
 13 bins of the exact $J$, over the `deep` and `even` pairs with at least one full sketch
 and $0 < J < 1$ (the others are exact); 64 seeds at $k = 1024$, 16 at $k = 128$, 512
 and 2048. Measured over predicted runs from 0.82 to 1.15 across the bins. (b) The mean of
@@ -3709,7 +3709,7 @@ similarity over the 564,525 pairs of all three selections, in 11 bins of the exa
 $m = 256$ and 512 (4 seeds each) and 1024 (8 seeds), with $\pm 2$ standard errors across
 seeds, and the mean plug-in of the production `varopt:512` sketches (not used; below
 $10^{-4}$, off the axis, in the first bin). The L1 curves follow the diagonal down to
-the floor of §10.6 (mean $\hat J_w$ 0.019, 0.013 and 0.0089 where $J_w < 10^{-3}$); the
+the floor of [§10.6](#sec:l1) (mean $\hat J_w$ 0.019, 0.013 and 0.0089 where $J_w < 10^{-3}$); the
 plug-in is 4 to 10 times too small for $J_w$ from $10^{-3}$ to 0.7. Errors share one
 permutation or projection within a seed, so the honest spread is across seeds.
 {{< /fig >}}
@@ -3729,7 +3729,7 @@ while the shared *value* is a few tenths at most (median $J_w$ 0.18).
 {{< /fig >}}
 
 **Cost.** Wall times and peak memory are those of `/usr/bin/time -v` (VmHWM, in GB of
-$10^9$ bytes as in §8.9); the busy times and peaks of single stores are each run's
+$10^9$ bytes as in [§8.9](#sec:cost)); the busy times and peaks of single stores are each run's
 `cost.tsv`. R1 took 8 min 24 s and 100.2 GB, almost all of it the exact store. R2 folded
 48 KMV stores over 31.2M records in 2 min 55 s and 68.0 GB; a $k = 1024$ store was busy
 146.7 s and peaked at 617,119,725 ranks in 733,466 live sketches. In R3, which folded
@@ -3753,7 +3753,7 @@ pass: $k = 1024$ at seeds 1, 2 and 3, $k = 256$, and $k = 1024$ under `pos`. It 
 {#tab:r4 caption="R4, all 778,613,440 records: per store, the time its thread was busy, the peaks of ranks held and of live sketches, and the number of records whose merge had elements left over. The seed changes the peaks not at all and the last column by about 1 percent. From R4's cost.tsv."}
 
 At the peak a $k = 1024$ store holds about 1,009 ranks in each of 7.59M live sketches,
-as many as the production run of §9 keeps alive: 30.6 GB of ranks.
+as many as the production run of [§9](#sec:production) keeps alive: 30.6 GB of ranks.
 
 - **Against the exact sizes.** On the first 31,187,785 records every hard counter of
   every store was 0 (R4's `count-check.tsv`): no whole sketch of the wrong size, no
@@ -3789,10 +3789,10 @@ as many as the production run of §9 keeps alive: 30.6 GB of ranks.
   the largest 983. Under `pos` exactly as many sketches are full as under `sets`.
 - **The file.** The seed-1 stream compresses to 1,842,558,077 bytes (`ls`), 2.37 B a
   record, 8.45 times less than its 15,572,268,872 raw bytes; it is the production count
-  file of §10.10.
+  file of [§10.10](#sec:kmv-file).
 
 The comparison of seeds, the check against the universe and the records counted exactly
-are read back from R4's streams by `sketch summary` (§10.7), with no fold:
+are read back from R4's streams by `sketch summary` ([§10.7](#sec:kmv-impl)), with no fold:
 
 ```text
 R="--range 0:31187785 --range 30187785:31187785 --range 0:100000000 --range 100000000:200000000 \
@@ -3835,7 +3835,7 @@ takes the lower order statistic, and the two differ in about the sixth digit.)
 **Matrices.** R5 folded the stores of the selected records over the whole chain, and R6
 read the production `varopt` sketches of the same records out of
 `colors.sketch-varopt512.zst`. The selections were drawn from R4's seed-1 stream by
-`sketch select chain` (§10.7), which prints the ranges below; a record is deep when its
+`sketch select chain` ([§10.7](#sec:kmv-impl)), which prints the ranges below; a record is deep when its
 $k = 1024$ sketch is full, so $\lvert S \rvert > 1024$ exactly by
 {{< xref "thm:kmv-dag" "full" >}}.
 
@@ -3899,7 +3899,7 @@ The checks:
 - **L1 against the exact $J_w$** could not be checked at full depth. It needs pairs whose
   two `varopt` sketches are unreduced, and so *are* the colours, up to `f32`; every
   selected record has more than 1,024 blocks, so its `varopt:512` sketch is always
-  reduced. The check stands on the prefix (§10.8).
+  reduced. The check stands on the prefix ([§10.8](#sec:kmv-results)).
 - **L1 against an exact lower bound.** Binning two colours into the same 1,024 bands
   can only lower their TV, and `colors.bands1024.zst` holds every record's exact binned
   colour; so $\widehat{\mathrm{TV}} \ge \mathrm{TV}_{1024} - 3\sqrt{2/m}\,\widehat{\mathrm{TV}}$
@@ -3967,7 +3967,7 @@ on the prefix: L1 $\hat J_w$ ($m = 1024$, `f64`) has percentiles 0, 0.21 and 0.5
 p50, p90), only 20.5% of the pairs lie below the floor of 0.0088, and its median falls
 with the gap from 0.55 under 5,000 blocks to 0.18 beyond 60,000. The independent store
 at $m = 512$, seed 2, agrees (median 0.18, p90 0.59). On the prefix, deep pairs across
-time had a median $J_w$ of $1.4 \times 10^{-4}$ (§10.1): what holds for the first 3M
+time had a median $J_w$ of $1.4 \times 10^{-4}$ ([§10.1](#sec:asked)): what holds for the first 3M
 records does not hold for the chain as a whole.
 
 Inside a window, where $J$ is close to 1, the weighted similarity is what tells
@@ -4007,7 +4007,7 @@ stream, copied after R4's checks passed. It is one zstd frame with a 4 MiB windo
 a plain `zstd -d` reads it.
 
 It holds, for each of the 778,613,440 transactions in record order, the 20-byte record of
-§10.7 for the $k = 1024$, seed-1, `sets` sketch of its support. Read it with
+[§10.7](#sec:kmv-impl) for the $k = 1024$, seed-1, `sets` sketch of its support. Read it with
 
 ```text
 zstd -dc colors.kmv1024.counts.zst | sketch decode
@@ -4037,7 +4037,7 @@ sketch summary --in colors.kmv1024.counts.zst \
   --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --bucket 10000000 $R --out prod-summary
 ```
 
-with the ranges `$R` of §10.9; it reads the 778,613,440 records in about 3.5 minutes of
+with the ranges `$R` of [§10.9](#sec:kmv-chain); it reads the 778,613,440 records in about 3.5 minutes of
 wall time. All records share one permutation, so their errors are correlated, by
 design: two records
 with nearly the same support get nearly the same error. A second seed's file is the
@@ -4047,9 +4047,9 @@ way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped
 ## 11. Ten Sketched Colours {#sec:ten}
 
 What the production file holds, read for a few transactions: the sketch $\hat C_t$ of
-§5.3, a polynomial in $x$ with at most 512 terms, where the exponent is the block a coin
+[§5.3](#sec:sketching-recurrence), a polynomial in $x$ with at most 512 terms, where the exponent is the block a coin
 was minted in and the coefficient the sketch's estimate of the share of $t$'s value
-minted there. The ten below are among the 1,280 records of §10.9 that R6 cut out of
+minted there. The ten below are among the 1,280 records of [§10.9](#sec:kmv-chain) that R6 cut out of
 `colors.sketch-varopt512.zst`, each picked for one property of its sketch. Each has
 exactly 512 terms, and its coefficients sum to 1 to seven digits, as point 4 of
 {{< xref "thm:varopt" "full" >}} and {{< xref "thm:dag" "full" >}} say they must. The
@@ -4062,7 +4062,7 @@ coefficients are rounded to six digits. All 5,120 terms, as stored, are in
 
 All of this section is read by `sketch describe`. It takes the 1,280 sketches as
 `sketch decode --select` prints them, their exact colours binned in the 1,024 bands (the
-lines of `colors.bands1024.zst` read for the check of §10.9) and their $\hat n$. It
+lines of `colors.bands1024.zst` read for the check of [§10.9](#sec:kmv-chain)) and their $\hat n$. It
 writes a row per record to `describe.tsv`, with the columns of
 {{< xref "tab:ten" "full" >}} and a few more, and totals over the 1,280 to
 `summary.tsv`; for the records given by `--records`, also the table's rows (`table.md`),
@@ -4094,7 +4094,7 @@ sketch describe --in varopt512.sel.txt --bands bands1024.sel.txt --counts counts
 | 229,491,784 | 470,000 | `w2017` | 35 | 48 | 0.0501 at 210,595 | 165,048 | 229,223 | 183,586 | 0.0016 | 142 |
 | 778,613,383 | 762,260 | `w2022` | 1 | 0 | $1/512$ at each of 512 | 175,122 | 391,528 | 443,316 | 0.0025 | 262 |
 | 778,611,720 | 762,260 | `chain` | 1 | 0 | $1/512$ at each of 512 | 351,468 | 761,472 | 711,490 | 0.0025 | 524 |
-{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of section 10.10. KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks. From sketch describe, table.md; describe.tsv has the same columns for all 1,280 records."}
+{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of [section 10.10](#sec:kmv-file). KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks. From sketch describe, table.md; describe.tsv has the same columns for all 1,280 records."}
 
 The ten, in the order of the table:
 
@@ -4242,7 +4242,7 @@ $$
 \end{aligned}
 $$
 
-**Flat sketches.** 543 of the 1,280 sketches of §10.9 are flat (`flat` in
+**Flat sketches.** 543 of the 1,280 sketches of [§10.9](#sec:kmv-chain) are flat (`flat` in
 `summary.tsv`), as 9 and 10 are: 512
 coefficients all equal to $1/512$. A sketch is flat when no entry of the merged parents'
 sketch exceeds the threshold $\tau$ of the last reduction
@@ -4255,16 +4255,16 @@ sketch, and is unbiased like any other.
 **Read with care.** Each coefficient estimates the share of one block without bias
 ({{< xref "thm:dag" "full" >}}), but the estimate of a single light block is
 crude: it is $\tau$ or 0. What a sketch gets right is the colour's CDF, and the
-functionals of §5.1. The KS column of the table, against the binned exact colour, runs
+functionals of [§5.1](#sec:colour-def). The KS column of the table, against the binned exact colour, runs
 from $3 \times 10^{-9}$, for colours made of heavy entries, to $0.0025$ for the flat
 sketches, a little over $\tau = 1/512$. That is allowed: the bound $\tau$ of
 {{< xref "cor:bv" "full" >}} is for one reduction against its own input, and through
-the recurrence the errors of the earlier reductions add to it (§6.3).
+the recurrence the errors of the earlier reductions add to it ([§6.3](#sec:propagation)).
 
 
 ## 12. The Colour Surface {#sec:surface}
 
-A colour is a probability distribution over the blocks (§5.1), and so is its sketch: the
+A colour is a probability distribution over the blocks ([§5.1](#sec:colour-def)), and so is its sketch: the
 coefficients are nonnegative and sum to one (point 4 of {{< xref "thm:varopt" "full" >}}).
 Set side by side in the order of the chain, the 778 million sketches make a surface over
 two time axes. One axis is the block a transaction is in, when its coins are spent. The
@@ -4286,7 +4286,7 @@ $\hat P(s, \cdot)$ is a probability distribution over minting bands. By
 same average of the exact colours. Its error does not shrink like
 $1 / \sqrt{\lvert T_s \rvert}$, though. The transactions of one band share ancestors, and
 the sketch of an ancestor was reduced once and then handed down to all of them, so their
-errors are correlated. §12.6 measures the error against the exact colours.
+errors are correlated. [§12.6](#sec:sketched-against-exact) measures the error against the exact colours.
 
 Three things the average is not:
 
@@ -4295,22 +4295,22 @@ Three things the average is not:
   the bitcoin that moved in it. Value weights need the transactions' amounts, which
   neither the sketch file nor the count file holds.
 - **"Minted in $b$" means paid out by the coinbase of block $b$**, fees included, as in
-  §5.1: a coinbase has the colour $x^{b}$ whatever part of it is fees.
+  [§5.1](#sec:colour-def): a coinbase has the colour $x^{b}$ whatever part of it is fees.
 - **The age is the time since minting**, measured through every transaction since the
   coinbase. It is not the time since the coins last moved, which is what the coin-age
   charts of chain analytics (HODL waves, coin days destroyed) measure.
 
-### 12.1 How it was computed
+### 12.1 How it was computed {#sec:it-was-computed}
 
 Two modes of the crate compute this section. `sketch surface` reads the files once and
 writes a surface as sums, by minting band and by age band (`<prefix>.mint.f64`,
 `<prefix>.age.f64`), the transactions of each row (`<prefix>.rows.f64`) and its
 counters (`<prefix>.surface.tsv`). `sketch surface-report` turns a sketched and an exact
-surface into the tables and numbers of §12.2 to §12.6 and the series the figures draw,
+surface into the tables and numbers of [§12.2](#sec:surface-2) to [§12.6](#sec:sketched-against-exact) and the series the figures draw,
 with the calendar from a file of each year's first block.
 
 - **The sketched surface.** `sketch surface` reads the production file
-  `colors.sketch-varopt512.zst` on its input and, beside it, the count file of §10.10
+  `colors.sketch-varopt512.zst` on its input and, beside it, the count file of [§10.10](#sec:kmv-file)
   for each record's block. It skips the first record of each block, the coinbase, and
   adds every other sketch, divided by its mass, to the row of its band. A coefficient at
   a block later than its transaction's own would mean that the two files do not line
@@ -4340,7 +4340,7 @@ at a block later than its transaction's own. `sketch surface` gives the matrices
 of the single-threaded first version of `surface-aggxp`; the 16-thread version added in
 the order its threads finished, and differs from them by at most $2 \times 10^{-12}$
 relative. `sketch surface-report`, run on the whole-chain `all` and `xall`, reproduces
-every table and number of §12.2 to §12.6, to the last digit of the Python scripts that
+every table and number of [§12.2](#sec:surface-2) to [§12.6](#sec:sketched-against-exact), to the last digit of the Python scripts that
 first computed them, and refuses two surfaces whose rows differ. As a cross-check of the
 reader, on the first 3M records a version that reads the text of `sketch decode` agreed
 with the sketched surface to $10^{-15}$ in the averaged surface ($1.3 \times 10^{-11}$
@@ -4352,7 +4352,7 @@ hold the series of {{< xref "fig:surface-age" "full" >}},
 {{< xref "fig:surface-check" "full" >}}(a) and {{< xref "fig:surface-ratio" "full" >}},
 equal to the script's to the bit.
 
-### 12.2 The surface
+### 12.2 The surface {#sec:surface-2}
 
 {{< fig src="surface-heatmap.svg" type="fullwidth" label="fig:surface" alt="Two heatmaps over spending time from 2009 to 2022 on the horizontal axis. Left: minting time on the vertical axis; the colour fills the triangle below the diagonal, dark along the diagonal before 2012, then an even blue with horizontal steps at the halvings of 2012, 2016 and 2020 and a pale band along the bottom for coins minted in 2009 and early 2010. Right: the same data with the age of the coins, up to 14 years, on the vertical axis; the halvings become diagonal lines." >}}
 The colour surface of the whole chain, from the production sketches: the share of a
@@ -4369,13 +4369,13 @@ sums to 1. (a) By minting time. (b) By age, spending time less minting time.
 - **Then the mass spreads over the whole past.** From 2012 each column covers nearly the
   whole triangle below the diagonal, at between $10^{-4}$ and $10^{-2}$ per band. By
   2022 the median age is 8.1 years, and three quarters of the colour is older than four
-  years (§12.4).
+  years ([§12.4](#sec:age-coins-that-move)).
 - **The halvings are horizontal steps**, at minting blocks 210,000 (November 2012),
   420,000 (July 2016) and 630,000 (May 2020). A block after a halving mints half as
   much, so it is half as large a share of everything that mixes it in. In (b), the same
   steps run along diagonals.
 - **The coins of 2009 and early 2010 stay pale** along the bottom of (a), all the way to
-  2022. They are spent far less often than their share of the supply (§12.5).
+  2022. They are spent far less often than their share of the supply ([§12.5](#sec:moves-against-exists)).
 - **Dark patches in 2010 and 2011** are single holdings moving, such as the coins minted
   around blocks 20,000 to 35,000 and spent in late 2010. With few transactions per band
   in those years, one large holding is visible on its own.
@@ -4386,7 +4386,7 @@ every cell below the diagonal is above zero, 99.3% of them between $10^{-4}$ and
 $10^{-2}$, and in the colour of 2022 the ten bands before each halving carry 1.94 to
 1.97 times the share of the ten after it.
 
-### 12.3 In three dimensions
+### 12.3 In three dimensions {#sec:three-dimensions}
 
 {{< fig src="surface-3d.svg" label="fig:surface3d" alt="A 3D surface over spending time and minting time, with a logarithmic height from one in a million to one. A sharp ridge rises along the diagonal at the early end, and a broad plateau slopes down toward the late end." >}}
 The surface of {{< xref "fig:surface" "full" >}}(a) as a height, on cells of
@@ -4401,14 +4401,14 @@ changes how high things look, and no value can be read off. The halving steps, c
 surface from the heatmap and from its slices; the 3D view is better suited to exploring
 the surface interactively than to a page.
 
-### 12.4 The age of the coins that move
+### 12.4 The age of the coins that move {#sec:age-coins-that-move}
 
 {{< fig src="surface-age.svg" type="fullwidth" label="fig:surface-age" alt="Left: one cumulative curve per year from 2011 to 2022 of the share of a transaction's colour younger than a given age, on a log age axis from one week to 13 years; the curves move right year by year. Right: the median, mean and 25-75 and 10-90 percent bands of the age against spending time; the median rises from near zero in 2012 to about 8.5 years at the end of 2022, with the exact median and mean drawn over the sketched ones." >}}
 The columns of {{< xref "fig:surface" "full" >}}(b) as distributions of age. (a) For
 each year, the share of a transaction's colour younger than a given age, averaged over
 the year's transactions. (b) Quantiles and mean of the age in each spending band of 745
 blocks from block 50,000 on, from the sketches; the dotted lines are the exact median
-and mean, from the exact surface, whose ages are differences of bands (§12.6).
+and mean, from the exact surface, whose ages are differences of bands ([§12.6](#sec:sketched-against-exact)).
 {{< /fig >}}
 
 | year spent | transactions | mean age | median age | under a week | under a year | over 4 years |
@@ -4439,7 +4439,7 @@ and mean, from the exact surface, whose ages are differences of bands (§12.6).
   within weeks, coincides with the rise and fall of the price in December 2017 and
   January 2018. The coins spent then were older than in the months around them.
 
-### 12.5 What moves against what exists
+### 12.5 What moves against what exists {#sec:moves-against-exists}
 
 Coins of every age exist, in known amounts: block $b$ mints a subsidy of
 $50 \cdot 2^{-\lfloor b / 210{,}000 \rfloor}$ BTC. If the coins that move were a fair
@@ -4493,9 +4493,9 @@ month.
 
 The comparison is between two different things: the supply counts bitcoin, and the
 colour is averaged over transactions. A value-weighted surface would compare like with
-like, and would need the amounts (§13).
+like, and would need the amounts ([§13](#sec:left)).
 
-### 12.6 Sketched against exact
+### 12.6 Sketched against exact {#sec:sketched-against-exact}
 
 {{< fig src="surface-check.svg" type="fullwidth" label="fig:surface-check" alt="Left: total variation distance between the sketched and the exact column, one point per spending band, on a log axis from about 1e-16 to 1e-1; tiny before 2011, up to about 1e-2 in 2011, and between about 6e-3 and 4e-2 from 2012 on. Right: the difference sketched minus exact for every cell of the triangle, on a symmetric log colour scale from -0.01 to 0.01; mostly pale, with horizontal stripes." >}}
 The sketched surface against the exact one, from `colors.bands1024.zst`. (a) The total
@@ -4507,14 +4507,14 @@ The two surfaces were computed from the same 777,851,179 transactions, row for r
 any difference comes from the sketches. The numbers below are in `surface-check.tsv`,
 with the medians by year in `surface-tv-years.tsv` and the ages read from bands in the
 `sketched-bands` and `exact-bands` rows of `surface-age.tsv`; the 0.42 of a single
-sketch is from §11's `describe.tsv`.
+sketch is from [§11](#sec:ten)'s `describe.tsv`.
 
 - **Columns.** The total variation distance between a sketched column and the exact one
   is at most 0.0029 before 2011 and at most 0.010 in 2011, with few transactions and
   small colours. From 2012 on, where every column averages at least 27,512 sketches, it
   is between 0.006 and 0.040, and it grows slowly with time: the median column is at
   0.013 in 2013 and at 0.034 in 2022. A single sketch is much further from its binned
-  colour: 0.42 for the tenth sketch of §11.
+  colour: 0.42 for the tenth sketch of [§11](#sec:ten).
 - **Cells.** No cell differs by more than $1.2 \times 10^{-3}$, and 99% of the cells
   where the exact surface is not zero differ by less than $2.4 \times 10^{-4}$.
 - **Ages.** Read the same way from both surfaces, as differences of bands, the mean age
@@ -4537,8 +4537,8 @@ The errors do not cancel as they would if the sketches were independent.
 band that a column overstates tends to be overstated in the columns after it too. That
 is what inherited sampling decisions do. When a reduction keeps or drops a light block
 for some transaction, every later transaction that spends those coins inherits the
-choice (§6.3). The surface is accurate to a few parts in a thousand for the questions of
-§12.4 and §12.5, which sum many cells. It is less accurate for a single cell, where the
+choice ([§6.3](#sec:propagation)). The surface is accurate to a few parts in a thousand for the questions of
+[§12.4](#sec:age-coins-that-move) and [§12.5](#sec:moves-against-exists), which sum many cells. It is less accurate for a single cell, where the
 error can be a sizable fraction of the value.
 
 
@@ -4554,29 +4554,29 @@ error can be a sizable fraction of the value.
 - **Why `varopt`'s error does not grow with depth.** {{< xref "cor:rate" "full" >}}
   proves the $1/k$ rate at every record, with a factor $\sqrt{A_t}$ that is allowed to
   grow with depth; that the error relative to the colours' spread stays flat, as
-  measured, is not proved (§6.3). The control for the stratification explanation, VarOpt
+  measured, is not proved ([§6.3](#sec:propagation)). The control for the stratification explanation, VarOpt
   with its lights chosen in random order, was run only with the design-phase prototype
-  on a prefix of the chain (§6.4); repeating it with the final binary over the whole
+  on a prefix of the chain ([§6.4](#sec:rates)); repeating it with the final binary over the whole
   chain is open. So is a direct look at the bound. On the first 3M records, where the
   exact colours are known, $A_t$ and $\sum_r \alpha_{t,r}^2 \tau_r^2$ could be computed
   record by record. That would show whether the error stays flat because these sums
   stay small under mixing, or because the errors of different reductions cancel.
 - **Literal bottom-$k$ against VarOpt.** The literal weighted bottom-$k$ sketch of
-  sections 2–4 is `prio`, and here it loses by 6–21×; the exponential (PPSWOR) ranks of
-  §2.2 were tried in the design phase and were no different from priority ranks. Whether
+  sections [2](#sec:weighted-extension-priority-sampling)–[4](#sec:high-performance-implementations) is `prio`, and here it loses by 6–21×; the exponential (PPSWOR) ranks of
+  [§2.2](#sec:mathematical-formulations) were tried in the design phase and were no different from priority ranks. Whether
   some bottom-$k$ variant can recover the $1/k$ rate (for instance by making the choice
   among the lights systematic, which is what VarOpt does) is open.
 - **The band-based floors.** The figure of TV1024 against its floor has to be redrawn
-  with each row's own $\tau$ before it can be shown; the numbers in §8.8 are the
+  with each row's own $\tau$ before it can be shown; the numbers in [§8.8](#sec:floors-tv1024-cannot-say) are the
   corrected ones.
 - **`--long=27` sizes** at $k = 64$, $256$ and $1024$ are estimates: at $k = 64$ from
   the 36.4% saving measured at $k = 128$, at $k = 256$ from its own 40.7% measured over
   0–350M, and at $k = 1024$ from an assumed saving of about 42%, extrapolated from the
   rise with $k$. At $k = 512$ the production run measured 172.7 GB, just below its
   estimate of 175–190 GB.
-- **The permutation is pseudo-random.** The exact unbiasedness of §10.4–10.5 is a
+- **The permutation is pseudo-random.** The exact unbiasedness of [§10.4](#sec:kmv-count)–[10.5](#sec:kmv-pairs) is a
   theorem about a uniform permutation; the code draws a Fisher–Yates shuffle from a
-  hash. The seed tests of §10.8 and the uniformity test T-K1 are the evidence that the
+  hash. The seed tests of [§10.8](#sec:kmv-results) and the uniformity test T-K1 are the evidence that the
   difference is harmless, and a change to the shuffle or the hash must rerun them.
 - **One permutation per run.** Every count and every cell of a matrix shares it, so
   errors are correlated across records and cells, and a single run can say nothing
@@ -4590,12 +4590,12 @@ error can be a sizable fraction of the value.
   records and, at full depth, only on the 1,280 records R5 selected
   ($7.8 \times 10^{-5}$ relative at worst). L1 against the exact $J_w$ was checked on the
   prefix only: no record of the whole-chain selections has an unreduced `varopt`
-  sketch to compare with. At full depth there is only the band lower bound of §10.9,
+  sketch to compare with. At full depth there is only the band lower bound of [§10.9](#sec:kmv-chain),
   which holds but is loose inside a window.
 - **A weighted sample that keeps the subset lemma.** Ranks $u_b / g(b)$ with a fixed
   function $g$ of the block keep {{< xref "lem:kmv-sub" "full" >}}, so they would fold
   exactly with exact weights, sampling blocks by a prior rather than by the colour. Which
-  $g$ (recency, minted value) would serve $J_w$ or the functionals of §5.1 is open, and
+  $g$ (recency, minted value) would serve $J_w$ or the functionals of [§5.1](#sec:colour-def) is open, and
   so is whether a weighted MinHash outside the class of
   {{< xref "prop:no-sum-merge" "full" >}} can compose under sums. The probability
   Jaccard index of Moulton and Jiang is not a function of L1, and no composing sketch
@@ -4613,11 +4613,11 @@ error can be a sizable fraction of the value.
   could lower the variance at small $J$.
 - **KMV and L1 sketches of every record are not stored.** At $k = 1024$ the KMV ones
   would take about 3.2 TB. The counts are stored, and so is the `varopt:512` colour of
-  every record (§9); KMV and L1 sketches exist only for selections, and a new selection
+  every record ([§9](#sec:production)); KMV and L1 sketches exist only for selections, and a new selection
   needs a new fold (about 70 minutes, as R5 took).
-- **A value-weighted surface.** The surface of §12 counts every transaction once.
+- **A value-weighted surface.** The surface of [§12](#sec:surface) counts every transaction once.
   Weighted by the amounts, it would be the colour of the bitcoin that moved, and its
-  comparison with the supply in §12.5 would be like with like. The amounts are not in
+  comparison with the supply in [§12.5](#sec:moves-against-exists) would be like with like. The amounts are not in
   the sketch file or the count file, so it needs one more pass over the chain with them.
   The time since coins last moved, which coin-age charts use, is a different recurrence
   and is not in the colours at all.
@@ -4627,71 +4627,71 @@ error can be a sizable fraction of the value.
 
 ## 14. Notes and References {#sec:references}
 
-### 14.1 Further reading
+### 14.1 Further reading {#sec:further-reading}
 
 - **Sampling theory.** {{< cite keys="horvitz1952generalization" mode="text" >}}
   introduced the estimator that weights each sampled item by the inverse of its
   inclusion probability; every weight and linear-functional estimate of the priority and
-  VarOpt sketches in this post, from priority sampling's $\max(w_i, 1/\tau)$ (§2.3, with
+  VarOpt sketches in this post, from priority sampling's $\max(w_i, 1/\tau)$ ([§2.3](#sec:horvitz-thompson-estimator), with
   rank threshold $\tau$) to the weight threshold $\tau$ carried by a kept light in
-  VarOpt (§6.1), is one of them (the KMV counts, the Jaccard and containment ratios,
-  and the Cauchy-scale L1 estimates of §1 and §10 are not).
+  VarOpt ([§6.1](#sec:varopt)), is one of them (the KMV counts, the Jaccard and containment ratios,
+  and the Cauchy-scale L1 estimates of [§1](#sec:introduction-bottom-k-sketches) and [§10](#sec:counting) are not).
   {{< cite keys="madow1949theory" mode="text" >}} belongs to the classical theory of
-  systematic sampling, the design that §6.1 runs along the block axis.
+  systematic sampling, the design that [§6.1](#sec:varopt) runs along the block axis.
   {{< cite keys="chao1982general" mode="text" >}} is a fixed-size plan with unequal
   probabilities in which units enter the sample one at a time; the stream VarOpt$_k$ of
   Cohen et al.{{< cite "cohen2009stream" >}} (one random eviction per arrival) draws
-  exactly the same distribution of samples, while the systematic scheme of §6.1 keeps
+  exactly the same distribution of samples, while the systematic scheme of [§6.1](#sec:varopt) keeps
   its inclusion probabilities but not its joint distribution.
 - **Resampling in particle filters.** {{< cite keys="kitagawa1996monte" mode="text" >}}
   and {{< cite keys="carpenter1999improved" mode="text" >}} introduced stratified and
   systematic resampling. {{< cite keys="fearnhead2003online" mode="text" >}} keep the
   particles above a threshold and resample the rest at the threshold's weight. That is
-  the reduction of §6.1, which they prove optimal among unbiased resampling schemes.
+  the reduction of [§6.1](#sec:varopt), which they prove optimal among unbiased resampling schemes.
   {{< cite keys="delmoral2004feynman" mode="text" >}} analyses particle systems through
   the decomposition of their error into the noises of the resampling steps, the analogue
-  of §6.3.
+  of [§6.3](#sec:propagation).
   {{< cite keys="gerber2015sequential" mode="text" >}} beat the Monte Carlo rate by
   ordering the particles and using quasi-random points, and
   {{< cite keys="gerber2019negative" mode="text" >}} prove that ordering speeds up
-  stratified resampling. That is the gain of the block order in §6.4.
+  stratified resampling. That is the gain of the block order in [§6.4](#sec:rates).
 - **Order sampling.** {{< cite keys="rosen1997asymptotic" mode="text" >}} studies the
   designs that give every unit an independent random ranking variable and keep the $n$
-  smallest: both rank families of §2.2 are of this kind. With the uniform ranks
+  smallest: both rank families of [§2.2](#sec:mathematical-formulations) are of this kind. With the uniform ranks
   $u_i/w_i$ it is the sequential Poisson sampling of
   {{< cite keys="ohlsson1998sequential" mode="text" >}}, devised for the Swedish
   Consumer Price Index; with exponential ranks it is sampling without replacement with
   probability proportional to weight.
 - **Priority sampling and VarOpt.** {{< cite keys="duffield2007priority" mode="text" >}}
-  is the source of §2–3: priority sampling, its unbiasedness and its zero covariances.
+  is the source of [§2](#sec:weighted-extension-priority-sampling)–[3](#sec:mathematical-proof-unbiasedness): priority sampling, its unbiasedness and its zero covariances.
   {{< cite keys="szegedy2006dlt" mode="text" >}} proved the near-optimality they had
   conjectured. {{< cite keys="cohen2009stream" mode="text" >}}, in its journal version
   {{< cite keys="cohen2011efficient" mode="text" >}}, define VarOpt$_k$, whose estimates
-  minimise the average variance over the subsets of every size; §6.1 keeps two of their
+  minimise the average variance over the subsets of every size; [§6.1](#sec:varopt) keeps two of their
   three requirements and trades the third for the block order.
 - **Bottom-$k$ sketches.** {{< cite keys="cohen2007summarizing" mode="text" >}} treat
   bottom-$k$ sketches as one family parametrised by the rank distribution, and
   {{< cite keys="cohen2008tighter" mode="text" >}} derive their Horvitz–Thompson
-  estimators by rank conditioning, the argument of §3.
+  estimators by rank conditioning, the argument of [§3](#sec:mathematical-proof-unbiasedness).
   {{< cite keys="thorup2013bottom" mode="text" >}} shows how little independence the
   hash function needs, for bottom-$k$ and for priority sampling alike.
   {{< cite keys="cohen1997size" mode="text" >}} folds min-rank sketches through a graph
-  to estimate the size of every node's reachability set, the fold of §10.3.
+  to estimate the size of every node's reachability set, the fold of [§10.3](#sec:coordinated-bottom-k-support).
 - **Counting distinct elements.** {{< cite keys="baryossef2002counting" mode="text" >}}
   keep the $k$ smallest hash values; {{< cite keys="beyer2007synopses" mode="text" >}}
-  name the KMV synopsis, prove the $(k - 1)/v_{(k)}$ estimator of §1.2 unbiased, and
+  name the KMV synopsis, prove the $(k - 1)/v_{(k)}$ estimator of [§1.2](#sec:primary-applications) unbiased, and
   extend it to multiset unions, intersections and differences.
   {{< cite keys="flajolet2007hyperloglog" mode="text" >}} is the right-hand column of
-  the table of §1.3, with a standard error of about $1.04/\sqrt{m}$ for $m$ registers,
+  the table of [§1.3](#sec:comparison-bottom-k-minhash), with a standard error of about $1.04/\sqrt{m}$ for $m$ registers,
   and {{< cite keys="broder1997resemblance" mode="text" >}} the origin of MinHash and of
   resemblance as the Jaccard index of shingle sets.
 - **Structure and coordination.** {{< cite keys="cohen2011structure" mode="text" >}}
   design VarOpt samples that respect an order or a hierarchy on the keys, so that range
   sums (here, the cuts of a colour's CDF) are much more accurate; their appendix on
-  ordered keys sets systematic sampling beside them, which is the choice §6.1 makes.
+  ordered keys sets systematic sampling beside them, which is the choice [§6.1](#sec:varopt) makes.
   {{< cite keys="cohen2009coordinated" mode="text" >}} coordinate samples of many weight
   assignments over the same keys through shared ranks, as `coord` does over the blocks
-  in §6.6.
+  in [§6.6](#sec:coord).
 - **Weighted similarity of distributions.**
   {{< cite keys="manasse2010consistent" mode="text" >}} define consistent weighted
   sampling, a MinHash for vectors whose collision probability is the weighted Jaccard
@@ -4700,31 +4700,31 @@ error can be a sizable fraction of the value.
   argue that for probability distributions, such as two colours, the natural
   generalisation of the Jaccard index is a different one, and give a MinHash for it,
   P-MinHash, whose ranks are those of {{< xref "prop:no-sum-merge" "full" >}}. None of
-  them composes through the sums of the colour recurrence; §10.6 uses instead that for
+  them composes through the sums of the colour recurrence; [§10.6](#sec:l1) uses instead that for
   distributions the weighted Jaccard similarity is a function of the L1 distance.
 - **Stable projections.** {{< cite keys="indyk2006stable" mode="text" >}} sketches the
   L1 distance of streamed vectors by projections with Cauchy entries, which are linear
-  and therefore follow any sequence of updates, including the mixtures of §5.1;
+  and therefore follow any sequence of updates, including the mixtures of [§5.1](#sec:colour-def);
   {{< cite keys="li2007nonlinear" mode="text" >}} study estimators of the scale from
-  Cauchy projections, among them the maximum likelihood estimator of §10.6, and their
+  Cauchy projections, among them the maximum likelihood estimator of [§10.6](#sec:l1), and their
   tail bounds. {{< cite keys="jowhari2011tight" mode="text" >}} give $L_p$ samplers,
   linear sketches from which a coordinate can be drawn in proportion to its weight, the
-  weighted sampling that does compose under sums (§10.6).
+  weighted sampling that does compose under sums ([§10.6](#sec:l1)).
 - **Martingales.** {{< cite keys="williams1991probability" mode="text" >}} covers what
-  §6.2–6.3 use: conditional expectation, the tower property, and the orthogonality of
+  [§6.2](#sec:unbiased)–[6.3](#sec:propagation) use: conditional expectation, the tower property, and the orthogonality of
   martingale differences.
 - **Bitcoin and taint.** {{< cite keys="nakamoto2008bitcoin" mode="text" >}} describes
   the chain whose transactions are coloured here.
   {{< cite keys="moser2014towards" mode="text" >}} define the *poison* and *haircut*
-  blacklisting policies, the second of which is the recurrence of §5.1 read for one set
+  blacklisting policies, the second of which is the recurrence of [§5.1](#sec:colour-def) read for one set
   of blocks; {{< cite keys="anderson2018bitcoin" mode="text" >}} propose
   first-in-first-out tracing instead, which in their case studies taints far fewer
   addresses than haircut.
 - **Randomness.** {{< cite keys="steele2014fast" mode="text" >}} is the SplitMix
-  generator whose output function hashes every draw of §7.3. The permutation of §10.7 is
+  generator whose output function hashes every draw of [§7.3](#sec:randomness). The permutation of [§10.7](#sec:kmv-impl) is
   the shuffle of Fisher and Yates in Durstenfeld's in-place form, Algorithm P of Knuth's
   §3.4.2.{{< cite "knuth1997taocp2" >}}
 
-### 14.2 References
+### 14.2 References {#sec:references-2}
 
 {{< bibliography heading="" >}}
