@@ -587,6 +587,16 @@ cohen2011structure:
   doi: "10.14778/3402707.3402721"
   url: "https://doi.org/10.14778/3402707.3402721"
 
+davis2006direct:
+  type: book
+  author: "Timothy A. Davis"
+  title: "Direct Methods for Sparse Linear Systems"
+  publisher: "Society for Industrial and Applied Mathematics"
+  series: "Fundamentals of Algorithms"
+  year: "2006"
+  doi: "10.1137/1.9780898718881"
+  url: "https://doi.org/10.1137/1.9780898718881"
+
 delmoral2004feynman:
   type: book
   author: "Pierre Del Moral"
@@ -658,6 +668,18 @@ gerber2019negative:
   year: "2019"
   doi: "10.1214/18-AOS1746"
   url: "https://doi.org/10.1214/18-AOS1746"
+
+gilbert1988sparse:
+  type: article
+  author: "John R. Gilbert and Tim Peierls"
+  title: "Sparse partial pivoting in time proportional to arithmetic operations"
+  journal: "SIAM Journal on Scientific and Statistical Computing"
+  volume: "9"
+  number: "5"
+  pages: "862–874"
+  year: "1988"
+  doi: "10.1137/0909058"
+  url: "https://doi.org/10.1137/0909058"
 
 horvitz1952generalization:
   type: article
@@ -824,6 +846,15 @@ ohlsson1998sequential:
   pages: "149–162"
   year: "1998"
   url: "https://www.scb.se/contentassets/ca21efb41fee47d293bbee5bf7be7fb3/sequential-poisson-sampling.pdf"
+
+ottosson2020oklab:
+  type: misc
+  author: "Björn Ottosson"
+  title: "A perceptual color space for image processing"
+  howpublished: "Blog post"
+  year: "2020"
+  month: "dec"
+  url: "https://bottosson.github.io/posts/oklab/"
 
 rosen1997asymptotic:
   type: article

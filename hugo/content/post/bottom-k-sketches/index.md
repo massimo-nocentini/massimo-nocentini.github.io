@@ -1,9 +1,9 @@
 +++
 date = '2026-11-12T10:30:00+01:00'
-lastmod = '2026-11-15T16:27:00+01:00'
+lastmod = '2026-11-19T18:00:00+01:00'
 title = 'Comprehensive Guide to Bottom-$k$ Sketches'
 subtitle = 'Unweighted, Weighted, Proofs & Implementations; and VarOpt Sketches of a Recurrence on the Bitcoin Chain'
-description = 'Bottom-k (KMV) sketches: cardinality, unions and Jaccard similarity; the weighted extension by priority sampling and exponential scaling with the Horvitz-Thompson estimator; the proof of unbiasedness; Rust and C99 implementations. Then a recurrence sketched: the colour of every transaction of the Bitcoin chain up to 2022 as a VarOpt sketch of at most k blocks, with proofs, the Rust implementation and measurements over 778 million records; and count-distinct and Jaccard similarity of the colours by a coordinated bottom-k of their supports, exact through the DAG, with a weighted similarity by a Cauchy linear sketch.'
+description = 'Bottom-k (KMV) sketches: cardinality, unions and Jaccard similarity; the weighted extension by priority sampling and exponential scaling with the Horvitz-Thompson estimator; the proof of unbiasedness; Rust and C99 implementations. Then a recurrence sketched: the colour of every transaction of the Bitcoin chain up to 2022 as a VarOpt sketch of at most k blocks, with the recurrence read as a unit lower triangular solve, proofs, the Rust implementation and measurements over 778 million records, and the exact colours of the head of the chain drawn record by record; and count-distinct and Jaccard similarity of the colours by a coordinated bottom-k of their supports, exact through the DAG, with a weighted similarity by a Cauchy linear sketch.'
 categories = ['data structure', 'rust', 'c']
 tags = ['sketches', 'bottom-k', 'priority sampling', 'VarOpt', 'bitcoin', 'count-distinct', 'Jaccard']
 toc = true
@@ -148,7 +148,7 @@ HyperLogLog:{{< cite "flajolet2007hyperloglog" >}}
 
 Here $M$ is the size of the hashed universe, as in [§1.2.1](#sec:cardinality-estimation-count-distinct), so a hash value takes
 $\log M$ bits, and $m$ is the number of HLL registers (standard error about
-$1.04/\sqrt{m}$, [§14](#sec:references)).
+$1.04/\sqrt{m}$, [§15](#sec:references)).
 
 
 ## 2. Weighted Extension: Priority Sampling & Exponential Scaling {#sec:weighted-extension-priority-sampling}
@@ -368,7 +368,7 @@ $$\text{Var}(\hat{W}_Q) = \sum_{i \in Q} \text{Var}(\hat{w}_i)$$
    by ORing `z >> 12` into the mantissa of double `1.0` (`0x3FF0000000000000`), forcing
    the lowest mantissa bit to 1, and subtracting `1.0`. 51 hash bits survive, and $u_i$ is
    an odd multiple of $2^{-52}$ between $2^{-52}$ and $1 - 2^{-52}$: the forced bit is
-   what keeps $u_i$ from being $0$. (The crate's hash, [§7.3](#sec:randomness), keeps all 52 bits on the
+   what keeps $u_i$ from being $0$. (The crate's hash, [§7.4](#sec:randomness), keeps all 52 bits on the
    midpoint grid instead.)
 4. **Preconditions:** each `id` is offered at most once, with its weight already
    aggregated per key (a repeated `id` is a repeated item), and weights are positive and
@@ -729,28 +729,42 @@ ideas for a different job, and was built and measured in the Rust repository
 `coloring-bt-transactions-rs` as a new binary, `sketch` (`src/bin/sketch.rs` and the
 modules under `src/bin/sketch/`). Here every sketch is made *from other sketches*, mixed
 with real weights, by a recurrence that runs over the 778,613,440 transaction records of
-the 2022 Bitcoin chain{{< cite "nakamoto2008bitcoin" >}}.
+the 2022 Bitcoin chain{{< cite "nakamoto2008bitcoin" >}}. The repository's main binary,
+`coloring-bt-transactions` (`src/main.rs`), computes the same colours exactly, and
+[§5.1](#sec:colour-def)–[5.4](#sec:reach) use it to set out the problem: the rule, the
+triangular system it solves, and how far an exact solve gets on the 2022 chain before
+memory stops it.
 
 One thing should be said at the start, because the title of this post promises
 bottom-$k$. The sketch that won is **not** literally a bottom-$k$ sketch. It is
 VarOpt$_k$ with its light items chosen by *systematic* sampling in block order: a
 threshold sampler, the sibling of the priority sampling of [§2](#sec:weighted-extension-priority-sampling) rather than one of its
 members. The literal weighted bottom-$k$ sketch of [§2](#sec:weighted-extension-priority-sampling) was built too (`prio` below) and
-measured beside it; it lost by a factor of 6 to 21 at the same size ([§8.4](#sec:variants-compared)). [Section 5.5](#sec:novelty)
+measured beside it; it lost by a factor of 6 to 21 at the same size ([§8.4](#sec:variants-compared)). [Section 5.7](#sec:novelty)
 says which of what follows is known and which is new. [Section 6](#sec:proofs)
 proves what each variant guarantees, [section 7](#sec:implementation) shows the code, [section 8](#sec:results) the
-measurements, and the reasons the threshold sampler wins run through all three. Section
-10 turns to two questions that no sketch of a colour answers: from how many blocks a
-transaction descends, and how much two transactions share.
+measurements, and the reasons the threshold sampler wins run through all three.
+[Section 10](#sec:counting) turns to two questions that no sketch of a colour answers: from how many blocks a
+transaction descends, and how much two transactions share. [Section 13](#sec:pictures)
+draws the exact colours where they still fit, over the first million records.
 
-Every result of a run quoted below can be recomputed from files on disk by a mode of
-`sketch`. Most come from modes that fold nothing and only read what the runs wrote:
+Every result of a run of `sketch` quoted below can be recomputed from files on disk by a
+mode of `sketch`. Most come from modes that fold nothing and only read what the runs wrote:
 `sketch summarize` turns the outputs of `chain` and `eval` into the tables of [section 8](#sec:results)
 (the factor above is the column `abs_dmean_over_varopt` of its `errors.tsv`, at
 $k = 64$, $256$ and $1024$), and `sketch summary` reads count streams back into the
-counts of sections [5.2](#sec:exact-colours-do-not) and [10](#sec:counting). [Section 7.9](#sec:modes-threads-commands-that) lists the modes and the runs. What no mode
+counts of sections [5.4](#sec:reach) and [10](#sec:counting). [Section 7.10](#sec:modes-threads-commands-that) lists the modes and the runs.
+Results of the main binary ([§5.1](#sec:colour-def)–[5.4](#sec:reach), [§7.3](#sec:allocator), [§7.12](#sec:matrix),
+[§13](#sec:pictures)) are crate runs too, but of `coloring-bt-transactions`, and each is
+given with its command line or its flags. Two of its whole-chain runs left their logs on disk
+(`colors.moments.log`, `colors.laplace.log`), and the exact sizes of its `--sets` run are
+a file on disk; the rest were measured while the main binary was written, and are quoted
+from its documentation (the crate's `README.md`, `RUNNING-2022.md` and source comments)
+or from its write-up, a description of the main binary that we wrote earlier and have
+not published, and each such result says which. What no mode of `sketch`
 computes is labelled where it appears: the prototypes and simulations of the design
-phase, benchmarks, wall-clock times from `/usr/bin/time`, and hand projections.
+phase, runs of the main binary, benchmarks, wall-clock times from `/usr/bin/time`, and
+hand projections.
 
 ### 5.1 Colours {#sec:colour-def}
 
@@ -782,7 +796,38 @@ case.{{< cite "moser2014towards,anderson2018bitcoin" >}}{{< /sidenote >}} The re
 come in file order and every input spends an earlier record, so the transactions form a
 DAG listed in topological order, and {{< eqref "eq:recurrence" >}} is evaluated in one
 pass. The repository's main binary does exactly that with `--weighted` (the loop in
-`src/main.rs`'s `run()`).
+`src/main.rs`'s `run()`):
+
+```text
+coloring-bt-transactions all --weighted < finalBCUTXO_2022.scm
+```
+
+prints every record's colour as its terms, block and coefficient; without `all` it stops
+at a default limit of 1,000,001 records. Two facts make that fold checkable.
+
+- **Mass.** A record's shares sum to one, and computed in `f64` they do so to within
+  $1.02 \times 10^{-13}$ on every record of the chain (measured by the crate's example
+  `matrix --csr`, [§7.12](#sec:matrix)). Under `--stats` the main binary audits the
+  fold and prints the worst drift of a colour's mass from one.{{< sidenote >}}No exact
+  `--weighted` fold has reached the end of the chain ([§5.3](#sec:exact-colours-do-not)), so
+  there is no whole-chain drift of the exact colours to quote. The two whole-chain runs
+  that wrote the exact references below ([§5.2](#sec:solve)) carry the colours in `f32` band lanes, and
+  their audits report $3.138 \times 10^{-5}$ (`--bands 1024`, `colors.moments.log`) and
+  $1.096 \times 10^{-4}$ (`--bands 1`, `colors.laplace.log`); the moments and Laplace
+  values beside the lanes are carried in `f64`.{{< /sidenote >}}
+- **Blocks.** Which blocks a colour names does not depend on the weights. The terms
+  `--weighted` prints, zero coefficients included (`src/weighted.rs` prunes nothing),
+  are exactly the blocks the unweighted fold computes; only the coefficients differ.
+  The blocks with a *positive* coefficient are the `pos` support of [§10.1](#sec:asked), which
+  differs from them only through zero-amount inputs and `f64` underflow.
+
+Give every input weight one and a colour becomes a *set* of blocks, with union in place
+of the sum: the support recurrence {{< eqref "eq:support" >}} of [§10.1](#sec:asked). That reading is
+older; it is what the Scheme program that preceded the crate computed. The main binary
+keeps two implementations of it, `--rings` (circular linked lists, the default) and
+`--sets` (sorted `u32` arrays), which share no code and print byte-identical output:
+diffing the two is a stronger check of the fast one than any test it could be given
+alone.
 
 A colour is read through linear functionals: its mean block and its spread, its CDF
 ("how much of this is older than block $x$") and its Laplace values,
@@ -791,34 +836,319 @@ $$
 F_t(x) = \sum_{b=0}^{x} c_t(b), \qquad \Lambda_s(C_t) = \sum_{b=0}^{L-1} c_t(b)\, e^{-s b / L},
 $$
 
-at $s \in \{0.5, 1, 2, 4, 8, 16, 32\}$. All of these are on disk, computed exactly, for
-every transaction of the chain (`colors.laplace.zst`, `colors.moments.zst`, and the
-1024-band binned colours `colors.bands1024.zst`), and they are what the sketches are
-measured against in [section 8](#sec:results).
+at $s \in \{0.5, 1, 2, 4, 8, 16, 32\}$. Their values for every transaction of the chain
+are on disk, solved as [§5.2](#sec:solve) shows, and they are what the sketches are measured against
+in [section 8](#sec:results).
 
-### 5.2 Why the exact colours do not fit {#sec:exact-colours-do-not}
+### 5.2 A triangular solve {#sec:solve}
+
+Number the records $0, 1, 2, \dots$ in file order, and read a colour as the row vector of
+its coefficients $(c_t(0), \dots, c_t(L - 1))$. Matrices are written as bold letters or,
+like $\Pi$ of [§10.6](#sec:l1), as Greek capitals, and an entry as $\Gamma_{t,p}$, row before column
+($\Pi_{jb}$ of [§10.6](#sec:l1) drops the comma). The *share matrix* $\Gamma$ is square, with a row and a
+column for every record, and holds the share of $t$'s value spent from record $p$:
+
+$$
+\Gamma_{t,p} = \sum_{\substack{1 \le i \le n \\ p_i = p}} s_{t,i} .
+$$
+
+It is $0$ when $t$ spends nothing of $p$, and it is the summed share $\bar s_g$ of
+{{< xref "prop:l1-linear" "full" >}} when $p$ is the parent $q_g$ of a group. A
+coinbase's row is zero, and every other row sums to one. Every input spends an earlier
+record, so **$\Gamma$ is strictly lower triangular.** Let the *colour matrix*
+$\mathbf{C}$ have row $t$ equal to $C_t$, and the *coinbase matrix* $\mathbf{E}$ have
+row $t$ equal to $e_\beta$ when $t$ is the coinbase of block $\beta$ (the $e_\beta$ of
+[§10.6](#sec:l1), all its mass on $\beta$) and $0$ otherwise; $\mathbf{I}$ is the identity. Row $t$
+of $\Gamma\,\mathbf{C}$ is $\sum_{p=0}^{t-1} \Gamma_{t,p}\, C_p$, which is
+{{< eqref "eq:recurrence" >}} with the inputs grouped by parent, so the recurrence for
+all records at once reads
+
+$$
+\mathbf{C} = \Gamma\,\mathbf{C} + \mathbf{E}
+\quad\iff\quad
+(\mathbf{I} - \Gamma)\,\mathbf{C} = \mathbf{E}
+\quad\iff\quad
+\mathbf{C} = (\mathbf{I} - \Gamma)^{-1}\,\mathbf{E} . \label{eq:solve}
+$$
+
+$\mathbf{I} - \Gamma$ is unit lower triangular, and the one pass of [§5.1](#sec:colour-def) *is* forward
+substitution on it{{< cite "gilbert1988sparse,davis2006direct" >}}: row $t$ is solved
+from rows already solved, with the same arithmetic in the same order.{{< sidenote >}}The
+rows are records: 778,613,440 of them, for 778,613,438 distinct transaction ids. The two
+BIP-30 duplicate coinbases, records 142,783 and 142,841, repeat the ids of earlier
+coinbases; each is a coinbase row of its own, and an input that names a duplicated id
+reads the later record (the insert displaces the older colour, [§7.5](#sec:driver)). The chain has
+2,044,897,328 inputs, so $\Gamma$ has at most that many nonzero entries: a parent spent
+twice by one record adds both shares into one entry.{{< /sidenote >}} Four things
+follow from reading it so.
+
+**It explains the cost.** An entry $(\Gamma^{j})_{t,r} \ne 0$ needs a path of $j$
+edges from $r$ to $t$, and every path extends back to a coinbase, so
+$\Gamma^{d+1} = 0$ for $d = \max_t d_t$, the longest path of
+{{< xref "cor:rate" "full" >}}, and the inverse is a finite sum,
+
+$$
+(\mathbf{I} - \Gamma)^{-1} = \sum_{j=0}^{d} \Gamma^{j}, \qquad d = \max_t d_t .
+$$
+
+Its entry $(t, r)$ is the sum, over all paths from $r$ to $t$, of the products of the
+shares along them: the $\alpha_{t,r}$ of {{< xref "thm:decomp" "full" >}}. The inverse
+of a sparse triangular matrix fills in along reachability in its graph, and row $t$ of
+$\mathbf{C}$ has a block wherever $t$ reaches that block's coinbase through positive
+shares: the support $S^+_t$ of [§10.1](#sec:asked) (`pos`). That fill-in, and its `sets` form below,
+are what [§5.3](#sec:exact-colours-do-not) and [§5.4](#sec:reach) measure. There is nothing to factor and no ordering to choose:
+$\mathbf{I} - \Gamma$ is already triangular, in the order of the chain, and the fill-in
+is in the answer, not in a factor that a better ordering could keep sparse.
+
+**It names the working set.** Forward substitution must keep row $p$ until the last row
+$t$ with $\Gamma_{t,p} \ne 0$ has been solved, and the `sets` form of the Boolean solve
+below, which keeps zero-amount inputs, until the last row that spends $p$ at all. A stream can bound that
+only by "has an unspent output"; the release oracle of [§5.3](#sec:exact-colours-do-not) answers the second question
+exactly, and so bounds the first.
+
+**It says what can be computed.** The solve is linear, so it commutes with every linear
+map of the colours. For any $L \times \nu$ matrix $\Phi$,
+
+$$
+\mathbf{C}\,\Phi = (\mathbf{I} - \Gamma)^{-1}\,(\mathbf{E}\,\Phi) . \label{eq:project}
+$$
+
+It is the same forward substitution, with $\nu$ columns on the right instead of
+$L = 762{,}261$. The memory per live record is $\nu$ numbers, flat in the size of the
+colour, and the result is exact for whatever $\Phi$ projects onto (in exact arithmetic;
+the main binary carries the moments and Laplace values in `f64` and the bands in `f32`
+lanes, [§5.1](#sec:colour-def)). The functionals of [§5.1](#sec:colour-def) are such projections: $\nu = 3$ and row $b$ of
+$\Phi$ equal to $(1, b, b^2)$ for the mass and the first two moments, from which the mean
+and the spread follow; the column $\mathbf{1}\{b \le x\}$ for a cut $F_t(x)$; $\nu = 7$
+and $\Phi_{b,j} = e^{-s_j b / L}$, with $s_1, \dots, s_7$ the values of [§5.1](#sec:colour-def), for the
+Laplace values; and $\nu = 1{,}024$ band indicators for the binned colours. They are the
+mean and spread of the main binary's `--moments`, its `--laplace` and its
+`--bands 1024`, and the exact references of [section 8](#sec:results) are such solves:
+
+```text
+coloring-bt-transactions all --bands 1024 --moments --stats \
+    --release-oracle lastspend-2022.u32 < finalBCUTXO_2022.scm    # colors.moments.zst
+coloring-bt-transactions all --bands 1 --laplace --stats \
+    --release-oracle lastspend-2022.u32 < finalBCUTXO_2022.scm    # colors.laplace.zst
+```
+
+The first took 1 h 30 min 48 s at a peak of 37.72 GB, the second 38 min 43 s at
+5.08 GB (`/usr/bin/time -v`, at the end of `colors.moments.log` and
+`colors.laplace.log`). The binned colours of `colors.bands1024.zst` came from a third
+such run, `--bands 1024` under the same release oracle, which read the share matrix of
+[§7.12](#sec:matrix) in place of the records: 5 h 00 min 18 s at 37.0 GB resident, by the
+write-up (its log was not kept), and 8.67 TiB of text, which `zstd` took to the 1.52 TiB
+of the file on disk.
+
+The L1 sketch of [§10.6](#sec:l1) is {{< eqref "eq:project" >}} too, with $\Phi_{b,j} = \Pi_{jb}$ for the
+blocks $b < L$ and $\nu = m$: {{< xref "prop:l1-linear" "full" >}} is that equation read
+row by row. What is not linear in the colour stays outside. The effective number of
+blocks of a colour, $1 / \sum_{b=0}^{L-1} c_t(b)^2$, is quadratic, and no projection
+gives it: if $\Phi$ has fewer than $L$ columns, some direction $d$ with $d\,\Phi = 0$
+changes $\sum_{b=0}^{L-1} c_t(b)^2$ but not $C_t\,\Phi$. So the fourth field of a line
+of `colors.moments.zst`, the effective number of blocks, is not one of these solves:
+under `--bands` the main binary reads it off the bands, and nothing here uses it.
+
+**The support is the same solve over the Booleans.** With "or" and "and" in place of the
+sum and the product, and $\Gamma$ replaced by a $0/1$ matrix, forward substitution yields
+the supports: the nonzero pattern of $\Gamma$ gives $S^+_t$ (`pos`), and the adjacency of
+the spend graph, an entry wherever $t$ spends $p$, zero amounts included, gives $S_t$ of
+{{< eqref "eq:support" >}} (`sets`). The series $\sum_{j \ge 0} \Gamma^{j}$ becomes the
+reflexive and transitive closure of that graph. The bottom-$k$ selection $K_k$ of
+[§10.3](#sec:coordinated-bottom-k-support) is not linear, but it passes through unions,
+
+$$
+K_k(S_1 \cup \dots \cup S_G) = K_k\big(K_k(S_1) \cup \dots \cup K_k(S_G)\big)
+$$
+
+({{< xref "lem:kmv-union" "full" >}}), so it can be applied after every union of this
+solve, as $\Phi$ is applied to the real one, and still yields $K_k(S_t)$ at every record
+({{< xref "thm:kmv-dag" "full" >}}): that is Cohen's size estimation for reachability
+sets.{{< cite "cohen1997size" >}}
+
+The sketches of [§5.5](#sec:sketching-recurrence) are this forward substitution with every solved row replaced by
+a randomised reduction of itself (unbiased for `varopt` and `prio`, [§6.2](#sec:unbiased)) before any
+later row reads it.
+
+### 5.3 Why the exact colours do not fit {#sec:exact-colours-do-not}
 
 The support of $C_t$ is the union of the supports of its parents with a positive share
-(every parent but a zero-amount input, [§10.1](#sec:asked)), so colours only grow. On the 2022 chain
-they grow fast: an exact fold of the set colours (the `sets` supports of [§10.1](#sec:asked), which
-also keep zero-amount inputs, without the weights) was stopped by a memory guard at 480
-GiB of resident memory around record 31.1M, 4% of the way through the chain, holding
-$1.24 \times 10^{11}$ block ids in 1.45M live colours, about 85,000 blocks a colour on
-average (a run of the main binary's `--sets` fold, not of `sketch`). Counted over
-transactions rather than live colours, the median transaction among those first 31.2M
-records has a colour of about 174,000 blocks, and about 234,000 for the last million of
-them: the exact sizes are in `finalBCUTXO_2022.sets-counts.31187785.txt`, and
-`sketch summary --sets-counts` with `--range 0:31187785 --range 30187785:31187785`
-reports their median as the column `ref_p50` of its `summary.tsv`. The weighted store
-is heavier still: it holds about 43 GB at 1.5M records. The release oracle, which frees a
-colour as soon as its last spender has read it, already cuts the live colours from 92.7M
-to 19.4M over the chain (the 43 GB, 92.7M and 19.4M are from the code's documentation,
-not from a logged run), and the distinct live colours still peak at about 7.6M (7,593,630
-distinct live sketches at the peak of the production run, `peak sketches` in its
-`--stats`, [§9](#sec:production)). Multiplied by hundreds of thousands of blocks, that does not fit in any
-memory.
+(every parent but a zero-amount input, [§10.1](#sec:asked)), so colours only grow. How much must be held
+is a count, not an extrapolation. The main binary's driver holds a colour for every
+transaction with an unspent output, and a colour-free pass over the file counts them:
+92,735,490 at the end of the 2022 chain and 92,753,575 at the peak (quoted from the
+crate's documentation, `src/oracle.rs`). A budget of 450 GB, a round figure below the
+503 GiB (540 GB) of memory of the machine of these runs, over that count is
 
-### 5.3 Sketching the recurrence {#sec:sketching-recurrence}
+$$
+\frac{450 \times 10^{9}\ \text{bytes}}{92{,}735{,}490} \approx 4{,}852\ \text{bytes a colour},
+$$
+
+404 weighted terms of 12 bytes (a `u32` block and an `f64` coefficient), or 1,213 set
+terms of 4. The weighted fold passes that early in the file, as
+{{< xref "tab:wall" "full" >}} measures on prefixes of it.
+
+| records | mean colour held (blocks) | distinct terms held (×12 B) | resident |
+| ---: | ---: | ---: | ---: |
+| 500,000 | 1,087 | 1.8 GB | – |
+| 1,000,000 | 4,723 | 15.2 GB | – |
+| 1,500,000 | 5,984 | 27.7 GB | 32 GB |
+| 3,000,000 | 12,754 | 102.6 GB | 107.75 GiB |
+{#tab:wall caption="The exact weighted fold on prefixes of the 2022 chain, a run of the main binary, not of `sketch`: `coloring-bt-transactions <records> --weighted --sum --stats < finalBCUTXO_2022.scm`. `--sum` prints one number a line and walks the same terms as the full output. The store holds a colour for every transaction with an unspent output, with no release oracle, so these means differ from those of {{< xref \"tab:sets-run\" \"full\" >}} and [§5.4](#sec:reach). The first three rows are in the crate's `RUNNING-2022.md`; the 3M row is from the main binary's write-up. No log of these runs was kept."}
+
+The mean colour grows as $\text{records}^{1.37}$, and the store is terms, not overhead:
+at 3M records `mallinfo2` reports 102.59 GB in use against
+$\text{terms} \times 12 = 102.57$ GB. Throughput over that span fell from 958,000 records
+a second to 760. The growth steepens: the local exponent of the live terms rose over
+successive half-million windows (1.48, 1.45, 1.82, 2.28), and fits that honour the rise
+put the wall, at the write-up's budget of 450 GiB, between 4.8M and 8M records, or 8M to
+11M with every exact saving the main binary has, under 1.5% of the file in every case (a
+hand projection). The 3M-record figures, the 760 records a second, the exponents and the
+fits are from the main binary's write-up; `RUNNING-2022.md` records the fall to 3,000
+records a second by 1.5M records.
+
+**The exact colour of every transaction of the 2022 chain cannot be materialised on this
+machine, under any per-transaction representation, and it is not close.** That is the
+fill-in of {{< eqref "eq:solve" >}}: $\mathbf{C}$ is a $778{,}613{,}440 \times 762{,}261$
+matrix whose rows, at depth, cover most of the past. Even with every colour frozen at the
+12,754 blocks of the 3M-record prefix, a store of the census's 92,735,490 colours would be
+12.9 TiB weighted, 4.3 TiB as sets or 8.0 TiB at a bit per block, and the text of every
+record's colour, at about 22 bytes a term, is over 100 TB.
+
+**Freeing colours earlier.** "Has an unspent output" is the only question a stream can
+ask, and the wrong one: what forward substitution needs ([§5.2](#sec:solve)) is whether a later
+record of *this file* reads the colour again. Of the 136 million outputs unspent at the
+end of the chain, 51,815,075 are `OP_RETURN`, unspendable, and none of the file's
+2,044,897,328 inputs touches them (from `src/oracle.rs`). A file has a future, so the
+right question is answered by reading it once first. The main binary's
+`examples/lastspend.rs` writes, in one pass, the last record that spends each
+transaction,
+
+```text
+cargo run --release --example lastspend -- lastspend-2022.u32 < finalBCUTXO_2022.scm
+```
+
+in 5 min 27 s and 2.9 GiB resident, about the size of the array it fills, a file of
+3.11 GB (time and memory from the write-up, which writes "2.9 GB"), and
+`--release-oracle lastspend-2022.u32` hands it to the fold; it is the file every `sketch`
+run of [§7.10](#sec:modes-threads-commands-that) takes with `--oracle`. The peak of the live colours falls from 92,753,575 to
+19,361,261, 4.79 times fewer (from `examples/lastspend.rs`'s documentation). The two
+whole-chain runs of [§5.2](#sec:solve) agree: their `--stats` progress lines, every 100,000 records,
+peak at 19,346,275 colours held, at record 291.4M. Over the first 400,000 records the
+oracle takes `--weighted --sum` from 947 MB to 258 MB resident and from 5.67 s to 5.26 s,
+with byte-identical output under every backend (from the write-up). Since a stale oracle
+would free a colour still wanted and quietly give a wrong answer, the file carries a magic
+string and a record count, checked before any record is read, and every record is checked
+against a bound. One subtlety matters later ([§7.12](#sec:matrix)): a record that spends the same
+transaction twice must free it on the *lowest* input index that names it, because the
+fold walks its inputs from the last to the first ([§7.5](#sec:driver)), and the lowest index is the one
+it reaches last.
+
+Under the oracle the distinct live colours of `sketch` still peak at about 7.6M
+(7,593,630 distinct live sketches at the peak of the production run, `peak sketches` in
+its `--stats`, [§9](#sec:production); distinct, because a record that spends one parent shares that
+parent's sketch, [§7.2](#sec:sketch-memory), so this counts fewer than the 19.4M colours held). Multiplied by hundreds of thousands of blocks, that does not fit in
+any memory.
+
+### 5.4 How far the exact sets reach {#sec:reach}
+
+The cheapest exact colour goes further than the weighted one: `--sets` under the release
+oracle, four bytes a block rather than twelve, and only the colours the rest of the file
+reads. It was run for the size of every colour, the number of blocks in it, which is the
+number of its terms (every coefficient is 1 under `--sets`):
+
+```text
+coloring-bt-transactions all --sets --stats --threads 4 \
+    --release-oracle lastspend-2022.u32 < finalBCUTXO_2022.scm | count
+```
+
+With `--threads 4`, four threads format the printed terms while the main thread folds,
+byte-identical to a serial run. `count` is a forty-line C filter outside the crate: it
+counts the terms of each line, checks that every coefficient is exactly 1, and prints the
+count, which became `finalBCUTXO_2022.sets-counts.31187785.txt` (194 MB, one count a
+line). It is there because the text is long: an earlier `--sets` run over the first
+million records, counted by `mawk`, spent twelve of its fifteen and a half minutes in
+`mawk`, and by the end of this run a line has over 150,000 terms. A shell loop, also outside the crate, read the
+fold's resident set from `/proc` every two seconds and would kill it at 480 GiB, or when
+the machine had less than 10 GiB available.
+
+The guard fired at 480 GiB, with 14 GiB still available and no swap touched, after
+**31,187,785 records, 4.0% of the file, in 29 h 14 min**. Every term of every line had
+coefficient 1.
+
+| records | elapsed | rate | live block ids | colours held | mean held | resident |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1,000,000 | 3 min | 3k/s | 1.20G | 184,466 | 6,518 | 8.1 GiB |
+| 2,000,000 | 13 min | 1k/s | 3.13G | 347,758 | 9,011 | 15.9 GiB |
+| 3,000,000 | 32 min | 579/s | 7.11G | 450,743 | 15,779 | 31.7 GiB |
+| 5,000,000 | 1.9 h | 399/s | 10.93G | 547,580 | 19,969 | 47.3 GiB |
+| 10,000,000 | 5.8 h | 312/s | 22.16G | 799,460 | 27,722 | 90.0 GiB |
+| 15,000,000 | 10.4 h | 297/s | 37.66G | 976,547 | 38,561 | 149.9 GiB |
+| 20,000,000 | 15.4 h | 259/s | 58.00G | 1,058,194 | 54,809 | 226.8 GiB |
+| 25,000,000 | 21.2 h | 229/s | 78.03G | 1,175,549 | 66,376 | 303.2 GiB |
+| 30,000,000 | 27.6 h | 210/s | 115.50G | 1,402,294 | 82,368 | 444.0 GiB |
+| 31,100,000 | 29.1 h | 202/s | 123.95G | 1,452,310 | 85,350 | 476.5 GiB |
+{#tab:sets-run .fullwidth caption="The exact `--sets` fold under the release oracle, a run of the main binary: records folded, wall time, rate, block ids in the colours held, colours held, their mean size, and the resident set. From the run's `--stats` progress lines and the guard's readings, as recorded in the main binary's write-up; that log was not kept. The colours held are also the `colored txs` column of `colors.moments.log`, whose run used the same oracle, and agree with it at every row."}
+
+**Where the memory goes.** Into block ids, as the weighted fold's went into terms. A
+colour is an `Rc<[u32]>`, ascending, so 123.95G live ids are 461.8 GiB at four bytes; the
+14.7 GiB between that and the resident set is the hash map of the colours held, the
+allocator's slack and the batches in flight to the formatting threads. Nothing is stored
+for the coefficients. The growth is in the size of a colour held more than in their
+number: between 5M and 31.1M records the colours held rise 2.7 times and their mean size
+4.3 times, and the cost of a million records rises with it, 8.5 GiB between 5M and 10M
+records, 15 between 15M and 25M, and 28 to 30 from 25M to the end. The rate falls the
+same way, from 399 records a second to 202, since a union reads and writes both of its
+operands whole and the operands are now hundreds of kilobytes.{{< sidenote >}}A first
+run, single-threaded and to `/dev/null`, was stopped by hand at 23,800,000 records after
+20.6 h, at a peak of 297.5 GiB. Both runs held the same 77,680,891,395 block ids at that
+record, as they must; the one above got there 50 minutes sooner and 4.7 GiB larger, the
+cost of the formatting threads and the pipe. These numbers are from the write-up; no log
+was kept.{{< /sidenote >}}
+
+{{< fig src="colour-size.svg" type="fullwidth" label="fig:colour-size" alt="Two panels on log axes of colour size, the number of blocks in a colour, for the first 31.2 million records. Left: records per size, a peak of 2.87 million colours of one block, a long low middle between about 400 and 75 thousand records per bin, and a second peak near 10 million records above 100 thousand blocks. Right: the cumulative share of records, 9.2 percent at one block, flat near 15 to 18 percent from 10 to 100 thousand blocks, then rising almost vertically to 100 percent by 236 thousand blocks, median 174,376." >}}
+Colour size, the number of blocks in the support $S_t$ of a colour, for each of the
+first 31,187,785 records of the 2022 chain, from the `--sets` run of [§5.4](#sec:reach) (main
+binary, release oracle, stopped by the memory guard at 480 GiB). (a) Records per size:
+one bin per size below 10, then ten log-width bins a decade. (b) The share of records
+with at most that many blocks, exactly, one step per distinct size (191,575 of them).
+Drawn by `figs_exact.py`, a script outside the crate, from the histogram of
+`finalBCUTXO_2022.sets-counts.31187785.txt`.
+{{< /fig >}}
+
+**What the colours look like.** {{< xref "fig:colour-size" "full" >}} shows two
+populations with almost nothing between them. 2,872,504 records, 9.2%, have a colour of
+exactly one block, and 15.5% have at most 10,000. Then the cumulative share is flat for
+more than two decades, and from about 120,000 blocks it climbs nearly vertically: the
+quartiles are 136,609, 174,376 and 206,256 blocks, the mean is 152,823, and the largest
+colour has 236,013 blocks. Over the last million of these records the median is about
+234,000 (233,620). By the end of the prefix most transactions descend from tens of
+thousands of blocks or more, and the ones that do not descend from very few. The first
+million records alone look nothing like this: their median is 3 blocks, the mean 8,411,
+the largest colour 72,383, and 41% of them have a colour of one block. The large
+population is what the chain grows into, and it grows at its own front edge: in the
+snapshots taken every three hours during the run, most of the records added since the one
+before fell into the top one or two bins, next to the largest colour of the moment (from
+the write-up). These statistics are computed from `finalBCUTXO_2022.sets-counts.31187785.txt`
+and `finalBCUTXO_2022.sets-counts.1000001.txt` by `stats_counts.py`, a script kept with
+the runs' evidence outside the crate, and `sketch` reports the two medians as the column
+`ref_p50` of the `summary.tsv` it writes when it reads the production count file of
+[§10.10](#sec:kmv-file) beside these sizes:
+
+```text
+sketch summary --in colors.kmv1024.counts.zst \
+    --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt \
+    --range 0:31187785 --range 30187785:31187785 --out summary
+```
+
+Exact sets, with every saving the main binary has, reach 4% of the chain on this machine,
+and the last million records cost about 30 GiB. That cost is still rising, so twice the
+memory would, by a hand extrapolation of that rise, buy a few million records more, not a
+second 31 million. It is not the code that stops the fold but the size of what is asked
+for, the fill-in of the Boolean form of {{< eqref "eq:solve" >}}. [Section 10.9](#sec:kmv-chain) carries the count to the end of the chain by the
+coordinated bottom-$k$ of [§10.3](#sec:coordinated-bottom-k-support), exact wherever a support has at most $k$ blocks.
+
+### 5.5 Sketching the recurrence {#sec:sketching-recurrence}
 
 So every colour is replaced by a *sketch* $\hat C_t$ of at most about $k$ entries, and
 the sketches are computed by the *same* recurrence:
@@ -831,20 +1161,36 @@ where $X_t$, the *candidate*, is the exact mixture of the parents' sketches, and
 is a randomised reduction back to about $k$ points, applied only when $X_t$ has more
 than $k$ points (otherwise $\hat C_t = X_t$; this holds for `varopt` and `prio`, while
 `coord` also applies the threshold inherited from its operands, which can drop terms
-even below $k$, [§6.6](#sec:coord) and [§7.7](#sec:prio-coord)). A coinbase is $\hat C_t = x^{\beta}$, exactly. What one
+even below $k$, [§6.6](#sec:coord) and [§7.8](#sec:prio-coord)). A coinbase is $\hat C_t = x^{\beta}$, exactly. What one
 wants from $R$ is that $\hat C_t$ be an unbiased estimate of $C_t$, still a probability
 distribution, and accurate on the functionals of [§5.1](#sec:colour-def), with an error that does not grow
 as the recurrence goes deeper into the chain.
 
-### 5.4 Why a linear combination of sketches is the crux {#sec:linear-combination-sketches-crux}
+In the matrix form of [§5.2](#sec:solve), {{< eqref "eq:sketched" >}} is a randomised forward
+substitution: each row is solved from the rows already solved and then reduced, before
+any later row reads it. Write $\delta_t = \hat C_t - X_t$ for the noise of the reduction
+at a record $t$ that is not a coinbase, and $\delta_t = 0$ for a coinbase and wherever no
+reduction happens; $\hat{\mathbf{C}}$ for the matrix whose row $t$ is $\hat C_t$, and
+$\mathbf{N}$ (for noise) for the matrix whose row $t$ is $\delta_t$. Row $t$ of
+$\Gamma\,\hat{\mathbf{C}}$ is $X_t$ ($0$ for a coinbase), so
+
+$$
+\hat{\mathbf{C}} = \Gamma\,\hat{\mathbf{C}} + \mathbf{E} + \mathbf{N}, \qquad \hat{\mathbf{C}} - \mathbf{C} = (\mathbf{I} - \Gamma)^{-1}\,\mathbf{N} .
+$$
+
+The error at every record is a fixed linear image of the noises injected on the way to
+it. [Section 6.3](#sec:propagation) proves what that implies.
+
+### 5.6 Why a linear combination of sketches is the crux {#sec:linear-combination-sketches-crux}
 
 In sections [1](#sec:introduction-bottom-k-sketches)–[4](#sec:high-performance-implementations) a merge is a union, $S(A \cup B) = \text{bottom-}k(S(A) \cup S(B))$, and
 it is exact because an item has the same weight in $A$, in $B$ and in $A \cup B$. Here
 the operation is a *linear combination*: the child's weight of block $b$ is
 $\sum_{i=1}^{n} s_{t,i}\, c_{p_i}(b)$, a sum of weights that may each be present in one parent's
 sketch and absent from another's. And the parents overlap heavily. Counted over records
-1.4–1.5M of the chain by a prototype of the design phase (not a crate run), 97% of the
-terms a merge writes arrive in runs, the one-sided
+1.4–1.5M of the chain on the main binary's exact `--weighted` merge (quoted from its
+documentation, `src/weighted.rs`, and the message of crate commit d8488bf; no log was
+kept), 97% of the terms a merge writes arrive in runs, the one-sided
 runs averaging 1,900 blocks and the shared runs 140: colours at depth are near-copies of
 a few common ancestors, not independent mixtures.
 
@@ -863,7 +1209,7 @@ Three consequences shape everything below.
    that needs independent parents fails here; the ones below use linearity and
    conditional expectations only.
 
-### 5.5 What is known and what is new {#sec:novelty}
+### 5.7 What is known and what is new {#sec:novelty}
 
 The tools of sections [6](#sec:proofs) and [10](#sec:counting) are known. What is new is the problem they are put to and
 a few results that come from putting them together. Here is the line between the two, so
@@ -872,6 +1218,11 @@ literature at review time found no earlier statement, not that none exists.
 
 **Known.**
 
+- *The solve.* The recurrence is forward substitution with a unit lower triangular
+  matrix ([§5.2](#sec:solve)). That the solution of a sparse triangular system fills in along
+  reachability in its graph is the observation behind sparse triangular
+  solvers;{{< cite "gilbert1988sparse,davis2006direct" >}} that a linear projection
+  commutes with the solve is linearity.
 - *The reduction.* VarOpt$_k$ with its lights chosen systematically
   ({{< xref "def:varopt" "full" >}}, {{< xref "thm:varopt" "full" >}}) is a classical
   design of survey sampling (Madow, Chao). It is the VarOpt$_k$ of Cohen et al. with one
@@ -915,7 +1266,7 @@ literature at review time found no earlier statement, not that none exists.
   most $V(g)\sqrt{A_t}/k$ at every node, with $A_t \le 1 + d_t$. Independent inclusion
   gives only $\sqrt{A_t/k}$. The result is modest, and its proof is elementary once the
   known pieces are in place. Two things it does not settle are measured instead. The
-  error stays flat with depth ([§8.3](#sec:error-against-depth)), an open question ([§13](#sec:left)). Priority sampling and
+  error stays flat with depth ([§8.3](#sec:error-against-depth)), an open question ([§14](#sec:left)). Priority sampling and
   VarOpt with lights in random order fall at about $k^{-1/2}$ at depth ([§6.4](#sec:rates), [§8.4](#sec:variants-compared)).
 - *The universe of each count*, [§10.4](#sec:kmv-count). Every block of a support is at most $\beta_t$,
   and $\beta_t$ depends on the chain and not on the permutation, so $[0, \beta_t]$ is a
@@ -933,8 +1284,8 @@ literature at review time found no earlier statement, not that none exists.
   - On the 2022 chain, VarOpt in block order beats the literal bottom-$k$ sketch by 6
     to 21 times at the same size.
   - Its error is flat in depth over 778M records.
-  - Every result of a run can be recomputed from files on disk by a mode of the crate,
-    and what cannot is labelled.
+  - Every result of a run can be recomputed from files on disk by the crate, or is
+    labelled.
 
 
 ## 6. Proofs {#sec:proofs}
@@ -1001,7 +1352,7 @@ subset sums that are not intervals of the block axis; it does not matter for the
 and the bounded-variation functionals read in this post, which
 {{< xref "thm:varopt" "full" >}}(5) bounds directly. The accumulator of the code, which
 starts at $U$, adds $v/\tau$ and keeps an item each time it crosses an integer, computes
-exactly this rule ([§7.6](#sec:varopt-reduction)).
+exactly this rule ([§7.7](#sec:varopt-reduction)).
 
 {{< lemma label="lem:threshold" >}}
 The threshold $\tau$ exists and is unique. At most $k - 1$ items are heavy, at least one
@@ -1209,7 +1560,7 @@ that are the same parent are added before reducing ($s\,C + s'\,C = (s + s')\,C$
 exactly), and zero-share operands are skipped, which changes nothing in $X_t$.
 
 {{< remark >}}
-In code, $U_t$ is a hash of the seed and the record index ([§7.3](#sec:randomness)), so a run is a
+In code, $U_t$ is a hash of the seed and the record index ([§7.4](#sec:randomness)), so a run is a
 deterministic function of its input. The theorem treats the hash values as independent
 uniforms; that is an idealisation of a good counter-based generator, and the
 seed-replicate tests of [§8.5](#sec:bias) are the check that it is harmless.
@@ -1298,6 +1649,17 @@ The same split, of the error into the orthogonal noises of the resampling steps,
 standard analysis of particle filters.{{< cite "delmoral2004feynman" >}} There the noise
 is carried forward by Markov kernels; here it is carried by the fixed coefficients
 $\alpha_{t,r}$ of the DAG.
+
+As [§5.2](#sec:solve) noted, the coefficients are no new object: $\alpha_{t,r}$ is entry $(t, r)$ of
+$(\mathbf{I} - \Gamma)^{-1}$, and {{< xref "thm:decomp" "full" >}} is, row by row, the
+identity of [§5.5](#sec:sketching-recurrence),
+
+$$
+\hat{\mathbf{C}} - \mathbf{C} = (\mathbf{I} - \Gamma)^{-1}\,\mathbf{N} .
+$$
+
+The $A_t$ of {{< xref "cor:rate" "full" >}} below is the squared Euclidean norm of row
+$t$ of $(\mathbf{I} - \Gamma)^{-1}$.
 
 {{< proposition label="prop:cutvar" >}}
 For VarOpt in record mode and a cut $x$, let $f_r(x)$ be the fractional part of $S_{j}$
@@ -1570,7 +1932,7 @@ $D$ and the output is $D$'s bottom-$k$ sketch. Otherwise $\tau' = c$ and at most
 candidates rank below it.
 {{< /proof >}}
 
-This is test T5 of the code ([§7.11](#sec:tests)), repeated through nested merges. Overlap breaks it,
+This is test T5 of the code ([§7.13](#sec:tests)), repeated through nested merges. Overlap breaks it,
 because a block held by one parent's sketch and not by the other's has only a *lower
 bound* on its weight: the missing parent's share is unknown and is taken as zero (the
 "zero rule").
@@ -1645,9 +2007,12 @@ lost: its error is almost all bias ([§8.4](#sec:variants-compared)) and does no
 The code below is excerpted from the `sketch` binary of `coloring-bt-transactions-rs`,
 trimmed (`// …` marks a cut) but not rewritten. It is about 6,500 lines with its tests
 (about 12,700 with the stores of [section 10](#sec:counting), and about 22,700 at commit 1a27649 with the
-modes that read the runs' outputs back, [§7.9](#sec:modes-threads-commands-that)), adds no dependency, and reuses the
+modes that read the runs' outputs back, [§7.10](#sec:modes-threads-commands-that)), adds no dependency, and reuses the
 repository's record parser, release oracle, exact weighted store and Laplace tables
-through `#[path]` modules.
+through `#[path]` modules. Two subsections are about the repository's main binary,
+`coloring-bt-transactions`, whose exact store, record parser and release oracle `sketch`
+reuses: [§7.3](#sec:allocator), the allocator both binaries declare, and [§7.12](#sec:matrix), the share
+matrix $\Gamma$ of [§5.2](#sec:solve), which the main binary writes once and reads back.
 
 ### 7.1 Where things are {#sec:where-things-are}
 
@@ -1709,7 +2074,58 @@ $k + 1$ output rounds up. The `Rc` matters more than the layout: most transactio
 one parent, or one parent several times, and their colour *is* the parent's, so the
 record answers the parent's `Rc` and costs a reference-count bump.
 
-### 7.3 Randomness {#sec:randomness}
+### 7.3 The allocator is not a detail {#sec:allocator}
+
+This subsection is about the main binary, whose exact store `sketch` reuses. At depth the
+exact fold is not merge-bound but `malloc`-bound. Its allocation pattern, hundreds of
+thousands of live blocks of 50 KB to 1 MB freed and reallocated at every merge, is the one
+glibc's allocator handles worst: measured over records 1.4M to 1.5M, a `malloc` costs
+26 µs against 47 ns at the head of the chain, a quarter of the fold's time (a measurement
+of the main binary, recorded in its `Cargo.toml` and `src/main.rs`).
+
+Two changes fix it, and they only work together. One is jemalloc as the global
+allocator, behind the default feature (`--no-default-features` gives glibc back). The
+other is a merge that writes into a fresh, uninitialised allocation at its upper bound
+and then shrinks it to the length the merge turned out to have, instead of zero-filling
+a staging buffer and copying out (`WeightedSets::intern` in `src/weighted.rs`). The
+shrink is a downward `realloc`, which jemalloc does in place and to size, and glibc does
+not.
+
+| 1,500,000 records, `--weighted --sum` | time | resident |
+| :--- | ---: | ---: |
+| glibc + staged merge | 257.71 s | 30.61 GiB |
+| jemalloc + in-place merge | **148.47 s** | **30.48 GiB** |
+{#tab:allocator caption="The main binary on the first 1.5M records of the 2022 chain, `coloring-bt-transactions 1500000 --weighted --sum < finalBCUTXO_2022.scm`, before and after the two changes: wall time and resident set, a benchmark quoted from the message of the crate commit that made them, d8488bf (no log kept)."}
+
+The pair is 1.74 times faster, with 0.4% less memory, and its output is md5-identical to
+the previous build's (checked over 30,000 records in seven modes). At 800,000 records the
+same pair is 60.28 s and 9.15 GiB against 38.39 s and 9.59 GiB: 1.57 times faster, but
+4.8% *more* resident, so the memory saving is a property of depth rather than of the
+change. Depth is where the wall of [§5.3](#sec:exact-colours-do-not) is.{{< sidenote >}}`--features mimalloc` builds
+the other candidate, kept because it was measured: as fast, but 15% to 24% more resident
+on the same prefix (`Cargo.toml`). Setting `_RJEM_MALLOC_CONF=thp:always` puts jemalloc's
+extents on transparent huge pages; it cut the page faults at 1.5M records by 92%, but the
+system time did not fall and the resident set grew 4% (the comment beside the allocator
+in `src/main.rs`).{{< /sidenote >}}
+
+A global allocator belongs to the binary that declares it, so `sketch` declares the same
+one, as its documentation says, "without this line the binary would silently run on the
+system allocator whatever the features say":
+
+```rust
+// src/main.rs and src/bin/sketch.rs, the same three lines
+#[cfg(feature = "jemalloc")]
+#[global_allocator]
+static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
+```
+
+`sketch --stats` prints the allocator it runs on, and the first line of the production
+run's `emit.err` ([§9](#sec:production)) is `sketch emit: allocator jemalloc`. The exact store of
+`sketch eval` is `src/weighted.rs` through `#[path]`, so it gets the in-place merge too,
+and a full $k = 256$ sketch is 2,048 bytes, a jemalloc size class
+([§7.2](#sec:sketch-memory)). `sketch` itself was not timed under glibc.
+
+### 7.4 Randomness {#sec:randomness}
 
 Every draw is a hash of its coordinates, so a run is a deterministic function of its
 input (the same seed over the same records writes the same bytes, which is what lets
@@ -1784,7 +2200,7 @@ pub fn coord_key(seed: u64, b: u32) -> f64 {
   {{< xref "thm:varopt" "full" >}}(5) needs $0 < U < 1$, and `prio` divides by its draw.
 - **Salts** keep the three variants' streams apart at equal seeds.
 
-### 7.4 The driver {#sec:driver}
+### 7.5 The driver {#sec:driver}
 
 `driver.rs` copies the loop of `src/main.rs`'s `run()` rather than sharing it (that loop
 is welded to the exact store), and keeps everything that decides *which* colour is
@@ -1829,7 +2245,7 @@ is done; without it the unspent-output counts decide, as in `run()`. The map is 
 transaction id with a multiplicative hash: SipHash's resistance to chosen keys buys
 nothing over a file of sequential integers.
 
-### 7.5 One record: grouping, the n-way merge, one reduction {#sec:record-grouping-n-way}
+### 7.6 One record: grouping, the n-way merge, one reduction {#sec:record-grouping-n-way}
 
 ```rust
 fn record_mode(&mut self, ops: &[(Handle, f64)], rec: u64) -> Handle {
@@ -1914,7 +2330,7 @@ Variant::VarOpt => {
 `merge_two(&h.entries, *s, &acc.entries, 1.0, …)` and calling `finish` after every
 combine with step index $j$.
 
-### 7.6 The VarOpt reduction {#sec:varopt-reduction}
+### 7.7 The VarOpt reduction {#sec:varopt-reduction}
 
 The threshold comes from {{< xref "lem:fixedpoint" "full" >}}: a few linear passes, each
 summing the lights *directly*.
@@ -1996,7 +2412,7 @@ events are only counted (`k+-1` in `--stats`), and the code asserts at most $k +
 points. Over the whole chain at $k = 512$ and $1024$ the count was zero (the column
 `off_by_one` of pass B's `cost.tsv`, and `k+-1 0` in the production run's `--stats`).
 
-### 7.7 `prio` and `coord` {#sec:prio-coord}
+### 7.8 `prio` and `coord` {#sec:prio-coord}
 
 `prio` keeps the $k$ largest priorities $v/u$ and carries each kept block at $\max(v, \tau_q)$:
 
@@ -2071,12 +2487,12 @@ fn emit(&self, c: &Handle, out: &mut Vec<(u32, f64)>) {
 
 For `varopt` the normalisation is the identity up to `f32` rounding whenever the
 reduction keeps $k$ points ({{< xref "thm:varopt" "full" >}}(1), (4)); on the synthetic
-DAG of [§7.11](#sec:tests) (where no $k \pm 1$ event occurs) `mass_raw` stays within $10^{-5}$ of $1$.
-In a $k \pm 1$ event ([§7.6](#sec:varopt-reduction)) one light more or one fewer is kept at weight $\tau$, the
+DAG of [§7.13](#sec:tests) (where no $k \pm 1$ event occurs) `mass_raw` stays within $10^{-5}$ of $1$.
+In a $k \pm 1$ event ([§7.7](#sec:varopt-reduction)) one light more or one fewer is kept at weight $\tau$, the
 raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
-`raw_mass - 1` ([§7.10](#sec:output-format)); no such event occurred on the chain.
+`raw_mass - 1` ([§7.11](#sec:output-format)); no such event occurred on the chain.
 
-### 7.8 Numerical care, in one place {#sec:numerical-care-place}
+### 7.9 Numerical care, in one place {#sec:numerical-care-place}
 
 - Sums in `f64`, storage in `f32`; zero and subnormal weights dropped at storage.
 - No light mass obtained as a difference, in either threshold routine.
@@ -2087,7 +2503,7 @@ raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
 - Draws strictly inside $(0, 1)$.
 - $k \pm 1$ outputs counted, never trimmed.
 
-### 7.9 Modes, threads and the commands that were run {#sec:modes-threads-commands-that}
+### 7.10 Modes, threads and the commands that were run {#sec:modes-threads-commands-that}
 
 - **`eval`** runs the exact store (`exact.rs`, bit-identical to `--weighted`) on its own
   thread beside one thread per sketch configuration, all fed by one parse, and measures
@@ -2122,7 +2538,7 @@ results are.
   of the reduced rows it matches to $2.4 \times 10^{-12}$ relative.
 - **`summary`** reads count streams back into what a whole-chain count is judged by:
   exactness, quantiles per bucket and per `--range`, the seeds against each other, and
-  the exact sizes where they exist ([§5.2](#sec:exact-colours-do-not), [§10.9](#sec:kmv-chain), [§10.10](#sec:kmv-file)). Every cell of the `mawk` and
+  the exact sizes where they exist ([§5.4](#sec:reach), [§10.9](#sec:kmv-chain), [§10.10](#sec:kmv-file)). Every cell of the `mawk` and
   Python passes it replaces comes out equal, except one p90 that Python printed rounded
   (54 for 53.5).
 - **`select prefix|chain`** chooses the records worth comparing from a count stream and
@@ -2137,9 +2553,7 @@ results are.
   matrices of [section 12](#sec:surface), bit-identical on prefixes to the two programs first used, and
   **`surface-report`** turns them into that section's tables and checks.
 
-The global allocator is jemalloc (the repository's default feature): a fold's heap is
-millions of small blocks freed and reallocated at every merge, the shape glibc's malloc
-degrades on.
+Both binaries run on jemalloc ([§7.3](#sec:allocator)).
 
 ```text
 cargo build --release --bin sketch
@@ -2181,7 +2595,7 @@ sketch emit --config varopt:512 --oracle lastspend-2022.u32 --limit all --stats 
   < finalBCUTXO_2022.scm 2> emit.err | zstd -q -T16 -12 --long=27 -o colors.sketch-varopt512.zst
 ```
 
-### 7.10 The output format {#sec:output-format}
+### 7.11 The output format {#sec:output-format}
 
 From `encode.rs`, integers as LEB128 varints, `z()` zigzag, floats little-endian:
 
@@ -2212,7 +2626,94 @@ window) avoids that, since it decodes with a plain `zstd -d` (verified with `cmp
 production uses it. Those notes, and the production line in `sketch.rs`'s documentation
 (`sketch emit ... | zstd -T16 -12`), predate this choice.
 
-### 7.11 The tests {#sec:tests}
+### 7.12 The share matrix on disk {#sec:matrix}
+
+This subsection, like [§7.3](#sec:allocator), is about the main binary. The solve of [§5.2](#sec:solve) has one
+coefficient matrix, $\Gamma$, and every run rebuilds it by parsing the 149,968,404,213
+bytes of the records, 193 bytes a record on average, for the five things the fold reads:
+the block, the transaction id, each input's amount and the transaction it spends, and the
+number of outputs. Every projection, every change to what is emitted rather than to what
+is folded, pays that parse first. The main binary's `examples/matrix.rs` writes
+$\Gamma$ once, in one pass, and `--matrix` reads it back in place of the records (a run
+given both a matrix and records on its input is refused):
+
+```text
+cargo build --release --example matrix
+./target/release/examples/matrix --compact chain2022.foldmat < finalBCUTXO_2022.scm   # 401.2 s
+./target/release/examples/matrix --check   chain2022.foldmat < finalBCUTXO_2022.scm   # 461.6 s, 8 MB
+./target/release/examples/matrix --verify  chain2022.foldmat                          # 110 s, 5.4 MB
+```
+
+| the 2022 chain as | bytes | against the text | exact |
+| :--- | ---: | ---: | :--- |
+| records, `finalBCUTXO_2022.scm` | 149,968,404,213 | 1.0× | yes |
+| `--csr`, `u32` row pointers, `u32` columns, `f32` shares | 19,473,632,380 | 7.7× | **no** |
+| `--compact`, the default | **10,601,433,514** | **14.1×** | yes |
+| `--structure`, no amounts | 6,126,089,724 | 24.5× | shape only |
+{#tab:matrix caption="The share matrix of the 2022 chain in the three forms `examples/matrix` writes, against the records. Sizes and times from the crate's `README.md`, `RUNNING-2022.md` and `src/matrix.rs` (runs of the main binary's example, wall times; the file itself was not kept)."}
+
+`--check` reads the compact file back against the records, field for field: 778,613,440
+records and 2,044,897,328 inputs (one entry each; a repeated parent is not merged on
+disk), every block id reconstructed from the coinbase rows
+alone, the content hashes agreeing. `--verify` asks the same question without the
+150 GB, sweeping the matrix alone against its header's hash and counts, and it exists
+because a fold does not check one: of 347,416 single-bit flips inside the rows of a
+20,000-record matrix, the reader's per-row invariants accept 102,220, and a flip at byte
+700,007 of a 500,000-record matrix folds to exit status 0, an empty stderr and a different
+answer. The row checks catch a damaged shape; only the hash catches a damaged number. The
+fold does not pay the 72% the hash adds to a sweep, and could not use it if it did: a
+hash settles at the last row, and the fold's output streams from the first.
+
+**The 19.5 GB was the lossy one.** The obvious binary form, a CSR with `f32` shares, is
+what `--csr` still writes, so that its loss is measured rather than argued. An `f32` share
+has a worst relative error of $5.96 \times 10^{-8}$, and only 28.10% of the chain's
+shares round-trip at all; the sum of a row's shares, within $1.02 \times 10^{-13}$ of one
+in `f64` ([§5.1](#sec:colour-def)), drifts by up to $5.96 \times 10^{-8}$ before the fold composes
+anything; and replaying the fold on those shares changes 44.71% of the `--sum` lines and
+98.92% of the coefficients of the terms output. The same `f32` is harmless in a sketch
+([§7.2](#sec:sketch-memory)), whose error is that of a $k$-point estimate; in an exact solve it is the only
+error. The fix is not a wider float. A share is $a_i / \sum_{j=1}^{n} a_j$ and both are
+integers, so the compact file stores the raw `u64` satoshi amounts, which is exact and
+smaller (4.48 GB of deltas against 8.18 GB of `f32`): amounts within a row are nothing
+like uniformly distributed, and a float is 32 bits of entropy by construction.
+
+| section | bytes | share | what it is |
+| :--- | ---: | ---: | :--- |
+| columns | 5,317,886,057 | 50.2% | 2,044,897,328 parents, zigzag deltas along each row |
+| amounts | 4,475,343,790 | 42.2% | 1,475,397,681 satoshi values, zigzag deltas |
+| heads | 804,399,854 | 7.6% | one byte a row: input and output counts, a nibble each, and escapes |
+| blocks | 762,261 | 0.0% | one varint per coinbase row, none elsewhere |
+| header and indexes | 3,041,552 | 0.0% | the 64-byte header; `GROUPS`, 16 bytes for each of the 190,092 groups of 4,096 rows; `TXFIX`, the four rows where the id breaks its sequence (the BIP-30 duplicates and the steps back), in 12 bytes, and the two counts |
+{#tab:matrix-bytes .fullwidth caption="Where the 10,601,433,514 bytes of the compact share matrix go: one self-contained row per record, in file order, with LEB128 varints and zigzag deltas throughout, as in the output format of [§7.11](#sec:output-format). From the crate's `README.md` and `src/matrix.rs`. The last row is the remainder of the total, 64 + 190,092 × 16 + 16 bytes; the `README.md`'s 3,041,488 leaves out the header."}
+
+Three rows of {{< xref "tab:matrix-bytes" "full" >}} are the case against a CSR's fixed
+widths. A `u32` row pointer costs 3.11 GB to hold a count whose median is 1, where a
+nibble and an escape cost 0.80; a `u32` column costs 8.18 GB where a delta costs 5.32; and
+73.14% of the rows have a single input, whose share is exactly 1 on both branches of the
+share rule, so 569,499,647 amounts need not exist. Those single-parent records are among
+the ones that answer their parent's `Rc` in [§7.2](#sec:sketch-memory).
+
+Two transforms were measured and refused, and both are reserved as flag bits a reader
+refuses, so that neither is re-derived later and quietly believed. Sorting each row's
+parents would save 0.89 GB of the delta chain and change 4.06% of the `--sum` lines,
+because the fold walks a row's inputs from the last to the first ([§7.5](#sec:driver)) and
+reassociating an `f64` sum moves its last bits. Deduplicating a row that spends the same
+transaction twice would save 0.13 GB and free that colour at the wrong instant, for the
+reason [§5.3](#sec:exact-colours-do-not) ends its oracle on: the fold counts the multiplicity down, and the oracle frees
+a colour on the lowest input index that names it.
+
+A run off the records and the same run off the matrix print the same bytes. The largest
+checks are a `--sets` pair of 294.6 GB a side at 2,000,000 records and `--bands 1024
+--moments` at 20,000,000 records, 1,149,593,609 bytes a side, and `--rings` and `--sets`
+still hash alike off a matrix. What the matrix saves is less than the size ratio: over
+20,000,000 records, 17.8 s off the text against 11.7 s off the matrix with the fold as
+cheap as it goes (`--bands 1 --sum`), and 70.5 s against 63.9 s at `--bands 1024
+--moments`, where the fold is most of the work, both with the records warm in the page
+cache; cold, the two files are 12.5 minutes of reading against 50 seconds. What the matrix
+buys is not a faster fold but a parse paid once. The whole-chain `colors.bands1024.zst` of
+[§5.2](#sec:solve) was folded off it. `sketch` does not read the matrix: its runs parse the text.
+
+### 7.13 The tests {#sec:tests}
 
 `cargo test --release --bin sketch -- --include-ignored` passed 106 of 106 at the time
 of the runs of [section 8](#sec:results), and 139 of 139 with the stores of [section 10](#sec:counting). At commit
@@ -2283,7 +2784,7 @@ assert:
   not), and over $J \in \{0, 0.024, 0.2, 0.95, 1\}$ its mean is within 4 SE and its SD
   within 10% of the hypergeometric value; containment is NaN exactly when its sample is
   empty and otherwise unbiased within 4 SE where its sample is large.
-- **The projection (T-L1 to T-L4).** The L1 store's vector equals $A\,C_t$ computed from
+- **The projection (T-L1 to T-L4).** The L1 store's vector equals $\Pi\,C_t$ computed from
   the exact colour, through the grouped and the free path, to $10^{-6}$ relative in
   `f32` and $10^{-12}$ in `f64`; over 400 seeds at $m \in \{128, 512\}$ and
   $\mathrm{TV} \in \{0.001, 0.01, 0.1, 0.5, 1\}$ the scale MLE has a relative bias of at
@@ -2322,16 +2823,16 @@ assert:
   configuration): every sketch against its whole exact colour and against the same
   variant's single-shot reduction of it.
 - **Cost emits** (`emit` cut into 10M-record stretches, each compressed by its own
-  `zstd -T16 -12`, [§7.9](#sec:modes-threads-commands-that)): `varopt` at $k = 64, 128, 256$ over the whole chain, and at
+  `zstd -T16 -12`, [§7.10](#sec:modes-threads-commands-that)): `varopt` at $k = 64, 128, 256$ over the whole chain, and at
   $k = 512$ until it was stopped at about 400M records; two more with `--long=27`.
 
-The accuracy tables use every 256th record (`--every 16 --rows-every 16`, [§7.9](#sec:modes-threads-commands-that); 3.04M
+The accuracy tables use every 256th record (`--every 16 --rows-every 16`, [§7.10](#sec:modes-threads-commands-that); 3.04M
 rows), restricted to *reduced* rows: a larger $k$ keeps more early colours exact, which
 would lower an all-rows average for a reason that has nothing to do with how well a
 sketch approximates. Errors in blocks are
 converted from fractions of $L$; a day is about 144 blocks. Labels: **[M]** measured,
 **[P]** projected from measurements, **[E]** a rougher estimate (an extrapolated
-compression ratio). Every number below comes from those runs, whose commands are in [§7.9](#sec:modes-threads-commands-that).
+compression ratio). Every number below comes from those runs, whose commands are in [§7.10](#sec:modes-threads-commands-that).
 
 One more mode turns their outputs into the tables of this section: `sketch summarize`
 reads each pass's per-record rows, `buckets.tsv`, `seeds.tsv` and `cost.tsv`, and
@@ -2571,7 +3072,7 @@ are the table's cells, written into the plotting script by hand.
 
 Only the errors (`errors.tsv`) and the fold-time ratios (`cost.tsv`'s
 `busy_over_reference`) come from `sketch summarize`. The rest was measured on the cost
-emits of [§7.9](#sec:modes-threads-commands-that): peak memory by their `--stats`, and, outside the crate, wall times and CPU
+emits of [§7.10](#sec:modes-threads-commands-that): peak memory by their `--stats`, and, outside the crate, wall times and CPU
 shares by `/usr/bin/time -v` and bytes per 10M-record stretch by `splitcount` and a small
 Python script. The [P] and [E] cells and the memory fit are hand projections.
 
@@ -2598,7 +3099,7 @@ Python script. The [P] and [E] cells and the memory fit are hand projections.
   $$
 
   (peak entries from `--stats`) projects about 68 GB at $k = 1024$, consistent with pass B. Live sketches hold about $0.985\,k$ entries
-  each at the peak. The machine has 503 GB, so memory constrains no $k$ here.
+  each at the peak. The machine has 503 GiB, so memory constrains no $k$ here.
 - **Time.** 1 h 07 min, 1 h 47 min to 2 h 00 min, and 3 h 23 min at $k = 64, 128, 256$;
   about 2 h 52 min to 400M records at $k = 512$, projected to 6.3–6.6 h for the whole
   chain (in pass A's `bucket_cost.tsv`, the 378.6M-record tail takes 1.22–1.28× the
@@ -2654,7 +3155,7 @@ sketch emit --config varopt:512 --oracle lastspend-2022.u32 --limit all --stats 
 It writes `colors.sketch-varopt512.zst`: for each of the 778,613,440 transactions, in
 record order, its colour as a `varopt` sketch of at most 512 blocks ($k \pm 1$ in rare
 rounding events), normalised to sum one, with the bit that says whether it is exact
-(and, when it is not, its $\tau$ and raw mass), in the format of [§7.10](#sec:output-format). It decodes with
+(and, when it is not, its $\tau$ and raw mass), in the format of [§7.11](#sec:output-format). It decodes with
 a plain `zstd -d` piped into `sketch decode`, and `sketch check` recomputes from it the
 error tables of a `chain` run.
 
@@ -2687,7 +3188,7 @@ and found the count and checksum of the file's trailer correct. Its per-record e
 bucket rows (`buckets.tsv`) are byte for byte those of the `varopt-k512-s1-rec` store of
 pass B, which computed them in memory while folding. So
 the file holds exactly the sketches whose accuracy [section 8](#sec:results) reports: over the whole
-chain, 349 blocks mean and 729 blocks p90 error on the mean block (Table 1, [§8.2](#sec:error-against-k)). A
+chain, 349 blocks mean and 729 blocks p90 error on the mean block ({{< xref "tab:k" "full" >}}, [§8.2](#sec:error-against-k)). A
 plain `zstd -d` decodes it; a 128 MB window needs no flag.
 
 A second product sits beside it: `colors.kmv1024.counts.zst`, the size of every
@@ -2733,7 +3234,7 @@ It comes with two semantics, and every number below names which one it is about:
 Three measures are asked of it.
 
 - **Count**, $\lvert S_t \rvert$: the number of blocks a transaction's coins descend
-  from (under `sets`, through zero-amount inputs too). [§5.2](#sec:exact-colours-do-not) gives its scale: a median of
+  from (under `sets`, through zero-amount inputs too). [§5.4](#sec:reach) gives its scale: a median of
   about 174,000 blocks over the first 31.2M records.
 - **Jaccard similarity** and **containment**, shared *ancestry*:
 
@@ -2867,7 +3368,7 @@ converse is $K_k(A) \subseteq A$.
 {{< /proof >}}
 
 {{< theorem note="exact through the DAG" label="thm:kmv-dag" >}}
-Fold $K_k$ through the driver of [§7.4](#sec:driver): a coinbase of block $\beta$ is $\{\rho(\beta)\}$,
+Fold $K_k$ through the driver of [§7.5](#sec:driver): a coinbase of block $\beta$ is $\{\rho(\beta)\}$,
 not full; a record groups its operands by parent (under `pos` it skips those of share
 0), answers the parent's own sketch when one group is left, and otherwise merges the
 groups' sketches by capped merges, with *full* set when an operand is full or a merge
@@ -2903,7 +3404,7 @@ opposite of [§6.3](#sec:propagation), where the whole difficulty was the error 
 records of one run do share is the permutation: their errors are correlated, and
 questions of bias are asked across seeds ([§10.8](#sec:kmv-results)).
 
-The same argument gives what [§5.4](#sec:linear-combination-sketches-crux) and [§6.6](#sec:coord) said a coordinated merge could not have:
+The same argument gives what [§5.6](#sec:linear-combination-sketches-crux) and [§6.6](#sec:coord) said a coordinated merge could not have:
 exact weights.
 
 {{< lemma note="kept weights" label="lem:kmv-weights" >}}
@@ -2934,7 +3435,7 @@ block $b_2$ ranks 0.8 in $D$, inside the merged threshold $0.889$, and 4 in $A$,
 $A$'s sketch, so its share from $A$ is unknown. Ranks that depend on the block alone
 keep the lemma, and so would block-level priorities $u_b / g(b)$ for any *fixed*
 function $g$ of the block: a sample weighted by a prior rather than by the colour, which
-[§13](#sec:left) leaves open.
+[§14](#sec:left) leaves open.
 {{< /remark >}}
 
 The exact weights were not shipped.{{< sidenote >}}The design-phase prototype stored
@@ -3286,7 +3787,7 @@ probability $J_w$, and for $J_w$ the L1 distance is all that is needed.
 ### 10.7 Implementation {#sec:kmv-impl}
 
 Both stores are `Algebra`s of their own, each on its own thread and fed by the same
-parse as every other store ([§7.9](#sec:modes-threads-commands-that)); the `SKETCH01` format, the production file and the
+parse as every other store ([§7.10](#sec:modes-threads-commands-that)); the `SKETCH01` format, the production file and the
 `varopt` code are untouched, and the old modes write byte-identical output. That was
 checked during the implementation against two references: the build of the commit
 before the stores (`f09847c`), on `emit`, `decode`, `eval`, `chain`, `check` and the
@@ -3296,7 +3797,7 @@ file's `decode`. With the final binary, the one of every run below, the `emit` a
 `eval` checks were repeated.
 
 The permutation is a Fisher–Yates shuffle{{< cite "knuth1997taocp2" >}} driven by the
-hash of [§7.3](#sec:randomness), built once per seed and shared by every store of that seed:
+hash of [§7.4](#sec:randomness), built once per seed and shared by every store of that seed:
 
 ```rust
 pub fn new(seed: u64, bits: u32) -> Perm {
@@ -3387,7 +3888,7 @@ fn record(&mut self, ops: &[(KHandle, f64)], rec: u64) -> KHandle {
 }
 ```
 
-`group` collects the operands by `Rc` pointer, as `Sketcher::group` does ([§7.5](#sec:record-grouping-n-way)), and
+`group` collects the operands by `Rc` pointer, as `Sketcher::group` does ([§7.6](#sec:record-grouping-n-way)), and
 under `pos` skips those of share 0. The restricted rank $R_t$ of [§10.4](#sec:kmv-count) comes from a
 Fenwick tree over rank space, grown block by block as the chain's newest block advances,
 so a whole run costs one insertion per block and one query per full record:
@@ -3496,7 +3997,7 @@ fn record(&mut self, ops: &[(LHandle, f64)], rec: u64) -> LHandle {
 ```
 
 A coinbase is $m$ draws `tan(pi (u - 1/2))` with `u = unit(h3(seed, SALT_L1, b, j))`,
-always finite since `unit` is strictly inside $(0, 1)$ ([§7.3](#sec:randomness)). The scale MLE solves its
+always finite since `unit` is strictly inside $(0, 1)$ ([§7.4](#sec:randomness)). The scale MLE solves its
 equation by Newton's method on $\ln \sigma$, started at the median of $\lvert d_j \rvert$
 and safeguarded by a bisection bracket, so heavy Cauchy tails cannot throw it off:
 
@@ -4214,7 +4715,7 @@ way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped
 ## 11. Ten Sketched Colours {#sec:ten}
 
 What the production file holds, read for a few transactions: the sketch $\hat C_t$ of
-[§5.3](#sec:sketching-recurrence), a polynomial in $x$ with at most 512 terms, where the exponent is the block a coin
+[§5.5](#sec:sketching-recurrence), a polynomial in $x$ with at most 512 terms, where the exponent is the block a coin
 was minted in and the coefficient the sketch's estimate of the share of $t$'s value
 minted there. The ten below are among the 1,280 records of [§10.9](#sec:kmv-chain) that R6 cut out of
 `colors.sketch-varopt512.zst`, each picked for one property of its sketch. Each has
@@ -4660,7 +5161,7 @@ month.
 
 The comparison is between two different things: the supply counts bitcoin, and the
 colour is averaged over transactions. A value-weighted surface would compare like with
-like, and would need the amounts ([§13](#sec:left)).
+like, and would need the amounts ([§14](#sec:left)).
 
 ### 12.6 Sketched against exact {#sec:sketched-against-exact}
 
@@ -4709,7 +5210,192 @@ choice ([§6.3](#sec:propagation)). The surface is accurate to a few parts in a 
 error can be a sizable fraction of the value.
 
 
-## 13. What Is Left {#sec:left}
+## 13. Pictures of the Exact Colours {#sec:pictures}
+
+{{< newthought >}}Below the wall of [§5.3](#sec:exact-colours-do-not){{< /newthought >}} the exact fold of [§5.1](#sec:colour-def) still runs, and the
+main binary draws what it computes. [Section 12](#sec:surface) averaged sketches over the whole chain;
+this section draws the head of the chain exactly, record by record, with nothing averaged
+and nothing sketched. Every picture here is made by `coloring-bt-transactions`, not by
+`sketch`.
+
+### 13.1 One pixel per transaction and block {#sec:pixels}
+
+`--png` draws a row per record and a column per block id, each pixel saying what the
+colour says about that block: one bit under the unweighted backends `--rings` and
+`--sets`, eight under `--weighted`. `--pdf` (in a build with `--features pdf`) and
+`--fold` fold that onto a bounded canvas, shading each cell by how much of its rectangle
+is inked.
+
+`--palette` reads the weighted samples through the colour ramp of [§13.3](#sec:ramp) instead of as
+greys. The image data are byte for byte those of the greyscale run; the file grows by
+780 bytes, a `PLTE` chunk of 256 colours and its header (the main binary's
+documentation, `src/main.rs`). What the ramp buys is levels:
+grey has 254 and an eye reads perhaps thirty, and these weights live in a fraction of a
+percent.
+
+### 13.2 The first million, exactly {#sec:provenance}
+
+{{< xref "fig:prov-history-sets" "full" >}} to
+{{< xref "fig:prov-window-weighted" "full" >}} are four `--fold` pages over the head of
+the 2022 chain, two readings of each of two spans. The readings are the support, under
+`--sets`, and the colour $C_t$ of {{< eqref "eq:recurrence" >}}, under `--weighted`;
+[§5.1](#sec:colour-def) says why the two share their blocks and differ only in the coefficients. The spans
+are the 1,000,001 records the driver stops at by default, and 1,024 records, at one row a
+record, around the Mt.Gox proof-of-reserves. Nothing in them is a projection or a sketch:
+every cell is drawn from whole colours, each kept until its transaction's last output is
+spent, the census rule of [§5.3](#sec:exact-colours-do-not), with no release oracle.
+
+Each page is one greyscale canvas, with no `--palette`: at most $1024 \times 1024$
+cells, each shaded by its coverage through the gamma $1/2.2$ that the driver fixes as
+`TONE` in `src/image.rs`, which lifts sparse ink and keeps its order. The four canvases
+come from four runs over the records (the script `make_provenance_figures.sh` of the main
+binary's write-up):
+
+```text
+coloring-bt-transactions 1000001 --sets --fold history_sets.png < finalBCUTXO_2022.scm
+coloring-bt-transactions 1000001 --weighted --gain 1000 --fold history_weighted.png < finalBCUTXO_2022.scm
+coloring-bt-transactions --sets --rows 830362..831386 --fold window_sets.png < finalBCUTXO_2022.scm
+coloring-bt-transactions --weighted --rows 830362..831386 --gain 2000 --fold window_weighted.png < finalBCUTXO_2022.scm
+```
+
+`figs_exact.py`, a script outside the crate, adds only the axes and, on the two window
+pages, the blue marker, and embeds every canvas cell as one image pixel. Timed one at a
+time under `/usr/bin/time -v`, at a load average of 3, the support of the history takes
+74.5 s and 5.36 GiB, and its weighted page 86.0 s and 16.78 GiB, most of it the 15.2 GB
+(14.2 GiB) of distinct terms that {{< xref "tab:wall" "full" >}} counts at a million
+records; the two windows take 25.9 s and 25.3 s. These times are quoted from a comment
+in that script; no log was kept.
+
+A weighted page drawn plainly is near white, because the ink in it genuinely is. Each
+weighted run therefore declares a `--gain`, 1000 over the history and 2000 over the
+window, and its caption quotes it. The gain lifts ink before the gamma and full coverage
+caps it, so these shades order cells and do not measure them.
+
+{{< fig src="provenance-history-sets.svg" type="fullwidth" label="fig:prov-history-sets" alt="A greyscale picture of the first 1,000,001 records, top to bottom, against block ids 0 to 135,659, left to right. Everything right of a frontier curve that bends from the top left down to the bottom right is white; below it the picture is almost solid grey, crossed by white vertical bands of blocks whose coins sat unspent." >}}
+The support of the first 1,000,001 records, as a picture of 135,659 block ids by
+1,000,001 records folded onto $1024 \times 1024$ cells. A row is about 977 records in
+file order and a column about 133 block ids, and each cell is shaded by how much of its
+rectangle is inked, through the gamma $1/2.2$. A transaction cannot descend from a block
+after its own, so the picture is white right of the frontier curve. Below it dependency
+is near-total: 95.6% of the cells carry ink, broken by white bands of value that sat
+unspent. Main binary: `coloring-bt-transactions 1000001 --sets --fold history_sets.png < finalBCUTXO_2022.scm`;
+page drawn by `figs_exact.py` ([§13.2](#sec:provenance)).
+{{< /fig >}}
+
+{{< fig src="provenance-history-weighted.svg" type="fullwidth" label="fig:prov-history-weighted" alt="The same records and block ids in greyscale, now weighted by value: the area below the frontier is mostly near white, with the ink concentrated in a dark rim along the frontier curve and in a few vertical streaks in the first 300,000 records." >}}
+The same 1,000,001 records under `--weighted --gain 1000`: the colour $C_t$ of
+{{< eqref "eq:recurrence" >}} rather than its support, on the cells of
+{{< xref "fig:prov-history-sets" "full" >}} (about 977 records by 133 block ids, gamma
+$1/2.2$). The declared gain lifts every cell's ink before the gamma, so shades order
+cells but do not measure them. Value concentrates along the frontier, because coins
+mostly move soon after they are minted, and the deep history that dominates the support
+carries almost none of it. Main binary:
+`coloring-bt-transactions 1000001 --weighted --gain 1000 --fold history_weighted.png < finalBCUTXO_2022.scm`.
+{{< /fig >}}
+
+The two pages read together. The 95.6% of {{< xref "fig:prov-history-sets" "full" >}}
+counts the cells left of the running maximum of each row's rightmost inked column, as
+`figs_exact.py` computes from the canvas. The weighted page is the exact,
+record-by-record form of the first reading of [§12.2](#sec:surface-2), "before 2012, what is spent was
+just minted": the value sits in a dark rim along the frontier. Side by side, the pages are
+the contrast of [§10.1](#sec:asked) between $J$ and $J_w$: old supports are shared, while a colour's
+weight sits on its recent blocks.
+
+`--rows` draws a window and still colours everything in front of it: the 1,024 rows of
+{{< xref "fig:prov-window-sets" "full" >}} and
+{{< xref "fig:prov-window-weighted" "full" >}} inherit from all 830,362 records before
+them, folded and not drawn. The row axis is the record ordinal, not the transaction id
+(the two BIP-30 duplicates of [§5.2](#sec:solve) put the ordinal two ahead of the id from record
+142,842). The proof-of-reserves, transaction 830,874, is therefore record 830,876 here, row 514 of
+the window counting from 0, in block 132,749; on the canvas its row is inked across 1,014
+of the 1,024 columns, and the two rows above it across one. No row is blank. In 882 of
+the 1,024 rows the newest block of the colour lies within ten columns of the right edge,
+about 1,300 blocks or nine days, but not in all: in the other 142 it lies further left,
+and in five of them before column 500 (these counts are read off the canvas by `canvas_rows.py`, a
+script kept with `figs_exact.py`). These pictures were first drawn for a companion article on the
+Mt.Gox cases, which draws their spend trees with `tree-pdf`, another binary of the crate;
+they are kept here because they are pictures of the colour and not of any one case.
+
+{{< fig src="provenance-window-sets.svg" type="fullwidth" label="fig:prov-window-sets" alt="1,024 records, one row each, from record 830,362 at the top to 831,385 at the bottom, against block ids 0 to 132,765. Most rows show only a speck at the right edge; about one in six is a black line across nearly the whole width. A blue wedge on the left marks record 830,876, one of the full-width rows." >}}
+One row a record: the support of the 1,024 records 830,362 to 831,385, under
+`--sets --rows 830362..831386`, every record before them coloured but not drawn. The
+$132{,}765 \times 1{,}024$ picture is folded onto cells of one record by about 130 block
+ids, gamma $1/2.2$. The blue wedge marks the Mt.Gox proof-of-reserves: transaction
+830,874, record 830,876, in block 132,749 of June 2011. Its row is inked across 1,014 of
+the 1,024 columns. Most rows are narrow, everyday payments with shallow provenance; the
+full-width bands are transactions whose coins descend from essentially every era of the
+chain. Main binary:
+`coloring-bt-transactions --sets --rows 830362..831386 --fold window_sets.png < finalBCUTXO_2022.scm`.
+{{< /fig >}}
+
+{{< fig src="provenance-window-weighted.svg" type="fullwidth" label="fig:prov-window-weighted" alt="The same 1,024 records weighted by value: nearly white, faint dotted lines where the support page had full-width bands, a dark scatter in the last few columns on the right, and the blue wedge at record 830,876." >}}
+The same 1,024 records around the proof-of-reserves (blue wedge, record 830,876) under
+`--weighted --gain 2000`, on the cells of {{< xref "fig:prov-window-sets" "full" >}}: one
+record by about 130 block ids, gamma $1/2.2$. The declared gain lifts ink before the
+gamma, so shades order cells but do not measure them. Even the full-width bands fade,
+except where real value rides old blocks. Main binary:
+`coloring-bt-transactions --weighted --rows 830362..831386 --gain 2000 --fold window_weighted.png < finalBCUTXO_2022.scm`.
+{{< /fig >}}
+
+### 13.3 A ramp that reads {#sec:ramp}
+
+The ramp of `--palette` is built in Oklab,{{< cite "ottosson2020oklab" >}} not in HSL.
+HSL's lightness is not luminance and its hue circle is far from uniform (yellow at
+$60^\circ$ and blue at $240^\circ$ have nominally the same lightness and are nothing of
+the sort), so a ramp built in it has bands where the eye sees a step that is not there.
+For a picture whose purpose is to compare magnitudes that is not cosmetic.
+
+Lightness carries the magnitude, monotonically, which keeps the picture readable in grey,
+readable to a colour-deficient eye, and readable where it is folded so small that a cell
+is a sample rather than a shape. Hue and chroma only separate levels that lightness
+leaves adjacent. Most of the chroma one would like at the dark end is outside sRGB.
+Clamping the channels there shifts the hue and flattens the sweep, so the gamut mapping
+holds lightness and hue fixed and bisects the chroma down until the colour fits: 256
+colours, computed once (`src/oklch.rs`).
+
+{{< fig src="palette-ramp.svg" label="fig:ramp" alt="A horizontal strip shading from near-white on the left through pale blue, teal, green and ochre to a dark wine red on the right." >}}
+The `--palette` ramp of `src/oklch.rs`, from paper on the left to the heaviest ink on the
+right (the `PLTE` chunk stores it in the reverse order, ink first), drawn from the
+write-up's `ramp.png`, which matches `ramp()` entry for entry. Lightness falls
+monotonically. The hue sweeps an arc of about $250^\circ$ rather than the full circle, so
+the ends stay apart.
+{{< /fig >}}
+
+### 13.4 One pixel per transaction {#sec:tint}
+
+The main binary's `examples/tint.rs` (`cargo run --release --example tint`) reads a
+`--moments` file, `colors.moments.zst` of [§5.2](#sec:solve), and draws each transaction as one
+pixel: the mean block to hue over an arc of $250^\circ$, and the concentration
+$1/(1 + \text{spread}/45{,}000)$ to chroma. Over the whole chain that picture is nearly
+one colour, and the reason is the data, not the drawing. The median spread is about
+164,850 blocks, so 80% of the records have a concentration between 0.18 and 0.33 and only
+3.4% exceed 0.5; and 80% of the hues fall in a stretch of about $39^\circ$ of the arc,
+because the mean climbs with the record index. (These figures are quoted from the main
+binary's write-up. `tint_stats.c`, a program kept with the runs' evidence outside the
+crate, recounts them over all 778,613,440 lines of `colors.moments.zst` and agrees: a
+median spread of 164,852 blocks, concentrations from 0.180 to 0.330 between the 10th and
+90th percentiles, 3.39% above 0.5, and 38.8° between the 10th and 90th percentile
+hues.) A fixed scale on a quantity this skewed spends the
+channel on a few transactions, so the picture is not shown here. Its two questions, when
+the coins were minted and how mixed they are, are asked elsewhere on axes that read: the
+first by the colour surface of [§12](#sec:surface), on two time axes; the second by the spread of
+[§5.1](#sec:colour-def), whose sketched error [section 8](#sec:results) measures.
+
+One lesson of the attempt stands, and it is about a scalar. Averaging the tints of the
+transactions that fall in a cell makes the cell nearly a function of its own position,
+for the same reason, so a binned picture of tints should sample one transaction per cell.
+[Section 12](#sec:surface) does average, but whole distributions rather than one number a transaction:
+the average of colours is again a distribution over the minting bands, a column is the
+expected colour of a transaction drawn at random from its band, and the structure that a tint
+would flatten (the diagonal, the halving steps) survives in it. What that average gives
+up is how the transactions of one band differ from one another.
+
+`tint --index` also writes the tint as one byte a record: 778,614,320 bytes for the
+chain, an 80-byte header, a 768-byte palette, the 778,613,440 bytes and 32 bytes for the
+four places where the transaction id breaks its sequence (`examples/tint.rs`).
+
+
+## 14. What Is Left {#sec:left}
 
 - **Bias at $k \ge 512$.** Pass B ran one seed; the 3-seed test covers $k = 64$ and
   $256$ only, and its 95% bounds (11.4% and 16.7% of the mean absolute error) are loose.
@@ -4726,7 +5412,10 @@ error can be a sizable fraction of the value.
   on a prefix of the chain ([§6.4](#sec:rates)); repeating it with the final binary over the whole
   chain is open. So is a direct look at the bound. On the first 3M records, where the
   exact colours are known, $A_t$ and $\sum_{r \preceq t} \alpha_{t,r}^2 \tau_r^2$ could be computed
-  record by record. That would show whether the error stays flat because these sums
+  record by record. $A_t$ is the squared norm of row $t$ of $(\mathbf{I} - \Gamma)^{-1}$
+  ([§6.3](#sec:propagation)), a solve with the identity on the right. Its rows hold an entry for every
+  ancestor record rather than every ancestor block, so it is a heavier solve than the
+  exact colours, and whether it fits on that prefix has not been measured. That would show whether the error stays flat because these sums
   stay small under mixing, or because the errors of different reductions cancel.
 - **Literal bottom-$k$ against VarOpt.** The literal weighted bottom-$k$ sketch of
   sections [2](#sec:weighted-extension-priority-sampling)–[4](#sec:high-performance-implementations) is `prio`, and here it loses by 6–21×; the exponential (PPSWOR) ranks of
@@ -4785,16 +5474,20 @@ error can be a sizable fraction of the value.
 - **A value-weighted surface.** The surface of [§12](#sec:surface) counts every transaction once.
   Weighted by the amounts, it would be the colour of the bitcoin that moved, and its
   comparison with the supply in [§12.5](#sec:moves-against-exists) would be like with like. The amounts are not in
-  the sketch file or the count file, so it needs one more pass over the chain with them.
+  the sketch file or the count file, so it needs one more pass over the chain with them,
+  or over the share matrix of [§7.12](#sec:matrix), which holds them (10.6 GB, not kept).
   The time since coins last moved, which coin-age charts use, is a different recurrence
   and is not in the colours at all.
+- **`sketch` does not read the share matrix.** Its runs parse the 150 GB of text
+  ([§7.12](#sec:matrix)); reading the matrix through the main binary's reader would save the parse of
+  every pass.
 - **The universe.** Blocks must stay below $2^{20} = 1{,}048{,}576$, which at 144 blocks a
   day the chain passes in about 2028; `:bits=21` doubles the tables to 16 MiB.
 
 
-## 14. Notes and References {#sec:references}
+## 15. Notes and References {#sec:references}
 
-### 14.1 Further reading {#sec:further-reading}
+### 15.1 Further reading {#sec:further-reading}
 
 - **Sampling theory.** {{< cite keys="horvitz1952generalization" mode="text" >}}
   introduced the estimator that weights each sampled item by the inverse of its
@@ -4877,6 +5570,11 @@ error can be a sizable fraction of the value.
   tail bounds. {{< cite keys="jowhari2011tight" mode="text" >}} give $L_p$ samplers,
   linear sketches from which a coordinate can be drawn in proportion to its weight, the
   weighted sampling that does compose under sums ([§10.6](#sec:l1)).
+- **Sparse triangular solves.** {{< cite keys="gilbert1988sparse" mode="text" >}} solve
+  a sparse triangular system in time proportional to the arithmetic, by first finding
+  the nonzeros of the solution as the nodes reachable in the graph of the matrix, the
+  fill-in that [§5.3](#sec:exact-colours-do-not)–[5.4](#sec:reach) measure; {{< cite keys="davis2006direct" mode="text" >}}
+  (chapter 3) gives the algorithm and its code.
 - **Martingales.** {{< cite keys="williams1991probability" mode="text" >}} covers what
   [§6.2](#sec:unbiased)–[6.3](#sec:propagation) use: conditional expectation, the tower property, and the orthogonality of
   martingale differences.
@@ -4888,10 +5586,10 @@ error can be a sizable fraction of the value.
   first-in-first-out tracing instead, which in their case studies taints far fewer
   addresses than haircut.
 - **Randomness.** {{< cite keys="steele2014fast" mode="text" >}} is the SplitMix
-  generator whose output function hashes every draw of [§7.3](#sec:randomness). The permutation of [§10.7](#sec:kmv-impl) is
+  generator whose output function hashes every draw of [§7.4](#sec:randomness). The permutation of [§10.7](#sec:kmv-impl) is
   the shuffle of Fisher and Yates in Durstenfeld's in-place form, Algorithm P of Knuth's
   §3.4.2.{{< cite "knuth1997taocp2" >}}
 
-### 14.2 References {#sec:references-2}
+### 15.2 References {#sec:references-2}
 
 {{< bibliography heading="" >}}
