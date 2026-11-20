@@ -3816,7 +3816,7 @@ their harmonic mean, cosine their geometric mean, Kulczynski their arithmetic me
 the overlap the larger of the two, so for every pair
 
 $$
-J \le 	ext{Dice} \le 	ext{cosine} \le 	ext{Kulczynski} \le 	ext{overlap},
+J \le \text{Dice} \le \text{cosine} \le \text{Kulczynski} \le \text{overlap},
 $$
 
 with equality throughout when the two supports have the same size. They differ only in
