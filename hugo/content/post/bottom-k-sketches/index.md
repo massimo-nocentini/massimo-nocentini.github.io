@@ -3808,8 +3808,39 @@ $$
 $$
 
 the Sørensen–Dice coefficient, the cosine (Ochiai) coefficient, the overlap
-(Szymkiewicz–Simpson) coefficient, Kulczynski's and the symmetric difference. The `kmv`
-store estimates all three numbers: the counts by {{< xref "prop:kmv-count" "full" >}}, the
+(Szymkiewicz–Simpson) coefficient, Kulczynski's and the symmetric difference. Here $A$
+and $B$ are the supports of two transactions, the blocks their coins descend from
+([§10.1](#sec:asked)), and the four ratios are best read through the two containments
+$c_A = I/n_A$, the share of $A$'s ancestry that $B$ shares, and $c_B = I/n_B$. Dice is
+their harmonic mean, cosine their geometric mean, Kulczynski their arithmetic mean and
+the overlap the larger of the two, so for every pair
+
+$$
+J \le 	ext{Dice} \le 	ext{cosine} \le 	ext{Kulczynski} \le 	ext{overlap},
+$$
+
+with equality throughout when the two supports have the same size. They differ only in
+how they treat a pair of unequal ancestries, and on this chain that is the common case:
+an old transaction descends from few blocks, a new one from most of the past.
+
+- **Dice** counts the shared blocks twice against the two sizes added, where Jaccard
+  counts them once against the union. It ranks every pair as $J$ does and says nothing
+  $J$ does not; it is the scale on which much of the literature reports overlap.
+- **Cosine** is the geometric mean of the two containments. A small ancestry wholly inside
+  a large one has $J = n_A/n_B$ but cosine $\sqrt{n_A/n_B}$: it penalises the difference
+  in size less than Jaccard and Dice do.
+- **Kulczynski** is the plain average of the two containments: how much of $A$'s
+  ancestry is shared, and how much of $B$'s, weighted alike whatever their sizes.
+- **The overlap** asks only whether the smaller ancestry lies inside the larger. It is 1
+  when every block the smaller one descends from is also an ancestor of the larger, however
+  much more the larger has. For an older and a newer transaction it says whether the
+  older one's sources are all among the newer one's.
+- **The symmetric difference** is a count, not a ratio: the number of blocks that are in
+  one ancestry and not in the other, the Hamming distance between the two supports read
+  as bit vectors over the blocks. It says how many minting blocks separate two
+  transactions, where the ratios say what share.
+
+The `kmv` store estimates all three numbers: the counts by {{< xref "prop:kmv-count" "full" >}}, the
 intersection as $\hat I = \hat J\, \hat n_u$ ([§10.5](#sec:kmv-pairs)). Dice is a function of $J$ alone,
 $2\hat J/(1 + \hat J)$, and inherits its accuracy: the derivative $2/(1 + J)^2$ is at most
 2, and below 1 where $J$ is above 0.42. The others are ratios of dependent estimates, as the
@@ -3860,7 +3891,13 @@ $$
 
 and the histogram intersection $\sum_{b=0}^{L-1} \min(x_b, y_b)$, Czekanowski's index
 and the weighted Sørensen index are all $1 - \mathrm{TV}$ ({{< xref "lem:jw-tv" "full" >}}).
-The `l1` store answers them as it answers $J_w$, from $\widehat{\mathrm{TV}}$, and with the
+Read on two colours, TV is the share of value that would have to be moved from one minting
+block to another to turn one colour into the other, however far it moves; and $1 -
+\mathrm{TV}$ is the share of value the two have in common block by block, the part of each
+transaction's value that could be the same minted coins in the other's. They answer the
+question of $J_w = (1 - \mathrm{TV})/(1 + \mathrm{TV})$ on a different scale: $1 -
+\mathrm{TV}$ is always at least $J_w$, and the median $J_w$ of 0.21 of the whole-chain
+pairs ([§10.1](#sec:asked)) is a common share of 0.35. The `l1` store answers them as it answers $J_w$, from $\widehat{\mathrm{TV}}$, and with the
 same floor: in {{< xref "tab:similarities" "full" >}}, $\min(\widehat{\mathrm{TV}}, 1)$ is
 within 0.004 where $J_w \ge 0.01$ and 0.016 low where $J_w < 0.01$, which is the floor of
 [§10.6](#sec:l1), $2 \times 0.0088$, seen from the other side.
@@ -3869,8 +3906,15 @@ within 0.004 where $J_w \ge 0.01$ and 0.016 low where $J_w < 0.01$, which is the
 colour's: {{< xref "cor:rate" "full" >}} bounds the error at every cut, and
 [section 8](#sec:results) measures the KS distance itself. So a distance between CDFs on the block
 axis is close too: KS is a metric, and by the triangle inequality the KS distance between
-two sketches is off by at most the sum of their own KS distances to their colours, as $W_1$ is ([§10.2](#sec:varopt-sketches-cannot-answer)), and unlike TV. `pairs`
-writes it beside $W_1$: over the whole chain its median is 0.56 across the `chain`
+two sketches is off by at most the sum of their own KS distances to their colours, as $W_1$ is ([§10.2](#sec:varopt-sketches-cannot-answer)), and unlike TV. The two read
+the colours along the chain's time axis. KS is the largest difference, over every block
+height $x$, between the shares of the two transactions' value minted at or before $x$:
+at the point of the chain's history where they differ most, how much more of one's value
+is older than that point than of the other's. $W_1$ is the area between the two CDFs, in
+blocks: how far in time, on average, value would have to move to turn one colour into the
+other, and when one colour is older than the other at every height, the difference of
+their mean blocks. TV and $1 - \mathrm{TV}$ treat a block a day away and a block ten years
+away alike; KS and $W_1$ do not. `pairs` writes KS beside $W_1$: over the whole chain its median is 0.56 across the `chain`
 selection and 0.06 to 0.13 inside the windows. `pairs` does not compute the exact KS of two
 colours, so it is not checked here.
 
