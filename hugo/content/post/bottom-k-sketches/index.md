@@ -1133,7 +1133,7 @@ the write-up). These statistics are computed from `finalBCUTXO_2022.sets-counts.
 and `finalBCUTXO_2022.sets-counts.1000001.txt` by `stats_counts.py`, a script kept with
 the runs' evidence outside the crate, and `sketch` reports the two medians as the column
 `ref_p50` of the `summary.tsv` it writes when it reads the production count file of
-[§10.10](#sec:kmv-file) beside these sizes:
+[§10.11](#sec:kmv-file) beside these sizes:
 
 ```text
 sketch summary --in colors.kmv1024.counts.zst \
@@ -1145,7 +1145,7 @@ Exact sets, with every saving the main binary has, reach 4% of the chain on this
 and the last million records cost about 30 GiB. That cost is still rising, so twice the
 memory would, by a hand extrapolation of that rise, buy a few million records more, not a
 second 31 million. It is not the code that stops the fold but the size of what is asked
-for, the fill-in of the Boolean form of {{< eqref "eq:solve" >}}. [Section 10.9](#sec:kmv-chain) carries the count to the end of the chain by the
+for, the fill-in of the Boolean form of {{< eqref "eq:solve" >}}. [Section 10.10](#sec:kmv-chain) carries the count to the end of the chain by the
 coordinated bottom-$k$ of [§10.3](#sec:coordinated-bottom-k-support), exact wherever a support has at most $k$ blocks.
 
 ### 5.5 Sketching the recurrence {#sec:sketching-recurrence}
@@ -2006,7 +2006,7 @@ lost: its error is almost all bias ([§8.4](#sec:variants-compared)) and does no
 
 The code below is excerpted from the `sketch` binary of `coloring-bt-transactions-rs`,
 trimmed (`// …` marks a cut) but not rewritten. It is about 6,500 lines with its tests
-(about 12,700 with the stores of [section 10](#sec:counting), and about 22,700 at commit 1a27649 with the
+(about 12,700 with the stores of [section 10](#sec:counting), and about 23,000 at commit adfe031 with the
 modes that read the runs' outputs back, [§7.10](#sec:modes-threads-commands-that)), adds no dependency, and reuses the
 repository's record parser, release oracle, exact weighted store and Laplace tables
 through `#[path]` modules. Two subsections are about the repository's main binary,
@@ -2526,7 +2526,7 @@ raw mass is $W \pm \tau$, and `emit` genuinely rescales the sketch and records
   a stored production file can be validated after the fact; **`decode`** turns the
   binary format into text.
 
-The modes added since (commits 159874d to 1a27649) fold nothing. They read files that
+The modes added since (commits 159874d to adfe031) fold nothing. They read files that
 the runs wrote and compute from them the numbers the post states, and each was checked
 against the script or ad-hoc program it replaces; their commands are given where their
 results are.
@@ -2538,13 +2538,14 @@ results are.
   of the reduced rows it matches to $2.4 \times 10^{-12}$ relative.
 - **`summary`** reads count streams back into what a whole-chain count is judged by:
   exactness, quantiles per bucket and per `--range`, the seeds against each other, and
-  the exact sizes where they exist ([§5.4](#sec:reach), [§10.9](#sec:kmv-chain), [§10.10](#sec:kmv-file)). Every cell of the `mawk` and
+  the exact sizes where they exist ([§5.4](#sec:reach), [§10.10](#sec:kmv-chain), [§10.11](#sec:kmv-file)). Every cell of the `mawk` and
   Python passes it replaces comes out equal, except one p90 that Python printed rounded
   (54 for 53.5).
 - **`select prefix|chain`** chooses the records worth comparing from a count stream and
   writes the file `pick --select` reads, byte-identical to the Python `select.py`'s.
 - **`pairs-stats`** reduces one or more `pairs` outputs to the bias, variance, agreement
-  and quantile tables of [§10.8](#sec:kmv-results) and [§10.9](#sec:kmv-chain), pooling the seeds of runs over the same rows.
+  and quantile tables of [§10.9](#sec:kmv-results) and [§10.10](#sec:kmv-chain), pooling the seeds of runs over the same rows,
+  and computes the other similarities of [§10.7](#sec:other-similarities) (from commit adfe031).
 - **`describe`** says what each production sketch cut out by `decode --select` is and
   compares it with its exact colour binned in 1024 bands ([section 11](#sec:ten)). Beside it,
   `pick --bands-ref` copies those binned colours during a fold, and `pairs --bands` adds
@@ -2717,8 +2718,8 @@ buys is not a faster fold but a parse paid once. The whole-chain `colors.bands10
 
 `cargo test --release --bin sketch -- --include-ignored` passed 106 of 106 at the time
 of the runs of [section 8](#sec:results), and 139 of 139 with the stores of [section 10](#sec:counting). At commit
-1a27649, with the modes that read the runs back, `cargo test --release --bin sketch`
-passes 194 and ignores 4: the two integration tests that read the chain's files, the
+adfe031, with the modes that read the runs back, `cargo test --release --bin sketch`
+passes 196 and ignores 4: the two integration tests that read the chain's files, the
 `coord` bias test below and a benchmark, which `--include-ignored` runs. What they
 assert:
 
@@ -3193,7 +3194,7 @@ plain `zstd -d` decodes it; a 128 MB window needs no flag.
 
 A second product sits beside it: `colors.kmv1024.counts.zst`, the size of every
 transaction's support, counted by the coordinated bottom-$k$ of [section 10](#sec:counting), exactly when
-the support has at most 1024 blocks and by an unbiased estimate otherwise. [Section 10.10](#sec:kmv-file)
+the support has at most 1024 blocks and by an unbiased estimate otherwise. [Section 10.11](#sec:kmv-file)
 says how to read it.
 
 
@@ -3249,16 +3250,16 @@ Three measures are asked of it.
   $$
 
 On this chain the last two say very different things. Among 255 deep transactions spread
-over the first 3M records (the `deep` selection of [§10.8](#sec:kmv-results), every support of at least
+over the first 3M records (the `deep` selection of [§10.9](#sec:kmv-results), every support of at least
 1,024 blocks), the median $J$ of a pair is 0.157 but the median $J_w$ is
 $1.4 \times 10^{-4}$, and 92% of the pairs have $J_w < 0.01$: old supports are largely
 shared, while a colour's weight sits on its recent blocks, which two transactions far
 apart in time do not share. Inside a window of three blocks (the `window` selection) the
 median $J$ is 0.994 and the median $J_w$ is 0.18. Over the whole chain the weights
-overlap more: among 512 deep transactions spread from 2010 to 2022 ([§10.9](#sec:kmv-chain)) the median
+overlap more: among 512 deep transactions spread from 2010 to 2022 ([§10.10](#sec:kmv-chain)) the median
 $J$ of a pair is 0.48 and the median estimated $J_w$ is 0.21, still 0.18 for pairs more
-than 60,000 blocks apart. These medians are read off the pair runs R3 and R7 of [§10.8](#sec:kmv-results) and
-[§10.9](#sec:kmv-chain) by `sketch pairs-stats` ([§10.7](#sec:kmv-impl)), in its `quantiles.tsv` (the 92% in
+than 60,000 blocks apart. These medians are read off the pair runs R3 and R7 of [§10.9](#sec:kmv-results) and
+[§10.10](#sec:kmv-chain) by `sketch pairs-stats` ([§10.8](#sec:kmv-impl)), in its `quantiles.tsv` (the 92% in
 `jw-strata.tsv`).
 
 ### 10.2 Why the VarOpt sketches cannot answer {#sec:varopt-sketches-cannot-answer}
@@ -3294,7 +3295,7 @@ blocks. Heavy blocks are exact; a light block shared by two independent reductio
 kept by both with probability $(x_b/\tau_x)(y_b/\tau_y)$ and then counts
 $\min(\tau_x, \tau_y)$, so it contributes about $x_b y_b / \max(\tau_x, \tau_y)$, far
 less than $\min(x_b, y_b)$, and the plug-in came out low in every stratum measured
-([§10.8](#sec:kmv-results)). Within one run the two sketches share the reductions of their common ancestors,
+([§10.9](#sec:kmv-results)). Within one run the two sketches share the reductions of their common ancestors,
 so the bias depends on how many fresh reductions separate a pair from its common
 ancestry, and it grows with depth. Measured:
 
@@ -3304,10 +3305,10 @@ ancestry, and it grows with depth. Measured:
 - On pairs of reduced colours with $J_w \in [0.1, 0.5)$, the bias of the same-run
   plug-in grows from $-0.014$ over records 0–1M to $-0.079$ over 1–1.5M and $-0.111$
   over 1.5–2M (same prototype).
-- On the prefix runs of [§10.8](#sec:kmv-results) the same-run plug-in of `varopt:512` underestimates $J_w$
+- On the prefix runs of [§10.9](#sec:kmv-results) the same-run plug-in of `varopt:512` underestimates $J_w$
   by 0.171 on average over the 32,640 pairs of the `window` selection (mean 0.029 against
   0.200), by 0.268 for $J_w \in [0.2, 0.5)$ and by 0.430 for $J_w \in [0.5, 0.9)$
-  (the table of weighted errors in [§10.8](#sec:kmv-results), from the `jw-strata.tsv` of
+  (the table of weighted errors in [§10.9](#sec:kmv-results), from the `jw-strata.tsv` of
   `sketch pairs-stats`, whose strata, weighted by their pairs, give the overall mean).
 
 The plug-in is therefore not shipped; `pairs` writes it only to document this. The
@@ -3402,7 +3403,7 @@ one-shot bottom-$k$ of its support, a deterministic function of $\rho$ and $S_t$
 every estimate read from it has exactly the law of a one-shot KMV estimate. This is the
 opposite of [§6.3](#sec:propagation), where the whole difficulty was the error the recursion adds. What the
 records of one run do share is the permutation: their errors are correlated, and
-questions of bias are asked across seeds ([§10.8](#sec:kmv-results)).
+questions of bias are asked across seeds ([§10.9](#sec:kmv-results)).
 
 The same argument gives what [§5.6](#sec:linear-combination-sketches-crux) and [§6.6](#sec:coord) said a coordinated merge could not have:
 exact weights.
@@ -3518,7 +3519,7 @@ $N$ for the set size and $M$ for the universe). The approximation slightly overs
 it: summed exactly over the law of $R$ (a numerical summation of the theory, outside the
 crate), for $n/N \le 0.9$ the variance is below it by under 1% at $k \ge 256$, under 3%
 at $k = 64$ and up to 11.5% at $k = 16$. The seed
-tests of [§10.8](#sec:kmv-results) check it on the chain.
+tests of [§10.9](#sec:kmv-results) check it on the chain.
 
 The proposition leaves the universe $V$ free, and the choice matters. The textbook
 choice is the whole permutation, $V = [0, M)$, with $R$ the $k$-th smallest rank itself:
@@ -3541,7 +3542,7 @@ $\hat n_M$: half the error, the gain a $k$ nearly four times larger would bring.
 measured RMS over 16 seeds is 0.0152 against 0.0266, 57% of the error, the gain of a $k$
 about three times larger. $R_t$ costs one query of a Fenwick tree over rank space per
 full record, into which the blocks are inserted as the chain's newest block advances
-([§10.7](#sec:kmv-impl)). Both estimates are written; $\hat n$ is the primary one.
+([§10.8](#sec:kmv-impl)). Both estimates are written; $\hat n$ is the primary one.
 
 ### 10.5 Jaccard, containment and unions {#sec:kmv-pairs}
 
@@ -3572,7 +3573,7 @@ $k J (1 - J)(n_u - k)/(n_u - 1)$.
 
 When neither sketch is full but their union exceeds $k$, the textbook formula over $K$
 is still an estimate (it deviated by up to 0.0035 in the design-phase prototype); the
-exact value is in hand, so it is used. In the `even` selection of [§10.8](#sec:kmv-results), 208,335 of the
+exact value is in hand, so it is used. In the `even` selection of [§10.9](#sec:kmv-results), 208,335 of the
 499,500 pairs have both sketches whole at $k = 1024$ and are computed exactly; in 57 of
 them the union exceeds $k$, where the textbook formula would have been an estimate
 (both counts are columns of `errors.tsv` from `sketch pairs-stats` on R3).
@@ -3607,7 +3608,7 @@ about half of it when the two are the same size, and none when $A$ is much large
 $k = 1024$ it is at most about 0.00025. With a strict
 threshold, $\rho(x) < \tau_B$, the same simulation (20,000 permutations per case) showed
 no bias within its standard error. The code keeps $\le$: at $k = 1024$ its bias is far
-below every error measured in [§10.8](#sec:kmv-results). The estimate is undefined when $T$ is empty, which
+below every error measured in [§10.9](#sec:kmv-results). The estimate is undefined when $T$ is empty, which
 happens when $A$ is much smaller than $B$: $A$ then has few elements below $\tau_B$,
 about $k \lvert A \rvert / \lvert B \rvert$ on average. `pairs` writes the size of $T$
 beside every containment, and the ratio $\hat J \hat n_u / \hat n_A$ as a flagged
@@ -3678,7 +3679,7 @@ one group has $\bar s_g = 1$ and $C_t = C_{q_g}$.
 There is no reduction, no $k$, no per-record randomness: the only error is floating
 point. The fold accumulates in `f64` in group order and stores `f32` (or `f64`); on the
 first 3M records the stored vector matched $\Pi\,C_t$ computed from the exact colour to
-$6.8 \times 10^{-7}$ relative in `f32` and $5.7 \times 10^{-14}$ in `f64` ([§10.8](#sec:kmv-results)).
+$6.8 \times 10^{-7}$ relative in `f32` and $5.7 \times 10^{-14}$ in `f64` ([§10.9](#sec:kmv-results)).
 
 For two fixed colours $x$ and $y$, which are functions of the chain and independent of
 $\Pi$, the differences
@@ -3730,7 +3731,7 @@ $$
 hundredths cannot be resolved one by one; the unclipped $\widehat{\mathrm{TV}}$ is
 written beside $\hat J_w$ for averages over many pairs. On the prefix, where the median
 $J_w$ of deep pairs across time is $1.4 \times 10^{-4}$ ([§10.1](#sec:asked)), a weighted map would
-show only the floor. Over the whole chain it would not ([§10.9](#sec:kmv-chain): only a fifth of the pairs
+show only the floor. Over the whole chain it would not ([§10.10](#sec:kmv-chain): only a fifth of the pairs
 lie below the floor), but there the maps are drawn for windows of a few blocks, where
 $J$ is near 1 and $J_w$ is what tells transactions apart.
 
@@ -3784,7 +3785,105 @@ linear sketch of $x$, so it folds through the recurrence as $\Pi$
 does.{{< cite "jowhari2011tight" >}} Two such samplers, however, do not collide with
 probability $J_w$, and for $J_w$ the L1 distance is all that is needed.
 
-### 10.7 Implementation {#sec:kmv-impl}
+### 10.7 Other similarities from the same sketches {#sec:other-similarities}
+
+Jaccard similarity and $J_w$ are two of many ways to say how much two transactions share,
+and the three stores already written answer several others with no new fold.
+`sketch pairs-stats` computes them from the outputs of `pairs` ([§10.8](#sec:kmv-impl)):
+against the exact values, where there are any, in `similarity.tsv`, and as quantiles in
+`similarity-quantiles.tsv`.
+
+**Set similarities.** Every classical similarity of two sets is a function of their sizes
+$n_A = \lvert A \rvert$, $n_B = \lvert B \rvert$ and of their intersection
+$I = \lvert A \cap B \rvert$:
+
+$$
+\begin{aligned}
+\text{Dice}(A, B) &= \frac{2I}{n_A + n_B} = \frac{2J}{1 + J}, &
+\text{cosine}(A, B) &= \frac{I}{\sqrt{n_A\, n_B}}, \\
+\text{overlap}(A, B) &= \frac{I}{\min(n_A, n_B)}, &
+\text{Kulczynski}(A, B) &= \frac12 \Big( \frac{I}{n_A} + \frac{I}{n_B} \Big), \\
+\lvert A \mathbin{\triangle} B \rvert &= n_A + n_B - 2I = (1 - J)\,\lvert A \cup B \rvert ,
+\end{aligned}
+$$
+
+the Sørensen–Dice coefficient, the cosine (Ochiai) coefficient, the overlap
+(Szymkiewicz–Simpson) coefficient, Kulczynski's and the symmetric difference. The `kmv`
+store estimates all three numbers: the counts by {{< xref "prop:kmv-count" "full" >}}, the
+intersection as $\hat I = \hat J\, \hat n_u$ ([§10.5](#sec:kmv-pairs)). Dice is a function of $J$ alone,
+$2\hat J/(1 + \hat J)$, and inherits its accuracy: the derivative $2/(1 + J)^2$ is at most
+2, and below 1 where $J$ is above 0.42. The others are ratios of dependent estimates, as the
+intersection is: consistent, not unbiased, and clipped to $[0, 1]$ where they are bounded.
+The overlap is also the containment of the smaller support in the larger, and read that
+way ([§10.5](#sec:kmv-pairs), the smaller side by its estimated count) its memberships are exact.
+The symmetric difference counts the elements outside the intersection, and the bottom-$k$
+of the union holds about $k(1 - J)$ of them, so its relative error is about
+$1/\sqrt{k(1 - J)}$: fine for supports far apart, useless for near-copies.
+
+Measured on the prefix, with R3's 16 seeds at $k = 1024$ as the unit of the bias test
+(the runs of [§10.9](#sec:kmv-results)):
+
+| measure | `deep`: mean | bias | RMS | `window`: mean | bias | RMS |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Dice, $2\hat J/(1 + \hat J)$ | 0.375 | $+0.0003$ | 0.012 | 0.981 | $-0.0003$ | 0.0029 |
+| cosine | 0.453 | $+0.0003$ | 0.023 | 0.982 | $-0.0002$ | 0.0039 |
+| Kulczynski | 0.628 | $-0.0001$ | 0.059 | 0.983 | $-0.0002$ | 0.0039 |
+| overlap, $\hat I / \min(\hat n_A, \hat n_B)$ | 0.962 | $\mathbf{-0.034}$ | 0.078 | 0.9999 | $\mathbf{-0.0009}$ | 0.0028 |
+| overlap, as the smaller side's containment | 0.962 | $-0.0001$ | 0.0055 | 0.9999 | $+0.00002$ | 0.00017 |
+| symmetric difference, relative | 44,932 | $-0.3\%$ | 6.5% | 4,264 | $\mathbf{-13\%}$ | 60% |
+| Bray–Curtis $= \min(\widehat{\mathrm{TV}}, 1)$, $J_w \ge 0.01$ | 0.890 | $-0.003$ | 0.034 | 0.656 | $+0.004$ | 0.029 |
+| Bray–Curtis, $J_w < 0.01$ | 0.998 | $\mathbf{-0.016}$ | 0.030 | 0.994 | $-0.016$ | 0.032 |
+{#tab:similarities .fullwidth caption="Other similarities from the same sketches, on the prefix: the mean exact value, the bias (mean over seeds of each seed's mean error) and the RMS error, for the deep pairs (32,385) and the window pairs (32,640). Set measures from kmv:1024, sets, 16 seeds; Bray–Curtis from l1:1024, f32, 8 seeds. In bold, a bias beyond the two-sided Bonferroni threshold at 1% family-wise over the strata tested (t of 3.6 to 3.8 for the KMV rows, 5.2 for the L1 ones). From similarity.tsv of sketch pairs-stats on R3 (crate adfe031); the Bray–Curtis rows pool the J_w strata of that file, weighted by their pairs."}
+
+Dice, cosine and Kulczynski show no bias in any stratum of $J$, and their RMS is that of
+$\hat J$ carried through their formulas. The overlap computed from the counts is biased low,
+by 0.034 on `deep` and by 0.075 in its stratum $J \le 0.05$: the true overlap is near 1,
+because an older support lies mostly inside a newer one, and the noise above 1 is
+clipped away. Read as the containment of the smaller support it shows no bias and an
+RMS of 0.0055, a fourteenth of the other, and it is the one to use. The symmetric
+difference is within 0.3% on `deep`, and fails inside the window, where $J$ is near 1:
+13% low, with an RMS of 60% (66% in the stratum $J > 0.9$).
+
+Over the whole chain (R7, `kmv:1024`, seed 1, [§10.10](#sec:kmv-chain)) inside each window the
+medians of Dice, cosine and Kulczynski are 0.999, and the overlap is estimated at exactly 1
+for at least 99.96% of the pairs: every sampled block of the smaller support is in the
+larger one. Across the `chain` selection the medians are 0.65 (Dice), 0.70 (cosine) and
+0.74 (Kulczynski), and the overlap is exactly 1 for 99.3% of the pairs where it is
+defined; 1,025 of the 130,816 are not, the cells where the containment is not.
+
+**Weighted similarities that are TV.** For two distributions $x$ and $y$ over the blocks,
+the Bray–Curtis dissimilarity is TV itself, since both sum to one,
+
+$$
+\frac{\sum_{b=0}^{L-1} \lvert x_b - y_b \rvert}{\sum_{b=0}^{L-1} (x_b + y_b)} = \mathrm{TV}(x, y),
+$$
+
+and the histogram intersection $\sum_{b=0}^{L-1} \min(x_b, y_b)$, Czekanowski's index
+and the weighted Sørensen index are all $1 - \mathrm{TV}$ ({{< xref "lem:jw-tv" "full" >}}).
+The `l1` store answers them as it answers $J_w$, from $\widehat{\mathrm{TV}}$, and with the
+same floor: in {{< xref "tab:similarities" "full" >}}, $\min(\widehat{\mathrm{TV}}, 1)$ is
+within 0.004 where $J_w \ge 0.01$ and 0.016 low where $J_w < 0.01$, which is the floor of
+[§10.6](#sec:l1), $2 \times 0.0088$, seen from the other side.
+
+**Distances between the VarOpt sketches.** Every `varopt` sketch's CDF is close to its
+colour's: {{< xref "cor:rate" "full" >}} bounds the error at every cut, and
+[section 8](#sec:results) measures the KS distance itself. So a distance between CDFs on the block
+axis is close too: KS is a metric, and by the triangle inequality the KS distance between
+two sketches is off by at most the sum of their own KS distances to their colours, as $W_1$ is ([§10.2](#sec:varopt-sketches-cannot-answer)), and unlike TV. `pairs`
+writes it beside $W_1$: over the whole chain its median is 0.56 across the `chain`
+selection and 0.06 to 0.13 inside the windows. `pairs` does not compute the exact KS of two
+colours, so it is not checked here.
+
+**What would need a new store.** The Euclidean distance, the inner product and the cosine
+of two colours need Gaussian projections in place of Cauchy ones, 2-stable rather than
+1-stable,{{< cite "indyk2006stable" >}} linear like $\Pi$ and folded the same way. The
+Jensen–Shannon divergence $H\big(\tfrac12(x + y)\big) - \tfrac12\big(H(x) + H(y)\big)$
+could come from the maximally skewed stable projections that Clifford and Cosma use to
+estimate entropy, since the midpoint is linear.{{< cite "clifford2013simple" >}} Neither
+was built ([§14](#sec:left)). The Hellinger distance and the Kullback–Leibler divergence
+are not linear in the colour, and no linear sketch folds them.
+
+### 10.8 Implementation {#sec:kmv-impl}
 
 Both stores are `Algebra`s of their own, each on its own thread and fed by the same
 parse as every other store ([§7.10](#sec:modes-threads-commands-that)); the `SKETCH01` format, the production file and the
@@ -4073,8 +4172,8 @@ what they wrote, with no fold:
   out of a `SKETCH01` file, which is how the production `varopt` sketches of selected
   records are read without a new fold.
 - **`select`** reads a count stream and writes the selection file that `pick --select`
-  reads: `select prefix` the `deep`, `window` and `even` groups of [§10.8](#sec:kmv-results) from a prefix's
-  stream and the exact sizes, `select chain` the four groups of [§10.9](#sec:kmv-chain) from the whole
+  reads: `select prefix` the `deep`, `window` and `even` groups of [§10.9](#sec:kmv-results) from a prefix's
+  stream and the exact sizes, `select chain` the four groups of [§10.10](#sec:kmv-chain) from the whole
   stream. It replaced the Python script that made the selections of R3 and R5, and
   writes the same two selection files byte for byte, in about 40 s where the script took
   56 min on the whole stream (wall times).
@@ -4082,16 +4181,17 @@ what they wrote, with no fold:
   writes what a whole-chain count is judged by once no reference is left: per stream and
   per range or bucket of records, the counts and their quantiles (beside the exact ones
   where `--sets-counts` reaches), the records counted exactly, the relative standard
-  error `se / n_hat`, and the seeds against each other ([§10.9](#sec:kmv-chain), [§10.10](#sec:kmv-file)).
+  error `se / n_hat`, and the seeds against each other ([§10.10](#sec:kmv-chain), [§10.11](#sec:kmv-file)).
 - **`pairs-stats`** reads one or more `pairs` outputs over the same rows, pooling their
-  seeds, and reduces them to the bias, variance, agreement and quantile tables of [§10.8](#sec:kmv-results)
-  and [§10.9](#sec:kmv-chain), seeds as the unit.
+  seeds, and reduces them to the bias, variance, agreement and quantile tables of [§10.9](#sec:kmv-results)
+  and [§10.10](#sec:kmv-chain), seeds as the unit, and to the other similarities of
+  [§10.7](#sec:other-similarities) (`similarity.tsv`, `similarity-quantiles.tsv`).
 
 On the whole chain the exact colours exist only binned, in `colors.bands1024.zst`, and
 three commands read them for a selection: `pick --bands-ref` copies the selected records'
 lines of that file beside the fold, `pairs --bands` adds each pair's binned TV, an exact
 lower bound on the TV the L1 store estimates, and checks the L1 estimates against it
-([§10.9](#sec:kmv-chain)), and `describe` compares the production `varopt` sketches that `decode --select`
+([§10.10](#sec:kmv-chain)), and `describe` compares the production `varopt` sketches that `decode --select`
 cut out with their binned colours ([§11](#sec:ten)).
 
 The count stream (`kmv.rs`):
@@ -4147,9 +4247,9 @@ zstd -dc --long=27 < colors.sketch-varopt512.zst | sketch decode --select sel/ch
 sketch pairs --in R5-pickall --varopt-text varopt512.sel.txt --out R7-pairsall --threads 64
 ```
 
-### 10.8 Results on the first 3M and 31.2M records {#sec:kmv-results}
+### 10.9 Results on the first 3M and 31.2M records {#sec:kmv-results}
 
-Four runs on prefixes of the chain, where exact answers exist, with the binary of [§10.7](#sec:kmv-impl)
+Four runs on prefixes of the chain, where exact answers exist, with the binary of [§10.8](#sec:kmv-impl)
 (139 tests passing):
 
 - **R1** (`eval`, the first 3M records, every 97th record, 30,928 records): 49 KMV
@@ -4400,7 +4500,7 @@ the exact store and 29 KMV, 17 L1 and one `varopt` store in one pass (7 min 36 s
 107.6 GB), a $k = 1024$ KMV store was busy 11.5 s over the 3M records, an L1 store at
 $m = 1024$ 14.3 s and `varopt:512` 23.9 s; `pairs` took 56 s for the 564,525 pairs.
 
-### 10.9 The whole chain {#sec:kmv-chain}
+### 10.10 The whole chain {#sec:kmv-chain}
 
 **Counts.** R4 counted every one of the 778,613,440 records with five stores in one
 pass: $k = 1024$ at seeds 1, 2 and 3, $k = 256$, and $k = 1024$ under `pos`. It took
@@ -4452,10 +4552,10 @@ as many as the production run of [§9](#sec:production) keeps alive: 30.6 GB of 
   the largest 983. Under `pos` exactly as many sketches are full as under `sets`.
 - **The file.** The seed-1 stream compresses to 1,842,558,077 bytes (`ls`), 2.37 B a
   record, 8.45 times less than its 15,572,268,872 raw bytes; it is the production count
-  file of [§10.10](#sec:kmv-file).
+  file of [§10.11](#sec:kmv-file).
 
 The comparison of seeds, the check against the universe and the records counted exactly
-are read back from R4's streams by `sketch summary` ([§10.7](#sec:kmv-impl)), with no fold:
+are read back from R4's streams by `sketch summary` ([§10.8](#sec:kmv-impl)), with no fold:
 
 ```text
 R="--range 0:31187785 --range 30187785:31187785 --range 0:100000000 --range 100000000:200000000 \
@@ -4498,7 +4598,7 @@ takes the lower order statistic, and the two differ in about the sixth digit.)
 **Matrices.** R5 folded the stores of the selected records over the whole chain, and R6
 read the production `varopt` sketches of the same records out of
 `colors.sketch-varopt512.zst`. The selections were drawn from R4's seed-1 stream by
-`sketch select chain` ([§10.7](#sec:kmv-impl)), which prints the ranges below; a record is deep when its
+`sketch select chain` ([§10.8](#sec:kmv-impl)), which prints the ranges below; a record is deep when its
 $k = 1024$ sketch is full, so $\lvert S \rvert > 1024$ exactly by
 {{< xref "thm:kmv-dag" "full" >}}.
 
@@ -4562,7 +4662,7 @@ The checks:
 - **L1 against the exact $J_w$** could not be checked at full depth. It needs pairs whose
   two `varopt` sketches are unreduced, and so *are* the colours, up to `f32`; every
   selected record has more than 1,024 blocks, so its `varopt:512` sketch is always
-  reduced. The check stands on the prefix ([§10.8](#sec:kmv-results)).
+  reduced. The check stands on the prefix ([§10.9](#sec:kmv-results)).
 - **L1 against an exact lower bound.** Binning two colours into the same 1,024 bands
   can only lower their TV, and `colors.bands1024.zst` holds every record's exact binned
   colour; so
@@ -4667,7 +4767,7 @@ shares at 1, at the floor and below the L1 floor, and their split by block gap a
 `quantiles.tsv`; the row of record 102,455 and the undefined cells in `cont-rows.tsv`;
 the Spearman correlations in `spearman.tsv`; `pos` against `sets` in `support.tsv`.
 
-### 10.10 The production count file {#sec:kmv-file}
+### 10.11 The production count file {#sec:kmv-file}
 
 `colors.kmv1024.counts.zst`, 1,842,558,077 bytes (SHA-256
 `c8d38950e06278e86b4affc86f1906bbb59712746aba29d2e1d9fce9485a7a7d`), is R4's seed-1
@@ -4675,7 +4775,7 @@ stream, copied after R4's checks passed. It is one zstd frame with a 4 MiB windo
 a plain `zstd -d` reads it.
 
 It holds, for each of the 778,613,440 transactions in record order, the 20-byte record of
-[§10.7](#sec:kmv-impl) for the $k = 1024$, seed-1, `sets` sketch of its support. Read it with
+[§10.8](#sec:kmv-impl) for the $k = 1024$, seed-1, `sets` sketch of its support. Read it with
 
 ```text
 zstd -dc colors.kmv1024.counts.zst | sketch decode
@@ -4705,7 +4805,7 @@ sketch summary --in colors.kmv1024.counts.zst \
   --sets-counts finalBCUTXO_2022.sets-counts.31187785.txt --bucket 10000000 $R --out prod-summary
 ```
 
-with the ranges `$R` of [§10.9](#sec:kmv-chain); it reads the 778,613,440 records in about 3.5 minutes of
+with the ranges `$R` of [§10.10](#sec:kmv-chain); it reads the 778,613,440 records in about 3.5 minutes of
 wall time. All records share one permutation, so their errors are correlated, by
 design: two records
 with nearly the same support get nearly the same error. A second seed's file is the
@@ -4717,7 +4817,7 @@ way to an independent estimate; R4 computed seeds 2 and 3, which are not shipped
 What the production file holds, read for a few transactions: the sketch $\hat C_t$ of
 [§5.5](#sec:sketching-recurrence), a polynomial in $x$ with at most 512 terms, where the exponent is the block a coin
 was minted in and the coefficient the sketch's estimate of the share of $t$'s value
-minted there. The ten below are among the 1,280 records of [§10.9](#sec:kmv-chain) that R6 cut out of
+minted there. The ten below are among the 1,280 records of [§10.10](#sec:kmv-chain) that R6 cut out of
 `colors.sketch-varopt512.zst`, each picked for one property of its sketch. Each has
 exactly 512 terms, and its coefficients sum to 1 to seven digits, as point 4 of
 {{< xref "thm:varopt" "full" >}} and {{< xref "thm:dag" "full" >}} say they must. The
@@ -4730,7 +4830,7 @@ coefficients are rounded to six digits. All 5,120 terms, as stored, are in
 
 All of this section is read by `sketch describe`. It takes the 1,280 sketches as
 `sketch decode --select` prints them, their exact colours binned in the 1,024 bands (the
-lines of `colors.bands1024.zst` read for the check of [§10.9](#sec:kmv-chain)) and their $\hat n$. It
+lines of `colors.bands1024.zst` read for the check of [§10.10](#sec:kmv-chain)) and their $\hat n$. It
 writes a row per record to `describe.tsv`, with the columns of
 {{< xref "tab:ten" "full" >}} and a few more, and totals over the 1,280 to
 `summary.tsv`; for the records given by `--records`, also the table's rows (`table.md`),
@@ -4762,7 +4862,7 @@ sketch describe --in varopt512.sel.txt --bands bands1024.sel.txt --counts counts
 | 229,491,784 | 470,000 | `w2017` | 35 | 48 | 0.0501 at 210,595 | 165,048 | 229,223 | 183,586 | 0.0016 | 142 |
 | 778,613,383 | 762,260 | `w2022` | 1 | 0 | $1/512$ at each of 512 | 175,122 | 391,528 | 443,316 | 0.0025 | 262 |
 | 778,611,720 | 762,260 | `chain` | 1 | 0 | $1/512$ at each of 512 | 351,468 | 761,472 | 711,490 | 0.0025 | 524 |
-{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of [section 10.10](#sec:kmv-file). KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks. From sketch describe, table.md; describe.tsv has the same columns for all 1,280 records."}
+{#tab:ten .fullwidth caption="The ten sketches. Heavy entries: those above the threshold tau of the last reduction, kept with their own weight; the others equal tau. Largest coefficient: its value and the block (or the number of blocks) that carries it. Mean and newest block: of the sketch. n hat: the support size from the production count file of [section 10.11](#sec:kmv-file). KS and W1: the sketch against the exact colour, both read at the 1,024 band edges of colors.bands1024.zst (the exact colours are on disk only binned, in bands of 745 blocks); W1 is the area between the two CDFs so read, rounded to whole blocks. From sketch describe, table.md; describe.tsv has the same columns for all 1,280 records."}
 
 The ten, in the order of the table:
 
@@ -4910,7 +5010,7 @@ $$
 \end{aligned}
 $$
 
-**Flat sketches.** 543 of the 1,280 sketches of [§10.9](#sec:kmv-chain) are flat (`flat` in
+**Flat sketches.** 543 of the 1,280 sketches of [§10.10](#sec:kmv-chain) are flat (`flat` in
 `summary.tsv`), as 9 and 10 are: 512
 coefficients all equal to $1/512$. A sketch is flat when no entry of the merged parents'
 sketch exceeds the threshold $\tau$ of the last reduction
@@ -4978,7 +5078,7 @@ surface into the tables and numbers of [§12.2](#sec:surface-2) to [§12.6](#sec
 with the calendar from a file of each year's first block.
 
 - **The sketched surface.** `sketch surface` reads the production file
-  `colors.sketch-varopt512.zst` on its input and, beside it, the count file of [§10.10](#sec:kmv-file)
+  `colors.sketch-varopt512.zst` on its input and, beside it, the count file of [§10.11](#sec:kmv-file)
   for each record's block. It skips the first record of each block, the coinbase, and
   adds every other sketch, divided by its mass, to the row of its band. A coefficient at
   a block later than its transaction's own would mean that the two files do not line
@@ -5432,12 +5532,17 @@ four places where the transaction id breaks its sequence (`examples/tint.rs`).
   estimate of 175–190 GB.
 - **The permutation is pseudo-random.** The exact unbiasedness of [§10.4](#sec:kmv-count)–[10.5](#sec:kmv-pairs) is a
   theorem about a uniform permutation; the code draws a Fisher–Yates shuffle from a
-  hash. The seed tests of [§10.8](#sec:kmv-results) and the uniformity test T-K1 are the evidence that the
+  hash. The seed tests of [§10.9](#sec:kmv-results) and the uniformity test T-K1 are the evidence that the
   difference is harmless, and a change to the shuffle or the hash must rerun them.
 - **One permutation per run.** Every count and every cell of a matrix shares it, so
   errors are correlated across records and cells, and a single run can say nothing
   about bias. The production count file is one seed; R4 computed seeds 2 and 3 beside it
   but they are not shipped.
+- **Other weighted similarities.** The Euclidean distance and the cosine of two colours
+  would need a store of Gaussian projections, and the Jensen–Shannon divergence one of
+  entropy sketches ([§10.7](#sec:other-similarities)); both would fold as the `l1` store does, and neither was
+  built. The KS distance between two `varopt` sketches is written by `pairs` but not
+  checked against the exact colours.
 - **Weighted similarity near the floor.** The L1 store's floor is 0.0088 at
   $m = 1024$, so pairs with smaller $J_w$ cannot be told apart one by one; a larger $m$
   lowers the floor only as $1/\sqrt m$. On the prefix that is most deep pairs across
@@ -5446,7 +5551,7 @@ four places where the transaction id breaks its sequence (`examples/tint.rs`).
   records and, at full depth, only on the 1,280 records R5 selected
   ($7.8 \times 10^{-5}$ relative at worst). L1 against the exact $J_w$ was checked on the
   prefix only: no record of the whole-chain selections has an unreduced `varopt`
-  sketch to compare with. At full depth there is only the band lower bound of [§10.9](#sec:kmv-chain),
+  sketch to compare with. At full depth there is only the band lower bound of [§10.10](#sec:kmv-chain),
   which holds but is loose inside a window.
 - **A weighted sample that keeps the subset lemma.** Ranks $u_b / g(b)$ with a fixed
   function $g$ of the block keep {{< xref "lem:kmv-sub" "full" >}}, so they would fold
@@ -5586,7 +5691,7 @@ four places where the transaction id breaks its sequence (`examples/tint.rs`).
   first-in-first-out tracing instead, which in their case studies taints far fewer
   addresses than haircut.
 - **Randomness.** {{< cite keys="steele2014fast" mode="text" >}} is the SplitMix
-  generator whose output function hashes every draw of [§7.4](#sec:randomness). The permutation of [§10.7](#sec:kmv-impl) is
+  generator whose output function hashes every draw of [§7.4](#sec:randomness). The permutation of [§10.8](#sec:kmv-impl) is
   the shuffle of Fisher and Yates in Durstenfeld's in-place form, Algorithm P of Knuth's
   §3.4.2.{{< cite "knuth1997taocp2" >}}
 
