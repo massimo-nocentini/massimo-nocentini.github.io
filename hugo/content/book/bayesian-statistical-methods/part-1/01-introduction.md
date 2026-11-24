@@ -132,6 +132,50 @@ for theta in [0.05, 0.10, 0.20]:
     print(f"theta={theta:.2f}: Wald coverage={cov_w:.3f}, Plus-four coverage={cov_ac:.3f}")
 ```
 
+## Symbolic Check in Wolfram Language {#sec:ch01-wolfram}
+
+Run the following `wolfram-ws-bridge` JavaScript-mode snippet (`W`, `wl`, `show`, `toJS`) to integrate the Beta–Binomial normalizer $Z$, posterior mean, mode (valid for $a+y > 1$ and $b+n-y > 1$), and shrinkage identity symbolically, then instantiate all three priors at $n = 20, y = 0$ to cross-check the Python output above.
+
+```js
+// Chapter 1: Symbolic Beta-Binomial posterior, shrinkage identity, and numeric check
+const { Times, Power, Plus, Subtract, Minus, th, a, b, n, y } = W
+const kernel = Times(
+  Power(th, Plus(a, y, -1)),
+  Power(Subtract(1, th), Plus(b, n, Minus(y), -1))
+)
+const Z = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
+  FullSimplify[Integrate[${kernel}, {th, 0, 1}]]]`
+const mean = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
+  FullSimplify[Integrate[th * ${kernel}, {th, 0, 1}] / ${Z}]]`
+// Posterior mode (valid when a + y > 1 and b + n - y > 1)
+await show`FullSimplify[th /. First[Solve[D[Log[${kernel}], th] == 0, th]]]`
+const resid = toJS(await wl`Simplify[
+  ${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]`)
+console.log('Shrinkage identity residual =', resid)
+
+// Instantiate at n = 20, y = 0 across all three priors (cross-check with Python)
+for (const [name, a0, b0] of [['Uniform', 1, 1], ['Epidemiological', 2, 20], ['Strong wrong', 10, 10]]) {
+  const m = toJS(await wl`N[${mean} /. {a -> ${a0}, b -> ${b0}, n -> 20, y -> 0}]`)
+  const pLt = toJS(await wl`N[Beta[1/10, ${a0}, ${b0 + 20}] / Beta[${a0}, ${b0 + 20}]]`)
+  console.log(`${name.padEnd(16)} -> mean = ${m.toFixed(3)}, Pr(theta < 0.10 | y=0) = ${pLt.toFixed(3)}`)
+}
+```
+
+**Symbolic outputs (`show`):**
+
+- **Normalizer $Z$**: `(Gamma[b + n - y]*Gamma[a + y])/Gamma[a + b + n]`
+- **Posterior mean $E[\theta \mid y]$**: `(a + y)/(a + b + n)`
+- **Posterior mode**: `(-1 + a + y)/(-2 + a + b + n)`
+
+**Console output:**
+
+```text
+Shrinkage identity residual = 0
+Uniform          -> mean = 0.045, Pr(theta < 0.10 | y=0) = 0.891
+Epidemiological  -> mean = 0.048, Pr(theta < 0.10 | y=0) = 0.926
+Strong wrong     -> mean = 0.250, Pr(theta < 0.10 | y=0) = 0.004
+```
+
 ## Exercises {#sec:ch01-exercises}
 
 {{< thm kind="exercise" label="ex:ch01-prior-dominance" >}}

@@ -313,6 +313,40 @@ print(f"AR(1): accept={acc / 10_000:.2f}, slope 95% CI={np.quantile(keep[:, 0], 
       f"ESS(slope, sigma^2, rho)={[round(ess(keep[:, j])) for j in range(3)]}")
 ```
 
+## Symbolic Check in Wolfram Language {#sec:ch10-wolfram}
+
+Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode to obtain $\frac{2}{\pi}\operatorname{arccot}(\ell/2) = \frac{2}{\pi}\arctan(2/\ell)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and reproduces the three theoretical acceptance rates.
+
+```js
+// Chapter 10: Symbolic Metropolis acceptance rate & closed-form AR(1) precision matrix
+const accRate = await show`Assuming[ell > 0,
+  FullSimplify[Integrate[Erfc[Abs[ell*w]/(2*Sqrt[2])]*Exp[-w^2/2]/Sqrt[2*Pi], {w, -Infinity, Infinity}]]]`
+
+// Verify AR(1) determinant and tridiagonal precision matrix symbolically for n = 5
+await show`Factor[Det[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
+await show`Simplify[(1 - rho^2) * Inverse[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
+
+// Instantiate acceptance rate on Hoff's 5-point normal target (tau^2 = 1/5.1)
+for (const [label, num, den] of [['1/32', 1, 32], ['2', 2, 1], ['64', 64, 1]]) {
+  const rate = toJS(await wl`N[${accRate} /. ell -> Sqrt[(${num}/${den}) * 51/10]]`)
+  console.log(`delta^2 = ${label.padStart(4)} -> exact acceptance rate = ${rate.toFixed(3)}`)
+}
+```
+
+**Symbolic outputs (`show`):**
+
+- **Exact stationary acceptance rate**: `(2*ArcCot[ell/2])/Pi`
+- **AR(1) determinant $\lvert C_\rho \rvert$ ($n = 5$)**: `(-1 + rho)^4*(1 + rho)^4`
+- **Scaled tridiagonal precision $(1 - \rho^2)C_\rho^{-1}$**: `{{1, -rho, 0, 0, 0}, {-rho, 1 + rho^2, -rho, 0, 0}, {0, -rho, 1 + rho^2, -rho, 0}, {0, 0, -rho, 1 + rho^2, -rho}, {0, 0, 0, -rho, 1}}`
+
+**Console output:**
+
+```text
+delta^2 = 1/32 -> exact acceptance rate = 0.875
+delta^2 =    2 -> exact acceptance rate = 0.356
+delta^2 =   64 -> exact acceptance rate = 0.070
+```
+
 ## Exercises {#sec:ch10-exercises}
 
 {{< thm kind="exercise" label="ex:ch10-optimal" >}}

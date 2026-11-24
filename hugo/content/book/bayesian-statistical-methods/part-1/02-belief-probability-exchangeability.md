@@ -168,6 +168,49 @@ for N in [20, 100, 1000]:
     print(f"N={N:4d}: TV distance = {tv_dist:.4f} (bound 2*2*n/N = {4*n/N:.4f})")
 ```
 
+## Symbolic Check in Wolfram Language {#sec:ch02-wolfram}
+
+This `wolfram-ws-bridge` JavaScript-mode snippet derives Bayes’ rule, the Bayes factor $s/f$, and the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$ symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
+
+```js
+// Chapter 2: Symbolic Bayes' rule, Bayes factor, and finite-population covariance
+const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
+await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
+
+// Finite-population without-replacement covariance Cov(Y1, Y2) < 0
+const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
+const covLim = toJS(await wl`Limit[${covF} /. kRed -> th * nPop, nPop -> Infinity]`)
+console.log('Limit of Cov(Y1, Y2) as N -> Infinity =', covLim)
+
+// Screening example (p0 = 1/100, s = 95/100, f = 5/100) & Diaconis-Freedman TV
+const pExact = await show`${post} /. {p0 -> 1/100, s -> 95/100, f -> 5/100}`
+console.log('Screening Pr(H1 | E) ≈', toJS(await wl(W.N(pExact))).toFixed(4))
+for (const nPop of [20, 100, 1000]) {
+  const kRed = Math.round(0.3 * nPop)
+  const tv = toJS(await wl`N[1/2 * Sum[Abs[
+    Binomial[${kRed}, k]*Binomial[${nPop - kRed}, 10 - k]/Binomial[${nPop}, 10]
+    - Binomial[10, k]*(3/10)^k*(7/10)^(10 - k)], {k, 0, 10}]]`)
+  console.log(`N = ${String(nPop).padStart(4)}: exact TV distance = ${tv.toFixed(4)}`)
+}
+```
+
+**Symbolic outputs (`show`):**
+
+- **Posterior $\Pr(H_1 \mid E)$**: `(p0*s)/(f - f*p0 + p0*s)`
+- **Bayes factor**: `s/f`
+- **Finite-urn $\operatorname{Cov}(Y_1, Y_2)$**: `(kRed*(kRed - nPop))/((-1 + nPop)*nPop^2)`
+- **Exact screening posterior**: `19/118`
+
+**Console output:**
+
+```text
+Limit of Cov(Y1, Y2) as N -> Infinity = 0
+Screening Pr(H1 | E) ≈ 0.1610
+N =   20: exact TV distance = 0.1587
+N =  100: exact TV distance = 0.0255
+N = 1000: exact TV distance = 0.0024
+```
+
 ## Exercises {#sec:ch02-exercises}
 
 {{< thm kind="exercise" label="ex:ch02-dutch-book" >}}

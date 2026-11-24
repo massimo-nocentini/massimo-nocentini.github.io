@@ -162,6 +162,37 @@ print(f"Posterior theta: mean={theta.mean():.4f}, 95% CI={np.round(np.quantile(t
 print(f"ESS(theta) = {ess_fft(theta):.0f} / {S}, ESS(sigma^2) = {ess_fft(sigma2):.0f} / {S}")
 ```
 
+## Symbolic Check in Wolfram Language {#sec:ch06-wolfram}
+
+Computes the bivariate-normal Gibbs transition mean and variance symbolically in `wolfram-ws-bridge` JavaScript mode, extracts the AR(1) contraction factor $\alpha = \rho^2$, and sums the integrated autocorrelation time to derive $S_{\text{eff}}/S = (1 - \rho^2)/(1 + \rho^2)$, instantiated at $\rho = 0.99$.
+
+```js
+// Chapter 6: Symbolic bivariate-normal Gibbs lag-k ACF and exact ESS ratio
+const transMean = await show`Assuming[v > 0 && Element[m, Reals],
+  Simplify[Integrate[rho*(m + Sqrt[v]*z)*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]] /. {m -> rho*x, v -> 1 - rho^2}`
+const alpha = await wl`D[${transMean}, x]`   // AR(1) lag-1 contraction coefficient = rho^2
+await show`Simplify[(v + Integrate[(rho*Sqrt[v]*z)^2*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]) /. v -> 1 - rho^2]`
+const tauInt = await show`Assuming[-1 < rho < 1, Together[Sum[2*(${alpha})^k, {k, 1, Infinity}] + 1]]`
+const essRatio = await show`Together[1 / ${tauInt}]`
+
+// Instantiate at rho = 99/100, S = 10,000
+const ess99 = toJS(await wl`N[10000 * (${essRatio} /. rho -> 99/100)]`)
+console.log(`At rho = 0.99, S = 10,000 -> exact S_eff = ${ess99.toFixed(2)}`)
+```
+
+**Symbolic outputs (`show`):**
+
+- **Transition mean $E[X^{(s+1)} \mid X^{(s)} = x]$**: `rho^2*x`
+- **Transition variance $\operatorname{Var}[X^{(s+1)} \mid X^{(s)} = x]$**: `1 - rho^4`
+- **Integrated autocorrelation time $\tau_{\text{int}}$**: `(-1 - rho^2)/(-1 + rho^2)`
+- **Exact ESS ratio $S_{\text{eff}}/S$**: `(1 - rho^2)/(1 + rho^2)`
+
+**Console output:**
+
+```text
+At rho = 0.99, S = 10,000 -> exact S_eff = 100.50
+```
+
 ## Exercises {#sec:ch06-exercises}
 
 {{< thm kind="exercise" label="ex:ch06-bvn-acf" >}}

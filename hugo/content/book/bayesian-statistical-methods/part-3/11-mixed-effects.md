@@ -196,6 +196,40 @@ print(f"Pr(theta_2 > 0 | y) = {np.mean(theta_s[burn:, 1] > 0):.3f}, "
       f"Pr(beta_new_2 > 0 | y) = {np.mean(b_new[:, 1] > 0):.3f}")
 ```
 
+## Symbolic Check in Wolfram Language {#sec:ch11-wolfram}
+
+Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, and computes the exact $2 \times 2$ LME slope posterior variance conditional on $(\Sigma, \sigma^2)$.
+
+```js
+// Chapter 11: Symbolic Poisson GLMM population-average vs. median rate & LME shrinkage
+const popAvg = await show`Assuming[v > 0 && Element[m, Reals],
+  FullSimplify[Integrate[Exp[m + Sqrt[v]*z]*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]]`
+await show`FullSimplify[${popAvg} / Exp[m]]`
+
+// Symbolic 2x2 LME conditional posterior variance V_j for centered x (X_j^T X_j = diag(nj, sxx))
+const Vj = await wl`FullSimplify[Inverse[Inverse[{{s11, s12}, {s12, s22}}] + DiagonalMatrix[{nj, sxx}]/sig2]]`
+const v22Sym = await show`FullSimplify[${Vj}[[2, 2]]]`
+
+// Instantiate conditional slope SD at Sigma = [[20, 2], [2, 1.5]], sig2 = 64, E[sxx] = nj - 1
+for (const nj of [5, 24]) {
+  const v22 = toJS(await wl`N[${v22Sym} /. {s11 -> 20, s12 -> 2, s22 -> 3/2, sig2 -> 64, nj -> ${nj}, sxx -> ${nj - 1}}]`)
+  console.log(`n_j = ${String(nj).padStart(2)} (sxx = ${nj - 1}) -> cond. slope SD = ${Math.sqrt(v22).toFixed(3)} (prior SD = ${Math.sqrt(1.5).toFixed(3)})`)
+}
+```
+
+**Symbolic outputs (`show`):**
+
+- **Population-average rate $E[\exp(\eta)]$**: `E^(m + v/2)`
+- **Ratio to typical-group rate**: `E^(v/2)`
+- **Conditional LME slope variance $(V_j)_{2,2}$**: `(sig2*(-(nj*s12^2) + nj*s11*s22 + s22*sig2))/(-(nj*s12^2*sxx) + nj*s11*(sig2 + s22*sxx) + sig2*(sig2 + s22*sxx))`
+
+**Console output:**
+
+```text
+n_j =  5 (sxx = 4) -> cond. slope SD = 1.126 (prior SD = 1.225)
+n_j = 24 (sxx = 23) -> cond. slope SD = 0.947 (prior SD = 1.225)
+```
+
 ## Exercises {#sec:ch11-exercises}
 
 {{< thm kind="exercise" label="ex:ch11-shrinkage-ols" >}}

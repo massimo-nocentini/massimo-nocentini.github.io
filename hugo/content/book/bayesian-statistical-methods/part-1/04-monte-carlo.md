@@ -50,7 +50,7 @@ One of the greatest strengths of sampling-based inference is effortless **push-f
 Then $\{\gamma^{(1)}, \dots, \gamma^{(S)}\}$ is an exact i.i.d. sample from the push-forward posterior $p(\gamma \mid y)$. Note why this matters: by **Jensen’s inequality**{{< index "Jensen’s inequality" >}}, $E[g(\theta) \mid y] \neq g(E[\theta \mid y])$ for nonlinear $g$—plugging the posterior mean into $g$ introduces bias, whereas averaging $g(\theta^{(s)})$ estimates $E[g(\theta) \mid y]$ consistently. Two textbook examples illustrate the payoff:
 
 - **Log-odds**{{< index "log-odds" >}}: Given $y = 441$ agreements out of $n = 860$ non-Protestant GSS respondents under a $\operatorname{beta}(1, 1)$ prior, $\theta \mid y \sim \operatorname{beta}(442, 420)$. Transforming draws via $\gamma^{(s)} = \log[\theta^{(s)} / (1 - \theta^{(s)})]$ directly yields the posterior density and credible intervals of the log-odds.
-- **Two-group comparisons**: For independent posteriors $\theta_1 \mid y_1 \sim \operatorname{gamma}(219, 112)$ and $\theta_2 \mid y_2 \sim \operatorname{gamma}(68, 45)$, drawing pairs $(\theta_1^{(s)}, \theta_2^{(s)})$ lets us approximate $\Pr(\theta_1 > \theta_2 \mid y) \approx \frac{1}{S}\sum_{s=1}^S \mathbf{1}(\theta_1^{(s)} > \theta_2^{(s)}) \approx 0.971$ and plot the entire posterior of the ratio $\theta_1 / \theta_2$ in three lines of code.
+- **Two-group comparisons**: For independent posteriors $\theta_1 \mid y_1 \sim \operatorname{gamma}(219, 112)$ and $\theta_2 \mid y_2 \sim \operatorname{gamma}(68, 45)$, drawing pairs $(\theta_1^{(s)}, \theta_2^{(s)})$ lets us approximate $\Pr(\theta_1 > \theta_2 \mid y) \approx \frac{1}{S}\sum_{s=1}^S \mathbf{1}(\theta_1^{(s)} > \theta_2^{(s)}) \approx 0.973$ (exact value $0.9726$, verified below) and plot the entire posterior of the ratio $\theta_1 / \theta_2$ in three lines of code.
 
 ## Ancestral Sampling from Predictive Distributions {#sec:ch04-predictive}
 
@@ -121,6 +121,40 @@ Y_rep = rng.poisson(th1[:, None], size=(S, n1))
 t_rep = np.sum(Y_rep == 2, axis=1) / np.maximum(np.sum(Y_rep == 1, axis=1), 1)
 p_ppc = np.mean(t_rep >= 2.0)
 print(f"PPC tail prob Pr(t(Y_rep) >= 2.0) = {p_ppc:.4f} +/- {2*np.sqrt(p_ppc*(1-p_ppc)/S):.4f}")
+```
+
+## Symbolic Check in Wolfram Language {#sec:ch04-wolfram}
+
+Derives the exact push-forward log-odds density via change-of-variables Jacobian and the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), then computes the exact incomplete-Beta benchmark for $\Pr(\theta_1 > \theta_2 \mid y)$ in `wolfram-ws-bridge` JavaScript mode.
+
+```js
+// Chapter 4: Symbolic log-odds push-forward density, gamma-ratio moments & exact benchmark
+const thOfG = await wl`th /. First[Solve[Log[th / (1 - th)] == g, th, Reals]]`
+const jac = await wl`FullSimplify[D[${thOfG}, g], Element[g, Reals]]`
+await show`FullSimplify[(${thOfG}^(a - 1)*(1 - ${thOfG})^(b - 1)/Beta[a, b]) * ${jac}, Element[g, Reals]]`
+
+// Exact moments of ratio R = th1 / th2 for independent Gamma(a1,b1), Gamma(a2,b2)
+const eR = await show`Assuming[a1 > 0 && b1 > 0 && a2 > 1 && b2 > 0,
+  FullSimplify[(a1/b1)*Integrate[(b2^a2/Gamma[a2])*t^(a2 - 2)*Exp[-b2*t], {t, 0, Infinity}]]]`
+await show`Assuming[a1 > 0 && b1 > 0 && a2 > 2 && b2 > 0,
+  FullSimplify[(a1*(a1 + 1)/b1^2)*Integrate[(b2^a2/Gamma[a2])*t^(a2 - 3)*Exp[-b2*t], {t, 0, Infinity}] - (${eR})^2]]`
+
+// Exact incomplete-Beta benchmark for Pr(th1 > th2 | y) (Gamma(219,112) vs Gamma(68,45))
+const pGt = toJS(await wl`N[1 - Beta[112/157, 219, 68] / Beta[219, 68]]`)
+const pLt175 = toJS(await wl`N[1 - Gamma[68, 45 * 7/4] / Gamma[68]]`)
+console.log(`Exact Pr(th1 > th2 | y) = ${pGt.toFixed(4)}  |  Exact Pr(th2 < 1.75 | y) = ${pLt175.toFixed(4)}`)
+```
+
+**Symbolic outputs (`show`):**
+
+- **Log-odds density $p(\gamma)$**: `(E^(a*g)*(1 + E^g)^(-a - b))/Beta[a, b]`
+- **Ratio mean $E[\theta_1/\theta_2]$**: `(a1*b2)/((-1 + a2)*b1)`
+- **Ratio variance $\operatorname{Var}[\theta_1/\theta_2]$**: `(a1*(-1 + a1 + a2)*b2^2)/((-2 + a2)*(-1 + a2)^2*b1^2)`
+
+**Console output:**
+
+```text
+Exact Pr(th1 > th2 | y) = 0.9726  |  Exact Pr(th2 < 1.75 | y) = 0.8998
 ```
 
 ## Exercises {#sec:ch04-exercises}

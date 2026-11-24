@@ -185,6 +185,35 @@ print(f"Pr(theta_2 > theta_1 | Y) = {np.mean(theta_s[:, 1] > theta_s[:, 0]):.3f}
 print(f"Pr(Ytilde_2 > Ytilde_1 | Y) = {np.mean(y_pred[:, 1] > y_pred[:, 0]):.3f}")
 ```
 
+## Symbolic Check in Wolfram Language {#sec:ch07-wolfram}
+
+Verifies symbolically for a general $3 \times 3$ covariance matrix $\Sigma$ in `wolfram-ws-bridge` JavaScript mode that the Schur-complement partial regression vector equals $-\Omega_{1,1}^{-1}\Omega_{1,23}^T$, then instantiates Hoff’s reading-comprehension conditional regression.
+
+```js
+// Chapter 7: Symbolic Schur complement, precision matrix Omega, and partial regression identity
+const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
+const betaSchur = await show`FullSimplify[Inverse[{{s22, s23}, {s23, s33}}] . {s12, s13}]`
+const betaPrec = await wl`FullSimplify[-Inverse[${Sig}][[1, {2, 3}]] / Inverse[${Sig}][[1, 1]]]`
+await show`FullSimplify[${betaSchur} - ${betaPrec}]`
+
+// Instantiate on Hoff's reading-comprehension covariance (s1^2=182.16, s2^2=243.65, r=0.70)
+const cov2 = [[182.16, 147.45], [147.45, 243.65]]
+const slope = toJS(await wl`N[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`)
+const condVar = toJS(await wl`N[${cov2}[[2, 2]] - ${cov2}[[1, 2]]^2 / ${cov2}[[1, 1]]]`)
+console.log(`Reading scores: E[Y2 | Y1] slope = ${slope.toFixed(4)}, cond SD = ${Math.sqrt(condVar).toFixed(2)}`)
+```
+
+**Symbolic outputs (`show`):**
+
+- **Symbolic partial regression $\boldsymbol{\beta}_{1 \mid 2,3}$**: `{(s13*s23 - s12*s33)/(s23^2 - s22*s33), (s13*s22 - s12*s23)/(-s23^2 + s22*s33)}`
+- **Identity residual (Schur minus precision formula)**: `{0, 0}`
+
+**Console output:**
+
+```text
+Reading scores: E[Y2 | Y1] slope = 0.8095, cond SD = 11.15
+```
+
 ## Exercises {#sec:ch07-exercises}
 
 {{< thm kind="exercise" label="ex:ch07-schur-prec" >}}
