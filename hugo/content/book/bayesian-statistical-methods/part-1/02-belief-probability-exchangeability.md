@@ -170,20 +170,57 @@ for N in [20, 100, 1000]:
 
 ## Symbolic Check in Wolfram Language {#sec:ch02-wolfram}
 
-This `wolfram-ws-bridge` JavaScript-mode snippet derives Bayes’ rule, the Bayes factor $s/f$, and the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$ symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
+This `wolfram-ws-bridge` JavaScript-mode sequence derives Bayes’ rule, the Bayes factor $s/f$, and the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$ symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
 
 ```js
-// Chapter 2: Symbolic Bayes' rule, Bayes factor, and finite-population covariance
 const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
-await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
+```
 
+
+$$
+\frac{\text{p0} s}{f-f \text{p0}+\text{p0} s}
+$$
+
+```js
+await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
+```
+
+
+$$
+\frac{s}{f}
+$$
+
+```js
 // Finite-population without-replacement covariance Cov(Y1, Y2) < 0
 const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
+```
+
+
+$$
+\frac{\text{kRed} (\text{kRed}-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}
+$$
+
+```js
 const covLim = toJS(await wl`Limit[${covF} /. kRed -> th * nPop, nPop -> Infinity]`)
 console.log('Limit of Cov(Y1, Y2) as N -> Infinity =', covLim)
+```
 
-// Screening example (p0 = 1/100, s = 95/100, f = 5/100) & Diaconis-Freedman TV
+
+```text
+Limit of Cov(Y1, Y2) as N -> Infinity = 0
+```
+
+```js
+// Screening example (p0 = 1/100, s = 95/100, f = 5/100)
 const pExact = await show`${post} /. {p0 -> 1/100, s -> 95/100, f -> 5/100}`
+```
+
+
+$$
+\frac{19}{118}
+$$
+
+```js
 console.log('Screening Pr(H1 | E) ≈', toJS(await wl(W.N(pExact))).toFixed(4))
 for (const nPop of [20, 100, 1000]) {
   const kRed = Math.round(0.3 * nPop)
@@ -194,17 +231,8 @@ for (const nPop of [20, 100, 1000]) {
 }
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Posterior $\Pr(H_1 \mid E)$**: `(p0*s)/(f - f*p0 + p0*s)`
-- **Bayes factor**: `s/f`
-- **Finite-urn $\operatorname{Cov}(Y_1, Y_2)$**: `(kRed*(kRed - nPop))/((-1 + nPop)*nPop^2)`
-- **Exact screening posterior**: `19/118`
-
-**Console output:**
 
 ```text
-Limit of Cov(Y1, Y2) as N -> Infinity = 0
 Screening Pr(H1 | E) ≈ 0.1610
 N =   20: exact TV distance = 0.1587
 N =  100: exact TV distance = 0.0255

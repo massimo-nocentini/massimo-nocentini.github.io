@@ -192,34 +192,48 @@ print("Pred PMF (no degree, y=0..5):", np.round(pmf1, 3))
 Integrates $\theta$ out of the Poisson–Gamma posterior symbolically in `wolfram-ws-bridge` JavaScript mode to recover the Negative Binomial predictive PMF, mean, and variance, then cross-checks the GSS predictive PMF and solves for the numerical $\operatorname{beta}(3, 9)$ 95% HPD interval.
 
 ```js
-// Chapter 3: Symbolic Poisson-Gamma -> Negative Binomial predictive & numerical Beta(3,9) HPD
 const { Times, Divide, Power, Exp, Minus, Subtract, Gamma, Factorial, th, yt, an, bn } = W
 const pois = Divide(Times(Power(th, yt), Exp(Minus(th))), Factorial(yt))
 const gam = Times(Divide(Power(bn, an), Gamma(an)), Power(th, Subtract(an, 1)), Exp(Times(-1, bn, th)))
 const pred = await show`Assuming[an > 0 && bn > 0 && yt >= 0 && Element[yt, Integers],
   FullSimplify[Integrate[${pois} * ${gam}, {th, 0, Infinity}]]]`
+```
+
+
+$$
+\frac{\text{bn}^{\text{an}} (1+\text{bn})^{-\text{an}-\text{yt}} \Gamma (\text{an}+\text{yt})}{\text{yt}! \Gamma (\text{an})}
+$$
+
+```js
 const predMean = await show`Assuming[an > 0 && bn > 0, FullSimplify[Sum[yt * ${pred}, {yt, 0, Infinity}]]]`
+```
+
+
+$$
+\frac{\text{an}}{\text{bn}}
+$$
+
+```js
 await show`Assuming[an > 0 && bn > 0,
   FullSimplify[Sum[yt^2 * ${pred}, {yt, 0, Infinity}] - (${predMean})^2]]`
+```
 
-// Instantiate GSS no-degree group (an = 219, bn = 112) and compare with Python
+
+$$
+\frac{\text{an} (1+\text{bn})}{\text{bn}^2}
+$$
+
+```js
+// Instantiate GSS no-degree group (an = 219, bn = 112) and numerical Beta(3, 9) 95% HPD
 const pmf = toJS(await wl`N[Table[${pred} /. {an -> 219, bn -> 112}, {yt, 0, 5}]]`)
 console.log('GSS pred PMF (y=0..5):', pmf.map(v => v.toFixed(3)).join(', '))
 
-// Numerical 95% HPD interval for Beta(3, 9) via FindRoot
 const hpd = toJS(await wl`{l, u} /. FindRoot[{
   l^2 (1 - l)^8 == u^2 (1 - u)^8,
   Integrate[t^2 (1 - t)^8 / Beta[3, 9], {t, l, u}] == 95/100}, {{l, 0.04}, {u, 0.48}}]`)
 console.log(`Beta(3,9) 95% HPD = [${hpd[0].toFixed(4)}, ${hpd[1].toFixed(4)}], width = ${(hpd[1] - hpd[0]).toFixed(4)}`)
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Predictive PMF $p(\tilde{y} \mid y)$**: `(bn^an*(1 + bn)^(-an - yt)*Gamma[an + yt])/(yt!*Gamma[an])`
-- **Predictive mean $E[\tilde{Y} \mid y]$**: `an/bn`
-- **Predictive variance $\operatorname{Var}[\tilde{Y} \mid y]$**: `(an*(1 + bn))/bn^2`
-
-**Console output:**
 
 ```text
 GSS pred PMF (y=0..5): 0.143, 0.277, 0.269, 0.176, 0.086, 0.034

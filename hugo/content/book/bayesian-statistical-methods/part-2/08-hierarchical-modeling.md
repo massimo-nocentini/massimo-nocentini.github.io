@@ -198,21 +198,51 @@ print(f"Total MSE vs truth: unpooled={np.mean((ybar - th_true)**2):.2f}, "
 Derives the two-group prior correlation from $(\theta_1, \theta_2) = (\mu + \delta, \mu - \delta)$, the shrinkage weight $B_j$, and (non-circularly from the log-density derivative) both the shape and $\nu_0/2$-scaled rate of $\sigma_0^2$, then evaluates plug-in shrinkage at $(\hat{\mu}, \hat{\tau}, \hat{\sigma}) = (48.1, 5.0, 9.2)$ for Schools 46 and 82 (compare Hoff’s full MCMC means $41.31$ and $42.53$, which also integrate over hyperparameter uncertainty).
 
 ```js
-// Chapter 8: Symbolic two-group correlation, shrinkage weight, and sigma_0^2 full conditional
 // 1. Derive Corr(theta_1, theta_2) from (theta_1, theta_2) = (mu + delta, mu - delta)
 const A = [[1, 1], [1, -1]]
 const cov2 = await wl`${A} . DiagonalMatrix[{g0^2, t0^2}] . Transpose[${A}]`
 await show`Together[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`
+```
 
-// 2. Shrinkage weight B_j and non-circular derivation of sigma_0^2 shape & rate (m = 3)
+
+$$
+\frac{\text{g0}^2-\text{t0}^2}{\text{g0}^2+\text{t0}^2}
+$$
+
+```js
+// 2. Shrinkage weight B_j
 const Bj = await show`Together[(nj / s2) / (nj / s2 + 1 / t2)]`
+```
+
+
+$$
+\frac{\text{nj} \text{t2}}{\text{s2}+\text{nj} \text{t2}}
+$$
+
+```js
+// 3. Non-circular derivation of sigma_0^2 full conditional shape & rate (m = 3)
 const logp = await wl`(a - 1)*Log[s0] - b*s0 + Sum[nu0/2*Log[nu0*s0/2] - LogGamma[nu0/2]
   + (nu0/2 - 1)*Log[x] - nu0*s0*x/2, {x, {x1, x2, x3}}]`
 const dLogp = await wl`Expand[D[${logp}, s0]]`
-await show`Simplify[1 + Coefficient[${dLogp}, s0, -1]]`   // shape: a + 3*nu0/2
-await show`Simplify[-Coefficient[${dLogp}, s0, 0]]`       // rate:  b + nu0*(x1+x2+x3)/2
+await show`Simplify[1 + Coefficient[${dLogp}, s0, -1]]`
+```
 
-// 3. Plug-in shrinkage at (mu, tau, sigma) = (48.1, 5.0, 9.2) for School 46 vs. School 82
+
+$$
+a+\frac{3 \text{nu0}}{2}
+$$
+
+```js
+await show`Simplify[-Coefficient[${dLogp}, s0, 0]]`
+```
+
+
+$$
+b+\frac{1}{2} \text{nu0} (\text{x1}+\text{x2}+\text{x3})
+$$
+
+```js
+// 4. Plug-in shrinkage at (mu, tau, sigma) = (48.1, 5.0, 9.2) for School 46 vs. School 82
 for (const [label, nj, yb] of [['School 46', 21, 40.18], ['School 82', 5, 38.76]]) {
   const w = toJS(await wl`N[${Bj} /. {nj -> ${nj}, t2 -> 25, s2 -> 84.64}]`)
   const plugMean = w * yb + (1 - w) * 48.1
@@ -220,14 +250,6 @@ for (const [label, nj, yb] of [['School 46', 21, 40.18], ['School 82', 5, 38.76]
 }
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Two-group prior $\operatorname{Corr}(\theta_1, \theta_2)$**: `(g0^2 - t0^2)/(g0^2 + t0^2)`
-- **Shrinkage weight $B_j$**: `(nj*t2)/(s2 + nj*t2)`
-- **Full conditional shape of $\sigma_0^2$ ($m = 3$)**: `a + (3*nu0)/2`
-- **Full conditional rate of $\sigma_0^2$ ($m = 3$)**: `b + (nu0*(x1 + x2 + x3))/2`
-
-**Console output:**
 
 ```text
 School 46 (n=21, ybar=40.18): B_j = 0.861, plug-in mean = 41.28

@@ -190,14 +190,28 @@ print("MC 95% CI for sigma:  ", np.round(np.quantile(np.sqrt(s2_mc), [0.025, 0.9
 Integrates precision $p = 1/\sigma^2$ out of the Normal–Inverse-Gamma joint posterior in `wolfram-ws-bridge` JavaScript mode, verifies that the ratio to the Student-$t$ kernel has zero derivative in $\theta$, factors $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$, and cross-checks the exact midge 95% credible interval.
 
 ```js
-// Chapter 5: Symbolic Normal-IG -> Student-t marginalization & exact MSE inequality
 const marg = await show`Assuming[nun > 0 && rate > 0,
   FullSimplify[Integrate[p^((nun + 1)/2 - 1)*Exp[-rate*p/2], {p, 0, Infinity}]]] /. rate -> nun*s2n + kn*(th - mun)^2`
+```
+
+
+$$
+2^{\frac{1+\text{nun}}{2}} \left(\frac{1}{\text{nun} \text{s2n}+\text{kn} (-\text{mun}+\text{th})^2}\right)^{\frac{1+\text{nun}}{2}} \Gamma \left(\frac{1+\text{nun}}{2}\right)
+$$
+
+```js
 const tKer = await wl`(1 + kn*(th - mun)^2 / (nun*s2n))^(-(nun + 1)/2)`
 const ratioSlope = toJS(await wl`Assuming[kn > 0 && nun > 0 && s2n > 0 && Element[{th, mun}, Reals],
   FullSimplify[D[Log[${marg} / ${tKer}], th]]]`)
 console.log('d/dth log(marginal / Student-t kernel) =', ratioSlope)
+```
 
+
+```text
+d/dth log(marginal / Student-t kernel) = 0
+```
+
+```js
 // Scaled MSE difference (n + k0)^2 * (MSE(theta_b) - MSE(ybar))
 const { Plus, Times, Power, Divide, Subtract, n, k0, s2, mu0, th0 } = W
 const mseB = Plus(
@@ -205,7 +219,14 @@ const mseB = Plus(
   Times(Power(Divide(k0, Plus(n, k0)), 2), Power(Subtract(mu0, th0), 2))
 )
 await show`Factor[Together[(${mseB} - s2/n) * (n + k0)^2]]`
+```
 
+
+$$
+\frac{\text{k0} \left(\text{k0} \text{mu0}^2 n-\text{k0} \text{s2}-2 n \text{s2}-2 \text{k0} \text{mu0} n \text{th0}+\text{k0} n \text{th0}^2\right)}{n}
+$$
+
+```js
 // Instantiate on Hoff's midge wing lengths (n = 9) and verify exact t_10 95% CI
 const y = [1.64, 1.70, 1.72, 1.74, 1.82, 1.82, 1.82, 1.90, 2.08]
 const mun = toJS(await wl`N[(19/10 + Total[${y}]) / 10]`)
@@ -216,15 +237,8 @@ const lo = mun - tCrit * Math.sqrt(s2n / 10), hi = mun + tCrit * Math.sqrt(s2n /
 console.log(`Midge exact: mu_n = ${mun.toFixed(4)}, s2_n = ${s2n.toFixed(5)}, 95% CI = [${lo.toFixed(4)}, ${hi.toFixed(4)}]`)
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Unnormalized Student-$t$ marginal**: `2^((1 + nun)/2)*((nun*s2n + kn*(-mun + th)^2)^(-1))^((1 + nun)/2)*Gamma[(1 + nun)/2]`
-- **Scaled difference $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$**: `(k0*(k0*mu0^2*n - k0*s2 - 2*n*s2 - 2*k0*mu0*n*th0 + k0*n*th0^2))/n`
-
-**Console output:**
 
 ```text
-d/dth log(marginal / Student-t kernel) = 0
 Midge exact: mu_n = 1.8140, s2_n = 0.01532, 95% CI = [1.7268, 1.9012]
 ```
 

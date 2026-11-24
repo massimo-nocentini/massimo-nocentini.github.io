@@ -277,19 +277,41 @@ print("model-averaged beta:", bma.round(2))
 Integrates $\gamma = 1/\sigma^2$ symbolically in `wolfram-ws-bridge` JavaScript mode to derive $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$, verifies both the Lindley limit ($g \to \infty$) and the information-paradox supremum (as $r_1 \to 0, \sigma_0^2 \to 0$), and instantiates `margZ` directly to reproduce Table 9.1.
 
 ```js
-// Chapter 9: Symbolic g-prior marginal likelihood, paradox limits & exact Table 9.1
 const margZ = await show`Assuming[nu0 > 0 && s20 > 0 && ssr > 0 && g > 0 && n > 0,
   FullSimplify[Integrate[(1 + g)^(-pz/2)*(2*Pi)^(-n/2)*((nu0*s20/2)^(nu0/2)/Gamma[nu0/2])
     *gam^((nu0 + n)/2 - 1)*Exp[-gam*(nu0*s20 + ssr)/2], {gam, 0, Infinity}]]]`
+```
+
+
+$$
+\frac{(1+g)^{-\text{pz}/2} \pi ^{-n/2} (\text{nu0} \text{s20})^{\text{nu0}/2} (\text{nu0} \text{s20}+\text{ssr})^{\frac{1}{2} (-n-\text{nu0})} \Gamma \left(\frac{n+\text{nu0}}{2}\right)}{\Gamma \left(\frac{\text{nu0}}{2}\right)}
+$$
+
+```js
 const bf = await wl`FullSimplify[
   (${margZ} /. {pz -> p1, ssr -> (g/(g+1))*r1 + (1/(g+1))*yy}) / (${margZ} /. {pz -> 0, ssr -> yy})]`
 const lindley = toJS(await wl`Assuming[p1 > 0 && nu0 > 0 && s20 > 0 && yy > 0 && r1 > 0 && n > 0,
   Limit[${bf}, g -> Infinity]]`)
 console.log('Lindley limit (g -> Infinity): BF =', lindley)
+```
+
+
+```text
+Lindley limit (g -> Infinity): BF = 0
+```
+
+```js
 // Information-paradox supremum (attained in the limit r1 -> 0, s20 -> 0)
 await show`Assuming[p1 > 0 && g > 0 && nu0 > 0 && yy > 0 && n > 0,
   FullSimplify[Limit[${bf} /. s20 -> 0, r1 -> 0]]]`
+```
 
+
+$$
+(1+g)^{\frac{1}{2} (n+\text{nu0}-\text{p1})}
+$$
+
+```js
 // Instantiate margZ directly on Hoff's Oxygen uptake Table 9.1 (g = n = 12, nu0 = 1, s20 = s_z^2)
 const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
 const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
@@ -311,15 +333,8 @@ console.log('Oxygen Table 9.1 log p(y|X,z):', logMargs.map(v => v.toFixed(2)).jo
 console.log('Oxygen Table 9.1 posterior p(z|y,X):', ws.map(v => (v / sumW).toFixed(2)).join(', '))
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Marginal likelihood $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$**: `((nu0*s20)^(nu0/2)*(nu0*s20 + ssr)^((-n - nu0)/2)*Gamma[(n + nu0)/2])/((1 + g)^(pz/2)*Pi^(n/2)*Gamma[nu0/2])`
-- **Information-paradox supremum**: `(1 + g)^((n + nu0 - p1)/2)`
-
-**Console output:**
 
 ```text
-Lindley limit (g -> Infinity): BF = 0
 Oxygen Table 9.1 log p(y|X,z): -44.33, -42.35, -37.66, -36.42, -37.60
 Oxygen Table 9.1 posterior p(z|y,X): 0.00, 0.00, 0.18, 0.63, 0.19
 ```

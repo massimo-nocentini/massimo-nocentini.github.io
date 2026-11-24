@@ -134,10 +134,9 @@ for theta in [0.05, 0.10, 0.20]:
 
 ## Symbolic Check in Wolfram Language {#sec:ch01-wolfram}
 
-Run the following `wolfram-ws-bridge` JavaScript-mode snippet (`W`, `wl`, `show`, `toJS`) to integrate the Beta–Binomial normalizer $Z$, posterior mean, mode (valid for $a+y > 1$ and $b+n-y > 1$), and shrinkage identity symbolically, then instantiate all three priors at $n = 20, y = 0$ to cross-check the Python output above.
+Run the following `wolfram-ws-bridge` JavaScript-mode sequence (`W`, `wl`, `show`, `toJS`) to integrate the Beta–Binomial normalizer $Z$, posterior mean, mode (valid for $a + y > 1$ and $b + n - y > 1$), and shrinkage identity symbolically, then instantiate all three priors at $n = 20, y = 0$ to cross-check the Python output above. Each `show` call is followed immediately by its rendered Wolfram `TeXForm` output.
 
 ```js
-// Chapter 1: Symbolic Beta-Binomial posterior, shrinkage identity, and numeric check
 const { Times, Power, Plus, Subtract, Minus, th, a, b, n, y } = W
 const kernel = Times(
   Power(th, Plus(a, y, -1)),
@@ -145,10 +144,34 @@ const kernel = Times(
 )
 const Z = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
   FullSimplify[Integrate[${kernel}, {th, 0, 1}]]]`
+```
+
+
+$$
+\frac{\Gamma (b+n-y) \Gamma (a+y)}{\Gamma (a+b+n)}
+$$
+
+```js
 const mean = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
   FullSimplify[Integrate[th * ${kernel}, {th, 0, 1}] / ${Z}]]`
+```
+
+
+$$
+\frac{a+y}{a+b+n}
+$$
+
+```js
 // Posterior mode (valid when a + y > 1 and b + n - y > 1)
 await show`FullSimplify[th /. First[Solve[D[Log[${kernel}], th] == 0, th]]]`
+```
+
+
+$$
+\frac{-1+a+y}{-2+a+b+n}
+$$
+
+```js
 const resid = toJS(await wl`Simplify[
   ${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]`)
 console.log('Shrinkage identity residual =', resid)
@@ -161,13 +184,6 @@ for (const [name, a0, b0] of [['Uniform', 1, 1], ['Epidemiological', 2, 20], ['S
 }
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Normalizer $Z$**: `(Gamma[b + n - y]*Gamma[a + y])/Gamma[a + b + n]`
-- **Posterior mean $E[\theta \mid y]$**: `(a + y)/(a + b + n)`
-- **Posterior mode**: `(-1 + a + y)/(-2 + a + b + n)`
-
-**Console output:**
 
 ```text
 Shrinkage identity residual = 0

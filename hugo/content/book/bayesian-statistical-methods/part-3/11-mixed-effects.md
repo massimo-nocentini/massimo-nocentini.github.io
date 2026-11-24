@@ -201,15 +201,36 @@ print(f"Pr(theta_2 > 0 | y) = {np.mean(theta_s[burn:, 1] > 0):.3f}, "
 Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, and computes the exact $2 \times 2$ LME slope posterior variance conditional on $(\Sigma, \sigma^2)$.
 
 ```js
-// Chapter 11: Symbolic Poisson GLMM population-average vs. median rate & LME shrinkage
 const popAvg = await show`Assuming[v > 0 && Element[m, Reals],
   FullSimplify[Integrate[Exp[m + Sqrt[v]*z]*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]]`
-await show`FullSimplify[${popAvg} / Exp[m]]`
+```
 
+
+$$
+e^{m+\frac{v}{2}}
+$$
+
+```js
+await show`FullSimplify[${popAvg} / Exp[m]]`
+```
+
+
+$$
+e^{v/2}
+$$
+
+```js
 // Symbolic 2x2 LME conditional posterior variance V_j for centered x (X_j^T X_j = diag(nj, sxx))
 const Vj = await wl`FullSimplify[Inverse[Inverse[{{s11, s12}, {s12, s22}}] + DiagonalMatrix[{nj, sxx}]/sig2]]`
 const v22Sym = await show`FullSimplify[${Vj}[[2, 2]]]`
+```
 
+
+$$
+\frac{\text{sig2} \left(-\text{nj} \text{s12}^2+\text{nj} \text{s11} \text{s22}+\text{s22} \text{sig2}\right)}{-\text{nj} \text{s12}^2 \text{sxx}+\text{nj} \text{s11} (\text{sig2}+\text{s22} \text{sxx})+\text{sig2} (\text{sig2}+\text{s22} \text{sxx})}
+$$
+
+```js
 // Instantiate conditional slope SD at Sigma = [[20, 2], [2, 1.5]], sig2 = 64, E[sxx] = nj - 1
 for (const nj of [5, 24]) {
   const v22 = toJS(await wl`N[${v22Sym} /. {s11 -> 20, s12 -> 2, s22 -> 3/2, sig2 -> 64, nj -> ${nj}, sxx -> ${nj - 1}}]`)
@@ -217,13 +238,6 @@ for (const nj of [5, 24]) {
 }
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Population-average rate $E[\exp(\eta)]$**: `E^(m + v/2)`
-- **Ratio to typical-group rate**: `E^(v/2)`
-- **Conditional LME slope variance $(V_j)_{2,2}$**: `(sig2*(-(nj*s12^2) + nj*s11*s22 + s22*sig2))/(-(nj*s12^2*sxx) + nj*s11*(sig2 + s22*sxx) + sig2*(sig2 + s22*sxx))`
-
-**Console output:**
 
 ```text
 n_j =  5 (sxx = 4) -> cond. slope SD = 1.126 (prior SD = 1.225)

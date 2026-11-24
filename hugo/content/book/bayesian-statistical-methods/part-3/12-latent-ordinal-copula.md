@@ -176,31 +176,45 @@ print("Posterior E[C | Y]:\n", np.round(C_draws[150:].mean(axis=0), 2))
 Verifies ordered-probit shift/scale invariance symbolically in `wolfram-ws-bridge` JavaScript mode, solves $(C^{-1})_{1,3} = 0$ for a $3 \times 3$ correlation matrix to prove $Z_1 \perp Z_3 \mid Z_2 \iff C_{1,3} = C_{1,2}C_{2,3}$, and contrasts exact conditional independence ($C_{1,3} = 0.325$) against the Python simulation ($C_{1,3} = 0.30$).
 
 ```js
-// Chapter 12: Symbolic ordered-probit invariance & latent Gaussian graphical model
 const invResid = toJS(await wl`Assuming[a > 0, Simplify[
   1/2*Erfc[-((a*g + c) - (a*eta + c))/(a*Sqrt[2])] - 1/2*Erfc[-(g - eta)/Sqrt[2]]]]`)
 console.log('Ordered-probit shift/scale invariance residual =', invResid)
+```
 
+
+```text
+Ordered-probit shift/scale invariance residual = 0
+```
+
+```js
 // Latent conditional independence Z1 _|_ Z3 | Z2 iff (C^(-1))_{1,3} == 0
 const C3 = [[1, W.r12, W.r13], [W.r12, 1, W.r23], [W.r13, W.r23, 1]]
 const omega13 = await show`Factor[Inverse[${C3}][[1, 3]]]`
-const solR13 = await show`r13 /. First[Solve[${omega13} == 0, r13]]`
+```
 
+
+$$
+\frac{\text{r13}-\text{r12} \text{r23}}{-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2}
+$$
+
+```js
+const solR13 = await show`r13 /. First[Solve[${omega13} == 0, r13]]`
+```
+
+
+$$
+\text{r12} \text{r23}
+$$
+
+```js
 // Contrast exact conditional independence (r13 = 13/40 = 0.325) vs. Ch. 12 Python (r13 = 3/10 = 0.30)
 const omZero = toJS(await wl`${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 13/40}`)
 const omPy = toJS(await wl`N[${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}]`)
 console.log(`At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = ${omZero},  Omega_13(0.30) = ${omPy.toFixed(4)}`)
 ```
 
-**Symbolic outputs (`show`):**
-
-- **Precision entry $\Omega_{1,3}$**: `(r13 - r12*r23)/(-1 + r12^2 + r13^2 - 2*r12*r13*r23 + r23^2)`
-- **Conditional-independence solution $C_{1,3}$**: `r12*r23`
-
-**Console output:**
 
 ```text
-Ordered-probit shift/scale invariance residual = 0
 At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = 0,  Omega_13(0.30) = 0.0578
 ```
 
