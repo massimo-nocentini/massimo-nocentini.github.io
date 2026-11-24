@@ -1,0 +1,208 @@
+---
+title: "Group Comparisons and Hierarchical Modeling"
+linkTitle: "Hierarchical Modeling"
+weight: 40
+label: "ch:hierarchical"
+---
+
+{{< newthought "Whenever data come in groups" />}}—students nested inside schools, patients nested inside hospitals, or baseball players across a league—two naive extremes tempt the analyst. **No pooling** fits each group completely separately, leaving small groups noisy and erratic. **Complete pooling** lumps all groups into one common mean, erasing genuine differences between groups. Chapter 8 resolves this tension cleanly through **hierarchical modeling**{{< index "hierarchical model" >}}{{< cite "hoff2009,lindley1972,gelman2007" >}}, where groups share information smoothly (**partial pooling**) in direct proportion to their sample sizes and between-group variance.
+
+## Two-Group Comparisons: Continuous Pooling via $(\mu \pm \delta)$ {#sec:ch08-two-groups}
+
+Start with $m = 2$ urban public high schools from the 2002 Educational Longitudinal Study (ELS): $n_1 = 31$ tenth graders in School 1 ($\bar{y}_1 = 50.81$) and $n_2 = 28$ in School 2 ($\bar{y}_2 = 46.15$), a sample gap of $\bar{y}_1 - \bar{y}_2 = 4.66$ points. Classical practice runs a two-sample $t$-test: if $p < 0.05$, report separate means $\bar{y}_1, \bar{y}_2$; if $p \ge 0.05$, pool both schools into a single grand mean. That binary switch is discontinuous and wastes information when groups are similar yet non-identical.
+
+Hoff replaces the binary switch with a reparameterization into an overall level $\mu$ and a half-difference $\delta$:
+
+$$
+\theta_1 = \mu + \delta, \qquad \theta_2 = \mu - \delta, \qquad
+\mu \sim \operatorname{normal}(\mu_0, \gamma_0^2), \qquad
+\delta \sim \operatorname{normal}(\delta_0, \tau_0^2), \label{eq:ch08-two-group}
+$$
+
+with a shared variance $\sigma^{-2} \sim \operatorname{gamma}(\nu_0/2, \nu_0\sigma_0^2/2)$. With $\delta_0 = 0$, the prior variance $\tau_0^2$ dials continuously between the two extremes: as $\tau_0^2 \to 0$, $\delta \to 0$ (complete pooling); as $\gamma_0^2, \tau_0^2 \to \infty$ together with $\gamma_0^2 = \tau_0^2$, $\theta_1$ and $\theta_2$ become prior-independent (no pooling); for finite $\tau_0^2$, the data themselves determine how far apart the two school means should be pulled.
+
+## Many Groups: Double Exchangeability and the Hierarchical Normal Model {#sec:ch08-hierarchical}
+
+Now suppose we observe $m = 100$ public high schools from the 2002 ELS, with $n_j$ tenth-grade students in school $j$ ($n_j$ ranging from $4$ to $32$). Two symmetries hold simultaneously:
+1. **Within-group exchangeability**: given school $j$’s mean $\theta_j$ and within-school variance $\sigma^2$, student scores $Y_{1,j}, \dots, Y_{n_j,j}$ are exchangeable, so $Y_{i,j} \mid \theta_j, \sigma^2 \stackrel{\text{i.i.d.}}{\sim} \operatorname{normal}(\theta_j, \sigma^2)$.
+2. **Between-group exchangeability**: the 100 schools are themselves a sample from the population of U.S. public high schools, so their means $\theta_1, \dots, \theta_m$ are exchangeable across schools: $\theta_j \mid \mu, \tau^2 \stackrel{\text{i.i.d.}}{\sim} \operatorname{normal}(\mu, \tau^2)$.
+
+{{< remark note="Sampling model vs. prior in hierarchical models" label="rem:ch08-two-stage" >}}
+Hoff emphasizes a vital conceptual distinction: $p(\theta_1, \dots, \theta_m \mid \mu, \tau^2)$ is **not** merely a fixed prior—it is a *between-group sampling model* describing variation across schools, whose population parameters $(\mu, \tau^2)$ are estimated from the data! Only the top-level distribution $p(\mu, \tau^2, \sigma^2)$ is a subjective prior.
+{{< /remark >}}
+
+Equipping $(\mu, \tau^2, \sigma^2)$ with independent semiconjugate priors,
+
+$$
+\mu \sim \operatorname{normal}(\mu_0, \gamma_0^2), \qquad
+\frac{1}{\tau^2} \sim \operatorname{gamma}\!\left(\frac{\eta_0}{2}, \frac{\eta_0 \tau_0^2}{2}\right), \qquad
+\frac{1}{\sigma^2} \sim \operatorname{gamma}\!\left(\frac{\nu_0}{2}, \frac{\nu_0 \sigma_0^2}{2}\right), \label{eq:ch08-hyperpriors}
+$$
+
+yields the directed acyclic graph (DAG) in {{< xref "fig:ch08-shrinkage" "full" >}} (left panel) and the joint posterior factorization
+
+$$
+p(\theta_1, \dots, \theta_m, \mu, \tau^2, \sigma^2 \mid \mathbf{y}_1, \dots, \mathbf{y}_m)
+\propto p(\mu)\,p(\tau^2)\,p(\sigma^2)
+\prod_{j=1}^m p(\theta_j \mid \mu, \tau^2)
+\prod_{i=1}^{n_j} p(y_{i,j} \mid \theta_j, \sigma^2). \label{eq:ch08-joint}
+$$
+
+{{< fig src="images/bayesian-hoff/fig-ch08-shrinkage.svg" type="fullwidth" label="fig:ch08-shrinkage" alt="Three panels: hierarchical normal DAG connecting hyperparameters (mu, tau^2) and sigma^2 to group means theta_j and observations y_j; scatter plot of sample means ybar_j versus shrunk hierarchical estimates theta_hat_j colored by group size; and scatter plot of shrinkage magnitude ybar_j minus theta_hat_j versus sample size n_j" short="Hierarchical normal DAG and adaptive partial pooling" >}}Left: DAG of the hierarchical normal model. Center: hierarchical posterior means $\hat{\theta}_j$ pull extreme group averages $\bar{y}_j$ toward the grand mean $\hat{\mu}$. Right: shrinkage magnitude $\lvert \bar{y}_j - \hat{\theta}_j \rvert$ is largest for small groups ($n_j \approx 5$) and vanishes for large groups.{{< /fig >}}
+
+### Full Conditionals and Modular Gibbs Sampling {#sec:ch08-gibbs}
+
+Reading directly off the DAG factorization {{< eqref "eq:ch08-joint" >}}, each parameter depends only on its immediate Markov blanket (parents, children, and co-parents), yielding four standard full conditionals:
+
+{{< proposition note="Full Conditionals of the Hierarchical Normal Model" label="prop:ch08-fc" >}}
+Under {{< eqref "eq:ch08-hyperpriors" >}}–{{< eqref "eq:ch08-joint" >}}, let $N = \sum_{j=1}^m n_j$ and $\bar{\theta} = \frac{1}{m}\sum_{j=1}^m \theta_j$. Then:
+
+1. **Group means** (conditionally independent across $j = 1, \dots, m$):
+
+   $$
+   \theta_j \mid \mu, \tau^2, \sigma^2, \mathbf{y}_j \sim \operatorname{normal}\!\left(
+   \frac{\frac{n_j}{\sigma^2}\bar{y}_j + \frac{1}{\tau^2}\mu}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}},\;
+   \frac{1}{\frac{n_j}{\sigma^2} + \frac{1}{\tau^2}}
+   \right). \label{eq:ch08-fc-thetaj}
+   $$
+
+2. **Population grand mean** (depends on $\mathbf{y}$ *only* through $\theta_1, \dots, \theta_m$):
+
+   $$
+   \mu \mid \boldsymbol{\theta}, \tau^2 \sim \operatorname{normal}\!\left(
+   \frac{\frac{m}{\tau^2}\bar{\theta} + \frac{1}{\gamma_0^2}\mu_0}{\frac{m}{\tau^2} + \frac{1}{\gamma_0^2}},\;
+   \frac{1}{\frac{m}{\tau^2} + \frac{1}{\gamma_0^2}}
+   \right). \label{eq:ch08-fc-mu}
+   $$
+
+3. **Between-group precision**:
+
+   $$
+   \frac{1}{\tau^2} \mid \boldsymbol{\theta}, \mu \sim \operatorname{gamma}\!\left(
+   \frac{\eta_0 + m}{2},\; \frac{\eta_0 \tau_0^2 + \sum_{j=1}^m (\theta_j - \mu)^2}{2}
+   \right). \label{eq:ch08-fc-tau2}
+   $$
+
+4. **Within-group precision**:
+
+   $$
+   \frac{1}{\sigma^2} \mid \boldsymbol{\theta}, \mathbf{y} \sim \operatorname{gamma}\!\left(
+   \frac{\nu_0 + N}{2},\; \frac{\nu_0 \sigma_0^2 + \sum_{j=1}^m \sum_{i=1}^{n_j} (y_{i,j} - \theta_j)^2}{2}
+   \right). \label{eq:ch08-fc-sig2}
+   $$
+{{< /proposition >}}
+
+Notice how every single equation in {{< xref "prop:ch08-fc" "full" >}} is just the Chapter 6 semiconjugate normal update applied at two levels: $(\mu, \tau^2)$ treat $\theta_1, \dots, \theta_m$ as their “data,” while each $\theta_j$ treats $(\mu, \tau^2)$ as its “prior.”{{< sidenote >}}Note a minor typographical slip on p. 135 of the 2009 printing of Hoff, which prints $1/\tau^2$ instead of $\mu/\tau^2$ in the numerator of {{< eqref "eq:ch08-fc-thetaj" >}} (Hoff’s R code on p. 138 correctly writes `mu/tau2`); see {{< xref "app:errata" "full" >}}.{{< /sidenote >}}
+
+## Adaptive Shrinkage and Stein’s Paradox {#sec:ch08-shrinkage}
+
+Rewriting the conditional expectation in {{< eqref "eq:ch08-fc-thetaj" >}} exposes the exact **shrinkage weight**{{< index "shrinkage" >}} for group $j$:
+
+$$
+E[\theta_j \mid \mu, \tau^2, \sigma^2, \mathbf{y}_j]
+= B_j\,\bar{y}_j + (1 - B_j)\,\mu, \qquad
+B_j = \frac{n_j / \sigma^2}{n_j / \sigma^2 + 1 / \tau^2}
+= \frac{n_j}{n_j + \sigma^2 / \tau^2}. \label{eq:ch08-shrink-weight}
+$$
+
+Two forces control how aggressively group $j$ borrows strength from the grand mean $\mu$:
+- **Sample size $n_j$**: small groups (small $n_j$) receive smaller weight $B_j$ and shrink strongly toward $\mu$; large groups stay near $\bar{y}_j$ ({{< xref "fig:ch08-shrinkage" "full" >}}, right).
+- **Variance ratio $\sigma^2/\tau^2$**: when schools are genuinely similar ($\tau^2 \ll \sigma^2$), $\sigma^2/\tau^2$ is large and shrinkage is strong; when schools truly differ widely ($\tau^2 \gg \sigma^2$), $B_j \to 1$ and the model lets each school stand on its own.
+
+In the 2002 ELS math scores ($m = 100$ schools, posterior $\hat{\mu} \approx 48.1$, $\hat{\tau} \approx 5.0$, $\hat{\sigma} \approx 9.2$, so $\hat{\sigma}^2/\hat{\tau}^2 \approx 3.4$), this produces a dramatic **ranking reversal** among low-scoring schools: School 82 has the *lower* raw sample mean ($\bar{y}_{82} = 38.76$) based on only $n_{82} = 5$ students, so its hierarchical estimate shrinks strongly *upward* toward $\hat{\mu}$ to $42.53$; School 46 has a slightly higher raw mean ($\bar{y}_{46} = 40.18$) based on $n_{46} = 21$ students, so it shrinks far less to $41.31$—reversing their order so that $\hat{\theta}_{82} > \hat{\theta}_{46}$! This echoes **Stein’s phenomenon**{{< cite "stein1956,efron1973" >}}{{< index "Stein’s paradox" >}}: with known equal variances, suitable shrinkage toward a fixed point ($m \ge 3$) or toward the estimated grand mean ($m \ge 4$) strictly dominates the unpooled sample means under total squared error $\sum_{j=1}^m (\hat{\theta}_j - \theta_j)^2$.
+
+{{< remark note="Two modern caveats: variance priors and non-centered parameterizations" label="rem:ch08-modern" >}}
+1. **Prior sensitivity for $\tau^2$ when $m$ is small**: With $m = 100$ schools, the data pin down $\tau^2$ easily. When $m$ is small (say $m = 5$), however, standard $\operatorname{inverse-gamma}(\epsilon, \epsilon)$ priors on $\tau^2$ can severely distort inference near $\tau = 0$; weakly informative half-$t$ or half-Cauchy priors on the standard deviation $\tau$ are far safer{{< cite "gelman2006" >}}.
+2. **Centered vs. non-centered mixing**: When $\tau^2$ is small relative to $\sigma^2/n_j$, the centered parameterization $\theta_j \sim \mathcal{N}(\mu, \tau^2)$ creates a narrow “funnel” geometry where Gibbs steps stall. Writing $\theta_j = \mu + \tau\,\tilde{\theta}_j$ with $\tilde{\theta}_j \stackrel{\text{i.i.d.}}{\sim} \mathcal{N}(0, 1)$ (the **non-centered parameterization**{{< cite "papaspiliopoulos2007" >}}) decouples $\tilde{\theta}_j$ from $\tau$ and restores fast mixing.
+{{< /remark >}}
+
+## Heterogeneous Group Variances {#sec:ch08-het-var}
+
+What if different schools also have different within-school spreads $\sigma_1^2, \dots, \sigma_m^2$? Adding a second hierarchy for the variances borrows strength across groups for variance estimation as well:
+
+$$
+\frac{1}{\sigma_j^2} \mid \nu_0, \sigma_0^2 \stackrel{\text{i.i.d.}}{\sim} \operatorname{gamma}\!\left(\frac{\nu_0}{2},\, \frac{\nu_0 \sigma_0^2}{2}\right), \qquad
+\sigma_0^2 \sim \operatorname{gamma}(a, b), \qquad
+p(\nu_0) \propto e^{-\alpha \nu_0} \quad (\nu_0 \in \{1, 2, \dots, \nu_{\max}\}). \label{eq:ch08-het-prior}
+$$
+
+Each $\sigma_j^{-2}$ now has its own conjugate gamma full conditional $\operatorname{gamma}\bigl(\frac{\nu_0 + n_j}{2},\, \frac{\nu_0 \sigma_0^2 + \sum_{i=1}^{n_j}(y_{i,j} - \theta_j)^2}{2}\bigr)$. Multiplying $\prod_{j=1}^m p(\sigma_j^{-2} \mid \nu_0, \sigma_0^2)$ by $\sigma_0^{2(a - 1)} e^{-b\sigma_0^2}$ yields the exact conjugate full conditional for the shared variance hyperparameter $\sigma_0^2$:
+
+$$
+p(\sigma_0^2 \mid \nu_0, \sigma_1^2, \dots, \sigma_m^2)
+\propto (\sigma_0^2)^{a - 1} e^{-b\sigma_0^2}
+\prod_{j=1}^m \left[(\sigma_0^2)^{\nu_0/2} \exp\!\left(-\frac{\nu_0 \sigma_0^2}{2\sigma_j^2}\right)\right]
+= (\sigma_0^2)^{a + \frac{m\nu_0}{2} - 1}
+\exp\!\left\{-\left(b + \frac{\nu_0}{2}\sum_{j=1}^m \frac{1}{\sigma_j^2}\right)\sigma_0^2\right\}, \label{eq:ch08-fc-sig0}
+$$
+
+which is $\operatorname{gamma}\!\bigl(a + \frac{m\nu_0}{2},\; b + \frac{\nu_0}{2}\sum_{j=1}^m \sigma_j^{-2}\bigr)$.{{< sidenote >}}Watch out for a missing factor of $\nu_0$ in the rate parameter printed on p. 144 of Hoff (2009), which writes $b + \frac{1}{2}\sum \sigma_j^{-2}$ instead of $b + \frac{\nu_0}{2}\sum \sigma_j^{-2}$; see {{< xref "app:errata" "full" >}}.{{< /sidenote >}} Because $\nu_0$ enters inside the gamma function $\Gamma(\nu_0/2)$, it has no standard conjugate density; restricting $\nu_0$ to a discrete grid $\{1, 2, \dots, \nu_{\max}\}$ lets us evaluate its exact log-full conditional (using the log-sum-exp trick for numerical stability) and draw $\nu_0$ from a categorical distribution at every Gibbs step:
+
+$$
+\begin{aligned}
+\log p(\nu_0 \mid \sigma_0^2, \sigma_1^2, \dots, \sigma_m^2)
+&= \text{const} + m\!\left[\frac{\nu_0}{2}\log\!\left(\frac{\nu_0 \sigma_0^2}{2}\right) - \log\Gamma\!\left(\frac{\nu_0}{2}\right)\right] \\
+&\quad + \left(\frac{\nu_0}{2} - 1\right)\sum_{j=1}^m \log\!\left(\frac{1}{\sigma_j^2}\right) - \frac{\nu_0 \sigma_0^2}{2}\sum_{j=1}^m \frac{1}{\sigma_j^2} - \alpha \nu_0.
+\end{aligned} \label{eq:ch08-fc-nu0}
+$$
+
+```python
+import numpy as np
+
+# Hierarchical normal Gibbs sampler on synthetic 60-school ELS-like data
+rng = np.random.default_rng(42)
+m = 60
+n_j = rng.integers(4, 25, size=m)
+th_true = rng.normal(48.1, 4.5, size=m)
+groups = [rng.normal(th, 9.2, size=nj) for th, nj in zip(th_true, n_j)]
+ybar = np.array([g.mean() for g in groups])
+ss_within = np.array([np.sum((g - g.mean())**2) for g in groups])
+N = int(n_j.sum())
+
+# Weakly informative hyperparameters (matching Hoff Ch. 8)
+mu0, g20 = 50.0, 25.0
+eta0, t20 = 1.0, 100.0
+nu0, s20 = 1.0, 100.0
+
+S = 4_000
+mu_s, tau2_s, sig2_s = np.empty(S), np.empty(S), np.empty(S)
+theta_s = np.empty((S, m))
+th_cur, mu_cur, t2_cur, s2_cur = ybar.copy(), ybar.mean(), np.var(ybar, ddof=1), 85.0
+
+for s in range(S):
+    # 1. Vectorized full conditional for all m group means theta_j
+    v_j = 1.0 / (n_j / s2_cur + 1.0 / t2_cur)
+    m_j = v_j * (n_j * ybar / s2_cur + mu_cur / t2_cur)
+    th_cur = rng.normal(m_j, np.sqrt(v_j))
+    # 2. Grand mean mu | theta, tau^2
+    v_mu = 1.0 / (m / t2_cur + 1.0 / g20)
+    m_mu = v_mu * (m * th_cur.mean() / t2_cur + mu0 / g20)
+    mu_cur = rng.normal(m_mu, np.sqrt(v_mu))
+    # 3. Between-group variance tau^2 | theta, mu
+    t2_cur = 1.0 / rng.gamma((eta0 + m) / 2.0,
+                             2.0 / (eta0 * t20 + np.sum((th_cur - mu_cur)**2)))
+    # 4. Within-group variance sigma^2 | theta, y (fast O(m) sum of squares)
+    sse = np.sum(ss_within + n_j * (ybar - th_cur)**2)
+    s2_cur = 1.0 / rng.gamma((nu0 + N) / 2.0, 2.0 / (nu0 * s20 + sse))
+    theta_s[s], mu_s[s], tau2_s[s], sig2_s[s] = th_cur, mu_cur, t2_cur, s2_cur
+
+th_hat = theta_s[500:].mean(axis=0)
+print(f"Posterior means: mu={mu_s[500:].mean():.2f}, tau={np.sqrt(tau2_s[500:]).mean():.2f}, "
+      f"sigma={np.sqrt(sig2_s[500:]).mean():.2f}")
+print(f"Total MSE vs truth: unpooled={np.mean((ybar - th_true)**2):.2f}, "
+      f"hierarchical={np.mean((th_hat - th_true)**2):.2f}")
+```
+
+## Exercises {#sec:ch08-exercises}
+
+{{< thm kind="exercise" label="ex:ch08-stein-risk" >}}
+In the Python script above, vary the true between-school standard deviation $\tau \in \{1, 3, 5, 15\}$ while holding $\sigma = 9.2$ fixed. Compare the total estimation MSE $\frac{1}{m}\sum_{j=1}^m (\hat{\theta}_j - \theta_j)^2$ of the hierarchical posterior mean against both the unpooled sample means $\bar{y}_j$ and the completely pooled grand mean $\bar{y}$. When is the gain from partial pooling largest?
+{{< /thm >}}
+
+{{< thm kind="exercise" label="ex:ch08-heterogeneous-gibbs" >}}
+Extend the Python Gibbs sampler to allow heterogeneous school variances $\sigma_1^2, \dots, \sigma_m^2$ using {{< eqref "eq:ch08-fc-sig0" >}} and {{< eqref "eq:ch08-fc-nu0" >}} over the grid $\nu_0 \in \{1, 2, \dots, 50\}$ (remembering to subtract `log_p.max()` before exponentiating when normalizing $\nu_0$). Verify that the factor $\nu_0$ in the rate of {{< eqref "eq:ch08-fc-sig0" >}} is required by checking whether your sampler recovers known synthetic values $(\nu_0, \sigma_0^2) = (10, 80)$.
+{{< /thm >}}
+
+{{< thm kind="exercise" label="ex:ch08-noncentered" >}}
+Simulate $m = 8$ groups with $n_j = 5$, $\sigma = 10$, and very small true between-group spread $\tau = 0.5$. Compare the lag-1 autocorrelation and $S_{\text{eff}}$ of $\tau$ under (a) the centered Gibbs sampler {{< xref "prop:ch08-fc" "full" >}} and (b) the non-centered reparameterization $\theta_j = \mu + \tau\tilde{\theta}_j$ (see {{< xref "rem:ch08-modern" "full" >}}).
+{{< /thm >}}
