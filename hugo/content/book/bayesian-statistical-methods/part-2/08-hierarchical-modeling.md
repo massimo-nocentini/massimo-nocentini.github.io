@@ -197,6 +197,8 @@ print(f"Total MSE vs truth: unpooled={np.mean((ybar - th_true)**2):.2f}, "
 
 Derives the two-group prior correlation from $(\theta_1, \theta_2) = (\mu + \delta, \mu - \delta)$, the shrinkage weight $B_j$, the symbolic shrunk-mean gap $\hat{\theta}_2 - \hat{\theta}_1$ governing ranking reversals between two groups $(n_1, \bar{y}_1)$ and $(n_2, \bar{y}_2)$, and (non-circularly from the log-density derivative) both the shape and $\nu_0/2$-scaled rate of $\sigma_0^2$, then evaluates plug-in shrinkage on Schools 46 and 82 (compare Hoff’s full MCMC means $41.31$ and $42.53$).
 
+{{< marginnote >}}Compute the prior correlation between two group means under the $(\mu, \delta)$ parameterization.{{< /marginnote >}}
+
 ```js
 // Chapter 8: Symbolic two-group correlation, ranking-reversal condition & sigma_0^2 full conditional
 const A = [[1, 1], [1, -1]]
@@ -211,6 +213,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Simplify the hierarchical shrinkage weight $B_j = (n_j/\sigma^2)/(n_j/\sigma^2 + 1/\tau^2)$.{{< /marginnote >}}
+
 ```js
 // Shrinkage weight B_j and symbolic shrunk-mean gap thetaHat_2 - thetaHat_1
 const Bj = await show`Together[(nj / s2) / (nj / s2 + 1 / t2)]`
@@ -219,6 +223,8 @@ const Bj = await show`Together[(nj / s2) / (nj / s2 + 1 / t2)]`
 $$
 B_j = \frac{n_j/\sigma^2}{n_j/\sigma^2 + 1/\tau^2} = \frac{n_j \tau^2}{\sigma^2 +n_j \tau^2}
 $$
+
+{{< marginnote >}}Derive the closed-form difference $\hat{\theta}_2 - \hat{\theta}_1$ between two shrunk group means.{{< /marginnote >}}
 
 ```js
 const gapSym = await show`FullSimplify[((${Bj} /. nj -> n2)*yb2 + (1 - (${Bj} /. nj -> n2))*mu)
@@ -231,6 +237,8 @@ $$
 &= \frac{\tau^2 (\mu (n_1 -n_2) \sigma^2 -n_1 (\sigma^2 +n_2 \tau^2) \bar{y}_1 +n_2 (\sigma^2 +n_1 \tau^2) \bar{y}_2)}{(\sigma^2 +n_1 \tau^2) (\sigma^2 +n_2 \tau^2)}
 \end{aligned}
 $$
+
+{{< marginnote >}}Extract the $[(\sigma_0^2)^{-1}]$ coefficient of $\partial_{\sigma_0^2}\log p$ to verify the Gamma full-conditional shape ($m = 3$).{{< /marginnote >}}
 
 ```js
 // Non-circular derivation of sigma_0^2 full conditional shape & rate (m = 3)
@@ -247,6 +255,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Extract the constant term of $-\partial_{\sigma_0^2}\log p$ to verify the Gamma full-conditional rate.{{< /marginnote >}}
+
 ```js
 await show`Simplify[-Coefficient[${dLogp}, s0, 0]]`
 ```
@@ -257,6 +267,8 @@ $$
 &= b+\frac{1}{2} \nu_0 (x_1 +x_2 +x_3)
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate shrinkage weights and posterior means for School 46 ($n=21$) and School 82 ($n=5$).{{< /marginnote >}}
 
 ```js
 // Instantiate plug-in shrinkage on School 46 (n1=21, yb1=40.18) vs School 82 (n2=5, yb2=38.76)
@@ -269,6 +281,8 @@ $$
 &= \left( \begin{array}{cc} 0.861164 & 41.2796 \\ 0.59626 & 42.5309 \\ \end{array} \right)
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate the shrunk difference $\hat{\theta}_{82} - \hat{\theta}_{46}$, confirming the ranking reversal over the raw gap.{{< /marginnote >}}
 
 ```js
 await show`N[${gapSym} /. {n1 -> 21, yb1 -> 40.18, n2 -> 5, yb2 -> 38.76, mu -> 48.1, t2 -> 25, s2 -> 84.64}]`
@@ -286,6 +300,8 @@ In the Python script above, vary the true between-school standard deviation $\ta
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Simplify the oracle hierarchical Bayes risk (MSE) $\frac{(\sigma^2/n)\tau^2}{\sigma^2/n + \tau^2}$ for equal group sizes $n$.{{< /marginnote >}}
+
 ```js
 // Ex 8.1: Oracle Bayes risk (MSE, equal n) of unpooled, completely pooled, and hierarchical partial pooling
 const rPart = await show`FullSimplify[(s2/n)*t2 / (s2/n + t2)]`
@@ -298,6 +314,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Express the risk ratio relative to unpooled $\bar{y}_j$ as the shrinkage weight $B_j$.{{< /marginnote >}}
+
 ```js
 await show`FullSimplify[${rPart} / (s2/n)]`
 ```
@@ -306,6 +324,8 @@ $$
 B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\sigma^2/n} = \frac{n \tau^2}{\sigma^2 +n \tau^2}
 $$
 
+{{< marginnote >}}Express the risk ratio relative to complete pooling as $1 - B_j$.{{< /marginnote >}}
+
 ```js
 await show`FullSimplify[${rPart} / t2]`
 ```
@@ -313,6 +333,8 @@ await show`FullSimplify[${rPart} / t2]`
 $$
 1 - B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\tau^2} = \frac{\sigma^2}{\sigma^2 +n \tau^2}
 $$
+
+{{< marginnote >}}Tabulate unpooled, pooled, and hierarchical MSE across $\tau \in \{1, 3, 5, 15\}$ at $\sigma^2 = 84.64, n = 10$.{{< /marginnote >}}
 
 ```js
 // Instantiate {unpooled, pooled, hierarchical} MSE at s2 = 84.64, n = 10 for tau in {1, 3, 5, 15}
@@ -334,6 +356,8 @@ Extend the Python Gibbs sampler to allow heterogeneous school variances $\sigma_
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Compute the posterior mean of $\sigma_0^2$ under the correct full-conditional rate $b + \frac{\nu_0}{2}\sum_j \sigma_j^{-2}$.{{< /marginnote >}}
+
 ```js
 // Ex 8.2: Bias of omitting nu0 in the full conditional rate of sigma_0^2 (plugging in sum sigma_j^{-2} = m / sigma_0^2)
 const meanCorrect = await show`FullSimplify[(a + m*nu0/2) / (b + (nu0/2)*m/s0True)]`
@@ -346,6 +370,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Compute the distorted posterior mean when the factor $\nu_0$ is mistakenly omitted from the rate.{{< /marginnote >}}
+
 ```js
 const meanBuggy = await show`FullSimplify[(a + m*nu0/2) / (b + (1/2)*m/s0True)]`
 ```
@@ -357,6 +383,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Take $m \to \infty$ to prove the bug inflates the posterior mean by an exact asymptotic factor of $\nu_0$.{{< /marginnote >}}
+
 ```js
 await show`Assuming[nu0 > 0 && s0True > 0, Limit[${meanBuggy} / ${meanCorrect}, m -> Infinity]]`
 ```
@@ -367,6 +395,8 @@ $$
 &= \nu_0
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate correct mean, buggy mean, and their ratio at $(\nu_0 = 10, \sigma_0^2 = 80, m = 100)$.{{< /marginnote >}}
 
 ```js
 await show`N[{${meanCorrect}, ${meanBuggy}, ${meanBuggy}/${meanCorrect}} /. {a -> 1, b -> 1/100, m -> 100, nu0 -> 10, s0True -> 80}]`
@@ -387,6 +417,8 @@ Simulate $m = 8$ groups with $n_j = 5$, $\sigma = 10$, and very small true betwe
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Derive the posterior correlation $\operatorname{Corr}(\theta_j, \mu \mid y, \sigma^2, \tau^2)$ across $m$ groups under centered parameterization.{{< /marginnote >}}
+
 ```js
 // Ex 8.3: Centered posterior coupling across m groups & centered mu-chain lag-1 ACF at fixed tau
 const corrCent = await show`FullSimplify[Sqrt[(s2/nj) / (s2/nj + m*t2)]]`
@@ -399,6 +431,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Derive the lag-1 autocorrelation of the centered $\mu$-chain at fixed $\tau$.{{< /marginnote >}}
+
 ```js
 const acfMu = await show`FullSimplify[(s2/nj) / (s2/nj + t2)]`
 ```
@@ -406,6 +440,8 @@ const acfMu = await show`FullSimplify[(s2/nj) / (s2/nj + t2)]`
 $$
 \operatorname{ACF}_1(\mu^{(s)} \mid \tau) = \frac{\sigma^2}{\sigma^2 +n_j \tau^2}
 $$
+
+{{< marginnote >}}Evaluate both coupling diagnostics at $m = 8, n_j = 5, \sigma = 10, \tau = 0.5$.{{< /marginnote >}}
 
 ```js
 await show`N[{${corrCent}, ${acfMu}} /. {s2 -> 100, nj -> 5, m -> 8, t2 -> 1/4}]`

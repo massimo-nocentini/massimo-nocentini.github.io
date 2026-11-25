@@ -276,6 +276,8 @@ print("model-averaged beta:", bma.round(2))
 
 Integrates $\gamma = 1/\sigma^2$ symbolically in `wolfram-ws-bridge` JavaScript mode to derive $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ and the general symbolic Bayes factor $\operatorname{BF}_{a,b}$ (retaining model-specific $s_a^2, s_b^2$), verifies both the Lindley limit ($g \to \infty$) and the information-paradox supremum, and instantiates `margZ` directly to reproduce Table 9.1.
 
+{{< marginnote >}}Integrate precision $\gamma = 1/\sigma^2$ out of the $g$-prior joint model to derive the closed-form marginal likelihood $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$.{{< /marginnote >}}
+
 ```js
 // Chapter 9: Symbolic g-prior marginal likelihood, general Bayes factor & exact Table 9.1
 const margZ = await show`Assuming[nu0 > 0 && s20 > 0 && ssr > 0 && g > 0 && n > 0,
@@ -290,6 +292,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Take the ratio of two marginal likelihoods to obtain the general symbolic Bayes factor $\operatorname{BF}_{a,b}$.{{< /marginnote >}}
+
 ```js
 // General symbolic Bayes factor BF_{a,b} retaining model-specific s20_a, s20_b
 await show`Assuming[nu0 > 0 && sa > 0 && sb > 0 && ssra > 0 && ssrb > 0 && g > 0 && n > 0,
@@ -303,6 +307,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Take $g \to \infty$ to prove Lindley’s paradox: diffuse $g$-priors force $\operatorname{BF}_{10} \to 0$ in favor of the null.{{< /marginnote >}}
+
 ```js
 const bf = await wl`FullSimplify[
   (${margZ} /. {pz -> p1, ssr -> (g/(g+1))*r1 + (1/(g+1))*yy}) / (${margZ} /. {pz -> 0, ssr -> yy})]`
@@ -312,6 +318,8 @@ await show`Assuming[p1 > 0 && nu0 > 0 && s20 > 0 && yy > 0 && r1 > 0 && n > 0, L
 $$
 \lim_{g \to \infty} \operatorname{BF}_{10} = 0
 $$
+
+{{< marginnote >}}Take $r_1 \to 0$ at $\sigma_0^2 = 0$ to derive the information-paradox upper bound $(1 + g)^{(n + \nu_0 - p_1)/2}$.{{< /marginnote >}}
 
 ```js
 await show`Assuming[p1 > 0 && g > 0 && nu0 > 0 && yy > 0 && n > 0,
@@ -324,6 +332,8 @@ $$
 &= (1+g)^{\frac{1}{2} (n+\nu_0 -p_1)}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate $\log p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ on all five models of Hoff’s Oxygen Uptake Table 9.1.{{< /marginnote >}}
 
 ```js
 // Instantiate margZ directly on Hoff's Oxygen uptake Table 9.1 (g = n = 12, nu0 = 1, s20 = s_z^2)
@@ -350,6 +360,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Normalize the log marginal likelihoods via softmax to reproduce the exact posterior model probabilities.{{< /marginnote >}}
+
 ```js
 await show`N[Exp[${logMargs} - Max[${logMargs}]] / Total[Exp[${logMargs} - Max[${logMargs}]]]]`
 ```
@@ -369,6 +381,8 @@ Integrate $\sigma^2$ out of {{< eqref "eq:ch09-gpost" >}} to show that any contr
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Write the squared Student-$t$ marginal scale of a linear contrast $c^T \beta$ under the $g$-prior.{{< /marginnote >}}
+
 ```js
 // Ex 9.1: Exact Student-t marginal CI for oxygen contrast beta2 + beta4*age across ages 20..31
 const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
@@ -384,6 +398,8 @@ $$
 &= \frac{(c^\top (X^\top X)^{-1} c) g (\nu_0 \sigma_0^2 +\operatorname{SSR}_g)}{(1+g) (n+\nu_0)}
 \end{aligned}
 $$
+
+{{< marginnote >}}Filter ages $20, \dots, 31$ where the exact $95\%$ $t_{13}$ credible interval for Aerobics minus Running lies strictly above $0$.{{< /marginnote >}}
 
 ```js
 const bOls = await wl`LinearSolve[Transpose[${X}].${X}, Transpose[${X}].${y}]`
@@ -406,6 +422,8 @@ The zero-centered $g$-prior also shrinks the intercept. Show that the fitted val
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Compute $\operatorname{SSR}_g(y + c\mathbf{1}) - \operatorname{SSR}_g(y)$ symbolically to expose shift non-invariance under a zero-centered $g$-prior.{{< /marginnote >}}
+
 ```js
 // Ex 9.2: Shift non-invariance of zero-centered g-prior under y -> y + c*1
 const shiftDiff = await show`FullSimplify[((g/(g + 1))*ssrOls + (1/(g + 1))*(yy + 2*c*n*yb + n*c^2)) - ((g/(g + 1))*ssrOls + (1/(g + 1))*yy)]`
@@ -414,6 +432,8 @@ const shiftDiff = await show`FullSimplify[((g/(g + 1))*ssrOls + (1/(g + 1))*(yy 
 $$
 \operatorname{SSR}_g(y + c\mathbf{1}) - \operatorname{SSR}_g(y) = \frac{c n (c+2 \bar{y})}{1+g}
 $$
+
+{{< marginnote >}}Instantiate the shift inflation as an exact fraction and decimal at $n = g = 12, \bar{y} = 0, c = 10$.{{< /marginnote >}}
 
 ```js
 await show`{${shiftDiff}, N[${shiftDiff}]} /. {n -> 12, g -> 12, yb -> 0, c -> 10}`
@@ -433,6 +453,8 @@ Verify both halves of {{< xref "rem:ch09-paradox" "full" >}}. Derive the bound $
 {{< /thm >}}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
+
+{{< marginnote >}}Write the Bayes factor $\operatorname{BF}_{A, B}(g)$ comparing (group + age) against (age only) as a function of $g$.{{< /marginnote >}}
 
 ```js
 // Ex 9.3: Exact switch point g* where Lindley's paradox flips A=(1,1,1,0) vs B=(1,0,1,0) on oxygen data (nu0 = 1)
@@ -455,6 +477,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Solve $\operatorname{BF}_{A, B}(g^*) = 1$ numerically to locate the exact Lindley-paradox crossover $g^*$.{{< /marginnote >}}
+
 ```js
 await show`g /. FindRoot[(${bfG} /. {s20 -> 8.54, yy -> ${yy}, fA -> ${fA}, fB -> ${fB}, n -> 12}) == 1, {g, 200}]`
 ```
@@ -471,6 +495,8 @@ Simulate $\mathbf{X}$ with $n = 342$, $p = 64$ independent standard normal colum
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Simplify the Beta–Binomial multiplicity-adjusting prior odds for adding one predictor to a model of size $k$.{{< /marginnote >}}
+
 ```js
 // Ex 9.4: Symbolic prior odds under Beta-Binomial multiplicity-adjusting prior
 const odds = await show`FullSimplify[FunctionExpand[(1/((p + 1)*Binomial[p, k + 1])) / (1/((p + 1)*Binomial[p, k]))]]`
@@ -479,6 +505,8 @@ const odds = await show`FullSimplify[FunctionExpand[(1/((p + 1)*Binomial[p, k + 
 $$
 \frac{\Pr(z_j = 1 \mid z_{-j})}{\Pr(z_j = 0 \mid z_{-j})} = \frac{1+k}{-k+p}
 $$
+
+{{< marginnote >}}Evaluate the prior odds at $p = 64$ for $k = 0$ ($1/64$) and $k = 5$ ($6/59$), contrasting with uniform odds $1$.{{< /marginnote >}}
 
 ```js
 await show`{${odds} /. {p -> 64, k -> 0}, ${odds} /. {p -> 64, k -> 5}}`

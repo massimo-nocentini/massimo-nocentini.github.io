@@ -189,6 +189,8 @@ print("MC 95% CI for sigma:  ", np.round(np.quantile(np.sqrt(s2_mc), [0.025, 0.9
 
 Integrates precision $p = 1/\sigma^2$ out of the Normal–Inverse-Gamma joint posterior in `wolfram-ws-bridge` JavaScript mode, verifies that the ratio to the Student-$t$ kernel has zero derivative in $\theta$, derives the exact symbolic Student-$t$ posterior variance $\operatorname{Var}[\theta \mid y]$, factors $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$, and instantiates all symbolic formulas on Hoff’s midge wing lengths.
 
+{{< marginnote >}}Integrate precision $p = 1/\sigma^2$ out of the Normal–Gamma joint posterior to obtain the marginal kernel in $\theta$.{{< /marginnote >}}
+
 ```js
 // Chapter 5: Symbolic Normal-IG -> Student-t marginal, variance & exact MSE inequality
 const marg = await show`Assuming[nun > 0 && rate > 0,
@@ -201,6 +203,8 @@ $$
 &= 2^{\frac{1+\nu_n}{2}} \left(\frac{1}{\nu_n \sigma_n^2 +\kappa_n (-\mu_n +\theta)^2}\right)^{\frac{1+\nu_n}{2}} \Gamma \left(\frac{1+\nu_n}{2}\right)
 \end{aligned}
 $$
+
+{{< marginnote >}}Check that the log-ratio of the integrated kernel to the $t_{\nu_n}(\mu_n, \sigma_n^2/\kappa_n)$ kernel has zero derivative in $\theta$.{{< /marginnote >}}
 
 ```js
 const tKer = await wl`(1 + kn*(th - mun)^2 / (nun*s2n))^(-(nun + 1)/2)`
@@ -215,6 +219,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Integrate $u^2$ against the Student-$t$ density to confirm $\operatorname{Var}(\theta \mid y) = \frac{\nu_n}{\nu_n - 2}\frac{\sigma_n^2}{\kappa_n}$.{{< /marginnote >}}
+
 ```js
 // Symbolic Student-t variance Var[theta | y] = (nun / (nun - 2)) * (s2n / kn) for nun > 2
 const tVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
@@ -224,6 +230,8 @@ const tVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
 $$
 \operatorname{Var}(\theta \mid y) = \frac{\nu_n \sigma_n^2}{\kappa_n (-2+\nu_n)}
 $$
+
+{{< marginnote >}}Factor the scaled MSE difference $(n + \kappa_0)^2[\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y})]$ to locate the crossover.{{< /marginnote >}}
 
 ```js
 // Scaled MSE difference (n + k0)^2 * (MSE(theta_b) - MSE(ybar))
@@ -241,6 +249,8 @@ $$
 &= \frac{\kappa_0 \left(\kappa_0 \mu_0^2 n-\kappa_0 \sigma^2 -2 n \sigma^2 -2 \kappa_0 \mu_0 n \theta_0 +\kappa_0 n \theta_0^2\right)}{n}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the exact posterior mean, variance, SD, and $95\%$ Student-$t$ credible interval on Hoff’s midge data.{{< /marginnote >}}
 
 ```js
 // Instantiate symbolic formulas on Hoff's midge wing lengths (n = 9)
@@ -266,6 +276,8 @@ Show that taking $\kappa_0, \nu_0 \to 0^+$ in {{< xref "thm:ch05-nig" "full" >}}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Take $\kappa_0 \to 0^+$ to verify that the posterior mean collapses to the sample mean $\bar{y}$.{{< /marginnote >}}
+
 ```js
 // Ex 5.1: Marginal posterior exponent of sigma^2 under kappa_0, nu_0 -> 0+ vs. reference prior 1/sigma^2
 await show`Limit[(k0*mu0 + n*yb)/(k0 + n), k0 -> 0]`
@@ -275,6 +287,8 @@ $$
 \lim_{\kappa_0 \to 0^+} \mu_n = \bar{y}
 $$
 
+{{< marginnote >}}Evaluate the marginal posterior exponent of $\sigma^2$ in the limit $\kappa_0, \nu_0 \to 0^+$.{{< /marginnote >}}
+
 ```js
 const powLim = await show`Assuming[n > 0, FullSimplify[-(n + nu0)/2 - 1 /. nu0 -> 0]]`
 ```
@@ -282,6 +296,8 @@ const powLim = await show`Assuming[n > 0, FullSimplify[-(n + nu0)/2 - 1 /. nu0 -
 $$
 \text{Marginal exponent of } \sigma^2 \text{ as } \kappa_0, \nu_0 \to 0^+ = -1-\frac{n}{2}
 $$
+
+{{< marginnote >}}Compute the corresponding marginal exponent of $\sigma^2$ under the Jeffreys/reference prior $p(\theta, \sigma^2) \propto 1/\sigma^2$.{{< /marginnote >}}
 
 ```js
 const powRef = await show`Assuming[n > 0, FullSimplify[-(n - 1)/2 - 1]]`
@@ -293,6 +309,8 @@ $$
 &= \frac{1}{2} (-1-n)
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the resulting degrees of freedom at $n = 9$, showing the $1$-df difference ($9$ versus $8$).{{< /marginnote >}}
 
 ```js
 await show`{-2*(${powLim} + 1), -2*(${powRef} + 1)} /. n -> 9`
@@ -310,6 +328,8 @@ Derive the exact posterior predictive distribution $\tilde{Y} \mid y_{1:n}$ in {
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Simplify the exact posterior predictive Student-$t$ variance $\operatorname{Var}(\tilde{Y} \mid y)$ for $\nu_n > 2$.{{< /marginnote >}}
+
 ```js
 // Ex 5.2: Exact posterior predictive Student-t variance for Normal-IG model
 const predVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
@@ -322,6 +342,8 @@ $$
 &= \frac{\left(1+\frac{1}{\kappa_n}\right) \nu_n \sigma_n^2}{-2+\nu_n}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the midge predictive SD alongside the much narrower posterior SD of $\theta$.{{< /marginnote >}}
 
 ```js
 await show`N[{Sqrt[${predVar}], Sqrt[(nun/(nun - 2))*s2n/kn]} /. {nun -> 10, kn -> 10, s2n -> 0.01532}]`
@@ -342,6 +364,8 @@ In {{< xref "thm:ch05-mse" "full" >}}, suppose $\theta_0 = 112$, $\sigma^2 = 169
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Solve $\operatorname{MSE}(\hat{\theta}_b) = \operatorname{MSE}(\bar{y})$ symbolically for the exact crossover sample size $n^*$.{{< /marginnote >}}
+
 ```js
 // Ex 5.3: Exact sample-size crossover n* where ybar beats Bayes shrinkage in MSE (exists iff k0*(mu0 - th0)^2 > 2*s2)
 const nStar = await show`n /. First[Solve[(mu0 - th0)^2 == s2*(1/n + 2/k0), n]]`
@@ -353,6 +377,8 @@ $$
 &= \frac{\kappa_0 \sigma^2}{\kappa_0 \mu_0^2-2 \sigma^2 -2 \kappa_0 \mu_0 \theta_0 +\kappa_0 \theta_0^2}
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate $n^*$ both as an exact fraction and numerically for the town-IQ parameters ($\theta_0=112, \mu_0=100$).{{< /marginnote >}}
 
 ```js
 await show`{${nStar}, N[${nStar}]} /. {th0 -> 112, mu0 -> 100, s2 -> 169, k0 -> 3}`

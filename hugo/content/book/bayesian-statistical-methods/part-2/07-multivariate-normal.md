@@ -189,6 +189,8 @@ print(f"Pr(Ytilde_2 > Ytilde_1 | Y) = {np.mean(y_pred[:, 1] > y_pred[:, 0]):.3f}
 
 Verifies symbolically for a general $3 \times 3$ covariance matrix $\Sigma$ in `wolfram-ws-bridge` JavaScript mode that the Schur-complement partial regression vector equals $-\Omega_{1,1}^{-1}\Omega_{1,23}^T$, derives the general $2 \times 2$ conditional slope and conditional variance symbolically in terms of $(s_1, s_2, \rho)$, and instantiates them on Hoff’s reading-comprehension covariance.
 
+{{< marginnote >}}Compute the symbolic $3 \times 3$ Schur regression slope vector $\Sigma_{23,23}^{-1}\Sigma_{23,1}$.{{< /marginnote >}}
+
 ```js
 // Chapter 7: Symbolic 3x3 Schur-precision identity & symbolic 2x2 conditional normal
 const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
@@ -202,6 +204,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Verify that the Schur slope vector equals $-\Omega_{11}^{-1}\Omega_{1,23}$ from the inverse covariance $\Omega = \Sigma^{-1}$.{{< /marginnote >}}
+
 ```js
 const betaPrec = await wl`FullSimplify[-Inverse[${Sig}][[1, {2, 3}]] / Inverse[${Sig}][[1, 1]]]`
 await show`FullSimplify[${betaSchur} - ${betaPrec}]`
@@ -210,6 +214,8 @@ await show`FullSimplify[${betaSchur} - ${betaPrec}]`
 $$
 \beta_{\text{Schur}} - \bigl(-\Omega_{11}^{-1}\Omega_{1,23}\bigr) = \{0,0\}
 $$
+
+{{< marginnote >}}Derive the symbolic conditional regression slope $\beta_{2\mid 1} = \rho\,\sigma_2/\sigma_1$ for a $2 \times 2$ normal.{{< /marginnote >}}
 
 ```js
 // Abstract 2x2 covariance {{s1^2, rho*s1*s2}, {rho*s1*s2, s2^2}}: symbolic slope & cond. variance
@@ -221,6 +227,8 @@ $$
 \beta_{2 \mid 1} = \frac{\Sigma_{1,2}}{\Sigma_{1,1}} = \frac{\rho \sigma_2}{\sigma_1}
 $$
 
+{{< marginnote >}}Derive the symbolic conditional variance $\operatorname{Var}(Y_2 \mid Y_1) = (1 - \rho^2)\sigma_2^2$.{{< /marginnote >}}
+
 ```js
 const cvarSym = await show`FullSimplify[${covSym}[[2, 2]] - ${covSym}[[1, 2]]^2 / ${covSym}[[1, 1]]]`
 ```
@@ -231,6 +239,8 @@ $$
 &= -\left(\left(-1+\rho^2\right) \sigma_2^2\right)
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the conditional slope and conditional SD on Hoff’s reading-comprehension covariance.{{< /marginnote >}}
 
 ```js
 // Instantiate on Hoff's reading-comprehension covariance (s1^2 = 182.16, s2^2 = 243.65, cov = 147.45)
@@ -251,6 +261,8 @@ Let $\Omega = \Sigma^{-1}$ be the precision matrix of $\mathbf{Y} \sim \mathcal{
 {{< /thm >}}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
+
+{{< marginnote >}}Invert a general symbolic $3 \times 3$ covariance $\Sigma$ and verify $\Sigma_{1,23}\Sigma_{23,23}^{-1} - (-\Omega_{11}^{-1}\Omega_{1,23}) = \mathbf{0}$.{{< /marginnote >}}
 
 ```js
 // Ex 7.1: 3x3 block-matrix proof that beta_{1|2,3} = Sigma_{1,23}*Sigma_{23,23}^(-1) = -Omega_{11}^(-1)*Omega_{1,23}
@@ -273,6 +285,8 @@ Extend the Python script above to create $20\%$ missing entries in column 2 unde
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Integrate $z\,\phi(z)$ over $(z_0, \infty)$ to derive the inverse Mills ratio bias $E[Z \mid Z > z_0]$ under left truncation.{{< /marginnote >}}
+
 ```js
 // Ex 7.2: Exact complete-case MNAR bias when observations below z0 are truncated (zero complete-case bias under MCAR only)
 const shift = await show`Assuming[Element[z0, Reals],
@@ -285,6 +299,8 @@ $$
 &= \frac{e^{-\frac{z_0^2}{2}} \sqrt{\frac{2}{\pi}}}{\operatorname{erfc} \left(\frac{z_0}{\sqrt{2}}\right)}
 \end{aligned}
 $$
+
+{{< marginnote >}}Find the $20\%$ standard normal quantile $z_{0.20}$ and evaluate the resulting MNAR upward bias.{{< /marginnote >}}
 
 ```js
 const z20 = await wl`z /. FindRoot[1/2*Erfc[-z/Sqrt[2]] == 1/5, {z, -0.84}]`
@@ -303,6 +319,8 @@ For $p = 3$ and $S_0 = I_3$, simulate $10{,}000$ draws from $\Sigma \sim \operat
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Record the exponent $(\nu_0 - p - 1)/2$ of $(1 - r^2)$ in the marginal correlation prior under $\operatorname{IW}(\nu_0, I_p)$.{{< /marginnote >}}
+
 ```js
 // Ex 7.3: Marginal prior p(rho) ~ (1 - rho^2)^((nu0 - p - 1)/2) under IW(nu0, I_p)
 const expSym = await show`(nu0 - p - 1) / 2`
@@ -311,6 +329,8 @@ const expSym = await show`(nu0 - p - 1) / 2`
 $$
 \text{Exponent of } (1 - r^2) \text{ in } p(r) = \frac{1}{2} (-1+\nu_0 -p)
 $$
+
+{{< marginnote >}}Integrate $(1 - r^2)^{(\nu_0 - p - 1)/2}$ over $(-1, 1)$ to obtain its Beta normalizing constant.{{< /marginnote >}}
 
 ```js
 await show`Assuming[nu0 > p - 1, FullSimplify[Integrate[(1 - r^2)^((nu0 - p - 1)/2), {r, -1, 1}]]]`
@@ -322,6 +342,8 @@ $$
 &= \frac{\sqrt{\pi} \Gamma \left(\frac{1}{2} (1+\nu_0 -p)\right)}{\Gamma \left(\frac{1}{2} (2+\nu_0 -p)\right)}
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate the exponent at $p = 3$ for $\nu_0 \in \{4, 6, 20\}$ (from uniform to concentrated near zero).{{< /marginnote >}}
 
 ```js
 await show`Table[${expSym} /. {p -> 3, nu0 -> v}, {v, {4, 6, 20}}]`

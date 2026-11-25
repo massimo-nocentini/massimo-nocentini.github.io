@@ -136,6 +136,8 @@ for theta in [0.05, 0.10, 0.20]:
 
 Run the following `wolfram-ws-bridge` JavaScript-mode sequence (`W`, `wl`, `show`, `toJS`) to derive the Beta–Binomial normalizer $Z$, posterior mean, posterior variance, mode (for $a+y > 1$, $b+n-y > 1$), and symbolic tail probability $\Pr(\theta < c \mid Y = y)$ completely symbolically, then instantiate the symbolic formulas at $(n, y, c) = (20, 0, 1/10)$ to cross-check the Python output above.
 
+{{< marginnote >}}Integrate the unnormalized Beta–Binomial kernel over $\theta \in (0, 1)$ to obtain the normalizing constant $Z$.{{< /marginnote >}}
+
 ```js
 // Chapter 1: Symbolic Beta-Binomial posterior, variance, CDF, and numeric check
 const { Times, Power, Plus, Subtract, Minus, th, a, b, n, y } = W
@@ -154,6 +156,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Compute the symbolic posterior mean $E[\theta \mid y]$ by integrating $\theta$ against the normalized posterior.{{< /marginnote >}}
+
 ```js
 const mean = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
   FullSimplify[Integrate[th * ${kernel}, {th, 0, 1}] / ${Z}]]`
@@ -162,6 +166,8 @@ const mean = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
 $$
 \mathbb{E}[\theta \mid y] = \frac{a+y}{a+b+n}
 $$
+
+{{< marginnote >}}Compute the symbolic posterior variance $\operatorname{Var}(\theta \mid y) = E[\theta^2 \mid y] - (E[\theta \mid y])^2$.{{< /marginnote >}}
 
 ```js
 const postVar = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
@@ -172,6 +178,8 @@ $$
 \operatorname{Var}(\theta \mid y) = \frac{(b+n-y) (a+y)}{(a+b+n)^2 (1+a+b+n)}
 $$
 
+{{< marginnote >}}Differentiate the log-kernel to find the closed-form posterior mode $\hat{\theta}_{\text{MAP}}$.{{< /marginnote >}}
+
 ```js
 // Posterior mode (valid when a + y > 1 and b + n - y > 1) and symbolic CDF Pr(th < c | y)
 await show`FullSimplify[th /. First[Solve[D[Log[${kernel}], th] == 0, th]]]`
@@ -180,6 +188,8 @@ await show`FullSimplify[th /. First[Solve[D[Log[${kernel}], th] == 0, th]]]`
 $$
 \hat{\theta}_{\text{MAP}} = \frac{-1+a+y}{-2+a+b+n}
 $$
+
+{{< marginnote >}}Integrate the Beta density up to $c$ to express $\Pr(\theta < c \mid y)$ via the incomplete Beta function.{{< /marginnote >}}
 
 ```js
 const cdfSym = await show`Assuming[al > 0 && be > 0 && 0 < c < 1,
@@ -190,6 +200,8 @@ $$
 \Pr(\theta < c \mid y) = \frac{B_c(a+y,b+n-y)}{B(a+y,b+n-y)}
 $$
 
+{{< marginnote >}}Verify that the posterior mean is a precision-weighted average of the sample proportion and prior mean.{{< /marginnote >}}
+
 ```js
 await show`Simplify[${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]`
 ```
@@ -197,6 +209,8 @@ await show`Simplify[${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]
 $$
 \mathbb{E}[\theta \mid y] - \left(\frac{n}{n+w}\frac{y}{n} + \frac{w}{n+w}\frac{a}{w}\right) = 0
 $$
+
+{{< marginnote >}}Instantiate the posterior mean and $\Pr(\theta < 0.10 \mid y=0)$ across the uniform, epidemiological, and strong-wrong priors.{{< /marginnote >}}
 
 ```js
 // Instantiate symbolic mean & CDF at n = 20, y = 0, c = 1/10 for Uniform (1,1), Epi (2,20), Strong wrong (10,10)
@@ -218,6 +232,8 @@ In the rare-event survey ($n = 20$, $y = 0$), suppose a skeptical colleague insi
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Write $\Pr(\theta < c \mid y = 0)$ symbolically as a regularized incomplete Beta ratio in prior weight $w$.{{< /marginnote >}}
+
 ```js
 // Ex 1.1: Prior dominance threshold w* where Pr(theta < c | y = 0) == 1/2
 const cdf = await show`Beta[c, w*th0, w*(1 - th0) + n] / Beta[w*th0, w*(1 - th0) + n]`
@@ -230,6 +246,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Solve numerically for the critical prior sample size $w^*$ where $\Pr(\theta < 0.10 \mid y = 0) = 1/2$.{{< /marginnote >}}
+
 ```js
 await show`w /. FindRoot[(${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20}) == 1/2, {w, 15, 35}]`
 ```
@@ -237,6 +255,8 @@ await show`w /. FindRoot[(${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20}) == 1/2, {w
 $$
 w^*\big|_{c=0.1,\;\theta_0=0.2,\;n=20} = 22.6228
 $$
+
+{{< marginnote >}}Evaluate $\Pr(\theta < 0.10 \mid y = 0)$ at the straddling integers $w = 22$ and $w = 23$.{{< /marginnote >}}
 
 ```js
 await show`N[{${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 22}, ${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 23}}]`
@@ -257,6 +277,8 @@ Show that if $Y \mid \beta, \sigma^2 \sim \mathcal{N}_n(X\beta, \sigma^2 I_n)$ a
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Multiply the negative log-posterior under a Laplace prior by $2\sigma^2$ to reveal the $\ell_1$-penalized objective.{{< /marginnote >}}
+
 ```js
 // Ex 1.2: Equivalence of Laplace MAP and Lasso penalty lambda = 2*sigma^2 / b
 const obj = await show`Expand[-2*s2 * (-ssr/(2*s2) - l1/b)]`
@@ -269,6 +291,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Extract the coefficient of $\|\beta\|_1$ to identify the exact Lasso penalty $\lambda = 2\sigma^2/b$.{{< /marginnote >}}
+
 ```js
 const lam = await show`Coefficient[${obj}, l1]`
 ```
@@ -276,6 +300,8 @@ const lam = await show`Coefficient[${obj}, l1]`
 $$
 \lambda = \frac{2 \sigma^2}{b}
 $$
+
+{{< marginnote >}}Instantiate $\lambda$ at $\sigma^2 = 1$ and Laplace scale $b = 1/2$.{{< /marginnote >}}
 
 ```js
 await show`${lam} /. {s2 -> 1, b -> 1/2}`
@@ -293,6 +319,8 @@ Plot the exact frequentist coverage of the 95% Wald interval and the 95% plus-fo
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Express the exact finite-sample Binomial coverage probability as a sum over accepted counts $k$.{{< /marginnote >}}
+
 ```js
 // Ex 1.3: Exact Binomial coverage sum (Wald vs. plus-four) & lattice oscillation
 await show`Sum[Binomial[n, k]*th^k*(1 - th)^(n - k)*Boole[Abs[pHat[k] - th] <= z*se[k]], {k, 0, n}]`
@@ -304,6 +332,8 @@ $$
 &= \sum_{k=0}^n (1-\theta)^{-k+n} \theta^k \binom{n}{k} \mathbf{1} [| -\theta +\hat{p} (k)| \leq z \operatorname{se} (k)]
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate exact coverage at $\theta = 0.10$ for $n \in \{20, 100\}$, comparing Wald versus plus-four intervals.{{< /marginnote >}}
 
 ```js
 await show`N[Table[Sum[Binomial[nVal, k]*(1/10)^k*(9/10)^(nVal - k)*Boole[

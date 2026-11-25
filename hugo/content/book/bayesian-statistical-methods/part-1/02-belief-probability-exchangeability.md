@@ -172,6 +172,8 @@ for N in [20, 100, 1000]:
 
 This `wolfram-ws-bridge` JavaScript-mode sequence derives Bayes’ rule, the Bayes factor $s/f$, the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$, and the exact finite-population hypergeometric sample-sum variance symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
 
+{{< marginnote >}}Apply Bayes’ rule symbolically to express $\Pr(H_1 \mid E)$ in terms of sensitivity $s$, false-positive rate $f$, and prior $p_0$.{{< /marginnote >}}
+
 ```js
 // Chapter 2: Symbolic Bayes' rule, Bayes factor, and finite-population covariance & variance
 const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
@@ -181,6 +183,8 @@ $$
 \Pr(H_1 \mid E) = \frac{s\,p_0}{s\,p_0 + f(1 - p_0)} = \frac{p_0 s}{f-f p_0 +p_0 s}
 $$
 
+{{< marginnote >}}Divide posterior odds by prior odds to verify that the Bayes factor equals the likelihood ratio $s/f$.{{< /marginnote >}}
+
 ```js
 await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
 ```
@@ -188,6 +192,8 @@ await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
 $$
 \operatorname{BF}_{10} = \frac{\text{posterior odds}}{\text{prior odds}} = \frac{s}{f}
 $$
+
+{{< marginnote >}}Derive the exact covariance $\operatorname{Cov}(Y_1, Y_2) < 0$ of two without-replacement draws from a finite population.{{< /marginnote >}}
 
 ```js
 // Finite-population without-replacement covariance Cov(Y1, Y2) < 0 and sample-sum variance
@@ -198,6 +204,8 @@ $$
 \operatorname{Cov}(Y_1, Y_2) = \frac{K (K -N)}{(-1+N) N^2}
 $$
 
+{{< marginnote >}}Combine marginal variances and pairwise covariances to obtain the hypergeometric sample-sum variance.{{< /marginnote >}}
+
 ```js
 const varHyper = await show`FullSimplify[n*(kRed/nPop)*(1 - kRed/nPop) + n*(n - 1)*(${covF})]`
 ```
@@ -206,6 +214,8 @@ $$
 \operatorname{Var}\!\left(\sum_{i=1}^n Y_i\right) = \frac{K n (K -N) (n-N)}{(-1+N) N^2}
 $$
 
+{{< marginnote >}}Take $N \to \infty$ at fixed proportion $\theta = K/N$ to confirm that finite-population covariance vanishes.{{< /marginnote >}}
+
 ```js
 await show`Limit[${covF} /. kRed -> th * nPop, nPop -> Infinity]`
 ```
@@ -213,6 +223,8 @@ await show`Limit[${covF} /. kRed -> th * nPop, nPop -> Infinity]`
 $$
 \lim_{N \to \infty} \operatorname{Cov}(Y_1, Y_2) = 0
 $$
+
+{{< marginnote >}}Instantiate Bayes’ rule as an exact fraction for the screening test ($p_0 = 0.01, s = 0.95, f = 0.05$).{{< /marginnote >}}
 
 ```js
 // Instantiate screening example (p0 = 1/100, s = 95/100, f = 5/100) & Diaconis-Freedman TV (N = 20, 100, 1000)
@@ -223,6 +235,8 @@ $$
 \Pr(H_1 \mid E)\big|_{p_0=0.01,\; s=0.95,\; f=0.05} = \frac{19}{118}
 $$
 
+{{< marginnote >}}Convert the exact screening posterior probability $19/118$ to decimal form.{{< /marginnote >}}
+
 ```js
 await show`N[${pExact}]`
 ```
@@ -230,6 +244,8 @@ await show`N[${pExact}]`
 $$
 \Pr(H_1 \mid E)\big|_{\text{decimal}} = 0.161017
 $$
+
+{{< marginnote >}}Compute the exact total-variation distance between hypergeometric and binomial draws as $N$ grows.{{< /marginnote >}}
 
 ```js
 await show`N[Table[1/2 * Sum[Abs[
@@ -252,6 +268,8 @@ Suppose a bookmaker offers even-money odds corresponding to subjective probabili
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Simplify the bookmaker’s guaranteed profit when selling one unit each of $F$ and $F^c$ at prices $q_F + q_{F^c} > 1$.{{< /marginnote >}}
+
 ```js
 // Ex 2.1: Dutch book guaranteed profit when qF + qNotF > 1 (both outcomes F and not-F)
 const profitF = await show`Simplify[(qF + qNotF) - 1]`
@@ -260,6 +278,8 @@ const profitF = await show`Simplify[(qF + qNotF) - 1]`
 $$
 \text{Dutch-book profit} = (q_F - 1) + q_{F^c} = -1+q_F +q_{F^c}
 $$
+
+{{< marginnote >}}Instantiate the guaranteed Dutch-book profit when $q_F = q_{F^c} = 0.6$.{{< /marginnote >}}
 
 ```js
 await show`N[${profitF} /. {qF -> 6/10, qNotF -> 6/10}]`
@@ -277,6 +297,8 @@ Consider drawing $n = 2$ balls without replacement from an urn containing $K$ re
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Compute $\Pr(Y_1 = 1, Y_2 = 0)$ symbolically for two draws without replacement from an urn of $K$ reds in $N$.{{< /marginnote >}}
+
 ```js
 // Ex 2.2: Exchangeability & negative covariance of n = 2 draws without replacement
 const p10 = await show`FullSimplify[(kRed/nPop)*((nPop - kRed)/(nPop - 1))]`
@@ -286,6 +308,8 @@ $$
 \Pr(Y_1 = 1, Y_2 = 0) = \Pr(Y_1 = 0, Y_2 = 1) = \frac{K (-K +N)}{(-1+N) N}
 $$
 
+{{< marginnote >}}Compute $\operatorname{Cov}(Y_1, Y_2)$ symbolically, showing it is strictly negative for $0 < K < N$.{{< /marginnote >}}
+
 ```js
 const p01 = await wl`FullSimplify[((nPop - kRed)/nPop)*(kRed/(nPop - 1))]`
 const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
@@ -294,6 +318,8 @@ const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed
 $$
 \operatorname{Cov}(Y_1, Y_2) = \frac{K (K -N)}{(-1+N) N^2}
 $$
+
+{{< marginnote >}}Check exchangeability symmetry, the $N \to \infty$ i.i.d. limit, and the concrete value at $(K, N) = (3, 10)$.{{< /marginnote >}}
 
 ```js
 await show`{Simplify[${p10} - ${p01}], Limit[${covF} /. kRed -> th*nPop, nPop -> Infinity], N[${covF} /. {kRed -> 3, nPop -> 10}]}`
@@ -314,6 +340,8 @@ Give an example of two events $F$ and $G$ that are *conditionally* independent g
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Factor $\Pr(F \cap G) - \Pr(F)\Pr(G)$ to show conditional independence given $H$ still yields marginal dependence.{{< /marginnote >}}
+
 ```js
 // Ex 2.3: Conditional independence given H and not-H still implies marginal dependence
 const margDiff = await show`Factor[(h*p1*q1 + (1 - h)*p0*q0) - (h*p1 + (1 - h)*p0)*(h*q1 + (1 - h)*q0)]`
@@ -322,6 +350,8 @@ const margDiff = await show`Factor[(h*p1*q1 + (1 - h)*p0*q0) - (h*p1 + (1 - h)*p
 $$
 \Pr(F \cap G) - \Pr(F)\Pr(G) = -((-1+h) h (p_0 -p_1) (q_0 -q_1))
 $$
+
+{{< marginnote >}}Evaluate the marginal dependence gap at $h = 1/2$, $p_1 = q_1 = 3/4$, and $p_0 = q_0 = 1/4$.{{< /marginnote >}}
 
 ```js
 await show`${margDiff} /. {h -> 1/2, p1 -> 3/4, q1 -> 3/4, p0 -> 1/4, q0 -> 1/4}`

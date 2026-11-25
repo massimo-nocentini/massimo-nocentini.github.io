@@ -191,6 +191,8 @@ print("Pred PMF (no degree, y=0..5):", np.round(pmf1, 3))
 
 Integrates $\theta$ out of the Poisson–Gamma posterior symbolically in `wolfram-ws-bridge` JavaScript mode to recover the Negative Binomial predictive PMF, mean, and variance, derives the general symbolic Beta interval mass $\int_l^u p(t \mid a, b)\,dt$, and then instantiates both on the GSS fertility counts and the $\operatorname{beta}(3, 9)$ 95% HPD interval.
 
+{{< marginnote >}}Integrate $\theta$ out of the Poisson–Gamma product to derive the Negative Binomial predictive PMF.{{< /marginnote >}}
+
 ```js
 // Chapter 3: Symbolic Poisson-Gamma predictive & general Beta(a,b) HPD integral
 const { Times, Divide, Power, Exp, Minus, Subtract, Gamma, Factorial, th, yt, an, bn } = W
@@ -207,6 +209,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Sum $\tilde{y}\,p(\tilde{y} \mid y)$ over all non-negative integers to obtain the predictive mean $a_n/b_n$.{{< /marginnote >}}
+
 ```js
 const predMean = await show`Assuming[an > 0 && bn > 0, FullSimplify[Sum[yt * ${pred}, {yt, 0, Infinity}]]]`
 ```
@@ -214,6 +218,8 @@ const predMean = await show`Assuming[an > 0 && bn > 0, FullSimplify[Sum[yt * ${p
 $$
 \mathbb{E}[\tilde{y} \mid y] = \frac{a_n}{b_n}
 $$
+
+{{< marginnote >}}Compute the symbolic predictive variance, showing overdispersion factor $(1 + b_n)/b_n$ relative to Poisson.{{< /marginnote >}}
 
 ```js
 await show`Assuming[an > 0 && bn > 0,
@@ -224,6 +230,8 @@ $$
 \operatorname{Var}(\tilde{y} \mid y) = \frac{a_n (1+b_n)}{b_n^2}
 $$
 
+{{< marginnote >}}Integrate the $\operatorname{beta}(a, b)$ density over $(l, u)$ to form the general HPD probability constraint.{{< /marginnote >}}
+
 ```js
 // Symbolic interval probability Int_l^u Beta(a, b) for general HPD system
 const betaMass = await show`Assuming[a > 0 && b > 0 && 0 < l < u < 1,
@@ -233,6 +241,8 @@ const betaMass = await show`Assuming[a > 0 && b > 0 && 0 < l < u < 1,
 $$
 \int_l^u \operatorname{Beta}(t \mid a, b)\,dt = \frac{-B_l(a,b)+B_u(a,b)}{B(a,b)}
 $$
+
+{{< marginnote >}}Instantiate the GSS no-degree posterior predictive PMF for $\tilde{y} = 0, \dots, 5$.{{< /marginnote >}}
 
 ```js
 // Instantiate GSS no-degree group (an = 219, bn = 112) and Beta(3, 9) 95% HPD
@@ -245,6 +255,8 @@ $$
 &= \{0.142747,0.276652,0.269307,0.175566,0.0862293,0.0340339\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Solve the equal-density and $95\%$ mass equations simultaneously for the exact $\operatorname{beta}(3, 9)$ HPD interval.{{< /marginnote >}}
 
 ```js
 await show`{l, u, u - l} /. FindRoot[{
@@ -267,6 +279,8 @@ Let $\theta \mid y \sim \operatorname{beta}(3, 9)$ and define the log-odds $\gam
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Derive the exact log-odds density $p_\gamma(g)$ of $\gamma = \operatorname{logit}(\theta)$ via the logistic Jacobian.{{< /marginnote >}}
+
 ```js
 // Ex 3.1: Log-odds HPD non-invariance vs. quantile monotone invariance for Beta(3, 9)
 const pg = await show`FullSimplify[(E^(a*g)*(1 + E^g)^(-a - b)) / Beta[a, b]]`
@@ -278,6 +292,8 @@ $$
 &= \frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
 \end{aligned}
 $$
+
+{{< marginnote >}}Solve directly for the $2.5\%$ and $97.5\%$ quantiles of $\gamma$ under $\operatorname{beta}(3, 9)$.{{< /marginnote >}}
 
 ```js
 await show`{g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 25/1000, {g, -2.7}],
@@ -291,6 +307,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Solve for the true $95\%$ HPD interval directly on the log-odds scale $\gamma$.{{< /marginnote >}}
+
 ```js
 await show`{gl, gu} /. FindRoot[{
   (${pg} /. {a -> 3, b -> 9, g -> gl}) == (${pg} /. {a -> 3, b -> 9, g -> gu}),
@@ -303,6 +321,8 @@ $$
 &= \{-2.65578,0.144331\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Transform the $\theta$-scale HPD endpoints via $\operatorname{logit}$ to show they disagree with the true $\gamma$-HPD.{{< /marginnote >}}
 
 ```js
 await show`N[{Log[0.0406/(1 - 0.0406)], Log[0.4837/(1 - 0.4837)]}]`
@@ -320,6 +340,8 @@ Using the law of total variance, derive the exact mean and variance of the beta�
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Compute the Beta–Binomial posterior predictive mean $E[\tilde{S}_m \mid y]$ symbolically.{{< /marginnote >}}
+
 ```js
 // Ex 3.2: Beta-Binomial posterior predictive mean, variance & overdispersion factor
 const meanT = await wl`an / (an + bn)`
@@ -331,6 +353,8 @@ $$
 \mathbb{E}[\tilde{S}_m \mid y] = \frac{a_n m}{a_n +b_n}
 $$
 
+{{< marginnote >}}Combine within- and between-$\theta$ variance terms to derive the exact Beta–Binomial predictive variance.{{< /marginnote >}}
+
 ```js
 const varS = await show`Factor[m*((${meanT})*(1 - ${meanT}) - ${varT}) + m^2*(${varT})]`
 ```
@@ -338,6 +362,8 @@ const varS = await show`Factor[m*((${meanT})*(1 - ${meanT}) - ${varT}) + m^2*(${
 $$
 \operatorname{Var}(\tilde{S}_m \mid y) = \frac{a_n b_n m (a_n +b_n +m)}{(a_n +b_n)^2 (1+a_n +b_n)}
 $$
+
+{{< marginnote >}}Divide by the plug-in Binomial variance to isolate the exact overdispersion multiplier.{{< /marginnote >}}
 
 ```js
 const ratio = await show`Factor[${varS} / (m*(${meanT})*(1 - ${meanT}))]`
@@ -349,6 +375,8 @@ $$
 &= \frac{a_n +b_n +m}{1+a_n +b_n}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the predictive mean and overdispersion factor at $\operatorname{beta}(2, 40)$ with $m = 20$ future trials.{{< /marginnote >}}
 
 ```js
 await show`N[{${meanS}, ${ratio}} /. {an -> 2, bn -> 40, m -> 20}]`
@@ -369,6 +397,8 @@ Cast the exponential sampling model $p(y \mid \theta) = \theta e^{-\theta y}$ ($
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Write the Diaconis–Ylvisaker conjugate prior kernel in the natural parameter $\phi = -\theta$ of the exponential model.{{< /marginnote >}}
+
 ```js
 // Ex 3.3: Exponential model (h=1, c=-phi, t=y) -> Diaconis-Ylvisaker prior -> Gamma(n0 + 1, n0*t0)
 const dyPhi = await show`(-phi)^n0 * Exp[n0 * t0 * phi]`
@@ -381,6 +411,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Transform back to the rate scale $\theta = -\phi$ with unit Jacobian to recognize the $\operatorname{gamma}(n_0 + 1, n_0 t_0)$ kernel.{{< /marginnote >}}
+
 ```js
 await show`FullSimplify[(${dyPhi} /. phi -> -th) * Abs[D[-th, th]], th > 0]`
 ```
@@ -391,6 +423,8 @@ $$
 &= e^{-n_0 t_0 \theta} \theta^{n_0}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the induced Gamma shape, rate, and prior mean at $(n_0, t_0) = (2, 3)$.{{< /marginnote >}}
 
 ```js
 await show`{n0 + 1, n0*t0, (n0 + 1)/(n0*t0)} /. {n0 -> 2, t0 -> 3}`

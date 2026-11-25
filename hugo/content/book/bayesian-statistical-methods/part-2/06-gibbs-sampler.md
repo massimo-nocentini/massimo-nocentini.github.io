@@ -166,6 +166,8 @@ print(f"ESS(theta) = {ess_fft(theta):.0f} / {S}, ESS(sigma^2) = {ess_fft(sigma2)
 
 Computes the bivariate-normal Gibbs transition mean and variance symbolically in `wolfram-ws-bridge` JavaScript mode, extracts the AR(1) contraction factor $\alpha = \rho^2$, sums the integrated autocorrelation time to derive $S_{\text{eff}}/S = (1 - \rho^2)/(1 + \rho^2)$, verifies the $O(1)$ sum-of-squares decomposition symbolically, and instantiates $S_{\text{eff}}$ at $\rho = 0.99$.
 
+{{< marginnote >}}Integrate one full two-step Gibbs sweep of a bivariate normal to derive the conditional mean $E[X^{(s+1)} \mid X^{(s)} = x] = \rho^2 x$.{{< /marginnote >}}
+
 ```js
 // Chapter 6: Symbolic bivariate-normal Gibbs transition, ACF, ESS & O(1) sum-of-squares identity
 const transMean = await show`Assuming[v > 0 && Element[m, Reals],
@@ -176,6 +178,8 @@ $$
 \mathbb{E}\!\left[X^{(s+1)} \mid X^{(s)} = x\right] = \rho^2 x
 $$
 
+{{< marginnote >}}Compute the one-step conditional variance $1 - \rho^4$, confirming an exact AR(1) transition.{{< /marginnote >}}
+
 ```js
 const alpha = await wl`D[${transMean}, x]`   // AR(1) lag-1 contraction coefficient = rho^2
 await show`Simplify[(v + Integrate[(rho*Sqrt[v]*z)^2*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]) /. v -> 1 - rho^2]`
@@ -185,6 +189,8 @@ $$
 \operatorname{Var}\!\left(X^{(s+1)} \mid X^{(s)} = x\right) = 1-\rho^4
 $$
 
+{{< marginnote >}}Sum $1 + 2\sum_{k=1}^\infty \rho^{2k}$ to obtain the integrated autocorrelation time $\tau_{\text{int}}$.{{< /marginnote >}}
+
 ```js
 const tauInt = await show`Assuming[-1 < rho < 1, Together[Sum[2*(${alpha})^k, {k, 1, Infinity}] + 1]]`
 ```
@@ -193,6 +199,8 @@ $$
 \tau_{\text{int}} = 1 + 2\sum_{k=1}^\infty \rho^{2k} = \frac{-1-\rho^2}{-1+\rho^2}
 $$
 
+{{< marginnote >}}Invert $\tau_{\text{int}}$ to express the effective sample size ratio $S_{\text{eff}}/S = (1 - \rho^2)/(1 + \rho^2)$.{{< /marginnote >}}
+
 ```js
 const essRatio = await show`Together[1 / ${tauInt}]`
 ```
@@ -200,6 +208,8 @@ const essRatio = await show`Together[1 / ${tauInt}]`
 $$
 \frac{S_{\text{eff}}}{S} = \frac{1}{\tau_{\text{int}}} = \frac{1-\rho^2}{1+\rho^2}
 $$
+
+{{< marginnote >}}Verify the $O(1)$ sum-of-squares decomposition symbolically for $n = 3$ observations.{{< /marginnote >}}
 
 ```js
 // Symbolic verification of the O(1) Gibbs sum-of-squares decomposition (n = 3)
@@ -213,6 +223,8 @@ $$
 &= 0
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate $S_{\text{eff}}$ at $\rho = 0.99$ and $S = 10{,}000$, illustrating severe correlation loss.{{< /marginnote >}}
 
 ```js
 // Instantiate exact S_eff at rho = 99/100, S = 10,000
@@ -231,6 +243,8 @@ Verify {{< eqref "eq:ch06-bvn-acf" >}} by showing that for the bivariate normal 
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Simplify the lag-$k$ autocorrelation of the bivariate-normal Gibbs chain to $(\rho^2)^k$.{{< /marginnote >}}
+
 ```js
 // Ex 6.1: Bivariate-normal Gibbs AR(1) recursion, lag-k ACF, and ESS
 await show`Assuming[-1 < rho < 1, FullSimplify[(rho^2)^k]]`
@@ -239,6 +253,8 @@ await show`Assuming[-1 < rho < 1, FullSimplify[(rho^2)^k]]`
 $$
 \operatorname{Corr}\!\left(X^{(s)}, X^{(s+k)}\right) = \left(\rho^2\right)^k
 $$
+
+{{< marginnote >}}Sum the geometric series to obtain the exact ESS ratio $(1 - \rho^2)/(1 + \rho^2)$.{{< /marginnote >}}
 
 ```js
 const essRatio = await show`Assuming[-1 < rho < 1, Together[1 / (1 + 2*Sum[rho^(2*k), {k, 1, Infinity}])]]`
@@ -250,6 +266,8 @@ $$
 &= \frac{1-\rho^2}{1+\rho^2}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the exact fraction and decimal ESS ratio at $\rho = 0.90$.{{< /marginnote >}}
 
 ```js
 await show`{${essRatio}, N[${essRatio}]} /. rho -> 9/10`
@@ -270,6 +288,8 @@ Suppose you place the improper prior $p(\theta, \sigma^2) \propto 1$ (flat on $\
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Record the full-conditional exponent $-n/2$ of $\sigma^2$ under the flat prior $p(\theta, \sigma^2) \propto 1$.{{< /marginnote >}}
+
 ```js
 // Ex 6.2: Flat prior p(theta, sigma^2) ~ 1 at n = 3 -> proper conditionals, improper marginal!
 const condExp = await show`Assuming[n > 0, FullSimplify[-n/2]]`
@@ -282,6 +302,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Record the marginal exponent $(1 - n)/2$ of $\sigma^2$ after integrating out $\theta$.{{< /marginnote >}}
+
 ```js
 const margExp = await show`Assuming[n > 0, FullSimplify[-(n - 1)/2]]`
 ```
@@ -289,6 +311,8 @@ const margExp = await show`Assuming[n > 0, FullSimplify[-(n - 1)/2]]`
 $$
 \text{Marginal exponent of } \sigma^2 \text{ in } p(\sigma^2 \mid y) = \frac{1-n}{2}
 $$
+
+{{< marginnote >}}Evaluate both exponents at $n = 3$, exposing a proper conditional ($-3/2$) alongside a divergent marginal ($-1$).{{< /marginnote >}}
 
 ```js
 await show`{${condExp}, ${margExp}} /. n -> 3`
@@ -309,6 +333,8 @@ Implement the trimodal mixture Gibbs sampler from {{< xref "fig:ch06-gibbs" "ful
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Express the mean residence time in mode $-3$ as the reciprocal of the one-step escape probability $p_{\text{esc}}$.{{< /marginnote >}}
+
 ```js
 // Ex 6.3: One-step escape probability & mean residence time from mode -3 in Hoff's trimodal Gibbs sampler
 const meanRes = await show`1 / pEsc`
@@ -317,6 +343,8 @@ const meanRes = await show`1 / pEsc`
 $$
 \mathbb{E}[\text{steps before escaping mode } -3] = \frac{1}{p_{\text{esc}}}
 $$
+
+{{< marginnote >}}Integrate the one-step escape probability numerically and evaluate the expected number of trapped iterations.{{< /marginnote >}}
 
 ```js
 const esc = await wl`NIntegrate[(Exp[-(th + 3)^2/(2/3)]/Sqrt[2*Pi/3]) * (1 - (45/100*Exp[-(th + 3)^2/(2/3)]) / (45/100*Exp[-(th + 3)^2/(2/3)] + 10/100*Exp[-th^2/(2/3)] + 45/100*Exp[-(th - 3)^2/(2/3)])), {th, -7, 7}]`

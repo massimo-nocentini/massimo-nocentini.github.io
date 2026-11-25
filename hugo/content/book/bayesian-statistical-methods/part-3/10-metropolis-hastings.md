@@ -317,6 +317,8 @@ print(f"AR(1): accept={acc / 10_000:.2f}, slope 95% CI={np.quantile(keep[:, 0], 
 
 Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode, abstracts the normal-target example to general $(n, \sigma^2, \tau_0^2, \delta)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and instantiates the symbolic acceptance formula on Hoff’s 5-point normal target.
 
+{{< marginnote >}}Integrate the Metropolis acceptance probability against a standard normal target to derive $\alpha(\ell) = \frac{2}{\pi}\operatorname{arccot}(\ell/2)$.{{< /marginnote >}}
+
 ```js
 // Chapter 10: Symbolic Metropolis acceptance rate (general normal posterior) & AR(1) precision
 const accRate = await show`Assuming[ell > 0,
@@ -329,6 +331,8 @@ $$
 &= \frac{2 \cot^{-1}\left(\frac{\ell}{2}\right)}{\pi}
 \end{aligned}
 $$
+
+{{< marginnote >}}Substitute the scaled proposal step $\ell = d\sqrt{n/\sigma^2 + \tau_0^{-2}}$ for a general normal posterior.{{< /marginnote >}}
 
 ```js
 // Abstract the normal-target example: ell = delta / tau_n with 1/tau_n^2 = n/s2 + 1/t0^2
@@ -343,6 +347,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Compute the symbolic determinant $(1 - \rho^2)^4$ of the $5 \times 5$ AR(1) correlation matrix.{{< /marginnote >}}
+
 ```js
 // Verify AR(1) determinant and tridiagonal precision matrix symbolically for n = 5
 await show`Factor[Det[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
@@ -351,6 +357,8 @@ await show`Factor[Det[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
 $$
 \det\!\bigl(\rho^{|i-j|}\bigr)_{1\le i,j\le 5} = (-1+\rho)^4 (1+\rho)^4
 $$
+
+{{< marginnote >}}Invert the $5 \times 5$ AR(1) correlation matrix to confirm its sparse tridiagonal precision structure.{{< /marginnote >}}
 
 ```js
 await show`Simplify[(1 - rho^2) * Inverse[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
@@ -362,6 +370,8 @@ $$
 &= \left( \begin{array}{ccccc} 1 & -\rho & 0 & 0 & 0 \\ -\rho & 1+\rho^2 & -\rho & 0 & 0 \\ 0 & -\rho & 1+\rho^2 & -\rho & 0 \\ 0 & 0 & -\rho & 1+\rho^2 & -\rho \\ 0 & 0 & 0 & -\rho & 1 \\ \end{array} \right)
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the exact acceptance rate on Hoff’s 5-point normal target for $\delta^2 \in \{1/32, 2, 64\}$.{{< /marginnote >}}
 
 ```js
 // Instantiate symbolic accNormal on Hoff's 5-point normal target (n = 5, s2 = 1, t0^2 = 10; delta^2 in {1/32, 2, 64})
@@ -380,6 +390,8 @@ Extend the proof of {{< xref "prop:ch10-accept" "full" >}} to the expected squar
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Simplify the 1-D Metropolis expected squared jump distance $\operatorname{ESJD}(\ell)$ symbolically.{{< /marginnote >}}
+
 ```js
 // Ex 10.1: Symbolic expected squared jump & optimal 1D Metropolis scaling (tau = 1; 2.38 is d -> Inf limit)
 const esjd = await show`FullSimplify[(2*ell^2/Pi) * (Pi/2 - ArcTan[ell/2] - Sin[2*ArcTan[ell/2]]/2)]`
@@ -392,6 +404,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Express the lag-1 autocorrelation $\rho_1(\ell) = 1 - \frac{1}{2}\operatorname{ESJD}(\ell)$ in closed form.{{< /marginnote >}}
+
 ```js
 const acf1 = await show`FullSimplify[1 - ${esjd}/2]`
 ```
@@ -402,6 +416,8 @@ $$
 &= 1-\frac{\ell^2 \left(-\frac{4 \ell}{4+\ell^2}+\pi -2 \tan^{-1}\left(\frac{\ell}{2}\right)\right)}{2 \pi}
 \end{aligned}
 $$
+
+{{< marginnote >}}Maximize $\operatorname{ESJD}(\ell)$ numerically to obtain the 1-D optimum $(\ell^*, \alpha(\ell^*), \rho_1(\ell^*))$.{{< /marginnote >}}
 
 ```js
 const ellStar = await wl`ell /. FindRoot[D[${esjd}, ell] == 0, {ell, 2.4}]`
@@ -420,6 +436,8 @@ Show that for $0 < \delta \le 1$ the reflecting random walk has density $J(b \mi
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Verify that the reflecting random-walk kernel integrates to $1$ near the boundary ($0 < a < d \le 1/2$).{{< /marginnote >}}
+
 ```js
 // Ex 10.2: Normalization & symmetry of reflecting random walk vs. naive-redraw boundary depletion
 await show`Assuming[0 < d <= 1/2 && 0 < a < d,
@@ -429,6 +447,8 @@ await show`Assuming[0 < d <= 1/2 && 0 < a < d,
 $$
 \int_0^1 J_{\text{refl}}(b \mid a)\,db = 1
 $$
+
+{{< marginnote >}}Compute the stationary density distortion factor $Z(a)/(2d)$ induced by naive boundary redrawing.{{< /marginnote >}}
 
 ```js
 const statFactor = await show`(Min[1, a + d] - Max[0, a - d]) / (2*d)`
@@ -440,6 +460,8 @@ $$
 &= \frac{-\max (0,a-d)+\min (1,a+d)}{2 d}
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate the boundary distortion at $a = 0.001, d = 0.2$, confirming the stationary boundary density is halved.{{< /marginnote >}}
 
 ```js
 await show`N[${statFactor} /. {a -> 1/1000, d -> 1/5}]`
@@ -457,6 +479,8 @@ To sample a positive parameter $\theta$, propose $\theta^* = \theta e^{\epsilon}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Take the ratio of reverse to forward log-normal proposal densities to derive the Hastings factor $\theta^*/\theta$.{{< /marginnote >}}
+
 ```js
 // Ex 10.3: Log-scale multiplicative proposal Hastings ratio J(th | th*) / J(th* | th) = th* / th
 const jFwd = await wl`Exp[-(Log[thP/th])^2/(2*d^2)] / (thP*d*Sqrt[2*Pi])`
@@ -467,6 +491,8 @@ const hRatio = await show`Assuming[th > 0 && thP > 0 && d > 0, FullSimplify[${jR
 $$
 \frac{J(\theta \mid \theta^*)}{J(\theta^* \mid \theta)} = \frac{\theta^*}{\theta}
 $$
+
+{{< marginnote >}}Evaluate the Hastings Jacobian correction at a doubling move $\theta = 1 \to \theta^* = 2$.{{< /marginnote >}}
 
 ```js
 await show`${hRatio} /. {th -> 1, thP -> 2}`
@@ -484,6 +510,8 @@ In {{< xref "alg:ch10-mwg" "full" >}} the update of $\rho$ conditions on $\bolds
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Write the collapsed marginal covariance $\operatorname{Cov}(y \mid X, \sigma^2, \rho)$ after integrating out $\beta \sim \mathcal{N}(b_0, \Sigma_0)$.{{< /marginnote >}}
+
 ```js
 // Ex 10.4: Marginal covariance of y | X, sigma^2, rho after integrating out beta ~ N(b0, S0)
 await show`s2 * cMat[rho] + xMat . s0Mat . Transpose[xMat]`
@@ -492,6 +520,8 @@ await show`s2 * cMat[rho] + xMat . s0Mat . Transpose[xMat]`
 $$
 \operatorname{Cov}(y \mid X, \sigma^2, \rho) = \sigma^2 C (\rho)+X .\Sigma_0 .X^T
 $$
+
+{{< marginnote >}}Instantiate the collapsed $2 \times 2$ marginal covariance at $\sigma^2 = 1, \rho = 0.5, X = (1, 2)^T, \Sigma_0 = 4$.{{< /marginnote >}}
 
 ```js
 await show`N[{{1, 1/2}, {1/2, 1}} + {{1}, {2}}.{{4}}.{{1, 2}}]`

@@ -200,6 +200,8 @@ print(f"Pr(theta_2 > 0 | y) = {np.mean(theta_s[burn:, 1] > 0):.3f}, "
 
 Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, derives both the general $2 \times 2$ LME slope posterior variance $(V_j)_{2,2}$ and the closed-form diagonal-$\Sigma$ shrinkage vector $\mathbf{m}_j$, and instantiates the conditional slope SD for small and large schools.
 
+{{< marginnote >}}Integrate $e^{m + \sqrt{v}z}$ against the standard normal to compute the population-averaged Poisson GLMM rate.{{< /marginnote >}}
+
 ```js
 // Chapter 11: Symbolic Poisson GLMM rate ratio & symbolic LME intercept/slope shrinkage
 const popAvg = await show`Assuming[v > 0 && Element[m, Reals],
@@ -210,6 +212,8 @@ $$
 \mathbb{E}[e^{\eta}] = \int_{-\infty}^\infty e^{m+\sqrt{v}\,z}\phi(z)\,dz = e^{m+\frac{v}{2}}
 $$
 
+{{< marginnote >}}Divide by the typical-group rate $e^m$ to isolate the exact Jensen inflation factor $e^{v/2}$.{{< /marginnote >}}
+
 ```js
 await show`FullSimplify[${popAvg} / Exp[m]]`
 ```
@@ -217,6 +221,8 @@ await show`FullSimplify[${popAvg} / Exp[m]]`
 $$
 \frac{\mathbb{E}[e^\eta]}{e^m} = e^{v/2}
 $$
+
+{{< marginnote >}}Invert the $2 \times 2$ LME posterior precision matrix to extract the conditional slope variance $[V_j]_{2,2}$.{{< /marginnote >}}
 
 ```js
 // Symbolic 2x2 LME posterior covariance V_j and diagonal-Sigma shrinkage mean m_j
@@ -231,6 +237,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Solve the diagonal-$\Sigma$ posterior mean system to display explicit intercept and slope shrinkage formulas.{{< /marginnote >}}
+
 ```js
 await show`FullSimplify[Inverse[DiagonalMatrix[{1/t1^2, 1/t2^2}] + DiagonalMatrix[{nj, sxx}]/sig2] . {th1/t1^2 + nj*yb/sig2, th2/t2^2 + sxx*b2ols/sig2}]`
 ```
@@ -241,6 +249,8 @@ $$
 &= \left\{\frac{\sigma^2 \theta_1 +n_j \tau_1^2 \bar{y}}{\sigma^2 +n_j \tau_1^2},\frac{\hat{\beta}_{j,2}^{\text{OLS}} S_{xx} \tau_2^2+\sigma^2 \theta_2}{\sigma^2 +S_{xx} \tau_2^2}\right\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the conditional slope SD for small ($n_j = 5$) versus large ($n_j = 24$) schools.{{< /marginnote >}}
 
 ```js
 // Instantiate conditional slope SD at Sigma = [[20, 2], [2, 1.5]], sig2 = 64, E[sxx] = nj - 1 (nj in {5, 24})
@@ -262,6 +272,8 @@ In the LME Python simulation above, compute the unpooled OLS slope $\hat{\beta}_
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Compute the shrinkage gap $\hat{\beta}_{j,2}^{\text{OLS}} - m_{j,2}$ symbolically under diagonal $\Sigma$.{{< /marginnote >}}
+
 ```js
 // Ex 11.1: Symbolic LME slope shrinkage difference b2ols - m_{j,2} = O(1/n_j) (diagonal Sigma)
 const shrinkDiff = await show`FullSimplify[b2ols - (sxx*b2ols/sig2 + th2/tau2Sq)/(sxx/sig2 + 1/tau2Sq)]`
@@ -273,6 +285,8 @@ $$
 &= \frac{\sigma^2 (\hat{\beta}_{j,2}^{\text{OLS}} -\theta_2)}{\sigma^2 +S_{xx} \tau_2^2}
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate the fraction of $(\hat{\beta}_{j,2}^{\text{OLS}} - \theta_2)$ shrunk away at $n_j = 5$ ($91.4\%$) and $n_j = 24$ ($65.0\%$).{{< /marginnote >}}
 
 ```js
 await show`N[Table[(${shrinkDiff} / (b2ols - th2)) /. {sig2 -> 64, tau2Sq -> 3/2, sxx -> nj - 1}, {nj, {5, 24}}]]`
@@ -293,6 +307,8 @@ Why did Hoff center student SES *within* each school ($\bar{x}_j = 0$) before fi
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Conjugate $\Sigma$ by the global covariate-shift matrix $T$ to track how $x \mapsto x - c$ alters $\Sigma_{1,2}$.{{< /marginnote >}}
+
 ```js
 // Ex 11.2: Effect of global shift x -> x - c on LME intercept covariance Sigma_{1,2}
 const T = [[1, W.c], [0, 1]]
@@ -306,6 +322,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Solve $(T\Sigma T^T)_{1,2} = 0$ for the exact decorrelating shift $c^* = -\Sigma_{12}/\Sigma_{22}$.{{< /marginnote >}}
+
 ```js
 const cDecorr = await show`c /. First[Solve[${covShift}[[1, 2]] == 0, c]]`
 ```
@@ -313,6 +331,8 @@ const cDecorr = await show`c /. First[Solve[${covShift}[[1, 2]] == 0, c]]`
 $$
 c^* = -\frac{\Sigma_{12}}{\Sigma_{22}}
 $$
+
+{{< marginnote >}}Instantiate $c^*$ as an exact fraction and decimal at $\Sigma_{12} = 2, \Sigma_{22} = 3/2$.{{< /marginnote >}}
 
 ```js
 await show`{${cDecorr}, N[${cDecorr}]} /. {s12 -> 2, s22 -> 3/2}`
@@ -333,6 +353,8 @@ Write a short Python implementation of {{< xref "alg:ch11-glmm-mwg" "full" >}} f
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Combine Poisson noise and log-normal random-effect variance via the law of total variance.{{< /marginnote >}}
+
 ```js
 // Ex 11.3: Exact predictive variance across layers 2-3 (random effects + Poisson noise, conditional on theta)
 const totVar = await show`FullSimplify[Exp[m + v/2] + Exp[2*m + v]*(Exp[v] - 1)]`
@@ -341,6 +363,8 @@ const totVar = await show`FullSimplify[Exp[m + v/2] + Exp[2*m + v]*(Exp[v] - 1)]
 $$
 \operatorname{Var}(\tilde{Y} \mid \theta) = e^{m+\frac{v}{2}}+e^{2 m+v} \left(-1+e^v\right)
 $$
+
+{{< marginnote >}}Instantiate median rate, population-average rate, and total predictive variance at $m = 1, v = 0.25$.{{< /marginnote >}}
 
 ```js
 await show`N[{Exp[m], Exp[m + v/2], ${totVar}} /. {m -> 1, v -> 1/4}]`

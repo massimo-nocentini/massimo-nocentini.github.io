@@ -34,6 +34,8 @@ The variance decomposition reappears throughout the book: posterior predictive o
 
 Consider the three-component normal mixture from {{< xref "ch:gibbs" "full" >}} with weights $w_j$, means $\theta_j$, and variances $\sigma_j^2$. We verify symbolically that $\operatorname{Var}(X)$ splits into within-component and between-component terms, rewrite the between-component variance as a pairwise sum $\sum_{i<j} w_i w_j (\theta_i - \theta_j)^2$, and instantiate on Hoff’s trimodal target ($w = (0.45, 0.10, 0.45)$, $\theta = (-3, 0, 3)$, $\sigma_j^2 = 1/3$):
 
+{{< marginnote >}}Compute the first two raw moments of a $\mathcal{N}(m, v)$ component by symbolic integration.{{< /marginnote >}}
+
 ```js
 // 1a. Law of total variance on Chapter 6's trimodal normal mixture
 const { x, m, v } = W
@@ -45,6 +47,8 @@ const mom = await show`Assuming[v > 0 && Element[m, Reals],
 $$
 \bigl(E[X \mid m, v],\; E[X^2 \mid m, v]\bigr) = \left\{m,m^2+v\right\}
 $$
+
+{{< marginnote >}}Verify the law of total variance symbolically for a 3-component normal mixture.{{< /marginnote >}}
 
 ```js
 const within = await wl`Sum[w[j]*s2[j], {j, 3}]`
@@ -60,6 +64,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Rewrite the between-component variance as a pairwise sum of squared mean differences.{{< /marginnote >}}
+
 ```js
 await show`Simplify[(${between} - Sum[w[i]*w[j]*(th[i] - th[j])^2, {i, 3}, {j, i + 1, 3}]) /. w[3] -> 1 - w[1] - w[2]]`
 ```
@@ -67,6 +73,8 @@ await show`Simplify[(${between} - Sum[w[i]*w[j]*(th[i] - th[j])^2, {i, 3}, {j, i
 $$
 \operatorname{Var}(E[X \mid Z]) - \sum_{i<j} w_i w_j (\theta_i - \theta_j)^2 = 0
 $$
+
+{{< marginnote >}}Instantiate the within, between, and total variance on Chapter 6’s trimodal mixture.{{< /marginnote >}}
 
 ```js
 const hoff = await wl`{w[1] -> 9/20, w[2] -> 1/10, w[3] -> 9/20, th[1] -> -3, th[2] -> 0, th[3] -> 3, s2[1] -> 1/3, s2[2] -> 1/3, s2[3] -> 1/3}`
@@ -94,6 +102,8 @@ Jensen’s inequality governs every nonlinear reparameterization in the book: lo
 
 For $X \sim \operatorname{gamma}(a, b)$ (shape $a$, rate $b$), $x \mapsto 1/x$ is strictly convex while $x \mapsto \log x$ is strictly concave. Computing both expectations symbolically exposes the exact Jensen gaps, which we instantiate at the midge precision posterior $(a, b) = (5, 3/40)$:
 
+{{< marginnote >}}Integrate $1/x$ against a $\operatorname{gamma}(a, b)$ density to obtain $E[1/X]$ symbolically.{{< /marginnote >}}
+
 ```js
 // 1b. Two Jensen gaps for a Gamma(a, b) precision random variable
 const { a, b, x } = W
@@ -105,6 +115,8 @@ $$
 E[1/X] = \frac{b}{-1+a}
 $$
 
+{{< marginnote >}}Integrate $\log x$ against the same gamma density to express $E[\log X]$ via the digamma function.{{< /marginnote >}}
+
 ```js
 const eLog = await show`Assuming[a > 0 && b > 0, FullSimplify[Integrate[Log[x]*${dens}, {x, 0, Infinity}]]]`
 ```
@@ -112,6 +124,8 @@ const eLog = await show`Assuming[a > 0 && b > 0, FullSimplify[Integrate[Log[x]*$
 $$
 E[\log X] = -\log (b)+\psi^{(0)}(a)
 $$
+
+{{< marginnote >}}Form the two exact Jensen gaps for $1/x$ (convex) and $\log x$ (concave).{{< /marginnote >}}
 
 ```js
 const gaps = await show`Assuming[a > 1 && b > 0, {FullSimplify[${eInv} - b/a], FullSimplify[Log[a/b] - ${eLog}]}]`
@@ -123,6 +137,8 @@ $$
 &= \left\{\frac{b}{(-1+a) a},\log (a)-\psi^{(0)}(a)\right\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate both Jensen gaps numerically at the midge precision posterior $(a, b) = (5, 3/40)$.{{< /marginnote >}}
 
 ```js
 await show`N[${gaps} /. {a -> 5, b -> 3/40}]`
@@ -165,6 +181,8 @@ A multiplicative factor may be absorbed into $\propto$ only if it does not depen
 
 Integrating the unnormalized normal kernel $e^{-\frac{1}{2}qx^2 + \ell x}$ yields its log-normalizer $\log Z(q, \ell)$, whose first two $\ell$-derivatives immediately return the mean $\ell/q$ and variance $1/q$. Substituting the sum of prior and data precisions reproduces the conjugate normal posterior of {{< xref "ch:normal" "full" >}}:
 
+{{< marginnote >}}Integrate the unnormalized normal kernel $e^{-qx^2/2 + \ell x}$ to find its normalizing constant $Z(q, \ell)$.{{< /marginnote >}}
+
 ```js
 // 2a. Normal kernel normalization Z(q, l) and precision-weighted posterior
 const { q, l } = W
@@ -178,6 +196,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Differentiate $\log Z(q, \ell)$ twice in $\ell$ to read off the mean $\ell/q$ and variance $1/q$.{{< /marginnote >}}
+
 ```js
 const mv = await show`Simplify[{D[Log[${z}], l], D[Log[${z}], {l, 2}]}]`
 ```
@@ -188,6 +208,8 @@ $$
 &= \left\{\frac{\ell}{q},\frac{1}{q}\right\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Substitute prior and data precisions to obtain the conjugate normal posterior mean and variance.{{< /marginnote >}}
 
 ```js
 const post = await show`Together[${mv} /. {q -> 1/t0^2 + n/s2, l -> mu0/t0^2 + n*yb/s2}]`
@@ -200,6 +222,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Instantiate the normal posterior on Hoff’s midge wing-length data at $\sigma^2 = 0.017$.{{< /marginnote >}}
+
 ```js
 await show`N[${post} /. {mu0 -> 19/10, t0 -> 95/100, n -> 9, yb -> 1804/1000, s2 -> 17/1000}]`
 ```
@@ -211,6 +235,8 @@ $$
 ### Working Example 2b: Score Fingerprints and Marginal Evidence
 
 We verify all three conjugate score fingerprints simultaneously (Beta–Binomial, Gamma–Poisson, Normal–Normal), and then confirm that dividing the joint density $p(y \mid \theta)\,p(\theta)$ by the recognized posterior $p(\theta \mid y)$ recovers the exact marginal evidence $p(y)$—instantiated on the rare-infection example ($a=2, b=20, n=20, y=0$) of {{< xref "ch:intro" "full" >}}:
+
+{{< marginnote >}}Check that the log-derivatives of the Beta, Gamma, and Normal kernels match their claimed posterior scores.{{< /marginnote >}}
 
 ```js
 // 2b. Score fingerprints (Beta, Gamma, Normal) and marginal evidence p(y)
@@ -230,6 +256,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Integrate out $\theta$ to compute the exact Beta–Binomial marginal likelihood $p(y)$.{{< /marginnote >}}
+
 ```js
 const joint = await wl`Binomial[n, y]*t^y*(1 - t)^(n - y)*t^(a - 1)*(1 - t)^(b - 1)/Beta[a, b]`
 const py = await show`Assuming[a > 0 && b > 0 && n >= y >= 0,
@@ -240,6 +268,8 @@ $$
 p(y) = \int_0^1 p(y \mid \theta)\,p(\theta)\,d\theta = \frac{B(a+y,b+n-y) \binom{n}{y}}{B(a,b)}
 $$
 
+{{< marginnote >}}Confirm that dividing the joint density by the normalized posterior recovers $p(y)$ identically.{{< /marginnote >}}
+
 ```js
 await show`Assuming[a > 0 && b > 0 && n >= y >= 0 && 0 < t < 1,
   FullSimplify[${joint}/(t^(a + y - 1)*(1 - t)^(b + n - y - 1)/Beta[a + y, b + n - y]) - ${py}]]`
@@ -248,6 +278,8 @@ await show`Assuming[a > 0 && b > 0 && n >= y >= 0 && 0 < t < 1,
 $$
 \frac{p(y \mid \theta)\,p(\theta)}{p(\theta \mid y)} - p(y) = 0
 $$
+
+{{< marginnote >}}Evaluate the marginal evidence and posterior mean on Chapter 1’s rare-infection dataset ($n=20, y=0$).{{< /marginnote >}}
 
 ```js
 await show`N[{${py}, (a + y)/(a + b + n)} /. {a -> 2, b -> 20, n -> 20, y -> 0}]`
@@ -289,6 +321,8 @@ Log-concavity guarantees well-behaved posterior geometry in GLMs ({{< xref "ch:m
 
 Starting from $\tilde{\sigma}^2 \sim \operatorname{gamma}(a, b)$, we transform to variance $\sigma^2 = 1/\tilde{\sigma}^2$ and log-precision $\eta = \log\tilde{\sigma}^2$. Notice how the modes fail to commute ($1/\operatorname{mode}(\tilde{\sigma}^2) \ne \operatorname{mode}(\sigma^2)$) whereas the medians match identically, and how $\eta$ is strictly log-concave for *every* $a > 0$ (while $\tilde{\sigma}^2$ requires $a \ge 1$ and $\sigma^2$ is never globally log-concave). Here $(a, b) = (5, 3/40)$ is the midge posterior with $\sigma_n^2 \approx 0.015$, and Wolfram’s `GammaDistribution` uses *scale* $1/b = 40/3$:
 
+{{< marginnote >}}Apply the 1-D change-of-variables formula to map $\tilde{\sigma}^2 \sim \operatorname{gamma}(a, b)$ to variance $\sigma^2 = 1/\tilde{\sigma}^2$.{{< /marginnote >}}
+
 ```js
 // 3a. Gamma precision on three scales: precision, variance, and log-precision
 const px = await wl`b^a/Gamma[a]*x^(a - 1)*Exp[-b*x]`
@@ -302,6 +336,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Verify that the resulting inverse-gamma density integrates to $1$ over $(0, \infty)$.{{< /marginnote >}}
+
 ```js
 await show`Assuming[a > 0 && b > 0, Integrate[${pv}, {v, 0, Infinity}]]`
 ```
@@ -310,6 +346,8 @@ $$
 \int_0^\infty p_{\sigma^2}(v)\,dv = 1
 $$
 
+{{< marginnote >}}Transform the same precision to the log scale $\eta = \log \tilde{\sigma}^2$ via its exponential Jacobian.{{< /marginnote >}}
+
 ```js
 const pe = await show`Assuming[a > 0 && b > 0 && Element[h, Reals], FullSimplify[(${px} /. x -> Exp[h])*Abs[D[Exp[h], h]]]]`
 ```
@@ -317,6 +355,8 @@ const pe = await show`Assuming[a > 0 && b > 0 && Element[h, Reals], FullSimplify
 $$
 p_{\eta}(\eta)\big|_{\eta = \log \tilde{\sigma}^2} = \frac{b^a e^{-b e^\eta+a \eta}}{\Gamma (a)}
 $$
+
+{{< marginnote >}}Solve $\partial \log p = 0$ on both scales to compare the precision mode with the variance mode.{{< /marginnote >}}
 
 ```js
 const modes = await show`Assuming[a > 1 && b > 0, Simplify[{x /. First[Solve[D[Log[${px}], x] == 0, x]], v /. First[Solve[D[Log[${pv}], v] == 0, v]]}]]`
@@ -329,6 +369,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Compute the second log-derivatives on all three scales to test global log-concavity.{{< /marginnote >}}
+
 ```js
 await show`Assuming[a > 0 && b > 0 && x > 0 && v > 0 && Element[h, Reals], Simplify[{D[Log[${px}], {x, 2}], D[Log[${pv}], {v, 2}], D[Log[${pe}], {h, 2}]}]]`
 ```
@@ -340,6 +382,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Instantiate $1/\operatorname{mode}(\tilde{\sigma}^2)$ versus $\operatorname{mode}(\sigma^2)$ to show that modes do not commute.{{< /marginnote >}}
+
 ```js
 await show`N[{1/${modes}[[1]], ${modes}[[2]]} /. {a -> 5, b -> 3/40}]`
 ```
@@ -350,6 +394,8 @@ $$
 &= \{0.01875,0.0125\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Compare $1/\operatorname{med}(\tilde{\sigma}^2)$ with $\operatorname{med}(\sigma^2)$ to confirm median equivariance.{{< /marginnote >}}
 
 ```js
 await show`N[{1/Median[GammaDistribution[5, 40/3]], Median[InverseGammaDistribution[5, 3/40]]}]`
@@ -366,6 +412,8 @@ $$
 
 Let $X_1 \sim \operatorname{gamma}(a, 1)$ and $X_2 \sim \operatorname{gamma}(b, 1)$ be independent, and set $S = X_1 + X_2$, $U = X_1 / (X_1 + X_2)$. The inverse map $(x_1, x_2) = (su, s(1-u))$ has Jacobian determinant $-s$, which simultaneously proves $B(a, b) = \Gamma(a)\Gamma(b)/\Gamma(a+b)$ and shows that $S \sim \operatorname{gamma}(a+b, 1)$ is *independent* of $U \sim \operatorname{beta}(a, b)$:
 
+{{< marginnote >}}Compute the 2-D Jacobian determinant of the map $(s, u) \mapsto (su, s(1 - u))$.{{< /marginnote >}}
+
 ```js
 // 3b. Deriving the Beta integral & independence via a 2D Jacobian
 const jac = await show`Simplify[Det[D[{s*u, s*(1 - u)}, {{s, u}}]]]`
@@ -374,6 +422,8 @@ const jac = await show`Simplify[Det[D[{s*u, s*(1 - u)}, {{s, u}}]]]`
 $$
 \det\frac{\partial(x_1, x_2)}{\partial(s, u)} = -s
 $$
+
+{{< marginnote >}}Integrate out the total $s$ to derive the $\operatorname{beta}(a, b)$ marginal density of $u = X_1/(X_1 + X_2)$.{{< /marginnote >}}
 
 ```js
 const joint = await wl`Assuming[s > 0 && 0 < u < 1 && a > 0 && b > 0, Simplify[PowerExpand[
@@ -388,6 +438,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Check that the joint density factors as $p_S(s)\,p_U(u)$, proving $S \perp U$.{{< /marginnote >}}
+
 ```js
 await show`Assuming[s > 0 && 0 < u < 1 && a > 0 && b > 0,
   FullSimplify[${joint}/(${margU}*s^(a + b - 1)*Exp[-s]/Gamma[a + b])]]`
@@ -396,6 +448,8 @@ await show`Assuming[s > 0 && 0 < u < 1 && a > 0 && b > 0,
 $$
 \frac{p_{S,U}(s,u)}{p_S(s)\,p_U(u)} = 1
 $$
+
+{{< marginnote >}}Cross-check $\Gamma(3)\Gamma(9)/\Gamma(12)$ directly against $\int_0^1 u^2(1-u)^8\,du$.{{< /marginnote >}}
 
 ```js
 await show`{Gamma[a]*Gamma[b]/Gamma[a + b] /. {a -> 3, b -> 9}, Integrate[u^2*(1 - u)^8, {u, 0, 1}]}`
@@ -452,6 +506,8 @@ This theorem gives the entire closed-form marginal likelihood and $\operatorname
 
 We verify completing the square in $\mathbb{R}^2$ and compute the symbolic lower-triangular Cholesky factor $L$ of a $2 \times 2$ covariance matrix (note that Wolfram’s `CholeskyDecomposition` returns the *upper* factor $R$ with $\Sigma = R^T R$, so we transpose it), instantiated on the reading-comprehension prior of {{< xref "ch:mvn" "full" >}}:
 
+{{< marginnote >}}Solve the $2 \times 2$ linear system $A\mathbf{m} = \mathbf{b}$ symbolically for the quadratic center.{{< /marginnote >}}
+
 ```js
 // 4a. Completing the square in R^2 and symbolic Cholesky factorization
 const x = [W.x1, W.x2], b = [W.b1, W.b2], A = [[W.a11, W.a12], [W.a12, W.a22]]
@@ -465,6 +521,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Verify the vector completing-the-square identity in $\mathbb{R}^2$ by symbolic simplification.{{< /marginnote >}}
+
 ```js
 await show`Simplify[(-${x} . ${A} . ${x}/2 + ${x} . ${b}) - (-(${x} - ${m}) . ${A} . (${x} - ${m})/2 + ${b} . ${m}/2)]`
 ```
@@ -475,6 +533,8 @@ $$
 &= 0
 \end{aligned}
 $$
+
+{{< marginnote >}}Compute the symbolic lower-triangular Cholesky factor $L$ of a $2 \times 2$ covariance matrix.{{< /marginnote >}}
 
 ```js
 const cov = await wl`{{s1^2, rho*s1*s2}, {rho*s1*s2, s2^2}}`
@@ -487,6 +547,8 @@ $$
 &= \left( \begin{array}{cc} \sigma_1 & 0 \\ \rho \sigma_2 & \sqrt{1-\rho^2} \sigma_2 \\ \end{array} \right)
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate $L$ on Chapter 7’s reading-comprehension prior and verify $L L^T = \Sigma$.{{< /marginnote >}}
 
 ```js
 await show`{${L} /. {s1 -> 25, s2 -> 25, rho -> 1/2}, Simplify[${L} . Transpose[${L}] - ${cov}, -1 < rho < 1]}`
@@ -502,6 +564,8 @@ $$
 ### Working Example 4b: Schur Complement and Projection Matrix $P_X$
 
 First we verify both Schur-complement identities on a general symbolic $3 \times 3$ covariance matrix $\Sigma$, then instantiate at $\Sigma_{1,1} = \Sigma_{2,2} = \Sigma_{3,3} = 4$, $\Sigma_{1,2} = \Sigma_{1,3} = 2$, $\Sigma_{2,3} = 1$—where the regression coefficient on $Y_2$ vanishes ($\{1/2, 0\}$), proving $Y_2 \perp Y_3 \mid Y_1$ despite $\Sigma_{2,3} \ne 0$:
+
+{{< marginnote >}}Verify both the Schur-complement determinant factorization and the precision identity $\Omega_{b,b}\Sigma_{b\mid a} = 1$ in $3 \times 3$.{{< /marginnote >}}
 
 ```js
 // 4b-i. 3x3 Schur complement determinant & quadratic-form factorization
@@ -519,6 +583,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Confirm that the $3 \times 3$ quadratic form splits into marginal and conditional-residual squares.{{< /marginnote >}}
+
 ```js
 await show`Simplify[${z} . Inverse[${Sig}] . ${z} - ${za} . Inverse[${Sig}[[{1, 2}, {1, 2}]]] . ${za} - (z3 - ${coef} . ${za})^2/${schur}]`
 ```
@@ -529,6 +595,8 @@ $$
 &= 0
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate on a $3 \times 3$ covariance where $Y_2 \perp Y_3 \mid Y_1$ despite nonzero $\Sigma_{2,3}$.{{< /marginnote >}}
 
 ```js
 await show`{${coef}, ${schur}, Det[${Sig}]} /. {s11 -> 4, s22 -> 4, s33 -> 4, s12 -> 2, s13 -> 2, s23 -> 1}`
@@ -542,6 +610,8 @@ $$
 $$
 
 Next we verify idempotence, orthogonality, trace, $\lvert I_3 + g P_X\rvert = (1 + g)^2$, the Woodbury inverse $(I_3 + g P_X)^{-1} = I_3 - \frac{g}{1+g} P_X$, and the Pythagorean decomposition $\mathbf{y}^T P_X \mathbf{y} + \mathbf{y}^T(I_3 - P_X)\mathbf{y} = \frac{79}{2} + \frac{3}{2} = 41 = \mathbf{y}^T \mathbf{y}$:
+
+{{< marginnote >}}Verify symbolically that the OLS hat matrix $P_X$ is idempotent and orthogonal to the residual space.{{< /marginnote >}}
 
 ```js
 // 4b-ii. OLS projection matrix P_X, g-prior determinant & inverse, and Pythagoras
@@ -557,6 +627,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Compute $\operatorname{tr}(P_X)$ and the $g$-prior determinant $\lvert I_3 + g P_X\rvert = (1 + g)^2$.{{< /marginnote >}}
+
 ```js
 await show`Simplify[{Tr[${P}], Det[IdentityMatrix[3] + g*${P}]}]`
 ```
@@ -564,6 +636,8 @@ await show`Simplify[{Tr[${P}], Det[IdentityMatrix[3] + g*${P}]}]`
 $$
 \bigl(\operatorname{tr}P_X,\; \lvert I_3 + gP_X\rvert\bigr) = \left\{2,(1+g)^2\right\}
 $$
+
+{{< marginnote >}}Confirm the Woodbury inverse $(I_3 + g P_X)^{-1} = I_3 - \frac{g}{1+g}P_X$ symbolically.{{< /marginnote >}}
 
 ```js
 await show`Simplify[Inverse[IdentityMatrix[3] + g*${P}] - (IdentityMatrix[3] - g/(1 + g)*${P})]`
@@ -575,6 +649,8 @@ $$
 &= \left( \begin{array}{ccc} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \\ \end{array} \right)
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate $P_X\mathbf{y}$ and verify the Pythagorean sum-of-squares split on a concrete vector $\mathbf{y}$.{{< /marginnote >}}
 
 ```js
 await show`With[{h = ${P} /. {x1 -> -1, x2 -> 0, x3 -> 1}, y = {1, 2, 6}}, {h . y, y . h . y, y . (y - h . y), y . y}]`
@@ -630,6 +706,8 @@ When negative autocorrelations dominate (antithetic sampling), $S_{\text{eff}}$ 
 
 For geometric autocorrelation $\rho_t = \rho^t$ ($0 < \rho < 1$), we sum the exact finite-$S$ variance inflation factor $1 + 2\sum_{t=1}^{S-1}(1 - t/S)\rho^t$, take its $S \to \infty$ limit $(1+\rho)/(1-\rho)$, cross-check against the Toeplitz correlation matrix $\frac{1}{S}\mathbf{1}^T(\rho^{\lvert i-j\rvert})\mathbf{1}$, and tabulate $(S_{\text{eff}}^{\text{exact}},\; S_{\text{eff}}^{\infty},\; \mathrm{MCSE}/\sigma)$ at $S = 1000$—ending with the bivariate normal Gibbs chain of {{< xref "ch:gibbs" "full" >}} where $\rho = 0.99^2 = 0.9801$ collapses $1{,}000$ draws to roughly $10$ effective draws:
 
+{{< marginnote >}}Sum the exact finite-$S$ variance inflation factor for geometric autocorrelation $\rho_t = \rho^t$.{{< /marginnote >}}
+
 ```js
 // 5a. Exact finite-S variance inflation & ESS for geometric autocorrelation rho^t
 const { r, t, ns } = W
@@ -644,6 +722,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Take $S \to \infty$ to recover the asymptotic autocorrelation time $(1 + \rho)/(1 - \rho)$.{{< /marginnote >}}
+
 ```js
 const iact = await show`Assuming[0 < r < 1, Limit[${infl}, ns -> Infinity]]`
 ```
@@ -651,6 +731,8 @@ const iact = await show`Assuming[0 < r < 1, Limit[${infl}, ns -> Infinity]]`
 $$
 \lim_{S\to\infty}\frac{S\operatorname{Var}(\bar g_S)}{\sigma^2} = \frac{1+\rho}{1-\rho}
 $$
+
+{{< marginnote >}}Cross-check the closed form against the explicit Toeplitz correlation matrix for $S \in \{2, 3, 7\}$.{{< /marginnote >}}
 
 ```js
 await show`Table[Simplify[Total[Table[r^Abs[i - j], {i, k}, {j, k}], 2]/k - (${infl} /. ns -> k)], {k, {2, 3, 7}}]`
@@ -662,6 +744,8 @@ $$
 &= \{0,0,0\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Tabulate exact ESS, asymptotic ESS, and $\mathrm{MCSE}/\sigma$ at $S = 1000$ across four autocorrelations.{{< /marginnote >}}
 
 ```js
 await show`Table[{ns/${infl}, ns/${iact}, Sqrt[${infl}/ns]} /. {ns -> 1000, r -> rv}, {rv, {0., 0.5, 0.9, 0.9801}}]`
@@ -678,6 +762,8 @@ $$
 
 Finally, consider a three-state target $\boldsymbol{\pi} = (\pi_1, \pi_2, \pi_3)$ ordered so $\pi_1 \ge \pi_2 \ge \pi_3 > 0$, with uniform proposal to either of the two other states (probability $1/2$ each) and Metropolis acceptance $\min(1, \pi_j/\pi_i)$. We construct the exact transition matrix $K$, verify detailed balance and stationarity symbolically, compute its closed-form spectrum $\operatorname{spec}(K)$, and evaluate the total-variation distance $\lVert K^s(3, \cdot) - \boldsymbol{\pi}\rVert_{\text{TV}}$ at $\boldsymbol{\pi} = (1/2, 3/10, 1/5)$:
 
+{{< marginnote >}}Build the exact $3 \times 3$ Metropolis transition matrix $K$ for ordered target probabilities $\pi_1 \ge \pi_2 \ge \pi_3$.{{< /marginnote >}}
+
 ```js
 // 5b. Three-state Metropolis chain: detailed balance, spectrum, and geometric TV convergence
 const tgt = [W.p1, W.p2, W.p3]
@@ -693,6 +779,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Verify detailed balance $\operatorname{diag}(\boldsymbol\pi)K = K^T\operatorname{diag}(\boldsymbol\pi)$ and stationarity $\boldsymbol\pi^T K = \boldsymbol\pi^T$.{{< /marginnote >}}
+
 ```js
 await show`Simplify[{DiagonalMatrix[${tgt}] . ${K} - Transpose[DiagonalMatrix[${tgt}] . ${K}], ${tgt} . ${K} - ${tgt}}]`
 ```
@@ -704,6 +792,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Compute the exact eigenvalues of $K$ to identify the spectral gap governing convergence.{{< /marginnote >}}
+
 ```js
 await show`Simplify[Eigenvalues[${K}]]`
 ```
@@ -714,6 +804,8 @@ $$
 &= \left\{1,-\frac{-\pi_1 +\pi_2 +\pi_3}{2 \pi_1},-\frac{\pi_3}{2 \pi_2}\right\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Evaluate the total-variation error $\lVert K^s(3, \cdot) - \boldsymbol\pi\rVert_{\text{TV}}$ at $s \in \{1, 2, 5, 10\}$.{{< /marginnote >}}
 
 ```js
 await show`N[Table[Total[Abs[MatrixPower[${K} /. {p1 -> 1/2, p2 -> 3/10, p3 -> 1/5}, k][[3]] - {1/2, 3/10, 1/5}]]/2, {k, {1, 2, 5, 10}}]]`

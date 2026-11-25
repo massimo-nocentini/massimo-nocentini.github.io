@@ -175,6 +175,8 @@ print("Posterior E[C | Y]:\n", np.round(C_draws[150:].mean(axis=0), 2))
 
 Verifies ordered-probit shift/scale invariance symbolically in `wolfram-ws-bridge` JavaScript mode, derives both the precision entry $\Omega_{1,3}$ and the symbolic partial correlation $\rho_{13 \mid 2} = -\Omega_{1,3}/\sqrt{\Omega_{1,1}\Omega_{3,3}}$ for a general $3 \times 3$ Gaussian copula correlation matrix, solves $\Omega_{1,3} = 0$, and contrasts exact conditional independence ($C_{1,3} = 0.325$) against the Python simulation ($C_{1,3} = 0.30$).
 
+{{< marginnote >}}Verify symbolically that simultaneous affine shifts and positive rescalings leave ordered-probit cell probabilities unchanged.{{< /marginnote >}}
+
 ```js
 // Chapter 12: Symbolic ordered-probit invariance & 3-variable Gaussian copula partial correlation
 await show`Assuming[a > 0, Simplify[
@@ -184,6 +186,8 @@ await show`Assuming[a > 0, Simplify[
 $$
 \Phi\!\left(\frac{(ag+c)-(a\eta+c)}{a}\right) - \Phi(g - \eta) = 0
 $$
+
+{{< marginnote >}}Invert the $3 \times 3$ correlation matrix $C$ to obtain the closed-form precision entry $\Omega_{1,3}$.{{< /marginnote >}}
 
 ```js
 // Latent precision Omega_{1,3}, partial correlation rho_{13|2}, and conditional-independence condition
@@ -195,6 +199,8 @@ const omega13 = await show`Factor[${Om}[[1, 3]]]`
 $$
 \Omega_{1,3} = \frac{r_{13} -r_{12} r_{23}}{-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2}
 $$
+
+{{< marginnote >}}Convert $-\Omega_{1,3}/\sqrt{\Omega_{1,1}\Omega_{3,3}}$ into the symbolic partial correlation $\rho_{13\mid 2}$.{{< /marginnote >}}
 
 ```js
 const pcorr13 = await show`Assuming[-1 < r12 < 1 && -1 < r23 < 1,
@@ -208,6 +214,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Solve $\Omega_{1,3} = 0$ for $r_{13}$ to recover the conditional-independence condition $r_{13} = r_{12} r_{23}$.{{< /marginnote >}}
+
 ```js
 await show`r13 /. First[Solve[${omega13} == 0, r13]]`
 ```
@@ -215,6 +223,8 @@ await show`r13 /. First[Solve[${omega13} == 0, r13]]`
 $$
 r_{13}\big|_{\Omega_{1,3}=0} = r_{12} r_{23}
 $$
+
+{{< marginnote >}}Instantiate $\Omega_{1,3}$ at exact conditional independence ($0.325$) and at Chapter 12’s Python value ($0.30$).{{< /marginnote >}}
 
 ```js
 // Instantiate at (r12, r23) = (0.65, 0.50): r13 = 0.325 (exact CI) vs. Ch. 12 Python (r13 = 0.30)
@@ -238,6 +248,8 @@ Verify numerically using the Gaussian copula script above that replacing column 
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Integrate $z\,e^{\sqrt{v}z}$ against $\phi(z)$ to derive the exact Pearson correlation attenuation under $h(Z_1) = e^{\sqrt{v}Z_1}$.{{< /marginnote >}}
+
 ```js
 // Ex 12.1: Rank invariance vs. Pearson correlation distortion under nonlinear h(Z_1) = exp(sqrt(v)*Z_1)
 const corrExp = await show`Assuming[v > 0, FullSimplify[
@@ -248,6 +260,8 @@ const corrExp = await show`Assuming[v > 0, FullSimplify[
 $$
 \operatorname{Corr}\!\left(e^{\sqrt{v}\,Z_1},\; Z_2\right) = \rho \sqrt{\frac{v}{-1+e^v}}
 $$
+
+{{< marginnote >}}Evaluate the attenuation factor at $v = 1$, showing Pearson correlation drops to $0.763\,\rho$ while ranks stay invariant.{{< /marginnote >}}
 
 ```js
 await show`N[${corrExp} /. {rho -> 1, v -> 1}]`
@@ -265,6 +279,8 @@ Simulate $n = 200$ observations from an ordered probit model with $K = 5$ catego
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Write the length-biased expected corridor width $2/(n\,\phi(g))$ trapping an Albert–Chib threshold.{{< /marginnote >}}
+
 ```js
 // Ex 12.2: Length-biased threshold corridor width 2 / (n * phi(g)) trapping Albert-Chib thresholds (marginal Z ~ N(0,1))
 const gapSym = await show`2 / (n * Exp[-g^2/2] / Sqrt[2*Pi])`
@@ -276,6 +292,8 @@ $$
 &= \frac{2 e^{\frac{g^2}{2}} \sqrt{2 \pi}}{n}
 \end{aligned}
 $$
+
+{{< marginnote >}}Instantiate the expected corridor width at $n = 200$ for $g = 0$ ($0.025$) and $g = 1$ ($0.041$).{{< /marginnote >}}
 
 ```js
 await show`N[{${gapSym} /. {n -> 200, g -> 0}, ${gapSym} /. {n -> 200, g -> 1}}]`
@@ -296,6 +314,8 @@ In the copula script above, construct a 3-variable precision matrix $\Omega$ wit
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Invert a $3 \times 3$ tridiagonal precision matrix ($\Omega_{1,3} = 0$) and compute the marginal correlation $C_{12}$.{{< /marginnote >}}
+
 ```js
 // Ex 12.3: Constructing a 3-variable Gaussian copula C from a tridiagonal precision Omega (Omega_{1,3} = 0)
 const Om = [[W.a, W.Minus(W.b), 0], [W.Minus(W.b), W.a, W.Minus(W.b)], [0, W.Minus(W.b), W.a]]
@@ -307,6 +327,8 @@ $$
 C_{12} = \frac{\Sigma_{12}}{\sqrt{\Sigma_{11}\Sigma_{22}}} = \frac{b}{\sqrt{(a-b) (a+b)}}
 $$
 
+{{< marginnote >}}Compute the marginal correlation $C_{13} = b^2/(a^2 - b^2) = C_{12}^2$, nonzero despite conditional independence.{{< /marginnote >}}
+
 ```js
 const c13 = await show`Assuming[a > 0 && b > 0 && a^2 > 2*b^2, FullSimplify[${Sig}[[1, 3]] / Sqrt[${Sig}[[1, 1]]*${Sig}[[3, 3]]]]]`
 ```
@@ -314,6 +336,8 @@ const c13 = await show`Assuming[a > 0 && b > 0 && a^2 > 2*b^2, FullSimplify[${Si
 $$
 C_{13} = \frac{\Sigma_{13}}{\sqrt{\Sigma_{11}\Sigma_{33}}} = \frac{b^2}{a^2-b^2}
 $$
+
+{{< marginnote >}}Instantiate $(C_{12}, C_{13})$ at $a = 2, b = 1$ to verify $C_{13} = 1/3 = (1/\sqrt{3})^2$.{{< /marginnote >}}
 
 ```js
 await show`N[{${c12}, ${c13}} /. {a -> 2, b -> 1}]`

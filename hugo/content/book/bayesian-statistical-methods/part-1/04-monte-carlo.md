@@ -127,6 +127,8 @@ print(f"PPC tail prob Pr(t(Y_rep) >= 2.0) = {p_ppc:.4f} +/- {2*np.sqrt(p_ppc*(1-
 
 Derives the exact push-forward log-odds density via change-of-variables Jacobian, the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), the symbolic Gamma CDF $\Pr(\theta_2 < c)$, and the general Beta representation of $\Pr(\theta_1 > \theta_2)$, then instantiates all symbolic expressions on the GSS fertility posteriors to benchmark the Monte Carlo estimates.
 
+{{< marginnote >}}Invert $\gamma = \operatorname{logit}(\theta)$ and multiply by its Jacobian to derive the exact log-odds density.{{< /marginnote >}}
+
 ```js
 // Chapter 4: Symbolic log-odds density, Gamma-ratio moments & symbolic Gamma tail probabilities
 const thOfG = await wl`th /. First[Solve[Log[th / (1 - th)] == g, th, Reals]]`
@@ -141,6 +143,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Integrate $1/\theta_2$ against $\operatorname{gamma}(a_2, b_2)$ to compute the exact mean of the rate ratio $\theta_1/\theta_2$.{{< /marginnote >}}
+
 ```js
 // Exact symbolic moments of ratio R = th1 / th2 for independent Gamma(a1,b1), Gamma(a2,b2)
 const eR = await show`Assuming[a1 > 0 && b1 > 0 && a2 > 1 && b2 > 0,
@@ -150,6 +154,8 @@ const eR = await show`Assuming[a1 > 0 && b1 > 0 && a2 > 1 && b2 > 0,
 $$
 \mathbb{E}[\theta_1 / \theta_2] = \frac{a_1 b_2}{(-1+a_2) b_1}
 $$
+
+{{< marginnote >}}Compute the second moment of $\theta_1/\theta_2$ symbolically to obtain $\operatorname{Var}(\theta_1/\theta_2)$ for $a_2 > 2$.{{< /marginnote >}}
 
 ```js
 await show`Assuming[a1 > 0 && b1 > 0 && a2 > 2 && b2 > 0,
@@ -163,6 +169,8 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Integrate the $\operatorname{gamma}(a_2, b_2)$ density up to $c$ to express its CDF via the incomplete Gamma function.{{< /marginnote >}}
+
 ```js
 // Symbolic Gamma CDF Pr(th < c) and general Beta-representation of Pr(th1 > th2)
 const gamCdf = await show`Assuming[a2 > 0 && b2 > 0 && c > 0,
@@ -173,6 +181,8 @@ $$
 \Pr(\theta_2 < c) = 1-\frac{\Gamma (a_2,b_2 c)}{\Gamma (a_2)}
 $$
 
+{{< marginnote >}}Express $\Pr(\theta_1 > \theta_2)$ for independent Gammas via the regularized incomplete Beta function.{{< /marginnote >}}
+
 ```js
 const pGtSym = await show`1 - Beta[b1 / (b1 + b2), a1, a2] / Beta[a1, a2]`
 ```
@@ -180,6 +190,8 @@ const pGtSym = await show`1 - Beta[b1 / (b1 + b2), a1, a2] / Beta[a1, a2]`
 $$
 \Pr(\theta_1 > \theta_2) = 1-\frac{B_{\frac{b_1}{b_1 +b_2}}(a_1,a_2)}{B(a_1,a_2)}
 $$
+
+{{< marginnote >}}Instantiate both exact GSS fertility tail probabilities to benchmark Monte Carlo estimates.{{< /marginnote >}}
 
 ```js
 // Instantiate at GSS fertility posteriors Gamma(219,112) vs Gamma(68,45) and c = 7/4
@@ -201,6 +213,8 @@ For $\theta \mid y \sim \operatorname{beta}(2, 40)$, use $S = 50{,}000$ Monte Ca
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Express $E[\operatorname{logit}(\theta)]$ for $\theta \sim \operatorname{beta}(a, b)$ in terms of the digamma function $\psi^{(0)}$.{{< /marginnote >}}
+
 ```js
 // Ex 4.1: Exact Jensen discrepancies for Beta(a, b): E[logit(theta)] and E[1/theta]
 const eLogit = await show`Assuming[a > 0 && b > 0, FullSimplify[PolyGamma[0, a] - PolyGamma[0, b]]]`
@@ -210,6 +224,8 @@ $$
 \mathbb{E}\!\left[\log\frac{\theta}{1-\theta}\right] = \psi^{(0)}(a)-\psi^{(0)}(b)
 $$
 
+{{< marginnote >}}Integrate $1/\theta$ against $\operatorname{beta}(a, b)$ to obtain $E[1/\theta]$ for $a > 1$.{{< /marginnote >}}
+
 ```js
 const eInv = await show`Assuming[a > 1 && b > 0, FullSimplify[Integrate[(1/th)*th^(a - 1)*(1 - th)^(b - 1)/Beta[a, b], {th, 0, 1}]]]`
 ```
@@ -218,6 +234,8 @@ $$
 \mathbb{E}\!\left[\frac{1}{\theta}\right] = 1+\frac{b}{-1+a}
 $$
 
+{{< marginnote >}}Subtract $1/E[\theta]$ to isolate the exact positive Jensen gap $b/[a(a-1)]$.{{< /marginnote >}}
+
 ```js
 await show`Factor[${eInv} - (a + b)/a]`
 ```
@@ -225,6 +243,8 @@ await show`Factor[${eInv} - (a + b)/a]`
 $$
 \mathbb{E}\!\left[\frac{1}{\theta}\right] - \frac{1}{\mathbb{E}[\theta]} = \frac{b}{(-1+a) a}
 $$
+
+{{< marginnote >}}Evaluate $E[\operatorname{logit}\theta]$, $\operatorname{logit}E[\theta]$, $E[1/\theta]$, and $1/E[\theta]$ at $\operatorname{beta}(2, 40)$.{{< /marginnote >}}
 
 ```js
 await show`N[{${eLogit}, Log[a/b], ${eInv}, (a + b)/a} /. {a -> 2, b -> 40}]`
@@ -245,6 +265,8 @@ For $\theta \mid y \sim \operatorname{gamma}(68, 45)$ and $\tilde{Y} \mid \theta
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Take the ratio of predictive variance to posterior variance to derive the exact Rao–Blackwell efficiency gain.{{< /marginnote >}}
+
 ```js
 // Ex 4.2: Exact Rao-Blackwell variance reduction ratio Var(Ytilde | y) / Var(theta | y)
 const rbRatio = await show`FullSimplify[((an*(bn + 1))/bn^2) / (an/bn^2)]`
@@ -253,6 +275,8 @@ const rbRatio = await show`FullSimplify[((an*(bn + 1))/bn^2) / (an/bn^2)]`
 $$
 \frac{\operatorname{Var}(\tilde{Y} \mid y)}{\operatorname{Var}(\theta \mid y)} = 1+b_n
 $$
+
+{{< marginnote >}}Instantiate the variance reduction factor at the GSS degree posterior $\operatorname{gamma}(68, 45)$.{{< /marginnote >}}
 
 ```js
 await show`${rbRatio} /. {an -> 68, bn -> 45}`
@@ -273,6 +297,8 @@ Design a posterior predictive check for overdispersion using the dispersion inde
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
+{{< marginnote >}}Compute the Negative Binomial dispersion index $\operatorname{Var}(Y)/E[Y] = 1 + 1/b$ symbolically.{{< /marginnote >}}
+
 ```js
 // Ex 4.3: Symbolic Negative Binomial dispersion index Var(Y) / E[Y] = 1 + 1/b
 const dispIdx = await show`FullSimplify[((a*(b + 1))/b^2) / (a/b)]`
@@ -281,6 +307,8 @@ const dispIdx = await show`FullSimplify[((a*(b + 1))/b^2) / (a/b)]`
 $$
 \frac{\operatorname{Var}(Y)}{\mathbb{E}[Y]} = 1+\frac{1}{b}
 $$
+
+{{< marginnote >}}Solve for the Gamma hyperparameters $(a, b)$ matching $E[Y] = 2$ and $\operatorname{Var}(Y) = 6$.{{< /marginnote >}}
 
 ```js
 const sol = await show`First[Solve[{a/b == 2, (a*(b + 1))/b^2 == 6}, {a, b}]]`
@@ -292,6 +320,8 @@ $$
 &= \left\{a\to 1,b\to \frac{1}{2}\right\}
 \end{aligned}
 $$
+
+{{< marginnote >}}Verify that the solved parameters yield a dispersion index of $3$ (triple the Poisson baseline).{{< /marginnote >}}
 
 ```js
 await show`${dispIdx} /. ${sol}`
