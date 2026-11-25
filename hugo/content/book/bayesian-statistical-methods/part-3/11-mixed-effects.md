@@ -121,7 +121,13 @@ Initialize $\boldsymbol{\beta}_{1:m}^{(0)}, \boldsymbol{\theta}^{(0)}, \Sigma^{(
 
 A fitted GLMM lets us separate three conceptually distinct predictive targets at any covariate location $\mathbf{x}$, each adding a new source of variance ({{< xref "fig:ch11-layers" "full" >}}):
 
-1. **Typical (median) group’s intensity** $\exp(\boldsymbol{\theta}^{(s)T}\mathbf{x})$: reflects only estimation uncertainty in the center curve $\boldsymbol{\theta}$ (narrowest band; note that because $\exp$ is convex, the *population-average* rate across groups is strictly larger, $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x}) \mid \boldsymbol{\theta}, \Sigma] = \exp(\boldsymbol{\theta}^T\mathbf{x} + \frac{1}{2}\mathbf{x}^T\Sigma\mathbf{x})$).
+1. **Typical (median) group’s intensity** $\exp(\boldsymbol{\theta}^{(s)T}\mathbf{x})$: reflects only estimation uncertainty in the center curve $\boldsymbol{\theta}$ (narrowest band; note that because $\exp$ is convex, the *population-average* rate across groups is strictly larger,
+
+   $$
+   E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x}) \mid \boldsymbol{\theta}, \Sigma] = \exp(\boldsymbol{\theta}^T\mathbf{x} + \frac{1}{2}\mathbf{x}^T\Sigma\mathbf{x})
+   $$
+
+   ).
 2. **New group’s intensity** $\exp(\tilde{\boldsymbol{\beta}}^{(s)T}\mathbf{x})$ with $\tilde{\boldsymbol{\beta}}^{(s)} \sim \mathcal{N}_p(\boldsymbol{\theta}^{(s)}, \Sigma^{(s)})$: adds *between-group heterogeneity* $\Sigma$ (substantially wider).
 3. **New individual count** $\tilde{Y}^{(s)} \sim \operatorname{Poisson}\bigl(\exp(\tilde{\boldsymbol{\beta}}^{(s)T}\mathbf{x})\bigr)$: adds *within-group Poisson sampling noise* (widest band—the honest interval for forecasting a new observation).
 

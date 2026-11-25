@@ -50,7 +50,13 @@ One of the greatest strengths of sampling-based inference is effortless **push-f
 Then $\{\gamma^{(1)}, \dots, \gamma^{(S)}\}$ is an exact i.i.d. sample from the push-forward posterior $p(\gamma \mid y)$. Note why this matters: by **Jensen’s inequality**{{< index "Jensen’s inequality" >}}, $E[g(\theta) \mid y] \neq g(E[\theta \mid y])$ for nonlinear $g$—plugging the posterior mean into $g$ introduces bias, whereas averaging $g(\theta^{(s)})$ estimates $E[g(\theta) \mid y]$ consistently. Two textbook examples illustrate the payoff:
 
 - **Log-odds**{{< index "log-odds" >}}: Given $y = 441$ agreements out of $n = 860$ non-Protestant GSS respondents under a $\operatorname{beta}(1, 1)$ prior, $\theta \mid y \sim \operatorname{beta}(442, 420)$. Transforming draws via $\gamma^{(s)} = \log[\theta^{(s)} / (1 - \theta^{(s)})]$ directly yields the posterior density and credible intervals of the log-odds.
-- **Two-group comparisons**: For independent posteriors $\theta_1 \mid y_1 \sim \operatorname{gamma}(219, 112)$ and $\theta_2 \mid y_2 \sim \operatorname{gamma}(68, 45)$, drawing pairs $(\theta_1^{(s)}, \theta_2^{(s)})$ lets us approximate $\Pr(\theta_1 > \theta_2 \mid y) \approx \frac{1}{S}\sum_{s=1}^S \mathbf{1}(\theta_1^{(s)} > \theta_2^{(s)}) \approx 0.973$ (exact value $0.9726$, verified below) and plot the entire posterior of the ratio $\theta_1 / \theta_2$ in three lines of code.
+- **Two-group comparisons**: For independent posteriors $\theta_1 \mid y_1 \sim \operatorname{gamma}(219, 112)$ and $\theta_2 \mid y_2 \sim \operatorname{gamma}(68, 45)$, drawing pairs $(\theta_1^{(s)}, \theta_2^{(s)})$ lets us approximate
+
+  $$
+  \Pr(\theta_1 > \theta_2 \mid y) \approx \frac{1}{S}\sum_{s=1}^S \mathbf{1}(\theta_1^{(s)} > \theta_2^{(s)}) \approx 0.973
+  $$
+
+  (exact value $0.9726$, verified below) and plot the entire posterior of the ratio $\theta_1 / \theta_2$ in three lines of code.
 
 ## Ancestral Sampling from Predictive Distributions {#sec:ch04-predictive}
 
@@ -69,7 +75,13 @@ $$
 Each pair $(\theta^{(s)}, \tilde{y}^{(s)})$ is a draw from the joint posterior $p(\theta, \tilde{y} \mid y)$, so discarding $\theta^{(s)}$ leaves marginal draws $\tilde{y}^{(s)} \sim p(\tilde{y} \mid y)$. For the GSS birth-rate groups, comparing paired draws $\tilde{y}_1^{(s)} \sim \operatorname{Poisson}(\theta_1^{(s)})$ and $\tilde{y}_2^{(s)} \sim \operatorname{Poisson}(\theta_2^{(s)})$ replaces a doubly infinite negative-binomial sum with a single vectorized comparison, giving $\Pr(\tilde{Y}_1 > \tilde{Y}_2 \mid y) \approx 0.482$.
 
 {{< remark note="Rao–Blackwellization: integrating analytically when you can" label="rem:ch04-rb" >}}
-Whenever the conditional expectation $E[\tilde{Y} \mid \theta]$ is known in closed form, averaging $E[\tilde{Y} \mid \theta^{(s)}]$ across draws achieves *strictly smaller* Monte Carlo variance than averaging simulated $\tilde{y}^{(s)}$, because $\operatorname{Var}(E[\tilde{Y} \mid \theta]) = \operatorname{Var}(\tilde{Y}) - E[\operatorname{Var}(\tilde{Y} \mid \theta)] \le \operatorname{Var}(\tilde{Y})$. This variance-reduction principle—**Rao–Blackwellization**{{< index "Rao–Blackwellization" >}}—carries directly into the Gibbs samplers of Part II.
+Whenever the conditional expectation $E[\tilde{Y} \mid \theta]$ is known in closed form, averaging $E[\tilde{Y} \mid \theta^{(s)}]$ across draws achieves *strictly smaller* Monte Carlo variance than averaging simulated $\tilde{y}^{(s)}$, because
+
+$$
+\operatorname{Var}(E[\tilde{Y} \mid \theta]) = \operatorname{Var}(\tilde{Y}) - E[\operatorname{Var}(\tilde{Y} \mid \theta)] \le \operatorname{Var}(\tilde{Y}).
+$$
+
+This variance-reduction principle—**Rao–Blackwellization**{{< index "Rao–Blackwellization" >}}—carries directly into the Gibbs samplers of Part II.
 {{< /remark >}}
 
 ## Posterior Predictive Model Checking {#sec:ch04-ppd}
@@ -83,7 +95,13 @@ Choose a diagnostic test statistic $t(y)$ capturing a structural feature of inte
 2. Sample a replicated dataset $\tilde{Y}^{(s)} = (\tilde{y}_1^{(s)}, \dots, \tilde{y}_n^{(s)}) \stackrel{\text{i.i.d.}}{\sim} p(y \mid \theta^{(s)})$.
 3. Compute $t^{(s)} = t(\tilde{Y}^{(s)})$.
 
-Compare the observed value $t(y_{\text{obs}})$ against the empirical distribution of $\{t^{(1)}, \dots, t^{(S)}\}$ via the posterior predictive tail probability $\hat{p}_{\text{PPC}} = \frac{1}{S}\sum_{s=1}^S \mathbf{1}\bigl(t^{(s)} \ge t(y_{\text{obs}})\bigr)$. If $t(y_{\text{obs}})$ lies far in the tail, the model fails to reproduce that feature of the population.
+Compare the observed value $t(y_{\text{obs}})$ against the empirical distribution of $\{t^{(1)}, \dots, t^{(S)}\}$ via the posterior predictive tail probability
+
+$$
+\hat{p}_{\text{PPC}} = \frac{1}{S}\sum_{s=1}^S \mathbf{1}\bigl(t^{(s)} \ge t(y_{\text{obs}})\bigr).
+$$
+
+If $t(y_{\text{obs}})$ lies far in the tail, the model fails to reproduce that feature of the population.
 {{< /thm >}}
 
 In the GSS fertility data for women without a bachelor’s degree ($n_1 = 111$), 38 women had 2 children while only 19 had 1 child, so $t(y_{\text{obs}}) = \#\{y_i = 2\} / \#\{y_i = 1\} = 2.0$. As {{< xref "fig:ch04-mc" "full" >}} (right panel) shows, only $0.51\%$ of Poisson posterior predictive replicates in our $50{,}000$-draw simulation reach $t(\tilde{Y}) \ge 2.0$ (exact value $\approx 0.0057 \pm 0.0002$): no Poisson distribution with mean near $1.95$—where the theoretical ratio is $p(2)/p(1) = \theta/2 \approx 0.98$—can exhibit such a sharp cultural spike at two children!

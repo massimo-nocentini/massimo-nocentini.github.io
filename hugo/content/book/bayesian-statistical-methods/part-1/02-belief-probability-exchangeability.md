@@ -53,11 +53,13 @@ The ratio $\operatorname{BF}_{ij} = \Pr(E \mid H_i) / \Pr(E \mid H_j)$ is the **
 Suppose a rare infection has population prevalence $\Pr(H_1) = 0.01$ (so $\Pr(H_0) = 0.99$, prior odds $1 : 99$). A diagnostic test has sensitivity $\Pr(E \mid H_1) = 0.95$ and false-positive rate $\Pr(E \mid H_0) = 0.05$.
 
 The Bayes factor for a positive test $E$ is $\operatorname{BF}_{10} = 0.95 / 0.05 = 19$. Multiplying by the prior odds gives posterior odds $19 \times (1/99) = 19/99$, and hence
+
 $$
 \Pr(H_1 \mid E)
 = \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.05 \times 0.99}
 = \frac{0.0095}{0.0590} \approx 0.161.
 $$
+
 Even with a 95%-accurate test, a positive screen raises the probability of infection only to $16.1\%$ because false positives from the $99\%$ healthy majority outnumber true positives roughly $5$ to $1$.
 {{< /example >}}
 
@@ -65,9 +67,11 @@ Even with a 95%-accurate test, a positive screen raises the probability of infec
 
 {{< definition note="Conditional Independence" label="def:ch02-cond-indep" >}}
 Two events $F$ and $G$ are **conditionally independent given $H$**{{< index "conditional independence" >}} if
+
 $$
 \Pr(F \cap G \mid H) = \Pr(F \mid H)\,\Pr(G \mid H).
 $$
+
 Equivalently (when $\Pr(G \mid H) > 0$), $\Pr(F \mid H \cap G) = \Pr(F \mid H)$: once $H$ is known, learning $G$ does not alter beliefs about $F$.
 {{< /definition >}}
 
@@ -106,6 +110,7 @@ Why do Bayesians assume observations are *conditionally i.i.d.* given $\theta$, 
 
 {{< definition note="Exchangeability" label="def:ch02-exchangeable" >}}
 Random variables $Y_1, \dots, Y_n$ are **exchangeable**{{< index "exchangeability" >}} if their joint density is invariant under every permutation $\pi$ of $\{1, \dots, n\}$:
+
 $$
 p(y_1, \dots, y_n) = p(y_{\pi(1)}, \dots, y_{\pi(n)}). \label{eq:ch02-exch}
 $$
@@ -117,23 +122,37 @@ If $\theta \sim p(\theta)$ and $Y_1, \dots, Y_n \mid \theta \stackrel{\text{i.i.
 
 {{< proof >}}
 For any permutation $\pi$ of $\{1, \dots, n\}$,
+
 $$
 p(y_1, \dots, y_n)
 = \int_{\Theta} \left(\prod_{i=1}^n p(y_i \mid \theta)\right) p(\theta)\,d\theta
 = \int_{\Theta} \left(\prod_{i=1}^n p(y_{\pi(i)} \mid \theta)\right) p(\theta)\,d\theta
 = p(y_{\pi(1)}, \dots, y_{\pi(n)}),
 $$
-because multiplication of real numbers is commutative. For the covariance, the law of total covariance gives $\operatorname{Cov}(Y_1, Y_2) = E[\operatorname{Cov}(Y_1, Y_2 \mid \theta)] + \operatorname{Cov}(E[Y_1 \mid \theta], E[Y_2 \mid \theta]) = 0 + \operatorname{Var}(E[Y_1 \mid \theta]) \ge 0$.
+
+because multiplication of real numbers is commutative. For the covariance, the law of total covariance gives
+
+$$
+\operatorname{Cov}(Y_1, Y_2) = E[\operatorname{Cov}(Y_1, Y_2 \mid \theta)] + \operatorname{Cov}(E[Y_1 \mid \theta], E[Y_2 \mid \theta]) = 0 + \operatorname{Var}(E[Y_1 \mid \theta]) \ge 0.
+$$
 {{< /proof >}}
 
 Notice what that non-negative covariance immediately implies: **finite exchangeability alone does *not* imply a conditionally i.i.d. mixture!** For example, if $(Y_1, Y_2)$ takes values $(1, 0)$ and $(0, 1)$ with probability $1/2$ each (sampling 2 balls without replacement from an urn with 1 red and 1 blue ball), then $(Y_1, Y_2)$ is exchangeable, yet $\operatorname{Cov}(Y_1, Y_2) = -1/4 < 0$—making any representation of the form {{< eqref "eq:ch02-definetti" >}} impossible. What is needed is **infinite extendability**: that $Y_1, \dots, Y_n$ can be viewed as the first $n$ terms of an arbitrarily long exchangeable sequence.
 
 {{< theorem note="de Finetti’s Representation Theorem" label="thm:ch02-definetti" >}}
 Let $\{Y_1, Y_2, \dots\}$ be an infinite sequence of random variables taking values in $\mathcal{Y}$ (a Polish space). If for every $n \ge 1$ the finite joint distribution of $(Y_1, \dots, Y_n)$ is exchangeable, then there exists a random probability distribution $F$ on $\mathcal{Y}$ (drawn from a prior measure $\Pi$ over distributions) such that for all $n$, conditionally on $F$, $Y_1, \dots, Y_n \stackrel{\text{i.i.d.}}{\sim} F$:
+
 $$
 p(y_1, \dots, y_n) = \int \left(\prod_{i=1}^n p(y_i \mid F)\right) d\Pi(F). \label{eq:ch02-definetti}
 $$
-In the binary case $\mathcal{Y} = \{0, 1\}$, $F$ is completely characterized by a single scalar $\theta = \lim_{N \to \infty} \frac{1}{N}\sum_{i=1}^N Y_i \in [0, 1]$, and {{< eqref "eq:ch02-definetti" >}} reduces to $p(y_1, \dots, y_n) = \int_0^1 \theta^{\sum y_i}(1 - \theta)^{n - \sum y_i}\,d\Pi(\theta)$.{{< cite "definetti1937" >}}
+
+In the binary case $\mathcal{Y} = \{0, 1\}$, $F$ is completely characterized by a single scalar $\theta = \lim_{N \to \infty} \frac{1}{N}\sum_{i=1}^N Y_i \in [0, 1]$, and {{< eqref "eq:ch02-definetti" >}} reduces to
+
+$$
+p(y_1, \dots, y_n) = \int_0^1 \theta^{\sum y_i}(1 - \theta)^{n - \sum y_i}\,d\Pi(\theta).
+$$
+
+{{< cite "definetti1937" >}}
 {{< /theorem >}}
 
 {{< remark note="Parametric models vs. de Finetti’s theorem" label="rem:ch02-parametric" >}}

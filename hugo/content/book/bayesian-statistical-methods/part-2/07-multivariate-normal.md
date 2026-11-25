@@ -66,10 +66,12 @@ To recognize the full conditional of $\Sigma$ from the MVN likelihood, we use th
 
 {{< proposition note="The Trace Trick and MVN Full Conditionals" label="prop:ch07-fc" >}}
 For any vectors $\mathbf{y}_1, \dots, \mathbf{y}_n, \boldsymbol{\theta} \in \mathbb{R}^p$ and symmetric matrix $\Sigma^{-1}$, define the sum-of-squares matrix $\mathbf{S}_{\boldsymbol{\theta}} = \sum_{i=1}^n (\mathbf{y}_i - \boldsymbol{\theta})(\mathbf{y}_i - \boldsymbol{\theta})^T$. Then
+
 $$
 \sum_{i=1}^n (\mathbf{y}_i - \boldsymbol{\theta})^T \Sigma^{-1} (\mathbf{y}_i - \boldsymbol{\theta})
 = \operatorname{tr}(\mathbf{S}_{\boldsymbol{\theta}} \Sigma^{-1}). \label{eq:ch07-trace-trick}
 $$
+
 Consequently, under the semiconjugate prior {{< eqref "eq:ch07-priors" >}}, the two full conditional distributions are:
 
 1. **Mean vector given covariance**: $\boldsymbol{\theta} \mid \Sigma, \mathbf{Y} \sim \mathcal{N}_p(\boldsymbol{\mu}_n, \Lambda_n)$, where
@@ -88,12 +90,26 @@ Consequently, under the semiconjugate prior {{< eqref "eq:ch07-priors" >}}, the 
 
 {{< proof >}}
 Each summand $(\mathbf{y}_i - \boldsymbol{\theta})^T \Sigma^{-1}(\mathbf{y}_i - \boldsymbol{\theta})$ is a $1 \times 1$ scalar, so it equals its own trace. Applying $\operatorname{tr}(ABC) = \operatorname{tr}(CAB)$ and linearity of trace gives
+
 $$
 \sum_{i=1}^n \operatorname{tr}\!\left((\mathbf{y}_i - \boldsymbol{\theta})^T \Sigma^{-1}(\mathbf{y}_i - \boldsymbol{\theta})\right)
 = \sum_{i=1}^n \operatorname{tr}\!\left((\mathbf{y}_i - \boldsymbol{\theta})(\mathbf{y}_i - \boldsymbol{\theta})^T \Sigma^{-1}\right)
 = \operatorname{tr}(\mathbf{S}_{\boldsymbol{\theta}} \Sigma^{-1}).
 $$
-For $\boldsymbol{\theta} \mid \Sigma, \mathbf{Y}$, collecting terms in $\boldsymbol{\theta}$ from $\log p(\boldsymbol{\theta}) + \log p(\mathbf{Y} \mid \boldsymbol{\theta}, \Sigma)$ gives $-\frac{1}{2}\boldsymbol{\theta}^T(\Lambda_0^{-1} + n\Sigma^{-1})\boldsymbol{\theta} + \boldsymbol{\theta}^T(\Lambda_0^{-1}\boldsymbol{\mu}_0 + n\Sigma^{-1}\bar{\mathbf{y}})$, which matches {{< eqref "eq:ch07-quad-recog" >}} directly. For $\Sigma \mid \boldsymbol{\theta}, \mathbf{Y}$, multiplying {{< eqref "eq:ch07-iw-pdf" >}} by $\lvert \Sigma \rvert^{-n/2}\exp\bigl(-\frac{1}{2}\operatorname{tr}(\mathbf{S}_{\boldsymbol{\theta}}\Sigma^{-1})\bigr)$ yields $\lvert \Sigma \rvert^{-(\nu_0 + n + p + 1)/2}\exp\bigl(-\frac{1}{2}\operatorname{tr}((S_0 + \mathbf{S}_{\boldsymbol{\theta}})\Sigma^{-1})\bigr)$, immediately recognizable as {{< eqref "eq:ch07-fc-sigma" >}}.
+
+For $\boldsymbol{\theta} \mid \Sigma, \mathbf{Y}$, collecting terms in $\boldsymbol{\theta}$ from $\log p(\boldsymbol{\theta}) + \log p(\mathbf{Y} \mid \boldsymbol{\theta}, \Sigma)$ gives
+
+$$
+-\frac{1}{2}\boldsymbol{\theta}^T(\Lambda_0^{-1} + n\Sigma^{-1})\boldsymbol{\theta} + \boldsymbol{\theta}^T(\Lambda_0^{-1}\boldsymbol{\mu}_0 + n\Sigma^{-1}\bar{\mathbf{y}}),
+$$
+
+which matches {{< eqref "eq:ch07-quad-recog" >}} directly. For $\Sigma \mid \boldsymbol{\theta}, \mathbf{Y}$, multiplying {{< eqref "eq:ch07-iw-pdf" >}} by $\lvert \Sigma \rvert^{-n/2}\exp\bigl(-\frac{1}{2}\operatorname{tr}(\mathbf{S}_{\boldsymbol{\theta}}\Sigma^{-1})\bigr)$ yields
+
+$$
+\lvert \Sigma \rvert^{-(\nu_0 + n + p + 1)/2}\exp\bigl(-\frac{1}{2}\operatorname{tr}((S_0 + \mathbf{S}_{\boldsymbol{\theta}})\Sigma^{-1})\bigr),
+$$
+
+immediately recognizable as {{< eqref "eq:ch07-fc-sigma" >}}.
 {{< /proof >}}
 
 {{< thm kind="algorithm" note="Two-Block MVN Gibbs Sampler" label="alg:ch07-mvn-gibbs" >}}

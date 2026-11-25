@@ -37,7 +37,13 @@ A **full conditional distribution**{{< index "full conditional distribution" >}}
    \tilde{\sigma}^2 \mid \theta, y_{1:n} \sim \operatorname{gamma}\!\left(\frac{\nu_0 + n}{2},\; \frac{\nu_0 \sigma_0^2 + n s_n^2(\theta)}{2}\right), \label{eq:ch06-fc-prec}
    $$
 
-   where $n s_n^2(\theta) = \sum_{i=1}^n (y_i - \theta)^2 = (n - 1)s^2 + n(\bar{y} - \theta)^2$ can be evaluated in $O(1)$ time at every iteration without re-scanning the dataset!
+   where
+
+$$
+n s_n^2(\theta) = \sum_{i=1}^n (y_i - \theta)^2 = (n - 1)s^2 + n(\bar{y} - \theta)^2
+$$
+
+can be evaluated in $O(1)$ time at every iteration without re-scanning the dataset!
 
 ## The Gibbs Sampler Algorithm {#sec:ch06-algorithm}
 
@@ -68,11 +74,13 @@ If $\phi^{(s-1)} \sim p(\phi \mid y)$, then a single conditional update replacin
 
 {{< proof >}}
 By definition of conditional probability, the joint density of the new state $(\phi_j', \phi_{-j})$ when the previous state was drawn from $p(\phi \mid y)$ is
+
 $$
 p_{\text{new}}(\phi_j', \phi_{-j})
 = p(\phi_{-j} \mid y)\,p(\phi_j' \mid \phi_{-j}, y)
 = p(\phi_j', \phi_{-j} \mid y).
 $$
+
 Since every single-block kernel preserves $p(\phi \mid y)$, their composition (the full systematic scan) also preserves $p(\phi \mid y)$.
 {{< /proof >}}
 

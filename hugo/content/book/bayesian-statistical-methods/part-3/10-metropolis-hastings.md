@@ -52,7 +52,11 @@ does not involve the intractable constant $p(y)$. If $r \ge 1$, the candidate de
 Let $J(\theta^* \mid \theta)$ be a *symmetric* proposal, $J(\theta_b \mid \theta_a) = J(\theta_a \mid \theta_b)$, for example $\operatorname{normal}(\theta, \delta^2)$ or $\operatorname{uniform}(\theta - \delta, \theta + \delta)$. Given $\theta^{(s)}$:
 
 1. Sample $\theta^* \sim J(\theta \mid \theta^{(s)})$.
-2. Compute $\log r = \log p(y \mid \theta^*) + \log p(\theta^*) - \log p(y \mid \theta^{(s)}) - \log p(\theta^{(s)})$.
+2. Compute
+
+   $$
+   \log r = \log p(y \mid \theta^*) + \log p(\theta^*) - \log p(y \mid \theta^{(s)}) - \log p(\theta^{(s)}).
+   $$
 3. Sample $u \sim \operatorname{uniform}(0, 1)$. Set $\theta^{(s+1)} = \theta^*$ if $\log u < \log r$, and $\theta^{(s+1)} = \theta^{(s)}$ otherwise.
 {{< /thm >}}
 
@@ -71,7 +75,13 @@ If the target is $\operatorname{normal}(\mu, \tau^2)$ and the proposal is $\oper
 {{< /proposition >}}
 
 {{< proof >}}
-Standardize so that $\mu = 0$, $\tau = 1$, $\ell = \delta/\tau$, and write the proposed jump as $u = \ell w$ with $w \sim \operatorname{normal}(0,1)$. Averaging the acceptance probability over the stationary position, $\int \phi(x)\min\{1, \phi(x+u)/\phi(x)\}\,dx = \int \min\{\phi(x), \phi(x + u)\}\,dx = 2\Phi(-\lvert u \rvert/2)$, the overlap of two unit normals a distance $\lvert u \rvert$ apart. With an independent $v \sim \operatorname{normal}(0,1)$, averaging over $w$ gives $2\Pr(v > \ell\lvert w \rvert/2)$. By rotational symmetry the wedge $\{v > \ell\lvert w \rvert/2\}$ has probability $\frac{1}{\pi}\bigl(\frac{\pi}{2} - \arctan\frac{\ell}{2}\bigr) = \frac{1}{\pi}\arctan\frac{2}{\ell}$.
+Standardize so that $\mu = 0$, $\tau = 1$, $\ell = \delta/\tau$, and write the proposed jump as $u = \ell w$ with $w \sim \operatorname{normal}(0,1)$. Averaging the acceptance probability over the stationary position,
+
+$$
+\int \phi(x)\min\{1, \phi(x+u)/\phi(x)\}\,dx = \int \min\{\phi(x), \phi(x + u)\}\,dx = 2\Phi(-\lvert u \rvert/2),
+$$
+
+the overlap of two unit normals a distance $\lvert u \rvert$ apart. With an independent $v \sim \operatorname{normal}(0,1)$, averaging over $w$ gives $2\Pr(v > \ell\lvert w \rvert/2)$. By rotational symmetry the wedge $\{v > \ell\lvert w \rvert/2\}$ has probability $\frac{1}{\pi}\bigl(\frac{\pi}{2} - \arctan\frac{\ell}{2}\bigr) = \frac{1}{\pi}\arctan\frac{2}{\ell}$.
 {{< /proof >}}
 
 With $\tau^2 = 1/5.1$ this gives $87.5\%$, $35.6\%$, and $7.0\%$ for $\delta^2 = \frac{1}{32}, 2, 64$, in line with the $87\%$ and $35\%$ Hoff observes for the first two (his finite-run estimate for the third is $5\%$). The usual advice is to run short pilot chains until the **acceptance rate**{{< index "acceptance rate" >}} lies between $20\%$ and $50\%$. Theory supports it. For idealized targets with $d$ independent components, Roberts, Gelman, and Gilks{{< cite "roberts1997" >}}{{< index "optimal scaling" >}} showed that as $d \to \infty$ the efficient proposal has scale about $2.38/\sqrt{d}$ times the target’s, with limiting acceptance rate $0.234$; in one dimension the corresponding optimum is near $0.44$ ({{< xref "ex:ch10-optimal" "full" >}}). These are guides, not certificates: a chain trapped in one mode may boast a perfect acceptance rate.
@@ -114,6 +124,7 @@ The correction $J_s(x^{(s)} \mid x^*)/J_s(x^* \mid x^{(s)})$ is easily remembere
 
 {{< proof >}}
 Part (i) is immediate. For (ii), $J(u^* \mid u, v) = p_0(u^* \mid v)$ and the reverse move has density $p_0(u \mid v)$, so
+
 $$
 r = \frac{p_0(u^*, v)}{p_0(u, v)} \cdot \frac{p_0(u \mid v)}{p_0(u^* \mid v)}
 = \frac{p_0(u^* \mid v)\,p_0(v)}{p_0(u \mid v)\,p_0(v)} \cdot \frac{p_0(u \mid v)}{p_0(u^* \mid v)} = 1 .
@@ -128,10 +139,12 @@ A chain is **irreducible**{{< index "irreducibility" >}} if it can eventually re
 
 {{< theorem note="Ergodic Theorem" label="thm:ch10-ergodic" >}}
 Let $\{x^{(1)}, x^{(2)}, \dots\}$ be an irreducible, aperiodic, and (positive) recurrent Markov chain. Then there is a unique distribution $\pi$ such that, as $s, S \to \infty$,
+
 $$
 \Pr(x^{(s)} \in A) \to \pi(A) \quad\text{for every set } A, \qquad
 \frac{1}{S}\sum_{s=1}^S g(x^{(s)}) \to \int g(x)\,\pi(x)\,dx \label{eq:ch10-ergodic}
 $$
+
 almost surely, for every $g$ with $\int \lvert g(x) \rvert\,\pi(x)\,dx < \infty$. Moreover $\pi$ is **stationary**{{< index "stationary distribution" >}}: if $x^{(s)} \sim \pi$ then $x^{(s+1)} \sim \pi$.
 {{< /theorem >}}
 
@@ -144,19 +157,23 @@ $$
 
 {{< theorem note="Detailed Balance for Metropolis–Hastings" label="thm:ch10-db" >}}
 The kernel {{< eqref "eq:ch10-kernel" >}} satisfies **detailed balance**{{< index "detailed balance" >}} with respect to $p_0$: for all sets $A$ and $B$,
+
 $$
 \int_A p_0(x)\,T(x, B)\,dx = \int_B p_0(x)\,T(x, A)\,dx . \label{eq:ch10-db}
 $$
+
 Consequently $p_0$ is stationary for $T$.
 {{< /theorem >}}
 
 {{< proof >}}
 *Accepted moves* ($x \neq x'$). Multiplying the acceptance probability through,
+
 $$
 p_0(x)\,J(x' \mid x)\,\alpha(x, x')
 = p_0(x)\,J(x' \mid x)\,\min\left\{1,\, \frac{p_0(x')\,J(x \mid x')}{p_0(x)\,J(x' \mid x)}\right\}
 = \min\bigl\{p_0(x)\,J(x' \mid x),\; p_0(x')\,J(x \mid x')\bigr\},
 $$
+
 which is symmetric in $(x, x')$. (Where $p_0(x)J(x' \mid x) = 0$ such a move has probability zero, and both sides vanish.) Integrating over $x \in A$, $x' \in B$ therefore equals integrating over $x \in B$, $x' \in A$.
 
 *Rejections* ($x = x'$). The atom contributes $\int_A p_0(x)\,\rho(x)\,\mathbf{1}(x \in B)\,dx = \int_{A \cap B} p_0(x)\,\rho(x)\,dx$, which is symmetric in $A$ and $B$ whatever $\rho$ is.
@@ -191,6 +208,7 @@ With a vague prior $\boldsymbol{\beta}_n$ is close to the generalized least squa
 
 {{< proposition note="Closed Form for the AR(1) Precision Matrix" label="prop:ch10-ar1" >}}
 For $\lvert \rho \rvert < 1$, $\lvert C_\rho \rvert = (1 - \rho^2)^{n-1}$, and $C_\rho^{-1}$ is tridiagonal:
+
 $$
 C_\rho^{-1} = \frac{1}{1 - \rho^2}
 \begin{pmatrix}
@@ -201,7 +219,14 @@ C_\rho^{-1} = \frac{1}{1 - \rho^2}
 & & & -\rho & 1
 \end{pmatrix}. \label{eq:ch10-tridiag}
 $$
-Hence $\mathbf{e}^TC_\rho^{-1}\mathbf{e} = e_1^2 + \frac{1}{1 - \rho^2}\sum_{t=2}^n (e_t - \rho e_{t-1})^2$, computable in $O(n)$ operations.
+
+Hence
+
+$$
+\mathbf{e}^TC_\rho^{-1}\mathbf{e} = e_1^2 + \frac{1}{1 - \rho^2}\sum_{t=2}^n (e_t - \rho e_{t-1})^2,
+$$
+
+computable in $O(n)$ operations.
 {{< /proposition >}}
 
 {{< proof >}}
@@ -317,7 +342,7 @@ print(f"AR(1): accept={acc / 10_000:.2f}, slope 95% CI={np.quantile(keep[:, 0], 
 
 Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode, abstracts the normal-target example to general $(n, \sigma^2, \tau_0^2, \delta)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and instantiates the symbolic acceptance formula on Hoff’s 5-point normal target.
 
-{{< marginnote >}}Integrate the Metropolis acceptance probability against a standard normal target to derive $\alpha(\ell) = \frac{2}{\pi}\operatorname{arccot}(\ell/2)$.{{< /marginnote >}}
+{{< marginnote >}}Integrate the Metropolis acceptance probability against a standard normal target to derive $\alpha(\ell) = (2/\pi)\operatorname{arccot}(\ell/2)$.{{< /marginnote >}}
 
 ```js
 // Chapter 10: Symbolic Metropolis acceptance rate (general normal posterior) & AR(1) precision
@@ -385,7 +410,13 @@ $$
 ## Exercises {#sec:ch10-exercises}
 
 {{< thm kind="exercise" label="ex:ch10-optimal" >}}
-Extend the proof of {{< xref "prop:ch10-accept" "full" >}} to the expected squared jump. With $\ell = \delta/\tau$ and $\omega = \arctan(\ell/2)$, show by polar coordinates that $E[(\theta^{(s+1)} - \theta^{(s)})^2] = \frac{2\delta^2}{\pi}\bigl[\frac{\pi}{2} - \omega - \frac{1}{2}\sin 2\omega\bigr]$ at stationarity, and that the lag-1 autocorrelation is $1$ minus this quantity divided by $2\tau^2$. Maximize numerically over $\ell$ and confirm that the optimum is near $\ell = 2.4$ with acceptance rate near $0.44$. Why do finite-run autocorrelations started at $\theta^{(0)} = 0$ differ from these stationary values?
+Extend the proof of {{< xref "prop:ch10-accept" "full" >}} to the expected squared jump. With $\ell = \delta/\tau$ and $\omega = \arctan(\ell/2)$, show by polar coordinates that
+
+$$
+E[(\theta^{(s+1)} - \theta^{(s)})^2] = \frac{2\delta^2}{\pi}\bigl[\frac{\pi}{2} - \omega - \frac{1}{2}\sin 2\omega\bigr]
+$$
+
+at stationarity, and that the lag-1 autocorrelation is $1$ minus this quantity divided by $2\tau^2$. Maximize numerically over $\ell$ and confirm that the optimum is near $\ell = 2.4$ with acceptance rate near $0.44$. Why do finite-run autocorrelations started at $\theta^{(0)} = 0$ differ from these stationary values?
 {{< /thm >}}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
@@ -404,7 +435,7 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Express the lag-1 autocorrelation $\rho_1(\ell) = 1 - \frac{1}{2}\operatorname{ESJD}(\ell)$ in closed form.{{< /marginnote >}}
+{{< marginnote >}}Express the lag-1 autocorrelation $\rho_1(\ell) = 1 - 1/2\operatorname{ESJD}(\ell)$ in closed form.{{< /marginnote >}}
 
 ```js
 const acf1 = await show`FullSimplify[1 - ${esjd}/2]`
@@ -431,7 +462,13 @@ $$
 {{< /details >}}
 
 {{< thm kind="exercise" label="ex:ch10-reflect" >}}
-Show that for $0 < \delta \le 1$ the reflecting random walk has density $J(b \mid a) = \frac{1}{2\delta}\bigl[\mathbf{1}(\lvert b - a \rvert < \delta) + \mathbf{1}(a + b < \delta) + \mathbf{1}(2 - a - b < \delta)\bigr]$ on $(0,1)$, and conclude that it is symmetric. What goes wrong if out-of-range proposals are instead redrawn until they fall inside $(0, 1)$, with no Hastings correction?
+Show that for $0 < \delta \le 1$ the reflecting random walk has density
+
+$$
+J(b \mid a) = \frac{1}{2\delta}\bigl[\mathbf{1}(\lvert b - a \rvert < \delta) + \mathbf{1}(a + b < \delta) + \mathbf{1}(2 - a - b < \delta)\bigr]
+$$
+
+on $(0,1)$, and conclude that it is symmetric. What goes wrong if out-of-range proposals are instead redrawn until they fall inside $(0, 1)$, with no Hastings correction?
 {{< /thm >}}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}

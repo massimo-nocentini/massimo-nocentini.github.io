@@ -47,16 +47,22 @@ Matching the coefficients of $\theta^2$ and $\theta$ (completing the square; see
 
 {{< proposition note="Normal–Normal Conditional Update" label="prop:ch05-normal-mean" >}}
 If $\theta \sim \operatorname{normal}(\mu_0, \tau_0^2)$ and $Y_1, \dots, Y_n \mid \theta, \sigma^2 \stackrel{\text{i.i.d.}}{\sim} \operatorname{normal}(\theta, \sigma^2)$ with $\sigma^2$ known, then $\theta \mid y_{1:n}, \sigma^2 \sim \operatorname{normal}(\mu_n, \tau_n^2)$, where
+
 $$
 \tilde{\tau}_n^2 = \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2} + \frac{n}{\sigma^2}, \qquad
 \mu_n = \frac{\frac{1}{\tau_0^2}\mu_0 + \frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2} + \frac{n}{\sigma^2}}. \label{eq:ch05-mean-update}
 $$
+
 Moreover, a future observation $\tilde{Y}$ has posterior predictive distribution $\tilde{Y} \mid y_{1:n}, \sigma^2 \sim \operatorname{normal}(\mu_n,\, \sigma^2 + \tau_n^2)$.
 {{< /proposition >}}
 
 Look closely at {{< eqref "eq:ch05-mean-update" >}}:
 - **Precisions add**: posterior precision equals prior precision ($1/\tau_0^2$) plus data precision ($n/\sigma^2$).
-- **Means average by precision**: $\mu_n$ is a convex combination of $\mu_0$ and $\bar{y}$, weighted by their respective precisions. Setting $\kappa_0 = \sigma^2 / \tau_0^2$ expresses the prior precision as $\kappa_0$ equivalent observations, giving $\mu_n = \frac{\kappa_0}{\kappa_0 + n}\mu_0 + \frac{n}{\kappa_0 + n}\bar{y}$.
+- **Means average by precision**: $\mu_n$ is a convex combination of $\mu_0$ and $\bar{y}$, weighted by their respective precisions. Setting $\kappa_0 = \sigma^2 / \tau_0^2$ expresses the prior precision as $\kappa_0$ equivalent observations, giving
+
+  $$
+  \mu_n = \frac{\kappa_0}{\kappa_0 + n}\mu_0 + \frac{n}{\kappa_0 + n}\bar{y}.
+  $$
 - **Predictive variances add**: writing $\tilde{Y} = \theta + \tilde{\epsilon}$ with $\tilde{\epsilon} \sim \operatorname{normal}(0, \sigma^2)$ independent of $\theta \mid y_{1:n}$, we immediately get $\operatorname{Var}(\tilde{Y} \mid y_{1:n}, \sigma^2) = \tau_n^2 + \sigma^2$—again separating parameter uncertainty from irreducible sampling variability.
 
 ## Joint Inference for Mean and Variance: The Conjugate Normal–Inverse-Gamma Model {#sec:ch05-joint}
@@ -72,34 +78,51 @@ equivalently $\sigma^2 \sim \operatorname{inverse-gamma}(\nu_0/2,\, \nu_0\sigma_
 
 {{< theorem note="Joint Conjugate Normal–Inverse-Gamma Posterior and Student-t Marginal" label="thm:ch05-nig" >}}
 Under the conjugate prior {{< eqref "eq:ch05-conj-prior" >}} and i.i.d. normal sampling model {{< eqref "eq:ch05-lik" >}}, define $\kappa_n = \kappa_0 + n$, $\nu_n = \nu_0 + n$, and
+
 $$
 \mu_n = \frac{\kappa_0 \mu_0 + n \bar{y}}{\kappa_n}, \qquad
 \nu_n \sigma_n^2 = \nu_0 \sigma_0^2 + (n - 1)s^2 + \frac{\kappa_0 n}{\kappa_0 + n}(\bar{y} - \mu_0)^2. \label{eq:ch05-nig-params}
 $$
+
 Then the joint posterior $p(\theta, \sigma^2 \mid y_{1:n}) = p(\theta \mid \sigma^2, y_{1:n})\,p(\sigma^2 \mid y_{1:n})$ is again Normal–Inverse-Gamma:
+
 $$
 \theta \mid \sigma^2, y_{1:n} \sim \operatorname{normal}\!\left(\mu_n,\, \frac{\sigma^2}{\kappa_n}\right), \qquad
 \frac{1}{\sigma^2} \mid y_{1:n} \sim \operatorname{gamma}\!\left(\frac{\nu_n}{2},\, \frac{\nu_n \sigma_n^2}{2}\right). \label{eq:ch05-nig-post}
 $$
+
 Integrating out $\sigma^2$ yields an exact location–scale **Student-$t$ marginal posterior**{{< index "Student-t distribution" >}} for $\theta$:
+
 $$
 \frac{\theta - \mu_n}{\sigma_n / \sqrt{\kappa_n}} \;\Bigm|\; y_{1:n} \;\sim\; t_{\nu_n}, \label{eq:ch05-student-t}
 $$
+
 and the posterior predictive distribution for a future observation $\tilde{Y}$ is $(\tilde{Y} - \mu_n) / \bigl(\sigma_n\sqrt{1 + 1/\kappa_n}\bigr) \mid y_{1:n} \sim t_{\nu_n}$.
 {{< /theorem >}}
 
 {{< proof >}}
 First, substitute $\tau_0^2 = \sigma^2/\kappa_0$ into {{< xref "prop:ch05-normal-mean" "full" >}} to obtain $\theta \mid \sigma^2, y_{1:n} \sim \operatorname{normal}(\mu_n, \sigma^2/\kappa_n)$ immediately. Next, to find $p(\sigma^2 \mid y_{1:n})$, combine the prior quadratic $\kappa_0(\theta - \mu_0)^2$ and data quadratic $n(\theta - \bar{y})^2$ using the algebraic identity
+
 $$
 \kappa_0(\theta - \mu_0)^2 + n(\theta - \bar{y})^2
 = \kappa_n(\theta - \mu_n)^2 + \frac{\kappa_0 n}{\kappa_0 + n}(\bar{y} - \mu_0)^2.
 $$
-Now multiply $p(\theta, \sigma^2)$ by $p(y_{1:n} \mid \theta, \sigma^2)$ and integrate over $\theta \in \mathbb{R}$. The $\theta$-integral $\int \exp\bigl\{-\frac{\kappa_n}{2\sigma^2}(\theta - \mu_n)^2\bigr\}\,d\theta = \sqrt{2\pi\sigma^2/\kappa_n}$ cancels the $(\sigma^2)^{-1/2}$ factor from $p(\theta \mid \sigma^2)$, leaving
+
+Now multiply $p(\theta, \sigma^2)$ by $p(y_{1:n} \mid \theta, \sigma^2)$ and integrate over $\theta \in \mathbb{R}$. The $\theta$-integral
+
+$$
+\int \exp\bigl\{-\frac{\kappa_n}{2\sigma^2}(\theta - \mu_n)^2\bigr\}\,d\theta = \sqrt{2\pi\sigma^2/\kappa_n}
+$$
+
+cancels the $(\sigma^2)^{-1/2}$ factor from $p(\theta \mid \sigma^2)$, leaving
+
 $$
 p(\sigma^2 \mid y_{1:n}) \propto (\sigma^2)^{-\frac{\nu_0 + n}{2} - 1}
 \exp\left\{-\frac{\nu_0 \sigma_0^2 + (n - 1)s^2 + \frac{\kappa_0 n}{\kappa_0 + n}(\bar{y} - \mu_0)^2}{2\sigma^2}\right\},
 $$
+
 which is the exact kernel of $\operatorname{inverse-gamma}(\nu_n/2,\, \nu_n\sigma_n^2/2)$. Finally, to obtain $p(\theta \mid y_{1:n})$, integrate the joint posterior over precision $\tilde{\sigma}^2 = 1/\sigma^2 \in (0, \infty)$:
+
 $$
 \begin{aligned}
 p(\theta \mid y_{1:n})
@@ -110,6 +133,7 @@ p(\theta \mid y_{1:n})
 \propto \left[1 + \frac{1}{\nu_n}\left(\frac{\theta - \mu_n}{\sigma_n / \sqrt{\kappa_n}}\right)^2\right]^{-\frac{\nu_n + 1}{2}},
 \end{aligned}
 $$
+
 which is precisely the density kernel of a Student-$t$ distribution with $\nu_n$ degrees of freedom, location $\mu_n$, and scale $\sigma_n/\sqrt{\kappa_n}$.
 {{< /proof >}}
 
@@ -126,7 +150,13 @@ Grogan and Wirth measured wing lengths (in mm) of $n = 9$ midges: $(1.64, 1.70, 
 A natural objection to Bayesian shrinkage is: *isn’t $\hat{\theta}_b = E[\theta \mid y_{1:n}] = w\bar{y} + (1 - w)\mu_0$ (with $w = \frac{n}{n + \kappa_0}$) biased whenever $\mu_0 \neq \theta_0$?* Yes—its bias is $(1 - w)(\mu_0 - \theta_0)$, whereas $\bar{y}$ is unbiased. Yet unbiasedness ignores variance! Measuring total accuracy by **Mean Squared Error**{{< index "mean squared error" >}} ($\operatorname{MSE} = \operatorname{Var} + \operatorname{Bias}^2$) reveals a striking frequentist justification for Bayesian shrinkage:
 
 {{< theorem note="When the Bayes Mean Beats y-bar in MSE" label="thm:ch05-mse" >}}
-Suppose $Y_1, \dots, Y_n \stackrel{\text{i.i.d.}}{\sim} \operatorname{normal}(\theta_0, \sigma^2)$ and $\hat{\theta}_b = \frac{n}{n+\kappa_0}\bar{y} + \frac{\kappa_0}{n+\kappa_0}\mu_0$ with $\kappa_0 > 0$. Then
+Suppose $Y_1, \dots, Y_n \stackrel{\text{i.i.d.}}{\sim} \operatorname{normal}(\theta_0, \sigma^2)$ and
+
+$$
+\hat{\theta}_b = \frac{n}{n+\kappa_0}\bar{y} + \frac{\kappa_0}{n+\kappa_0}\mu_0
+$$
+
+with $\kappa_0 > 0$. Then
 
 $$
 \operatorname{MSE}(\hat{\theta}_b)
@@ -143,10 +173,12 @@ $$
 
 {{< proof >}}
 Write $\operatorname{MSE}(\hat{\theta}_b) < \sigma^2/n$ using {{< eqref "eq:ch05-mse" >}} and multiply both sides by $(n + \kappa_0)^2$:
+
 $$
 n\sigma^2 + \kappa_0^2 (\mu_0 - \theta_0)^2 < \frac{(n + \kappa_0)^2}{n}\sigma^2
 = \left(n + 2\kappa_0 + \frac{\kappa_0^2}{n}\right)\sigma^2.
 $$
+
 Subtracting $n\sigma^2$ and dividing by $\kappa_0^2 > 0$ gives $(\mu_0 - \theta_0)^2 < \sigma^2(2/\kappa_0 + 1/n)$.
 {{< /proof >}}
 
@@ -219,7 +251,7 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Integrate $u^2$ against the Student-$t$ density to confirm $\operatorname{Var}(\theta \mid y) = \frac{\nu_n}{\nu_n - 2}\frac{\sigma_n^2}{\kappa_n}$.{{< /marginnote >}}
+{{< marginnote >}}Integrate $u^2$ against the Student-$t$ density to confirm $\operatorname{Var}(\theta \mid y) = [\nu_n/(\nu_n - 2)](\sigma_n^2/\kappa_n)$.{{< /marginnote >}}
 
 ```js
 // Symbolic Student-t variance Var[theta | y] = (nun / (nun - 2)) * (s2n / kn) for nun > 2

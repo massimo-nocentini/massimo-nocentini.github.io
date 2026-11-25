@@ -21,12 +21,19 @@ By the **Fisher–Neyman factorization theorem**{{< index "Fisher–Neyman facto
 
 {{< definition note="Conjugate Prior Family" label="def:ch03-conjugate" >}}
 A class $\mathcal{P}$ of prior distributions for $\theta$ is **conjugate**{{< index "conjugate prior" >}} for a sampling model $p(y \mid \theta)$ if{{< cite "raiffa1961" >}}
+
 $$
 p(\theta) \in \mathcal{P} \implies p(\theta \mid y) \in \mathcal{P}.
 $$
 {{< /definition >}}
 
-Suppose $\theta \sim \operatorname{beta}(a, b)$, with density $p(\theta) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \theta^{a-1}(1-\theta)^{b-1}$ on $[0, 1]$ (the uniform prior on $[0, 1]$ is the special case $a = b = 1$). Multiplying prior and binomial likelihood and dropping factors independent of $\theta$ gives
+Suppose $\theta \sim \operatorname{beta}(a, b)$, with density
+
+$$
+p(\theta) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \theta^{a-1}(1-\theta)^{b-1}
+$$
+
+on $[0, 1]$ (the uniform prior on $[0, 1]$ is the special case $a = b = 1$). Multiplying prior and binomial likelihood and dropping factors independent of $\theta$ gives
 
 $$
 p(\theta \mid y) \propto \theta^{a-1}(1 - \theta)^{b-1} \cdot \theta^y (1 - \theta)^{n - y}
@@ -101,7 +108,13 @@ Multiplying prior and likelihood yields the conjugate posterior and the exact **
 {{< proposition note="Poisson–Gamma Update and Predictive Variance" label="prop:ch03-pois-gamma" >}}
 Let $\theta \sim \operatorname{gamma}(a, b)$ and $Y_1, \dots, Y_n \mid \theta \stackrel{\text{i.i.d.}}{\sim} \operatorname{Poisson}(\theta)$, with $a_n = a + \sum_{i=1}^n y_i$ and $b_n = b + n$. Then:
 
-1. **Posterior**: $\theta \mid y_1, \dots, y_n \sim \operatorname{gamma}(a_n, b_n)$, with $E[\theta \mid y] = \frac{b}{b+n}\frac{a}{b} + \frac{n}{b+n}\bar{y}$. Here $b$ acts as prior sample size and $a$ as prior total count.
+1. **Posterior**: $\theta \mid y_1, \dots, y_n \sim \operatorname{gamma}(a_n, b_n)$, with
+
+   $$
+   E[\theta \mid y] = \frac{b}{b+n}\frac{a}{b} + \frac{n}{b+n}\bar{y}.
+   $$
+
+   Here $b$ acts as prior sample size and $a$ as prior total count.
 2. **Posterior predictive**: integrating out $\theta$ gives a $\operatorname{negative\ binomial}(a_n, b_n)$ distribution,
 
    $$
@@ -121,7 +134,14 @@ Let $\theta \sim \operatorname{gamma}(a, b)$ and $Y_1, \dots, Y_n \mid \theta \s
 {{< /proposition >}}
 
 {{< proof >}}
-For the posterior, $p(\theta \mid y_{1:n}) \propto \theta^{a-1} e^{-b\theta} \cdot \theta^{\sum y_i} e^{-n\theta} = \theta^{a_n - 1} e^{-b_n \theta}$, which is the kernel of $\operatorname{gamma}(a_n, b_n)$. For the predictive distribution, using $\tilde{Y} \perp y_{1:n} \mid \theta$ and the gamma integral $\int_0^\infty \theta^{\alpha - 1} e^{-\beta\theta}\,d\theta = \Gamma(\alpha)/\beta^\alpha$:
+For the posterior,
+
+$$
+p(\theta \mid y_{1:n}) \propto \theta^{a-1} e^{-b\theta} \cdot \theta^{\sum y_i} e^{-n\theta} = \theta^{a_n - 1} e^{-b_n \theta},
+$$
+
+which is the kernel of $\operatorname{gamma}(a_n, b_n)$. For the predictive distribution, using $\tilde{Y} \perp y_{1:n} \mid \theta$ and the gamma integral $\int_0^\infty \theta^{\alpha - 1} e^{-\beta\theta}\,d\theta = \Gamma(\alpha)/\beta^\alpha$:
+
 $$
 \begin{aligned}
 p(\tilde{y} \mid y_{1:n})
@@ -130,7 +150,12 @@ p(\tilde{y} \mid y_{1:n})
 = \frac{b_n^{a_n}}{\Gamma(\tilde{y} + 1)\,\Gamma(a_n)}\,\frac{\Gamma(a_n + \tilde{y})}{(b_n + 1)^{a_n + \tilde{y}}},
 \end{aligned}
 $$
-which rearranges immediately into {{< eqref "eq:ch03-negbin" >}}. The predictive variance {{< eqref "eq:ch03-pred-var" >}} follows directly from the law of total variance: $\operatorname{Var}[\tilde{Y} \mid y] = E[\operatorname{Var}(\tilde{Y} \mid \theta) \mid y] + \operatorname{Var}[E(\tilde{Y} \mid \theta) \mid y] = E[\theta \mid y] + \operatorname{Var}[\theta \mid y]$.
+
+which rearranges immediately into {{< eqref "eq:ch03-negbin" >}}. The predictive variance {{< eqref "eq:ch03-pred-var" >}} follows directly from the law of total variance:
+
+$$
+\operatorname{Var}[\tilde{Y} \mid y] = E[\operatorname{Var}(\tilde{Y} \mid \theta) \mid y] + \operatorname{Var}[E(\tilde{Y} \mid \theta) \mid y] = E[\theta \mid y] + \operatorname{Var}[\theta \mid y].
+$$
 {{< /proof >}}
 
 Equation {{< eqref "eq:ch03-pred-var" >}} captures a universal law of Bayesian prediction: predictive variance equals expected sampling variance *plus* variance from parameter uncertainty. As $n \to \infty$, $\operatorname{Var}[\theta \mid y] \to 0$, but irreducible sampling variability $E[\theta \mid y]$ remains.
@@ -157,7 +182,13 @@ which is proper whenever $n_0 > 0$ and $t_0$ lies in the interior of the convex 
 
 To translate {{< eqref "eq:ch03-dy-prior" >}} from the natural parameter $\phi$ back to the standard parameter $\theta$, we apply the change-of-variables Jacobian $p(\theta) = p(\phi(\theta))\,\lvert d\phi/d\theta \rvert$:
 
-- **Binary**: $\phi = \log\frac{\theta}{1-\theta}$, so $c(\phi) = 1 - \theta$ and $\lvert d\phi/d\theta \rvert = \theta^{-1}(1-\theta)^{-1}$, giving $p(\theta) \propto (1-\theta)^{n_0} (\frac{\theta}{1-\theta})^{n_0 t_0} \theta^{-1}(1-\theta)^{-1} = \theta^{n_0 t_0 - 1}(1-\theta)^{n_0(1-t_0) - 1}$, i.e. $\operatorname{beta}\bigl(n_0 t_0,\, n_0(1 - t_0)\bigr)$.
+- **Binary**: $\phi = \log\frac{\theta}{1-\theta}$, so $c(\phi) = 1 - \theta$ and $\lvert d\phi/d\theta \rvert = \theta^{-1}(1-\theta)^{-1}$, giving
+
+  $$
+  p(\theta) \propto (1-\theta)^{n_0} (\frac{\theta}{1-\theta})^{n_0 t_0} \theta^{-1}(1-\theta)^{-1} = \theta^{n_0 t_0 - 1}(1-\theta)^{n_0(1-t_0) - 1},
+  $$
+
+  i.e. $\operatorname{beta}\bigl(n_0 t_0,\, n_0(1 - t_0)\bigr)$.
 - **Poisson**: $\phi = \log\theta$, so $c(\phi) = \exp(-e^\phi) = e^{-\theta}$ and $\lvert d\phi/d\theta \rvert = \theta^{-1}$, giving $p(\theta) \propto e^{-n_0 \theta}\,\theta^{n_0 t_0}\,\theta^{-1} = \theta^{n_0 t_0 - 1} e^{-n_0 \theta}$, i.e. $\operatorname{gamma}(n_0 t_0,\, n_0)$.
 
 | Model | $t(y)$ | Natural $\phi$ | $c(\phi)$ | Conjugate prior on $\theta$ | Weakly informative ($n_0 = 1$) |

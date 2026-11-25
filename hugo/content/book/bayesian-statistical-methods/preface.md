@@ -8,6 +8,12 @@ label: "ch:preface"
 
 {{< newthought "Peter D. Hoff’s textbook" />}} *A First Course in Bayesian Statistical Methods*{{< cite "hoff2009" >}} is widely admired because it turns a one-quarter graduate course into a remarkably tight, self-contained arc—bridging classical theoretical foundations{{< cite "bernardo1994" >}} and applied Bayesian data analysis{{< cite "gelman2004" >}} from motivating examples in Chapter 1 and the axioms of rational belief in Chapter 2 to semiparametric Gaussian copulas for mixed ordinal data in Chapter 12, never losing sight of either mathematical clarity or hands-on simulation.
 
+Bayesian inference treats every unknown—whether a population proportion, a covariance matrix, a missing measurement, or a latent threshold—as a random variable governed by probability distributions:
+
+- **Part I** ({{< xref "part:foundations" "full" >}}) builds the logical foundation from belief axioms and de Finetti’s exchangeability theorem through conjugate one-parameter models and i.i.d. Monte Carlo integration.
+- **Part II** ({{< xref "part:normal-gibbs" "full" >}}) develops univariate and multivariate normal models, introduces the Gibbs sampler and MCMC diagnostics, and shows how two-level exchangeability gives rise to hierarchical shrinkage.
+- **Part III** ({{< xref "part:regression-latent" "full" >}}) moves into Bayesian linear regression, Zellner’s $g$-prior and variable selection, the general Metropolis–Hastings algorithm, linear and generalized linear mixed effects models, and latent-variable methods (ordered probit, rank likelihood, and Gaussian copulas) for ordinal data.
+
 This companion book was created to help you *read, internalize, and verify* every idea in Hoff’s twelve chapters. Rather than merely summarizing the textbook, each chapter here:
 
 1. **Isolates the conceptual core**: why a model, prior, or algorithm is introduced, what problem it solves, and what fails without it.

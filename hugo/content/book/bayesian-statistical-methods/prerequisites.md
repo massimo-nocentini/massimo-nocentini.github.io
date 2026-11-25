@@ -17,6 +17,7 @@ A Bayesian model specifies a **joint distribution** $p(x, z)$ over observable da
 Let $X$ and $Z$ be random variables on a common probability space.
 1. If $E\lvert X\rvert < \infty$, then $E[X] = E\{E[X \mid Z]\}$.
 2. If $E[X^2] < \infty$, then
+
 $$
 \operatorname{Var}(X) = E\{\operatorname{Var}(X \mid Z)\} + \operatorname{Var}(E[X \mid Z]).
 $$
@@ -153,9 +154,11 @@ $$
 ## Conditioning, Bayes’ Rule, and Kernel Recognition {#sec:pre-kernel}
 
 Bayes’ rule turns a generative model $p(y \mid \theta)$ and prior $p(\theta)$ into the posterior
+
 $$
 p(\theta \mid y) = \frac{p(y \mid \theta)\,p(\theta)}{p(y)}, \qquad p(y) = \int_\Theta p(y \mid \theta)\,p(\theta)\,d\theta.
 $$
+
 Dividing two hypotheses $H_1, H_0$ cancels $p(y)$ and yields $\text{posterior odds} = \operatorname{BF}_{10} \times \text{prior odds}$ (used in {{< xref "ch:exchangeability" "full" >}} and {{< xref "ch:regression" "full" >}}). When observations are conditionally independent given $\theta$, updating sequentially with $y_1$ and then $y_2$ produces the exact same posterior as updating in a single batch with $(y_1, y_2)$.
 
 {{< thm kind="proposition" title="Kernel Uniqueness" label="prop:pre-kernel" >}}
@@ -297,6 +300,7 @@ Working in Bayesian inference constantly requires switching parameter scales—f
 
 {{< thm kind="theorem" title="Change of Variables" label="thm:pre-cov" >}}
 Let $g : U \to V$ be a $C^1$ diffeomorphism between open subsets of $\mathbb{R}^p$, and let $X$ have density $p_X$ on $U$. Then $V = g(X)$ has density
+
 $$
 p_V(v) = p_X\bigl(g^{-1}(v)\bigr)\,\bigl\lvert \det Dg^{-1}(v) \bigr\rvert.
 $$
@@ -308,8 +312,17 @@ Quantiles are equivariant under strictly increasing maps ($Q_\alpha(g(X)) = g(Q_
 
 Three special-function identities underpin almost every closed-form integral in Parts I–III:
 - **Gamma recursion:** $\Gamma(a + 1) = a\,\Gamma(a)$ for $a > 0$, with $\Gamma(n) = (n - 1)!$ and $\Gamma(1/2) = \sqrt{\pi}$.
-- **Beta–Gamma identity:** $B(a, b) = \int_0^1 u^{a-1}(1-u)^{b-1}\,du = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$.
-- **Gaussian integral:** squaring $I = \int_{-\infty}^\infty e^{-x^2/2}\,dx$ and switching to polar coordinates gives $I^2 = \int_0^{2\pi} \int_0^\infty r e^{-r^2/2}\,dr\,d\varphi = 2\pi$, so $I = \sqrt{2\pi}$.
+- **Beta–Gamma identity:**
+
+  $$
+  B(a, b) = \int_0^1 u^{a-1}(1-u)^{b-1}\,du = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}.
+  $$
+
+- **Gaussian integral:** squaring $I = \int_{-\infty}^\infty e^{-x^2/2}\,dx$ and switching to polar coordinates gives
+
+  $$
+  I^2 = \int_0^{2\pi} \int_0^\infty r e^{-r^2/2}\,dr\,d\varphi = 2\pi \implies I = \sqrt{2\pi}.
+  $$
 
 {{< thm kind="proposition" title="Log-Concavity and Unimodality" label="prop:pre-logconcave" >}}
 A density $p$ is **log-concave** if $\log p$ is concave on its support. Log-concavity is preserved under products (priors times likelihoods), affine pre-composition ($x \mapsto Ax + b$), and marginalization (Prékopa’s theorem). A *strictly* log-concave density has **at most one** mode (existence also requires that the supremum be attained in the interior).
@@ -477,14 +490,17 @@ Cholesky factorization turns standard normal draws $\mathbf{z} \sim \mathcal{N}_
 - **Precision form:** if $A = L L^T$, then $A^{-1}\mathbf{b} + L^{-T}\mathbf{z} \sim \mathcal{N}_p(A^{-1}\mathbf{b}, A^{-1})$.
 
 **Completing the square** ({{< eqref "eq:appB-vec-sq" >}} in {{< xref "app:toolkit" "full" >}}) expands $-\tfrac{1}{2}(\mathbf{x} - \mathbf{m})^T A (\mathbf{x} - \mathbf{m})$ around $\mathbf{m} = A^{-1}\mathbf{b}$ using symmetry $A = A^T$, immediately giving the multivariate Gaussian integral
+
 $$
 \int_{\mathbb{R}^p} \exp\!\left(-\tfrac{1}{2}\mathbf{x}^T A \mathbf{x} + \mathbf{b}^T\mathbf{x}\right) d\mathbf{x}
 = (2\pi)^{p/2} \lvert A \rvert^{-1/2} \exp\!\left(\tfrac{1}{2}\mathbf{b}^T A^{-1} \mathbf{b}\right),
 $$
+
 used in {{< xref "ch:mvn" "full" >}}, {{< xref "ch:hierarchical" "full" >}}, {{< xref "ch:regression" "full" >}}, and {{< xref "ch:mixed" "full" >}}.
 
 {{< thm kind="theorem" title="Schur Complement Factorization" label="thm:pre-schur" >}}
 Partition an SPD matrix $\Sigma$ and vector $\mathbf{z}$ into blocks $a$ and $b$, with Schur complement $\Sigma_{b\mid a} = \Sigma_{b,b} - \Sigma_{b,a}\Sigma_{a,a}^{-1}\Sigma_{a,b}$ and residual $\mathbf{r} = \mathbf{z}_b - \Sigma_{b,a}\Sigma_{a,a}^{-1}\mathbf{z}_a$. Then
+
 $$
 \lvert \Sigma \rvert = \lvert \Sigma_{a,a} \rvert \cdot \lvert \Sigma_{b\mid a} \rvert, \qquad
 \mathbf{z}^T \Sigma^{-1} \mathbf{z} = \mathbf{z}_a^T \Sigma_{a,a}^{-1} \mathbf{z}_a + \mathbf{r}^T \Sigma_{b\mid a}^{-1} \mathbf{r}.
@@ -495,6 +511,7 @@ Together, those two identities *are* the marginal $\times$ conditional factoriza
 
 {{< thm kind="theorem" title="Orthogonal Projection and Zellner’s g-Prior Identity" label="thm:pre-proj" >}}
 Let $X \in \mathbb{R}^{n \times p}$ have full column rank $p$, and set $P_X = X(X^T X)^{-1} X^T$. Then $P_X$ is symmetric and idempotent ($P_X^2 = P_X$), has $\operatorname{tr}(P_X) = \operatorname{rank}(P_X) = p$, and satisfies $X^T(I_n - P_X) = 0$. Because its eigenvalues lie in $\{0, 1\}$ ($p$ ones and $n - p$ zeros), for every $g > -1$,
+
 $$
 \lvert I_n + g P_X \rvert = (1 + g)^p, \qquad (I_n + g P_X)^{-1} = I_n - \frac{g}{1 + g} P_X.
 $$
@@ -609,7 +626,11 @@ $$
 \end{aligned}
 $$
 
-Next we verify idempotence, orthogonality, trace, $\lvert I_3 + g P_X\rvert = (1 + g)^2$, the Woodbury inverse $(I_3 + g P_X)^{-1} = I_3 - \frac{g}{1+g} P_X$, and the Pythagorean decomposition $\mathbf{y}^T P_X \mathbf{y} + \mathbf{y}^T(I_3 - P_X)\mathbf{y} = \frac{79}{2} + \frac{3}{2} = 41 = \mathbf{y}^T \mathbf{y}$:
+Next we verify idempotence, orthogonality, trace, $\lvert I_3 + g P_X\rvert = (1 + g)^2$, the Woodbury inverse $(I_3 + g P_X)^{-1} = I_3 - \frac{g}{1+g} P_X$, and the Pythagorean decomposition:
+
+$$
+\mathbf{y}^T P_X \mathbf{y} + \mathbf{y}^T(I_3 - P_X)\mathbf{y} = \frac{79}{2} + \frac{3}{2} = 41 = \mathbf{y}^T \mathbf{y}.
+$$
 
 {{< marginnote >}}Verify symbolically that the OLS hat matrix $P_X$ is idempotent and orthogonal to the residual space.{{< /marginnote >}}
 
@@ -637,7 +658,7 @@ $$
 \bigl(\operatorname{tr}P_X,\; \lvert I_3 + gP_X\rvert\bigr) = \left\{2,(1+g)^2\right\}
 $$
 
-{{< marginnote >}}Confirm the Woodbury inverse $(I_3 + g P_X)^{-1} = I_3 - \frac{g}{1+g}P_X$ symbolically.{{< /marginnote >}}
+{{< marginnote >}}Confirm the Woodbury inverse $(I_3 + g P_X)^{-1} = I_3 - g/(1+g)P_X$ symbolically.{{< /marginnote >}}
 
 ```js
 await show`Simplify[Inverse[IdentityMatrix[3] + g*${P}] - (IdentityMatrix[3] - g/(1 + g)*${P})]`
@@ -671,16 +692,20 @@ When posterior integrals lack closed forms, Parts I–III replace exact calculus
 
 {{< thm kind="theorem" title="Strong Law and Central Limit Theorem for i.i.d. Monte Carlo" label="thm:pre-lln" >}}
 Let $\phi^{(1)}, \dots, \phi^{(S)} \stackrel{\text{i.i.d.}}{\sim} \pi$ and set $\bar{g}_S = \frac{1}{S} \sum_{s=1}^S g(\phi^{(s)})$. If $E_\pi\lvert g(\phi)\rvert < \infty$, then $\bar{g}_S \to E_\pi[g(\phi)]$ almost surely. If $\sigma^2 = \operatorname{Var}_\pi(g(\phi)) < \infty$, then
+
 $$
 \sqrt{S}\,\bigl(\bar{g}_S - E_\pi[g(\phi)]\bigr) \xrightarrow{d} \mathcal{N}(0, \sigma^2), \qquad \mathrm{MCSE} = \frac{\sigma}{\sqrt{S}},
 $$
+
 a convergence rate of $O(S^{-1/2})$ that is *independent of parameter dimension* $p$.
 {{< /thm >}}
 
 When direct sampling from $\pi$ is impossible, we construct a Markov chain with transition kernel $K(\phi, \phi')$ that leaves $\pi$ **stationary** (invariant): $\pi K = \pi$, i.e., $\int \pi(\phi)\,K(\phi, \phi')\,d\phi = \pi(\phi')$. A stronger, easily checked sufficient condition is **detailed balance** (reversibility):
+
 $$
 \pi(\phi)\,K(\phi, \phi') = \pi(\phi')\,K(\phi', \phi).
 $$
+
 Integrating both sides over $\phi$ immediately yields $\pi K = \pi$. The converse fails: a systematic-scan Gibbs sampler ({{< xref "ch:gibbs" "full" >}}) is generally stationary without being reversible.
 
 {{< thm kind="theorem" title="Ergodic Theorem for Markov Chains" label="thm:pre-ergodic" >}}
@@ -691,14 +716,22 @@ Let $\pi$ be an invariant probability distribution of a $\pi$-irreducible Markov
 {{< /thm >}}
 
 {{< remark note="Why aperiodicity separates averages from distributions" label="rem:pre-periodic" >}}
-The deterministic two-state flip $K = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ is irreducible with invariant distribution $\pi = (\tfrac{1}{2}, \tfrac{1}{2})$: its ergodic averages converge to $\frac{1}{2}(g(1) + g(2))$, yet $K^s$ oscillates forever and never converges in total variation.
+The deterministic two-state flip
+
+$$
+K = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+$$
+
+is irreducible with invariant distribution $\pi = (1/2, 1/2)$: its ergodic averages converge to $\frac{1}{2}(g(1) + g(2))$, yet $K^s$ oscillates forever and never converges in total variation.
 {{< /remark >}}
 
 {{< thm kind="proposition" title="Asymptotic Variance and Effective Sample Size" label="prop:pre-ess" >}}
 For a stationary Markov chain with lag-$t$ autocorrelations $\rho_t = \operatorname{Corr}(g(\phi^{(s)}), g(\phi^{(s+t)}))$ satisfying $\sum_{t=1}^\infty \lvert\rho_t\rvert < \infty$,
+
 $$
 S\operatorname{Var}(\bar{g}_S) \longrightarrow \sigma^2\!\left(1 + 2\sum_{t=1}^\infty \rho_t\right), \qquad S_{\text{eff}} = \frac{S}{1 + 2\sum_{t=1}^\infty \rho_t}.
 $$
+
 When negative autocorrelations dominate (antithetic sampling), $S_{\text{eff}}$ can exceed $S$. A Markov chain CLT requires stronger mixing—for example, geometric ergodicity together with $E_\pi\lvert g\rvert^{2+\delta} < \infty$.
 {{< /thm >}}
 

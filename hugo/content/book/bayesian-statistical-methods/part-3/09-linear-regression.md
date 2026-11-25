@@ -41,6 +41,7 @@ As a function of $\boldsymbol{\beta}$, the likelihood {{< eqref "eq:ch09-lik" >}
 
 {{< proposition note="Semiconjugate Full Conditionals" label="prop:ch09-fc" >}}
 Under independent priors $\boldsymbol{\beta} \sim \mathcal{N}_p(\boldsymbol{\beta}_0, \Sigma_0)$ and $1/\sigma^2 \sim \operatorname{gamma}(\nu_0/2,\, \nu_0\sigma_0^2/2)$,
+
 $$
 \begin{aligned}
 \boldsymbol{\beta} \mid \mathbf{y}, \mathbf{X}, \sigma^2 &\sim \mathcal{N}_p(\mathbf{m}, V), \qquad
@@ -52,7 +53,13 @@ $$
 {{< /proposition >}}
 
 {{< proof >}}
-Collecting the terms in $\boldsymbol{\beta}$ from prior and likelihood gives the exponent $-\frac{1}{2}\boldsymbol{\beta}^T(\Sigma_0^{-1} + \mathbf{X}^T\mathbf{X}/\sigma^2)\boldsymbol{\beta} + \boldsymbol{\beta}^T(\Sigma_0^{-1}\boldsymbol{\beta}_0 + \mathbf{X}^T\mathbf{y}/\sigma^2)$, whose precision matrix and linear term are read off directly. With $\gamma = 1/\sigma^2$, the second conditional is proportional to $\gamma^{\nu_0/2 - 1}e^{-\gamma\nu_0\sigma_0^2/2} \cdot \gamma^{n/2}e^{-\gamma\operatorname{SSR}(\boldsymbol{\beta})/2}$, a gamma kernel.
+Collecting the terms in $\boldsymbol{\beta}$ from prior and likelihood gives the exponent
+
+$$
+-\frac{1}{2}\boldsymbol{\beta}^T(\Sigma_0^{-1} + \mathbf{X}^T\mathbf{X}/\sigma^2)\boldsymbol{\beta} + \boldsymbol{\beta}^T(\Sigma_0^{-1}\boldsymbol{\beta}_0 + \mathbf{X}^T\mathbf{y}/\sigma^2),
+$$
+
+whose precision matrix and linear term are read off directly. With $\gamma = 1/\sigma^2$, the second conditional is proportional to $\gamma^{\nu_0/2 - 1}e^{-\gamma\nu_0\sigma_0^2/2} \cdot \gamma^{n/2}e^{-\gamma\operatorname{SSR}(\boldsymbol{\beta})/2}$, a gamma kernel.
 {{< /proof >}}
 
 Alternating these two draws is a complete Gibbs sampler. Precisions add and means average by precision, exactly as in one dimension: a vague prior ($\Sigma_0^{-1} \to 0$) returns $\hat{\boldsymbol{\beta}}_{\text{ols}}$, and a noisy experiment ($\sigma^2 \to \infty$) returns $\boldsymbol{\beta}_0$. The obstacle is not computation but *elicitation*: $\Sigma_0$ has $p$ variances and $\binom{p}{2}$ correlations, and few of us hold opinions about the prior correlation between an intercept and an interaction.
@@ -84,12 +91,21 @@ with $g = n$ carrying one observation’s information. Scaling the prior by $\si
 
 {{< theorem note="Exact Posterior under the g-Prior" label="thm:ch09-gprior" >}}
 Under {{< eqref "eq:ch09-lik" >}} and {{< eqref "eq:ch09-gprior" >}}, define
+
 $$
 \operatorname{SSR}_g
 = \mathbf{y}^T\Bigl(I_n - \frac{g}{g+1}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\Bigr)\mathbf{y}
 = \frac{g}{g+1}\operatorname{SSR}_{\text{ols}} + \frac{1}{g+1}\mathbf{y}^T\mathbf{y}. \label{eq:ch09-ssrg}
 $$
-Then $p(\mathbf{y} \mid \mathbf{X}, \sigma^2) = (2\pi\sigma^2)^{-n/2}(1 + g)^{-p/2}\exp\{-\operatorname{SSR}_g/(2\sigma^2)\}$, and
+
+Then
+
+$$
+p(\mathbf{y} \mid \mathbf{X}, \sigma^2) = (2\pi\sigma^2)^{-n/2}(1 + g)^{-p/2}\exp\{-\operatorname{SSR}_g/(2\sigma^2)\},
+$$
+
+and
+
 $$
 \begin{aligned}
 1/\sigma^2 \mid \mathbf{y}, \mathbf{X} &\sim \operatorname{gamma}\!\left(\frac{\nu_0 + n}{2},\, \frac{\nu_0\sigma_0^2 + \operatorname{SSR}_g}{2}\right), \\
@@ -100,10 +116,12 @@ $$
 
 {{< proof >}}
 Let $\mathbf{m} = \frac{g}{g+1}\hat{\boldsymbol{\beta}}_{\text{ols}}$. Completing the square in the combined exponent,
+
 $$
 (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \frac{1}{g}\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
 = \frac{g+1}{g}(\boldsymbol{\beta} - \mathbf{m})^T\mathbf{X}^T\mathbf{X}(\boldsymbol{\beta} - \mathbf{m}) + \operatorname{SSR}_g .
 $$
+
 The first term gives the conditional distribution of $\boldsymbol{\beta}$. Integrating it over $\boldsymbol{\beta}$ contributes $(2\pi\sigma^2)^{p/2}\bigl(\frac{g}{g+1}\bigr)^{p/2}\lvert\mathbf{X}^T\mathbf{X}\rvert^{-1/2}$, while the prior’s normalizing constant is $(2\pi g\sigma^2)^{-p/2}\lvert\mathbf{X}^T\mathbf{X}\rvert^{1/2}$; their product is $(1 + g)^{-p/2}$. What remains, as a function of $\gamma = 1/\sigma^2$, is $\gamma^{n/2}e^{-\gamma\operatorname{SSR}_g/2}$, which multiplies the $\operatorname{gamma}(\nu_0/2, \nu_0\sigma_0^2/2)$ prior to give the stated gamma posterior.
 {{< /proof >}}
 
@@ -129,6 +147,7 @@ The Bayesian response is to place the question inside the model. Write $\beta_j 
 
 {{< proposition note="Exact Marginal Likelihood of a Model" label="prop:ch09-marginal" >}}
 With $1/\sigma^2 \sim \operatorname{gamma}(\nu_0/2,\, \nu_0\sigma_0^2/2)$ and $\operatorname{SSR}_g^z$ as in {{< eqref "eq:ch09-ssrg" >}} computed from $\mathbf{X}_z$ (and $\operatorname{SSR}_g^z = \mathbf{y}^T\mathbf{y}$ when $p_z = 0$),
+
 $$
 p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})
 = \pi^{-n/2}\,\frac{\Gamma\bigl(\frac{\nu_0 + n}{2}\bigr)}{\Gamma\bigl(\frac{\nu_0}{2}\bigr)}\,
@@ -139,12 +158,14 @@ $$
 
 {{< proof >}}
 Multiply $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}, \gamma)$ from {{< xref "thm:ch09-gprior" "full" >}} by the gamma prior density and integrate over $\gamma = 1/\sigma^2$:
+
 $$
 \frac{(1+g)^{-p_z/2}}{(2\pi)^{n/2}}\,\frac{(\nu_0\sigma_0^2/2)^{\nu_0/2}}{\Gamma(\nu_0/2)}
 \int_0^\infty \gamma^{\frac{\nu_0 + n}{2} - 1} e^{-\gamma(\nu_0\sigma_0^2 + \operatorname{SSR}_g^z)/2}\,d\gamma
 = \frac{(1+g)^{-p_z/2}}{(2\pi)^{n/2}}\,\frac{(\nu_0\sigma_0^2/2)^{\nu_0/2}}{\Gamma(\nu_0/2)}\,
 \frac{\Gamma\bigl(\frac{\nu_0+n}{2}\bigr)}{\bigl(\frac{\nu_0\sigma_0^2 + \operatorname{SSR}_g^z}{2}\bigr)^{(\nu_0+n)/2}},
 $$
+
 and the powers of $2$ combine to $2^{n/2}$, turning $(2\pi)^{-n/2}$ into $\pi^{-n/2}$.
 {{< /proof >}}
 

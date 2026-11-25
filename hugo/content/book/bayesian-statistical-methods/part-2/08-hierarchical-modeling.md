@@ -136,7 +136,7 @@ p(\sigma_0^2 \mid \nu_0, \sigma_1^2, \dots, \sigma_m^2)
 \exp\!\left\{-\left(b + \frac{\nu_0}{2}\sum_{j=1}^m \frac{1}{\sigma_j^2}\right)\sigma_0^2\right\}, \label{eq:ch08-fc-sig0}
 $$
 
-which is $\operatorname{gamma}\!\bigl(a + \frac{m\nu_0}{2},\; b + \frac{\nu_0}{2}\sum_{j=1}^m \sigma_j^{-2}\bigr)$.{{< sidenote >}}Watch out for a missing factor of $\nu_0$ in the rate parameter printed on p. 144 of Hoff (2009), which writes $b + \frac{1}{2}\sum \sigma_j^{-2}$ instead of $b + \frac{\nu_0}{2}\sum \sigma_j^{-2}$; see {{< xref "app:errata" "full" >}}.{{< /sidenote >}} Because $\nu_0$ enters inside the gamma function $\Gamma(\nu_0/2)$, it has no standard conjugate density; restricting $\nu_0$ to a discrete grid $\{1, 2, \dots, \nu_{\max}\}$ lets us evaluate its exact log-full conditional (using the log-sum-exp trick for numerical stability) and draw $\nu_0$ from a categorical distribution at every Gibbs step:
+which is $\operatorname{gamma}\!\bigl(a + \frac{m\nu_0}{2},\; b + \frac{\nu_0}{2}\sum_{j=1}^m \sigma_j^{-2}\bigr)$.{{< sidenote >}}Watch out for a missing factor of $\nu_0$ in the rate parameter printed on p. 144 of Hoff (2009), which writes $b + 1/2\sum \sigma_j^{-2}$ instead of $b + \nu_0/2\sum \sigma_j^{-2}$; see {{< xref "app:errata" "full" >}}.{{< /sidenote >}} Because $\nu_0$ enters inside the gamma function $\Gamma(\nu_0/2)$, it has no standard conjugate density; restricting $\nu_0$ to a discrete grid $\{1, 2, \dots, \nu_{\max}\}$ lets us evaluate its exact log-full conditional (using the log-sum-exp trick for numerical stability) and draw $\nu_0$ from a categorical distribution at every Gibbs step:
 
 $$
 \begin{aligned}
@@ -300,7 +300,7 @@ In the Python script above, vary the true between-school standard deviation $\ta
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
-{{< marginnote >}}Simplify the oracle hierarchical Bayes risk (MSE) $\frac{(\sigma^2/n)\tau^2}{\sigma^2/n + \tau^2}$ for equal group sizes $n$.{{< /marginnote >}}
+{{< marginnote >}}Simplify the oracle hierarchical Bayes risk (MSE) $(\sigma^2/n)\tau^2 / (\sigma^2/n + \tau^2)$ for equal group sizes $n$.{{< /marginnote >}}
 
 ```js
 // Ex 8.1: Oracle Bayes risk (MSE, equal n) of unpooled, completely pooled, and hierarchical partial pooling
@@ -356,7 +356,7 @@ Extend the Python Gibbs sampler to allow heterogeneous school variances $\sigma_
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
-{{< marginnote >}}Compute the posterior mean of $\sigma_0^2$ under the correct full-conditional rate $b + \frac{\nu_0}{2}\sum_j \sigma_j^{-2}$.{{< /marginnote >}}
+{{< marginnote >}}Compute the posterior mean of $\sigma_0^2$ under the correct full-conditional rate $b + \nu_0/2\sum_j \sigma_j^{-2}$.{{< /marginnote >}}
 
 ```js
 // Ex 8.2: Bias of omitting nu0 in the full conditional rate of sigma_0^2 (plugging in sum sigma_j^{-2} = m / sigma_0^2)

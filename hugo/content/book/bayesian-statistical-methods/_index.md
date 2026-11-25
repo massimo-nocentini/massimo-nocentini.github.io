@@ -1,10 +1,8 @@
 ---
-title: "Bayesian Statistical Methods"
-subtitle: "A Conceptual & Computational Companion to Peter D. Hoff’s First Course"
-author: "Massimo Nocentini"
-publisher: "tufte.hugo"
-date: 2026-11-24
-description: "A self-contained, concept-first Hugo book guiding the reader through all twelve chapters of Peter D. Hoff’s A First Course in Bayesian Statistical Methods (2009), with derivations, theorems, figures, Python/NumPy implementations, and cross-referenced appendices."
+title: "A First Course in Bayesian Statistical Methods"
+author: "Peter D. Hoff"
+publisher: "Springer"
+description: "A First Course in Bayesian Statistical Methods by Peter D. Hoff: study companion with derivations, theorems, Wolfram Language symbolic checks, Python implementations, and exercises."
 book: true
 font: "etbook"
 mathFont: "euler"
@@ -26,7 +24,7 @@ epigraphs:
     author: "Pierre-Simon Laplace"
     work: "A Philosophical Essay on Probabilities (1814)"
 copyrightPage: |
-  *Study companion and conceptual exposition* of Peter D. Hoff, *A First Course in Bayesian Statistical Methods* (Springer Texts in Statistics, 2009, ISBN 978-0-387-92299-7).
+  *Study companion and conceptual exposition* of Peter D. Hoff, *A First Course in Bayesian Statistical Methods* (Springer Texts in Statistics, 2009, ISBN 978-0-387-92299-7), prepared by Massimo Nocentini.
 
   This Hugo book is an independent pedagogical guide written to clarify the mathematical structure, derivations, algorithms, and intuition of every chapter of Hoff’s text; it is not a reproduction of the original work.
 
@@ -51,9 +49,3 @@ tufte:
   print:
     paper: "a4"
 ---
-
-{{< newthought "Bayesian inference" />}} treats every unknown—whether a population proportion, a covariance matrix, a missing measurement, or a latent threshold—as a random variable governed by probability distributions. This companion follows Peter D. Hoff’s *A First Course in Bayesian Statistical Methods*{{< cite "hoff2009" >}} chapter by chapter, stripping away mechanical clutter so that each core idea stands in plain view:
-
-- **Part I** ({{< xref "part:foundations" "full" >}}) builds the logical foundation from belief axioms and de Finetti’s exchangeability theorem through conjugate one-parameter models and i.i.d. Monte Carlo integration.
-- **Part II** ({{< xref "part:normal-gibbs" "full" >}}) develops univariate and multivariate normal models, introduces the Gibbs sampler and MCMC diagnostics, and shows how two-level exchangeability gives rise to hierarchical shrinkage.
-- **Part III** ({{< xref "part:regression-latent" "full" >}}) moves into Bayesian linear regression, Zellner’s $g$-prior and variable selection, the general Metropolis–Hastings algorithm, linear and generalized linear mixed effects models, and latent-variable methods (ordered probit, rank likelihood, and Gaussian copulas) for ordinal data.
