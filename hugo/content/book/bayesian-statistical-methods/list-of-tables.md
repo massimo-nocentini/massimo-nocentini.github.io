@@ -2,7 +2,7 @@
 title: "List of Tables"
 matter: front
 unnumbered: true
-weight: 40
+weight: 50
 ---
 
 {{< listoftables heading="" >}}

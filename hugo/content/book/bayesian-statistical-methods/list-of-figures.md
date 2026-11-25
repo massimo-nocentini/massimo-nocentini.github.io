@@ -2,7 +2,7 @@
 title: "List of Figures"
 matter: front
 unnumbered: true
-weight: 30
+weight: 40
 ---
 
 {{< listoffigures heading="" >}}
