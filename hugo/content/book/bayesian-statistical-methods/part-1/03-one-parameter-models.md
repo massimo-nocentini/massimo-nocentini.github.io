@@ -218,6 +218,124 @@ pmf1 = stats.nbinom.pmf(y_vals, a + sy1, (b + n1) / (b + n1 + 1))
 print("Pred PMF (no degree, y=0..5):", np.round(pmf1, 3))
 ```
 
+## Modern Developments: Misspecification and Calibrated Prediction {#sec:ch03-modern}
+
+### Generalized and Coarsened Posteriors {#sec:ch03-coarsened}
+
+A **generalized posterior**{{< index "generalized posterior" >}} replaces the log-likelihood by a chosen loss, and a **coarsened posterior**{{< index "coarsened posterior" >}} tempers the likelihood to allow for a model that is only approximately right.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Bissiri, Holmes, and Walker{{< cite "bissiri2016" >}} and Miller and Dunson{{< cite "miller2019" >}}, and it modernizes the conjugate updates of this chapter for misspecified models.{{< /sidenote >}} For a loss $\ell(\theta, y)$ and learning rate $\eta > 0$,
+
+$$
+p_\eta(\theta \mid y_{1:n}) \propto p(\theta)\,\exp\Bigl\{-\eta \sum_{i=1}^n \ell(\theta, y_i)\Bigr\}. \label{eq:ch03-gen-post}
+$$
+
+*Why it holds*: {{< eqref "eq:ch03-gen-post" >}} is the distribution $\nu$ that minimizes $\eta\,E_\nu\bigl[\sum_i \ell(\theta, y_i)\bigr] + \operatorname{KL}(\nu \,\Vert\, p)$, because that objective equals $\operatorname{KL}(\nu \,\Vert\, p_\eta)$ plus a constant. The choice $\ell = -\log p(y \mid \theta)$, $\eta = 1$ is Bayes’ rule. Coarsening conditions on the data being *close* in relative entropy to a sample from the model, with an exponential prior of rate $\alpha$ on the distance; approximately, this gives the log-likelihood loss with $\eta = \zeta_n = \alpha/(\alpha + n)$. The Diaconis–Ylvisaker prior {{< eqref "eq:ch03-dy-prior" >}} then updates with $\zeta_n n$ in place of $n$:
+
+$$
+n_0 \mapsto n_0 + \zeta_n n, \qquad
+\operatorname{beta}(a, b) \mapsto \operatorname{beta}\bigl(a + \zeta_n y,\, b + \zeta_n(n - y)\bigr), \qquad
+\zeta_n n = \frac{\alpha n}{\alpha + n} \to \alpha. \label{eq:ch03-coarsened}
+$$
+
+The effective sample size saturates at $\alpha$, so the posterior width does not vanish. For the GSS data ($n = 129$, $y = 118$, uniform prior), $\alpha = 50$ gives $\zeta_n n \approx 36$ and moves the posterior mean and standard deviation from $0.908$ and $0.025$ to $0.893$ and $0.049$.
+
+**When to use it.** Use it when $n$ is large and small model errors would otherwise yield spurious certainty, or when only a loss is available. If the model is trusted, the ordinary update is sharper; $\alpha$ or $\eta$ must be chosen and reported.
+
+### Conformal Bayes {#sec:ch03-conformal}
+
+**Conformal Bayes**{{< index "conformal Bayes" >}} uses a posterior predictive such as {{< eqref "eq:ch03-negbin" >}} to rank observations, and draws its coverage from exchangeability rather than from the model.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Fong and Holmes{{< cite "fong2021" >}} and Hoff’s own later paper{{< cite "hoff2023" >}}. Conformal prediction itself predates 2009, as does the use of Bayesian predictive scores within it; the add-one-in computation and Hoff’s Bayes-optimal formulation come from these later papers.{{< /sidenote >}} For a candidate value $y$ of $Y_{n+1}$, put $y_{n+1} = y$, let $\sigma_i = p(y_i \mid y_{1:n+1})$ be the predictive density of observation $i$ given the augmented sample, and define
+
+$$
+\pi(y) = \frac{1}{n+1}\sum_{i=1}^{n+1} \mathbf{1}(\sigma_i \le \sigma_{n+1}), \qquad
+C_\alpha(y_{1:n}) = \{y : \pi(y) > \alpha\}. \label{eq:ch03-conformal}
+$$
+
+*Why it holds*: the augmented posterior is symmetric in the $n + 1$ observations, so if $Y_1, \dots, Y_{n+1}$ are exchangeable ({{< xref "def:ch02-exchangeable" "full" >}}) then so are the scores. Hence $\Pr(\pi(Y_{n+1}) \le \alpha) \le \alpha$, and $\Pr(Y_{n+1} \in C_\alpha) \ge 1 - \alpha$ for every $n$, *even if the sampling model is wrong*. No refitting is required: draws $\theta^{(s)} \sim p(\theta \mid y_{1:n})$ with weights proportional to $p(y \mid \theta^{(s)})$ (“add-one-in” importance sampling) target the augmented posterior. In the Poisson–gamma model even this is unnecessary, since $\sigma_i$ is the $\operatorname{negative\ binomial}(a_n + y,\, b_n + 1)$ probability of $y_i$.
+
+Hoff’s version starts from the opposite end: among prediction regions with guaranteed frequentist coverage, it seeks the one with the smallest *expected volume* under the Bayesian model. The prior then buys precision, not validity.
+
+**When to use it.** Use it when prediction intervals must be calibrated in repeated use and the sampling model is doubtful. The guarantee is *marginal* over the sample and the new observation, not conditional on the realized $y_{1:n}$. Since data that are i.i.d. given $\theta$ are exchangeable, it holds at every fixed $\theta$: it is a predictive analogue, with $\ge$, of the frequentist coverage in {{< xref "def:ch03-coverage" "full" >}}. With a credible model, the predictive {{< eqref "eq:ch03-negbin" >}} alone is simpler and gives full probabilities.
+
+### Computational & Symbolic Check {#sec:ch03-modern-check}
+
+The Python block reproduces the coarsened GSS posterior of {{< eqref "eq:ch03-coarsened" >}} and evaluates the conformal set {{< eqref "eq:ch03-conformal" >}} for the illustrative counts $y = (0, 1, 2, 2, 6)$ under a $\operatorname{gamma}(2, 2)$ prior, so that $a_n = 13$ and $b_n = 7$.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import stats
+
+n, y, alpha = 129, 118, 50                       # coarsened GSS posterior, uniform prior
+for zeta in (1.0, alpha / (alpha + n)):
+    post = stats.beta(1 + zeta * y, 1 + zeta * (n - y))
+    print(f"ESS={zeta*n:.2f}: mean={post.mean():.4f}, sd={post.std():.4f}")
+for m in (10**3, 10**5, 10**7):
+    print(f"n={m}: ESS={alpha*m/(alpha+m):.3f} -> {alpha}")
+
+data, a, b = np.array([0, 1, 2, 2, 6]), 2, 2     # conformal Bayes, Poisson-gamma
+an, bn = a + data.sum(), b + len(data)
+def conf_p(yc):
+    aug = np.append(data, yc)
+    sig = stats.nbinom.pmf(aug, an + yc, (bn + 1) / (bn + 2))
+    return np.mean(sig <= sig[-1])
+p = [conf_p(k) for k in range(9)]
+print(np.round(p, 3), "80% set:", [k for k in range(9) if p[k] > 0.2])
+```
+
+{{< marginnote >}}Take $n \to \infty$ in the effective sample size $\zeta_n n$: it saturates at $\alpha$.{{< /marginnote >}}
+
+```js
+// Chapter 3 (modern): coarsened beta posterior & conformal negative-binomial score
+const ess = await wl`al*n/(al + n)`
+await show`Limit[${ess}, n -> Infinity, Assumptions -> al > 0]`
+```
+
+$$
+\lim_{n \to \infty} \zeta_n n = \alpha
+$$
+
+{{< marginnote >}}Posterior effective size, mean, and SD for the ordinary ($\zeta = 1$) and coarsened ($\alpha = 50$) GSS updates.{{< /marginnote >}}
+
+```js
+await show`N[Table[With[{a = 1 + z*118, b = 1 + z*11},
+  {129*z, a/(a + b), Sqrt[a*b/((a + b)^2*(a + b + 1))]}], {z, {1, 50/179}}]]`
+```
+
+$$
+\bigl(\zeta_n n,\; \mathbb{E}[\theta \mid y],\; \operatorname{SD}(\theta \mid y)\bigr)_{\zeta = 1,\; 50/179} = \left( \begin{array}{ccc} 129. & 0.908397 & 0.0251076 \\ 36.0335 & 0.89292 & 0.0494927 \\ \end{array} \right)
+$$
+
+{{< marginnote >}}Write the closed-form conformal score $\sigma_i$, a negative-binomial probability with shape $a_n + y$ and rate $b_n + 1$.{{< /marginnote >}}
+
+```js
+const sig = await show`(bn + 1)^(an + y)*(bn + 2)^(-an - y - yi)*Gamma[an + y + yi] / (yi! * Gamma[an + y])`
+```
+
+$$
+\sigma_i = \frac{(1+b_n)^{a_n +y} (2+b_n)^{-a_n -y-y_i} \Gamma (a_n +y+y_i)}{y_i ! \Gamma (a_n +y)}
+$$
+
+{{< marginnote >}}Verify it by integrating the Poisson density of $y_i$ over the augmented $\operatorname{gamma}(a_n + y, b_n + 1)$ posterior.{{< /marginnote >}}
+
+```js
+await show`Assuming[an > 0 && bn > 0 && y >= 0 && yi >= 0 && Element[{y, yi}, Integers], FullSimplify[
+  Integrate[th^yi*Exp[-th]/yi! * (bn + 1)^(an + y)/Gamma[an + y]*th^(an + y - 1)*Exp[-(bn + 1)*th],
+    {th, 0, Infinity}] / (${sig})]]`
+```
+
+$$
+\frac{1}{\sigma_i}\int_0^\infty \operatorname{Poisson}(y_i \mid \theta)\,\operatorname{Gamma}(\theta \mid a_n + y, b_n + 1)\,d\theta = 1
+$$
+
+{{< marginnote >}}Compute exact conformal $\pi(y)$ for $y = 0, \dots, 8$: at level $\alpha = 0.2$ the set is $\{0, \dots, 6\}$.{{< /marginnote >}}
+
+```js
+await show`Table[With[{s = Table[(${sig}) /. {an -> 13, bn -> 7, y -> yc, yi -> v}, {v, {0, 1, 2, 2, 6, yc}}]},
+  Count[s, v_ /; v <= Last[s]]/6], {yc, 0, 8}]`
+```
+
+$$
+\bigl(\pi(y)\bigr)_{y=0}^{8} = \left\{\frac{1}{2},1,\frac{5}{6},\frac{1}{2},\frac{1}{3},\frac{1}{3},\frac{1}{3},\frac{1}{6},\frac{1}{6}\right\}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch03-wolfram}
 
 Integrates $\theta$ out of the Poisson–Gamma posterior symbolically in `wolfram-ws-bridge` JavaScript mode to recover the Negative Binomial predictive PMF, mean, and variance, derives the general symbolic Beta interval mass $\int_l^u p(t \mid a, b)\,dt$, and then instantiates both on the GSS fertility counts and the $\operatorname{beta}(3, 9)$ 95% HPD interval.

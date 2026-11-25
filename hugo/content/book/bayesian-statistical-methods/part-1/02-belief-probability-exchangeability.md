@@ -187,6 +187,122 @@ for N in [20, 100, 1000]:
     print(f"N={N:4d}: TV distance = {tv_dist:.4f} (bound 2*2*n/N = {4*n/N:.4f})")
 ```
 
+## Modern Developments: Predictive and Anytime-Valid Inference {#sec:ch02-modern}
+
+### Martingale Posteriors {#sec:ch02-martingale}
+
+A **martingale posterior**{{< index "martingale posterior" >}} starts from predictive distributions for observables and obtains a distribution for $\theta$ without first writing down a prior and a likelihood.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Fong, Holmes, and Walker{{< cite "fong2023" >}}, who develop the predictive reading of de Finetti’s theorem, itself much older.{{< /sidenote >}} In {{< xref "thm:ch02-definetti" "full" >}}, the $F$ in {{< eqref "eq:ch02-definetti" >}} is the limit of the empirical distribution of an infinite sequence: given all the observables, nothing about $\theta$ would be unknown. So simulate the missing ones. Given a one-step predictive $P_N$ based on $y_{1:N}$, *predictive resampling* draws
+
+$$
+Y_{N+1} \sim P_N, \quad N = n, n+1, \dots, \qquad
+\theta_\infty = \theta(F_\infty), \quad
+F_\infty = \lim_{N \to \infty} P_N, \label{eq:ch02-martingale}
+$$
+
+and the law of $\theta_\infty$ given $y_{1:n}$ is the martingale posterior. The name reflects the coherence condition $E[P_{N+1}(A) \mid y_{1:N}] = P_N(A)$ for every event $A$: each $P_N(A)$ is a martingale in $[0, 1]$, so it converges almost surely, and imagined data do not shift beliefs on average.
+
+*Why it recovers Bayes*: for binary data, take the Pólya-urn predictive $P_N(1) = (a + \sum_{i \le N} y_i)/(a + b + N)$. This is the predictive of the $\operatorname{beta}(a, b)$ model ({{< xref "ch:one-param" "full" >}}), so given $y_{1:n}$ the simulated sequence is exchangeable and its limiting frequency has exactly the posterior law $\operatorname{beta}\bigl(a + \sum y_i,\, b + n - \sum y_i\bigr)$. Other predictives yield posteriors with no explicit prior.
+
+**When to use it.** Use it when predictions are easier to specify than priors, or when the parametric restriction in {{< xref "rem:ch02-parametric" "full" >}} is unwelcome; the forward simulations are independent and parallel, but truncated at a finite $N$. With a trusted parametric model and prior, Hoff’s route is direct and exact.
+
+### Bayes Factors as e-Values and Anytime-Valid Testing {#sec:ch02-evalues}
+
+For a simple null hypothesis, the Bayes factor of {{< eqref "eq:ch02-bayes-factor" >}} is also an **e-value**{{< index "e-value" >}}, a nonnegative statistic with null expectation at most one.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Grünwald, de Heide, and Koolen{{< cite "grunwald2024" >}} and the survey of Ramdas et al.{{< cite "ramdas2023" >}} The maximal inequality it rests on is classical (Ville, 1939).{{< /sidenote >}} Let $H_0$ specify a joint density $p_0$, let $m_1(y_{1:t}) = \int p(y_{1:t} \mid \theta)\,p(\theta \mid H_1)\,d\theta$ with a proper prior fixed in advance, and set $\operatorname{BF}_t = m_1(y_{1:t})/p_0(y_{1:t})$. Then for every fixed $t$ and every $\alpha \in (0, 1)$,
+
+$$
+E_{0}[\operatorname{BF}_t] \le 1, \qquad
+\Pr_{0}\Bigl(\sup_{t \ge 1} \operatorname{BF}_t \ge \tfrac{1}{\alpha}\Bigr) \le \alpha, \label{eq:ch02-ville}
+$$
+
+with equality in the first relation when $p_0 > 0$ wherever $m_1 > 0$.
+
+*Why it holds*: under $H_0$, $E_0[\operatorname{BF}_{t+1} \mid y_{1:t}] = \operatorname{BF}_t \int \frac{m_1(y \mid y_{1:t})}{p_0(y \mid y_{1:t})}\,p_0(y \mid y_{1:t})\,dy \le \operatorname{BF}_t$, so $\operatorname{BF}_t$ is a nonnegative supermartingale started at $1$, and Ville’s inequality bounds its supremum. In {{< xref "ex:ch02-screening" "full" >}}, a positive test has $\operatorname{BF}_{10} = 19$ and a negative one $1/19$, so $E_0[\operatorname{BF}] = 0.05 \cdot 19 + 0.95/19 = 1$; note that $19 < 20$ does not reject at level $\alpha = 0.05$.
+
+When $H_0$ is *composite*, averaging over a prior on it protects only on average: the expectation can exceed one at particular null values. Choosing the null mixture by **reverse information projection**—the mixture (or limit of mixtures) $p_W$ minimizing $\operatorname{KL}(m_1 \,\Vert\, p_W)$—restores the e-value property when that minimum is finite, but at a fixed sample size; unrestricted optional stopping needs a further argument.
+
+**When to use it.** Use {{< eqref "eq:ch02-ville" >}} to monitor data continuously with a frequentist guarantee. The threshold $1/\alpha$ is conservative compared with a fixed-$n$ test, and unlike Hoff’s posterior odds it ignores $\Pr(H_0)$.
+
+### Computational & Symbolic Check {#sec:ch02-modern-check}
+
+The Python block runs the Pólya urn forward to recover its beta posterior and checks $E_0[\operatorname{BF}_{10}] = 1$ together with the bound {{< eqref "eq:ch02-ville" >}}; the Wolfram sequence proves both identities.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import stats
+from scipy.special import betaln
+
+rng = np.random.default_rng(42)
+a, b, n, s, S, M = 1, 1, 10, 7, 20_000, 2_000
+ones = np.full(S, float(a + s))
+for N in range(n, n + M):                         # Polya-urn predictive resampling
+    ones += rng.random(S) < ones / (a + b + N)
+post = stats.beta(a + s, b + n - s)
+theta = ones / (a + b + n + M)
+print(f"mean {theta.mean():.3f} vs {post.mean():.3f}, sd {theta.std():.3f} vs {post.std():.3f}")
+
+y, th0 = np.arange(n + 1), 0.3                    # E_0[BF_10] summed over y = 0..n
+bf = np.exp(betaln(a + y, b + n - y) - betaln(a, b) - y * np.log(th0) - (n - y) * np.log1p(-th0))
+print("E_0[BF] =", np.sum(stats.binom.pmf(y, n, th0) * bf))
+t, c = np.arange(1, 1001), np.cumsum(rng.random((2000, 1000)) < 0.5, axis=1)
+log_bf = betaln(1 + c, 1 + t - c) + t * np.log(2)
+print("Pr_0(sup BF >= 20) =", np.mean(log_bf.max(axis=1) >= np.log(20)), "<= 0.05")
+```
+
+{{< marginnote >}}One urn step: averaging the next predictive over $Y_{N+1}$ returns the current one, with $A$ ones-weight and $T$ total weight.{{< /marginnote >}}
+
+```js
+// Chapter 2 (modern): Polya-urn martingale, beta moments & the e-value identity
+await show`Simplify[(A/T)*(A + 1)/(T + 1) + (1 - A/T)*A/(T + 1) - A/T]`
+```
+
+$$
+E[P_{N+1}(1) \mid y_{1:N}] - P_N(1) = 0
+$$
+
+{{< marginnote >}}Multiply urn predictives for $r$ successive ones: the result is a ratio of rising factorials.{{< /marginnote >}}
+
+```js
+const urnMom = await show`Product[(a + j)/(a + b + j), {j, 0, r - 1}]`
+```
+
+$$
+\Pr(r \text{ successive ones}) = \frac{(a)_r}{(a+b)_r}
+$$
+
+{{< marginnote >}}These equal all the moments of $\operatorname{beta}(a, b)$, and moments determine a law on $[0, 1]$, so the limiting frequency is exactly beta.{{< /marginnote >}}
+
+```js
+await show`Assuming[a > 0 && b > 0 && r >= 0 && Element[r, Integers], FullSimplify[
+  Integrate[th^(a + r - 1)*(1 - th)^(b - 1)/Beta[a, b], {th, 0, 1}] / (${urnMom})]]`
+```
+
+$$
+\frac{\int_0^1 \theta^r \operatorname{Beta}(\theta \mid a, b)\,d\theta}{\Pr(r \text{ successive ones})} = 1
+$$
+
+{{< marginnote >}}E-value identity for every $n$: $p_0$ cancels, leaving $\sum_y m_1(y)$; sum inside the $\theta$-integral first.{{< /marginnote >}}
+
+```js
+await show`Assuming[a > 0 && b > 0 && 0 < th < 1 && n >= 1 && Element[n, Integers],
+  Integrate[FullSimplify[Sum[Binomial[n, y]*th^y*(1 - th)^(n - y), {y, 0, n}]]
+    * th^(a - 1)*(1 - th)^(b - 1)/Beta[a, b], {th, 0, 1}]]`
+```
+
+$$
+\mathbb{E}_0[\operatorname{BF}_{10}] = \int_0^1 \sum_{y=0}^n \binom{n}{y}\theta^y(1-\theta)^{n-y}\,p(\theta \mid H_1)\,d\theta = 1
+$$
+
+{{< marginnote >}}Check by exact summation over $y = 0, \dots, n$ with a symbolic null value $\theta_0$ and a $\operatorname{beta}(2, 3)$ alternative.{{< /marginnote >}}
+
+```js
+const bf10 = await wl`Beta[2 + y, 3 + n - y] / (Beta[2, 3]*th0^y*(1 - th0)^(n - y))`
+await show`Table[Simplify[Sum[Binomial[n, y]*th0^y*(1 - th0)^(n - y)*(${bf10}), {y, 0, n}]], {n, {5, 10, 20}}]`
+```
+
+$$
+\bigl(\mathbb{E}_0[\operatorname{BF}_{10}]\bigr)_{n \in \{5,\,10,\,20\}} = \{1,1,1\}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch02-wolfram}
 
 This `wolfram-ws-bridge` JavaScript-mode sequence derives Bayes’ rule, the Bayes factor $s/f$, the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$, and the exact finite-population hypergeometric sample-sum variance symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.

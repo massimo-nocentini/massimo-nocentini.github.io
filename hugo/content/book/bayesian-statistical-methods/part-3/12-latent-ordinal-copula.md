@@ -171,6 +171,124 @@ print("True C:\n", np.round(C_true, 2))
 print("Posterior E[C | Y]:\n", np.round(C_draws[150:].mean(axis=0), 2))
 ```
 
+## Modern Developments: Copula Graphs, Exact Probit, and Efficiency {#sec:ch12-modern}
+
+### Gaussian Copula Graphical Models {#sec:ch12-ggm}
+
+{{< xref "sec:ch12-graphs" "full" >}} read a latent graph off posterior draws of $\Omega^{(s)}$, but the inverse-Wishart draw of {{< xref "alg:ch12-copula-gibbs" "full" >}} never yields an entry exactly equal to zero; a **copula graphical model**{{< index "Gaussian copula graphical model" >}} makes the graph $G$ itself a parameter.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Dobra and Lenkoski (2011) and Mohammadi et al. (2017) join Hoff’s extended rank likelihood to a prior on sparse precision matrices.{{< /sidenote >}} Let $\Omega = \Sigma^{-1}$ be the expanded precision and $P_G$ the positive definite matrices with $\Omega_{j,k} = 0$ for every missing edge. The **$G$-Wishart**{{< index "G-Wishart distribution" >}} prior gives{{< cite "dobra2011" >}}
+
+$$
+\begin{aligned}
+p(\Omega \mid G) &= \frac{\lvert\Omega\rvert^{(\delta - 2)/2}}{I_G(\delta, S_0)}\,e^{-\operatorname{tr}(\Omega S_0)/2}\,\mathbf{1}(\Omega \in P_G), \qquad
+\Omega \mid \mathbf{Z}, G \sim W_G(\delta + n,\, S_0 + \mathbf{Z}^T\mathbf{Z}), \\
+p(G \mid \mathbf{Z}) &\propto p(G)\,\frac{I_G(\delta + n,\, S_0 + \mathbf{Z}^T\mathbf{Z})}{I_G(\delta, S_0)}.
+\end{aligned} \label{eq:ch12-gwishart}
+$$
+
+*Why it holds.* The normal likelihood multiplies the prior by $\lvert\Omega\rvert^{n/2}e^{-\operatorname{tr}(\Omega\mathbf{Z}^T\mathbf{Z})/2}$, so $(\delta, S_0)$ simply updates, and the ratio of normalizers is the marginal likelihood of $G$. For the complete graph and $\delta = \nu_0 - p + 1$ it is exactly Hoff’s Step 2. Parameter expansion survives because $C^{-1} = \Delta\Omega\Delta$ with $\Delta = \operatorname{diag}(\sqrt{\Sigma_{j,j}})$: rescaling never creates or destroys a zero. The $\mathbf{Z}$ update is untouched. As $I_G$ is intractable for general graphs, $G$ and $\Omega$ are explored jointly, by reversible jump{{< cite "dobra2011" >}} or by a birth–death process on edges.{{< cite "mohammadi2017" >}}
+
+**When to use it.** Use it when edge probabilities $\Pr(\Omega_{j,k} \ne 0 \mid \mathbf{Y})$ are the question or $p$ is large relative to $n$. Keep Hoff’s inverse-Wishart when a few partial coefficients with intervals suffice. Edges describe the *latent* scores, with the caution of {{< xref "sec:ch12-graphs" "full" >}} for discrete margins.
+
+### Exact i.i.d. Sampling for Binary Probit Regression {#sec:ch12-exact-probit}
+
+With $K = 2$ categories, the slow coupling behind {{< eqref "eq:ch12-thresh-bounds" >}} can be removed altogether: the posterior of $\boldsymbol{\beta}$ is a known distribution, the **unified skew-normal**{{< index "unified skew-normal distribution" >}}, and can be sampled without a Markov chain.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Durante (2019) proved this conjugacy, and Botev (2017) supplies the truncated-normal sampler that makes it practical, replacing Albert–Chib Gibbs.{{< /sidenote >}} Code $y_i \in \{0, 1\}$ for $\{Y_i = 2\}$, and let $X$ have rows $(\mathbf{x}_i^T, -1)$ so that the last entry of $\boldsymbol{\beta}$ is the single threshold $g_1$. With prior $\boldsymbol{\beta} \sim \mathcal{N}(\mathbf{0}, \Sigma_0)$ on the augmented vector, set $D = \operatorname{diag}(2\mathbf{y} - \mathbf{1})X$ and $S = I_n + D\Sigma_0D^T$. Then{{< cite "durante2019" >}}
+
+$$
+\begin{aligned}
+\boldsymbol{\beta} \mid \mathbf{y} &\stackrel{d}{=} \Sigma_0D^TS^{-1}\mathbf{T} + \mathbf{V}, \qquad
+\mathbf{T} \sim \mathcal{N}_n(\mathbf{0}, S) \text{ given } \mathbf{T} > \mathbf{0}, \\
+\mathbf{V} &\sim \mathcal{N}\bigl(\mathbf{0},\, \Sigma_0 - \Sigma_0D^TS^{-1}D\Sigma_0\bigr) \text{ independent of } \mathbf{T}, \qquad
+p(\mathbf{y}) = \Phi_n(\mathbf{0}; S),
+\end{aligned} \label{eq:ch12-sun}
+$$
+
+where $\Phi_n(\cdot\,; S)$ is the $\mathcal{N}_n(\mathbf{0}, S)$ distribution function.
+
+*Why it holds.* Let $\mathbf{T} = D\boldsymbol{\beta} + \boldsymbol{\epsilon}$ with $\boldsymbol{\epsilon} \sim \mathcal{N}_n(\mathbf{0}, I_n)$. Given $\boldsymbol{\beta}$, $\Pr(\mathbf{T} > \mathbf{0}) = \prod_i \Phi((2y_i - 1)X_i\boldsymbol{\beta})$ is the probit likelihood, so conditioning on $\{\mathbf{T} > \mathbf{0}\}$ *is* conditioning on the data. As $(\boldsymbol{\beta}, \mathbf{T})$ is jointly normal, regressing $\boldsymbol{\beta}$ on $\mathbf{T}$ gives both terms, and symmetry gives $p(\mathbf{y})$. Check: one observation $y = 1$ with $X = \Sigma_0 = 1$ has $S = 2$, $p(y) = 1/2$, and posterior mean $\frac{1}{2}\sqrt{2}\sqrt{2/\pi} = 1/\sqrt{\pi} \approx 0.564$. Truncated normals are drawn exactly by accept–reject with minimax exponential tilting.{{< cite "botev2017" >}}
+
+**When to use it.** Use it for small to moderate $n$, *any* $p$ (the cost sits in an $n$-dimensional truncated normal), and for model comparison through $p(\mathbf{y})$, where only $\Phi_n$ must be estimated. Keep the Gibbs sampler of {{< xref "sec:ch12-ac-gibbs" "full" >}} for large $n$, or for $K > 2$ with unknown thresholds.
+
+### Efficiency of the Rank Likelihood and Margins under MAR {#sec:ch12-efficiency}
+
+The rank likelihood {{< eqref "eq:ch12-rank-lik" >}} and its copula extension discard everything but order, which raises two questions left open above: how much information is lost about $C$, and how can we predict on the original scale without the margins $F_j$?{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Hoff, Niu, and Wellner (2014) settle the first question for continuous margins, and Feldman and Kowal (2024) address the second for mixed and missing data.{{< /sidenote >}} Let $C = C(\boldsymbol{\vartheta})$ be a smoothly parameterized correlation matrix and $L_R$ the probability of the observed ranks. For *continuous* margins,{{< cite "hoff2014" >}}
+
+$$
+\log\frac{L_R(\boldsymbol{\vartheta} + \mathbf{h}/\sqrt{n})}{L_R(\boldsymbol{\vartheta})} \xrightarrow{d}
+\operatorname{normal}\!\left(-\frac{1}{2}\mathbf{h}^TI^*\mathbf{h},\; \mathbf{h}^TI^*\mathbf{h}\right), \qquad
+\widetilde{F}_j(x) = \Phi\!\left(\frac{\max\{Z_{i,j} : y_{i,j} \le x\}}{\sqrt{\Sigma_{j,j}}}\right), \label{eq:ch12-efficiency}
+$$
+
+the second formula being evaluated at each draw of {{< xref "alg:ch12-copula-gibbs" "full" >}}, over observed $y_{i,j}$ and with value $0$ below the smallest of them.
+
+*Why it holds.* The limit is that of the likelihood ratio in a suitably chosen multivariate *normal* model, so the information bound for rank-based estimators equals that for the full data, and the normal model is least favorable. For $p = 2$, $I^*(\rho) = (1 - \rho^2)^{-2}$, the information about a normal correlation with unknown variances: asymptotically, ignorance of the margins costs no more than ignorance of two variances. For the margins, $\{Y_{i,j} \le x\}$ is the event that $Z_{i,j}$ lies below a latent cutpoint, which the largest latent score compatible with $y \le x$ locates. Under **missing at random**{{< index "missing at random" >}} the empirical distribution of the *observed* $y_{i,j}$ is biased in general, while this estimate inherits the correction made by the joint latent model. Feldman and Kowal use it with a *mixture* copula and prove posterior consistency for the margins and copula parameters under MAR and their regularity conditions;{{< cite "feldman2024" >}} neither it nor Hoff’s algorithm is justified under MNAR, where missingness depends on the unseen value itself.
+
+**When to use it.** For $C$ alone, use Hoff’s rank likelihood: with continuous margins the ranks forgo no first-order information (ties lie outside the theorem). Add the margins for imputation or prediction, and the mixture when dependence is visibly nonlinear.
+
+### Computational & Symbolic Check {#sec:ch12-modern-check}
+
+For one observation with $x = y = \Sigma_0 = 1$, the representation {{< eqref "eq:ch12-sun" >}} reads $\beta = \frac{1}{2}T + V$, where $T \sim \mathcal{N}(0, 2)$ given $T > 0$ and $V \sim \mathcal{N}(0, \frac{1}{2})$. The script compares its exact i.i.d. draws with quadrature against the posterior, which is proportional to $\Phi(\beta)\phi(\beta)$.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import math
+import numpy as np
+from scipy import integrate, stats
+
+# 1. Quadrature: unnormalized posterior Phi(b) phi(b)
+def moment(r):
+    f = lambda b: b ** r * stats.norm.cdf(b) * stats.norm.pdf(b)
+    return integrate.quad(f, -np.inf, np.inf)[0]
+py = moment(0)
+mean = moment(1) / py
+print(f"p(y)={py:.6f}, mean={mean:.6f}, var={moment(2) / py - mean ** 2:.6f}")
+print(f"exact: 0.5, {1 / math.sqrt(math.pi):.6f}, {1 - 1 / math.pi:.6f}")
+# 2. Unified skew-normal: i.i.d. draws, no Markov chain
+rng = np.random.default_rng(121)
+T = math.sqrt(2.0) * np.abs(rng.normal(size=200_000))            # N(0,2) given T > 0
+beta = 0.5 * T + math.sqrt(0.5) * rng.normal(size=T.size)
+print(f"SUN draws: mean={beta.mean():.4f}, var={beta.var():.4f}")
+```
+
+{{< marginnote >}}Integrate $\Phi(\beta)\phi(\beta)$ and $\beta\,\Phi(\beta)\phi(\beta)$ directly, with $\Phi(\beta) = \tfrac12\operatorname{erfc}(-\beta/\sqrt{2})$, and take their ratio.{{< /marginnote >}}
+
+```js
+// Exact binary probit posterior, n = x = y = Sigma0 = 1: evidence and posterior mean
+const pyInt = await wl`Integrate[1/2*Erfc[-b/Sqrt[2]]*Exp[-b^2/2]/Sqrt[2*Pi], {b, -Infinity, Infinity}]`
+const numInt = await wl`Integrate[b*1/2*Erfc[-b/Sqrt[2]]*Exp[-b^2/2]/Sqrt[2*Pi], {b, -Infinity, Infinity}]`
+const meanPost = await wl`FullSimplify[(${numInt}) / (${pyInt})]`
+await show`{${pyInt}, ${numInt}, ${meanPost}}`
+```
+
+$$
+\begin{aligned}
+&\left(\int\Phi\,\phi\,d\beta,\; \int\beta\,\Phi\,\phi\,d\beta,\; \mathbb{E}[\beta \mid y = 1]\right) \\
+&= \left\{\frac{1}{2},\frac{1}{2 \sqrt{\pi}},\frac{1}{\sqrt{\pi}}\right\}
+\end{aligned}
+$$
+
+{{< marginnote >}}Compute $\tfrac12\,\mathbb{E}[T \mid T > 0]$ for $T \sim \mathcal{N}(0, 2)$ from the unified skew-normal formula.{{< /marginnote >}}
+
+```js
+const meanSun = await show`FullSimplify[1/2*Integrate[t*Exp[-t^2/4]/Sqrt[4*Pi], {t, 0, Infinity}]
+  / Integrate[Exp[-t^2/4]/Sqrt[4*Pi], {t, 0, Infinity}]]`
+```
+
+$$
+\frac{1}{2}\,\mathbb{E}[T \mid T > 0] = \frac{1}{\sqrt{\pi}}
+$$
+
+{{< marginnote >}}Subtract the two derivations of the posterior mean, and instantiate the mean and variance ($\mathbb{E}[\beta^2 \mid y] = 1$) for the Python output.{{< /marginnote >}}
+
+```js
+await show`{FullSimplify[(${meanPost}) - (${meanSun})], N[${meanPost}], N[1 - (${meanPost})^2]}`
+```
+
+$$
+\begin{aligned}
+&\left(\mathbb{E}[\beta \mid y] - \tfrac{1}{2}\,\mathbb{E}[T \mid T > 0],\; \mathbb{E}[\beta \mid y],\; \operatorname{Var}[\beta \mid y]\right) \\
+&= \{0,0.56419,0.68169\}
+\end{aligned}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch12-wolfram}
 
 Verifies ordered-probit shift/scale invariance symbolically in `wolfram-ws-bridge` JavaScript mode, derives both the precision entry $\Omega_{1,3}$ and the symbolic partial correlation $\rho_{13 \mid 2} = -\Omega_{1,3}/\sqrt{\Omega_{1,1}\Omega_{3,3}}$ for a general $3 \times 3$ Gaussian copula correlation matrix, solves $\Omega_{1,3} = 0$, and contrasts exact conditional independence ($C_{1,3} = 0.325$) against the Python simulation ($C_{1,3} = 0.30$).

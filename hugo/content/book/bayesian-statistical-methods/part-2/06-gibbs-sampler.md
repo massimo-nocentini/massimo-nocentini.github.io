@@ -119,7 +119,7 @@ $$
 
 The quantity $S_{\text{eff}}$ is the **effective sample size (ESS)**{{< index "effective sample size" >}}: the number of *independent* posterior draws that would yield the same Monte Carlo standard error as our $S$ correlated MCMC draws. For the bivariate normal benchmark {{< eqref "eq:ch06-bvn-acf" >}}, summing the geometric series gives $S_{\text{eff}} = S\,\frac{1 - \rho^2}{1 + \rho^2}$—so at $\rho = 0.99$, $S = 10{,}000$ Gibbs draws are worth only about $100$ independent draws!
 
-In practice, always combine four diagnostic habits:{{< cite "gelman1992,vehtari2021" >}}
+In practice, always combine four diagnostic habits:{{< cite "gelman1992,vehtari2021" >}}{{< sidenote >}}Vehtari et al. (2021) is beyond Hoff (2009): rank-normalized split-$\widehat{R}$, its $1.01$ threshold, and separate bulk and tail effective sample sizes are not in Hoff’s book.{{< /sidenote >}}
 1. **Traceplots**: inspect $\phi^{(s)}$ versus $s$ for drift (non-stationarity) or sticky plateaus.
 2. **Multiple overdispersed chains & $\widehat{R}$**: launch chains from widely separated starting points; if they fail to overlap (as in a multimodal trap), the split-$\widehat{R}$ statistic stays above $1.01$.
 3. **Autocorrelation function (ACF) and $S_{\text{eff}}$**: verify that lag-$k$ autocorrelations decay quickly to zero and that $S_{\text{eff}}$ is large enough (typically $S_{\text{eff}} \ge 1{,}000$) for every target quantity and tail quantile of interest.
@@ -169,6 +169,139 @@ def ess_fft(x):
 print(f"Posterior theta: mean={theta.mean():.4f}, 95% CI={np.round(np.quantile(theta, [0.025, 0.975]), 4)}")
 print(f"ESS(theta) = {ess_fft(theta):.0f} / {S}, ESS(sigma^2) = {ess_fft(sigma2):.0f} / {S}")
 ```
+
+## Modern Developments: Couplings, Variational Inference, and Tempering {#sec:ch06-modern}
+
+### Unbiased MCMC via Couplings {#sec:ch06-unbiased}
+
+Running *two* Gibbs chains that eventually meet removes burn-in bias exactly, rather than waiting for it to become negligible.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Jacob, O’Leary and Atchadé (2020) turn coupling, an older proof technique, into a practical estimator.{{< cite "jacob2020" >}}{{< /sidenote >}} Let $(X_t)$ and $(Y_t)$ be two copies of the chain in {{< xref "alg:ch06-gibbs" "full" >}} with the same initial law, $Y$ lagging by one step, moved by a joint kernel under which each is marginally the Gibbs chain. Let $\tau = \inf\{t \ge 1 : X_t = Y_{t-1}\}$ be the **meeting time**{{< index "meeting time" >}}, after which the chains stay equal. Then
+
+$$
+H_k = h(X_k) + \sum_{t=k+1}^{\tau - 1}\bigl[h(X_t) - h(Y_{t-1})\bigr], \qquad
+E[H_k] = E[h(\phi) \mid y]. \label{eq:ch06-unbiased}
+$$
+
+Why? Telescoping writes $E[h(\phi) \mid y] = E[h(X_k)] + \sum_{t > k}\bigl(E[h(X_t)] - E[h(X_{t-1})]\bigr)$; since $Y_{t-1}$ has the law of $X_{t-1}$, it may replace $X_{t-1}$, and all terms with $t \ge \tau$ are zero. If the chain converges with uniformly bounded moments of $h$ of order slightly above two and $\tau$ has geometric tails, the interchange of sum and expectation is justified, and $H_k$ has finite variance and finite expected cost. For Gibbs, draw each full conditional {{< eqref "eq:ch06-fc-theta" >}}–{{< eqref "eq:ch06-fc-prec" >}} from a *maximal coupling* of the two chains’ versions, which makes the two draws equal with the largest possible probability.
+
+**When to use it.** Independent replicates of $H_k$ can be averaged across processors, with ordinary i.i.d. standard errors in place of {{< eqref "eq:ch06-ess" >}}. For one long, fast-mixing chain, Hoff’s recipe is cheaper. In a sticky multimodal target unbiasedness still holds in expectation, but rare enormous corrections make the variance misleading.
+
+### Coordinate Ascent Variational Inference {#sec:ch06-cavi}
+
+**Variational inference**{{< index "variational inference" >}} replaces simulation by optimization, approximating $p(\phi \mid y)$ by the closest factorized density $q(\phi) = \prod_j q_j(\phi_j)$ in $\operatorname{KL}(q \,\|\, p)$.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; mean-field methods came from machine learning before 2009, and Blei, Kucukelbir and McAuliffe (2017) give the standard statistical account.{{< cite "blei2017" >}}{{< /sidenote >}} Holding the other factors fixed, minimizing over $q_j$ gives the **CAVI** update
+
+$$
+q_j(\phi_j) \;\propto\; \exp\bigl\{E_{q_{-j}}\bigl[\log p(\phi_j \mid \phi_{-j}, y)\bigr]\bigr\}, \label{eq:ch06-cavi}
+$$
+
+because, as a function of $q_j$, the objective is the KL divergence from $q_j$ to this density plus a constant. It is Gibbs with averaging in place of sampling: under {{< eqref "eq:ch06-semiconj-prior" >}}, $q(\theta)$ is normal and $q(\tilde{\sigma}^2)$ is gamma, as in {{< eqref "eq:ch06-fc-theta" >}} and {{< eqref "eq:ch06-fc-prec" >}} with $\tilde{\sigma}^2$ replaced by $E_q[\tilde{\sigma}^2]$ and $(\bar{y} - \theta)^2$ by $E_q[(\bar{y} - \theta)^2]$.
+
+For the bivariate normal benchmark behind {{< eqref "eq:ch06-bvn-acf" >}}, averaging $-\frac{(x - \rho Y)^2}{2(1 - \rho^2)}$ over $q_Y$ gives
+
+$$
+q_X = \mathcal{N}\bigl(\rho\,m_Y,\; 1 - \rho^2\bigr), \qquad
+m_X^{(s+1)} = \rho\,m_Y^{(s)}, \quad m_Y^{(s)} = \rho\,m_X^{(s)}
+\;\Longrightarrow\; m_X^{(s+1)} = \rho^2\,m_X^{(s)}. \label{eq:ch06-cavi-bvn}
+$$
+
+The means converge to the exact value $0$, contracting by $\rho^2$ per sweep—precisely Gibbs’ lag-1 autocorrelation. But the variance is $1 - \rho^2$, the *conditional* variance, instead of the marginal value $1$: at $\rho = 0.99$ the reported standard deviation is $0.141$, about seven times too small, and no amount of iteration repairs it.
+
+**When to use it.** Use CAVI for fast point estimates or initialization on large problems; keep Gibbs whenever interval widths matter.
+
+### Non-Reversible Parallel Tempering {#sec:ch06-nrpt}
+
+**Parallel tempering**{{< index "parallel tempering" >}} can cure the sticky trimodal example of {{< xref "fig:ch06-gibbs" "full" >}} by linking it to an easy distribution through a ladder of intermediate ones.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; parallel tempering itself predates 2009, but the round-trip and communication-barrier analysis of non-reversible swap schedules is due to Syed et al. (2022).{{< cite "syed2022" >}}{{< /sidenote >}} Choose a reference $\pi_0$ that is easy to sample (here, a wide normal), set $\pi_\beta \propto \pi_0^{1-\beta}\,\pi^{\beta}$ on $0 = \beta_0 < \dots < \beta_N = 1$, run one chain per $\beta_i$, and propose to swap the states of neighbours. The non-reversible scheme *alternates deterministically* between swapping the even pairs and the odd pairs, instead of choosing between them at random. If the swap between levels $i-1$ and $i$ is rejected with probability $r_i$, and swaps behave independently across iterations (efficient local exploration), the total rate of reference-to-target round trips is, with the limit taken as the largest gap $\beta_i - \beta_{i-1}$ shrinks to $0$,
+
+$$
+\mathcal{T} = \frac{1}{2 + 2\sum_{i=1}^N \frac{r_i}{1 - r_i}}
+\;\longrightarrow\; \frac{1}{2 + 2\Lambda} \quad (N \to \infty), \qquad
+\Lambda = \lim_{N \to \infty}\sum_{i=1}^N r_i. \label{eq:ch06-nrpt}
+$$
+
+Why? A state keeps moving in one direction until a rejection reverses it. Crossing two barriers with success probabilities $p_1, p_2$, with all back-and-forth reflections counted, succeeds with probability $p_1p_2/[1 - (1 - p_1)(1 - p_2)]$; hence $1/p - 1 = r/(1-r)$ *adds* along the ladder. Refining the ladder therefore does no harm, whereas random alternation makes each state a diffusive random walk whose round-trip rate tends to $0$. The **global communication barrier** $\Lambda$ depends on $\pi_0$ and $\pi$, not on the schedule.
+
+**When to use it.** Plain Gibbs suffices for unimodal posteriors. When $\widehat{R}$ exposes separated modes—or the $\approx 306$-step residence time in {{< xref "ex:ch06-mixture-fix" "full" >}}—temper, with a reference wide enough to cover every mode.
+
+### Computational & Symbolic Check {#sec:ch06-modern-check}
+
+The script iterates the CAVI update {{< eqref "eq:ch06-cavi-bvn" >}} from the target’s precision matrix, and runs the Gibbs sampler on the same target to compare its lag-1 autocorrelation and standard deviation.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+
+# CAVI on the standardized bivariate normal, written in terms of its precision matrix
+rho = 0.99
+Om = np.linalg.inv(np.array([[1.0, rho], [rho, 1.0]]))
+m_x, means = 3.0, [3.0]
+for _ in range(400):
+    m_y = -Om[1, 0] * m_x / Om[1, 1]
+    m_x = -Om[0, 1] * m_y / Om[0, 0]
+    means.append(m_x)
+print(f"CAVI: mean {m_x:.5f}, SD {np.sqrt(1 / Om[0, 0]):.4f} (exact 1), rate {means[1] / means[0]:.4f}")
+
+# Gibbs on the same target: same rate, as lag-1 autocorrelation, but the correct marginal SD
+rng, S, sd = np.random.default_rng(6), 200_000, np.sqrt(1 - rho**2)
+Z, x, cur = rng.normal(size=(S, 2)), np.empty(S), 0.0
+for s in range(S):
+    cur = rho * (rho * cur + sd * Z[s, 0]) + sd * Z[s, 1]
+    x[s] = cur
+print(f"Gibbs: SD {x.std():.3f}, lag-1 ACF {np.corrcoef(x[:-1], x[1:])[0, 1]:.4f} (exact {rho**2:.4f})")
+```
+
+{{< marginnote >}}Average $\log p(x \mid Y)$ over $q_Y$ with mean $m_Y$ and variance $v_Y$; the curvature in $x$ gives the CAVI variance, whatever $v_Y$ is.{{< /marginnote >}}
+
+```js
+// Chapter 6 (modern): CAVI fixed-point update on the standardized bivariate normal
+const eLog = await wl`Assuming[vY > 0 && Element[{mY, x, rho}, Reals],
+  Integrate[-(x - rho*(mY + Sqrt[vY]*z))^2/(2*(1 - rho^2))*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]`
+const qVar = await show`Simplify[-1/D[${eLog}, {x, 2}]]`
+```
+
+$$
+\operatorname{Var}_{q}(X) = 1-\rho^2
+$$
+
+{{< marginnote >}}Solve for the stationary point in $x$ to obtain the mean update.{{< /marginnote >}}
+
+```js
+const qMean = await show`x /. First[Solve[D[${eLog}, x] == 0, x]]`
+```
+
+$$
+E_{q}[X] = m_Y \rho
+$$
+
+{{< marginnote >}}Compose the $Y$ and $X$ updates into one full sweep, $m_X \mapsto \rho^2 m_X$.{{< /marginnote >}}
+
+```js
+const sweep = await show`${qMean} /. mY -> rho*mX`
+```
+
+$$
+m_X^{(s+1)} = m_X \rho^2
+$$
+
+{{< marginnote >}}Subtract Gibbs’ lag-1 autocorrelation $E\bigl[X \cdot E[X^{(s+1)} \mid X]\bigr] = E[X \cdot \rho^2 X]$ from the CAVI contraction rate.{{< /marginnote >}}
+
+```js
+await show`Simplify[D[${sweep}, mX] - Integrate[x*(rho^2*x)*Exp[-x^2/2]/Sqrt[2*Pi], {x, -Infinity, Infinity}]]`
+```
+
+$$
+\frac{\partial m_X^{(s+1)}}{\partial m_X^{(s)}} - \operatorname{Corr}\!\left(X^{(s)}, X^{(s+1)}\right)_{\text{Gibbs}} = 0
+$$
+
+{{< marginnote >}}Instantiate the CAVI standard deviation, the contraction rate, and the factor by which the true SD is understated, at $\rho = 0.99$.{{< /marginnote >}}
+
+```js
+await show`N[{Sqrt[${qVar}], D[${sweep}, mX], 1/Sqrt[${qVar}]} /. rho -> 99/100]`
+```
+
+$$
+\begin{aligned}
+&\bigl(\operatorname{SD}_q(X),\; \text{rate},\; \operatorname{SD}_p(X)/\operatorname{SD}_q(X)\bigr)_{\rho=0.99} \\
+&= \{0.141067,0.9801,7.08881\}
+\end{aligned}
+$$
 
 ## Symbolic Check in Wolfram Language {#sec:ch06-wolfram}
 

@@ -141,6 +141,110 @@ p_ppc = np.mean(t_rep >= 2.0)
 print(f"PPC tail prob Pr(t(Y_rep) >= 2.0) = {p_ppc:.4f} +/- {2*np.sqrt(p_ppc*(1-p_ppc)/S):.4f}")
 ```
 
+## Modern Developments: Predictive Evaluation and Validated Computation {#sec:ch04-modern}
+
+### PSIS-LOO and LOO-PIT {#sec:ch04-psis-loo}
+
+**Pareto-smoothed importance sampling leave-one-out cross-validation**{{< index "PSIS-LOO" >}} (PSIS-LOO) estimates how well a model predicts each observation from all the others, using the single set of draws in {{< eqref "eq:ch04-iid" >}}.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Vehtari, Gelman, and Gabry{{< cite "vehtari2017" >}} and Vehtari et al.{{< cite "vehtari2024" >}}, with the sample-size theory of Chatterjee and Diaconis{{< cite "chatterjee2018" >}}. It modernizes the posterior predictive check of {{< xref "alg:ch04-ppc" "full" >}}.{{< /sidenote >}} For conditionally independent data,
+
+$$
+p(y_i \mid y_{-i}) = \frac{1}{E\bigl[\,1/p(y_i \mid \theta) \,\big|\, y\,\bigr]}
+\approx \frac{\sum_{s} w_i^{(s)}\,p(y_i \mid \theta^{(s)})}{\sum_{s} w_i^{(s)}}, \qquad
+r_i^{(s)} = \frac{1}{p(y_i \mid \theta^{(s)})}, \label{eq:ch04-loo}
+$$
+
+where $w_i^{(s)}$ is $r_i^{(s)}$ with its largest values smoothed by a fitted generalized Pareto tail.
+
+*Why it holds*: $p(\theta \mid y_{-i}) \propto p(\theta \mid y)/p(y_i \mid \theta)$; integrate both sides. The Pareto shape estimate $\hat{k}$ is the diagnostic: Vehtari et al. flag the result when $\hat{k} > \min(1 - 1/\log_{10} S,\, 0.7)$. A heavy tail means the two posteriors differ, and importance sampling needs on the order of $\exp\{\operatorname{KL}(p(\theta \mid y_{-i}) \,\Vert\, p(\theta \mid y))\}$ draws. The Poisson–gamma model offers an exact check: $\theta \mid y_{-i} \sim \operatorname{gamma}(a_n - y_i,\, b_n - 1)$, so $p(y_i \mid y_{-i})$ is a $\operatorname{negative\ binomial}(a_n - y_i,\, b_n - 1)$ probability, and the raw ratios $r_i \propto e^{\theta}\theta^{-y_i}$ have tail shape $\max(1/b_n,\, y_i/a_n)$, below $1$ exactly when that gamma is proper.
+
+The **LOO-PIT**{{< index "LOO-PIT" >}} values $\Pr(\tilde{Y}_i \le y_i \mid y_{-i})$ (randomized over ties for counts) should look approximately uniform when the model is adequate. Since $y_i$ does not inform its own prediction, they address the double use of data in {{< xref "rem:ch04-misspec" "full" >}}.
+
+**When to use it.** Use PSIS-LOO to compare predictive models and LOO-PIT to check marginal calibration, refitting without $y_i$ wherever $\hat{k}$ is large. Hoff’s check remains the tool for a specific feature, such as the spike at two children.
+
+### Simulation-Based Calibration {#sec:ch04-sbc}
+
+**Simulation-based calibration**{{< index "simulation-based calibration" >}} (SBC) tests whether the code that claims to draw from a posterior really does.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Talts et al.{{< cite "talts2018" >}}, Modrák et al.{{< cite "modrak2025" >}}, and Säilynoja, Bürkner, and Vehtari{{< cite "sailynoja2022" >}}. Where {{< xref "alg:ch04-ppc" "full" >}} checks the model, SBC checks the computation.{{< /sidenote >}} Run the ancestral scheme {{< eqref "eq:ch04-ancestral" >}} from the *prior*, then fit the simulated data and rank the true value, by a test quantity $f(\theta, y)$, among $L$ posterior draws:
+
+$$
+\tilde{\theta} \sim p(\theta), \quad
+y \sim p(y \mid \tilde{\theta}), \quad
+\theta^{(1)}, \dots, \theta^{(L)} \stackrel{\text{i.i.d.}}{\sim} p(\theta \mid y), \qquad
+R = \sum_{l=1}^{L} \mathbf{1}\bigl(f(\theta^{(l)}, y) < f(\tilde{\theta}, y)\bigr). \label{eq:ch04-sbc}
+$$
+
+If the sampler is exact and ties have probability zero (otherwise break them at random), $R$ is uniform on $\{0, 1, \dots, L\}$.
+
+*Why it holds*: the joint density factors as $p(\tilde{\theta})\,p(y \mid \tilde{\theta}) = p(y)\,p(\tilde{\theta} \mid y)$, so given $y$ the value $\tilde{\theta}$ is itself a posterior draw, i.i.d. with the $\theta^{(l)}$, and every rank is equally likely. Repeat over many simulated datasets and compare the ranks with uniformity through the empirical distribution function and its simultaneous confidence bands, which avoid the arbitrary bins of a histogram.
+
+The converse fails. A broken sampler that ignores $y$ and returns *prior* draws gives uniform ranks for every $f(\theta)$, because $\tilde{\theta}$ and the $\theta^{(l)}$ are then i.i.d. from the prior. Data-dependent quantities such as the log-likelihood $f(\theta, y) = \log p(y \mid \theta)$ can expose it: $y$ was generated from $\tilde{\theta}$, which therefore tends to rank high.
+
+**When to use it.** Run SBC before trusting a new sampler, thinning autocorrelated draws such as those of {{< xref "ch:gibbs" "full" >}}. It complements Hoff’s MCSE {{< eqref "eq:ch04-mcse" >}}, which measures noise but not bias, and his predictive checks: passing SBC says nothing about whether the model fits the observed data.
+
+### Computational & Symbolic Check {#sec:ch04-modern-check}
+
+For the GSS posterior $\operatorname{gamma}(219, 112)$ the importance ratios in {{< eqref "eq:ch04-loo" >}} have tail shape below $1/2$ for these $y_i$, so even the raw harmonic-mean estimate is stable; the Python block compares it with the exact negative-binomial value, and the Wolfram sequence proves the identity.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(42)
+an, bn, S = 219, 112, 200_000
+theta = rng.gamma(an, 1.0 / bn, size=S)          # full-data posterior draws
+for yi in range(4):
+    exact = stats.nbinom.pmf(yi, an - yi, (bn - 1) / bn)   # NB(an - yi, bn - 1)
+    r = 1.0 / stats.poisson.pmf(yi, theta)                 # raw importance ratios
+    loo = 1.0 / r.mean()                                   # harmonic-mean identity
+    mcse = loo**2 * r.std() / np.sqrt(S)                   # delta method
+    print(f"y_i={yi}: exact={exact:.6f}, MC LOO={loo:.6f} +/- {2*mcse:.6f}, "
+          f"tail shape={max(1/bn, yi/an):.4f}")
+```
+
+{{< marginnote >}}Write the exact leave-one-out predictive: a negative binomial with shape $a_n - y_i$ and rate $b_n - 1$.{{< /marginnote >}}
+
+```js
+// Chapter 4 (modern): exact Poisson-gamma LOO vs. the harmonic-mean identity
+const looNB = await show`Gamma[an]/(Gamma[an - yi]*yi!)*((bn - 1)/bn)^(an - yi)*(1/bn)^yi`
+```
+
+$$
+p(y_i \mid y_{-i}) = \frac{\left(\frac{1}{b_n}\right)^{y_i} \left(\frac{-1+b_n}{b_n}\right)^{a_n -y_i} \Gamma (a_n)}{y_i ! \Gamma (a_n -y_i)}
+$$
+
+{{< marginnote >}}Verify it by integrating $\operatorname{Poisson}(y_i \mid \theta)$ over the leave-one-out posterior $\operatorname{gamma}(a_n - y_i, b_n - 1)$.{{< /marginnote >}}
+
+```js
+await show`Assuming[bn > 1 && yi >= 0 && an > yi && Element[yi, Integers], FullSimplify[
+  Integrate[th^yi*Exp[-th]/yi! * (bn - 1)^(an - yi)/Gamma[an - yi]*th^(an - yi - 1)*Exp[-(bn - 1)*th],
+    {th, 0, Infinity}] / (${looNB})]]`
+```
+
+$$
+\frac{1}{\operatorname{NB}(y_i)}\int_0^\infty \operatorname{Poisson}(y_i \mid \theta)\,\operatorname{Gamma}(\theta \mid a_n - y_i, b_n - 1)\,d\theta = 1
+$$
+
+{{< marginnote >}}Integrate $1/p(y_i \mid \theta)$ over the *full* posterior and invert: the harmonic-mean identity returns the same probability.{{< /marginnote >}}
+
+```js
+const invP = await wl`Assuming[bn > 1 && yi >= 0 && an > yi && Element[yi, Integers], FullSimplify[
+  Integrate[yi!*Exp[th]*th^(-yi) * bn^an/Gamma[an]*th^(an - 1)*Exp[-bn*th], {th, 0, Infinity}]]]`
+await show`Assuming[bn > 1 && yi >= 0 && an > yi && Element[yi, Integers], FullSimplify[(1/(${invP})) / (${looNB})]]`
+```
+
+$$
+\frac{1/\mathbb{E}\bigl[p(y_i \mid \theta)^{-1} \mid y\bigr]}{p(y_i \mid y_{-i})} = 1
+$$
+
+{{< marginnote >}}Instantiate the exact LOO predictive at the GSS posterior for $y_i = 0, 1, 2, 3$ to benchmark the Monte Carlo column.{{< /marginnote >}}
+
+```js
+await show`N[Table[(${looNB}) /. {an -> 219, bn -> 112}, {yi, 0, 3}]]`
+```
+
+$$
+\bigl(p(y_i \mid y_{-i})\bigr)_{y_i=0}^{3}\big|_{a_n=219,\; b_n=112} = \{0.140277,0.275498,0.269293,0.174677\}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch04-wolfram}
 
 Derives the exact push-forward log-odds density via change-of-variables Jacobian, the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), the symbolic Gamma CDF $\Pr(\theta_2 < c)$, and the general Beta representation of $\Pr(\theta_1 > \theta_2)$, then instantiates all symbolic expressions on the GSS fertility posteriors to benchmark the Monte Carlo estimates.

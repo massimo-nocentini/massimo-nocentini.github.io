@@ -58,7 +58,7 @@ p(\Sigma) \propto \lvert \Sigma \rvert^{-(\nu_0 + p + 1)/2}
 E[\Sigma] = \frac{1}{\nu_0 - p - 1} S_0 \quad (\nu_0 > p + 1). \label{eq:ch07-iw-pdf}
 $$
 
-Setting $\nu_0 = p + 2$ gives a weakly informative prior centered at $E[\Sigma] = S_0$ with finite expectation.{{< sidenote >}}**Limitation of the inverse-Wishart prior:** a single scalar $\nu_0$ simultaneously governs our certainty about all $p$ diagonal variances *and* all $p(p-1)/2$ off-diagonal correlations! When variances differ in prior certainty from correlations, modern practice often separates scale and correlation priors (e.g., LKJ priors on correlations), or uses parameter expansion as in {{< xref "ch:ordinal" "full" >}}.{{< /sidenote >}}
+Setting $\nu_0 = p + 2$ gives a weakly informative prior centered at $E[\Sigma] = S_0$ with finite expectation.{{< sidenote >}}**Limitation of the inverse-Wishart prior:** a single scalar $\nu_0$ simultaneously governs our certainty about all $p$ diagonal variances *and* all $p(p-1)/2$ off-diagonal correlations! When variances differ in prior certainty from correlations, modern practice often separates scale and correlation priors (e.g., LKJ priors on correlations{{< cite "lewandowski2009" >}}, published the same year as Hoff’s book and not covered there; see {{< xref "sec:ch07-huang-wand" "full" >}}), or uses parameter expansion as in {{< xref "ch:ordinal" "full" >}}.{{< /sidenote >}}
 
 ### The Trace Trick and Full Conditionals {#sec:ch07-trace-trick}
 
@@ -200,6 +200,125 @@ y_pred = np.array([rng.multivariate_normal(th, Sg) for th, Sg in zip(theta_s, Si
 print(f"Pr(theta_2 > theta_1 | Y) = {np.mean(theta_s[:, 1] > theta_s[:, 0]):.3f}")
 print(f"Pr(Ytilde_2 > Ytilde_1 | Y) = {np.mean(y_pred[:, 1] > y_pred[:, 0]):.3f}")
 ```
+
+## Modern Developments: Covariance Priors, Sparse Graphs, and Missingness {#sec:ch07-modern}
+
+### Huang–Wand Hierarchical Inverse-Wishart and LKJ Priors {#sec:ch07-huang-wand}
+
+A single extra layer of scale parameters repairs the inverse-Wishart’s main defect—one $\nu_0$ governing everything—without leaving the Gibbs sampler.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; the hierarchy is due to Huang and Wand (2013), while the LKJ construction of Lewandowski, Kurowicka and Joe appeared in the same year as Hoff’s book and is not covered there.{{< cite "huang2013,lewandowski2009" >}}{{< /sidenote >}} In the notation of {{< eqref "eq:ch07-priors" >}}, let
+
+$$
+\Sigma \mid \mathbf{a} \sim \operatorname{inverse-Wishart}\!\left(\nu + p - 1,\; S_{\mathbf{a}}^{-1}\right), \quad
+S_{\mathbf{a}} = 2\nu\operatorname{diag}\!\left(\tfrac{1}{a_1}, \dots, \tfrac{1}{a_p}\right), \quad
+\frac{1}{a_k} \sim \operatorname{gamma}\!\left(\tfrac12, \tfrac{1}{A_k^2}\right). \label{eq:ch07-huang-wand}
+$$
+
+Given $\mathbf{a}$, $\Sigma_{k,k} \sim \operatorname{inverse-gamma}(\nu/2, \nu/a_k)$, and mixing over $a_k$ makes each standard deviation $\sigma_k$ a half-$t$ variable with $\nu$ degrees of freedom and scale $A_k$.{{< index "half-t distribution" >}} Rescaling by a diagonal matrix leaves correlations unchanged, so each $\rho_{i,j}$ has density proportional to $(1 - r^2)^{\nu/2 - 1}$ (compare {{< xref "ex:ch07-iw-scale" "full" >}}): $\nu = 2$ makes every correlation *marginally* uniform. The updates stay conjugate: {{< eqref "eq:ch07-fc-sigma" >}} with $\nu_0 = \nu + p - 1$ and $S_0 = S_{\mathbf{a}}$, followed by $1/a_k \mid \Sigma \sim \operatorname{gamma}\bigl(\frac{\nu + p}{2},\, \nu(\Sigma^{-1})_{k,k} + A_k^{-2}\bigr)$.
+
+The **LKJ prior**{{< index "LKJ prior" >}} instead sets $p(C) \propto \lvert C \rvert^{\eta - 1}$ on correlation matrices, independently of the scales. At $\eta = 1$ it is uniform *jointly*, hence not marginally uniform for $p > 2$.
+
+**When to use it.** Keep {{< eqref "eq:ch07-priors" >}} when $S_0$ carries real information. Choose Huang–Wand as the default inside Gibbs, and LKJ with separate scale priors when scales and correlations must be a priori independent and sampling is gradient-based.
+
+### The Graphical Horseshoe {#sec:ch07-ghs}
+
+The **graphical horseshoe**{{< index "graphical horseshoe" >}} shrinks most off-diagonal entries of $\Omega = \Sigma^{-1}$ almost to zero while leaving strong ones nearly untouched.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Li, Craig and Bhadra (2019) extend the horseshoe shrinkage prior to inverse covariance matrices.{{< cite "li2019" >}}{{< /sidenote >}} By {{< xref "ex:ch07-schur-prec" "full" >}}, $\Omega_{i,j} = 0$ exactly when $Y_i$ and $Y_j$ are conditionally independent, so sparsity in $\Omega$ is sparsity in the coefficients {{< eqref "eq:ch07-partial-beta" >}}. Restricted to $\Omega \succ 0$, the prior is flat on each $\Omega_{i,i}$, with $\Omega_{i,j} \mid \lambda_{i,j}, \tau \sim \mathcal{N}(0, \lambda_{i,j}^2\tau^2)$ for $i < j$ and half-Cauchy $\lambda_{i,j}$ and $\tau$. Write $\mathbf{S} = \mathbf{S}_{\boldsymbol{\theta}}$, single out the last row and column, and let $\boldsymbol{\omega} = \Omega_{-p,p}$, $\gamma = \Omega_{p,p} - \boldsymbol{\omega}^T\Omega_{-p,-p}^{-1}\boldsymbol{\omega}$, and $D = \operatorname{diag}(\lambda_{i,p}^2\tau^2)$. Then, given the rest,
+
+$$
+\gamma \sim \operatorname{gamma}\!\left(\tfrac{n}{2} + 1,\, \tfrac{\mathbf{S}_{p,p}}{2}\right), \qquad
+\boldsymbol{\omega} \sim \mathcal{N}_{p-1}\bigl(-G\,\mathbf{S}_{-p,p},\, G\bigr), \qquad
+G = \bigl(\mathbf{S}_{p,p}\,\Omega_{-p,-p}^{-1} + D^{-1}\bigr)^{-1}. \label{eq:ch07-ghs}
+$$
+
+Why? $\lvert \Omega \rvert = \gamma\,\lvert \Omega_{-p,-p} \rvert$, and the trace {{< eqref "eq:ch07-trace-trick" >}} contributes $2\mathbf{S}_{-p,p}^T\boldsymbol{\omega} + \mathbf{S}_{p,p}(\gamma + \boldsymbol{\omega}^T\Omega_{-p,-p}^{-1}\boldsymbol{\omega})$; now apply {{< eqref "eq:ch07-quad-recog" >}}. Because $\gamma > 0$, every draw is positive definite. Cycle over columns; inverse-gamma auxiliary variables handle $\lambda_{i,j}$ and $\tau$.
+
+**When to use it.** For the four Pima variables an inverse-Wishart is enough. Use the graphical horseshoe when $p$ is comparable to or larger than $n$ and few edges are expected; it yields no exact zeros, so edges must still be selected, for example by credible intervals.
+
+### Realized versus Everywhere MAR {#sec:ch07-mar}
+
+The MAR condition of {{< xref "sec:ch07-missing" "full" >}} hides two different assumptions, and Bayesian ignorability needs only the weaker.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Seaman et al. (2013) separate two readings long conflated in the literature descending from Rubin’s original definition of MAR.{{< cite "seaman2013" >}}{{< /sidenote >}} Let $(\tilde{\mathbf{o}}, \tilde{\mathbf{y}}_{\text{obs}})$ be the pattern and values *actually observed*. **Realized MAR**{{< index "realized MAR" >}} requires $\Pr(\mathbf{O} = \tilde{\mathbf{o}} \mid \tilde{\mathbf{y}}_{\text{obs}}, \mathbf{y}_{\text{mis}}, \psi)$ to be constant in $\mathbf{y}_{\text{mis}}$, for every $\psi$; **everywhere MAR** requires this for every pattern and every data set that *could* have occurred. Under realized MAR,
+
+$$
+p(\boldsymbol{\theta}, \Sigma, \psi \mid \tilde{\mathbf{y}}_{\text{obs}}, \tilde{\mathbf{o}})
+\propto p(\psi)\Pr(\tilde{\mathbf{o}} \mid \tilde{\mathbf{y}}_{\text{obs}}, \psi)
+\times p(\boldsymbol{\theta}, \Sigma)\!\int\! p(\tilde{\mathbf{y}}_{\text{obs}}, \mathbf{y}_{\text{mis}} \mid \boldsymbol{\theta}, \Sigma)\,d\mathbf{y}_{\text{mis}}, \label{eq:ch07-realized-mar}
+$$
+
+given prior-independent $\psi$. The mechanism is constant in $\mathbf{y}_{\text{mis}}$, so it leaves the integral, and the posterior is evaluated *only* at $\tilde{\mathbf{o}}$: unrealized patterns never enter. Coverage, expected information, and replicated missing-data patterns average over other data sets, so realized MAR does not justify ignoring the mechanism *there*; everywhere MAR, with distinct parameters, is the usual sufficient condition.
+
+Suppose post-tests could be withheld according to their own value, but only for children with a pretest below $30$. If every pretest in our sample was fully observed and exceeded $30$, the data are realized MAR yet not everywhere MAR: the posterior may ignore the mechanism, while a simulation study of its coverage may not.
+
+**When to use it.** For the posterior from {{< xref "alg:ch07-mar-gibbs" "full" >}}, argue realized MAR plus prior independence; for frequentist calibration, defend everywhere MAR or model $\mathbf{O}$ explicitly. Hoff’s single MAR condition does not draw this distinction.
+
+### Computational & Symbolic Check {#sec:ch07-modern-check}
+
+The script simulates {{< eqref "eq:ch07-huang-wand" >}} with $p = \nu = 2$, testing $\rho$ against the uniform and $\sigma_1$ against the half-$t_2$ distribution, and then draws $3 \times 3$ correlation matrices uniformly (LKJ, $\eta = 1$). For $p = 2$ the LKJ density of $\rho$ is proportional to $(1 - \rho^2)^{\eta - 1}$; for general $p$ the exponent becomes $\eta - 2 + p/2$, so at $p = 3$, $\eta = 1$ the marginal variance is $\frac14$ rather than the uniform’s $\frac13$.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import stats
+
+# Huang-Wand, p = nu = 2: draw IW(3) with scale 4*I, then rescale by 1/a_k (correlations are invariant)
+rng = np.random.default_rng(7)
+N, nu, A = 50_000, 2, 2.5
+Sig0 = stats.invwishart.rvs(df=nu + 1, scale=2 * nu * np.eye(2), size=N, random_state=rng)
+inv_a = rng.gamma(0.5, A**2, size=(N, 2))        # NumPy scale = 1/rate = A^2
+Sig = Sig0 * np.sqrt(inv_a[:, :, None] * inv_a[:, None, :])
+sd1 = np.sqrt(Sig[:, 0, 0])
+rho = Sig[:, 0, 1] / (sd1 * np.sqrt(Sig[:, 1, 1]))
+print(f"KS(rho, U(-1,1)) = {stats.kstest(rho, stats.uniform(-1, 2).cdf).statistic:.4f}")
+print(f"KS(sigma_1, half-t_2) = {stats.kstest(sd1, lambda x: 2 * stats.t.cdf(x / A, nu) - 1).statistic:.4f}")
+
+# LKJ(eta = 1), p = 3: uniform over positive definite correlation matrices, by rejection
+r = rng.uniform(-1, 1, size=(400_000, 3))
+keep = 1 + 2 * r.prod(axis=1) - (r**2).sum(axis=1) > 0
+print(f"LKJ p = 3: Var(rho_12) = {r[keep, 0].var():.4f} (exact 0.25; uniform 0.3333)")
+```
+
+{{< marginnote >}}Change variables $\Sigma \mapsto (\sigma_1, \sigma_2, \rho)$, integrate out both scales, and check that the log-ratio to $(1 - \rho^2)^{\nu/2 - 1}$ has zero derivative; $a_1, a_2$ enter only as constants.{{< /marginnote >}}
+
+```js
+// Chapter 7 (modern): Huang-Wand (p = 2) correlation marginal & LKJ density
+const sInt = await wl`Assuming[nu > 0 && k > 0,
+  FullSimplify[Integrate[s^(-(nu + 2))*Exp[-k/s^2], {s, 0, Infinity}]]]`
+const rhoKer = await wl`(1 - r^2)^(-(nu + 4)/2) * (${sInt} /. k -> nu/(a1*(1 - r^2))) * (${sInt} /. k -> nu/(a2*(1 - r^2)))`
+await show`Assuming[nu > 0 && a1 > 0 && a2 > 0 && -1 < r < 1,
+  FullSimplify[D[Log[${rhoKer} / (1 - r^2)^(nu/2 - 1)], r]]]`
+```
+
+$$
+\frac{d}{d\rho}\log\!\left(\frac{p(\rho \mid a_1, a_2)}{(1 - \rho^2)^{\nu/2 - 1}}\right) = 0
+$$
+
+{{< marginnote >}}Normalize $(1 - \rho^2)^{\eta - 1}$: the LKJ density for $p = 2$, which is also Huang–Wand with $\eta = \nu/2$.{{< /marginnote >}}
+
+```js
+const rhoDen = await show`Assuming[eta > 0 && -1 < r < 1,
+  FullSimplify[(1 - r^2)^(eta - 1) / Integrate[(1 - t^2)^(eta - 1), {t, -1, 1}]]]`
+```
+
+$$
+p(\rho \mid \eta) = \frac{\left(1-\rho^2\right)^{-1+\eta} \Gamma \left(\frac{1}{2}+\eta\right)}{\sqrt{\pi} \Gamma (\eta)}
+$$
+
+{{< marginnote >}}Instantiate at $\eta = 1$ (Huang–Wand with $\nu = 2$: uniform) and at $\eta = 2$ (concentrated near zero).{{< /marginnote >}}
+
+```js
+await show`{${rhoDen} /. eta -> 1, ${rhoDen} /. eta -> 2}`
+```
+
+$$
+\bigl(p(\rho \mid \eta = 1),\; p(\rho \mid \eta = 2)\bigr) = \left\{\frac{1}{2},\frac{3}{4} \left(1-\rho^2\right)\right\}
+$$
+
+{{< marginnote >}}Evaluate $\operatorname{Var}(\rho)$ at $\eta = 1$ and at the effective exponent $\eta = \frac32$ that LKJ$(1)$ induces when $p = 3$.{{< /marginnote >}}
+
+```js
+await show`Table[Integrate[r^2*(${rhoDen} /. eta -> e), {r, -1, 1}], {e, {1, 3/2}}]`
+```
+
+$$
+\bigl(\operatorname{Var}(\rho)_{p=2},\; \operatorname{Var}(\rho)_{p=3}\bigr)_{\text{LKJ}(1)} = \left\{\frac{1}{3},\frac{1}{4}\right\}
+$$
 
 ## Symbolic Check in Wolfram Language {#sec:ch07-wolfram}
 

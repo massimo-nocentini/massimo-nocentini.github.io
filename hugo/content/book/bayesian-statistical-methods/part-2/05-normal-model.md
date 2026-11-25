@@ -217,6 +217,141 @@ print("MC 95% CI for theta:  ", np.round(np.quantile(th_mc, [0.025, 0.975]), 4))
 print("MC 95% CI for sigma:  ", np.round(np.quantile(np.sqrt(s2_mc), [0.025, 0.975]), 4))
 ```
 
+## Modern Developments: Learning the Prior and Surviving Outliers {#sec:ch05-modern}
+
+### Tweedie’s Formula and Empirical Bayes Shrinkage {#sec:ch05-tweedie}
+
+**Tweedie’s formula**{{< index "Tweedie’s formula" >}} computes a normal posterior mean from the *marginal* density of the data alone, with no explicit prior.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; the identity itself is much older—Robbins reported it in 1956 and credited Maurice Tweedie—and Efron (2011) modernized it as an empirical Bayes correction for selection bias.{{< cite "efron2011" >}}{{< /sidenote >}} Take $\bar{y} \mid \theta \sim \operatorname{normal}(\theta, v)$ with $v = \sigma^2/n$ known and *any* prior $\pi(\theta)$, and let $m(\bar{y}) = \int p(\bar{y} \mid \theta)\,\pi(\theta)\,d\theta$. Then
+
+$$
+E[\theta \mid \bar{y}] = \bar{y} + v\,\frac{d}{d\bar{y}}\log m(\bar{y}), \qquad
+\operatorname{Var}(\theta \mid \bar{y}) = v\left[1 + v\,\frac{d^2}{d\bar{y}^2}\log m(\bar{y})\right]. \label{eq:ch05-tweedie}
+$$
+
+Why? Since $\partial_{\bar{y}}\,p(\bar{y} \mid \theta) = \frac{\theta - \bar{y}}{v}\,p(\bar{y} \mid \theta)$, differentiating under the integral gives $m'/m = (E[\theta \mid \bar{y}] - \bar{y})/v$; a second derivative gives the variance. With $\pi = \operatorname{normal}(\mu_0, \tau_0^2)$, $m$ is $\operatorname{normal}(\mu_0, \tau_0^2 + v)$ and {{< eqref "eq:ch05-tweedie" >}} collapses to $\bar{y} - \frac{v}{\tau_0^2 + v}(\bar{y} - \mu_0)$, exactly $\mu_n$ in {{< eqref "eq:ch05-mean-update" >}}.
+
+The gain appears with many parallel problems $(\theta_i, \bar{y}_i)$ sharing $v$: the observed $\bar{y}_i$ are themselves a sample from $m$, so a smooth estimate $\hat{m}$ replaces the prior. The most extreme $\bar{y}_i$ are then pulled back by $v\,(\log \hat{m})'$, correcting the winner’s curse: a Bayes posterior given $\bar{y}_i$ is unchanged by having *selected* case $i$ for its extremeness.
+
+**When to use it.** With one mean and real prior knowledge, use {{< xref "prop:ch05-normal-mean" "full" >}}. With hundreds of parallel means and no trusted prior family, use Tweedie—but not in the far tails, where $\hat{m}$ has little data and its derivative is unstable.
+
+### Whole Robustness with Log-Regularly Varying Tails {#sec:ch05-robust}
+
+A sampling density with sufficiently heavy tails can make a conflicting outlier’s influence on the posterior of *both* $\theta$ and $\sigma$ vanish in the limit, a property called **whole robustness**{{< index "whole robustness" >}}.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Desgagné (2015) proves whole robustness for location–scale models, sharpening the older heavy-tail advice for outliers.{{< cite "desgagne2015" >}}{{< /sidenote >}} The normal model fails badly: moving one observation $y_i \to \infty$ drags $\mu_n$ along and inflates $\nu_n\sigma_n^2$ in {{< eqref "eq:ch05-nig-params" >}} without bound. Replace it by $p(y_i \mid \theta, \sigma) = \frac{1}{\sigma}f\bigl(\frac{y_i - \theta}{\sigma}\bigr)$ and examine the outlier’s likelihood factor, normalized by the constant $f(y_i)$, as $y_i \to \infty$:
+
+$$
+\frac{\frac{1}{\sigma}\,f\!\left(\frac{y_i - \theta}{\sigma}\right)}{f(y_i)} \;\longrightarrow\;
+\begin{cases}
+\sigma^{\nu}, & f = t_\nu \quad (\text{partial robustness}), \\
+1, & z f(z) \text{ log-regularly varying} \quad (\text{whole robustness}).
+\end{cases} \label{eq:ch05-whole-robust}
+$$
+
+For $t_\nu$, $f(z) \sim c\,\lvert z \rvert^{-\nu-1}$: $\theta$ is protected, but the surviving factor $\sigma^\nu$ still pushes the scale upward. If instead $z f(z) = h(\log z)$ with $h$ regularly varying—say $f(z) \propto 1/[z(\log z)^{b}]$, $b > 1$, spliced onto a normal core—then shifting and scaling alter $\log z$ only by lower-order terms, so the ratio tends to $1$ and the outlier drops out. Passing from factors to the whole posterior requires regularity of $f$ (symmetry, continuity, monotone tails), a prior that is controlled near $\sigma = 0$, and sufficiently many non-outliers relative to outliers; otherwise the “outliers” could form the dominant cluster. The theorem in the paper gives the exact count.
+
+**When to use it.** Keep Hoff’s conjugate model for clean data and closed forms; use a log-regularly varying $f$, at the price of MCMC and of predictive distributions with no finite mean, when gross contamination must affect neither location nor scale.
+
+### Computational & Symbolic Check {#sec:ch05-modern-check}
+
+The script compares {{< eqref "eq:ch05-tweedie" >}}, computed from a numerically integrated marginal $m$, with the conjugate update, and then evaluates the outlier factor {{< eqref "eq:ch05-whole-robust" >}} for $t_4$ and for the log-regularly varying tail $f(z) \propto 1/[z(\log z)^2]$.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import integrate, stats
+
+# Tweedie from the integrated marginal m(y); log m is quadratic, so central differences are exact
+mu0, t20, v, y, h = 1.0, 4.0, 1.0, 3.0, 0.1
+def log_m(u):
+    f = lambda th: stats.norm.pdf(u, th, np.sqrt(v)) * stats.norm.pdf(th, mu0, np.sqrt(t20))
+    return np.log(integrate.quad(f, -20, 20, epsabs=0, epsrel=1e-12)[0])
+lo, mid, hi = log_m(y - h), log_m(y), log_m(y + h)
+print(f"Tweedie:   {y + v * (hi - lo) / (2 * h):.6f}, {v * (1 + v * (hi - 2 * mid + lo) / h**2):.6f}")
+print(f"Conjugate: {(t20 * y + v * mu0) / (t20 + v):.6f}, {t20 * v / (t20 + v):.6f}")
+
+# Outlier factor (1/s) f((z - th)/s) / f(z): limit s^nu = 16 for t_4, limit 1 for the LRV tail
+th, s, nu, b = 1.0, 2.0, 4.0, 2.0
+for z in (1e2, 1e8, 1e100):
+    t_ratio = ((1 + ((z - th) / s)**2 / nu) / (1 + z**2 / nu))**(-(nu + 1) / 2) / s
+    lrv_ratio = z / (z - th) * (np.log(z) / np.log((z - th) / s))**b
+    print(f"z = {z:.0e}: Student-t {t_ratio:.4f}, log-regularly varying {lrv_ratio:.4f}")
+```
+
+{{< marginnote >}}Apply Tweedie’s mean formula to the Normal–Normal marginal $m = \mathcal{N}(\mu_0, \tau_0^2 + v)$.{{< /marginnote >}}
+
+```js
+// Chapter 5 (modern): Tweedie on the Normal-Normal marginal & outlier-factor limits
+const logM = await wl`-(yb - mu0)^2/(2*(t2 + v)) - Log[2*Pi*(t2 + v)]/2`
+const twMean = await show`Factor[yb + v*D[${logM}, yb]]`
+```
+
+$$
+E[\theta \mid \bar{y}] = \bar{y} + v\,(\log m)'(\bar{y}) = \frac{\mu_0 v+\tau_0^2 \bar{y}}{\tau_0^2+v}
+$$
+
+{{< marginnote >}}Apply Tweedie’s variance formula to the same marginal.{{< /marginnote >}}
+
+```js
+const twVar = await show`Factor[v*(1 + v*D[${logM}, {yb, 2}])]`
+```
+
+$$
+\operatorname{Var}(\theta \mid \bar{y}) = v\bigl[1 + v\,(\log m)''(\bar{y})\bigr] = \frac{\tau_0^2 v}{\tau_0^2+v}
+$$
+
+{{< marginnote >}}Subtract the precision-weighted conjugate mean and variance: both differences vanish identically.{{< /marginnote >}}
+
+```js
+await show`Simplify[{${twMean} - (mu0/t2 + yb/v)/(1/t2 + 1/v), ${twVar} - 1/(1/t2 + 1/v)}]`
+```
+
+$$
+\bigl(E_{\text{Tweedie}} - E_{\text{conj}},\; \operatorname{Var}_{\text{Tweedie}} - \operatorname{Var}_{\text{conj}}\bigr) = \{0,0\}
+$$
+
+{{< marginnote >}}Instantiate at the Python values $(\mu_0, \tau_0^2, v, \bar{y}) = (1, 4, 1, 3)$.{{< /marginnote >}}
+
+```js
+await show`{${twMean}, ${twVar}} /. {mu0 -> 1, t2 -> 4, v -> 1, yb -> 3}`
+```
+
+$$
+\bigl(E[\theta \mid \bar{y}],\; \operatorname{Var}(\theta \mid \bar{y})\bigr) = \left\{\frac{13}{5},\frac{4}{5}\right\}
+$$
+
+{{< marginnote >}}Student-$t$ outlier factor: the limit $\sigma^\nu$ still involves the scale (partial robustness).{{< /marginnote >}}
+
+```js
+const tFac = await wl`(1/s)*((1 + ((z - th)/s)^2/nu)/(1 + z^2/nu))^(-(nu + 1)/2)`
+await show`Assuming[nu > 0 && s > 0 && Element[th, Reals], FullSimplify[Limit[${tFac}, z -> Infinity]]]`
+```
+
+$$
+\lim_{z \to \infty} \frac{\frac{1}{\sigma}\,t_\nu\!\left(\frac{z - \theta}{\sigma}\right)}{t_\nu(z)} = \sigma^\nu
+$$
+
+{{< marginnote >}}Log-regularly varying outlier factor ($b = 2$): the limit is free of $\theta$ and $\sigma$ (whole robustness).{{< /marginnote >}}
+
+```js
+const lrvFac = await wl`z/(z - th)*(Log[z]/Log[(z - th)/s])^2`
+await show`Assuming[s > 0 && Element[th, Reals], Limit[${lrvFac}, z -> Infinity]]`
+```
+
+$$
+\lim_{z \to \infty} \frac{\frac{1}{\sigma}\,f\!\left(\frac{z - \theta}{\sigma}\right)}{f(z)}\bigg|_{f(z) \propto 1/[z(\log z)^2]} = 1
+$$
+
+{{< marginnote >}}Tabulate both factors at $z \in \{10^2, 10^8, 10^{100}\}$ for $(\theta, \sigma, \nu) = (1, 2, 4)$: convergence to $1$ is only logarithmic.{{< /marginnote >}}
+
+```js
+await show`N[Table[{${tFac}, ${lrvFac}} /. {th -> 1, s -> 2, nu -> 4, z -> zz}, {zz, {10^2, 10^8, 10^100}}]]`
+```
+
+$$
+\begin{aligned}
+&\bigl(t_4 \text{ factor},\; \text{LRV factor}\bigr)_{z \in \{10^2,\, 10^8,\, 10^{100}\}} \\
+&= \left( \begin{array}{cc} 16.7729 & 1.40698 \\ 16. & 1.07973 \\ 16. & 1.00605 \\ \end{array} \right)
+\end{aligned}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch05-wolfram}
 
 Integrates precision $p = 1/\sigma^2$ out of the Normal–Inverse-Gamma joint posterior in `wolfram-ws-bridge` JavaScript mode, verifies that the ratio to the Student-$t$ kernel has zero derivative in $\theta$, derives the exact symbolic Student-$t$ posterior variance $\operatorname{Var}[\theta \mid y]$, factors $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$, and instantiates all symbolic formulas on Hoff’s midge wing lengths.

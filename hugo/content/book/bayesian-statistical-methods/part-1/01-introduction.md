@@ -93,7 +93,7 @@ $$
 Y_i = \beta_1 x_{i,1} + \beta_2 x_{i,2} + \dots + \beta_{64} x_{i,64} + \sigma \epsilon_i. \label{eq:ch01-diabetes}
 $$
 
-Specifying a full 65-dimensional subjective prior is practically impossible. Instead, we encode one structural belief—**sparsity**{{< index "sparsity" >}}: many of the 64 coefficients are probably zero—by giving each $\beta_j$ a 50% prior point mass at zero (a spike-and-slab prior).{{< sidenote >}}Note a subtlety we revisit in {{< xref "ch:regression" "full" >}}: independent $\Pr(\beta_j \neq 0) = 1/2$ across $p = 64$ predictors actually induces a $\operatorname{binomial}(64, 1/2)$ prior on model size centered at 32 active predictors. True multiplicity-adjusting sparsity places a hierarchical $\operatorname{beta}(1, 1)$ prior on the inclusion probability itself, inducing a uniform prior over model size{{< cite "scott2010" >}}.{{< /sidenote >}} Comparing test-set mean squared prediction error on the 100 held-out patients demonstrates the practical power of Bayesian regularization:
+Specifying a full 65-dimensional subjective prior is practically impossible. Instead, we encode one structural belief—**sparsity**{{< index "sparsity" >}}: many of the 64 coefficients are probably zero—by giving each $\beta_j$ a 50% prior point mass at zero (a spike-and-slab prior).{{< sidenote >}}Note a subtlety we revisit in {{< xref "ch:regression" "full" >}}: independent $\Pr(\beta_j \neq 0) = 1/2$ across $p = 64$ predictors actually induces a $\operatorname{binomial}(64, 1/2)$ prior on model size centered at 32 active predictors. True multiplicity-adjusting sparsity places a hierarchical $\operatorname{beta}(1, 1)$ prior on the inclusion probability itself, inducing a uniform prior over model size{{< cite "scott2010" >}}. **Beyond Hoff (2009).** That analysis of multiplicity appeared in 2010 and is not in Hoff’s book.{{< /sidenote >}} Comparing test-set mean squared prediction error on the 100 held-out patients demonstrates the practical power of Bayesian regularization:
 
 | Method | Structural Idea | Diabetes Test MSE |
 |:-------|:----------------|:------------------|
@@ -131,6 +131,125 @@ for theta in [0.05, 0.10, 0.20]:
     cov_ac = pmf[(p_ac - 1.96 * se_ac <= theta) & (theta <= p_ac + 1.96 * se_ac)].sum()
     print(f"theta={theta:.2f}: Wald coverage={cov_w:.3f}, Plus-four coverage={cov_ac:.3f}")
 ```
+
+## Modern Developments: Robust Priors and Prior Sensitivity {#sec:ch01-modern}
+
+### Robust Mixture Priors {#sec:ch01-robust-map}
+
+A **robust mixture prior**{{< index "robust mixture prior" >}} keeps the benefit of an informative prior while letting the data overrule it.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows the robust meta-analytic-predictive (MAP) priors of Schmidli et al.{{< cite "schmidli2014" >}}, which modernize shrinkage toward a single beta prior. Here MAP stands for “meta-analytic-predictive”, not “maximum a posteriori”.{{< /sidenote >}} The fixed data weight $n/(n+w)$ in {{< eqref "eq:ch01-shrinkage" >}} is the same however badly $\bar{y}$ disagrees with $\theta_0$. Instead, let $p_1 = \operatorname{beta}(a, b)$ be the informative prior, $p_0 = \operatorname{beta}(1, 1)$ a vague one, and $\omega$ the prior probability that the informative component is relevant:
+
+$$
+\begin{gathered}
+p(\theta) = \omega\,p_1(\theta) + (1 - \omega)\,p_0(\theta), \qquad
+p(\theta \mid y) = \omega^{*} p_1(\theta \mid y) + (1 - \omega^{*})\,p_0(\theta \mid y), \\
+\omega^{*} = \frac{\omega\,m_1(y)}{\omega\,m_1(y) + (1 - \omega)\,m_0(y)}, \qquad
+m_j(y) = \int_0^1 p(y \mid \theta)\,p_j(\theta)\,d\theta.
+\end{gathered} \label{eq:ch01-robust}
+$$
+
+*Why it holds*: $p(y \mid \theta)\,p_j(\theta) = m_j(y)\,p_j(\theta \mid y)$ for each component, so Bayes’ rule {{< eqref "eq:ch01-bayes" >}} reweights the components by how well each predicted $y$. Take $n = 20$ and $\omega = 0.8$. With $\operatorname{beta}(2, 20)$ as $p_1$, observing $y = 0$ raises the weight to $\omega^{*} = 0.956$ (posterior mean $0.0475$), whereas a conflicting $y = 10$ drops it to $0.064$ (mean $0.486$, against $0.286$ for the informative prior alone). With the miscalibrated $\operatorname{beta}(10, 10)$ and $y = 0$, $\omega^{*} = 0.012$ and the mean is $0.048$, not the $0.250$ of {{< xref "tab:ch01-sensitivity" "full" >}}.
+
+**When to use it.** Prefer the mixture when the prior summarizes *historical* data that may not be exchangeable with the new sample. Hoff’s single beta suffices when conflict is implausible or $n \gg w$. Since $\omega$ is itself a prior choice, report how results vary with it.
+
+### Power-Scaling Sensitivity Analysis {#sec:ch01-power-scaling}
+
+**Power-scaling**{{< index "power-scaling" >}} turns the prior-by-prior comparison of {{< xref "tab:ch01-sensitivity" "full" >}} into a local diagnostic that needs no list of alternative priors.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; it follows Kallioinen et al.{{< cite "kallioinen2024" >}} and modernizes sensitivity analysis by hand-picked alternative priors.{{< /sidenote >}} Raise either ingredient of {{< eqref "eq:ch01-bayes" >}} to a power $\alpha$ near $1$:
+
+$$
+p_{\alpha}^{\text{prior}}(\theta \mid y) \propto p(y \mid \theta)\,p(\theta)^{\alpha}, \qquad
+p_{\alpha}^{\text{lik}}(\theta \mid y) \propto p(y \mid \theta)^{\alpha}\,p(\theta). \label{eq:ch01-power-scale}
+$$
+
+*Why it works*: $p_{\alpha}^{\text{prior}}(\theta \mid y)/p(\theta \mid y) \propto p(\theta)^{\alpha - 1}$, so reweighting one set of posterior draws explores the whole family without refitting. The discrepancy from the original posterior is measured by the cumulative Jensen–Shannon distance, which compares distribution functions. Sensitivity to *both* prior and likelihood suggests **prior–data conflict**; sensitivity to the prior but *not* to the likelihood suggests a likelihood that is non-informative relative to the prior.
+
+In the beta–binomial model the families are $\operatorname{beta}\bigl(\alpha(a-1) + 1 + y,\, \alpha(b-1) + 1 + n - y\bigr)$ and $\operatorname{beta}\bigl(a + \alpha y,\, b + \alpha(n - y)\bigr)$. For $n = 20$, $y = 0$ and $\alpha = \tfrac12, 1, 2$, the $\operatorname{beta}(2, 20)$ posterior mean barely moves under prior scaling ($0.047$, $0.048$, $0.048$). For $\operatorname{beta}(10, 10)$ it moves *up* under prior scaling ($0.177$, $0.250$, $0.328$) and *down* under likelihood scaling ($0.333$, $0.250$, $0.167$): the signature of conflict.
+
+**When to use it.** Use it as a routine first screen, especially with many parameters. Hoff’s explicit table and contours remain preferable when a specific alternative prior matters, because power-scaling explores only one direction and is blind to a flat prior, for which $p(\theta)^{\alpha}$ never changes.
+
+### Computational & Symbolic Check {#sec:ch01-modern-check}
+
+The Python block evaluates the weights of {{< eqref "eq:ch01-robust" >}} and both power-scaled families of {{< eqref "eq:ch01-power-scale" >}} at $n = 20$, $\omega = 0.8$; the Wolfram sequence repeats them from the symbolic marginals.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import stats
+from scipy.special import betaln
+
+n, om = 20, 0.8
+for a, b, y in [(2, 20, 0), (2, 20, 10), (10, 10, 0)]:
+    m1 = np.exp(betaln(a + y, b + n - y) - betaln(a, b))
+    m0 = np.exp(betaln(1 + y, 1 + n - y))
+    ws = om * m1 / (om * m1 + (1 - om) * m0)
+    mean = ws * (a + y) / (a + b + n) + (1 - ws) * (1 + y) / (2 + n)
+    print(f"Beta({a},{b}), y={y}: w*={ws:.4f}, mean={mean:.4f}")
+
+for a, b in [(2, 20), (10, 10)]:  # power-scaling at y = 0
+    for al in (0.5, 1, 2):
+        pr = stats.beta.cdf(0.1, al * (a - 1) + 1, al * (b - 1) + 1 + n)
+        lik = stats.beta.cdf(0.1, a, b + al * n)
+        print(f"Beta({a},{b}), alpha={al}: prior-scaled {pr:.4f}, lik-scaled {lik:.4f}")
+```
+
+{{< marginnote >}}Write the marginal likelihood $m_j(y)$ of a $\operatorname{beta}(a, b)$ component, up to the common binomial coefficient.{{< /marginnote >}}
+
+```js
+// Chapter 1 (modern): robust mixture weights & power-scaled tail probabilities
+const mj = await show`Beta[a + y, b + n - y] / Beta[a, b]`
+```
+
+$$
+m_j(y) \propto \frac{B(a+y,b+n-y)}{B(a,b)}
+$$
+
+{{< marginnote >}}Confirm that $m_j$ is the integral of the likelihood kernel against the $\operatorname{beta}(a, b)$ density.{{< /marginnote >}}
+
+```js
+await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y, FullSimplify[
+  Integrate[th^(a + y - 1)*(1 - th)^(b + n - y - 1)/Beta[a, b], {th, 0, 1}] / (${mj})]]`
+```
+
+$$
+\frac{1}{m_j(y)}\int_0^1 \theta^y(1-\theta)^{n-y}\,p_j(\theta)\,d\theta = 1
+$$
+
+{{< marginnote >}}Evaluate $(\omega^*, E[\theta \mid y])$ for $(a, b, y) = (2, 20, 0)$, $(2, 20, 10)$, $(10, 10, 0)$.{{< /marginnote >}}
+
+```js
+const wStar = await wl`om*(${mj}) / (om*(${mj}) + (1 - om)*Beta[1 + y, 1 + n - y])`
+const mixMean = await wl`(${wStar})*(a + y)/(a + b + n) + (1 - (${wStar}))*(1 + y)/(2 + n)`
+await show`N[Table[{${wStar}, ${mixMean}} /. {n -> 20, om -> 4/5, a -> p[[1]], b -> p[[2]], y -> p[[3]]},
+  {p, {{2, 20, 0}, {2, 20, 10}, {10, 10, 0}}}]]`
+```
+
+$$
+\begin{aligned}
+&\bigl(\omega^{*},\; \mathbb{E}[\theta \mid y]\bigr)_{(2,20,0),\,(2,20,10),\,(10,10,0)} \\
+&= \left( \begin{array}{cc} 0.95558 & 0.0475229 \\ 0.0643441 & 0.486212 \\ 0.0120586 & 0.0479211 \\ \end{array} \right)
+\end{aligned}
+$$
+
+{{< marginnote >}}Tabulate the exact prior-scaled posterior means: nearly flat for $\operatorname{beta}(2, 20)$, rising for $\operatorname{beta}(10, 10)$.{{< /marginnote >}}
+
+```js
+await show`Table[(al*(p[[1]] - 1) + 1)/(al*(p[[1]] + p[[2]] - 2) + 2 + 20), {p, {{2, 20}, {10, 10}}}, {al, {1/2, 1, 2}}]`
+```
+
+$$
+\mathbb{E}_{\alpha}^{\text{prior}}[\theta \mid y=0]\big|_{\alpha = 1/2,\,1,\,2} = \left( \begin{array}{ccc} \frac{3}{64} & \frac{1}{21} & \frac{3}{62} \\ \frac{11}{62} & \frac{1}{4} & \frac{19}{58} \\ \end{array} \right)
+$$
+
+{{< marginnote >}}Evaluate the likelihood-scaled $\Pr(\theta < 0.1 \mid y = 0)$ for $\alpha = \tfrac12, 1, 2$ under each prior.{{< /marginnote >}}
+
+```js
+await show`N[Table[BetaRegularized[1/10, p[[1]], p[[2]] + 20*al], {p, {{2, 20}, {10, 10}}}, {al, {1/2, 1, 2}}]]`
+```
+
+$$
+\begin{aligned}
+&\Pr\nolimits_{\alpha}^{\text{lik}}(\theta < 0.1 \mid y=0)\big|_{\alpha = 1/2,\,1,\,2} \\
+&= \left( \begin{array}{ccc} 0.830435 & 0.926096 & 0.987421 \\ 0.000332596 & 0.00416472 & 0.0665894 \\ \end{array} \right)
+\end{aligned}
+$$
 
 ## Symbolic Check in Wolfram Language {#sec:ch01-wolfram}
 

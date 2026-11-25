@@ -338,6 +338,109 @@ print(f"AR(1): accept={acc / 10_000:.2f}, slope 95% CI={np.quantile(keep[:, 0], 
       f"ESS(slope, sigma^2, rho)={[round(ess(keep[:, j])) for j in range(3)]}")
 ```
 
+## Modern Developments: Gradients, Estimated Likelihoods, and Informed Proposals {#sec:ch10-modern}
+
+### Hamiltonian Monte Carlo and the No-U-Turn Sampler {#sec:ch10-hmc}
+
+The random walk of {{< xref "alg:ch10-metropolis" "full" >}} ignores the gradient of the log-posterior, which for {{< eqref "eq:ch10-logpost" >}} is simply $\sum_i (y_i - e^{\boldsymbol{\beta}^T\mathbf{x}_i})\mathbf{x}_i - \Sigma_0^{-1}(\boldsymbol{\beta} - \boldsymbol{\beta}_0)$; **Hamiltonian Monte Carlo**{{< index "Hamiltonian Monte Carlo" >}} (HMC) uses it to make distant proposals that are still accepted.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; HMC itself is older (physicists introduced it as *hybrid* Monte Carlo in the 1980s), but its optimal-scaling theory (Beskos et al., 2013) and the self-tuning No-U-Turn Sampler (Hoffman and Gelman, 2014) are later.{{< /sidenote >}} Write $\ell(\theta) = \log p(\theta \mid y)$, add a momentum $\mathbf{u} \sim \mathcal{N}_d(\mathbf{0}, M)$, and iterate leapfrog steps of size $\epsilon$:
+
+$$
+\begin{aligned}
+\mathbf{u}_{1/2} &= \mathbf{u} + \frac{\epsilon}{2}\nabla\ell(\theta), \qquad
+\theta' = \theta + \epsilon M^{-1}\mathbf{u}_{1/2}, \qquad
+\mathbf{u}' = \mathbf{u}_{1/2} + \frac{\epsilon}{2}\nabla\ell(\theta'), \\
+\alpha &= \min\bigl\{1,\, e^{H(\theta, \mathbf{u}) - H(\theta^*, \mathbf{u}^*)}\bigr\}, \qquad
+H(\theta, \mathbf{u}) = -\ell(\theta) + \frac{1}{2}\mathbf{u}^TM^{-1}\mathbf{u},
+\end{aligned} \label{eq:ch10-hmc}
+$$
+
+where $(\theta^*, \mathbf{u}^*)$ is the end of the trajectory.
+
+*Why it holds.* Each of the three updates is a shear, with Jacobian $1$, and following the trajectory with a momentum flip gives a map that is its own inverse. The proposal is therefore deterministic, volume preserving, and reversible, so the *reverse over forward* factor of {{< eqref "eq:ch10-mh-ratio" >}} is $1$ and only the change in $H$ remains. For product targets in $d$ dimensions the stable step size scales as $d^{-1/4}$, so a trajectory of fixed length costs $O(d^{1/4})$ gradients, against $O(d)$ steps for the random walk, and the optimal acceptance rate rises from $0.234$ to $0.651$.{{< cite "beskos2013" >}} The **No-U-Turn Sampler**{{< index "No-U-Turn Sampler" >}} doubles the trajectory until $(\theta^+ - \theta^-)^T\mathbf{u}^\pm < 0$ at either end, selects a point in a way that preserves the target, and tunes $\epsilon$ during warmup.{{< cite "hoffman2014" >}}
+
+**When to use it.** Make NUTS the default for smooth, continuous posteriors with more than a few parameters. Hoff’s random walk remains fine in low dimension or without gradients; discrete parameters need a different tool, and separated modes defeat both.
+
+### Pseudo-Marginal and Particle MCMC {#sec:ch10-pseudomarginal}
+
+The ratio {{< eqref "eq:ch10-ratio" >}} cancels $p(y)$ but still requires $p(y \mid \theta)$, which is itself an intractable integral when the AR(1) process of {{< eqref "eq:ch10-ar1" >}} is, say, the hidden log-rate of Poisson counts; the **pseudo-marginal**{{< index "pseudo-marginal MCMC" >}} method replaces it with an estimate.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; the theory of Andrieu and Roberts (2009) appeared in the same year as Hoff’s book and is not covered there, and particle MCMC (Andrieu, Doucet, and Holenstein, 2010) followed.{{< /sidenote >}} Let $\hat{p} \ge 0$ be a random estimate of $p(y \mid \theta)$ with density $m(\hat{p} \mid \theta)$ and $E[\hat{p} \mid \theta] = p(y \mid \theta)$. Use
+
+$$
+\hat{r} = \frac{\hat{p}^*\,p(\theta^*)}{\hat{p}^{(s)}\,p(\theta^{(s)})} \times \frac{J(\theta^{(s)} \mid \theta^*)}{J(\theta^* \mid \theta^{(s)})}, \qquad
+\tilde{p}(\theta, \hat{p} \mid y) \propto p(\theta)\,\hat{p}\,m(\hat{p} \mid \theta). \label{eq:ch10-pm}
+$$
+
+*Why it holds.* Run Metropolis–Hastings on the extended target $\tilde{p}$, proposing $\theta^* \sim J$ and then $\hat{p}^* \sim m(\cdot \mid \theta^*)$. The factors $m$ cancel, leaving exactly $\hat{r}$, so {{< xref "thm:ch10-db" "full" >}} applies. Integrating $\hat{p}$ out of $\tilde{p}$ gives $p(\theta)\,p(y \mid \theta)$ by unbiasedness: the estimate is noisy, yet the target is *exact*.{{< cite "andrieu2009" >}} The stored $\hat{p}^{(s)}$ must be kept until the next acceptance; refreshing it changes the target. A particle filter supplies unbiased estimates for state-space models, and *particle Gibbs* updates the whole hidden path.{{< cite "andrieu2010" >}} More particles mean less noise but more work: under Gaussian log-noise of constant variance, a standard deviation of $\log\hat{p}$ near $1.2$ is a good general choice, lower when the exact chain would mix well and higher when it would mix poorly.{{< cite "doucet2015" >}}
+
+**When to use it.** Use it when $p(y \mid \theta)$ cannot be evaluated but has an unbiased, nonnegative estimator of manageable variance; being able to simulate data is not enough by itself. If the latent path can be updated in closed-form blocks, Hoff’s {{< xref "alg:ch10-mwg" "full" >}} is simpler and cheaper.
+
+### Locally Balanced Proposals for Discrete Spaces {#sec:ch10-balanced}
+
+Gradients do not exist on $\{0,1\}^p$, so the sampler for the inclusion vector $\mathbf{z}$ in {{< xref "ch:regression" "full" >}} visits coordinates blindly, most of which have nothing to do; a **locally balanced proposal**{{< index "locally balanced proposal" >}} looks at all the neighbors first.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Zanella (2020) extends gradient-style informed proposals to discrete spaces, modernizing blind single-site updates.{{< /sidenote >}} Let $K$ be a symmetric kernel, such as “flip a uniformly chosen coordinate,” and let $h > 0$ satisfy $h(t) = t\,h(1/t)$, for example $h(t) = \sqrt{t}$ or $h(t) = t/(1+t)$. Then{{< cite "zanella2020" >}}
+
+$$
+\begin{aligned}
+J(\mathbf{z}^* \mid \mathbf{z}) &= \frac{1}{Z(\mathbf{z})}\,h\!\left(\frac{p_0(\mathbf{z}^*)}{p_0(\mathbf{z})}\right)K(\mathbf{z}, \mathbf{z}^*), \qquad
+Z(\mathbf{z}) = \sum_{\mathbf{z}'} h\!\left(\frac{p_0(\mathbf{z}')}{p_0(\mathbf{z})}\right)K(\mathbf{z}, \mathbf{z}'), \\
+\alpha(\mathbf{z}, \mathbf{z}^*) &= \min\left\{1,\; \frac{Z(\mathbf{z})}{Z(\mathbf{z}^*)}\right\}.
+\end{aligned} \label{eq:ch10-balanced}
+$$
+
+*Why it holds.* Put $t = p_0(\mathbf{z}^*)/p_0(\mathbf{z})$ in {{< eqref "eq:ch10-mh-ratio" >}}. Symmetry cancels $K$, and the ratio becomes $t\,h(1/t)\,Z(\mathbf{z})/\{h(t)\,Z(\mathbf{z}^*)\} = Z(\mathbf{z})/Z(\mathbf{z}^*)$. When one flip barely alters the surroundings, $Z(\mathbf{z}) \approx Z(\mathbf{z}^*)$ and nearly every informed move is accepted. The greedy choice $h(t) = t$ violates the condition and loses this property. For variable selection, flipping $z_j$ has $t = o_j$ if $z_j = 0$ and $t = 1/o_j$ if $z_j = 1$, with the odds $o_j$ of {{< eqref "eq:ch09-odds" >}}. With $h(t) = t/(1+t)$ the weight $h$ is exactly the probability that Hoff’s Gibbs update would change $z_j$, so effort goes to the coordinates that want to move.
+
+**When to use it.** One move needs all $p$ marginal likelihoods, so it pays when $p$ is large, few coordinates are ambiguous, and the evaluations parallelize. For small $p$, {{< xref "alg:ch09-collapsed" "full" >}} is hard to beat; and since both make single flips, neither crosses a valley between swapped correlated regressors unless $K$ includes swaps.
+
+### Computational & Symbolic Check {#sec:ch10-modern-check}
+
+The script runs the leapfrog map of {{< eqref "eq:ch10-hmc" >}} on a one-dimensional standard normal, $U(q) = -\ell(q) = q^2/2$ with $M = 1$, and tests volume, reversibility, the HMC draws, and the Barker weight $h(t) = t/(1+t)$.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+
+def leapfrog(q, p, eps=0.5, L=3):                    # U(q) = q^2/2, so U'(q) = q
+    for _ in range(L):
+        p = p - 0.5 * eps * q
+        q = q + eps * p
+        p = p - 0.5 * eps * q
+    return q, p
+
+rng = np.random.default_rng(101)
+J = np.column_stack([leapfrog(1.0, 0.0), leapfrog(0.0, 1.0)])   # here the map is linear
+q1, p1 = leapfrog(0.7, -1.2)
+print("det J =", np.linalg.det(J).round(12), " reversed:", np.round(leapfrog(q1, -p1), 12))
+q, acc = np.full(50_000, 3.0), 0.0                   # 50,000 chains, all started at q = 3
+for _ in range(20):
+    p = rng.normal(size=q.size)
+    qn, pn = leapfrog(q, p)
+    ok = np.log(rng.uniform(size=q.size)) < 0.5 * (q ** 2 + p ** 2 - qn ** 2 - pn ** 2)
+    q, acc = np.where(ok, qn, q), acc + ok.mean() / 20
+print(f"HMC: accept={acc:.3f}, mean={q.mean():.3f}, var={q.var():.3f} (exact 0, 1)")
+t, h = np.array([0.1, 1.0, 7.0]), lambda t: t / (1 + t)
+print("balance h(t) - t h(1/t):", np.round(h(t) - t * h(1 / t), 12))
+```
+
+{{< marginnote >}}Differentiate one leapfrog step for an *arbitrary* potential $U$: both $U''$ terms cancel, so the determinant is $1$ for every $\epsilon$.{{< /marginnote >}}
+
+```js
+// One leapfrog step (M = 1) for a general potential U, and its Jacobian determinant
+const leap = await wl`With[{ph = p - eps/2*U'[q]}, With[{qn = q + eps*ph}, {qn, ph - eps/2*U'[qn]}]]`
+await show`Simplify[Det[D[${leap}, {{q, p}}]]]`
+```
+
+$$
+\det J_{\text{leapfrog}} = \det\frac{\partial(q', p')}{\partial(q, p)} = 1
+$$
+
+{{< marginnote >}}Test $h(t) - t\,h(1/t)$ for the Barker weight, the square root, and the greedy $h(t) = t$, which fails the balance condition.{{< /marginnote >}}
+
+```js
+// Locally balanced condition h(t) = t h(1/t): Barker, square root, and the greedy choice
+await show`Assuming[t > 0, Simplify[Table[f - t*(f /. t -> 1/t), {f, {t/(1 + t), Sqrt[t], t}}]]]`
+```
+
+$$
+\bigl(h(t) - t\,h(1/t)\bigr)_{h \,\in\, \left\{\frac{t}{1+t},\, \sqrt{t},\, t\right\}} = \{0,0,-1+t\}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch10-wolfram}
 
 Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode, abstracts the normal-target example to general $(n, \sigma^2, \tau_0^2, \delta)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and instantiates the symbolic acceptance formula on Hoff’s 5-point normal target.

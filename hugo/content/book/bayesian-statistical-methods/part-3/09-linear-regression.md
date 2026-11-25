@@ -293,6 +293,140 @@ print("inclusion (Gibbs):", pip.round(3), " (exact):", (w @ np.array(models)).ro
 print("model-averaged beta:", bma.round(2))
 ```
 
+## Modern Developments: Shrinkage, Correlated Selection, and Stacking {#sec:ch09-modern}
+
+### The Horseshoe and Regularized Horseshoe Priors {#sec:ch09-horseshoe}
+
+The $g$-prior shrinks every coefficient by the same factor $g/(g+1)$ in {{< eqref "eq:ch09-gpost" >}}, whereas a **global–local prior**{{< index "horseshoe prior" >}} gives each coefficient a shrinkage factor of its own.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; the horseshoe of Carvalho, Polson, and Scott (2010) and its regularized form (Piironen and Vehtari, 2017) offer a continuous alternative to the spike-and-slab of {{< xref "sec:ch09-selection" "full" >}}.{{< /sidenote >}} The horseshoe{{< cite "carvalho2010" >}} takes half-Cauchy scales; for an orthogonal design with $\mathbf{X}^T\mathbf{X} = nI$,
+
+$$
+\begin{aligned}
+\beta_j \mid \lambda_j, \tau, \sigma^2 &\sim \operatorname{normal}(0,\, \sigma^2\tau^2\lambda_j^2), \qquad
+\lambda_j \stackrel{\text{i.i.d.}}{\sim} C^+(0,1), \quad \tau \sim C^+(0, \tau_0), \\
+E[\beta_j \mid \mathbf{y}, \lambda_j, \tau] &= (1 - \kappa_j)\,\hat{\beta}_{j,\text{ols}}, \qquad
+\kappa_j = \frac{1}{1 + n\tau^2\lambda_j^2}.
+\end{aligned} \label{eq:ch09-horseshoe}
+$$
+
+*Why it holds.* Each coordinate is a normal update with data precision $n/\sigma^2$ and prior precision $1/(\sigma^2\tau^2\lambda_j^2)$, and $\kappa_j$ is the prior’s share. At $n\tau^2 = 1$ the half-Cauchy makes $\kappa_j \sim \operatorname{beta}(\frac{1}{2}, \frac{1}{2})$: mass piles up at $0$ (keep) and $1$ (discard). Writing each $\lambda_j^2$ as a mixture of inverse-gammas restores Gibbs sampling,{{< cite "makalic2016" >}} and $\boldsymbol{\beta}$ can be drawn in $O(n^2p)$ operations.{{< cite "bhattacharya2016" >}} A guess of $p_0$ relevant regressors suggests $\tau_0 = p_0/\{(p - p_0)\sqrt{n}\}$, and replacing $\lambda_j^2$ by $c^2\lambda_j^2/(c^2 + \tau^2\lambda_j^2)$ caps the slab at width $c\sigma$, the **regularized horseshoe**.{{< cite "piironen2017" >}} Beware the Bayesian lasso, with its double-exponential prior of rate $\rho$: its *mode* (the lasso{{< cite "tibshirani1996" >}}) is sparse, but its *full posterior* is not. In the sequence model ($\mathbf{X} = I_n$, $\sigma^2 = 1$) with true $\boldsymbol{\beta} = \mathbf{0}$ and $\rho = \sqrt{2\log n}$, each coordinate keeps posterior spread of order $1/\rho$, so $\lVert\boldsymbol{\beta}\rVert$ is of order $\sqrt{n/\log n}$ while the mode’s error vanishes.{{< cite "castillo2015" >}}
+
+**When to use it.** Prefer the horseshoe for prediction or estimation with $p$ large or comparable to $n$ and no need for exact zeros. Keep Hoff’s {{< xref "alg:ch09-collapsed" "full" >}} when model probabilities are themselves the question.
+
+### Sum of Single Effects (SuSiE) {#sec:ch09-susie}
+
+{{< xref "rem:ch09-pip" "full" >}} warned that two nearly duplicate regressors share one strong effect, each showing an inclusion probability near $1/2$; **SuSiE**{{< index "SuSiE" >}} turns that warning into a reportable answer, the *set* of regressors that holds the effect.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; the sum-of-single-effects model is due to Wang, Sarkar, Carbonetto, and Stephens (2020) and complements per-variable inclusion probabilities.{{< /sidenote >}} It writes $\boldsymbol{\beta}$ as $L$ vectors with one nonzero entry each:{{< cite "wang2020" >}}
+
+$$
+\begin{aligned}
+\boldsymbol{\beta} &= \sum_{l=1}^L b_l\,\boldsymbol{\gamma}_l, \qquad
+\boldsymbol{\gamma}_l \sim \operatorname{multinomial}(1, \boldsymbol{\pi}), \quad b_l \sim \operatorname{normal}(0, \sigma_{0l}^2), \\
+\alpha_{lj} &= \frac{\pi_j\operatorname{BF}_{lj}}{\sum_k \pi_k\operatorname{BF}_{lk}}, \qquad
+\operatorname{BF}_{lj} = \sqrt{\frac{s_j^2}{s_j^2 + \sigma_{0l}^2}}\,
+\exp\!\left\{\frac{\hat{b}_{lj}^2}{2s_j^2}\cdot\frac{\sigma_{0l}^2}{s_j^2 + \sigma_{0l}^2}\right\},
+\end{aligned} \label{eq:ch09-susie}
+$$
+
+with $\hat{b}_{lj} = \mathbf{x}_j^T\mathbf{r}_l/\mathbf{x}_j^T\mathbf{x}_j$, $s_j^2 = \sigma^2/\mathbf{x}_j^T\mathbf{x}_j$, and $\mathbf{r}_l$ the residual after subtracting the other $L - 1$ expected effects.
+
+*Why it holds.* With a single effect there are only $p$ models, so Bayes’ rule enumerates them exactly, and $\operatorname{BF}_{lj}$ is a ratio of normal marginals. Cycling over $l$ (iterative Bayesian stepwise selection) is coordinate ascent on a variational objective in which the $L$ effects are independent but the choice *within* each is not. If $\mathbf{x}_1 = \mathbf{x}_2$ and $\pi_1 = \pi_2$, then $\operatorname{BF}_{l1} = \operatorname{BF}_{l2}$. When they carry a strong effect, $\boldsymbol{\alpha}_l \approx (\frac{1}{2}, \frac{1}{2}, 0, \dots)$ and the 95% **credible set**{{< index "credible set" >}} is $\{1, 2\}$: we are sure there is an effect, and unsure which column carries it.
+
+**When to use it.** Choose SuSiE for sparse problems with strongly correlated regressors, such as genetic fine mapping. Because it is variational, dependence *between* effects is lost and local optima are possible; for moderate $p$, or dense signals, {{< xref "alg:ch09-collapsed" "full" >}} targets the exact posterior.
+
+### Bayesian Stacking in $\mathcal{M}$-Open Settings {#sec:ch09-stacking}
+
+The average {{< eqref "eq:ch09-bma" >}} weights models by $p(\mathbf{z} \mid \mathbf{y}, \mathbf{X})$, the right weights when one of the candidates is true (**$\mathcal{M}$-closed**) but not when all are wrong (**$\mathcal{M}$-open**).{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; stacking is a much older idea for point predictions, extended to full predictive distributions by Yao, Vehtari, Simpson, and Gelman (2018) as an alternative to model averaging.{{< /sidenote >}} As $n$ grows, model averaging typically puts all its weight on the single model closest to the truth in Kullback–Leibler divergence, even if a mixture predicts better. **Stacking**{{< index "stacking" >}} chooses the mixture directly by its leave-one-out log score:{{< cite "yao2018" >}}
+
+$$
+\hat{\mathbf{w}} = \operatorname*{arg\,max}_{w_k \ge 0,\; \sum_k w_k = 1}\;
+\frac{1}{n}\sum_{i=1}^n \log \sum_{k=1}^K w_k\, p(y_i \mid \mathbf{y}_{-i}, \mathcal{M}_k). \label{eq:ch09-stacking}
+$$
+
+*Why it holds.* Each held-out term estimates the mixture’s expected log score on new data without using $y_i$ twice, and the objective is concave on the simplex. Under the $g$-prior, the leave-one-out terms need no refitting. Hold the prior, including $\sigma_0^2$, fixed and let $A = I_n - \frac{g}{g+1}\mathbf{X}_z(\mathbf{X}_z^T\mathbf{X}_z)^{-1}\mathbf{X}_z^T$ be the matrix in {{< eqref "eq:ch09-ssrg" >}}. Marginally $\mathbf{y}$ is multivariate $t$ with scale matrix $\sigma_0^2A^{-1}$, so
+
+$$
+y_i \mid \mathbf{y}_{-i}, \mathbf{z} \sim t_{\nu_0 + n - 1}\!\left(y_i - \frac{(A\mathbf{y})_i}{A_{ii}},\;
+\frac{\nu_0\sigma_0^2 + \operatorname{SSR}_g^z - (A\mathbf{y})_i^2/A_{ii}}{A_{ii}\,(\nu_0 + n - 1)}\right), \label{eq:ch09-loo}
+$$
+
+with location and squared scale; the location does not depend on $y_i$, which cancels. The choice $\sigma_0^2 = s_z^2$ behind {{< xref "tab:ch09-models" "full" >}} uses all of $\mathbf{y}$, so it would have to be recomputed, or fixed, for an honest hold-out score.
+
+**When to use it.** Stack when the goal is prediction and no model is believed. Keep Hoff’s averaging when a true model is plausible or the posterior probabilities answer the scientific question: stacking weights are *not* probabilities, and near-identical models split theirs arbitrarily.
+
+### Computational & Symbolic Check {#sec:ch09-modern-check}
+
+The script compares draws of the shrinkage factor in {{< eqref "eq:ch09-horseshoe" >}} with $\operatorname{beta}(\frac{1}{2}, \frac{1}{2})$, and evaluates the single-effect probabilities of {{< eqref "eq:ch09-susie" >}} for two identical regressors and one unrelated regressor.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(91)
+# 1. Horseshoe: lambda ~ C+(0,1) with n tau^2 = 1 gives kappa ~ Beta(1/2, 1/2)
+kappa = 1.0 / (1.0 + rng.standard_cauchy(100_000) ** 2)
+print("KS distance:", round(stats.kstest(kappa, stats.beta(0.5, 0.5).cdf).statistic, 4),
+      " mean, var:", kappa.mean().round(3), kappa.var().round(3), "(exact 0.5, 0.125)")
+# 2. SuSiE single effect: columns 1 and 2 are identical, column 3 is noise
+n, sig2, v0 = 200, 1.0, 1.0
+x = rng.normal(size=n)
+X = np.column_stack([x, x, rng.normal(size=n)])
+y = 0.8 * x + rng.normal(size=n)
+xx = (X ** 2).sum(axis=0)
+bhat, s2 = X.T @ y / xx, sig2 / xx
+lbf = 0.5 * np.log(s2 / (s2 + v0)) + bhat ** 2 / (2 * s2) * v0 / (s2 + v0)
+alpha = np.exp(lbf - lbf.max())
+print("PIPs:", (alpha / alpha.sum()).round(3), "(exact 1/2, 1/2, ~0)")
+```
+
+{{< marginnote >}}Change variables from $\lambda = \sqrt{1-\kappa}/\sqrt{\kappa}$ to $\kappa$ (a decreasing map, hence the minus sign) and divide by the $\operatorname{Beta}(\tfrac12, \tfrac12)$ density.{{< /marginnote >}}
+
+```js
+// Horseshoe: the half-Cauchy prior on lambda induces kappa = 1/(1 + lambda^2) ~ Beta(1/2, 1/2)
+const lamK = await wl`Sqrt[1 - k]/Sqrt[k]`
+const densK = await wl`Assuming[0 < k < 1, FullSimplify[-D[${lamK}, k] * 2/(Pi*(1 + (${lamK})^2))]]`
+await show`Assuming[0 < k < 1, FullSimplify[(${densK}) / (k^(-1/2)*(1 - k)^(-1/2)/Beta[1/2, 1/2])]]`
+```
+
+$$
+\begin{aligned}
+&\frac{p_\lambda(\lambda(\kappa))\,\lvert d\lambda/d\kappa\rvert}{\kappa^{-1/2}(1-\kappa)^{-1/2}/B\!\left(\frac{1}{2}, \frac{1}{2}\right)} \\
+&= 1
+\end{aligned}
+$$
+
+{{< marginnote >}}Integrate the induced density to get $\mathbb{E}[\kappa]$ and $\operatorname{Var}[\kappa]$, the exact values printed by the script.{{< /marginnote >}}
+
+```js
+await show`{Integrate[k*(${densK}), {k, 0, 1}], Integrate[(k - 1/2)^2*(${densK}), {k, 0, 1}]}`
+```
+
+$$
+\bigl(\mathbb{E}[\kappa],\; \operatorname{Var}[\kappa]\bigr) = \left\{\frac{1}{2},\frac{1}{8}\right\}
+$$
+
+{{< marginnote >}}Integrate the effect $b$ out of the normal likelihood and divide by the closed form of $\operatorname{BF}_{lj}$ stated above.{{< /marginnote >}}
+
+```js
+// SuSiE: Bayes factor as a ratio of normal marginals, then PIPs of two duplicate regressors
+const bfOne = await wl`Assuming[s2 > 0 && v > 0 && Element[bh, Reals], FullSimplify[Exp[bh^2/(2*s2)]
+  *Integrate[Exp[-(bh - b)^2/(2*s2)]*Exp[-b^2/(2*v)]/Sqrt[2*Pi*v], {b, -Infinity, Infinity}]]]`
+await show`Assuming[s2 > 0 && v > 0 && Element[bh, Reals],
+  FullSimplify[(${bfOne}) / (Sqrt[s2/(s2 + v)]*Exp[bh^2/(2*s2)*v/(s2 + v)])]]`
+```
+
+$$
+\frac{\int p(\hat{b} \mid b)\,p(b)\,db \,\big/\, p(\hat{b} \mid b = 0)}{\sqrt{\frac{s^2}{s^2+\sigma_0^2}}\,\exp\!\left\{\frac{\hat{b}^2}{2s^2}\cdot\frac{\sigma_0^2}{s^2+\sigma_0^2}\right\}} = 1
+$$
+
+{{< marginnote >}}Duplicate columns have the same Bayes factor, so it cancels; equal prior weights leave $\alpha_1 = \alpha_2 = \tfrac12$.{{< /marginnote >}}
+
+```js
+await show`FullSimplify[{w1*(${bfOne}), w2*(${bfOne})} / (w1*(${bfOne}) + w2*(${bfOne}))] /. w2 -> w1`
+```
+
+$$
+(\alpha_1, \alpha_2)\big|_{\mathbf{x}_1 = \mathbf{x}_2,\; \pi_1 = \pi_2} = \left\{\frac{1}{2},\frac{1}{2}\right\}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch09-wolfram}
 
 Integrates $\gamma = 1/\sigma^2$ symbolically in `wolfram-ws-bridge` JavaScript mode to derive $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ and the general symbolic Bayes factor $\operatorname{BF}_{a,b}$ (retaining model-specific $s_a^2, s_b^2$), verifies both the Lindley limit ($g \to \infty$) and the information-paradox supremum, and instantiates `margZ` directly to reproduce Table 9.1.

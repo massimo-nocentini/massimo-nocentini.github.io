@@ -202,6 +202,129 @@ print(f"Pr(theta_2 > 0 | y) = {np.mean(theta_s[burn:, 1] > 0):.3f}, "
       f"Pr(beta_new_2 > 0 | y) = {np.mean(b_new[:, 1] > 0):.3f}")
 ```
 
+## Modern Developments: Augmentation, Crossed Effects, and INLA {#sec:ch11-modern}
+
+### Pólya–Gamma Augmentation for Logistic and Negative-Binomial GLMMs {#sec:ch11-polyagamma}
+
+Replacing the Poisson in {{< eqref "eq:ch11-glmm" >}} by a logistic or negative-binomial likelihood still breaks Step 1 of {{< xref "alg:ch11-lme-gibbs" "full" >}}, but for *those two* families a latent variable repairs it exactly.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Pólya–Gamma augmentation is due to Polson, Scott, and Windle (2013) and replaces the Metropolis block for logistic and negative-binomial responses.{{< /sidenote >}} Suppose the likelihood of $y_{i,j}$ is proportional to $e^{a\psi}/(1 + e^\psi)^b$ in $\psi = \boldsymbol{\beta}_j^T\mathbf{x}_{i,j}$: Bernoulli has $(a, b) = (y, 1)$, and negative-binomial with size $r$ and log-odds $\psi$ has $(a, b) = (y, y + r)$. With $\kappa = a - b/2$ and $\operatorname{PG}$ the **Pólya–Gamma**{{< index "Pólya–Gamma distribution" >}} family,{{< cite "polson2013" >}}
+
+$$
+\begin{aligned}
+\frac{e^{a\psi}}{(1 + e^\psi)^b} &= 2^{-b}e^{\kappa\psi}\,E_{\omega \sim \operatorname{PG}(b, 0)}\bigl[e^{-\omega\psi^2/2}\bigr], \qquad
+\omega_{i,j} \mid \boldsymbol{\beta}_j \sim \operatorname{PG}(b_{i,j},\, \boldsymbol{\beta}_j^T\mathbf{x}_{i,j}), \\
+\boldsymbol{\beta}_j \mid \boldsymbol{\omega}, \mathbf{y}_j, \boldsymbol{\theta}, \Sigma &\sim \mathcal{N}_p(\mathbf{m}_j, V_j), \qquad
+V_j = (\Sigma^{-1} + \mathbf{X}_j^T\operatorname{diag}(\boldsymbol{\omega}_j)\mathbf{X}_j)^{-1}, \quad
+\mathbf{m}_j = V_j(\Sigma^{-1}\boldsymbol{\theta} + \mathbf{X}_j^T\boldsymbol{\kappa}_j).
+\end{aligned} \label{eq:ch11-pg}
+$$
+
+*Why it holds.* Write $(1 + e^\psi)^{-b} = 2^{-b}e^{-b\psi/2}\cosh^{-b}(\psi/2)$; the Laplace transform of $\operatorname{PG}(b, 0)$ is, by construction, $E[e^{-\omega t}] = \cosh^{-b}(\sqrt{t/2})$, taken at $t = \psi^2/2$. Given $\omega$ the exponent is quadratic in $\boldsymbol{\beta}_j$, and the update is {{< eqref "eq:ch11-fc-betaj" >}} with $\omega_{i,j}$ as observation-specific precisions. The draws of $\boldsymbol{\theta}$ and $\Sigma$ are unchanged. For ordinary logistic regression with a normal prior this Gibbs chain is uniformly ergodic;{{< cite "choi2013" >}} that theorem concerns fixed effects, not the full hierarchical scan. The **Poisson** likelihood lacks the denominator, is only an $r \to \infty$ limit, and is *not* covered.
+
+**When to use it.** Use it for logistic and negative-binomial mixed models (an unknown $r$ needs its own update): no proposal to tune. For Poisson GLMMs keep Hoff’s {{< xref "alg:ch11-glmm-mwg" "full" >}} or use HMC ({{< xref "sec:ch10-hmc" "full" >}}).
+
+### Scalable Collapsed Gibbs for Crossed Random Effects {#sec:ch11-crossed}
+
+Every group in {{< eqref "eq:ch11-lme" >}} is nested, so the $\boldsymbol{\beta}_j$ are conditionally independent; if instead each test score belongs to a student *and* an exam item, the random effects are **crossed**{{< index "crossed random effects" >}} and the modular sampler slows down as the data grow.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; Papaspiliopoulos, Roberts, and Zanella (2020) analyze crossed effects, and Ascolani and Zanella (2024) the nested two-level models of this chapter.{{< /sidenote >}} Take $y_{s,k} = \mu + a_s + b_k + \epsilon_{s,k}$ with $s \le I$, $k \le J$, one observation per cell ($N = IJ$), a flat prior on $\mu$, and known variances $\sigma_a^2, \sigma_b^2, \sigma^2$. The plain scan $\mu, \mathbf{a}, \mathbf{b}$ has relaxation time $T$, and the collapsed sampler replaces its $\mu$ update as follows:{{< cite "papaspiliopoulos2020" >}}
+
+$$
+T = 1 + \frac{\max\{J\sigma_a^2,\, I\sigma_b^2\}}{\sigma^2}, \qquad
+\mu \mid \mathbf{b}, \mathbf{y} \sim \operatorname{normal}\!\left(\bar{y} - \bar{b},\; \frac{\sigma_a^2 + \sigma^2/J}{I}\right) \;\text{ then }\; \mathbf{a} \mid \mu, \mathbf{b}, \mathbf{y}, \label{eq:ch11-crossed}
+$$
+
+followed by the same pair with $\mathbf{a}$ and $\mathbf{b}$ exchanged.
+
+*Why it holds.* In the plain scan the averages satisfy $E[\bar{a}' \mid \bar{a}] = c_a\bar{a}$ with $c_a = J\sigma_a^2/(J\sigma_a^2 + \sigma^2)$ (and $c_b = I\sigma_b^2/(I\sigma_b^2 + \sigma^2)$ likewise), and the corresponding map for $(\bar{a}, \bar{b})$ is triangular with eigenvalues $c_a, c_b$; contrasts mix at once. Since $\max(I, J) \ge \sqrt{N}$, for fixed variances $T$ is at least of order $\sqrt{N}$ at a cost of $O(N)$ per scan, hence at least of order $N^{3/2}$ in total. Integrating $\mathbf{a}$ out removes the coupling: with $\mu$ flat, the conditional of $\bar{b}$ given $\mathbf{a}$ is just its prior, so in this balanced layout successive collapsed draws of $\mathbf{b}$ are *independent*. For unbalanced designs the speed depends on how well connected the design is. For nested two-level models, Hoff’s own case, the mixing time of suitable Gibbs samplers stays bounded as the number of groups grows, under regularity conditions and from a good starting point.{{< cite "ascolani2024" >}}
+
+**When to use it.** Collapse whenever two or more factors cross. For a single grouping factor, {{< xref "alg:ch11-lme-gibbs" "full" >}} already scales, subject to {{< xref "rem:ch11-mixing" "full" >}}.
+
+### Integrated Nested Laplace Approximation (INLA) {#sec:ch11-inla}
+
+Given $\Sigma$, the unknowns $\boldsymbol{\xi} = (\boldsymbol{\beta}_{1:m}, \boldsymbol{\theta})$ of the Poisson GLMM {{< eqref "eq:ch11-glmm" >}} have a Gaussian prior and a log-concave likelihood, so their posterior is often close to normal and its marginals can be *computed*, approximately, rather than sampled.{{< sidenote >}}**Beyond Hoff (2009).** This material is not in Hoff’s book; INLA (Rue, Martino, and Chopin, 2009) appeared in the same year as Hoff’s book and is not covered there; Van Niekerk et al. (2023) reformulate it.{{< /sidenote >}} With hyperparameters $\boldsymbol{\psi}$ (here the entries of $\Sigma$), **INLA**{{< index "INLA" >}} evaluates{{< cite "rue2009" >}}
+
+$$
+\tilde{p}(\boldsymbol{\psi} \mid \mathbf{y}) \propto \left.\frac{p(\boldsymbol{\xi}, \boldsymbol{\psi}, \mathbf{y})}{\tilde{p}_G(\boldsymbol{\xi} \mid \boldsymbol{\psi}, \mathbf{y})}\right|_{\boldsymbol{\xi} = \boldsymbol{\xi}^*(\boldsymbol{\psi})}, \qquad
+\tilde{p}(\xi_i \mid \mathbf{y}) = \sum_k \tilde{p}(\xi_i \mid \boldsymbol{\psi}_k, \mathbf{y})\,\tilde{p}(\boldsymbol{\psi}_k \mid \mathbf{y})\,\Delta_k, \label{eq:ch11-inla}
+$$
+
+where $\boldsymbol{\xi}^*(\boldsymbol{\psi})$ is the conditional mode, $\tilde{p}_G$ the Gaussian matched there, and $\Delta_k$ are integration weights.
+
+*Why it holds.* The identity $p(\boldsymbol{\psi} \mid \mathbf{y}) = p(\boldsymbol{\xi}, \boldsymbol{\psi} \mid \mathbf{y})/p(\boldsymbol{\xi} \mid \boldsymbol{\psi}, \mathbf{y})$ is exact at *every* $\boldsymbol{\xi}$; only the denominator is approximated, at the point where a Gaussian fits best. As in {{< xref "prop:ch10-concave" "full" >}}, log-concavity makes that mode unique (with a proper normal prior on $\boldsymbol{\theta}$), and Newton’s method finds it quickly because the prior precision is sparse. The marginals are then mixtures over a small grid of $\boldsymbol{\psi}$. A recent reformulation removes the linear predictors from the latent field and corrects the Gaussian means variationally, which helps when data are abundant.{{< cite "vanniekerk2023" >}}
+
+**When to use it.** INLA gives fast, deterministic marginals for latent Gaussian models with few hyperparameters. MCMC is still needed when there are many (an unstructured $5 \times 5$ $\Sigma$ for Hoff’s quartic mouse curves has $15$), when random effects are not Gaussian or the predictor is nonlinear, when the conditional posterior is far from normal, as for sparse binary data, or when the full joint posterior is wanted: there, {{< xref "alg:ch11-glmm-mwg" "full" >}} remains the reference.
+
+### Computational & Symbolic Check {#sec:ch11-modern-check}
+
+At $b = 1$ the first identity of {{< eqref "eq:ch11-pg" >}} rests on $E_{\omega \sim \operatorname{PG}(1,0)}[e^{-\omega\psi^2/2}] = \operatorname{sech}(\psi/2)$. The script checks it by simulating the series $\omega \stackrel{d}{=} \frac{1}{2\pi^2}\sum_{k=1}^\infty g_k/(k - \frac{1}{2})^2$ with $g_k \sim \operatorname{exponential}(1)$, and by the infinite product that the series implies.{{< sidenote >}}**Beyond Hoff (2009).** This computational check and its Wolfram symbolic counterpart below verify the modern methods in this section and are not in Hoff’s book.{{< /sidenote >}}
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(111)
+K, S = 200, 40_000
+k = np.arange(1, K + 1)
+# PG(1,0) draws from the first K terms; the mean of the omitted tail is added back
+w = 1.0 / (2 * np.pi ** 2 * (k - 0.5) ** 2)
+omega = rng.exponential(size=(S, K)) @ w + (0.25 - w.sum())
+print(f"E[omega] = {omega.mean():.4f} (exact 0.25)")
+kk = np.arange(1, 100_001)
+for psi in (1.0, 2.0, 4.0):
+    mc = np.exp(-omega * psi ** 2 / 2).mean()
+    prod = np.exp(-np.log1p(psi ** 2 / (np.pi * (2 * kk - 1)) ** 2).sum())
+    print(f"psi={psi}: Monte Carlo={mc:.4f}, product={prod:.6f}, "
+          f"sech(psi/2)={1 / np.cosh(psi / 2):.6f}")
+    # Bernoulli likelihood at y = 1: kappa = 1/2
+    print("   logistic:", round(0.5 * np.exp(psi / 2) * mc, 4), round(1 / (1 + np.exp(-psi)), 4))
+```
+
+{{< marginnote >}}Integrate out one exponential $g_k$: each term of the series contributes the factor $\bigl(1 + \psi^2/(\pi^2(2k-1)^2)\bigr)^{-1}$.{{< /marginnote >}}
+
+```js
+// Laplace transform of one term g_k / (2 Pi^2 (k - 1/2)^2) at t = psi^2/2, minus the product factor
+await show`Assuming[k >= 1 && Element[psi, Reals],
+  FullSimplify[Integrate[Exp[-g]*Exp[-g*psi^2/(4*Pi^2*(k - 1/2)^2)], {g, 0, Infinity}]
+    - 1/(1 + psi^2/(Pi^2*(2*k - 1)^2))]]`
+```
+
+$$
+\int_0^\infty e^{-g}\,e^{-g\psi^2/\{4\pi^2(k-\frac{1}{2})^2\}}\,dg - \left(1 + \frac{\psi^2}{\pi^2(2k-1)^2}\right)^{-1} = 0
+$$
+
+{{< marginnote >}}Multiply the independent factors over all $k$: Euler’s product for $\cosh$ closes the Pólya–Gamma transform.{{< /marginnote >}}
+
+```js
+const pgLap = await show`FullSimplify[1/Product[1 + psi^2/(Pi^2*(2*k - 1)^2), {k, 1, Infinity}]]`
+```
+
+$$
+\begin{aligned}
+&\mathbb{E}_{\omega\sim\operatorname{PG}(1,0)}\bigl[e^{-\omega\psi^2/2}\bigr] = \prod_{k=1}^\infty \left(1 + \frac{\psi^2}{\pi^2(2k-1)^2}\right)^{-1} \\
+&= \operatorname{sech}\left(\frac{\psi}{2}\right)
+\end{aligned}
+$$
+
+{{< marginnote >}}Substitute the transform into the fundamental identity at $b = 1$, for a symbolic exponent $a$.{{< /marginnote >}}
+
+```js
+await show`FullSimplify[TrigToExp[Exp[a*psi]/(1 + Exp[psi]) - 1/2*Exp[(a - 1/2)*psi]*(${pgLap})]]`
+```
+
+$$
+\frac{e^{a\psi}}{1+e^\psi} - \frac{1}{2}\,e^{(a-\frac{1}{2})\psi}\,\mathbb{E}_{\omega\sim\operatorname{PG}(1,0)}\bigl[e^{-\omega\psi^2/2}\bigr] = 0
+$$
+
+{{< marginnote >}}Read $\mathbb{E}[\omega]$ off the $\psi^2$ coefficient and instantiate $\operatorname{sech}(\psi/2)$ at the script’s $\psi \in \{1, 2, 4\}$.{{< /marginnote >}}
+
+```js
+await show`{-2*SeriesCoefficient[${pgLap}, {psi, 0, 2}], N[Table[${pgLap}, {psi, {1, 2, 4}}]]}`
+```
+
+$$
+\begin{aligned}
+&\bigl(\mathbb{E}[\omega],\; \operatorname{sech}(\psi/2)_{\psi \in \{1,\, 2,\, 4\}}\bigr) \\
+&= \left\{\frac{1}{4},\{0.886819,0.648054,0.265802\}\right\}
+\end{aligned}
+$$
+
 ## Symbolic Check in Wolfram Language {#sec:ch11-wolfram}
 
 Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, derives both the general $2 \times 2$ LME slope posterior variance $(V_j)_{2,2}$ and the closed-form diagonal-$\Sigma$ shrinkage vector $\mathbf{m}_j$, and instantiates the conditional slope SD for small and large schools.
