@@ -128,14 +128,17 @@ print(f"PPC tail prob Pr(t(Y_rep) >= 2.0) = {p_ppc:.4f} +/- {2*np.sqrt(p_ppc*(1-
 Derives the exact push-forward log-odds density via change-of-variables Jacobian, the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), the symbolic Gamma CDF $\Pr(\theta_2 < c)$, and the general Beta representation of $\Pr(\theta_1 > \theta_2)$, then instantiates all symbolic expressions on the GSS fertility posteriors to benchmark the Monte Carlo estimates.
 
 ```js
+// Chapter 4: Symbolic log-odds density, Gamma-ratio moments & symbolic Gamma tail probabilities
 const thOfG = await wl`th /. First[Solve[Log[th / (1 - th)] == g, th, Reals]]`
 const jac = await wl`FullSimplify[D[${thOfG}, g], Element[g, Reals]]`
 await show`FullSimplify[(${thOfG}^(a - 1)*(1 - ${thOfG})^(b - 1)/Beta[a, b]) * ${jac}, Element[g, Reals]]`
 ```
 
-
 $$
-\frac{\theta(g)^{a-1}(1-\theta(g))^{b-1}}{B(a,b)}\,\frac{d\theta}{dg} \;=\; \frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
+\begin{aligned}
+&p_\gamma(g) = p_\theta\!\left(\frac{e^g}{1+e^g}\right)\left|\frac{d\theta}{dg}\right| \\
+&= \frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
+\end{aligned}
 $$
 
 ```js
@@ -144,9 +147,8 @@ const eR = await show`Assuming[a1 > 0 && b1 > 0 && a2 > 1 && b2 > 0,
   FullSimplify[(a1/b1)*Integrate[(b2^a2/Gamma[a2])*t^(a2 - 2)*Exp[-b2*t], {t, 0, Infinity}]]]`
 ```
 
-
 $$
-\frac{a_1}{b_1}\int_0^\infty \frac{b_2^{a_2}}{\Gamma(a_2)}\,t^{a_2 -2} e^{-b_2 \,t}\,dt \;=\; \frac{a_1 b_2}{(-1+a_2) b_1}
+\mathbb{E}[\theta_1 / \theta_2] = \frac{a_1 b_2}{(-1+a_2) b_1}
 $$
 
 ```js
@@ -154,44 +156,42 @@ await show`Assuming[a1 > 0 && b1 > 0 && a2 > 2 && b2 > 0,
   FullSimplify[(a1*(a1 + 1)/b1^2)*Integrate[(b2^a2/Gamma[a2])*t^(a2 - 3)*Exp[-b2*t], {t, 0, Infinity}] - (${eR})^2]]`
 ```
 
-
 $$
 \begin{aligned}
-&\frac{a_1 (a_1 +1)}{b_1^2}\int_0^\infty \frac{b_2^{a_2}}{\Gamma(a_2)}\,t^{a_2 -3} e^{-b_2 \,t}\,dt - E\!\left[\frac{\theta_1}{\theta_2}\right]^2 \\
-&= \frac{a_1 (-1+a_1 +a_2) b_2^2}{(-2+a_2) (-1+a_2)^2 b_1^2}\end{aligned}
+&\operatorname{Var}(\theta_1 / \theta_2) \\
+&= \frac{a_1 (-1+a_1 +a_2) b_2^2}{(-2+a_2) (-1+a_2)^2 b_1^2}
+\end{aligned}
 $$
 
 ```js
-// Symbolic Gamma CDF Pr(th2 < c) and general Beta representation of Pr(th1 > th2)
+// Symbolic Gamma CDF Pr(th < c) and general Beta-representation of Pr(th1 > th2)
 const gamCdf = await show`Assuming[a2 > 0 && b2 > 0 && c > 0,
   FullSimplify[Integrate[(b2^a2/Gamma[a2])*t^(a2 - 1)*Exp[-b2*t], {t, 0, c}]]]`
 ```
 
-
 $$
-\Pr(\theta_2 < c) = \int_0^c \frac{b_2^{a_2}}{\Gamma(a_2)}\,t^{a_2 -1} e^{-b_2 \,t}\,dt \;=\; 1-\frac{\Gamma (a_2,b_2 c)}{\Gamma (a_2)}
+\Pr(\theta_2 < c) = 1-\frac{\Gamma (a_2,b_2 c)}{\Gamma (a_2)}
 $$
 
 ```js
 const pGtSym = await show`1 - Beta[b1 / (b1 + b2), a1, a2] / Beta[a1, a2]`
 ```
 
-
 $$
-\Pr(\theta_1 > \theta_2) \;=\; 1-\frac{B_{\frac{b_1}{b_1 +b_2}}(a_1,a_2)}{B(a_1,a_2)}
+\Pr(\theta_1 > \theta_2) = 1-\frac{B_{\frac{b_1}{b_1 +b_2}}(a_1,a_2)}{B(a_1,a_2)}
 $$
 
 ```js
 // Instantiate at GSS fertility posteriors Gamma(219,112) vs Gamma(68,45) and c = 7/4
-const pGt = toJS(await wl`N[${pGtSym} /. {a1 -> 219, b1 -> 112, a2 -> 68, b2 -> 45}]`)
-const pLt175 = toJS(await wl`N[${gamCdf} /. {a2 -> 68, b2 -> 45, c -> 7/4}]`)
-console.log(`Exact Pr(th1 > th2 | y) = ${pGt.toFixed(4)}  |  Exact Pr(th2 < 1.75 | y) = ${pLt175.toFixed(4)}`)
+await show`N[{${pGtSym} /. {a1 -> 219, b1 -> 112, a2 -> 68, b2 -> 45}, ${gamCdf} /. {a2 -> 68, b2 -> 45, c -> 7/4}}]`
 ```
 
-
-```text
-Exact Pr(th1 > th2 | y) = 0.9726  |  Exact Pr(th2 < 1.75 | y) = 0.8998
-```
+$$
+\begin{aligned}
+&\bigl(\Pr(\theta_1 > \theta_2 \mid y),\; \Pr(\theta_2 < 1.75 \mid y)\bigr)_{\text{GSS}} \\
+&= \{0.97256,0.899829\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch04-exercises}
 
@@ -207,7 +207,7 @@ const eLogit = await show`Assuming[a > 0 && b > 0, FullSimplify[PolyGamma[0, a] 
 ```
 
 $$
-\mathbb{E}\!\left[\log\frac{\theta}{1-\theta}\right] = \psi ^{(0)}(a)-\psi ^{(0)}(b)
+\mathbb{E}\!\left[\log\frac{\theta}{1-\theta}\right] = \psi^{(0)}(a)-\psi^{(0)}(b)
 $$
 
 ```js
@@ -219,7 +219,7 @@ $$
 $$
 
 ```js
-const invGap = await show`Factor[${eInv} - (a + b)/a]`
+await show`Factor[${eInv} - (a + b)/a]`
 ```
 
 $$
@@ -227,15 +227,15 @@ $$
 $$
 
 ```js
-const [v1, v2, v3, v4] = toJS(await wl`N[{${eLogit}, Log[a/b], ${eInv}, (a + b)/a} /. {a -> 2, b -> 40}]`)
-console.log(`Beta(2,40): E[logit] = ${v1.toFixed(4)} < logit(E[th]) = ${v2.toFixed(4)} (concave on (0,1/2))`)
-console.log(`Beta(2,40): E[1/th] = ${v3.toFixed(2)} > 1/E[th] = ${v4.toFixed(2)} (note: E[1/th^2] = Inf at a=2 -> infinite MC variance)`)
+await show`N[{${eLogit}, Log[a/b], ${eInv}, (a + b)/a} /. {a -> 2, b -> 40}]`
 ```
 
-```text
-Beta(2,40): E[logit] = -3.2535 < logit(E[th]) = -2.9957 (concave on (0,1/2))
-Beta(2,40): E[1/th] = 41.00 > 1/E[th] = 21.00 (note: E[1/th^2] = Inf at a=2 -> infinite MC variance)
-```
+$$
+\begin{aligned}
+&\bigl(\mathbb{E}[\operatorname{logit}\theta],\; \operatorname{logit}\mathbb{E}[\theta],\; \mathbb{E}[\theta^{-1}],\; (\mathbb{E}[\theta])^{-1}\bigr)_{\operatorname{Beta}(2,40)} \\
+&= \{-3.25354,-2.99573,41.,21.\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -255,13 +255,15 @@ $$
 $$
 
 ```js
-const val = toJS(await wl`${rbRatio} /. {an -> 68, bn -> 45}`)
-console.log(`At Gamma(68, 45): exact Rao-Blackwell variance ratio = ${val}`)
+await show`${rbRatio} /. {an -> 68, bn -> 45}`
 ```
 
-```text
-At Gamma(68, 45): exact Rao-Blackwell variance ratio = 46
-```
+$$
+\begin{aligned}
+&\left.\frac{\operatorname{Var}(\tilde{Y} \mid y)}{\operatorname{Var}(\theta \mid y)}\right|_{a_n=68,\; b_n=45} \\
+&= 46
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -292,12 +294,11 @@ $$
 $$
 
 ```js
-const dVal = toJS(await wl`N[${dispIdx} /. ${sol}]`)
-console.log(`Mean = 2, Var = 6 -> dispersion index = ${dVal.toFixed(1)} (vs. 1.0 under Poisson)`)
+await show`${dispIdx} /. ${sol}`
 ```
 
-```text
-Mean = 2, Var = 6 -> dispersion index = 3.0 (vs. 1.0 under Poisson)
-```
+$$
+\left.\frac{\operatorname{Var}(Y)}{\mathbb{E}[Y]}\right|_{a=1,\; b=1/2} = 3
+$$
 
 {{< /details >}}

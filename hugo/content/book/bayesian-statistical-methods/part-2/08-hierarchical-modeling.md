@@ -198,14 +198,17 @@ print(f"Total MSE vs truth: unpooled={np.mean((ybar - th_true)**2):.2f}, "
 Derives the two-group prior correlation from $(\theta_1, \theta_2) = (\mu + \delta, \mu - \delta)$, the shrinkage weight $B_j$, the symbolic shrunk-mean gap $\hat{\theta}_2 - \hat{\theta}_1$ governing ranking reversals between two groups $(n_1, \bar{y}_1)$ and $(n_2, \bar{y}_2)$, and (non-circularly from the log-density derivative) both the shape and $\nu_0/2$-scaled rate of $\sigma_0^2$, then evaluates plug-in shrinkage on Schools 46 and 82 (compare Hoff’s full MCMC means $41.31$ and $42.53$).
 
 ```js
+// Chapter 8: Symbolic two-group correlation, ranking-reversal condition & sigma_0^2 full conditional
 const A = [[1, 1], [1, -1]]
 const cov2 = await wl`${A} . DiagonalMatrix[{g0^2, t0^2}] . Transpose[${A}]`
 await show`Together[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`
 ```
 
-
 $$
-\frac{(A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^T)_{1,2}}{(A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^T)_{1,1}} \;=\; \frac{\gamma_0^2-\tau_0^2}{\gamma_0^2+\tau_0^2}
+\begin{aligned}
+&\frac{(A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^\top)_{1,2}}{(A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^\top)_{1,1}} \\
+&= \frac{\gamma_0^2-\tau_0^2}{\gamma_0^2+\tau_0^2}
+\end{aligned}
 $$
 
 ```js
@@ -213,9 +216,8 @@ $$
 const Bj = await show`Together[(nj / s2) / (nj / s2 + 1 / t2)]`
 ```
 
-
 $$
-B_j = \frac{n_j /\sigma^2}{n_j /\sigma^2 + 1/\tau^2} \;=\; \frac{n_j \tau^2}{\sigma^2 +n_j \tau^2}
+B_j = \frac{n_j/\sigma^2}{n_j/\sigma^2 + 1/\tau^2} = \frac{n_j \tau^2}{\sigma^2 +n_j \tau^2}
 $$
 
 ```js
@@ -223,11 +225,11 @@ const gapSym = await show`FullSimplify[((${Bj} /. nj -> n2)*yb2 + (1 - (${Bj} /.
   - ((${Bj} /. nj -> n1)*yb1 + (1 - (${Bj} /. nj -> n1))*mu)]`
 ```
 
-
 $$
 \begin{aligned}
-&\hat{\theta}_2 - \hat{\theta}_1 = \bigl[B_2\bar{y}_2 + (1 - B_2)\mu\bigr] - \bigl[B_1\bar{y}_1 + (1 - B_1)\mu\bigr] \\
-&= \frac{\tau^2 (\mu (n_1 -n_2) \sigma^2 -n_1 (\sigma^2 +n_2 \tau^2) \bar{y}_1 +n_2 (\sigma^2 +n_1 \tau^2) \bar{y}_2)}{(\sigma^2 +n_1 \tau^2) (\sigma^2 +n_2 \tau^2)}\end{aligned}
+&\hat{\theta}_2 - \hat{\theta}_1 = \bigl[B_2\bar{y}_2 + (1-B_2)\mu\bigr] - \bigl[B_1\bar{y}_1 + (1-B_1)\mu\bigr] \\
+&= \frac{\tau^2 (\mu (n_1 -n_2) \sigma^2 -n_1 (\sigma^2 +n_2 \tau^2) \bar{y}_1 +n_2 (\sigma^2 +n_1 \tau^2) \bar{y}_2)}{(\sigma^2 +n_1 \tau^2) (\sigma^2 +n_2 \tau^2)}
+\end{aligned}
 $$
 
 ```js
@@ -238,36 +240,43 @@ const dLogp = await wl`Expand[D[${logp}, s0]]`
 await show`Simplify[1 + Coefficient[${dLogp}, s0, -1]]`
 ```
 
-
 $$
-1 + [(\sigma_0^2)^{-1}]\frac{\partial}{\partial \sigma_0^2}\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) \;=\; a+\frac{3 \nu_0}{2}
+\begin{aligned}
+&1 + [(\sigma_0^2)^{-1}]\frac{\partial}{\partial \sigma_0^2}\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) \\
+&= a+\frac{3 \nu_0}{2}
+\end{aligned}
 $$
 
 ```js
 await show`Simplify[-Coefficient[${dLogp}, s0, 0]]`
 ```
 
-
 $$
--[(\sigma_0^2)^0]\frac{\partial}{\partial \sigma_0^2}\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) \;=\; b+\frac{1}{2} \nu_0 (x_1 + x_2 + x_3)
+\begin{aligned}
+&-[(\sigma_0^2)^0]\frac{\partial}{\partial \sigma_0^2}\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) \\
+&= b+\frac{1}{2} \nu_0 (x_1 +x_2 +x_3)
+\end{aligned}
 $$
 
 ```js
 // Instantiate plug-in shrinkage on School 46 (n1=21, yb1=40.18) vs School 82 (n2=5, yb2=38.76)
-const gapVal = toJS(await wl`N[${gapSym} /. {n1 -> 21, yb1 -> 40.18, n2 -> 5, yb2 -> 38.76, mu -> 48.1, t2 -> 25, s2 -> 84.64}]`)
-for (const [label, nj, yb] of [['School 46', 21, 40.18], ['School 82', 5, 38.76]]) {
-  const w = toJS(await wl`N[${Bj} /. {nj -> ${nj}, t2 -> 25, s2 -> 84.64}]`)
-  console.log(`${label} (n=${nj}, ybar=${yb.toFixed(2)}): B_j = ${w.toFixed(3)}, plug-in mean = ${(w*yb + (1 - w)*48.1).toFixed(2)}`)
-}
-console.log(`Shrunk ranking reversal (School 82 - School 46) = +${gapVal.toFixed(2)} (raw gap = -1.42)`)
+await show`N[Table[{w, w*p[[2]] + (1 - w)*48.1} /. w -> (${Bj} /. {nj -> p[[1]], t2 -> 25, s2 -> 84.64}), {p, {{21, 40.18}, {5, 38.76}}}]]`
 ```
 
+$$
+\begin{aligned}
+&\bigl(B_j,\; \hat{\theta}_j\bigr)_{\text{School 46, School 82}} \\
+&= \left( \begin{array}{cc} 0.861164 & 41.2796 \\ 0.59626 & 42.5309 \\ \end{array} \right)
+\end{aligned}
+$$
 
-```text
-School 46 (n=21, ybar=40.18): B_j = 0.861, plug-in mean = 41.28
-School 82 (n=5, ybar=38.76): B_j = 0.596, plug-in mean = 42.53
-Shrunk ranking reversal (School 82 - School 46) = +1.25 (raw gap = -1.42)
+```js
+await show`N[${gapSym} /. {n1 -> 21, yb1 -> 40.18, n2 -> 5, yb2 -> 38.76, mu -> 48.1, t2 -> 25, s2 -> 84.64}]`
 ```
+
+$$
+(\hat{\theta}_{82} - \hat{\theta}_{46})_{\text{shrunk}} = 1.25135
+$$
 
 ## Exercises {#sec:ch08-exercises}
 
@@ -285,41 +294,37 @@ const rPart = await show`FullSimplify[(s2/n)*t2 / (s2/n + t2)]`
 $$
 \begin{aligned}
 &\operatorname{Risk}_{\text{hier}}(\sigma^2, \tau^2, n) \\
-&= \frac{\sigma^2 \tau^2 }{\sigma^2 +n \tau^2 }
+&= \frac{\sigma^2 \tau^2}{\sigma^2 +n \tau^2}
 \end{aligned}
 $$
 
 ```js
-const bWeight = await show`FullSimplify[${rPart} / (s2/n)]`
+await show`FullSimplify[${rPart} / (s2/n)]`
 ```
 
 $$
-B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\sigma^2/n} = \frac{n \tau^2 }{\sigma^2 +n \tau^2 }
-$$
-
-```js
-const oneMinusB = await show`FullSimplify[${rPart} / t2]`
-```
-
-$$
-1 - B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\tau^2} = \frac{\sigma^2 }{\sigma^2 +n \tau^2 }
+B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\sigma^2/n} = \frac{n \tau^2}{\sigma^2 +n \tau^2}
 $$
 
 ```js
-for (const tau of [1, 3, 5, 15]) {
-  const [rp, ru] = toJS(await wl`N[{${rPart}, s2/n} /. {s2 -> 84.64, n -> 10, t2 -> ${tau*tau}}]`)
-  console.log(`tau = ${String(tau).padStart(2)}: unpooled MSE = ${ru.toFixed(2)}, pooled MSE = ${(tau*tau).toFixed(2)}, hierarchical MSE = ${rp.toFixed(2)}`)
-}
-console.log('Max gain over min(unpooled, pooled) occurs at tau^2 = s2/n (tau ≈ 2.91), halving MSE')
+await show`FullSimplify[${rPart} / t2]`
 ```
 
-```text
-tau =  1: unpooled MSE = 8.46, pooled MSE = 1.00, hierarchical MSE = 0.89
-tau =  3: unpooled MSE = 8.46, pooled MSE = 9.00, hierarchical MSE = 4.36
-tau =  5: unpooled MSE = 8.46, pooled MSE = 25.00, hierarchical MSE = 6.32
-tau = 15: unpooled MSE = 8.46, pooled MSE = 225.00, hierarchical MSE = 8.16
-Max gain over min(unpooled, pooled) occurs at tau^2 = s2/n (tau ≈ 2.91), halving MSE
+$$
+1 - B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\tau^2} = \frac{\sigma^2}{\sigma^2 +n \tau^2}
+$$
+
+```js
+// Instantiate {unpooled, pooled, hierarchical} MSE at s2 = 84.64, n = 10 for tau in {1, 3, 5, 15}
+await show`N[Table[{s2/n, tau^2, ${rPart} /. t2 -> tau^2} /. {s2 -> 84.64, n -> 10}, {tau, {1, 3, 5, 15}}]]`
 ```
+
+$$
+\begin{aligned}
+&\bigl(\text{unpooled},\; \text{pooled},\; \text{hierarchical MSE}\bigr)_{\tau \in \{1,\,3,\,5,\,15\}} \\
+&= \left( \begin{array}{ccc} 8.464 & 1. & 0.894336 \\ 8.464 & 9. & 4.36189 \\ 8.464 & 25. & 6.32321 \\ 8.464 & 225. & 8.15715 \\ \end{array} \right)
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -337,7 +342,7 @@ const meanCorrect = await show`FullSimplify[(a + m*nu0/2) / (b + (nu0/2)*m/s0Tru
 $$
 \begin{aligned}
 &\mathbb{E}[\sigma_0^2 \mid \text{correct rate},\; \sum_j \sigma_j^{-2} = m/\sigma_0^2] \\
-&= \frac{(2 a+m \nu_0 ) \sigma_0^2 }{m \nu_0 +2 b \sigma_0^2 }
+&= \frac{(2 a+m \nu_0) \sigma_0^2}{m \nu_0 +2 b \sigma_0^2}
 \end{aligned}
 $$
 
@@ -348,12 +353,12 @@ const meanBuggy = await show`FullSimplify[(a + m*nu0/2) / (b + (1/2)*m/s0True)]`
 $$
 \begin{aligned}
 &\mathbb{E}[\sigma_0^2 \mid \text{buggy rate},\; \sum_j \sigma_j^{-2} = m/\sigma_0^2] \\
-&= \frac{(2 a+m \nu_0 ) \sigma_0^2 }{m+2 b \sigma_0^2 }
+&= \frac{(2 a+m \nu_0) \sigma_0^2}{m+2 b \sigma_0^2}
 \end{aligned}
 $$
 
 ```js
-const limRatio = await show`Assuming[nu0 > 0 && s0True > 0, Limit[${meanBuggy} / ${meanCorrect}, m -> Infinity]]`
+await show`Assuming[nu0 > 0 && s0True > 0, Limit[${meanBuggy} / ${meanCorrect}, m -> Infinity]]`
 ```
 
 $$
@@ -364,13 +369,15 @@ $$
 $$
 
 ```js
-const [mc, mb] = toJS(await wl`N[{${meanCorrect}, ${meanBuggy}} /. {a -> 1, b -> 1/100, m -> 100, nu0 -> 10, s0True -> 80}]`)
-console.log(`At (nu0=10, s0^2=80, m=100): correct mean = ${mc.toFixed(2)}, buggy mean = ${mb.toFixed(1)} (ratio = ${(mb/mc).toFixed(2)}x, tending to nu0 = 10)`)
+await show`N[{${meanCorrect}, ${meanBuggy}, ${meanBuggy}/${meanCorrect}} /. {a -> 1, b -> 1/100, m -> 100, nu0 -> 10, s0True -> 80}]`
 ```
 
-```text
-At (nu0=10, s0^2=80, m=100): correct mean = 80.03, buggy mean = 789.0 (ratio = 9.86x, tending to nu0 = 10)
-```
+$$
+\begin{aligned}
+&\bigl(\mathbb{E}_{\text{correct}},\; \mathbb{E}_{\text{buggy}},\; \text{ratio}\bigr)_{\nu_0=10,\;\sigma_0^2=80,\;m=100} \\
+&= \{80.0319,788.976,9.85827\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -388,7 +395,7 @@ const corrCent = await show`FullSimplify[Sqrt[(s2/nj) / (s2/nj + m*t2)]]`
 $$
 \begin{aligned}
 &\operatorname{Corr}(\theta_j, \mu \mid y, \sigma^2, \tau^2) \\
-&= \sqrt{\frac{\sigma^2 }{\sigma^2 +m n_j \tau^2 }}
+&= \sqrt{\frac{\sigma^2}{\sigma^2 +m n_j \tau^2}}
 \end{aligned}
 $$
 
@@ -397,16 +404,18 @@ const acfMu = await show`FullSimplify[(s2/nj) / (s2/nj + t2)]`
 ```
 
 $$
-\operatorname{ACF}_1(\mu^{(s)} \mid \tau) = \frac{\sigma^2 }{\sigma^2 +n_j \tau^2 }
+\operatorname{ACF}_1(\mu^{(s)} \mid \tau) = \frac{\sigma^2}{\sigma^2 +n_j \tau^2}
 $$
 
 ```js
-const [cVal, aVal] = toJS(await wl`N[{${corrCent}, ${acfMu}} /. {s2 -> 100, nj -> 5, m -> 8, t2 -> 1/4}]`)
-console.log(`At m = 8, nj = 5, sigma = 10, tau = 0.5: Corr(theta_j, mu | y, tau) = ${cVal.toFixed(4)}, centered mu-chain lag-1 ACF = ${aVal.toFixed(4)}`)
+await show`N[{${corrCent}, ${acfMu}} /. {s2 -> 100, nj -> 5, m -> 8, t2 -> 1/4}]`
 ```
 
-```text
-At m = 8, nj = 5, sigma = 10, tau = 0.5: Corr(theta_j, mu | y, tau) = 0.9535, centered mu-chain lag-1 ACF = 0.9877
-```
+$$
+\begin{aligned}
+&\bigl(\operatorname{Corr}(\theta_j, \mu \mid y, \tau),\; \operatorname{ACF}_1(\mu \mid \tau)\bigr)_{m=8,\; n_j=5,\; \sigma=10,\; \tau=0.5} \\
+&= \{0.953463,0.987654\}
+\end{aligned}
+$$
 
 {{< /details >}}

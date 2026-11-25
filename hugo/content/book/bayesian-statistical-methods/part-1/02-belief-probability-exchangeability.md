@@ -173,21 +173,20 @@ for N in [20, 100, 1000]:
 This `wolfram-ws-bridge` JavaScript-mode sequence derives Bayes’ rule, the Bayes factor $s/f$, the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$, and the exact finite-population hypergeometric sample-sum variance symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
 
 ```js
+// Chapter 2: Symbolic Bayes' rule, Bayes factor, and finite-population covariance & variance
 const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
 ```
 
-
 $$
-\Pr(H_1 \mid E) = \frac{s\,p_0}{s\,p_0 + f(1 - p_0)} \;=\; \frac{p_0 s}{f-f p_0 +p_0 s}
+\Pr(H_1 \mid E) = \frac{s\,p_0}{s\,p_0 + f(1 - p_0)} = \frac{p_0 s}{f-f p_0 +p_0 s}
 $$
 
 ```js
 await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
 ```
 
-
 $$
-\frac{\Pr(H_1 \mid E)/(1 - \Pr(H_1 \mid E))}{p_0 /(1 - p_0)} \;=\; \frac{s}{f}
+\operatorname{BF}_{10} = \frac{\text{posterior odds}}{\text{prior odds}} = \frac{s}{f}
 $$
 
 ```js
@@ -195,60 +194,55 @@ $$
 const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
 ```
 
-
 $$
-\operatorname{Cov}(Y_1, Y_2) = \frac{\text{kRed}}{\text{nPop}}\cdot\frac{\text{kRed}-1}{\text{nPop}-1} - \left(\frac{\text{kRed}}{\text{nPop}}\right)^2 \;=\; \frac{\text{kRed} (\text{kRed}-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}
+\operatorname{Cov}(Y_1, Y_2) = \frac{K (K -N)}{(-1+N) N^2}
 $$
 
 ```js
 const varHyper = await show`FullSimplify[n*(kRed/nPop)*(1 - kRed/nPop) + n*(n - 1)*(${covF})]`
 ```
 
-
 $$
-\begin{aligned}
-&\operatorname{Var}\!\left(\sum_{i=1}^n Y_i\right) = n\,\frac{\text{kRed}}{\text{nPop}}\!\left(1 - \frac{\text{kRed}}{\text{nPop}}\right) + n(n-1)\operatorname{Cov}(Y_1, Y_2) \\
-&= \frac{\text{kRed} n (\text{kRed}-\text{nPop}) (n-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}\end{aligned}
+\operatorname{Var}\!\left(\sum_{i=1}^n Y_i\right) = \frac{K n (K -N) (n-N)}{(-1+N) N^2}
 $$
 
 ```js
-const covLim = toJS(await wl`Limit[${covF} /. kRed -> th * nPop, nPop -> Infinity]`)
-console.log('Limit of Cov(Y1, Y2) as N -> Infinity =', covLim)
+await show`Limit[${covF} /. kRed -> th * nPop, nPop -> Infinity]`
 ```
 
-
-```text
-Limit of Cov(Y1, Y2) as N -> Infinity = 0
-```
+$$
+\lim_{N \to \infty} \operatorname{Cov}(Y_1, Y_2) = 0
+$$
 
 ```js
-// Instantiate screening example (p0 = 1/100, s = 95/100, f = 5/100)
+// Instantiate screening example (p0 = 1/100, s = 95/100, f = 5/100) & Diaconis-Freedman TV (N = 20, 100, 1000)
 const pExact = await show`${post} /. {p0 -> 1/100, s -> 95/100, f -> 5/100}`
 ```
 
-
 $$
-\left.\Pr(H_1 \mid E)\right|_{p_0 =\frac{1}{100},\, s=\frac{95}{100},\, f=\frac{5}{100}} \;=\; \frac{19}{118}
+\Pr(H_1 \mid E)\big|_{p_0=0.01,\; s=0.95,\; f=0.05} = \frac{19}{118}
 $$
 
 ```js
-console.log('Screening Pr(H1 | E) ≈', toJS(await wl(W.N(pExact))).toFixed(4))
-for (const nPop of [20, 100, 1000]) {
-  const kRed = Math.round(0.3 * nPop)
-  const tv = toJS(await wl`N[1/2 * Sum[Abs[
-    Binomial[${kRed}, k]*Binomial[${nPop - kRed}, 10 - k]/Binomial[${nPop}, 10]
-    - Binomial[10, k]*(3/10)^k*(7/10)^(10 - k)], {k, 0, 10}]]`)
-  console.log(`N = ${String(nPop).padStart(4)}: exact TV distance = ${tv.toFixed(4)}`)
-}
+await show`N[${pExact}]`
 ```
 
+$$
+\Pr(H_1 \mid E)\big|_{\text{decimal}} = 0.161017
+$$
 
-```text
-Screening Pr(H1 | E) ≈ 0.1610
-N =   20: exact TV distance = 0.1587
-N =  100: exact TV distance = 0.0255
-N = 1000: exact TV distance = 0.0024
+```js
+await show`N[Table[1/2 * Sum[Abs[
+  Binomial[3*nPop/10, k]*Binomial[7*nPop/10, 10 - k]/Binomial[nPop, 10]
+  - Binomial[10, k]*(3/10)^k*(7/10)^(10 - k)], {k, 0, 10}], {nPop, {20, 100, 1000}}]]`
 ```
+
+$$
+\begin{aligned}
+&\bigl(d_{\text{TV}}(\text{Hypergeom}, \text{Binom})\bigr)_{N \in \{20,\,100,\,1000\}} \\
+&= \{0.15871,0.0255493,0.00244915\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch02-exercises}
 
@@ -268,13 +262,12 @@ $$
 $$
 
 ```js
-const pVal = toJS(await wl`N[${profitF} /. {qF -> 6/10, qNotF -> 6/10}]`)
-console.log(`Selling 1 unit of F (0.6) and 1 unit of not-F (0.6): guaranteed profit = +${pVal.toFixed(2)} whether F occurs or not`)
+await show`N[${profitF} /. {qF -> 6/10, qNotF -> 6/10}]`
 ```
 
-```text
-Selling 1 unit of F (0.6) and 1 unit of not-F (0.6): guaranteed profit = +0.20 whether F occurs or not
-```
+$$
+\text{Profit}\big|_{q_F=0.6,\; q_{F^c}=0.6} = 0.2
+$$
 
 {{< /details >}}
 
@@ -290,7 +283,7 @@ const p10 = await show`FullSimplify[(kRed/nPop)*((nPop - kRed)/(nPop - 1))]`
 ```
 
 $$
-\Pr(Y_1 = 1, Y_2 = 0) = \Pr(Y_1 = 0, Y_2 = 1) = \frac{K (-K +N )}{(-1+N ) N }
+\Pr(Y_1 = 1, Y_2 = 0) = \Pr(Y_1 = 0, Y_2 = 1) = \frac{K (-K +N)}{(-1+N) N}
 $$
 
 ```js
@@ -299,22 +292,19 @@ const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed
 ```
 
 $$
-\begin{aligned}
-&\operatorname{Cov}(Y_1, Y_2) = \Pr(Y_1 = 1, Y_2 = 1) - \Pr(Y_1 = 1)^2 \\
-&= \frac{K (K -N )}{(-1+N ) N ^2}
-\end{aligned}
+\operatorname{Cov}(Y_1, Y_2) = \frac{K (K -N)}{(-1+N) N^2}
 $$
 
 ```js
-const lim = toJS(await wl`Limit[${covF} /. kRed -> th*nPop, nPop -> Infinity]`)
-const exchDiff = toJS(await wl`Simplify[${p10} - ${p01}]`)
-const cVal = toJS(await wl`N[${covF} /. {kRed -> 3, nPop -> 10}]`)
-console.log(`P(1,0) - P(0,1) = ${exchDiff},  Cov < 0 for 0 < K < N,  limit as N -> Inf = ${lim},  at (K=3, N=10): Cov = ${cVal.toFixed(4)}`)
+await show`{Simplify[${p10} - ${p01}], Limit[${covF} /. kRed -> th*nPop, nPop -> Infinity], N[${covF} /. {kRed -> 3, nPop -> 10}]}`
 ```
 
-```text
-P(1,0) - P(0,1) = 0,  Cov < 0 for 0 < K < N,  limit as N -> Inf = 0,  at (K=3, N=10): Cov = -0.0233
-```
+$$
+\begin{aligned}
+&\bigl(P(1,0)-P(0,1),\; \lim_{N\to\infty}\operatorname{Cov},\; \operatorname{Cov}|_{K=3,N=10}\bigr) \\
+&= \{0,0,-0.0233333\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -330,16 +320,15 @@ const margDiff = await show`Factor[(h*p1*q1 + (1 - h)*p0*q0) - (h*p1 + (1 - h)*p
 ```
 
 $$
-\Pr(F \cap G) - \Pr(F)\Pr(G) = -((-1+h) h (p_0 -p_1 ) (q_0 -q_1 ))
+\Pr(F \cap G) - \Pr(F)\Pr(G) = -((-1+h) h (p_0 -p_1) (q_0 -q_1))
 $$
 
 ```js
-const val = toJS(await wl`N[${margDiff} /. {h -> 1/2, p1 -> 3/4, q1 -> 3/4, p0 -> 1/4, q0 -> 1/4}]`)
-console.log(`At h=1/2, p1=q1=3/4, p0=q0=1/4: P(F and G) - P(F)P(G) = +${val.toFixed(4)} > 0 (H plays the role of theta)`)
+await show`${margDiff} /. {h -> 1/2, p1 -> 3/4, q1 -> 3/4, p0 -> 1/4, q0 -> 1/4}`
 ```
 
-```text
-At h=1/2, p1=q1=3/4, p0=q0=1/4: P(F and G) - P(F)P(G) = +0.0625 > 0 (H plays the role of theta)
-```
+$$
+\bigl[\Pr(F \cap G) - \Pr(F)\Pr(G)\bigr]_{h=1/2,\; p_1=q_1=3/4,\; p_0=q_0=1/4} = \frac{1}{16}
+$$
 
 {{< /details >}}

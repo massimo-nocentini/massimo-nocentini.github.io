@@ -137,6 +137,7 @@ for theta in [0.05, 0.10, 0.20]:
 Run the following `wolfram-ws-bridge` JavaScript-mode sequence (`W`, `wl`, `show`, `toJS`) to derive the Beta–Binomial normalizer $Z$, posterior mean, posterior variance, mode (for $a+y > 1$, $b+n-y > 1$), and symbolic tail probability $\Pr(\theta < c \mid Y = y)$ completely symbolically, then instantiate the symbolic formulas at $(n, y, c) = (20, 0, 1/10)$ to cross-check the Python output above.
 
 ```js
+// Chapter 1: Symbolic Beta-Binomial posterior, variance, CDF, and numeric check
 const { Times, Power, Plus, Subtract, Minus, th, a, b, n, y } = W
 const kernel = Times(
   Power(th, Plus(a, y, -1)),
@@ -146,9 +147,11 @@ const Z = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
   FullSimplify[Integrate[${kernel}, {th, 0, 1}]]]`
 ```
 
-
 $$
-\int_0^1 \theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \;=\; \frac{\Gamma (b+n-y) \Gamma (a+y)}{\Gamma (a+b+n)}
+\begin{aligned}
+&\int_0^1 \theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \\
+&= \frac{\Gamma (b+n-y) \Gamma (a+y)}{\Gamma (a+b+n)}
+\end{aligned}
 $$
 
 ```js
@@ -156,9 +159,8 @@ const mean = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
   FullSimplify[Integrate[th * ${kernel}, {th, 0, 1}] / ${Z}]]`
 ```
 
-
 $$
-\frac{1}{Z}\int_0^1 \theta\cdot\theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \;=\; \frac{a+y}{a+b+n}
+\mathbb{E}[\theta \mid y] = \frac{a+y}{a+b+n}
 $$
 
 ```js
@@ -166,52 +168,47 @@ const postVar = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
   FullSimplify[Integrate[th^2 * ${kernel}, {th, 0, 1}] / ${Z} - (${mean})^2]]`
 ```
 
-
 $$
-\operatorname{Var}[\theta \mid y] = E[\theta^2 \mid y] - E[\theta \mid y]^2 \;=\; \frac{(b+n-y) (a+y)}{(a+b+n)^2 (1+a+b+n)}
+\operatorname{Var}(\theta \mid y) = \frac{(b+n-y) (a+y)}{(a+b+n)^2 (1+a+b+n)}
 $$
 
 ```js
-// Posterior mode (valid when a + y > 1 and b + n - y > 1)
+// Posterior mode (valid when a + y > 1 and b + n - y > 1) and symbolic CDF Pr(th < c | y)
 await show`FullSimplify[th /. First[Solve[D[Log[${kernel}], th] == 0, th]]]`
 ```
 
-
 $$
-\arg\max_{\theta \in (0,1)} \log\!\left[\theta^{a+y-1}(1-\theta)^{b+n-y-1}\right] \;=\; \frac{-1+a+y}{-2+a+b+n}
+\hat{\theta}_{\text{MAP}} = \frac{-1+a+y}{-2+a+b+n}
 $$
 
 ```js
-// Symbolic tail probability Pr(theta < c | y) for arbitrary c in (0, 1)
 const cdfSym = await show`Assuming[al > 0 && be > 0 && 0 < c < 1,
   FullSimplify[Integrate[th^(al - 1)*(1 - th)^(be - 1), {th, 0, c}] / Beta[al, be]]] /. {al -> a + y, be -> b + n - y}`
 ```
 
-
 $$
-\Pr(\theta < c \mid y) = \frac{1}{Z}\int_0^c \theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \;=\; \frac{B_c(a+y,b+n-y)}{B(a+y,b+n-y)}
+\Pr(\theta < c \mid y) = \frac{B_c(a+y,b+n-y)}{B(a+y,b+n-y)}
 $$
 
 ```js
-const resid = toJS(await wl`Simplify[
-  ${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]`)
-console.log('Shrinkage identity residual =', resid)
-
-// Instantiate symbolic mean & CDF at n = 20, y = 0, c = 1/10 (cross-check with Python)
-for (const [name, a0, b0] of [['Uniform', 1, 1], ['Epidemiological', 2, 20], ['Strong wrong', 10, 10]]) {
-  const m = toJS(await wl`N[${mean} /. {a -> ${a0}, b -> ${b0}, n -> 20, y -> 0}]`)
-  const pLt = toJS(await wl`N[${cdfSym} /. {a -> ${a0}, b -> ${b0}, n -> 20, y -> 0, c -> 1/10}]`)
-  console.log(`${name.padEnd(16)} -> mean = ${m.toFixed(3)}, Pr(theta < 0.10 | y=0) = ${pLt.toFixed(3)}`)
-}
+await show`Simplify[${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]`
 ```
 
+$$
+\mathbb{E}[\theta \mid y] - \left(\frac{n}{n+w}\frac{y}{n} + \frac{w}{n+w}\frac{a}{w}\right) = 0
+$$
 
-```text
-Shrinkage identity residual = 0
-Uniform          -> mean = 0.045, Pr(theta < 0.10 | y=0) = 0.891
-Epidemiological  -> mean = 0.048, Pr(theta < 0.10 | y=0) = 0.926
-Strong wrong     -> mean = 0.250, Pr(theta < 0.10 | y=0) = 0.004
+```js
+// Instantiate symbolic mean & CDF at n = 20, y = 0, c = 1/10 for Uniform (1,1), Epi (2,20), Strong wrong (10,10)
+await show`N[Table[{${mean}, ${cdfSym}} /. {a -> p[[1]], b -> p[[2]], n -> 20, y -> 0, c -> 1/10}, {p, {{1, 1}, {2, 20}, {10, 10}}}]]`
 ```
+
+$$
+\begin{aligned}
+&\bigl(\mathbb{E}[\theta \mid y=0],\; \Pr(\theta < 0.10 \mid y=0)\bigr)_{\text{Unif, Epi, Strong}} \\
+&= \left( \begin{array}{cc} 0.0454545 & 0.890581 \\ 0.047619 & 0.926096 \\ 0.25 & 0.00416472 \\ \end{array} \right)
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch01-exercises}
 
@@ -229,19 +226,28 @@ const cdf = await show`Beta[c, w*th0, w*(1 - th0) + n] / Beta[w*th0, w*(1 - th0)
 $$
 \begin{aligned}
 &\Pr(\theta < c \mid y = 0) \\
-&= \frac{B_c(\theta_0 w,n+(1-\theta_0 ) w)}{B(\theta_0 w,n+(1-\theta_0 ) w)}
+&= \frac{B_c(\theta_0 w,n+(1-\theta_0) w)}{B(\theta_0 w,n+(1-\theta_0) w)}
 \end{aligned}
 $$
 
 ```js
-const wStar = toJS(await wl`w /. FindRoot[(${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20}) == 1/2, {w, 15, 35}]`)
-const [p22, p23] = toJS(await wl`N[{${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 22}, ${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 23}}]`)
-console.log(`Critical prior sample size w* = ${wStar.toFixed(3)} (w = 22 -> ${p22.toFixed(3)}, w = 23 -> ${p23.toFixed(3)})`)
+await show`w /. FindRoot[(${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20}) == 1/2, {w, 15, 35}]`
 ```
 
-```text
-Critical prior sample size w* = 22.623 (w = 22 -> 0.513, w = 23 -> 0.492)
+$$
+w^*\big|_{c=0.1,\;\theta_0=0.2,\;n=20} = 22.6228
+$$
+
+```js
+await show`N[{${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 22}, ${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 23}}]`
 ```
+
+$$
+\begin{aligned}
+&\bigl(\Pr(\theta < 0.1 \mid y=0, w=22),\;\Pr(\theta < 0.1 \mid y=0, w=23)\bigr) \\
+&= \{0.512971,0.492266\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -259,7 +265,7 @@ const obj = await show`Expand[-2*s2 * (-ssr/(2*s2) - l1/b)]`
 $$
 \begin{aligned}
 &-2\sigma^2 \log p(\beta \mid y, \sigma^2, b) + \text{const} \\
-&= \frac{2 \|\beta\|_1 \sigma^2 }{b}+\operatorname{SSR}
+&= \frac{2 \|\beta\|_1 \sigma^2}{b}+\operatorname{SSR}
 \end{aligned}
 $$
 
@@ -268,17 +274,16 @@ const lam = await show`Coefficient[${obj}, l1]`
 ```
 
 $$
-\lambda = \frac{2 \sigma^2 }{b}
+\lambda = \frac{2 \sigma^2}{b}
 $$
 
 ```js
-const lamVal = toJS(await wl`N[${lam} /. {s2 -> 1, b -> 1/2}]`)
-console.log(`At sigma^2 = 1, b = 1/2 -> Lasso penalty lambda = ${lamVal.toFixed(2)}`)
+await show`${lam} /. {s2 -> 1, b -> 1/2}`
 ```
 
-```text
-At sigma^2 = 1, b = 1/2 -> Lasso penalty lambda = 4.00
-```
+$$
+\lambda\big|_{\sigma^2=1,\; b=1/2} = 4
+$$
 
 {{< /details >}}
 
@@ -290,31 +295,27 @@ Plot the exact frequentist coverage of the 95% Wald interval and the 95% plus-fo
 
 ```js
 // Ex 1.3: Exact Binomial coverage sum (Wald vs. plus-four) & lattice oscillation
-const cov = async (nVal, thVal, plusFour) => toJS(await wl`N[Sum[
-  Binomial[${nVal}, k]*(${thVal})^k*(1 - ${thVal})^(${nVal} - k) * Boole[
-    Abs[(k + ${plusFour ? 2 : 0})/(${nVal} + ${plusFour ? 4 : 0}) - ${thVal}] <=
-    (196/100)*Sqrt[((k + ${plusFour ? 2 : 0})/(${nVal} + ${plusFour ? 4 : 0}))*(1 - (k + ${plusFour ? 2 : 0})/(${nVal} + ${plusFour ? 4 : 0}))/(${nVal} + ${plusFour ? 4 : 0})]],
-  {k, 0, ${nVal}}]]`)
 await show`Sum[Binomial[n, k]*th^k*(1 - th)^(n - k)*Boole[Abs[pHat[k] - th] <= z*se[k]], {k, 0, n}]`
 ```
 
 $$
 \begin{aligned}
 &\operatorname{Covg}_n(\theta) \\
-&= \sum _{k=0}^n (1-\theta )^{-k+n} \theta ^k \binom{n}{k} \mathbf{1} [| -\theta +\hat{p} (k)| \leq z \operatorname{se} (k)]
+&= \sum_{k=0}^n (1-\theta)^{-k+n} \theta^k \binom{n}{k} \mathbf{1} [| -\theta +\hat{p} (k)| \leq z \operatorname{se} (k)]
 \end{aligned}
 $$
 
 ```js
-for (const nVal of [20, 100]) {
-  const thR = W.Rational(1, 10)
-  console.log(`n = ${String(nVal).padStart(3)}, theta = 0.10: Wald = ${(await cov(nVal, thR, false)).toFixed(4)}, Plus-four = ${(await cov(nVal, thR, true)).toFixed(4)}`)
-}
+await show`N[Table[Sum[Binomial[nVal, k]*(1/10)^k*(9/10)^(nVal - k)*Boole[
+  Abs[(k + c0)/(nVal + 2*c0) - 1/10] <= (196/100)*Sqrt[((k + c0)/(nVal + 2*c0))*(1 - (k + c0)/(nVal + 2*c0))/(nVal + 2*c0)]],
+  {k, 0, nVal}], {nVal, {20, 100}}, {c0, {0, 2}}]]`
 ```
 
-```text
-n =  20, theta = 0.10: Wald = 0.8760, Plus-four = 0.9568
-n = 100, theta = 0.10: Wald = 0.9324, Plus-four = 0.9523
-```
+$$
+\begin{aligned}
+&\bigl(\operatorname{Covg}_{n,\text{Wald}}(0.1),\; \operatorname{Covg}_{n,\text{plus-4}}(0.1)\bigr)_{n \in \{20,\,100\}} \\
+&= \left( \begin{array}{cc} 0.876037 & 0.956826 \\ 0.932416 & 0.952273 \\ \end{array} \right)
+\end{aligned}
+$$
 
 {{< /details >}}

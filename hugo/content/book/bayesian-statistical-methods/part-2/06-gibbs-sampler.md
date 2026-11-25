@@ -167,13 +167,13 @@ print(f"ESS(theta) = {ess_fft(theta):.0f} / {S}, ESS(sigma^2) = {ess_fft(sigma2)
 Computes the bivariate-normal Gibbs transition mean and variance symbolically in `wolfram-ws-bridge` JavaScript mode, extracts the AR(1) contraction factor $\alpha = \rho^2$, sums the integrated autocorrelation time to derive $S_{\text{eff}}/S = (1 - \rho^2)/(1 + \rho^2)$, verifies the $O(1)$ sum-of-squares decomposition symbolically, and instantiates $S_{\text{eff}}$ at $\rho = 0.99$.
 
 ```js
+// Chapter 6: Symbolic bivariate-normal Gibbs transition, ACF, ESS & O(1) sum-of-squares identity
 const transMean = await show`Assuming[v > 0 && Element[m, Reals],
   Simplify[Integrate[rho*(m + Sqrt[v]*z)*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]] /. {m -> rho*x, v -> 1 - rho^2}`
 ```
 
-
 $$
-\left.\int_{-\infty}^\infty \rho(m + \sqrt{v}\,z)\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right|_{m=\rho x,\, v=1-\rho^2} \;=\; \rho^2 x
+\mathbb{E}\!\left[X^{(s+1)} \mid X^{(s)} = x\right] = \rho^2 x
 $$
 
 ```js
@@ -181,45 +181,47 @@ const alpha = await wl`D[${transMean}, x]`   // AR(1) lag-1 contraction coeffici
 await show`Simplify[(v + Integrate[(rho*Sqrt[v]*z)^2*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]) /. v -> 1 - rho^2]`
 ```
 
-
 $$
-\left.\left(v + \int_{-\infty}^\infty (\rho\sqrt{v}\,z)^2\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right)\right|_{v=1-\rho^2} \;=\; 1-\rho^4
+\operatorname{Var}\!\left(X^{(s+1)} \mid X^{(s)} = x\right) = 1-\rho^4
 $$
 
 ```js
 const tauInt = await show`Assuming[-1 < rho < 1, Together[Sum[2*(${alpha})^k, {k, 1, Infinity}] + 1]]`
 ```
 
-
 $$
-1 + 2\sum_{k=1}^{\infty} (\rho^2)^k \;=\; \frac{-1-\rho^2}{-1+\rho^2}
+\tau_{\text{int}} = 1 + 2\sum_{k=1}^\infty \rho^{2k} = \frac{-1-\rho^2}{-1+\rho^2}
 $$
 
 ```js
 const essRatio = await show`Together[1 / ${tauInt}]`
 ```
 
-
 $$
-\frac{S_{\text{eff}}}{S} = \frac{1}{\tau_{\text{int}}} \;=\; \frac{1-\rho^2}{1+\rho^2}
+\frac{S_{\text{eff}}}{S} = \frac{1}{\tau_{\text{int}}} = \frac{1-\rho^2}{1+\rho^2}
 $$
 
 ```js
 // Symbolic verification of the O(1) Gibbs sum-of-squares decomposition (n = 3)
-const ssResid = toJS(await wl`Expand[Sum[(y[i] - th)^2, {i, 3}]
-  - (Sum[(y[i] - (y[1] + y[2] + y[3])/3)^2, {i, 3}] + 3*((y[1] + y[2] + y[3])/3 - th)^2)]`)
-console.log('Sum-of-squares decomposition residual =', ssResid)
+await show`Expand[Sum[(y[i] - th)^2, {i, 3}]
+  - (Sum[(y[i] - (y[1] + y[2] + y[3])/3)^2, {i, 3}] + 3*((y[1] + y[2] + y[3])/3 - th)^2)]`
+```
 
+$$
+\begin{aligned}
+&\sum_{i=1}^3 (y_i - \theta)^2 - \left[\sum_{i=1}^3 (y_i - \bar{y})^2 + 3(\bar{y} - \theta)^2\right] \\
+&= 0
+\end{aligned}
+$$
+
+```js
 // Instantiate exact S_eff at rho = 99/100, S = 10,000
-const ess99 = toJS(await wl`N[10000 * (${essRatio} /. rho -> 99/100)]`)
-console.log(`At rho = 0.99, S = 10,000 -> exact S_eff = ${ess99.toFixed(2)}`)
+await show`N[10000 * (${essRatio} /. rho -> 99/100)]`
 ```
 
-
-```text
-Sum-of-squares decomposition residual = 0
-At rho = 0.99, S = 10,000 -> exact S_eff = 100.50
-```
+$$
+S_{\text{eff}}\big|_{\rho=0.99,\; S=10{,}000} = 100.5
+$$
 
 ## Exercises {#sec:ch06-exercises}
 
@@ -231,11 +233,11 @@ Verify {{< eqref "eq:ch06-bvn-acf" >}} by showing that for the bivariate normal 
 
 ```js
 // Ex 6.1: Bivariate-normal Gibbs AR(1) recursion, lag-k ACF, and ESS
-const lagK = await show`Assuming[-1 < rho < 1, FullSimplify[(rho^2)^k]]`
+await show`Assuming[-1 < rho < 1, FullSimplify[(rho^2)^k]]`
 ```
 
 $$
-\operatorname{Corr}\!\left(X^{(s)}, X^{(s+k)}\right) = \left(\rho ^2\right)^k
+\operatorname{Corr}\!\left(X^{(s)}, X^{(s+k)}\right) = \left(\rho^2\right)^k
 $$
 
 ```js
@@ -245,18 +247,20 @@ const essRatio = await show`Assuming[-1 < rho < 1, Together[1 / (1 + 2*Sum[rho^(
 $$
 \begin{aligned}
 &\frac{\operatorname{ESS}}{S} = \frac{1}{1 + 2\sum_{k=1}^\infty \rho^{2k}} \\
-&= \frac{1-\rho ^2}{1+\rho ^2}
+&= \frac{1-\rho^2}{1+\rho^2}
 \end{aligned}
 $$
 
 ```js
-const r90 = toJS(await wl`N[${essRatio} /. rho -> 9/10]`)
-console.log(`At rho = 0.90: lag-1 ACF = 0.81, ESS / S = ${r90.toFixed(4)} (= 19/181)`)
+await show`{${essRatio}, N[${essRatio}]} /. rho -> 9/10`
 ```
 
-```text
-At rho = 0.90: lag-1 ACF = 0.81, ESS / S = 0.1050 (= 19/181)
-```
+$$
+\begin{aligned}
+&\left(\frac{\operatorname{ESS}}{S}_{\text{exact}},\; \frac{\operatorname{ESS}}{S}_{\text{decimal}}\right)_{\rho=0.9} \\
+&= \left\{\frac{19}{181},0.104972\right\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -287,21 +291,15 @@ $$
 $$
 
 ```js
-const tailN3 = await show`${margExp} /. n -> 3`
+await show`{${condExp}, ${margExp}} /. n -> 3`
 ```
 
 $$
-\text{Marginal exponent of } \sigma^2 \text{ at } n = 3 = -1
+\begin{aligned}
+&\bigl(\text{cond. exponent},\; \text{marginal exponent}\bigr)_{n=3} \\
+&= \left\{-\frac{3}{2},-1\right\}
+\end{aligned}
 $$
-
-```js
-const [cN3, mN3] = toJS(await wl`N[{${condExp}, ${margExp}} /. n -> 3]`)
-console.log(`At n = 3: theta | s2,y ~ N(ybar, s2/3) and s2 | theta,y has exponent ${cN3} (IG(1/2, SS/2), proper), but marginal exponent is ${mN3} -> diverges! (proper iff n >= 4)`)
-```
-
-```text
-At n = 3: theta | s2,y ~ N(ybar, s2/3) and s2 | theta,y has exponent -1.5 (IG(1/2, SS/2), proper), but marginal exponent is -1 -> diverges! (proper iff n >= 4)
-```
 
 {{< /details >}}
 
@@ -317,17 +315,19 @@ const meanRes = await show`1 / pEsc`
 ```
 
 $$
-\mathbb{E}[\text{steps before escaping mode } -3] = \frac{1}{p_{\text{esc}} }
+\mathbb{E}[\text{steps before escaping mode } -3] = \frac{1}{p_{\text{esc}}}
 $$
 
 ```js
-const esc = toJS(await wl`NIntegrate[(Exp[-(th + 3)^2/(2/3)]/Sqrt[2*Pi/3]) * (1 - (45/100*Exp[-(th + 3)^2/(2/3)]) / (45/100*Exp[-(th + 3)^2/(2/3)] + 10/100*Exp[-th^2/(2/3)] + 45/100*Exp[-(th - 3)^2/(2/3)])), {th, -7, 7}]`)
-const resSteps = toJS(await wl`N[${meanRes} /. pEsc -> ${esc}]`)
-console.log(`1-step Gibbs escape prob from mode -3 ≈ ${esc.toFixed(5)} (mean residence ≈ ${resSteps.toFixed(1)} steps trapped); ancestral sampling has ACF = 0 -> ESS/S = 1`)
+const esc = await wl`NIntegrate[(Exp[-(th + 3)^2/(2/3)]/Sqrt[2*Pi/3]) * (1 - (45/100*Exp[-(th + 3)^2/(2/3)]) / (45/100*Exp[-(th + 3)^2/(2/3)] + 10/100*Exp[-th^2/(2/3)] + 45/100*Exp[-(th - 3)^2/(2/3)])), {th, -7, 7}]`
+await show`N[{${esc}, ${meanRes} /. pEsc -> ${esc}}]`
 ```
 
-```text
-1-step Gibbs escape prob from mode -3 ≈ 0.00327 (mean residence ≈ 305.8 steps trapped); ancestral sampling has ACF = 0 -> ESS/S = 1
-```
+$$
+\begin{aligned}
+&\bigl(p_{\text{esc}},\; \mathbb{E}[\text{steps trapped}]\bigr)_{\text{mode }-3} \\
+&= \{0.00327041,305.772\}
+\end{aligned}
+$$
 
 {{< /details >}}

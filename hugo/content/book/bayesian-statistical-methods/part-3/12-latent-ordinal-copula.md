@@ -176,15 +176,14 @@ print("Posterior E[C | Y]:\n", np.round(C_draws[150:].mean(axis=0), 2))
 Verifies ordered-probit shift/scale invariance symbolically in `wolfram-ws-bridge` JavaScript mode, derives both the precision entry $\Omega_{1,3}$ and the symbolic partial correlation $\rho_{13 \mid 2} = -\Omega_{1,3}/\sqrt{\Omega_{1,1}\Omega_{3,3}}$ for a general $3 \times 3$ Gaussian copula correlation matrix, solves $\Omega_{1,3} = 0$, and contrasts exact conditional independence ($C_{1,3} = 0.325$) against the Python simulation ($C_{1,3} = 0.30$).
 
 ```js
-const invResid = toJS(await wl`Assuming[a > 0, Simplify[
-  1/2*Erfc[-((a*g + c) - (a*eta + c))/(a*Sqrt[2])] - 1/2*Erfc[-(g - eta)/Sqrt[2]]]]`)
-console.log('Ordered-probit shift/scale invariance residual =', invResid)
+// Chapter 12: Symbolic ordered-probit invariance & 3-variable Gaussian copula partial correlation
+await show`Assuming[a > 0, Simplify[
+  1/2*Erfc[-((a*g + c) - (a*eta + c))/(a*Sqrt[2])] - 1/2*Erfc[-(g - eta)/Sqrt[2]]]]`
 ```
 
-
-```text
-Ordered-probit shift/scale invariance residual = 0
-```
+$$
+\Phi\!\left(\frac{(ag+c)-(a\eta+c)}{a}\right) - \Phi(g - \eta) = 0
+$$
 
 ```js
 // Latent precision Omega_{1,3}, partial correlation rho_{13|2}, and conditional-independence condition
@@ -193,9 +192,8 @@ const Om = await wl`Inverse[${C3}]`
 const omega13 = await show`Factor[${Om}[[1, 3]]]`
 ```
 
-
 $$
-\Omega_{1,3} = \left(C^{-1}\right)_{1,3} \;=\; \frac{r_{13} -r_{12} r_{23}}{-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2}
+\Omega_{1,3} = \frac{r_{13} -r_{12} r_{23}}{-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2}
 $$
 
 ```js
@@ -203,34 +201,34 @@ const pcorr13 = await show`Assuming[-1 < r12 < 1 && -1 < r23 < 1,
   FullSimplify[-${Om}[[1, 3]] / Sqrt[${Om}[[1, 1]] * ${Om}[[3, 3]]]]]`
 ```
 
-
 $$
 \begin{aligned}
-&\rho_{13 \mid 2} = -\frac{\Omega_{1,3}}{\sqrt{\Omega_{1,1}\,\Omega_{3,3}}} \\
-&= \frac{-r_{13} +r_{12} r_{23}}{\sqrt{\frac{\left(-1+r_{12}^2\right) \left(-1+r_{23}^2\right)}{\left(-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2\right)^2}} \left(-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2\right)}\end{aligned}
+&\rho_{13 \mid 2} = -\frac{\Omega_{1,3}}{\sqrt{\Omega_{1,1}\Omega_{3,3}}} \\
+&= \frac{-r_{13} +r_{12} r_{23}}{\sqrt{\frac{\left(-1+r_{12}^2\right) \left(-1+r_{23}^2\right)}{\left(-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2\right)^2}} \left(-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2\right)}
+\end{aligned}
 $$
 
 ```js
 await show`r13 /. First[Solve[${omega13} == 0, r13]]`
 ```
 
-
 $$
-r_{13} \big|_{\Omega_{1,3} = 0} \;=\; r_{12} r_{23} 
+r_{13}\big|_{\Omega_{1,3}=0} = r_{12} r_{23}
 $$
 
 ```js
 // Instantiate at (r12, r23) = (0.65, 0.50): r13 = 0.325 (exact CI) vs. Ch. 12 Python (r13 = 0.30)
-const omZero = toJS(await wl`${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 13/40}`)
-const omPy = toJS(await wl`N[${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}]`)
-const pcPy = toJS(await wl`N[${pcorr13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}]`)
-console.log(`At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = ${omZero},  Omega_13(0.30) = ${omPy.toFixed(4)} (pcorr = ${pcPy.toFixed(4)})`)
+await show`{${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 13/40},
+  N[${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}],
+  N[${pcorr13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}]}`
 ```
 
-
-```text
-At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = 0,  Omega_13(0.30) = 0.0578 (pcorr = -0.0380)
-```
+$$
+\begin{aligned}
+&\bigl(\Omega_{1,3}(0.325),\; \Omega_{1,3}(0.30),\; \rho_{13\mid 2}(0.30)\bigr) \\
+&= \{0,0.0578035,-0.0379869\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch12-exercises}
 
@@ -252,13 +250,12 @@ $$
 $$
 
 ```js
-const rVal = toJS(await wl`N[${corrExp} /. {rho -> 1, v -> 1}]`)
-console.log(`Pearson Corr(exp(sqrt(v)*Z_1), Z_2) attenuates rho by factor ${rVal.toFixed(4)} at v = 1, whereas rank set R(Y) is invariant`)
+await show`N[${corrExp} /. {rho -> 1, v -> 1}]`
 ```
 
-```text
-Pearson Corr(exp(sqrt(v)*Z_1), Z_2) attenuates rho by factor 0.7629 at v = 1, whereas rank set R(Y) is invariant
-```
+$$
+\left.\operatorname{Corr}\!\left(e^{\sqrt{v}\,Z_1},\; Z_2\right)\right|_{\rho=1,\; v=1} = 0.762874
+$$
 
 {{< /details >}}
 
@@ -276,18 +273,20 @@ const gapSym = await show`2 / (n * Exp[-g^2/2] / Sqrt[2*Pi])`
 $$
 \begin{aligned}
 &\mathbb{E}\!\left[Z_{\text{hi}} - Z_{\text{lo}}\right] \\
-&= \frac{2 e^{\frac{g^2}{2}} \sqrt{2 \pi }}{n}
+&= \frac{2 e^{\frac{g^2}{2}} \sqrt{2 \pi}}{n}
 \end{aligned}
 $$
 
 ```js
-const [w0, w1] = toJS(await wl`N[{${gapSym} /. {n -> 200, g -> 0}, ${gapSym} /. {n -> 200, g -> 1}}]`)
-console.log(`At n = 200 (marginal Z ~ N(0,1)): expected length-biased corridor width is ${w0.toFixed(4)} at g = 0 and ${w1.toFixed(4)} at g = 1`)
+await show`N[{${gapSym} /. {n -> 200, g -> 0}, ${gapSym} /. {n -> 200, g -> 1}}]`
 ```
 
-```text
-At n = 200 (marginal Z ~ N(0,1)): expected length-biased corridor width is 0.0251 at g = 0 and 0.0413 at g = 1
-```
+$$
+\begin{aligned}
+&\bigl(\mathbb{E}[Z_{\text{hi}} - Z_{\text{lo}}]_{g=0},\; \mathbb{E}[Z_{\text{hi}} - Z_{\text{lo}}]_{g=1}\bigr)_{n=200} \\
+&= \{0.0250663,0.0413273\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -317,12 +316,11 @@ C_{13} = \frac{\Sigma_{13}}{\sqrt{\Sigma_{11}\Sigma_{33}}} = \frac{b^2}{a^2-b^2}
 $$
 
 ```js
-const [r12, r13] = toJS(await wl`N[{${c12}, ${c13}} /. {a -> 2, b -> 1}]`)
-console.log(`Tridiagonal Omega (a=2, b=1): Omega_13 = 0 (preserved by diagonal rescaling to C^(-1)), yet marginal C_12 = ${r12.toFixed(4)}, C_13 = ${r13.toFixed(4)} = C_12^2`)
+await show`N[{${c12}, ${c13}} /. {a -> 2, b -> 1}]`
 ```
 
-```text
-Tridiagonal Omega (a=2, b=1): Omega_13 = 0 (preserved by diagonal rescaling to C^(-1)), yet marginal C_12 = 0.5774, C_13 = 0.3333 = C_12^2
-```
+$$
+\bigl(C_{12},\; C_{13}\bigr)_{a=2,\; b=1} = \{0.57735,0.333333\}
+$$
 
 {{< /details >}}

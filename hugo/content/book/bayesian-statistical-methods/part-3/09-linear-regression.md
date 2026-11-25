@@ -277,16 +277,17 @@ print("model-averaged beta:", bma.round(2))
 Integrates $\gamma = 1/\sigma^2$ symbolically in `wolfram-ws-bridge` JavaScript mode to derive $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ and the general symbolic Bayes factor $\operatorname{BF}_{a,b}$ (retaining model-specific $s_a^2, s_b^2$), verifies both the Lindley limit ($g \to \infty$) and the information-paradox supremum, and instantiates `margZ` directly to reproduce Table 9.1.
 
 ```js
+// Chapter 9: Symbolic g-prior marginal likelihood, general Bayes factor & exact Table 9.1
 const margZ = await show`Assuming[nu0 > 0 && s20 > 0 && ssr > 0 && g > 0 && n > 0,
   FullSimplify[Integrate[(1 + g)^(-pz/2)*(2*Pi)^(-n/2)*((nu0*s20/2)^(nu0/2)/Gamma[nu0/2])
     *gam^((nu0 + n)/2 - 1)*Exp[-gam*(nu0*s20 + ssr)/2], {gam, 0, Infinity}]]]`
 ```
 
-
 $$
 \begin{aligned}
-&\int_0^\infty (1+g)^{-p_z /2}(2\pi)^{-n/2}\frac{(\nu_0 \,\sigma_0^2 /2)^{\nu_0 /2}}{\Gamma(\nu_0 /2)}\,\gamma^{\frac{\nu_0 +n}{2}-1} e^{-\gamma(\nu_0 \,\sigma_0^2 +\operatorname{SSR}_g)/2}\,d\gamma \\
-&= \frac{(1+g)^{-p_z /2} \pi^{-n/2} (\nu_0 \sigma_0^2)^{\nu_0 /2} (\nu_0 \sigma_0^2 +\operatorname{SSR}_g)^{\frac{1}{2} (-n-\nu_0)} \Gamma \left(\frac{n+\nu_0}{2}\right)}{\Gamma \left(\frac{\nu_0}{2}\right)}\end{aligned}
+&p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}) \\
+&= \frac{(1+g)^{-p_z /2} \pi^{-n/2} (\nu_0 \sigma_0^2)^{\nu_0 /2} (\nu_0 \sigma_0^2 +\operatorname{SSR}_g)^{\frac{1}{2} (-n-\nu_0)} \Gamma \left(\frac{n+\nu_0}{2}\right)}{\Gamma \left(\frac{\nu_0}{2}\right)}
+\end{aligned}
 $$
 
 ```js
@@ -295,33 +296,33 @@ await show`Assuming[nu0 > 0 && sa > 0 && sb > 0 && ssra > 0 && ssrb > 0 && g > 0
   FullSimplify[(${margZ} /. {pz -> pa, s20 -> sa, ssr -> ssra}) / (${margZ} /. {pz -> pb, s20 -> sb, ssr -> ssrb})]]`
 ```
 
-
 $$
-\operatorname{BF}_{a,b} = \frac{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_a)}{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_b)} \;=\; (1+g)^{\frac{1}{2} (-p_a +p_b)} \left(\frac{\sigma_{0,a}^2}{\sigma_{0,b}^2}\right)^{\nu_0 /2} \left(\frac{\nu_0 \sigma_{0,a}^2 +\operatorname{SSR}_a}{\nu_0 \sigma_{0,b}^2 +\operatorname{SSR}_b}\right)^{\frac{1}{2} (-n-\nu_0)}
+\begin{aligned}
+&\operatorname{BF}_{a,b} = \frac{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_a)}{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_b)} \\
+&= (1+g)^{\frac{1}{2} (-p_a +p_b)} \left(\frac{\sigma_{0,a}^2}{\sigma_{0,b}^2}\right)^{\nu_0 /2} \left(\frac{\nu_0 \sigma_{0,a}^2 +\operatorname{SSR}_a}{\nu_0 \sigma_{0,b}^2 +\operatorname{SSR}_b}\right)^{\frac{1}{2} (-n-\nu_0)}
+\end{aligned}
 $$
 
 ```js
 const bf = await wl`FullSimplify[
   (${margZ} /. {pz -> p1, ssr -> (g/(g+1))*r1 + (1/(g+1))*yy}) / (${margZ} /. {pz -> 0, ssr -> yy})]`
-const lindley = toJS(await wl`Assuming[p1 > 0 && nu0 > 0 && s20 > 0 && yy > 0 && r1 > 0 && n > 0,
-  Limit[${bf}, g -> Infinity]]`)
-console.log('Lindley limit (g -> Infinity): BF =', lindley)
+await show`Assuming[p1 > 0 && nu0 > 0 && s20 > 0 && yy > 0 && r1 > 0 && n > 0, Limit[${bf}, g -> Infinity]]`
 ```
 
-
-```text
-Lindley limit (g -> Infinity): BF = 0
-```
+$$
+\lim_{g \to \infty} \operatorname{BF}_{10} = 0
+$$
 
 ```js
-// Information-paradox supremum (attained in the limit r1 -> 0, s20 -> 0)
 await show`Assuming[p1 > 0 && g > 0 && nu0 > 0 && yy > 0 && n > 0,
   FullSimplify[Limit[${bf} /. s20 -> 0, r1 -> 0]]]`
 ```
 
-
 $$
-\lim_{r_1 \to 0}\left.\operatorname{BF}_{10}\right|_{\sigma_0^2 =0} \;=\; (1+g)^{\frac{1}{2} (n+\nu_0 -p_1)}
+\begin{aligned}
+&\lim_{r_1 \to 0}\left.\operatorname{BF}_{10}\right|_{\sigma_0^2=0} \\
+&= (1+g)^{\frac{1}{2} (n+\nu_0 -p_1)}
+\end{aligned}
 $$
 
 ```js
@@ -339,18 +340,26 @@ for (const cols of [[0], [0, 1], [0, 2], [0, 1, 2], [0, 1, 2, 3]]) {
   const ssrG = await wl`${y}.${y} - (12/13)*(${y}.${Xz}.${bOls})`
   logMargs.push(toJS(await wl`N[Log[${margZ} /. {n -> 12, g -> 12, nu0 -> 1, pz -> ${pz}, s20 -> ${s2z}, ssr -> ${ssrG}}]]`))
 }
-const maxLm = Math.max(...logMargs)
-const ws = logMargs.map(v => Math.exp(v - maxLm))
-const sumW = ws.reduce((a, b) => a + b, 0)
-console.log('Oxygen Table 9.1 log p(y|X,z):', logMargs.map(v => v.toFixed(2)).join(', '))
-console.log('Oxygen Table 9.1 posterior p(z|y,X):', ws.map(v => (v / sumW).toFixed(2)).join(', '))
+await show`N[${logMargs}]`
 ```
 
+$$
+\begin{aligned}
+&\bigl(\log p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})\bigr)_{\text{Table 9.1}} \\
+&= \{-44.3327,-42.3533,-37.6577,-36.4173,-37.5986\}
+\end{aligned}
+$$
 
-```text
-Oxygen Table 9.1 log p(y|X,z): -44.33, -42.35, -37.66, -36.42, -37.60
-Oxygen Table 9.1 posterior p(z|y,X): 0.00, 0.00, 0.18, 0.63, 0.19
+```js
+await show`N[Exp[${logMargs} - Max[${logMargs}]] / Total[Exp[${logMargs} - Max[${logMargs}]]]]`
 ```
+
+$$
+\begin{aligned}
+&\bigl(p(\mathbf{z} \mid \mathbf{y}, \mathbf{X})\bigr)_{\text{Table 9.1}} \\
+&= \{0.000228291,0.00165244,0.180895,0.625313,0.191911\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch09-exercises}
 
@@ -372,29 +381,22 @@ await show`(g/(g + 1))*cXtXinvC * (nu0*s20 + ssrG) / (nu0 + n)`
 $$
 \begin{aligned}
 &\operatorname{Scale}^2\!\left(c^\top \beta \mid y\right) \\
-&= \frac{(c^\top (X^\top X)^{-1} c) g (\nu_0 \sigma_0^2 +\operatorname{SSR}_g )}{(1+g) (n+\nu_0 )}
+&= \frac{(c^\top (X^\top X)^{-1} c) g (\nu_0 \sigma_0^2 +\operatorname{SSR}_g)}{(1+g) (n+\nu_0)}
 \end{aligned}
 $$
 
 ```js
 const bOls = await wl`LinearSolve[Transpose[${X}].${X}, Transpose[${X}].${y}]`
 const XtXinv = await wl`Inverse[Transpose[${X}].${X}]`
-const s20 = toJS(await wl`N[Total[(${y} - ${X}.${bOls})^2] / 8]`)
-const ssrG = toJS(await wl`N[${y}.${y} - (12/13)*(${y}.${X}.${bOls})]`)
-const t13 = toJS(await wl`t /. FindRoot[1 - Beta[13/(13 + t^2), 13/2, 1/2]/Beta[13/2, 1/2] == 95/100, {t, 2.16}]`)
-const sigAges = []
-for (let a = 20; a <= 31; a++) {
-  const c = [0, 1, 0, a]
-  const loc = toJS(await wl`N[(12/13) * (${c}.${bOls})]`)
-  const sc = Math.sqrt(toJS(await wl`N[(12/13)*(${c}.${XtXinv}.${c})*(${s20} + ${ssrG})/13]`))
-  if (loc - t13*sc > 0) sigAges.push(a)
-}
-console.log('Ages with 95% exact t_13 CI strictly above 0 (none strictly below 0):', sigAges.join(', '))
+const s20 = await wl`N[Total[(${y} - ${X}.${bOls})^2] / 8]`
+const ssrG = await wl`N[${y}.${y} - (12/13)*(${y}.${X}.${bOls})]`
+const t13 = await wl`t /. FindRoot[1 - Beta[13/(13 + t^2), 13/2, 1/2]/Beta[13/2, 1/2] == 95/100, {t, 2.16}]`
+await show`Select[Range[20, 31], ((12/13)*({0, 1, 0, #}.${bOls}) - ${t13}*Sqrt[(12/13)*({0, 1, 0, #}.${XtXinv}.{0, 1, 0, #})*(${s20} + ${ssrG})/13]) > 0 &]`
 ```
 
-```text
-Ages with 95% exact t_13 CI strictly above 0 (none strictly below 0): 22, 23, 24, 25
-```
+$$
+\bigl\{\text{age} \in [20, 31] : 95\%\text{ exact } t_{13}\text{ CI} > 0\bigr\} = \{22,23,24,25\}
+$$
 
 {{< /details >}}
 
@@ -410,17 +412,19 @@ const shiftDiff = await show`FullSimplify[((g/(g + 1))*ssrOls + (1/(g + 1))*(yy 
 ```
 
 $$
-\operatorname{SSR}_g(y + c\mathbf{1}) - \operatorname{SSR}_g(y) = \frac{c n (c+2 \bar{y} )}{1+g}
+\operatorname{SSR}_g(y + c\mathbf{1}) - \operatorname{SSR}_g(y) = \frac{c n (c+2 \bar{y})}{1+g}
 $$
 
 ```js
-const val = toJS(await wl`N[${shiftDiff} /. {n -> 12, g -> 12, yb -> 0, c -> 10}]`)
-console.log(`Shifting y by +10 (n=12, g=12, ybar=0) changes SSR_g by +${val.toFixed(2)} (eliminated by flat intercept + centered X)`)
+await show`{${shiftDiff}, N[${shiftDiff}]} /. {n -> 12, g -> 12, yb -> 0, c -> 10}`
 ```
 
-```text
-Shifting y by +10 (n=12, g=12, ybar=0) changes SSR_g by +92.31 (eliminated by flat intercept + centered X)
-```
+$$
+\begin{aligned}
+&\bigl(\Delta\operatorname{SSR}_{g,\text{exact}},\; \Delta\operatorname{SSR}_{g,\text{decimal}}\bigr)_{n=12,\; g=12,\; \bar{y}=0,\; c=10} \\
+&= \left\{\frac{1200}{13},92.3077\right\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -447,18 +451,17 @@ const bfG = await show`(1 + g)^(-1/2) * ((s20 + yy - (g/(g + 1))*fB) / (s20 + yy
 $$
 \begin{aligned}
 &\operatorname{BF}_{A, B}(g) \\
-&= \frac{\left(\frac{-\frac{F_B g}{1+g}+\sigma_0^2 +y^\top y }{-\frac{F_A g}{1+g}+\sigma_0^2 +y^\top y }\right)^{\frac{1+n}{2}}}{\sqrt{1+g}}
+&= \frac{\left(\frac{-\frac{F_B g}{1+g}+\sigma_0^2 +y^\top y}{-\frac{F_A g}{1+g}+\sigma_0^2 +y^\top y}\right)^{\frac{1+n}{2}}}{\sqrt{1+g}}
 \end{aligned}
 $$
 
 ```js
-const gStar = toJS(await wl`g /. FindRoot[(${bfG} /. {s20 -> 8.54, yy -> ${yy}, fA -> ${fA}, fB -> ${fB}, n -> 12}) == 1, {g, 200}]`)
-console.log(`Preferred model flips from A=(group+age) to B=(age only) at g* ≈ ${gStar.toFixed(1)}`)
+await show`g /. FindRoot[(${bfG} /. {s20 -> 8.54, yy -> ${yy}, fA -> ${fA}, fB -> ${fB}, n -> 12}) == 1, {g, 200}]`
 ```
 
-```text
-Preferred model flips from A=(group+age) to B=(age only) at g* ≈ 4423.4
-```
+$$
+g^*\big|_{\operatorname{BF}_{A,B}(g^*)=1} = 4423.36
+$$
 
 {{< /details >}}
 
@@ -478,12 +481,14 @@ $$
 $$
 
 ```js
-const [o0, o5] = toJS(await wl`N[{${odds} /. {p -> 64, k -> 0}, ${odds} /. {p -> 64, k -> 5}}]`)
-console.log(`At p = 64: prior odds at k = 0 is ${o0.toFixed(4)} (= 1/64), at k = 5 is ${o5.toFixed(4)} (= 6/59; vs. 1.0 under uniform)`)
+await show`{${odds} /. {p -> 64, k -> 0}, ${odds} /. {p -> 64, k -> 5}}`
 ```
 
-```text
-At p = 64: prior odds at k = 0 is 0.0156 (= 1/64), at k = 5 is 0.1017 (= 6/59; vs. 1.0 under uniform)
-```
+$$
+\begin{aligned}
+&\bigl(\text{odds}_{k=0},\; \text{odds}_{k=5}\bigr)_{p=64} \\
+&= \left\{\frac{1}{64},\frac{6}{59}\right\}
+\end{aligned}
+$$
 
 {{< /details >}}

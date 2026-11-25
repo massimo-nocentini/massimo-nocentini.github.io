@@ -201,22 +201,21 @@ print(f"Pr(theta_2 > 0 | y) = {np.mean(theta_s[burn:, 1] > 0):.3f}, "
 Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, derives both the general $2 \times 2$ LME slope posterior variance $(V_j)_{2,2}$ and the closed-form diagonal-$\Sigma$ shrinkage vector $\mathbf{m}_j$, and instantiates the conditional slope SD for small and large schools.
 
 ```js
+// Chapter 11: Symbolic Poisson GLMM rate ratio & symbolic LME intercept/slope shrinkage
 const popAvg = await show`Assuming[v > 0 && Element[m, Reals],
   FullSimplify[Integrate[Exp[m + Sqrt[v]*z]*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]]`
 ```
 
-
 $$
-\int_{-\infty}^\infty e^{m + \sqrt{v}\,z}\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz \;=\; e^{m+\frac{v}{2}}
+\mathbb{E}[e^{\eta}] = \int_{-\infty}^\infty e^{m+\sqrt{v}\,z}\phi(z)\,dz = e^{m+\frac{v}{2}}
 $$
 
 ```js
 await show`FullSimplify[${popAvg} / Exp[m]]`
 ```
 
-
 $$
-\frac{E[e^\eta]}{e^m} \;=\; e^{v/2}
+\frac{\mathbb{E}[e^\eta]}{e^m} = e^{v/2}
 $$
 
 ```js
@@ -225,37 +224,35 @@ const Vj = await wl`FullSimplify[Inverse[Inverse[{{s11, s12}, {s12, s22}}] + Dia
 const v22Sym = await show`FullSimplify[${Vj}[[2, 2]]]`
 ```
 
-
 $$
 \begin{aligned}
 &\left[\left(\Sigma^{-1} + \frac{1}{\sigma^2}\operatorname{diag}(n_j, S_{xx})\right)^{-1}\right]_{2,2} \\
-&= \frac{\sigma^2 \left(-n_j \Sigma_{12}^2+n_j \Sigma_{11} \Sigma_{22} +\Sigma_{22} \sigma^2 \right)}{-n_j \Sigma_{12}^2 S_{xx} +n_j \Sigma_{11} (\sigma^2 +\Sigma_{22} S_{xx})+\sigma^2 (\sigma^2 +\Sigma_{22} S_{xx})}\end{aligned}
+&= \frac{\sigma^2 \left(-n_j \Sigma_{12}^2+n_j \Sigma_{11} \Sigma_{22} +\Sigma_{22} \sigma^2 \right)}{-n_j \Sigma_{12}^2 S_{xx} +n_j \Sigma_{11} (\sigma^2 +\Sigma_{22} S_{xx})+\sigma^2 (\sigma^2 +\Sigma_{22} S_{xx})}
+\end{aligned}
 $$
 
 ```js
 await show`FullSimplify[Inverse[DiagonalMatrix[{1/t1^2, 1/t2^2}] + DiagonalMatrix[{nj, sxx}]/sig2] . {th1/t1^2 + nj*yb/sig2, th2/t2^2 + sxx*b2ols/sig2}]`
 ```
 
-
 $$
 \begin{aligned}
-&\mathbf{m}_j^{\text{diag}} = \left(\operatorname{diag}(\tau_1^{-2}, \tau_2^{-2}) + \frac{1}{\sigma^2}\operatorname{diag}(n_j, S_{xx})\right)^{-1}\begin{pmatrix} \theta_1 /\tau_1^2 + n_j \,\bar{y} /\sigma^2 \\ \theta_2 /\tau_2^2 + S_{xx} \,\hat{\beta}_{j,2}^{\text{OLS}} /\sigma^2 \end{pmatrix} \\
-&= \left\{\frac{\sigma^2 \theta_1 +n_j \tau_1^2 \bar{y}}{\sigma^2 +n_j \tau_1^2},\frac{\hat{\beta}_{j,2}^{\text{OLS}} S_{xx} \tau_2^2+\sigma^2 \theta_2}{\sigma^2 +S_{xx} \tau_2^2}\right\}\end{aligned}
+&\mathbf{m}_j^{\text{diag}} \\
+&= \left\{\frac{\sigma^2 \theta_1 +n_j \tau_1^2 \bar{y}}{\sigma^2 +n_j \tau_1^2},\frac{\hat{\beta}_{j,2}^{\text{OLS}} S_{xx} \tau_2^2+\sigma^2 \theta_2}{\sigma^2 +S_{xx} \tau_2^2}\right\}
+\end{aligned}
 $$
 
 ```js
-// Instantiate conditional slope SD at Sigma = [[20, 2], [2, 1.5]], sig2 = 64, E[sxx] = nj - 1
-for (const nj of [5, 24]) {
-  const v22 = toJS(await wl`N[${v22Sym} /. {s11 -> 20, s12 -> 2, s22 -> 3/2, sig2 -> 64, nj -> ${nj}, sxx -> ${nj - 1}}]`)
-  console.log(`n_j = ${String(nj).padStart(2)} (sxx = ${nj - 1}) -> cond. slope SD = ${Math.sqrt(v22).toFixed(3)} (prior SD = ${Math.sqrt(1.5).toFixed(3)})`)
-}
+// Instantiate conditional slope SD at Sigma = [[20, 2], [2, 1.5]], sig2 = 64, E[sxx] = nj - 1 (nj in {5, 24})
+await show`N[Table[Sqrt[${v22Sym} /. {s11 -> 20, s12 -> 2, s22 -> 3/2, sig2 -> 64, nj -> nVal, sxx -> nVal - 1}], {nVal, {5, 24}}]]`
 ```
 
-
-```text
-n_j =  5 (sxx = 4) -> cond. slope SD = 1.126 (prior SD = 1.225)
-n_j = 24 (sxx = 23) -> cond. slope SD = 0.947 (prior SD = 1.225)
-```
+$$
+\begin{aligned}
+&\bigl(\operatorname{SD}(\beta_{j,2} \mid y_j, \theta, \Sigma, \sigma^2)\bigr)_{n_j \in \{5,\, 24\}} \\
+&= \{1.1264,0.947057\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch11-exercises}
 
@@ -273,21 +270,20 @@ const shrinkDiff = await show`FullSimplify[b2ols - (sxx*b2ols/sig2 + th2/tau2Sq)
 $$
 \begin{aligned}
 &\hat{\beta}_{j,2}^{\text{OLS}} - m_{j,2} \\
-&= \frac{\sigma^2 (\hat{\beta}_{j,2}^{\text{OLS}} -\theta_2 )}{\sigma^2 +S_{xx} \tau_2^2 }
+&= \frac{\sigma^2 (\hat{\beta}_{j,2}^{\text{OLS}} -\theta_2)}{\sigma^2 +S_{xx} \tau_2^2}
 \end{aligned}
 $$
 
 ```js
-for (const nj of [5, 24]) {
-  const frac = toJS(await wl`N[(${shrinkDiff} / (b2ols - th2)) /. {sig2 -> 64, tau2Sq -> 3/2, sxx -> ${nj - 1}}]`)
-  console.log(`n_j = ${String(nj).padStart(2)}: fraction of (b2ols - theta2) shrunk away (diagonal Sigma) = ${(100*frac).toFixed(1)}%`)
-}
+await show`N[Table[(${shrinkDiff} / (b2ols - th2)) /. {sig2 -> 64, tau2Sq -> 3/2, sxx -> nj - 1}, {nj, {5, 24}}]]`
 ```
 
-```text
-n_j =  5: fraction of (b2ols - theta2) shrunk away (diagonal Sigma) = 91.4%
-n_j = 24: fraction of (b2ols - theta2) shrunk away (diagonal Sigma) = 65.0%
-```
+$$
+\begin{aligned}
+&\left(\frac{\hat{\beta}_{j,2}^{\text{OLS}} - m_{j,2}}{\hat{\beta}_{j,2}^{\text{OLS}} - \theta_2}\right)_{n_j \in \{5,\, 24\}} \\
+&= \{0.914286,0.649746\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -306,7 +302,7 @@ const covShift = await show`FullSimplify[${T} . {{s11, s12}, {s12, s22}} . Trans
 $$
 \begin{aligned}
 &T \Sigma T^\top \\
-&= \left( \begin{array}{cc} \Sigma_{11} +c (2 \Sigma_{12} +c \Sigma_{22} ) & \Sigma_{12} +c \Sigma_{22} \\ \Sigma_{12} +c \Sigma_{22} & \Sigma_{22} \\ \end{array} \right)
+&= \left( \begin{array}{cc} \Sigma_{11} +c (2 \Sigma_{12} +c \Sigma_{22}) & \Sigma_{12} +c \Sigma_{22} \\ \Sigma_{12} +c \Sigma_{22} & \Sigma_{22} \\ \end{array} \right)
 \end{aligned}
 $$
 
@@ -315,17 +311,19 @@ const cDecorr = await show`c /. First[Solve[${covShift}[[1, 2]] == 0, c]]`
 ```
 
 $$
-c^* = -\frac{\Sigma_{12} }{\Sigma_{22} }
+c^* = -\frac{\Sigma_{12}}{\Sigma_{22}}
 $$
 
 ```js
-const cVal = toJS(await wl`N[${cDecorr} /. {s12 -> 2, s22 -> 3/2}]`)
-console.log(`At Sigma = [[20, 2], [2, 1.5]]: decorrelating shift c* = ${cVal.toFixed(3)} (note: within-school centering uses school-specific c_j)`)
+await show`{${cDecorr}, N[${cDecorr}]} /. {s12 -> 2, s22 -> 3/2}`
 ```
 
-```text
-At Sigma = [[20, 2], [2, 1.5]]: decorrelating shift c* = -1.333 (note: within-school centering uses school-specific c_j)
-```
+$$
+\begin{aligned}
+&\bigl(c^*_{\text{exact}},\; c^*_{\text{decimal}}\bigr)_{\Sigma_{12}=2,\; \Sigma_{22}=3/2} \\
+&= \left\{-\frac{4}{3},-1.33333\right\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -345,12 +343,14 @@ $$
 $$
 
 ```js
-const [v1, v2, v3] = toJS(await wl`N[{Exp[m], Exp[m + v/2], ${totVar}} /. {m -> 1, v -> 1/4}]`)
-console.log(`At m = 1, v = 0.25: median rate = ${v1.toFixed(2)}, pop-avg rate = ${v2.toFixed(2)}, predictive Var(Ytilde | theta) = ${v3.toFixed(2)}`)
+await show`N[{Exp[m], Exp[m + v/2], ${totVar}} /. {m -> 1, v -> 1/4}]`
 ```
 
-```text
-At m = 1, v = 0.25: median rate = 2.72, pop-avg rate = 3.08, predictive Var(Ytilde | theta) = 5.77
-```
+$$
+\begin{aligned}
+&\bigl(e^m,\; e^{m+v/2},\; \operatorname{Var}(\tilde{Y} \mid \theta)\bigr)_{m=1,\; v=0.25} \\
+&= \{2.71828,3.08022,5.77497\}
+\end{aligned}
+$$
 
 {{< /details >}}

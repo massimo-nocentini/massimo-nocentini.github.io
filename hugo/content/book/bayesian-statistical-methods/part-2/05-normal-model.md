@@ -190,40 +190,39 @@ print("MC 95% CI for sigma:  ", np.round(np.quantile(np.sqrt(s2_mc), [0.025, 0.9
 Integrates precision $p = 1/\sigma^2$ out of the Normal–Inverse-Gamma joint posterior in `wolfram-ws-bridge` JavaScript mode, verifies that the ratio to the Student-$t$ kernel has zero derivative in $\theta$, derives the exact symbolic Student-$t$ posterior variance $\operatorname{Var}[\theta \mid y]$, factors $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$, and instantiates all symbolic formulas on Hoff’s midge wing lengths.
 
 ```js
+// Chapter 5: Symbolic Normal-IG -> Student-t marginal, variance & exact MSE inequality
 const marg = await show`Assuming[nun > 0 && rate > 0,
   FullSimplify[Integrate[p^((nun + 1)/2 - 1)*Exp[-rate*p/2], {p, 0, Infinity}]]] /. rate -> nun*s2n + kn*(th - mun)^2`
 ```
 
-
 $$
 \begin{aligned}
-&\left.\int_0^\infty p^{\frac{\nu_n +1}{2}-1} e^{-\text{rate}\cdot p/2}\,dp\right|_{\text{rate}=\nu_n \,\sigma_n^2 +\kappa_n (\theta -\mu_n)^2} \\
-&= 2^{\frac{1+\nu_n}{2}} \left(\frac{1}{\nu_n \sigma_n^2 +\kappa_n (-\mu_n +\theta)^2}\right)^{\frac{1+\nu_n}{2}} \Gamma \left(\frac{1+\nu_n}{2}\right)\end{aligned}
+&\int_0^\infty p^{\frac{\nu_n+1}{2}-1} e^{-p(\nu_n\sigma_n^2 + \kappa_n(\theta-\mu_n)^2)/2}\,dp \\
+&= 2^{\frac{1+\nu_n}{2}} \left(\frac{1}{\nu_n \sigma_n^2 +\kappa_n (-\mu_n +\theta)^2}\right)^{\frac{1+\nu_n}{2}} \Gamma \left(\frac{1+\nu_n}{2}\right)
+\end{aligned}
 $$
 
 ```js
 const tKer = await wl`(1 + kn*(th - mun)^2 / (nun*s2n))^(-(nun + 1)/2)`
-const ratioSlope = toJS(await wl`Assuming[kn > 0 && nun > 0 && s2n > 0 && Element[{th, mun}, Reals],
-  FullSimplify[D[Log[${marg} / ${tKer}], th]]]`)
-console.log('d/dth log(marginal / Student-t kernel) =', ratioSlope)
+await show`Assuming[kn > 0 && nun > 0 && s2n > 0 && Element[{th, mun}, Reals],
+  FullSimplify[D[Log[${marg} / ${tKer}], th]]]`
 ```
 
-
-```text
-d/dth log(marginal / Student-t kernel) = 0
-```
+$$
+\begin{aligned}
+&\frac{d}{d\theta}\log\!\left(\frac{p(\theta \mid y)}{t_{\nu_n}(\theta \mid \mu_n, \sigma_n^2/\kappa_n)}\right) \\
+&= 0
+\end{aligned}
+$$
 
 ```js
-// Symbolic Student-t posterior variance Var[theta | y] for nun > 2
+// Symbolic Student-t variance Var[theta | y] = (nun / (nun - 2)) * (s2n / kn) for nun > 2
 const tVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
   FullSimplify[(s2n/kn) * Integrate[u^2*(1 + u^2/nun)^(-(nun + 1)/2) / (Sqrt[nun]*Beta[1/2, nun/2]), {u, -Infinity, Infinity}]]]`
 ```
 
-
 $$
-\begin{aligned}
-&\operatorname{Var}[\theta \mid y] = \frac{\sigma_n^2}{\kappa_n}\int_{-\infty}^\infty u^2\,\frac{(1 + u^2/\nu_n)^{-(\nu_n +1)/2}}{\sqrt{\nu_n}\,B(\tfrac12, \nu_n /2)}\,du \\
-&= \frac{\nu_n \sigma_n^2}{\kappa_n (-2+\nu_n)}\end{aligned}
+\operatorname{Var}(\theta \mid y) = \frac{\nu_n \sigma_n^2}{\kappa_n (-2+\nu_n)}
 $$
 
 ```js
@@ -236,27 +235,28 @@ const mseB = Plus(
 await show`Factor[Together[(${mseB} - s2/n) * (n + k0)^2]]`
 ```
 
-
 $$
-(n + \kappa_0)^2\!\left[\operatorname{MSE}(\hat{\theta}_b) - \frac{\sigma^2}{n}\right] \;=\; \frac{\kappa_0 \left(\kappa_0 \mu_0^2 n-\kappa_0 \sigma^2 -2 n \sigma^2 -2 \kappa_0 \mu_0 n \theta_0 +\kappa_0 n \theta_0^2\right)}{n}
+\begin{aligned}
+&(n + \kappa_0)^2\bigl(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y})\bigr) \\
+&= \frac{\kappa_0 \left(\kappa_0 \mu_0^2 n-\kappa_0 \sigma^2 -2 n \sigma^2 -2 \kappa_0 \mu_0 n \theta_0 +\kappa_0 n \theta_0^2\right)}{n}
+\end{aligned}
 $$
 
 ```js
 // Instantiate symbolic formulas on Hoff's midge wing lengths (n = 9)
 const y = [1.64, 1.70, 1.72, 1.74, 1.82, 1.82, 1.82, 1.90, 2.08]
-const mun = toJS(await wl`N[(19/10 + Total[${y}]) / 10]`)
-const s2n = toJS(await wl`N[(1/100 + 8*Variance[${y}] + (9/10)*(Mean[${y}] - 19/10)^2) / 10]`)
-const sdPost = Math.sqrt(toJS(await wl`N[${tVar} /. {nun -> 10, kn -> 10, s2n -> ${s2n}}]`))
-const tCrit = toJS(await wl`t /. FindRoot[
-  Integrate[(1 + u^2/10)^(-11/2) / (Sqrt[10]*Beta[1/2, 5]), {u, -t, t}] == 95/100, {t, 2.2}]`)
-const lo = mun - tCrit * Math.sqrt(s2n / 10), hi = mun + tCrit * Math.sqrt(s2n / 10)
-console.log(`Midge exact: mu_n = ${mun.toFixed(4)}, s2_n = ${s2n.toFixed(5)}, post SD = ${sdPost.toFixed(4)}, 95% CI = [${lo.toFixed(4)}, ${hi.toFixed(4)}]`)
+const mun = await wl`N[(19/10 + Total[${y}]) / 10]`
+const s2n = await wl`N[(1/100 + 8*Variance[${y}] + (9/10)*(Mean[${y}] - 19/10)^2) / 10]`
+const tCrit = await wl`t /. FindRoot[1 - Beta[10/(10 + t^2), 5, 1/2]/Beta[5, 1/2] == 95/100, {t, 2.2}]`
+await show`N[{${mun}, ${s2n}, Sqrt[${tVar} /. {nun -> 10, kn -> 10, s2n -> ${s2n}}], ${mun} - ${tCrit}*Sqrt[${s2n}/10], ${mun} + ${tCrit}*Sqrt[${s2n}/10]}]`
 ```
 
-
-```text
-Midge exact: mu_n = 1.8140, s2_n = 0.01532, post SD = 0.0438, 95% CI = [1.7268, 1.9012]
-```
+$$
+\begin{aligned}
+&\bigl(\mu_n,\; \sigma_n^2,\; \operatorname{SD}(\theta \mid y),\; \text{CI}_{0.025},\; \text{CI}_{0.975}\bigr)_{\text{midge}} \\
+&= \{1.814,0.015324,0.0437664,1.72678,1.90122\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch05-exercises}
 
@@ -268,7 +268,7 @@ Show that taking $\kappa_0, \nu_0 \to 0^+$ in {{< xref "thm:ch05-nig" "full" >}}
 
 ```js
 // Ex 5.1: Marginal posterior exponent of sigma^2 under kappa_0, nu_0 -> 0+ vs. reference prior 1/sigma^2
-const muLim = await show`Limit[(k0*mu0 + n*yb)/(k0 + n), k0 -> 0]`
+await show`Limit[(k0*mu0 + n*yb)/(k0 + n), k0 -> 0]`
 ```
 
 $$
@@ -295,13 +295,12 @@ $$
 $$
 
 ```js
-const [dfLim, dfRef] = toJS(await wl`{-2*(${powLim} + 1), -2*(${powRef} + 1)} /. n -> 9`)
-console.log(`At n = 9: kappa0,nu0 -> 0+ gives df = ${dfLim} (prior ~ s2^(-3/2)), whereas 1/s2 gives df = ${dfRef} (nu0 = -1)`)
+await show`{-2*(${powLim} + 1), -2*(${powRef} + 1)} /. n -> 9`
 ```
 
-```text
-At n = 9: kappa0,nu0 -> 0+ gives df = 9 (prior ~ s2^(-3/2)), whereas 1/s2 gives df = 8 (nu0 = -1)
-```
+$$
+\bigl(\text{df}_{\kappa_0,\nu_0\to 0^+},\; \text{df}_{1/\sigma^2}\bigr)_{n=9} = \{9,8\}
+$$
 
 {{< /details >}}
 
@@ -320,19 +319,20 @@ const predVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
 $$
 \begin{aligned}
 &\operatorname{Var}(\tilde{Y} \mid y) \\
-&= \frac{\left(1+\frac{1}{\kappa_n }\right) \nu_n \sigma_n^2 }{-2+\nu_n }
+&= \frac{\left(1+\frac{1}{\kappa_n}\right) \nu_n \sigma_n^2}{-2+\nu_n}
 \end{aligned}
 $$
 
 ```js
-const sdPred = Math.sqrt(toJS(await wl`N[${predVar} /. {nun -> 10, kn -> 10, s2n -> 0.01532}]`))
-const sdTheta = Math.sqrt(toJS(await wl`N[(nun/(nun - 2))*s2n/kn /. {nun -> 10, kn -> 10, s2n -> 0.01532}]`))
-console.log(`Midge posterior predictive SD = ${sdPred.toFixed(4)} (vs. posterior SD of theta = ${sdTheta.toFixed(4)})`)
+await show`N[{Sqrt[${predVar}], Sqrt[(nun/(nun - 2))*s2n/kn]} /. {nun -> 10, kn -> 10, s2n -> 0.01532}]`
 ```
 
-```text
-Midge posterior predictive SD = 0.1451 (vs. posterior SD of theta = 0.0438)
-```
+$$
+\begin{aligned}
+&\bigl(\operatorname{SD}(\tilde{Y} \mid y),\; \operatorname{SD}(\theta \mid y)\bigr)_{\text{midge}} \\
+&= \{0.145138,0.0437607\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -350,17 +350,19 @@ const nStar = await show`n /. First[Solve[(mu0 - th0)^2 == s2*(1/n + 2/k0), n]]`
 $$
 \begin{aligned}
 &n^* \\
-&= \frac{\kappa_0 \sigma^2 }{\kappa_0 \mu_0 ^2-2 \sigma^2 -2 \kappa_0 \mu_0 \theta_0 +\kappa_0 \theta_0 ^2}
+&= \frac{\kappa_0 \sigma^2}{\kappa_0 \mu_0^2-2 \sigma^2 -2 \kappa_0 \mu_0 \theta_0 +\kappa_0 \theta_0^2}
 \end{aligned}
 $$
 
 ```js
-const val = toJS(await wl`N[${nStar} /. {th0 -> 112, mu0 -> 100, s2 -> 169, k0 -> 3}]`)
-console.log(`At theta0=112, mu0=100, s2=169, k0=3 -> exact n* = ${val.toFixed(3)} (= 507/94; ybar wins for n >= 6)`)
+await show`{${nStar}, N[${nStar}]} /. {th0 -> 112, mu0 -> 100, s2 -> 169, k0 -> 3}`
 ```
 
-```text
-At theta0=112, mu0=100, s2=169, k0=3 -> exact n* = 5.394 (= 507/94; ybar wins for n >= 6)
-```
+$$
+\begin{aligned}
+&\bigl(n^*_{\text{exact}},\; n^*_{\text{decimal}}\bigr)_{\theta_0=112,\;\mu_0=100,\;\sigma^2=169,\;\kappa_0=3} \\
+&= \left\{\frac{507}{94},5.39362\right\}
+\end{aligned}
+$$
 
 {{< /details >}}

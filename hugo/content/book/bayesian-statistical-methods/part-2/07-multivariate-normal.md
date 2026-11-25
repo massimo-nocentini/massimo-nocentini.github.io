@@ -190,13 +190,16 @@ print(f"Pr(Ytilde_2 > Ytilde_1 | Y) = {np.mean(y_pred[:, 1] > y_pred[:, 0]):.3f}
 Verifies symbolically for a general $3 \times 3$ covariance matrix $\Sigma$ in `wolfram-ws-bridge` JavaScript mode that the Schur-complement partial regression vector equals $-\Omega_{1,1}^{-1}\Omega_{1,23}^T$, derives the general $2 \times 2$ conditional slope and conditional variance symbolically in terms of $(s_1, s_2, \rho)$, and instantiates them on Hoff’s reading-comprehension covariance.
 
 ```js
+// Chapter 7: Symbolic 3x3 Schur-precision identity & symbolic 2x2 conditional normal
 const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
 const betaSchur = await show`FullSimplify[Inverse[{{s22, s23}, {s23, s33}}] . {s12, s13}]`
 ```
 
-
 $$
-\begin{pmatrix} \Sigma_{22} & \Sigma_{23} \\ \Sigma_{23} & \Sigma_{33} \end{pmatrix}^{-1}\begin{pmatrix} \Sigma_{12} \\ \Sigma_{13} \end{pmatrix} \;=\; \left\{\frac{\Sigma_{13} \Sigma_{23} -\Sigma_{12} \Sigma_{33}}{\Sigma_{23}^2-\Sigma_{22} \Sigma_{33}},\frac{\Sigma_{13} \Sigma_{22} -\Sigma_{12} \Sigma_{23}}{-\Sigma_{23}^2+\Sigma_{22} \Sigma_{33}}\right\}
+\begin{aligned}
+&\beta_{\text{Schur}} = \Sigma_{23,23}^{-1}\Sigma_{23,1} \\
+&= \left\{\frac{\Sigma_{13} \Sigma_{23} -\Sigma_{12} \Sigma_{33}}{\Sigma_{23}^2-\Sigma_{22} \Sigma_{33}},\frac{\Sigma_{13} \Sigma_{22} -\Sigma_{12} \Sigma_{23}}{-\Sigma_{23}^2+\Sigma_{22} \Sigma_{33}}\right\}
+\end{aligned}
 $$
 
 ```js
@@ -204,9 +207,8 @@ const betaPrec = await wl`FullSimplify[-Inverse[${Sig}][[1, {2, 3}]] / Inverse[$
 await show`FullSimplify[${betaSchur} - ${betaPrec}]`
 ```
 
-
 $$
-\boldsymbol{\beta}_{1 \mid 2,3}^{\text{Schur}} - \left(-\Omega_{1,1}^{-1}\Omega_{1,23}^T\right) \;=\; \{0,0\}
+\beta_{\text{Schur}} - \bigl(-\Omega_{11}^{-1}\Omega_{1,23}\bigr) = \{0,0\}
 $$
 
 ```js
@@ -215,31 +217,32 @@ const covSym = [[W.Power(W.s1, 2), W.Times(W.rho, W.s1, W.s2)], [W.Times(W.rho, 
 const slopeSym = await show`FullSimplify[${covSym}[[1, 2]] / ${covSym}[[1, 1]]]`
 ```
 
-
 $$
-\beta_{2 \mid 1} = \frac{\Sigma_{1,2}}{\Sigma_{1,1}} \;=\; \frac{\rho \sigma_2}{\sigma_1}
+\beta_{2 \mid 1} = \frac{\Sigma_{1,2}}{\Sigma_{1,1}} = \frac{\rho \sigma_2}{\sigma_1}
 $$
 
 ```js
 const cvarSym = await show`FullSimplify[${covSym}[[2, 2]] - ${covSym}[[1, 2]]^2 / ${covSym}[[1, 1]]]`
 ```
 
-
 $$
-\operatorname{Var}(Y_2 \mid Y_1) = \Sigma_{2,2} - \frac{\Sigma_{1,2}^2}{\Sigma_{1,1}} \;=\; -\left(\left(-1+\rho^2\right) \sigma_2^2\right)
+\begin{aligned}
+&\operatorname{Var}(Y_2 \mid Y_1) = \Sigma_{2,2} - \frac{\Sigma_{1,2}^2}{\Sigma_{1,1}} \\
+&= -\left(\left(-1+\rho^2\right) \sigma_2^2\right)
+\end{aligned}
 $$
 
 ```js
-// Instantiate on Hoff's reading-comprehension covariance (s1^2 = 182.16, s2^2 = 243.65, r = 0.70)
-const slope = toJS(await wl`N[${slopeSym} /. {s1 -> Sqrt[182.16], s2 -> Sqrt[243.65], rho -> 147.45/Sqrt[182.16*243.65]}]`)
-const condVar = toJS(await wl`N[${cvarSym} /. {s1 -> Sqrt[182.16], s2 -> Sqrt[243.65], rho -> 147.45/Sqrt[182.16*243.65]}]`)
-console.log(`Reading scores: E[Y2 | Y1] slope = ${slope.toFixed(4)}, cond SD = ${Math.sqrt(condVar).toFixed(2)}`)
+// Instantiate on Hoff's reading-comprehension covariance (s1^2 = 182.16, s2^2 = 243.65, cov = 147.45)
+await show`N[{${slopeSym}, Sqrt[${cvarSym}]} /. {s1 -> Sqrt[182.16], s2 -> Sqrt[243.65], rho -> 147.45/Sqrt[182.16*243.65]}]`
 ```
 
-
-```text
-Reading scores: E[Y2 | Y1] slope = 0.8095, cond SD = 11.15
-```
+$$
+\begin{aligned}
+&\bigl(\beta_{2\mid 1},\; \operatorname{SD}(Y_2 \mid Y_1)\bigr)_{\text{reading}} \\
+&= \{0.809453,11.1488\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch07-exercises}
 
@@ -255,20 +258,12 @@ const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]
 const Om = await wl`Inverse[${Sig}]`
 const betaCov = await wl`${Sig}[[1, {2, 3}]] . Inverse[${Sig}[[{2, 3}, {2, 3}]]]`
 const betaPrec = await wl`-${Om}[[1, {2, 3}]] / ${Om}[[1, 1]]`
-const resid = await show`FullSimplify[${betaCov} - ${betaPrec}]`
+await show`FullSimplify[${betaCov} - ${betaPrec}]`
 ```
 
 $$
 \Sigma_{1,23}\Sigma_{23,23}^{-1} - \bigl(-\Omega_{11}^{-1}\Omega_{1,23}\bigr) = \{0,0\}
 $$
-
-```js
-console.log(`3x3 block-inversion identity residual = ${JSON.stringify(toJS(resid))}; Omega_{1,j} = 0 <=> beta_{1|j,-1j} = 0`)
-```
-
-```text
-3x3 block-inversion identity residual = [0,0]; Omega_{1,j} = 0 <=> beta_{1|j,-1j} = 0
-```
 
 {{< /details >}}
 
@@ -279,7 +274,7 @@ Extend the Python script above to create $20\%$ missing entries in column 2 unde
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
 ```js
-// Ex 7.2: Exact complete-case MNAR bias when observations below z0 are truncated
+// Ex 7.2: Exact complete-case MNAR bias when observations below z0 are truncated (zero complete-case bias under MCAR only)
 const shift = await show`Assuming[Element[z0, Reals],
   FullSimplify[Integrate[z*Exp[-z^2/2]/Sqrt[2*Pi], {z, z0, Infinity}] / Integrate[Exp[-z^2/2]/Sqrt[2*Pi], {z, z0, Infinity}]]]`
 ```
@@ -287,19 +282,18 @@ const shift = await show`Assuming[Element[z0, Reals],
 $$
 \begin{aligned}
 &\mathbb{E}[Z \mid Z > z_0] \\
-&= \frac{e^{-\frac{z_0 ^2}{2}} \sqrt{\frac{2}{\pi }}}{\operatorname{erfc} \left(\frac{z_0 }{\sqrt{2}}\right)}
+&= \frac{e^{-\frac{z_0^2}{2}} \sqrt{\frac{2}{\pi}}}{\operatorname{erfc} \left(\frac{z_0}{\sqrt{2}}\right)}
 \end{aligned}
 $$
 
 ```js
-const z20 = toJS(await wl`z /. FindRoot[1/2*Erfc[-z/Sqrt[2]] == 1/5, {z, -0.84}]`)
-const bias = toJS(await wl`N[${shift} /. z0 -> ${z20}]`)
-console.log(`Dropping bottom 20% (z0 = ${z20.toFixed(4)}): complete-case mean biased upward by +${bias.toFixed(4)}*sigma (zero complete-case bias under MCAR only; MAR needs data-augmentation Gibbs; MNAR biases both)`)
+const z20 = await wl`z /. FindRoot[1/2*Erfc[-z/Sqrt[2]] == 1/5, {z, -0.84}]`
+await show`N[{${z20}, ${shift} /. z0 -> ${z20}}]`
 ```
 
-```text
-Dropping bottom 20% (z0 = -0.8416): complete-case mean biased upward by +0.3500*sigma (zero complete-case bias under MCAR only; MAR needs data-augmentation Gibbs; MNAR biases both)
-```
+$$
+\bigl(z_{0.20},\; \mathbb{E}[Z \mid Z > z_{0.20}]\bigr) = \{-0.841621,0.349952\}
+$$
 
 {{< /details >}}
 
@@ -319,28 +313,22 @@ $$
 $$
 
 ```js
-const zNorm = await show`Assuming[nu0 > p - 1, FullSimplify[Integrate[(1 - r^2)^((nu0 - p - 1)/2), {r, -1, 1}]]]`
+await show`Assuming[nu0 > p - 1, FullSimplify[Integrate[(1 - r^2)^((nu0 - p - 1)/2), {r, -1, 1}]]]`
 ```
 
 $$
 \begin{aligned}
 &\int_{-1}^1 (1 - r^2)^{(\nu_0 - p - 1)/2}\,dr \\
-&= \frac{\sqrt{\pi } \Gamma \left(\frac{1}{2} (1+\nu_0 -p)\right)}{\Gamma \left(\frac{1}{2} (2+\nu_0 -p)\right)}
+&= \frac{\sqrt{\pi} \Gamma \left(\frac{1}{2} (1+\nu_0 -p)\right)}{\Gamma \left(\frac{1}{2} (2+\nu_0 -p)\right)}
 \end{aligned}
 $$
 
 ```js
-for (const nu0 of [4, 6, 20]) {
-  const eVal = toJS(await wl`${expSym} /. {p -> 3, nu0 -> ${nu0}}`)
-  const desc = eVal === 0 ? 'exact Uniform(-1, 1)' : (eVal === 1 ? 'moderately unimodal around 0' : 'concentrated near 0')
-  console.log(`p = 3, nu0 = ${String(nu0).padStart(2)} -> exponent = ${eVal} (${desc})`)
-}
+await show`Table[${expSym} /. {p -> 3, nu0 -> v}, {v, {4, 6, 20}}]`
 ```
 
-```text
-p = 3, nu0 =  4 -> exponent = 0 (exact Uniform(-1, 1))
-p = 3, nu0 =  6 -> exponent = 1 (moderately unimodal around 0)
-p = 3, nu0 = 20 -> exponent = 8 (concentrated near 0)
-```
+$$
+\left(\frac{\nu_0 - p - 1}{2}\right)_{p=3,\; \nu_0 \in \{4,\, 6,\, 20\}} = \{0,1,8\}
+$$
 
 {{< /details >}}

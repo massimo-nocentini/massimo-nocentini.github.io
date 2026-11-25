@@ -192,6 +192,7 @@ print("Pred PMF (no degree, y=0..5):", np.round(pmf1, 3))
 Integrates $\theta$ out of the Poisson–Gamma posterior symbolically in `wolfram-ws-bridge` JavaScript mode to recover the Negative Binomial predictive PMF, mean, and variance, derives the general symbolic Beta interval mass $\int_l^u p(t \mid a, b)\,dt$, and then instantiates both on the GSS fertility counts and the $\operatorname{beta}(3, 9)$ 95% HPD interval.
 
 ```js
+// Chapter 3: Symbolic Poisson-Gamma predictive & general Beta(a,b) HPD integral
 const { Times, Divide, Power, Exp, Minus, Subtract, Gamma, Factorial, th, yt, an, bn } = W
 const pois = Divide(Times(Power(th, yt), Exp(Minus(th))), Factorial(yt))
 const gam = Times(Divide(Power(bn, an), Gamma(an)), Power(th, Subtract(an, 1)), Exp(Times(-1, bn, th)))
@@ -199,18 +200,19 @@ const pred = await show`Assuming[an > 0 && bn > 0 && yt >= 0 && Element[yt, Inte
   FullSimplify[Integrate[${pois} * ${gam}, {th, 0, Infinity}]]]`
 ```
 
-
 $$
-\int_0^\infty \frac{\theta^{\tilde{y}} e^{-\theta}}{\tilde{y} !}\,\frac{b_n^{a_n}}{\Gamma(a_n)}\,\theta^{a_n -1} e^{-b_n \,\theta}\,d\theta \;=\; \frac{b_n^{a_n} (1+b_n)^{-a_n -\tilde{y}} \Gamma (a_n +\tilde{y})}{\tilde{y} ! \Gamma (a_n)}
+\begin{aligned}
+&p(\tilde{y} \mid y) = \int_0^\infty \operatorname{Poisson}(\tilde{y} \mid \theta)\,\operatorname{Gamma}(\theta \mid a_n, b_n)\,d\theta \\
+&= \frac{b_n^{a_n} (1+b_n)^{-a_n -\tilde{y}} \Gamma (a_n +\tilde{y})}{\tilde{y} ! \Gamma (a_n)}
+\end{aligned}
 $$
 
 ```js
 const predMean = await show`Assuming[an > 0 && bn > 0, FullSimplify[Sum[yt * ${pred}, {yt, 0, Infinity}]]]`
 ```
 
-
 $$
-\sum_{\tilde{y} =0}^{\infty} \tilde{y} \cdot p(\tilde{y} \mid y) \;=\; \frac{a_n}{b_n}
+\mathbb{E}[\tilde{y} \mid y] = \frac{a_n}{b_n}
 $$
 
 ```js
@@ -218,37 +220,44 @@ await show`Assuming[an > 0 && bn > 0,
   FullSimplify[Sum[yt^2 * ${pred}, {yt, 0, Infinity}] - (${predMean})^2]]`
 ```
 
-
 $$
-\sum_{\tilde{y} =0}^{\infty} \tilde{y}^2\,p(\tilde{y} \mid y) - \left(\frac{a_n}{b_n}\right)^2 \;=\; \frac{a_n (1+b_n)}{b_n^2}
+\operatorname{Var}(\tilde{y} \mid y) = \frac{a_n (1+b_n)}{b_n^2}
 $$
 
 ```js
-// Symbolic interval probability Int_l^u Beta(a, b) for the general HPD system
+// Symbolic interval probability Int_l^u Beta(a, b) for general HPD system
 const betaMass = await show`Assuming[a > 0 && b > 0 && 0 < l < u < 1,
   FullSimplify[Integrate[t^(a - 1)*(1 - t)^(b - 1) / Beta[a, b], {t, l, u}]]]`
 ```
 
-
 $$
-\int_l^u \frac{t^{a-1}(1-t)^{b-1}}{B(a,b)}\,dt \;=\; \frac{-B_l(a,b)+B_u(a,b)}{B(a,b)}
+\int_l^u \operatorname{Beta}(t \mid a, b)\,dt = \frac{-B_l(a,b)+B_u(a,b)}{B(a,b)}
 $$
 
 ```js
-// Instantiate GSS no-degree group (an = 219, bn = 112) and numerical Beta(3, 9) 95% HPD
-const pmf = toJS(await wl`N[Table[${pred} /. {an -> 219, bn -> 112}, {yt, 0, 5}]]`)
-console.log('GSS pred PMF (y=0..5):', pmf.map(v => v.toFixed(3)).join(', '))
-const hpd = toJS(await wl`{l, u} /. FindRoot[{
+// Instantiate GSS no-degree group (an = 219, bn = 112) and Beta(3, 9) 95% HPD
+await show`N[Table[${pred} /. {an -> 219, bn -> 112}, {yt, 0, 5}]]`
+```
+
+$$
+\begin{aligned}
+&\bigl(p(\tilde{y} \mid y)\bigr)_{\tilde{y}=0}^5 \text{ at } (a_n, b_n) = (219, 112) \\
+&= \{0.142747,0.276652,0.269307,0.175566,0.0862293,0.0340339\}
+\end{aligned}
+$$
+
+```js
+await show`{l, u, u - l} /. FindRoot[{
   l^(a - 1)*(1 - l)^(b - 1) == u^(a - 1)*(1 - u)^(b - 1),
-  (${betaMass}) == 95/100} /. {a -> 3, b -> 9}, {{l, 0.04}, {u, 0.48}}]`)
-console.log(`Beta(3,9) 95% HPD = [${hpd[0].toFixed(4)}, ${hpd[1].toFixed(4)}], width = ${(hpd[1] - hpd[0]).toFixed(4)}`)
+  (${betaMass}) == 95/100} /. {a -> 3, b -> 9}, {{l, 0.04}, {u, 0.48}}]`
 ```
 
-
-```text
-GSS pred PMF (y=0..5): 0.143, 0.277, 0.269, 0.176, 0.086, 0.034
-Beta(3,9) 95% HPD = [0.0406, 0.4837], width = 0.4432
-```
+$$
+\begin{aligned}
+&\bigl(l,\; u,\; u - l\bigr)_{\operatorname{Beta}(3, 9)\text{ 95\% HPD}} \\
+&= \{0.0405552,0.483724,0.443168\}
+\end{aligned}
+$$
 
 ## Exercises {#sec:ch03-exercises}
 
@@ -265,26 +274,43 @@ const pg = await show`FullSimplify[(E^(a*g)*(1 + E^g)^(-a - b)) / Beta[a, b]]`
 
 $$
 \begin{aligned}
-&p_\gamma(g) = p_\theta\!\left(\frac{e^g}{1+e^g}\right) \left|\frac{d}{dg}\frac{e^g}{1+e^g}\right| \\
+&p_\gamma(g) = p_\theta\!\left(\frac{e^g}{1+e^g}\right)\left|\frac{d}{dg}\frac{e^g}{1+e^g}\right| \\
 &= \frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
 \end{aligned}
 $$
 
 ```js
-const hpdG = toJS(await wl`{gl, gu} /. FindRoot[{
-  (${pg} /. {a -> 3, b -> 9, g -> gl}) == (${pg} /. {a -> 3, b -> 9, g -> gu}),
-  Integrate[${pg} /. {a -> 3, b -> 9}, {g, gl, gu}] == 95/100}, {{gl, -2.9}, {gu, 0.0}}]`)
-const qLo = toJS(await wl`g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 25/1000, {g, -2.7}]`)
-const qHi = toJS(await wl`g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 975/1000, {g, 0.1}]`)
-const logit = t => Math.log(t / (1 - t))
-console.log(`Direct gamma-quantile CI:      [${qLo.toFixed(3)}, ${qHi.toFixed(3)}]  (matches logit of theta-quantiles)`)
-console.log(`Transformed theta-HPD CI:      [${logit(0.0406).toFixed(3)}, ${logit(0.4837).toFixed(3)}]  vs. true gamma-HPD: [${hpdG[0].toFixed(3)}, ${hpdG[1].toFixed(3)}]`)
+await show`{g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 25/1000, {g, -2.7}],
+  g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 975/1000, {g, 0.1}]}`
 ```
 
-```text
-Direct gamma-quantile CI:      [-2.748, 0.071]  (matches logit of theta-quantiles)
-Transformed theta-HPD CI:      [-3.163, -0.065]  vs. true gamma-HPD: [-2.656, 0.144]
+$$
+\begin{aligned}
+&\bigl(q_{0.025}^\gamma,\; q_{0.975}^\gamma\bigr)_{\operatorname{Beta}(3,9)} \\
+&= \{-2.74768,0.0710533\}
+\end{aligned}
+$$
+
+```js
+await show`{gl, gu} /. FindRoot[{
+  (${pg} /. {a -> 3, b -> 9, g -> gl}) == (${pg} /. {a -> 3, b -> 9, g -> gu}),
+  Integrate[${pg} /. {a -> 3, b -> 9}, {g, gl, gu}] == 95/100}, {{gl, -2.9}, {gu, 0.0}}]`
 ```
+
+$$
+\begin{aligned}
+&\bigl(g_L^{\text{HPD}},\; g_U^{\text{HPD}}\bigr)_{\operatorname{Beta}(3,9)} \\
+&= \{-2.65578,0.144331\}
+\end{aligned}
+$$
+
+```js
+await show`N[{Log[0.0406/(1 - 0.0406)], Log[0.4837/(1 - 0.4837)]}]`
+```
+
+$$
+\bigl(\operatorname{logit}(0.0406),\; \operatorname{logit}(0.4837)\bigr) = \{-3.16254,-0.0652231\}
+$$
 
 {{< /details >}}
 
@@ -302,7 +328,7 @@ const meanS = await show`Factor[m * ${meanT}]`
 ```
 
 $$
-\mathbb{E}[\tilde{S}_m \mid y] = \frac{a_n m}{a_n +b_n }
+\mathbb{E}[\tilde{S}_m \mid y] = \frac{a_n m}{a_n +b_n}
 $$
 
 ```js
@@ -310,10 +336,7 @@ const varS = await show`Factor[m*((${meanT})*(1 - ${meanT}) - ${varT}) + m^2*(${
 ```
 
 $$
-\begin{aligned}
-&\operatorname{Var}(\tilde{S}_m \mid y) \\
-&= \frac{a_n b_n m (a_n +b_n +m)}{(a_n +b_n )^2 (1+a_n +b_n )}
-\end{aligned}
+\operatorname{Var}(\tilde{S}_m \mid y) = \frac{a_n b_n m (a_n +b_n +m)}{(a_n +b_n)^2 (1+a_n +b_n)}
 $$
 
 ```js
@@ -323,18 +346,20 @@ const ratio = await show`Factor[${varS} / (m*(${meanT})*(1 - ${meanT}))]`
 $$
 \begin{aligned}
 &\frac{\operatorname{Var}(\tilde{S}_m \mid y)}{m\,\bar{\theta}(1 - \bar{\theta})} \\
-&= \frac{a_n +b_n +m}{1+a_n +b_n }
+&= \frac{a_n +b_n +m}{1+a_n +b_n}
 \end{aligned}
 $$
 
 ```js
-const [mVal, rVal] = toJS(await wl`N[{${meanS}, ${ratio}} /. {an -> 2, bn -> 40, m -> 20}]`)
-console.log(`At Beta(2, 40), m = 20: E[S_m | y] = ${mVal.toFixed(4)}, overdispersion factor = ${rVal.toFixed(4)} (= 62/43)`)
+await show`N[{${meanS}, ${ratio}} /. {an -> 2, bn -> 40, m -> 20}]`
 ```
 
-```text
-At Beta(2, 40), m = 20: E[S_m | y] = 0.9524, overdispersion factor = 1.4419 (= 62/43)
-```
+$$
+\begin{aligned}
+&\bigl(\mathbb{E}[\tilde{S}_{20}\mid y],\; \text{overdispersion ratio}\bigr)_{\operatorname{Beta}(2,40)} \\
+&= \{0.952381,1.44186\}
+\end{aligned}
+$$
 
 {{< /details >}}
 
@@ -352,28 +377,30 @@ const dyPhi = await show`(-phi)^n0 * Exp[n0 * t0 * phi]`
 $$
 \begin{aligned}
 &p(\phi \mid n_0, t_0) \propto \exp\!\bigl(n_0 t_0 \phi - n_0(-\log(-\phi))\bigr) \\
-&= e^{n_0 \phi t_0 } (-\phi )^{n_0 }
+&= e^{n_0 \phi t_0} (-\phi)^{n_0}
 \end{aligned}
 $$
 
 ```js
-const gamKer = await show`FullSimplify[(${dyPhi} /. phi -> -th) * Abs[D[-th, th]], th > 0]`
+await show`FullSimplify[(${dyPhi} /. phi -> -th) * Abs[D[-th, th]], th > 0]`
 ```
 
 $$
 \begin{aligned}
 &p(\theta \mid n_0, t_0) \propto p(\phi \mid n_0, t_0)\big|_{\phi = -\theta}\,\left|\frac{d\phi}{d\theta}\right| \\
-&= e^{-n_0 t_0 \theta } \theta ^{n_0 }
+&= e^{-n_0 t_0 \theta} \theta^{n_0}
 \end{aligned}
 $$
 
 ```js
-const [shape, rate, meanG] = toJS(await wl`N[{n0 + 1, n0*t0, (n0 + 1)/(n0*t0)} /. {n0 -> 2, t0 -> 3}]`)
-console.log(`At (n0=2, t0=3): Gamma(${shape}, ${rate}), prior mean = ${meanG.toFixed(3)}`)
+await show`{n0 + 1, n0*t0, (n0 + 1)/(n0*t0)} /. {n0 -> 2, t0 -> 3}`
 ```
 
-```text
-At (n0=2, t0=3): Gamma(3, 6), prior mean = 0.500
-```
+$$
+\begin{aligned}
+&\bigl(\text{shape},\; \text{rate},\; \mathbb{E}[\theta]\bigr)_{n_0=2,\; t_0=3} \\
+&= \left\{3,6,\frac{1}{2}\right\}
+\end{aligned}
+$$
 
 {{< /details >}}

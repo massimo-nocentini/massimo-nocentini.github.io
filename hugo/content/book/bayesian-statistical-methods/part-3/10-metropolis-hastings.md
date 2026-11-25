@@ -318,13 +318,16 @@ print(f"AR(1): accept={acc / 10_000:.2f}, slope 95% CI={np.quantile(keep[:, 0], 
 Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode, abstracts the normal-target example to general $(n, \sigma^2, \tau_0^2, \delta)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and instantiates the symbolic acceptance formula on Hoff’s 5-point normal target.
 
 ```js
+// Chapter 10: Symbolic Metropolis acceptance rate (general normal posterior) & AR(1) precision
 const accRate = await show`Assuming[ell > 0,
   FullSimplify[Integrate[Erfc[Abs[ell*w]/(2*Sqrt[2])]*Exp[-w^2/2]/Sqrt[2*Pi], {w, -Infinity, Infinity}]]]`
 ```
 
-
 $$
-\int_{-\infty}^\infty \operatorname{erfc}\!\left(\frac{\lvert \ell \,w \rvert}{2\sqrt{2}}\right)\frac{e^{-w^2/2}}{\sqrt{2\pi}}\,dw \;=\; \frac{2 \cot^{-1}\left(\frac{\ell}{2}\right)}{\pi}
+\begin{aligned}
+&\alpha(\ell) = \int_{-\infty}^\infty \operatorname{erfc}\!\left(\frac{|\ell w|}{2\sqrt{2}}\right)\phi(w)\,dw \\
+&= \frac{2 \cot^{-1}\left(\frac{\ell}{2}\right)}{\pi}
+\end{aligned}
 $$
 
 ```js
@@ -333,9 +336,11 @@ const accNormal = await show`Assuming[d > 0 && n > 0 && s2 > 0 && t0 > 0,
   FullSimplify[${accRate} /. ell -> d * Sqrt[n/s2 + 1/t0^2]]]`
 ```
 
-
 $$
-\alpha(\delta;\, n, \sigma^2, \tau_0^2) = \left.\frac{2}{\pi}\cot^{-1}\!\left(\frac{\ell}{2}\right)\right|_{\ell =d\sqrt{n/\sigma^2 +1/\tau_0^2}} \;=\; \frac{2 \cot^{-1}\left(\frac{1}{2} d \sqrt{\frac{n}{\sigma^2}+\frac{1}{\tau_0^2}}\right)}{\pi}
+\begin{aligned}
+&\alpha\!\left(d\sqrt{n/\sigma^2 + \tau_0^{-2}}\right) \\
+&= \frac{2 \cot^{-1}\left(\frac{1}{2} d \sqrt{\frac{n}{\sigma^2}+\frac{1}{\tau_0^2}}\right)}{\pi}
+\end{aligned}
 $$
 
 ```js
@@ -343,34 +348,29 @@ $$
 await show`Factor[Det[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
 ```
 
-
 $$
-\det\!\left(\rho^{\lvert i - j \rvert}\right)_{1 \le i,j \le 5} \;=\; (-1+\rho)^4 (1+\rho)^4
+\det\!\bigl(\rho^{|i-j|}\bigr)_{1\le i,j\le 5} = (-1+\rho)^4 (1+\rho)^4
 $$
 
 ```js
 await show`Simplify[(1 - rho^2) * Inverse[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
 ```
 
-
 $$
-(1 - \rho^2)\,C_\rho^{-1} \;=\; \left( \begin{array}{ccccc} 1 & -\rho & 0 & 0 & 0 \\ -\rho & 1+\rho^2 & -\rho & 0 & 0 \\ 0 & -\rho & 1+\rho^2 & -\rho & 0 \\ 0 & 0 & -\rho & 1+\rho^2 & -\rho \\ 0 & 0 & 0 & -\rho & 1 \\ \end{array} \right)
+\begin{aligned}
+&(1-\rho^2)\bigl(\rho^{|i-j|}\bigr)_{1\le i,j\le 5}^{-1} \\
+&= \left( \begin{array}{ccccc} 1 & -\rho & 0 & 0 & 0 \\ -\rho & 1+\rho^2 & -\rho & 0 & 0 \\ 0 & -\rho & 1+\rho^2 & -\rho & 0 \\ 0 & 0 & -\rho & 1+\rho^2 & -\rho \\ 0 & 0 & 0 & -\rho & 1 \\ \end{array} \right)
+\end{aligned}
 $$
 
 ```js
-// Instantiate symbolic accNormal on Hoff's 5-point normal target (n = 5, s2 = 1, t0^2 = 10)
-for (const [label, num, den] of [['1/32', 1, 32], ['2', 2, 1], ['64', 64, 1]]) {
-  const rate = toJS(await wl`N[${accNormal} /. {n -> 5, s2 -> 1, t0 -> Sqrt[10], d -> Sqrt[${num}/${den}]}]`)
-  console.log(`delta^2 = ${label.padStart(4)} -> exact acceptance rate = ${rate.toFixed(3)}`)
-}
+// Instantiate symbolic accNormal on Hoff's 5-point normal target (n = 5, s2 = 1, t0^2 = 10; delta^2 in {1/32, 2, 64})
+await show`N[Table[${accNormal} /. {n -> 5, s2 -> 1, t0 -> Sqrt[10], d -> Sqrt[d2]}, {d2, {1/32, 2, 64}}]]`
 ```
 
-
-```text
-delta^2 = 1/32 -> exact acceptance rate = 0.875
-delta^2 =    2 -> exact acceptance rate = 0.356
-delta^2 =   64 -> exact acceptance rate = 0.070
-```
+$$
+\bigl(\alpha(\delta)\bigr)_{\delta^2 \in \{1/32,\, 2,\, 64\}} = \{0.874573,0.356176,0.0701892\}
+$$
 
 ## Exercises {#sec:ch10-exercises}
 
@@ -388,7 +388,7 @@ const esjd = await show`FullSimplify[(2*ell^2/Pi) * (Pi/2 - ArcTan[ell/2] - Sin[
 $$
 \begin{aligned}
 &\operatorname{ESJD}(\ell) \\
-&= \frac{\ell ^2 \left(-\frac{4 \ell }{4+\ell ^2}+\pi -2 \tan ^{-1}\left(\frac{\ell }{2}\right)\right)}{\pi }
+&= \frac{\ell^2 \left(-\frac{4 \ell}{4+\ell^2}+\pi -2 \tan^{-1}\left(\frac{\ell}{2}\right)\right)}{\pi}
 \end{aligned}
 $$
 
@@ -399,20 +399,18 @@ const acf1 = await show`FullSimplify[1 - ${esjd}/2]`
 $$
 \begin{aligned}
 &\rho_1(\ell) = 1 - \frac{1}{2}\operatorname{ESJD}(\ell) \\
-&= 1-\frac{\ell ^2 \left(-\frac{4 \ell }{4+\ell ^2}+\pi -2 \tan ^{-1}\left(\frac{\ell }{2}\right)\right)}{2 \pi }
+&= 1-\frac{\ell^2 \left(-\frac{4 \ell}{4+\ell^2}+\pi -2 \tan^{-1}\left(\frac{\ell}{2}\right)\right)}{2 \pi}
 \end{aligned}
 $$
 
 ```js
-const ellStar = toJS(await wl`ell /. FindRoot[D[${esjd}, ell] == 0, {ell, 2.4}]`)
-const accOpt = toJS(await wl`N[(2/Pi)*ArcCot[${ellStar}/2]]`)
-const acfMin = toJS(await wl`N[${acf1} /. ell -> ${ellStar}]`)
-console.log(`1D optimum (tau = 1): ell* = ${ellStar.toFixed(3)}, acceptance rate = ${accOpt.toFixed(3)}, min lag-1 ACF = ${acfMin.toFixed(3)}`)
+const ellStar = await wl`ell /. FindRoot[D[${esjd}, ell] == 0, {ell, 2.4}]`
+await show`N[{${ellStar}, (2/Pi)*ArcCot[${ellStar}/2], ${acf1} /. ell -> ${ellStar}}]`
 ```
 
-```text
-1D optimum (tau = 1): ell* = 2.426, acceptance rate = 0.439, min lag-1 ACF = 0.628
-```
+$$
+\bigl(\ell^*,\; \alpha(\ell^*),\; \rho_1(\ell^*)\bigr)_{\tau=1} = \{2.4264,0.438862,0.627898\}
+$$
 
 {{< /details >}}
 
@@ -424,7 +422,7 @@ Show that for $0 < \delta \le 1$ the reflecting random walk has density $J(b \mi
 
 ```js
 // Ex 10.2: Normalization & symmetry of reflecting random walk vs. naive-redraw boundary depletion
-const normInt = await show`Assuming[0 < d <= 1/2 && 0 < a < d,
+await show`Assuming[0 < d <= 1/2 && 0 < a < d,
   FullSimplify[Integrate[1/(2*d), {b, 0, a + d}] + Integrate[1/(2*d), {b, 0, d - a}]]]`
 ```
 
@@ -444,13 +442,12 @@ $$
 $$
 
 ```js
-const fEdge = toJS(await wl`N[${statFactor} /. {a -> 1/1000, d -> 1/5}]`)
-console.log(`Reflecting kernel integrates to ${toJS(normInt)} and is symmetric; naive redraw shrinks stationary boundary density to ${fEdge.toFixed(3)}x (rejecting out-of-range proposals is valid!)`)
+await show`N[${statFactor} /. {a -> 1/1000, d -> 1/5}]`
 ```
 
-```text
-Reflecting kernel integrates to 1 and is symmetric; naive redraw shrinks stationary boundary density to 0.502x (rejecting out-of-range proposals is valid!)
-```
+$$
+\left.\frac{Z(a)}{2d}\right|_{a=0.001,\; d=0.2} = 0.5025
+$$
 
 {{< /details >}}
 
@@ -468,17 +465,16 @@ const hRatio = await show`Assuming[th > 0 && thP > 0 && d > 0, FullSimplify[${jR
 ```
 
 $$
-\frac{J(\theta \mid \theta^*)}{J(\theta^* \mid \theta)} = \frac{\theta^* }{\theta }
+\frac{J(\theta \mid \theta^*)}{J(\theta^* \mid \theta)} = \frac{\theta^*}{\theta}
 $$
 
 ```js
-const rVal = toJS(await wl`N[${hRatio} /. {th -> 1, thP -> 2}]`)
-console.log(`At th = 1 -> th* = 2: Hastings factor = ${rVal.toFixed(1)}; omitting th*/th targets pi(th)/th (which may diverge at 0)`)
+await show`${hRatio} /. {th -> 1, thP -> 2}`
 ```
 
-```text
-At th = 1 -> th* = 2: Hastings factor = 2.0; omitting th*/th targets pi(th)/th (which may diverge at 0)
-```
+$$
+\left.\frac{J(\theta \mid \theta^*)}{J(\theta^* \mid \theta)}\right|_{\theta=1,\; \theta^*=2} = 2
+$$
 
 {{< /details >}}
 
@@ -490,21 +486,22 @@ In {{< xref "alg:ch10-mwg" "full" >}} the update of $\rho$ conditions on $\bolds
 
 ```js
 // Ex 10.4: Marginal covariance of y | X, sigma^2, rho after integrating out beta ~ N(b0, S0)
-const margCov = await show`s2 * cMat[rho] + xMat . s0Mat . Transpose[xMat]`
+await show`s2 * cMat[rho] + xMat . s0Mat . Transpose[xMat]`
 ```
 
 $$
-\operatorname{Cov}(y \mid X, \sigma^2, \rho) = \sigma^2 C (\rho )+X .\Sigma_0 .X ^T
+\operatorname{Cov}(y \mid X, \sigma^2, \rho) = \sigma^2 C (\rho)+X .\Sigma_0 .X^T
 $$
 
 ```js
-// Concrete 2x2 verification (p = 1, X = {{1}, {2}}, S0 = {{4}}, s2 = 1, rho = 1/2)
-const mVal = toJS(await wl`N[{{1, 1/2}, {1/2, 1}} + {{1}, {2}}.{{4}}.{{1, 2}}]`)
-console.log('Concrete marginal Cov(y | X, s2=1, rho=0.5) [mean = X*b0]:', JSON.stringify(mVal))
+await show`N[{{1, 1/2}, {1/2, 1}} + {{1}, {2}}.{{4}}.{{1, 2}}]`
 ```
 
-```text
-Concrete marginal Cov(y | X, s2=1, rho=0.5) [mean = X*b0]: [[5,8.5],[8.5,17]]
-```
+$$
+\begin{aligned}
+&\operatorname{Cov}(y \mid X, \sigma^2=1, \rho=0.5) \\
+&= \left( \begin{array}{cc} 5. & 8.5 \\ 8.5 & 17. \\ \end{array} \right)
+\end{aligned}
+$$
 
 {{< /details >}}
