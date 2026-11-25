@@ -173,7 +173,7 @@ const transMean = await show`Assuming[v > 0 && Element[m, Reals],
 
 
 $$
-\left.\int_{-\infty}^\infty \rho(m + \sqrt{v}\,z)\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right|_{m=\rho x,\, v=1-\rho^2} \;=\; \rho ^2 x
+\left.\int_{-\infty}^\infty \rho(m + \sqrt{v}\,z)\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right|_{m=\rho x,\, v=1-\rho^2} \;=\; \rho^2 x
 $$
 
 ```js
@@ -183,7 +183,7 @@ await show`Simplify[(v + Integrate[(rho*Sqrt[v]*z)^2*Exp[-z^2/2]/Sqrt[2*Pi], {z,
 
 
 $$
-\left.\left(v + \int_{-\infty}^\infty (\rho\sqrt{v}\,z)^2\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right)\right|_{v=1-\rho^2} \;=\; 1-\rho ^4
+\left.\left(v + \int_{-\infty}^\infty (\rho\sqrt{v}\,z)^2\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right)\right|_{v=1-\rho^2} \;=\; 1-\rho^4
 $$
 
 ```js
@@ -192,7 +192,7 @@ const tauInt = await show`Assuming[-1 < rho < 1, Together[Sum[2*(${alpha})^k, {k
 
 
 $$
-1 + 2\sum_{k=1}^{\infty} (\rho^2)^k \;=\; \frac{-1-\rho ^2}{-1+\rho ^2}
+1 + 2\sum_{k=1}^{\infty} (\rho^2)^k \;=\; \frac{-1-\rho^2}{-1+\rho^2}
 $$
 
 ```js
@@ -201,7 +201,7 @@ const essRatio = await show`Together[1 / ${tauInt}]`
 
 
 $$
-\frac{S_{\text{eff}}}{S} = \frac{1}{\tau_{\text{int}}} \;=\; \frac{1-\rho ^2}{1+\rho ^2}
+\frac{S_{\text{eff}}}{S} = \frac{1}{\tau_{\text{int}}} \;=\; \frac{1-\rho^2}{1+\rho^2}
 $$
 
 ```js
@@ -227,10 +227,107 @@ At rho = 0.99, S = 10,000 -> exact S_eff = 100.50
 Verify {{< eqref "eq:ch06-bvn-acf" >}} by showing that for the bivariate normal target $(X, Y) \sim \mathcal{N}_2\bigl(0, \bigl(\begin{smallmatrix} 1 & \rho \\ \rho & 1 \end{smallmatrix}\bigr)\bigr)$, the Gibbs update satisfies $X^{(s)} = \rho^2 X^{(s-1)} + \eta^{(s)}$ where $\eta^{(s)} \sim \mathcal{N}(0, 1 - \rho^4)$ is independent of $X^{(s-1)}$. Deduce $\operatorname{Corr}(X^{(s)}, X^{(s+k)}) = \rho^{2k}$ and $S_{\text{eff}} = S\,\frac{1-\rho^2}{1+\rho^2}$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 6.1: Bivariate-normal Gibbs AR(1) recursion, lag-k ACF, and ESS
+const lagK = await show`Assuming[-1 < rho < 1, FullSimplify[(rho^2)^k]]`
+```
+
+$$
+\operatorname{Corr}\!\left(X^{(s)}, X^{(s+k)}\right) = \left(\rho ^2\right)^k
+$$
+
+```js
+const essRatio = await show`Assuming[-1 < rho < 1, Together[1 / (1 + 2*Sum[rho^(2*k), {k, 1, Infinity}])]]`
+```
+
+$$
+\begin{aligned}
+&\frac{\operatorname{ESS}}{S} = \frac{1}{1 + 2\sum_{k=1}^\infty \rho^{2k}} \\
+&= \frac{1-\rho ^2}{1+\rho ^2}
+\end{aligned}
+$$
+
+```js
+const r90 = toJS(await wl`N[${essRatio} /. rho -> 9/10]`)
+console.log(`At rho = 0.90: lag-1 ACF = 0.81, ESS / S = ${r90.toFixed(4)} (= 19/181)`)
+```
+
+```text
+At rho = 0.90: lag-1 ACF = 0.81, ESS / S = 0.1050 (= 19/181)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch06-improper-trap" >}}
 Suppose you place the improper prior $p(\theta, \sigma^2) \propto 1$ (flat on $\sigma^2$, not $1/\sigma^2$) with $n = 3$ normal observations. Write down the formal full conditionals $p(\theta \mid \sigma^2, y)$ and $p(\sigma^2 \mid \theta, y)$. Verify that both are proper distributions ($\sigma^2 \mid \theta, y \sim \operatorname{inverse-gamma}(1/2, \text{SS}/2)$), yet after integrating out $\theta$ the marginal density of $\sigma^2$ has a $(\sigma^2)^{-1}$ tail and is *not* integrable as $\sigma^2 \to \infty$!
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 6.2: Flat prior p(theta, sigma^2) ~ 1 at n = 3 -> proper conditionals, improper marginal!
+const condExp = await show`Assuming[n > 0, FullSimplify[-n/2]]`
+```
+
+$$
+\begin{aligned}
+&\text{Full-conditional exponent of } \sigma^2 \text{ in } p(\sigma^2 \mid \theta, y) \\
+&= -\frac{n}{2}
+\end{aligned}
+$$
+
+```js
+const margExp = await show`Assuming[n > 0, FullSimplify[-(n - 1)/2]]`
+```
+
+$$
+\text{Marginal exponent of } \sigma^2 \text{ in } p(\sigma^2 \mid y) = \frac{1-n}{2}
+$$
+
+```js
+const tailN3 = await show`${margExp} /. n -> 3`
+```
+
+$$
+\text{Marginal exponent of } \sigma^2 \text{ at } n = 3 = -1
+$$
+
+```js
+const [cN3, mN3] = toJS(await wl`N[{${condExp}, ${margExp}} /. n -> 3]`)
+console.log(`At n = 3: theta | s2,y ~ N(ybar, s2/3) and s2 | theta,y has exponent ${cN3} (IG(1/2, SS/2), proper), but marginal exponent is ${mN3} -> diverges! (proper iff n >= 4)`)
+```
+
+```text
+At n = 3: theta | s2,y ~ N(ybar, s2/3) and s2 | theta,y has exponent -1.5 (IG(1/2, SS/2), proper), but marginal exponent is -1 -> diverges! (proper iff n >= 4)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch06-mixture-fix" >}}
 Implement the trimodal mixture Gibbs sampler from {{< xref "fig:ch06-gibbs" "full" >}} in Python and run 4 chains from $\delta^{(0)} \in \{1, 2, 3\}$ for $S = 2{,}000$ iterations. Compute the empirical component frequencies and $S_{\text{eff}}$ for $\theta$. Why does direct ancestral sampling ($\delta \sim \text{Categorical}(0.45, 0.10, 0.45)$, then $\theta \mid \delta$) have $S_{\text{eff}} = S$?
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 6.3: One-step escape probability & mean residence time from mode -3 in Hoff's trimodal Gibbs sampler
+const meanRes = await show`1 / pEsc`
+```
+
+$$
+\mathbb{E}[\text{steps before escaping mode } -3] = \frac{1}{p_{\text{esc}} }
+$$
+
+```js
+const esc = toJS(await wl`NIntegrate[(Exp[-(th + 3)^2/(2/3)]/Sqrt[2*Pi/3]) * (1 - (45/100*Exp[-(th + 3)^2/(2/3)]) / (45/100*Exp[-(th + 3)^2/(2/3)] + 10/100*Exp[-th^2/(2/3)] + 45/100*Exp[-(th - 3)^2/(2/3)])), {th, -7, 7}]`)
+const resSteps = toJS(await wl`N[${meanRes} /. pEsc -> ${esc}]`)
+console.log(`1-step Gibbs escape prob from mode -3 ≈ ${esc.toFixed(5)} (mean residence ≈ ${resSteps.toFixed(1)} steps trapped); ancestral sampling has ACF = 0 -> ESS/S = 1`)
+```
+
+```text
+1-step Gibbs escape prob from mode -3 ≈ 0.00327 (mean residence ≈ 305.8 steps trapped); ancestral sampling has ACF = 0 -> ESS/S = 1
+```
+
+{{< /details >}}

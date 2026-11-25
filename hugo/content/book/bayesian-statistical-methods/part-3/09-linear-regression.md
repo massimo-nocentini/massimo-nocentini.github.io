@@ -285,9 +285,8 @@ const margZ = await show`Assuming[nu0 > 0 && s20 > 0 && ssr > 0 && g > 0 && n > 
 
 $$
 \begin{aligned}
-\int_0^\infty (1+g)^{-\text{pz}/2}(2\pi)^{-n/2}\frac{(\text{nu0}\,\text{s20}/2)^{\text{nu0}/2}}{\Gamma(\text{nu0}/2)}\,\gamma^{\frac{\text{nu0}+n}{2}-1} e^{-\gamma(\text{nu0}\,\text{s20}+\text{ssr})/2}\,d\gamma \\
-&= \frac{(1+g)^{-\text{pz}/2} \pi ^{-n/2} (\text{nu0} \text{s20})^{\text{nu0}/2} (\text{nu0} \text{s20}+\text{ssr})^{\frac{1}{2} (-n-\text{nu0})} \Gamma \left(\frac{n+\text{nu0}}{2}\right)}{\Gamma \left(\frac{\text{nu0}}{2}\right)}
-\end{aligned}
+&\int_0^\infty (1+g)^{-p_z /2}(2\pi)^{-n/2}\frac{(\nu_0 \,\sigma_0^2 /2)^{\nu_0 /2}}{\Gamma(\nu_0 /2)}\,\gamma^{\frac{\nu_0 +n}{2}-1} e^{-\gamma(\nu_0 \,\sigma_0^2 +\operatorname{SSR}_g)/2}\,d\gamma \\
+&= \frac{(1+g)^{-p_z /2} \pi^{-n/2} (\nu_0 \sigma_0^2)^{\nu_0 /2} (\nu_0 \sigma_0^2 +\operatorname{SSR}_g)^{\frac{1}{2} (-n-\nu_0)} \Gamma \left(\frac{n+\nu_0}{2}\right)}{\Gamma \left(\frac{\nu_0}{2}\right)}\end{aligned}
 $$
 
 ```js
@@ -298,7 +297,7 @@ await show`Assuming[nu0 > 0 && sa > 0 && sb > 0 && ssra > 0 && ssrb > 0 && g > 0
 
 
 $$
-\operatorname{BF}_{a,b} = \frac{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_a)}{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_b)} \;=\; (1+g)^{\frac{1}{2} (-\text{pa}+\text{pb})} \left(\frac{\text{sa}}{\text{sb}}\right)^{\text{nu0}/2} \left(\frac{\text{nu0} \text{sa}+\text{ssra}}{\text{nu0} \text{sb}+\text{ssrb}}\right)^{\frac{1}{2} (-n-\text{nu0})}
+\operatorname{BF}_{a,b} = \frac{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_a)}{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_b)} \;=\; (1+g)^{\frac{1}{2} (-p_a +p_b)} \left(\frac{\sigma_{0,a}^2}{\sigma_{0,b}^2}\right)^{\nu_0 /2} \left(\frac{\nu_0 \sigma_{0,a}^2 +\operatorname{SSR}_a}{\nu_0 \sigma_{0,b}^2 +\operatorname{SSR}_b}\right)^{\frac{1}{2} (-n-\nu_0)}
 $$
 
 ```js
@@ -322,7 +321,7 @@ await show`Assuming[p1 > 0 && g > 0 && nu0 > 0 && yy > 0 && n > 0,
 
 
 $$
-\lim_{r_1 \to 0}\left.\operatorname{BF}_{10}\right|_{\text{s20}=0} \;=\; (1+g)^{\frac{1}{2} (n+\text{nu0}-\text{p1})}
+\lim_{r_1 \to 0}\left.\operatorname{BF}_{10}\right|_{\sigma_0^2 =0} \;=\; (1+g)^{\frac{1}{2} (n+\nu_0 -p_1)}
 $$
 
 ```js
@@ -359,14 +358,132 @@ Oxygen Table 9.1 posterior p(z|y,X): 0.00, 0.00, 0.18, 0.63, 0.19
 Integrate $\sigma^2$ out of {{< eqref "eq:ch09-gpost" >}} to show that any contrast $\mathbf{c}^T\boldsymbol{\beta}$ has a Student-$t$ posterior with $\nu_0 + n$ degrees of freedom, location $\frac{g}{g+1}\mathbf{c}^T\hat{\boldsymbol{\beta}}_{\text{ols}}$, and squared scale $\frac{g}{g+1}\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}\,(\nu_0\sigma_0^2 + \operatorname{SSR}_g)/(\nu_0 + n)$. Use it to reproduce the claim that the 95% interval for $\beta_2 + \beta_4\,a$ excludes zero at ages $a = 22, \dots, 25$ only.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 9.1: Exact Student-t marginal CI for oxygen contrast beta2 + beta4*age across ages 20..31
+const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
+const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+const y = [-0.87, -10.74, -3.27, -1.97, 7.50, -7.25, 17.05, 4.96, 10.40, 11.05, 0.26, 2.51]
+const X = age.map((a, i) => [1, grp[i], a, grp[i] * a])
+await show`(g/(g + 1))*cXtXinvC * (nu0*s20 + ssrG) / (nu0 + n)`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Scale}^2\!\left(c^\top \beta \mid y\right) \\
+&= \frac{(c^\top (X^\top X)^{-1} c) g (\nu_0 \sigma_0^2 +\operatorname{SSR}_g )}{(1+g) (n+\nu_0 )}
+\end{aligned}
+$$
+
+```js
+const bOls = await wl`LinearSolve[Transpose[${X}].${X}, Transpose[${X}].${y}]`
+const XtXinv = await wl`Inverse[Transpose[${X}].${X}]`
+const s20 = toJS(await wl`N[Total[(${y} - ${X}.${bOls})^2] / 8]`)
+const ssrG = toJS(await wl`N[${y}.${y} - (12/13)*(${y}.${X}.${bOls})]`)
+const t13 = toJS(await wl`t /. FindRoot[1 - Beta[13/(13 + t^2), 13/2, 1/2]/Beta[13/2, 1/2] == 95/100, {t, 2.16}]`)
+const sigAges = []
+for (let a = 20; a <= 31; a++) {
+  const c = [0, 1, 0, a]
+  const loc = toJS(await wl`N[(12/13) * (${c}.${bOls})]`)
+  const sc = Math.sqrt(toJS(await wl`N[(12/13)*(${c}.${XtXinv}.${c})*(${s20} + ${ssrG})/13]`))
+  if (loc - t13*sc > 0) sigAges.push(a)
+}
+console.log('Ages with 95% exact t_13 CI strictly above 0 (none strictly below 0):', sigAges.join(', '))
+```
+
+```text
+Ages with 95% exact t_13 CI strictly above 0 (none strictly below 0): 22, 23, 24, 25
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch09-intercept" >}}
 The zero-centered $g$-prior also shrinks the intercept. Show that the fitted values are $\frac{g}{g+1}$ times the OLS fitted values, so that adding a constant to every $y_i$ changes the posterior of the slopes’ *variance* (through $\mathbf{y}^T\mathbf{y}$) although it should be irrelevant. Propose a version with a flat prior on the intercept and centered regressors, and explain why a *common* improper prior on the intercept does not harm Bayes factors while one on the slopes would.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 9.2: Shift non-invariance of zero-centered g-prior under y -> y + c*1
+const shiftDiff = await show`FullSimplify[((g/(g + 1))*ssrOls + (1/(g + 1))*(yy + 2*c*n*yb + n*c^2)) - ((g/(g + 1))*ssrOls + (1/(g + 1))*yy)]`
+```
+
+$$
+\operatorname{SSR}_g(y + c\mathbf{1}) - \operatorname{SSR}_g(y) = \frac{c n (c+2 \bar{y} )}{1+g}
+$$
+
+```js
+const val = toJS(await wl`N[${shiftDiff} /. {n -> 12, g -> 12, yb -> 0, c -> 10}]`)
+console.log(`Shifting y by +10 (n=12, g=12, ybar=0) changes SSR_g by +${val.toFixed(2)} (eliminated by flat intercept + centered X)`)
+```
+
+```text
+Shifting y by +10 (n=12, g=12, ybar=0) changes SSR_g by +92.31 (eliminated by flat intercept + centered X)
+```
+
+{{< /details >}}
 
 {{< thm kind="exercise" label="ex:ch09-paradox" >}}
 Verify both halves of {{< xref "rem:ch09-paradox" "full" >}}. Derive the bound $(1+g)^{(\nu_0+n-p_z)/2}$, and plot the log Bayes factor of $(1,1,1,0)$ against $(1,0,1,0)$ for the oxygen data (common $\sigma_0^2 = 8.54$) as $g$ ranges from $1$ to $10^6$. At what $g$ does the preferred model switch?
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 9.3: Exact switch point g* where Lindley's paradox flips A=(1,1,1,0) vs B=(1,0,1,0) on oxygen data (nu0 = 1)
+const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
+const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+const y = [-0.87, -10.74, -3.27, -1.97, 7.50, -7.25, 17.05, 4.96, 10.40, 11.05, 0.26, 2.51]
+const Xfull = age.map((a, i) => [1, grp[i], a, grp[i] * a])
+const fitSum = async cols => {
+  const Xz = Xfull.map(r => cols.map(c => r[c]))
+  return toJS(await wl`N[${y}.${Xz}.LinearSolve[Transpose[${Xz}].${Xz}, Transpose[${Xz}].${y}]]`)
+}
+const yy = toJS(await wl`N[${y}.${y}]`), fA = await fitSum([0, 1, 2]), fB = await fitSum([0, 2])
+const bfG = await show`(1 + g)^(-1/2) * ((s20 + yy - (g/(g + 1))*fB) / (s20 + yy - (g/(g + 1))*fA))^((n + 1)/2)`
+```
+
+$$
+\begin{aligned}
+&\operatorname{BF}_{A, B}(g) \\
+&= \frac{\left(\frac{-\frac{F_B g}{1+g}+\sigma_0^2 +y^\top y }{-\frac{F_A g}{1+g}+\sigma_0^2 +y^\top y }\right)^{\frac{1+n}{2}}}{\sqrt{1+g}}
+\end{aligned}
+$$
+
+```js
+const gStar = toJS(await wl`g /. FindRoot[(${bfG} /. {s20 -> 8.54, yy -> ${yy}, fA -> ${fA}, fB -> ${fB}, n -> 12}) == 1, {g, 200}]`)
+console.log(`Preferred model flips from A=(group+age) to B=(age only) at g* ≈ ${gStar.toFixed(1)}`)
+```
+
+```text
+Preferred model flips from A=(group+age) to B=(age only) at g* ≈ 4423.4
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch09-permute" >}}
 Simulate $\mathbf{X}$ with $n = 342$, $p = 64$ independent standard normal columns and an independent response $\mathbf{y}$. Apply backward elimination with cutoff $1.65$ and record the number of survivors; then run {{< xref "alg:ch09-collapsed" "full" >}} under both the uniform prior and the prior $\bigl[(p+1)\binom{p}{p_z}\bigr]^{-1}$. (For the latter, show that the prior odds in {{< eqref "eq:ch09-odds" >}} equal $(k+1)/(p-k)$ when $k$ other regressors are included.) Compare the three answers.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 9.4: Symbolic prior odds under Beta-Binomial multiplicity-adjusting prior
+const odds = await show`FullSimplify[FunctionExpand[(1/((p + 1)*Binomial[p, k + 1])) / (1/((p + 1)*Binomial[p, k]))]]`
+```
+
+$$
+\frac{\Pr(z_j = 1 \mid z_{-j})}{\Pr(z_j = 0 \mid z_{-j})} = \frac{1+k}{-k+p}
+$$
+
+```js
+const [o0, o5] = toJS(await wl`N[{${odds} /. {p -> 64, k -> 0}, ${odds} /. {p -> 64, k -> 5}}]`)
+console.log(`At p = 64: prior odds at k = 0 is ${o0.toFixed(4)} (= 1/64), at k = 5 is ${o5.toFixed(4)} (= 6/59; vs. 1.0 under uniform)`)
+```
+
+```text
+At p = 64: prior odds at k = 0 is 0.0156 (= 1/64), at k = 5 is 0.1017 (= 6/59; vs. 1.0 under uniform)
+```
+
+{{< /details >}}

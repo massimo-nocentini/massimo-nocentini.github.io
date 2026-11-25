@@ -195,7 +195,7 @@ const omega13 = await show`Factor[${Om}[[1, 3]]]`
 
 
 $$
-\Omega_{1,3} = \left(C^{-1}\right)_{1,3} \;=\; \frac{\text{r13}-\text{r12} \text{r23}}{-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2}
+\Omega_{1,3} = \left(C^{-1}\right)_{1,3} \;=\; \frac{r_{13} -r_{12} r_{23}}{-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2}
 $$
 
 ```js
@@ -206,9 +206,8 @@ const pcorr13 = await show`Assuming[-1 < r12 < 1 && -1 < r23 < 1,
 
 $$
 \begin{aligned}
-\rho_{13 \mid 2} = -\frac{\Omega_{1,3}}{\sqrt{\Omega_{1,1}\,\Omega_{3,3}}} \\
-&= \frac{-\text{r13}+\text{r12} \text{r23}}{\sqrt{\frac{\left(-1+\text{r12}^2\right) \left(-1+\text{r23}^2\right)}{\left(-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2\right)^2}} \left(-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2\right)}
-\end{aligned}
+&\rho_{13 \mid 2} = -\frac{\Omega_{1,3}}{\sqrt{\Omega_{1,1}\,\Omega_{3,3}}} \\
+&= \frac{-r_{13} +r_{12} r_{23}}{\sqrt{\frac{\left(-1+r_{12}^2\right) \left(-1+r_{23}^2\right)}{\left(-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2\right)^2}} \left(-1+r_{12}^2+r_{13}^2-2 r_{12} r_{13} r_{23} +r_{23}^2\right)}\end{aligned}
 $$
 
 ```js
@@ -217,7 +216,7 @@ await show`r13 /. First[Solve[${omega13} == 0, r13]]`
 
 
 $$
-\text{r13}\big|_{\Omega_{1,3} = 0} \;=\; \text{r12} \text{r23}
+r_{13} \big|_{\Omega_{1,3} = 0} \;=\; r_{12} r_{23} 
 $$
 
 ```js
@@ -239,10 +238,91 @@ At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = 0,  Omega_13(0.30) = 0.0578 (pco
 Verify numerically using the Gaussian copula script above that replacing column $Y_1$ with $Y_1' = \log(Y_1)$ or $Y_1'' = Y_1^3$ leaves the posterior distribution of $C$ completely unchanged (up to Monte Carlo variation). Explain why this invariance fails for the standard multivariate normal model of {{< xref "ch:mvn" "full" >}}.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 12.1: Rank invariance vs. Pearson correlation distortion under nonlinear h(Z_1) = exp(sqrt(v)*Z_1)
+const corrExp = await show`Assuming[v > 0, FullSimplify[
+  rho * Integrate[z*Exp[Sqrt[v]*z]*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}] /
+  Sqrt[Integrate[Exp[2*Sqrt[v]*z]*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}] - Exp[v]]]]`
+```
+
+$$
+\operatorname{Corr}\!\left(e^{\sqrt{v}\,Z_1},\; Z_2\right) = \rho \sqrt{\frac{v}{-1+e^v}}
+$$
+
+```js
+const rVal = toJS(await wl`N[${corrExp} /. {rho -> 1, v -> 1}]`)
+console.log(`Pearson Corr(exp(sqrt(v)*Z_1), Z_2) attenuates rho by factor ${rVal.toFixed(4)} at v = 1, whereas rank set R(Y) is invariant`)
+```
+
+```text
+Pearson Corr(exp(sqrt(v)*Z_1), Z_2) attenuates rho by factor 0.7629 at v = 1, whereas rank set R(Y) is invariant
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch12-probit-vs-rank" >}}
 Simulate $n = 200$ observations from an ordered probit model with $K = 5$ categories and $\boldsymbol{\beta} = (0.8, -0.5)^T$. Compare the lag-1 autocorrelation and effective sample size $S_{\text{eff}}$ of $\beta_1$ under (a) the Albert–Chib threshold Gibbs sampler {{< eqref "eq:ch12-thresh-bounds" >}} and (b) the rank-likelihood Gibbs sampler {{< xref "alg:ch12-rank-gibbs" "full" >}}.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 12.2: Length-biased threshold corridor width 2 / (n * phi(g)) trapping Albert-Chib thresholds (marginal Z ~ N(0,1))
+const gapSym = await show`2 / (n * Exp[-g^2/2] / Sqrt[2*Pi])`
+```
+
+$$
+\begin{aligned}
+&\mathbb{E}\!\left[Z_{\text{hi}} - Z_{\text{lo}}\right] \\
+&= \frac{2 e^{\frac{g^2}{2}} \sqrt{2 \pi }}{n}
+\end{aligned}
+$$
+
+```js
+const [w0, w1] = toJS(await wl`N[{${gapSym} /. {n -> 200, g -> 0}, ${gapSym} /. {n -> 200, g -> 1}}]`)
+console.log(`At n = 200 (marginal Z ~ N(0,1)): expected length-biased corridor width is ${w0.toFixed(4)} at g = 0 and ${w1.toFixed(4)} at g = 1`)
+```
+
+```text
+At n = 200 (marginal Z ~ N(0,1)): expected length-biased corridor width is 0.0251 at g = 0 and 0.0413 at g = 1
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch12-partial-graph" >}}
 In the copula script above, construct a 3-variable precision matrix $\Omega$ with $\Omega_{1,3} = 0$ (so $Z_1 \perp Z_3 \mid Z_2$ even though $C_{1,3} > 0$). Run {{< xref "alg:ch12-copula-gibbs" "full" >}}, compute the posterior 95% credible intervals of $C_{1,3}$ and $\Omega_{1,3} = (C^{-1})_{1,3}$, and verify that the copula accurately distinguishes marginal correlation from conditional independence!
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 12.3: Constructing a 3-variable Gaussian copula C from a tridiagonal precision Omega (Omega_{1,3} = 0)
+const Om = [[W.a, W.Minus(W.b), 0], [W.Minus(W.b), W.a, W.Minus(W.b)], [0, W.Minus(W.b), W.a]]
+const Sig = await wl`Inverse[${Om}]`
+const c12 = await show`Assuming[a > 0 && b > 0 && a^2 > 2*b^2, FullSimplify[${Sig}[[1, 2]] / Sqrt[${Sig}[[1, 1]]*${Sig}[[2, 2]]]]]`
+```
+
+$$
+C_{12} = \frac{\Sigma_{12}}{\sqrt{\Sigma_{11}\Sigma_{22}}} = \frac{b}{\sqrt{(a-b) (a+b)}}
+$$
+
+```js
+const c13 = await show`Assuming[a > 0 && b > 0 && a^2 > 2*b^2, FullSimplify[${Sig}[[1, 3]] / Sqrt[${Sig}[[1, 1]]*${Sig}[[3, 3]]]]]`
+```
+
+$$
+C_{13} = \frac{\Sigma_{13}}{\sqrt{\Sigma_{11}\Sigma_{33}}} = \frac{b^2}{a^2-b^2}
+$$
+
+```js
+const [r12, r13] = toJS(await wl`N[{${c12}, ${c13}} /. {a -> 2, b -> 1}]`)
+console.log(`Tridiagonal Omega (a=2, b=1): Omega_13 = 0 (preserved by diagonal rescaling to C^(-1)), yet marginal C_12 = ${r12.toFixed(4)}, C_13 = ${r13.toFixed(4)} = C_12^2`)
+```
+
+```text
+Tridiagonal Omega (a=2, b=1): Omega_13 = 0 (preserved by diagonal rescaling to C^(-1)), yet marginal C_12 = 0.5774, C_13 = 0.3333 = C_12^2
+```
+
+{{< /details >}}

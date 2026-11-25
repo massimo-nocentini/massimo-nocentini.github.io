@@ -196,7 +196,7 @@ const betaSchur = await show`FullSimplify[Inverse[{{s22, s23}, {s23, s33}}] . {s
 
 
 $$
-\begin{pmatrix} \text{s22} & \text{s23} \\ \text{s23} & \text{s33} \end{pmatrix}^{-1}\begin{pmatrix} \text{s12} \\ \text{s13} \end{pmatrix} \;=\; \left\{\frac{\text{s13} \text{s23}-\text{s12} \text{s33}}{\text{s23}^2-\text{s22} \text{s33}},\frac{\text{s13} \text{s22}-\text{s12} \text{s23}}{-\text{s23}^2+\text{s22} \text{s33}}\right\}
+\begin{pmatrix} \Sigma_{22} & \Sigma_{23} \\ \Sigma_{23} & \Sigma_{33} \end{pmatrix}^{-1}\begin{pmatrix} \Sigma_{12} \\ \Sigma_{13} \end{pmatrix} \;=\; \left\{\frac{\Sigma_{13} \Sigma_{23} -\Sigma_{12} \Sigma_{33}}{\Sigma_{23}^2-\Sigma_{22} \Sigma_{33}},\frac{\Sigma_{13} \Sigma_{22} -\Sigma_{12} \Sigma_{23}}{-\Sigma_{23}^2+\Sigma_{22} \Sigma_{33}}\right\}
 $$
 
 ```js
@@ -217,7 +217,7 @@ const slopeSym = await show`FullSimplify[${covSym}[[1, 2]] / ${covSym}[[1, 1]]]`
 
 
 $$
-\beta_{2 \mid 1} = \frac{\Sigma_{1,2}}{\Sigma_{1,1}} \;=\; \frac{\rho  \text{s2}}{\text{s1}}
+\beta_{2 \mid 1} = \frac{\Sigma_{1,2}}{\Sigma_{1,1}} \;=\; \frac{\rho \sigma_2}{\sigma_1}
 $$
 
 ```js
@@ -226,7 +226,7 @@ const cvarSym = await show`FullSimplify[${covSym}[[2, 2]] - ${covSym}[[1, 2]]^2 
 
 
 $$
-\operatorname{Var}(Y_2 \mid Y_1) = \Sigma_{2,2} - \frac{\Sigma_{1,2}^2}{\Sigma_{1,1}} \;=\; -\left(\left(-1+\rho ^2\right) \text{s2}^2\right)
+\operatorname{Var}(Y_2 \mid Y_1) = \Sigma_{2,2} - \frac{\Sigma_{1,2}^2}{\Sigma_{1,1}} \;=\; -\left(\left(-1+\rho^2\right) \sigma_2^2\right)
 $$
 
 ```js
@@ -247,10 +247,100 @@ Reading scores: E[Y2 | Y1] slope = 0.8095, cond SD = 11.15
 Let $\Omega = \Sigma^{-1}$ be the precision matrix of $\mathbf{Y} \sim \mathcal{N}_p(\boldsymbol{\theta}, \Sigma)$. Using the block-matrix inversion identity, show that the partial regression vector in {{< eqref "eq:ch07-partial-beta" >}} satisfies $\boldsymbol{\beta}_{j \mid -j} = -\Omega_{j,j}^{-1}\Omega_{j,-j}^T$, and deduce that $Y_i$ and $Y_j$ are conditionally independent given all remaining variables if and only if $\Omega_{i,j} = 0$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 7.1: 3x3 block-matrix proof that beta_{1|2,3} = Sigma_{1,23}*Sigma_{23,23}^(-1) = -Omega_{11}^(-1)*Omega_{1,23}
+const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
+const Om = await wl`Inverse[${Sig}]`
+const betaCov = await wl`${Sig}[[1, {2, 3}]] . Inverse[${Sig}[[{2, 3}, {2, 3}]]]`
+const betaPrec = await wl`-${Om}[[1, {2, 3}]] / ${Om}[[1, 1]]`
+const resid = await show`FullSimplify[${betaCov} - ${betaPrec}]`
+```
+
+$$
+\Sigma_{1,23}\Sigma_{23,23}^{-1} - \bigl(-\Omega_{11}^{-1}\Omega_{1,23}\bigr) = \{0,0\}
+$$
+
+```js
+console.log(`3x3 block-inversion identity residual = ${JSON.stringify(toJS(resid))}; Omega_{1,j} = 0 <=> beta_{1|j,-1j} = 0`)
+```
+
+```text
+3x3 block-inversion identity residual = [0,0]; Omega_{1,j} = 0 <=> beta_{1|j,-1j} = 0
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch07-mar-vs-mnar" >}}
 Extend the Python script above to create $20\%$ missing entries in column 2 under (a) MCAR (uniform random mask), (b) MAR (missing with higher probability when $Y_{i,1}$ is in its bottom quartile), and (c) MNAR (missing whenever $Y_{i,2}$ falls below its 20th percentile). Implement {{< xref "alg:ch07-mar-gibbs" "full" >}} and compare its posterior for $\boldsymbol{\theta}$ against complete-case analysis across all three regimes.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 7.2: Exact complete-case MNAR bias when observations below z0 are truncated
+const shift = await show`Assuming[Element[z0, Reals],
+  FullSimplify[Integrate[z*Exp[-z^2/2]/Sqrt[2*Pi], {z, z0, Infinity}] / Integrate[Exp[-z^2/2]/Sqrt[2*Pi], {z, z0, Infinity}]]]`
+```
+
+$$
+\begin{aligned}
+&\mathbb{E}[Z \mid Z > z_0] \\
+&= \frac{e^{-\frac{z_0 ^2}{2}} \sqrt{\frac{2}{\pi }}}{\operatorname{erfc} \left(\frac{z_0 }{\sqrt{2}}\right)}
+\end{aligned}
+$$
+
+```js
+const z20 = toJS(await wl`z /. FindRoot[1/2*Erfc[-z/Sqrt[2]] == 1/5, {z, -0.84}]`)
+const bias = toJS(await wl`N[${shift} /. z0 -> ${z20}]`)
+console.log(`Dropping bottom 20% (z0 = ${z20.toFixed(4)}): complete-case mean biased upward by +${bias.toFixed(4)}*sigma (zero complete-case bias under MCAR only; MAR needs data-augmentation Gibbs; MNAR biases both)`)
+```
+
+```text
+Dropping bottom 20% (z0 = -0.8416): complete-case mean biased upward by +0.3500*sigma (zero complete-case bias under MCAR only; MAR needs data-augmentation Gibbs; MNAR biases both)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch07-iw-scale" >}}
 For $p = 3$ and $S_0 = I_3$, simulate $10{,}000$ draws from $\Sigma \sim \operatorname{inverse-Wishart}(\nu_0, S_0^{-1})$ for $\nu_0 \in \{4, 6, 20\}$ and inspect the implied prior distribution of the off-diagonal correlation $\rho_{1,2} = \Sigma_{1,2}/\sqrt{\Sigma_{1,1}\Sigma_{2,2}}$. Why does $\nu_0 = p + 1 = 4$ produce a uniform marginal prior on each correlation $\rho_{i,j} \in (-1, 1)$?
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 7.3: Marginal prior p(rho) ~ (1 - rho^2)^((nu0 - p - 1)/2) under IW(nu0, I_p)
+const expSym = await show`(nu0 - p - 1) / 2`
+```
+
+$$
+\text{Exponent of } (1 - r^2) \text{ in } p(r) = \frac{1}{2} (-1+\nu_0 -p)
+$$
+
+```js
+const zNorm = await show`Assuming[nu0 > p - 1, FullSimplify[Integrate[(1 - r^2)^((nu0 - p - 1)/2), {r, -1, 1}]]]`
+```
+
+$$
+\begin{aligned}
+&\int_{-1}^1 (1 - r^2)^{(\nu_0 - p - 1)/2}\,dr \\
+&= \frac{\sqrt{\pi } \Gamma \left(\frac{1}{2} (1+\nu_0 -p)\right)}{\Gamma \left(\frac{1}{2} (2+\nu_0 -p)\right)}
+\end{aligned}
+$$
+
+```js
+for (const nu0 of [4, 6, 20]) {
+  const eVal = toJS(await wl`${expSym} /. {p -> 3, nu0 -> ${nu0}}`)
+  const desc = eVal === 0 ? 'exact Uniform(-1, 1)' : (eVal === 1 ? 'moderately unimodal around 0' : 'concentrated near 0')
+  console.log(`p = 3, nu0 = ${String(nu0).padStart(2)} -> exponent = ${eVal} (${desc})`)
+}
+```
+
+```text
+p = 3, nu0 =  4 -> exponent = 0 (exact Uniform(-1, 1))
+p = 3, nu0 =  6 -> exponent = 1 (moderately unimodal around 0)
+p = 3, nu0 = 20 -> exponent = 8 (concentrated near 0)
+```
+
+{{< /details >}}

@@ -219,10 +219,102 @@ Strong wrong     -> mean = 0.250, Pr(theta < 0.10 | y=0) = 0.004
 In the rare-event survey ($n = 20$, $y = 0$), suppose a skeptical colleague insists on a prior centered at $\theta_0 = 0.20$. How large can their prior sample size $w = a + b$ be before $\Pr(\theta < 0.10 \mid Y = 0)$ drops below $0.50$? Verify your answer numerically in Python using `scipy.stats.beta.cdf`.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 1.1: Prior dominance threshold w* where Pr(theta < c | y = 0) == 1/2
+const cdf = await show`Beta[c, w*th0, w*(1 - th0) + n] / Beta[w*th0, w*(1 - th0) + n]`
+```
+
+$$
+\begin{aligned}
+&\Pr(\theta < c \mid y = 0) \\
+&= \frac{B_c(\theta_0 w,n+(1-\theta_0 ) w)}{B(\theta_0 w,n+(1-\theta_0 ) w)}
+\end{aligned}
+$$
+
+```js
+const wStar = toJS(await wl`w /. FindRoot[(${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20}) == 1/2, {w, 15, 35}]`)
+const [p22, p23] = toJS(await wl`N[{${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 22}, ${cdf} /. {c -> 1/10, th0 -> 1/5, n -> 20, w -> 23}}]`)
+console.log(`Critical prior sample size w* = ${wStar.toFixed(3)} (w = 22 -> ${p22.toFixed(3)}, w = 23 -> ${p23.toFixed(3)})`)
+```
+
+```text
+Critical prior sample size w* = 22.623 (w = 22 -> 0.513, w = 23 -> 0.492)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch01-laplace-lasso" >}}
 Show that if $Y \mid \beta, \sigma^2 \sim \mathcal{N}_n(X\beta, \sigma^2 I_n)$ and $\beta_1, \dots, \beta_p \stackrel{\text{i.i.d.}}{\sim} \operatorname{Laplace}(0, b)$ with density $p(\beta_j) = \frac{1}{2b}\exp(-\lvert \beta_j \rvert / b)$, then maximizing $\log p(\beta \mid y, X, \sigma^2)$ is equivalent to minimizing $\operatorname{SSR}(\beta) + \lambda \sum_{j=1}^p \lvert \beta_j \rvert$. Express $\lambda$ in terms of $\sigma^2$ and $b$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 1.2: Equivalence of Laplace MAP and Lasso penalty lambda = 2*sigma^2 / b
+const obj = await show`Expand[-2*s2 * (-ssr/(2*s2) - l1/b)]`
+```
+
+$$
+\begin{aligned}
+&-2\sigma^2 \log p(\beta \mid y, \sigma^2, b) + \text{const} \\
+&= \frac{2 \|\beta\|_1 \sigma^2 }{b}+\operatorname{SSR}
+\end{aligned}
+$$
+
+```js
+const lam = await show`Coefficient[${obj}, l1]`
+```
+
+$$
+\lambda = \frac{2 \sigma^2 }{b}
+$$
+
+```js
+const lamVal = toJS(await wl`N[${lam} /. {s2 -> 1, b -> 1/2}]`)
+console.log(`At sigma^2 = 1, b = 1/2 -> Lasso penalty lambda = ${lamVal.toFixed(2)}`)
+```
+
+```text
+At sigma^2 = 1, b = 1/2 -> Lasso penalty lambda = 4.00
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch01-wald-coverage" >}}
 Plot the exact frequentist coverage of the 95% Wald interval and the 95% plus-four interval as functions of $\theta \in (0, 1)$ for $n = 20$ and $n = 100$. Why does the coverage curve oscillate sharply even for $n = 100$?
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 1.3: Exact Binomial coverage sum (Wald vs. plus-four) & lattice oscillation
+const cov = async (nVal, thVal, plusFour) => toJS(await wl`N[Sum[
+  Binomial[${nVal}, k]*(${thVal})^k*(1 - ${thVal})^(${nVal} - k) * Boole[
+    Abs[(k + ${plusFour ? 2 : 0})/(${nVal} + ${plusFour ? 4 : 0}) - ${thVal}] <=
+    (196/100)*Sqrt[((k + ${plusFour ? 2 : 0})/(${nVal} + ${plusFour ? 4 : 0}))*(1 - (k + ${plusFour ? 2 : 0})/(${nVal} + ${plusFour ? 4 : 0}))/(${nVal} + ${plusFour ? 4 : 0})]],
+  {k, 0, ${nVal}}]]`)
+await show`Sum[Binomial[n, k]*th^k*(1 - th)^(n - k)*Boole[Abs[pHat[k] - th] <= z*se[k]], {k, 0, n}]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Covg}_n(\theta) \\
+&= \sum _{k=0}^n (1-\theta )^{-k+n} \theta ^k \binom{n}{k} \mathbf{1} [| -\theta +\hat{p} (k)| \leq z \operatorname{se} (k)]
+\end{aligned}
+$$
+
+```js
+for (const nVal of [20, 100]) {
+  const thR = W.Rational(1, 10)
+  console.log(`n = ${String(nVal).padStart(3)}, theta = 0.10: Wald = ${(await cov(nVal, thR, false)).toFixed(4)}, Plus-four = ${(await cov(nVal, thR, true)).toFixed(4)}`)
+}
+```
+
+```text
+n =  20, theta = 0.10: Wald = 0.8760, Plus-four = 0.9568
+n = 100, theta = 0.10: Wald = 0.9324, Plus-four = 0.9523
+```
+
+{{< /details >}}

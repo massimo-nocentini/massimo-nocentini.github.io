@@ -205,7 +205,7 @@ await show`Together[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`
 
 
 $$
-\frac{(A\operatorname{diag}(\text{g0}^2, \text{t0}^2)A^T)_{1,2}}{(A\operatorname{diag}(\text{g0}^2, \text{t0}^2)A^T)_{1,1}} \;=\; \frac{\text{g0}^2-\text{t0}^2}{\text{g0}^2+\text{t0}^2}
+\frac{(A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^T)_{1,2}}{(A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^T)_{1,1}} \;=\; \frac{\gamma_0^2-\tau_0^2}{\gamma_0^2+\tau_0^2}
 $$
 
 ```js
@@ -215,7 +215,7 @@ const Bj = await show`Together[(nj / s2) / (nj / s2 + 1 / t2)]`
 
 
 $$
-B_j = \frac{\text{nj}/\text{s2}}{\text{nj}/\text{s2} + 1/\text{t2}} \;=\; \frac{\text{nj} \text{t2}}{\text{s2}+\text{nj} \text{t2}}
+B_j = \frac{n_j /\sigma^2}{n_j /\sigma^2 + 1/\tau^2} \;=\; \frac{n_j \tau^2}{\sigma^2 +n_j \tau^2}
 $$
 
 ```js
@@ -226,9 +226,8 @@ const gapSym = await show`FullSimplify[((${Bj} /. nj -> n2)*yb2 + (1 - (${Bj} /.
 
 $$
 \begin{aligned}
-\hat{\theta}_2 - \hat{\theta}_1 = \bigl[B_2\bar{y}_2 + (1 - B_2)\mu\bigr] - \bigl[B_1\bar{y}_1 + (1 - B_1)\mu\bigr] \\
-&= \frac{\text{t2} (\mu  (\text{n1}-\text{n2}) \text{s2}-\text{n1} (\text{s2}+\text{n2} \text{t2}) \text{yb1}+\text{n2} (\text{s2}+\text{n1} \text{t2}) \text{yb2})}{(\text{s2}+\text{n1} \text{t2}) (\text{s2}+\text{n2} \text{t2})}
-\end{aligned}
+&\hat{\theta}_2 - \hat{\theta}_1 = \bigl[B_2\bar{y}_2 + (1 - B_2)\mu\bigr] - \bigl[B_1\bar{y}_1 + (1 - B_1)\mu\bigr] \\
+&= \frac{\tau^2 (\mu (n_1 -n_2) \sigma^2 -n_1 (\sigma^2 +n_2 \tau^2) \bar{y}_1 +n_2 (\sigma^2 +n_1 \tau^2) \bar{y}_2)}{(\sigma^2 +n_1 \tau^2) (\sigma^2 +n_2 \tau^2)}\end{aligned}
 $$
 
 ```js
@@ -241,7 +240,7 @@ await show`Simplify[1 + Coefficient[${dLogp}, s0, -1]]`
 
 
 $$
-1 + [\text{s0}^{-1}]\frac{\partial}{\partial \text{s0}}\log p(\text{s0} \mid \text{nu0}, \text{x1}, \text{x2}, \text{x3}) \;=\; a+\frac{3 \text{nu0}}{2}
+1 + [(\sigma_0^2)^{-1}]\frac{\partial}{\partial \sigma_0^2}\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) \;=\; a+\frac{3 \nu_0}{2}
 $$
 
 ```js
@@ -250,7 +249,7 @@ await show`Simplify[-Coefficient[${dLogp}, s0, 0]]`
 
 
 $$
--[\text{s0}^0]\frac{\partial}{\partial \text{s0}}\log p(\text{s0} \mid \text{nu0}, \text{x1}, \text{x2}, \text{x3}) \;=\; b+\frac{1}{2} \text{nu0} (\text{x1}+\text{x2}+\text{x3})
+-[(\sigma_0^2)^0]\frac{\partial}{\partial \sigma_0^2}\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) \;=\; b+\frac{1}{2} \nu_0 (x_1 + x_2 + x_3)
 $$
 
 ```js
@@ -276,10 +275,138 @@ Shrunk ranking reversal (School 82 - School 46) = +1.25 (raw gap = -1.42)
 In the Python script above, vary the true between-school standard deviation $\tau \in \{1, 3, 5, 15\}$ while holding $\sigma = 9.2$ fixed. Compare the total estimation MSE $\frac{1}{m}\sum_{j=1}^m (\hat{\theta}_j - \theta_j)^2$ of the hierarchical posterior mean against both the unpooled sample means $\bar{y}_j$ and the completely pooled grand mean $\bar{y}$. When is the gain from partial pooling largest?
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 8.1: Oracle Bayes risk (MSE, equal n) of unpooled, completely pooled, and hierarchical partial pooling
+const rPart = await show`FullSimplify[(s2/n)*t2 / (s2/n + t2)]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Risk}_{\text{hier}}(\sigma^2, \tau^2, n) \\
+&= \frac{\sigma^2 \tau^2 }{\sigma^2 +n \tau^2 }
+\end{aligned}
+$$
+
+```js
+const bWeight = await show`FullSimplify[${rPart} / (s2/n)]`
+```
+
+$$
+B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\sigma^2/n} = \frac{n \tau^2 }{\sigma^2 +n \tau^2 }
+$$
+
+```js
+const oneMinusB = await show`FullSimplify[${rPart} / t2]`
+```
+
+$$
+1 - B_j = \frac{\operatorname{Risk}_{\text{hier}}}{\tau^2} = \frac{\sigma^2 }{\sigma^2 +n \tau^2 }
+$$
+
+```js
+for (const tau of [1, 3, 5, 15]) {
+  const [rp, ru] = toJS(await wl`N[{${rPart}, s2/n} /. {s2 -> 84.64, n -> 10, t2 -> ${tau*tau}}]`)
+  console.log(`tau = ${String(tau).padStart(2)}: unpooled MSE = ${ru.toFixed(2)}, pooled MSE = ${(tau*tau).toFixed(2)}, hierarchical MSE = ${rp.toFixed(2)}`)
+}
+console.log('Max gain over min(unpooled, pooled) occurs at tau^2 = s2/n (tau ≈ 2.91), halving MSE')
+```
+
+```text
+tau =  1: unpooled MSE = 8.46, pooled MSE = 1.00, hierarchical MSE = 0.89
+tau =  3: unpooled MSE = 8.46, pooled MSE = 9.00, hierarchical MSE = 4.36
+tau =  5: unpooled MSE = 8.46, pooled MSE = 25.00, hierarchical MSE = 6.32
+tau = 15: unpooled MSE = 8.46, pooled MSE = 225.00, hierarchical MSE = 8.16
+Max gain over min(unpooled, pooled) occurs at tau^2 = s2/n (tau ≈ 2.91), halving MSE
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch08-heterogeneous-gibbs" >}}
 Extend the Python Gibbs sampler to allow heterogeneous school variances $\sigma_1^2, \dots, \sigma_m^2$ using {{< eqref "eq:ch08-fc-sig0" >}} and {{< eqref "eq:ch08-fc-nu0" >}} over the grid $\nu_0 \in \{1, 2, \dots, 50\}$ (remembering to subtract `log_p.max()` before exponentiating when normalizing $\nu_0$). Verify that the factor $\nu_0$ in the rate of {{< eqref "eq:ch08-fc-sig0" >}} is required by checking whether your sampler recovers known synthetic values $(\nu_0, \sigma_0^2) = (10, 80)$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 8.2: Bias of omitting nu0 in the full conditional rate of sigma_0^2 (plugging in sum sigma_j^{-2} = m / sigma_0^2)
+const meanCorrect = await show`FullSimplify[(a + m*nu0/2) / (b + (nu0/2)*m/s0True)]`
+```
+
+$$
+\begin{aligned}
+&\mathbb{E}[\sigma_0^2 \mid \text{correct rate},\; \sum_j \sigma_j^{-2} = m/\sigma_0^2] \\
+&= \frac{(2 a+m \nu_0 ) \sigma_0^2 }{m \nu_0 +2 b \sigma_0^2 }
+\end{aligned}
+$$
+
+```js
+const meanBuggy = await show`FullSimplify[(a + m*nu0/2) / (b + (1/2)*m/s0True)]`
+```
+
+$$
+\begin{aligned}
+&\mathbb{E}[\sigma_0^2 \mid \text{buggy rate},\; \sum_j \sigma_j^{-2} = m/\sigma_0^2] \\
+&= \frac{(2 a+m \nu_0 ) \sigma_0^2 }{m+2 b \sigma_0^2 }
+\end{aligned}
+$$
+
+```js
+const limRatio = await show`Assuming[nu0 > 0 && s0True > 0, Limit[${meanBuggy} / ${meanCorrect}, m -> Infinity]]`
+```
+
+$$
+\begin{aligned}
+&\lim_{m \to \infty} \frac{\mathbb{E}[\sigma_0^2 \mid \text{buggy}]}{\mathbb{E}[\sigma_0^2 \mid \text{correct}]} \\
+&= \nu_0
+\end{aligned}
+$$
+
+```js
+const [mc, mb] = toJS(await wl`N[{${meanCorrect}, ${meanBuggy}} /. {a -> 1, b -> 1/100, m -> 100, nu0 -> 10, s0True -> 80}]`)
+console.log(`At (nu0=10, s0^2=80, m=100): correct mean = ${mc.toFixed(2)}, buggy mean = ${mb.toFixed(1)} (ratio = ${(mb/mc).toFixed(2)}x, tending to nu0 = 10)`)
+```
+
+```text
+At (nu0=10, s0^2=80, m=100): correct mean = 80.03, buggy mean = 789.0 (ratio = 9.86x, tending to nu0 = 10)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch08-noncentered" >}}
 Simulate $m = 8$ groups with $n_j = 5$, $\sigma = 10$, and very small true between-group spread $\tau = 0.5$. Compare the lag-1 autocorrelation and $S_{\text{eff}}$ of $\tau$ under (a) the centered Gibbs sampler {{< xref "prop:ch08-fc" "full" >}} and (b) the non-centered reparameterization $\theta_j = \mu + \tau\tilde{\theta}_j$ (see {{< xref "rem:ch08-modern" "full" >}}).
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 8.3: Centered posterior coupling across m groups & centered mu-chain lag-1 ACF at fixed tau
+const corrCent = await show`FullSimplify[Sqrt[(s2/nj) / (s2/nj + m*t2)]]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Corr}(\theta_j, \mu \mid y, \sigma^2, \tau^2) \\
+&= \sqrt{\frac{\sigma^2 }{\sigma^2 +m n_j \tau^2 }}
+\end{aligned}
+$$
+
+```js
+const acfMu = await show`FullSimplify[(s2/nj) / (s2/nj + t2)]`
+```
+
+$$
+\operatorname{ACF}_1(\mu^{(s)} \mid \tau) = \frac{\sigma^2 }{\sigma^2 +n_j \tau^2 }
+$$
+
+```js
+const [cVal, aVal] = toJS(await wl`N[{${corrCent}, ${acfMu}} /. {s2 -> 100, nj -> 5, m -> 8, t2 -> 1/4}]`)
+console.log(`At m = 8, nj = 5, sigma = 10, tau = 0.5: Corr(theta_j, mu | y, tau) = ${cVal.toFixed(4)}, centered mu-chain lag-1 ACF = ${aVal.toFixed(4)}`)
+```
+
+```text
+At m = 8, nj = 5, sigma = 10, tau = 0.5: Corr(theta_j, mu | y, tau) = 0.9535, centered mu-chain lag-1 ACF = 0.9877
+```
+
+{{< /details >}}

@@ -146,7 +146,7 @@ const eR = await show`Assuming[a1 > 0 && b1 > 0 && a2 > 1 && b2 > 0,
 
 
 $$
-\frac{\text{a1}}{\text{b1}}\int_0^\infty \frac{\text{b2}^{\text{a2}}}{\Gamma(\text{a2})}\,t^{\text{a2}-2} e^{-\text{b2}\,t}\,dt \;=\; \frac{\text{a1} \text{b2}}{(-1+\text{a2}) \text{b1}}
+\frac{a_1}{b_1}\int_0^\infty \frac{b_2^{a_2}}{\Gamma(a_2)}\,t^{a_2 -2} e^{-b_2 \,t}\,dt \;=\; \frac{a_1 b_2}{(-1+a_2) b_1}
 $$
 
 ```js
@@ -157,9 +157,8 @@ await show`Assuming[a1 > 0 && b1 > 0 && a2 > 2 && b2 > 0,
 
 $$
 \begin{aligned}
-\frac{\text{a1}(\text{a1}+1)}{\text{b1}^2}\int_0^\infty \frac{\text{b2}^{\text{a2}}}{\Gamma(\text{a2})}\,t^{\text{a2}-3} e^{-\text{b2}\,t}\,dt - E\!\left[\frac{\theta_1}{\theta_2}\right]^2 \\
-&= \frac{\text{a1} (-1+\text{a1}+\text{a2}) \text{b2}^2}{(-2+\text{a2}) (-1+\text{a2})^2 \text{b1}^2}
-\end{aligned}
+&\frac{a_1 (a_1 +1)}{b_1^2}\int_0^\infty \frac{b_2^{a_2}}{\Gamma(a_2)}\,t^{a_2 -3} e^{-b_2 \,t}\,dt - E\!\left[\frac{\theta_1}{\theta_2}\right]^2 \\
+&= \frac{a_1 (-1+a_1 +a_2) b_2^2}{(-2+a_2) (-1+a_2)^2 b_1^2}\end{aligned}
 $$
 
 ```js
@@ -170,7 +169,7 @@ const gamCdf = await show`Assuming[a2 > 0 && b2 > 0 && c > 0,
 
 
 $$
-\Pr(\theta_2 < c) = \int_0^c \frac{\text{b2}^{\text{a2}}}{\Gamma(\text{a2})}\,t^{\text{a2}-1} e^{-\text{b2}\,t}\,dt \;=\; 1-\frac{\Gamma (\text{a2},\text{b2} c)}{\Gamma (\text{a2})}
+\Pr(\theta_2 < c) = \int_0^c \frac{b_2^{a_2}}{\Gamma(a_2)}\,t^{a_2 -1} e^{-b_2 \,t}\,dt \;=\; 1-\frac{\Gamma (a_2,b_2 c)}{\Gamma (a_2)}
 $$
 
 ```js
@@ -179,7 +178,7 @@ const pGtSym = await show`1 - Beta[b1 / (b1 + b2), a1, a2] / Beta[a1, a2]`
 
 
 $$
-\Pr(\theta_1 > \theta_2) \;=\; 1-\frac{B_{\frac{\text{b1}}{\text{b1}+\text{b2}}}(\text{a1},\text{a2})}{B(\text{a1},\text{a2})}
+\Pr(\theta_1 > \theta_2) \;=\; 1-\frac{B_{\frac{b_1}{b_1 +b_2}}(a_1,a_2)}{B(a_1,a_2)}
 $$
 
 ```js
@@ -200,10 +199,105 @@ Exact Pr(th1 > th2 | y) = 0.9726  |  Exact Pr(th2 < 1.75 | y) = 0.8998
 For $\theta \mid y \sim \operatorname{beta}(2, 40)$, use $S = 50{,}000$ Monte Carlo draws to compare $E[\log\frac{\theta}{1-\theta} \mid y]$ against $\log\frac{E[\theta \mid y]}{1 - E[\theta \mid y]}$, and compare $E[1/\theta \mid y]$ against $1 / E[\theta \mid y]$. Explain the sign of each discrepancy via Jensen’s inequality.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 4.1: Exact Jensen discrepancies for Beta(a, b): E[logit(theta)] and E[1/theta]
+const eLogit = await show`Assuming[a > 0 && b > 0, FullSimplify[PolyGamma[0, a] - PolyGamma[0, b]]]`
+```
+
+$$
+\mathbb{E}\!\left[\log\frac{\theta}{1-\theta}\right] = \psi ^{(0)}(a)-\psi ^{(0)}(b)
+$$
+
+```js
+const eInv = await show`Assuming[a > 1 && b > 0, FullSimplify[Integrate[(1/th)*th^(a - 1)*(1 - th)^(b - 1)/Beta[a, b], {th, 0, 1}]]]`
+```
+
+$$
+\mathbb{E}\!\left[\frac{1}{\theta}\right] = 1+\frac{b}{-1+a}
+$$
+
+```js
+const invGap = await show`Factor[${eInv} - (a + b)/a]`
+```
+
+$$
+\mathbb{E}\!\left[\frac{1}{\theta}\right] - \frac{1}{\mathbb{E}[\theta]} = \frac{b}{(-1+a) a}
+$$
+
+```js
+const [v1, v2, v3, v4] = toJS(await wl`N[{${eLogit}, Log[a/b], ${eInv}, (a + b)/a} /. {a -> 2, b -> 40}]`)
+console.log(`Beta(2,40): E[logit] = ${v1.toFixed(4)} < logit(E[th]) = ${v2.toFixed(4)} (concave on (0,1/2))`)
+console.log(`Beta(2,40): E[1/th] = ${v3.toFixed(2)} > 1/E[th] = ${v4.toFixed(2)} (note: E[1/th^2] = Inf at a=2 -> infinite MC variance)`)
+```
+
+```text
+Beta(2,40): E[logit] = -3.2535 < logit(E[th]) = -2.9957 (concave on (0,1/2))
+Beta(2,40): E[1/th] = 41.00 > 1/E[th] = 21.00 (note: E[1/th^2] = Inf at a=2 -> infinite MC variance)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch04-rb" >}}
 For $\theta \mid y \sim \operatorname{gamma}(68, 45)$ and $\tilde{Y} \mid \theta \sim \operatorname{Poisson}(\theta)$, compare the empirical variance across 500 repeated runs ($S = 200$ draws each) of (a) the naive predictive mean $\frac{1}{S}\sum \tilde{y}^{(s)}$ versus (b) the Rao–Blackwellized estimator $\frac{1}{S}\sum \theta^{(s)}$. How closely does the variance ratio match $\operatorname{Var}(\tilde{Y} \mid y) / \operatorname{Var}(\theta \mid y) = (b_n + 1)/1 = 46$?
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 4.2: Exact Rao-Blackwell variance reduction ratio Var(Ytilde | y) / Var(theta | y)
+const rbRatio = await show`FullSimplify[((an*(bn + 1))/bn^2) / (an/bn^2)]`
+```
+
+$$
+\frac{\operatorname{Var}(\tilde{Y} \mid y)}{\operatorname{Var}(\theta \mid y)} = 1+b_n
+$$
+
+```js
+const val = toJS(await wl`${rbRatio} /. {an -> 68, bn -> 45}`)
+console.log(`At Gamma(68, 45): exact Rao-Blackwell variance ratio = ${val}`)
+```
+
+```text
+At Gamma(68, 45): exact Rao-Blackwell variance ratio = 46
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch04-overdispersion" >}}
 Design a posterior predictive check for overdispersion using the dispersion index $t(Y) = s^2(Y) / \bar{Y}$. Simulate a negative-binomial dataset with mean $2$ and variance $6$ ($n = 100$), fit a conjugate Poisson–Gamma model, and verify that {{< xref "alg:ch04-ppc" "full" >}} flags the overdispersion clearly.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 4.3: Symbolic Negative Binomial dispersion index Var(Y) / E[Y] = 1 + 1/b
+const dispIdx = await show`FullSimplify[((a*(b + 1))/b^2) / (a/b)]`
+```
+
+$$
+\frac{\operatorname{Var}(Y)}{\mathbb{E}[Y]} = 1+\frac{1}{b}
+$$
+
+```js
+const sol = await show`First[Solve[{a/b == 2, (a*(b + 1))/b^2 == 6}, {a, b}]]`
+```
+
+$$
+\begin{aligned}
+&\text{Solution for } (\mathbb{E}[Y]=2,\; \operatorname{Var}(Y)=6) \\
+&= \left\{a\to 1,b\to \frac{1}{2}\right\}
+\end{aligned}
+$$
+
+```js
+const dVal = toJS(await wl`N[${dispIdx} /. ${sol}]`)
+console.log(`Mean = 2, Var = 6 -> dispersion index = ${dVal.toFixed(1)} (vs. 1.0 under Poisson)`)
+```
+
+```text
+Mean = 2, Var = 6 -> dispersion index = 3.0 (vs. 1.0 under Poisson)
+```
+
+{{< /details >}}

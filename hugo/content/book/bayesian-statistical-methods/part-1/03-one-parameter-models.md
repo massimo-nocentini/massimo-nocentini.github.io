@@ -201,7 +201,7 @@ const pred = await show`Assuming[an > 0 && bn > 0 && yt >= 0 && Element[yt, Inte
 
 
 $$
-\int_0^\infty \frac{\theta^{\text{yt}} e^{-\theta}}{\text{yt}!}\,\frac{\text{bn}^{\text{an}}}{\Gamma(\text{an})}\,\theta^{\text{an}-1} e^{-\text{bn}\,\theta}\,d\theta \;=\; \frac{\text{bn}^{\text{an}} (1+\text{bn})^{-\text{an}-\text{yt}} \Gamma (\text{an}+\text{yt})}{\text{yt}! \Gamma (\text{an})}
+\int_0^\infty \frac{\theta^{\tilde{y}} e^{-\theta}}{\tilde{y} !}\,\frac{b_n^{a_n}}{\Gamma(a_n)}\,\theta^{a_n -1} e^{-b_n \,\theta}\,d\theta \;=\; \frac{b_n^{a_n} (1+b_n)^{-a_n -\tilde{y}} \Gamma (a_n +\tilde{y})}{\tilde{y} ! \Gamma (a_n)}
 $$
 
 ```js
@@ -210,7 +210,7 @@ const predMean = await show`Assuming[an > 0 && bn > 0, FullSimplify[Sum[yt * ${p
 
 
 $$
-\sum_{\text{yt}=0}^{\infty} \text{yt}\cdot p(\text{yt} \mid y) \;=\; \frac{\text{an}}{\text{bn}}
+\sum_{\tilde{y} =0}^{\infty} \tilde{y} \cdot p(\tilde{y} \mid y) \;=\; \frac{a_n}{b_n}
 $$
 
 ```js
@@ -220,7 +220,7 @@ await show`Assuming[an > 0 && bn > 0,
 
 
 $$
-\sum_{\text{yt}=0}^{\infty} \text{yt}^2\,p(\text{yt} \mid y) - \left(\frac{\text{an}}{\text{bn}}\right)^2 \;=\; \frac{\text{an} (1+\text{bn})}{\text{bn}^2}
+\sum_{\tilde{y} =0}^{\infty} \tilde{y}^2\,p(\tilde{y} \mid y) - \left(\frac{a_n}{b_n}\right)^2 \;=\; \frac{a_n (1+b_n)}{b_n^2}
 $$
 
 ```js
@@ -256,10 +256,124 @@ Beta(3,9) 95% HPD = [0.0406, 0.4837], width = 0.4432
 Let $\theta \mid y \sim \operatorname{beta}(3, 9)$ and define the log-odds $\gamma = \log\frac{\theta}{1-\theta}$. Compute both the equal-tailed 95% credible interval and the 95% HPD interval for $\gamma$, and compare them against the log-odds transform of the $\theta$-intervals $[0.060, 0.518]$ and $[0.041, 0.484]$. Verify that the quantile interval transforms identically while the HPD interval does not.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 3.1: Log-odds HPD non-invariance vs. quantile monotone invariance for Beta(3, 9)
+const pg = await show`FullSimplify[(E^(a*g)*(1 + E^g)^(-a - b)) / Beta[a, b]]`
+```
+
+$$
+\begin{aligned}
+&p_\gamma(g) = p_\theta\!\left(\frac{e^g}{1+e^g}\right) \left|\frac{d}{dg}\frac{e^g}{1+e^g}\right| \\
+&= \frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
+\end{aligned}
+$$
+
+```js
+const hpdG = toJS(await wl`{gl, gu} /. FindRoot[{
+  (${pg} /. {a -> 3, b -> 9, g -> gl}) == (${pg} /. {a -> 3, b -> 9, g -> gu}),
+  Integrate[${pg} /. {a -> 3, b -> 9}, {g, gl, gu}] == 95/100}, {{gl, -2.9}, {gu, 0.0}}]`)
+const qLo = toJS(await wl`g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 25/1000, {g, -2.7}]`)
+const qHi = toJS(await wl`g /. FindRoot[Integrate[${pg} /. {a -> 3, b -> 9}, {g, -Infinity, g}] == 975/1000, {g, 0.1}]`)
+const logit = t => Math.log(t / (1 - t))
+console.log(`Direct gamma-quantile CI:      [${qLo.toFixed(3)}, ${qHi.toFixed(3)}]  (matches logit of theta-quantiles)`)
+console.log(`Transformed theta-HPD CI:      [${logit(0.0406).toFixed(3)}, ${logit(0.4837).toFixed(3)}]  vs. true gamma-HPD: [${hpdG[0].toFixed(3)}, ${hpdG[1].toFixed(3)}]`)
+```
+
+```text
+Direct gamma-quantile CI:      [-2.748, 0.071]  (matches logit of theta-quantiles)
+Transformed theta-HPD CI:      [-3.163, -0.065]  vs. true gamma-HPD: [-2.656, 0.144]
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch03-betabinom-overdisp" >}}
 Using the law of total variance, derive the exact mean and variance of the beta–binomial posterior predictive count $\tilde{S}_m$ in {{< eqref "eq:ch03-betabinom" >}}, and show that its variance exceeds the binomial variance $m \bar{\theta}(1 - \bar{\theta})$ by a factor $(a_n + b_n + m)/(a_n + b_n + 1)$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 3.2: Beta-Binomial posterior predictive mean, variance & overdispersion factor
+const meanT = await wl`an / (an + bn)`
+const varT = await wl`(an*bn) / ((an + bn)^2*(an + bn + 1))`
+const meanS = await show`Factor[m * ${meanT}]`
+```
+
+$$
+\mathbb{E}[\tilde{S}_m \mid y] = \frac{a_n m}{a_n +b_n }
+$$
+
+```js
+const varS = await show`Factor[m*((${meanT})*(1 - ${meanT}) - ${varT}) + m^2*(${varT})]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Var}(\tilde{S}_m \mid y) \\
+&= \frac{a_n b_n m (a_n +b_n +m)}{(a_n +b_n )^2 (1+a_n +b_n )}
+\end{aligned}
+$$
+
+```js
+const ratio = await show`Factor[${varS} / (m*(${meanT})*(1 - ${meanT}))]`
+```
+
+$$
+\begin{aligned}
+&\frac{\operatorname{Var}(\tilde{S}_m \mid y)}{m\,\bar{\theta}(1 - \bar{\theta})} \\
+&= \frac{a_n +b_n +m}{1+a_n +b_n }
+\end{aligned}
+$$
+
+```js
+const [mVal, rVal] = toJS(await wl`N[{${meanS}, ${ratio}} /. {an -> 2, bn -> 40, m -> 20}]`)
+console.log(`At Beta(2, 40), m = 20: E[S_m | y] = ${mVal.toFixed(4)}, overdispersion factor = ${rVal.toFixed(4)} (= 62/43)`)
+```
+
+```text
+At Beta(2, 40), m = 20: E[S_m | y] = 0.9524, overdispersion factor = 1.4419 (= 62/43)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch03-exp-expfam" >}}
 Cast the exponential sampling model $p(y \mid \theta) = \theta e^{-\theta y}$ ($y > 0, \theta > 0$) into the exponential-family form {{< eqref "eq:ch03-expfam" >}}, write down its Diaconis–Ylvisaker conjugate prior {{< eqref "eq:ch03-dy-prior" >}}, and confirm that the conjugate family is $\operatorname{gamma}(a, b)$.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 3.3: Exponential model (h=1, c=-phi, t=y) -> Diaconis-Ylvisaker prior -> Gamma(n0 + 1, n0*t0)
+const dyPhi = await show`(-phi)^n0 * Exp[n0 * t0 * phi]`
+```
+
+$$
+\begin{aligned}
+&p(\phi \mid n_0, t_0) \propto \exp\!\bigl(n_0 t_0 \phi - n_0(-\log(-\phi))\bigr) \\
+&= e^{n_0 \phi t_0 } (-\phi )^{n_0 }
+\end{aligned}
+$$
+
+```js
+const gamKer = await show`FullSimplify[(${dyPhi} /. phi -> -th) * Abs[D[-th, th]], th > 0]`
+```
+
+$$
+\begin{aligned}
+&p(\theta \mid n_0, t_0) \propto p(\phi \mid n_0, t_0)\big|_{\phi = -\theta}\,\left|\frac{d\phi}{d\theta}\right| \\
+&= e^{-n_0 t_0 \theta } \theta ^{n_0 }
+\end{aligned}
+$$
+
+```js
+const [shape, rate, meanG] = toJS(await wl`N[{n0 + 1, n0*t0, (n0 + 1)/(n0*t0)} /. {n0 -> 2, t0 -> 3}]`)
+console.log(`At (n0=2, t0=3): Gamma(${shape}, ${rate}), prior mean = ${meanG.toFixed(3)}`)
+```
+
+```text
+At (n0=2, t0=3): Gamma(3, 6), prior mean = 0.500
+```
+
+{{< /details >}}

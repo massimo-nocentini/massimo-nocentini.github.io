@@ -228,9 +228,8 @@ const v22Sym = await show`FullSimplify[${Vj}[[2, 2]]]`
 
 $$
 \begin{aligned}
-\left[\left(\Sigma^{-1} + \frac{1}{\text{sig2}}\operatorname{diag}(\text{nj}, \text{sxx})\right)^{-1}\right]_{2,2} \\
-&= \frac{\text{sig2} \left(-\text{nj} \text{s12}^2+\text{nj} \text{s11} \text{s22}+\text{s22} \text{sig2}\right)}{-\text{nj} \text{s12}^2 \text{sxx}+\text{nj} \text{s11} (\text{sig2}+\text{s22} \text{sxx})+\text{sig2} (\text{sig2}+\text{s22} \text{sxx})}
-\end{aligned}
+&\left[\left(\Sigma^{-1} + \frac{1}{\sigma^2}\operatorname{diag}(n_j, S_{xx})\right)^{-1}\right]_{2,2} \\
+&= \frac{\sigma^2 \left(-n_j \Sigma_{12}^2+n_j \Sigma_{11} \Sigma_{22} +\Sigma_{22} \sigma^2 \right)}{-n_j \Sigma_{12}^2 S_{xx} +n_j \Sigma_{11} (\sigma^2 +\Sigma_{22} S_{xx})+\sigma^2 (\sigma^2 +\Sigma_{22} S_{xx})}\end{aligned}
 $$
 
 ```js
@@ -240,9 +239,8 @@ await show`FullSimplify[Inverse[DiagonalMatrix[{1/t1^2, 1/t2^2}] + DiagonalMatri
 
 $$
 \begin{aligned}
-\mathbf{m}_j^{\text{diag}} = \left(\operatorname{diag}(\text{t1}^{-2}, \text{t2}^{-2}) + \frac{1}{\text{sig2}}\operatorname{diag}(\text{nj}, \text{sxx})\right)^{-1}\begin{pmatrix} \text{th1}/\text{t1}^2 + \text{nj}\,\text{yb}/\text{sig2} \\ \text{th2}/\text{t2}^2 + \text{sxx}\,\text{b2ols}/\text{sig2} \end{pmatrix} \\
-&= \left\{\frac{\text{sig2} \text{th1}+\text{nj} \text{t1}^2 \text{yb}}{\text{sig2}+\text{nj} \text{t1}^2},\frac{\text{b2ols} \text{sxx} \text{t2}^2+\text{sig2} \text{th2}}{\text{sig2}+\text{sxx} \text{t2}^2}\right\}
-\end{aligned}
+&\mathbf{m}_j^{\text{diag}} = \left(\operatorname{diag}(\tau_1^{-2}, \tau_2^{-2}) + \frac{1}{\sigma^2}\operatorname{diag}(n_j, S_{xx})\right)^{-1}\begin{pmatrix} \theta_1 /\tau_1^2 + n_j \,\bar{y} /\sigma^2 \\ \theta_2 /\tau_2^2 + S_{xx} \,\hat{\beta}_{j,2}^{\text{OLS}} /\sigma^2 \end{pmatrix} \\
+&= \left\{\frac{\sigma^2 \theta_1 +n_j \tau_1^2 \bar{y}}{\sigma^2 +n_j \tau_1^2},\frac{\hat{\beta}_{j,2}^{\text{OLS}} S_{xx} \tau_2^2+\sigma^2 \theta_2}{\sigma^2 +S_{xx} \tau_2^2}\right\}\end{aligned}
 $$
 
 ```js
@@ -265,10 +263,94 @@ n_j = 24 (sxx = 23) -> cond. slope SD = 0.947 (prior SD = 1.225)
 In the LME Python simulation above, compute the unpooled OLS slope $\hat{\beta}_{j,2}^{\text{ols}}$ for every school $j = 1, \dots, m$ and compare its total MSE against the hierarchical posterior mean $\hat{\beta}_{j,2}$ from {{< xref "alg:ch11-lme-gibbs" "full" >}}. Plot $\hat{\beta}_{j,2}^{\text{ols}} - \hat{\beta}_{j,2}$ versus $n_j$ to verify that small schools experience the strongest slope shrinkage.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 11.1: Symbolic LME slope shrinkage difference b2ols - m_{j,2} = O(1/n_j) (diagonal Sigma)
+const shrinkDiff = await show`FullSimplify[b2ols - (sxx*b2ols/sig2 + th2/tau2Sq)/(sxx/sig2 + 1/tau2Sq)]`
+```
+
+$$
+\begin{aligned}
+&\hat{\beta}_{j,2}^{\text{OLS}} - m_{j,2} \\
+&= \frac{\sigma^2 (\hat{\beta}_{j,2}^{\text{OLS}} -\theta_2 )}{\sigma^2 +S_{xx} \tau_2^2 }
+\end{aligned}
+$$
+
+```js
+for (const nj of [5, 24]) {
+  const frac = toJS(await wl`N[(${shrinkDiff} / (b2ols - th2)) /. {sig2 -> 64, tau2Sq -> 3/2, sxx -> ${nj - 1}}]`)
+  console.log(`n_j = ${String(nj).padStart(2)}: fraction of (b2ols - theta2) shrunk away (diagonal Sigma) = ${(100*frac).toFixed(1)}%`)
+}
+```
+
+```text
+n_j =  5: fraction of (b2ols - theta2) shrunk away (diagonal Sigma) = 91.4%
+n_j = 24: fraction of (b2ols - theta2) shrunk away (diagonal Sigma) = 65.0%
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch11-centering" >}}
 Why did Hoff center student SES *within* each school ($\bar{x}_j = 0$) before fitting the LME model? Show algebraically how shifting $x_{i,j}$ by a constant changes both the interpretation of the intercept $\beta_{j,1}$ and the off-diagonal covariance $\Sigma_{1,2} = \operatorname{Cov}(\beta_{j,1}, \beta_{j,2})$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 11.2: Effect of global shift x -> x - c on LME intercept covariance Sigma_{1,2}
+const T = [[1, W.c], [0, 1]]
+const covShift = await show`FullSimplify[${T} . {{s11, s12}, {s12, s22}} . Transpose[${T}]]`
+```
+
+$$
+\begin{aligned}
+&T \Sigma T^\top \\
+&= \left( \begin{array}{cc} \Sigma_{11} +c (2 \Sigma_{12} +c \Sigma_{22} ) & \Sigma_{12} +c \Sigma_{22} \\ \Sigma_{12} +c \Sigma_{22} & \Sigma_{22} \\ \end{array} \right)
+\end{aligned}
+$$
+
+```js
+const cDecorr = await show`c /. First[Solve[${covShift}[[1, 2]] == 0, c]]`
+```
+
+$$
+c^* = -\frac{\Sigma_{12} }{\Sigma_{22} }
+$$
+
+```js
+const cVal = toJS(await wl`N[${cDecorr} /. {s12 -> 2, s22 -> 3/2}]`)
+console.log(`At Sigma = [[20, 2], [2, 1.5]]: decorrelating shift c* = ${cVal.toFixed(3)} (note: within-school centering uses school-specific c_j)`)
+```
+
+```text
+At Sigma = [[20, 2], [2, 1.5]]: decorrelating shift c* = -1.333 (note: within-school centering uses school-specific c_j)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch11-glmm-mh" >}}
 Write a short Python implementation of {{< xref "alg:ch11-glmm-mwg" "full" >}} for $m = 15$ groups with $n_j = 12$ Poisson counts $y_{i,j} \sim \operatorname{Poisson}(\exp(\beta_{j,1} + \beta_{j,2} x_{i,j}))$. Tune the proposal scale $c$ so average acceptance across groups stays between $25\%$ and $45\%$, and plot the three uncertainty bands of {{< xref "fig:ch11-layers" "full" >}}!
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 11.3: Exact predictive variance across layers 2-3 (random effects + Poisson noise, conditional on theta)
+const totVar = await show`FullSimplify[Exp[m + v/2] + Exp[2*m + v]*(Exp[v] - 1)]`
+```
+
+$$
+\operatorname{Var}(\tilde{Y} \mid \theta) = e^{m+\frac{v}{2}}+e^{2 m+v} \left(-1+e^v\right)
+$$
+
+```js
+const [v1, v2, v3] = toJS(await wl`N[{Exp[m], Exp[m + v/2], ${totVar}} /. {m -> 1, v -> 1/4}]`)
+console.log(`At m = 1, v = 0.25: median rate = ${v1.toFixed(2)}, pop-avg rate = ${v2.toFixed(2)}, predictive Var(Ytilde | theta) = ${v3.toFixed(2)}`)
+```
+
+```text
+At m = 1, v = 0.25: median rate = 2.72, pop-avg rate = 3.08, predictive Var(Ytilde | theta) = 5.77
+```
+
+{{< /details >}}

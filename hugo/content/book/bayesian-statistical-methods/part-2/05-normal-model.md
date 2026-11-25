@@ -197,9 +197,8 @@ const marg = await show`Assuming[nun > 0 && rate > 0,
 
 $$
 \begin{aligned}
-\left.\int_0^\infty p^{\frac{\text{nun}+1}{2}-1} e^{-\text{rate}\cdot p/2}\,dp\right|_{\text{rate}=\text{nun}\,\text{s2n}+\text{kn}(\text{th}-\text{mun})^2} \\
-&= 2^{\frac{1+\text{nun}}{2}} \left(\frac{1}{\text{nun} \text{s2n}+\text{kn} (-\text{mun}+\text{th})^2}\right)^{\frac{1+\text{nun}}{2}} \Gamma \left(\frac{1+\text{nun}}{2}\right)
-\end{aligned}
+&\left.\int_0^\infty p^{\frac{\nu_n +1}{2}-1} e^{-\text{rate}\cdot p/2}\,dp\right|_{\text{rate}=\nu_n \,\sigma_n^2 +\kappa_n (\theta -\mu_n)^2} \\
+&= 2^{\frac{1+\nu_n}{2}} \left(\frac{1}{\nu_n \sigma_n^2 +\kappa_n (-\mu_n +\theta)^2}\right)^{\frac{1+\nu_n}{2}} \Gamma \left(\frac{1+\nu_n}{2}\right)\end{aligned}
 $$
 
 ```js
@@ -223,9 +222,8 @@ const tVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
 
 $$
 \begin{aligned}
-\operatorname{Var}[\theta \mid y] = \frac{\text{s2n}}{\text{kn}}\int_{-\infty}^\infty u^2\,\frac{(1 + u^2/\text{nun})^{-(\text{nun}+1)/2}}{\sqrt{\text{nun}}\,B(\tfrac12, \text{nun}/2)}\,du \\
-&= \frac{\text{nun} \text{s2n}}{\text{kn} (-2+\text{nun})}
-\end{aligned}
+&\operatorname{Var}[\theta \mid y] = \frac{\sigma_n^2}{\kappa_n}\int_{-\infty}^\infty u^2\,\frac{(1 + u^2/\nu_n)^{-(\nu_n +1)/2}}{\sqrt{\nu_n}\,B(\tfrac12, \nu_n /2)}\,du \\
+&= \frac{\nu_n \sigma_n^2}{\kappa_n (-2+\nu_n)}\end{aligned}
 $$
 
 ```js
@@ -240,7 +238,7 @@ await show`Factor[Together[(${mseB} - s2/n) * (n + k0)^2]]`
 
 
 $$
-(n + \text{k0})^2\!\left[\operatorname{MSE}(\hat{\theta}_b) - \frac{\text{s2}}{n}\right] \;=\; \frac{\text{k0} \left(\text{k0} \text{mu0}^2 n-\text{k0} \text{s2}-2 n \text{s2}-2 \text{k0} \text{mu0} n \text{th0}+\text{k0} n \text{th0}^2\right)}{n}
+(n + \kappa_0)^2\!\left[\operatorname{MSE}(\hat{\theta}_b) - \frac{\sigma^2}{n}\right] \;=\; \frac{\kappa_0 \left(\kappa_0 \mu_0^2 n-\kappa_0 \sigma^2 -2 n \sigma^2 -2 \kappa_0 \mu_0 n \theta_0 +\kappa_0 n \theta_0^2\right)}{n}
 $$
 
 ```js
@@ -266,10 +264,103 @@ Midge exact: mu_n = 1.8140, s2_n = 0.01532, post SD = 0.0438, 95% CI = [1.7268, 
 Show that taking $\kappa_0, \nu_0 \to 0^+$ in {{< xref "thm:ch05-nig" "full" >}} gives $\mu_n = \bar{y}$ and $\nu_n = n$, whereas the reference prior $p(\theta, \sigma^2) \propto 1/\sigma^2$ gives $n - 1$ degrees of freedom. Explain the discrepancy by tracking the factor $(\sigma^2)^{-1/2}$ in $p(\theta \mid \sigma^2)$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 5.1: Marginal posterior exponent of sigma^2 under kappa_0, nu_0 -> 0+ vs. reference prior 1/sigma^2
+const muLim = await show`Limit[(k0*mu0 + n*yb)/(k0 + n), k0 -> 0]`
+```
+
+$$
+\lim_{\kappa_0 \to 0^+} \mu_n = \bar{y}
+$$
+
+```js
+const powLim = await show`Assuming[n > 0, FullSimplify[-(n + nu0)/2 - 1 /. nu0 -> 0]]`
+```
+
+$$
+\text{Marginal exponent of } \sigma^2 \text{ as } \kappa_0, \nu_0 \to 0^+ = -1-\frac{n}{2}
+$$
+
+```js
+const powRef = await show`Assuming[n > 0, FullSimplify[-(n - 1)/2 - 1]]`
+```
+
+$$
+\begin{aligned}
+&\text{Marginal exponent of } \sigma^2 \text{ under } p(\theta, \sigma^2) \propto 1/\sigma^2 \\
+&= \frac{1}{2} (-1-n)
+\end{aligned}
+$$
+
+```js
+const [dfLim, dfRef] = toJS(await wl`{-2*(${powLim} + 1), -2*(${powRef} + 1)} /. n -> 9`)
+console.log(`At n = 9: kappa0,nu0 -> 0+ gives df = ${dfLim} (prior ~ s2^(-3/2)), whereas 1/s2 gives df = ${dfRef} (nu0 = -1)`)
+```
+
+```text
+At n = 9: kappa0,nu0 -> 0+ gives df = 9 (prior ~ s2^(-3/2)), whereas 1/s2 gives df = 8 (nu0 = -1)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch05-pred-student-t" >}}
 Derive the exact posterior predictive distribution $\tilde{Y} \mid y_{1:n}$ in {{< xref "thm:ch05-nig" "full" >}} by integrating $\tilde{Y} \mid \theta, \sigma^2 \sim \operatorname{normal}(\theta, \sigma^2)$ first over $\theta \mid \sigma^2, y_{1:n}$ and then over $\sigma^2 \mid y_{1:n}$. Confirm that its variance is $\frac{\nu_n}{\nu_n - 2}\,\sigma_n^2(1 + 1/\kappa_n)$ for $\nu_n > 2$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 5.2: Exact posterior predictive Student-t variance for Normal-IG model
+const predVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
+  FullSimplify[(nun/(nun - 2)) * s2n * (1 + 1/kn)]]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Var}(\tilde{Y} \mid y) \\
+&= \frac{\left(1+\frac{1}{\kappa_n }\right) \nu_n \sigma_n^2 }{-2+\nu_n }
+\end{aligned}
+$$
+
+```js
+const sdPred = Math.sqrt(toJS(await wl`N[${predVar} /. {nun -> 10, kn -> 10, s2n -> 0.01532}]`))
+const sdTheta = Math.sqrt(toJS(await wl`N[(nun/(nun - 2))*s2n/kn /. {nun -> 10, kn -> 10, s2n -> 0.01532}]`))
+console.log(`Midge posterior predictive SD = ${sdPred.toFixed(4)} (vs. posterior SD of theta = ${sdTheta.toFixed(4)})`)
+```
+
+```text
+Midge posterior predictive SD = 0.1451 (vs. posterior SD of theta = 0.0438)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch05-mse-crossover" >}}
 In {{< xref "thm:ch05-mse" "full" >}}, suppose $\theta_0 = 112$, $\sigma^2 = 169$, $\mu_0 = 100$, and $\kappa_0 = 3$. Find the exact sample size $n^*$ above which $\bar{y}$ achieves lower MSE than $\hat{\theta}_b$, and verify your threshold against the orange curve in {{< xref "fig:ch05-mse" "full" >}}.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 5.3: Exact sample-size crossover n* where ybar beats Bayes shrinkage in MSE (exists iff k0*(mu0 - th0)^2 > 2*s2)
+const nStar = await show`n /. First[Solve[(mu0 - th0)^2 == s2*(1/n + 2/k0), n]]`
+```
+
+$$
+\begin{aligned}
+&n^* \\
+&= \frac{\kappa_0 \sigma^2 }{\kappa_0 \mu_0 ^2-2 \sigma^2 -2 \kappa_0 \mu_0 \theta_0 +\kappa_0 \theta_0 ^2}
+\end{aligned}
+$$
+
+```js
+const val = toJS(await wl`N[${nStar} /. {th0 -> 112, mu0 -> 100, s2 -> 169, k0 -> 3}]`)
+console.log(`At theta0=112, mu0=100, s2=169, k0=3 -> exact n* = ${val.toFixed(3)} (= 507/94; ybar wins for n >= 6)`)
+```
+
+```text
+At theta0=112, mu0=100, s2=169, k0=3 -> exact n* = 5.394 (= 507/94; ybar wins for n >= 6)
+```
+
+{{< /details >}}

@@ -178,7 +178,7 @@ const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
 
 
 $$
-\Pr(H_1 \mid E) = \frac{s\,\text{p0}}{s\,\text{p0} + f(1 - \text{p0})} \;=\; \frac{\text{p0} s}{f-f \text{p0}+\text{p0} s}
+\Pr(H_1 \mid E) = \frac{s\,p_0}{s\,p_0 + f(1 - p_0)} \;=\; \frac{p_0 s}{f-f p_0 +p_0 s}
 $$
 
 ```js
@@ -187,7 +187,7 @@ await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
 
 
 $$
-\frac{\Pr(H_1 \mid E)/(1 - \Pr(H_1 \mid E))}{\text{p0}/(1 - \text{p0})} \;=\; \frac{s}{f}
+\frac{\Pr(H_1 \mid E)/(1 - \Pr(H_1 \mid E))}{p_0 /(1 - p_0)} \;=\; \frac{s}{f}
 $$
 
 ```js
@@ -207,9 +207,8 @@ const varHyper = await show`FullSimplify[n*(kRed/nPop)*(1 - kRed/nPop) + n*(n - 
 
 $$
 \begin{aligned}
-\operatorname{Var}\!\left(\sum_{i=1}^n Y_i\right) = n\,\frac{\text{kRed}}{\text{nPop}}\!\left(1 - \frac{\text{kRed}}{\text{nPop}}\right) + n(n-1)\operatorname{Cov}(Y_1, Y_2) \\
-&= \frac{\text{kRed} n (\text{kRed}-\text{nPop}) (n-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}
-\end{aligned}
+&\operatorname{Var}\!\left(\sum_{i=1}^n Y_i\right) = n\,\frac{\text{kRed}}{\text{nPop}}\!\left(1 - \frac{\text{kRed}}{\text{nPop}}\right) + n(n-1)\operatorname{Cov}(Y_1, Y_2) \\
+&= \frac{\text{kRed} n (\text{kRed}-\text{nPop}) (n-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}\end{aligned}
 $$
 
 ```js
@@ -229,7 +228,7 @@ const pExact = await show`${post} /. {p0 -> 1/100, s -> 95/100, f -> 5/100}`
 
 
 $$
-\left.\Pr(H_1 \mid E)\right|_{\text{p0}=\frac{1}{100},\, s=\frac{95}{100},\, f=\frac{5}{100}} \;=\; \frac{19}{118}
+\left.\Pr(H_1 \mid E)\right|_{p_0 =\frac{1}{100},\, s=\frac{95}{100},\, f=\frac{5}{100}} \;=\; \frac{19}{118}
 $$
 
 ```js
@@ -257,10 +256,90 @@ N = 1000: exact TV distance = 0.0024
 Suppose a bookmaker offers even-money odds corresponding to subjective probabilities $q(F) = 0.6$ and $q(\text{not } F) = 0.6$ (violating P1–P2 because $q(F) + q(\text{not } F) = 1.2 > 1$). Construct a pair of bets against this bookmaker that guarantees you a positive profit whether $F$ occurs or not.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 2.1: Dutch book guaranteed profit when qF + qNotF > 1 (both outcomes F and not-F)
+const profitF = await show`Simplify[(qF + qNotF) - 1]`
+```
+
+$$
+\text{Dutch-book profit} = (q_F - 1) + q_{F^c} = -1+q_F +q_{F^c}
+$$
+
+```js
+const pVal = toJS(await wl`N[${profitF} /. {qF -> 6/10, qNotF -> 6/10}]`)
+console.log(`Selling 1 unit of F (0.6) and 1 unit of not-F (0.6): guaranteed profit = +${pVal.toFixed(2)} whether F occurs or not`)
+```
+
+```text
+Selling 1 unit of F (0.6) and 1 unit of not-F (0.6): guaranteed profit = +0.20 whether F occurs or not
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch02-finite-exch" >}}
 Consider drawing $n = 2$ balls without replacement from an urn containing $K$ red balls and $N - K$ blue balls, where $Y_i = 1$ if draw $i$ is red. Verify directly that $(Y_1, Y_2)$ is exchangeable and compute $\operatorname{Cov}(Y_1, Y_2)$ as a function of $K$ and $N$. Show that $\operatorname{Cov}(Y_1, Y_2) < 0$ for every finite $N \ge 2$ with $0 < K < N$, and verify that $\operatorname{Cov}(Y_1, Y_2) \to 0$ as $N \to \infty$ with $K/N \to \theta$.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 2.2: Exchangeability & negative covariance of n = 2 draws without replacement
+const p10 = await show`FullSimplify[(kRed/nPop)*((nPop - kRed)/(nPop - 1))]`
+```
+
+$$
+\Pr(Y_1 = 1, Y_2 = 0) = \Pr(Y_1 = 0, Y_2 = 1) = \frac{K (-K +N )}{(-1+N ) N }
+$$
+
+```js
+const p01 = await wl`FullSimplify[((nPop - kRed)/nPop)*(kRed/(nPop - 1))]`
+const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{Cov}(Y_1, Y_2) = \Pr(Y_1 = 1, Y_2 = 1) - \Pr(Y_1 = 1)^2 \\
+&= \frac{K (K -N )}{(-1+N ) N ^2}
+\end{aligned}
+$$
+
+```js
+const lim = toJS(await wl`Limit[${covF} /. kRed -> th*nPop, nPop -> Infinity]`)
+const exchDiff = toJS(await wl`Simplify[${p10} - ${p01}]`)
+const cVal = toJS(await wl`N[${covF} /. {kRed -> 3, nPop -> 10}]`)
+console.log(`P(1,0) - P(0,1) = ${exchDiff},  Cov < 0 for 0 < K < N,  limit as N -> Inf = ${lim},  at (K=3, N=10): Cov = ${cVal.toFixed(4)}`)
+```
+
+```text
+P(1,0) - P(0,1) = 0,  Cov < 0 for 0 < K < N,  limit as N -> Inf = 0,  at (K=3, N=10): Cov = -0.0233
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch02-conditional-indep" >}}
 Give an example of two events $F$ and $G$ that are *conditionally* independent given $H$ and given $\text{not } H$, yet *marginally* dependent. Explain how this mirrors the behavior of observations $Y_1, Y_2$ in a Bayesian model with unknown parameter $\theta$.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 2.3: Conditional independence given H and not-H still implies marginal dependence
+const margDiff = await show`Factor[(h*p1*q1 + (1 - h)*p0*q0) - (h*p1 + (1 - h)*p0)*(h*q1 + (1 - h)*q0)]`
+```
+
+$$
+\Pr(F \cap G) - \Pr(F)\Pr(G) = -((-1+h) h (p_0 -p_1 ) (q_0 -q_1 ))
+$$
+
+```js
+const val = toJS(await wl`N[${margDiff} /. {h -> 1/2, p1 -> 3/4, q1 -> 3/4, p0 -> 1/4, q0 -> 1/4}]`)
+console.log(`At h=1/2, p1=q1=3/4, p0=q0=1/4: P(F and G) - P(F)P(G) = +${val.toFixed(4)} > 0 (H plays the role of theta)`)
+```
+
+```text
+At h=1/2, p1=q1=3/4, p0=q0=1/4: P(F and G) - P(F)P(G) = +0.0625 > 0 (H plays the role of theta)
+```
+
+{{< /details >}}

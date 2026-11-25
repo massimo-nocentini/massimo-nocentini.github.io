@@ -324,7 +324,7 @@ const accRate = await show`Assuming[ell > 0,
 
 
 $$
-\int_{-\infty}^\infty \operatorname{erfc}\!\left(\frac{\lvert \text{ell}\,w \rvert}{2\sqrt{2}}\right)\frac{e^{-w^2/2}}{\sqrt{2\pi}}\,dw \;=\; \frac{2 \cot ^{-1}\left(\frac{\text{ell}}{2}\right)}{\pi }
+\int_{-\infty}^\infty \operatorname{erfc}\!\left(\frac{\lvert \ell \,w \rvert}{2\sqrt{2}}\right)\frac{e^{-w^2/2}}{\sqrt{2\pi}}\,dw \;=\; \frac{2 \cot^{-1}\left(\frac{\ell}{2}\right)}{\pi}
 $$
 
 ```js
@@ -335,7 +335,7 @@ const accNormal = await show`Assuming[d > 0 && n > 0 && s2 > 0 && t0 > 0,
 
 
 $$
-\alpha(\delta;\, n, \sigma^2, \tau_0^2) = \left.\frac{2}{\pi}\cot^{-1}\!\left(\frac{\text{ell}}{2}\right)\right|_{\text{ell}=d\sqrt{n/\text{s2}+1/\text{t0}^2}} \;=\; \frac{2 \cot ^{-1}\left(\frac{1}{2} d \sqrt{\frac{n}{\text{s2}}+\frac{1}{\text{t0}^2}}\right)}{\pi }
+\alpha(\delta;\, n, \sigma^2, \tau_0^2) = \left.\frac{2}{\pi}\cot^{-1}\!\left(\frac{\ell}{2}\right)\right|_{\ell =d\sqrt{n/\sigma^2 +1/\tau_0^2}} \;=\; \frac{2 \cot^{-1}\left(\frac{1}{2} d \sqrt{\frac{n}{\sigma^2}+\frac{1}{\tau_0^2}}\right)}{\pi}
 $$
 
 ```js
@@ -345,7 +345,7 @@ await show`Factor[Det[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
 
 
 $$
-\det\!\left(\rho^{\lvert i - j \rvert}\right)_{1 \le i,j \le 5} \;=\; (-1+\rho )^4 (1+\rho )^4
+\det\!\left(\rho^{\lvert i - j \rvert}\right)_{1 \le i,j \le 5} \;=\; (-1+\rho)^4 (1+\rho)^4
 $$
 
 ```js
@@ -354,7 +354,7 @@ await show`Simplify[(1 - rho^2) * Inverse[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]
 
 
 $$
-(1 - \rho^2)\,C_\rho^{-1} \;=\; \left( \begin{array}{ccccc} 1 & -\rho  & 0 & 0 & 0 \\ -\rho  & 1+\rho ^2 & -\rho  & 0 & 0 \\ 0 & -\rho  & 1+\rho ^2 & -\rho  & 0 \\ 0 & 0 & -\rho  & 1+\rho ^2 & -\rho  \\ 0 & 0 & 0 & -\rho  & 1 \\ \end{array} \right)
+(1 - \rho^2)\,C_\rho^{-1} \;=\; \left( \begin{array}{ccccc} 1 & -\rho & 0 & 0 & 0 \\ -\rho & 1+\rho^2 & -\rho & 0 & 0 \\ 0 & -\rho & 1+\rho^2 & -\rho & 0 \\ 0 & 0 & -\rho & 1+\rho^2 & -\rho \\ 0 & 0 & 0 & -\rho & 1 \\ \end{array} \right)
 $$
 
 ```js
@@ -378,14 +378,133 @@ delta^2 =   64 -> exact acceptance rate = 0.070
 Extend the proof of {{< xref "prop:ch10-accept" "full" >}} to the expected squared jump. With $\ell = \delta/\tau$ and $\omega = \arctan(\ell/2)$, show by polar coordinates that $E[(\theta^{(s+1)} - \theta^{(s)})^2] = \frac{2\delta^2}{\pi}\bigl[\frac{\pi}{2} - \omega - \frac{1}{2}\sin 2\omega\bigr]$ at stationarity, and that the lag-1 autocorrelation is $1$ minus this quantity divided by $2\tau^2$. Maximize numerically over $\ell$ and confirm that the optimum is near $\ell = 2.4$ with acceptance rate near $0.44$. Why do finite-run autocorrelations started at $\theta^{(0)} = 0$ differ from these stationary values?
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 10.1: Symbolic expected squared jump & optimal 1D Metropolis scaling (tau = 1; 2.38 is d -> Inf limit)
+const esjd = await show`FullSimplify[(2*ell^2/Pi) * (Pi/2 - ArcTan[ell/2] - Sin[2*ArcTan[ell/2]]/2)]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{ESJD}(\ell) \\
+&= \frac{\ell ^2 \left(-\frac{4 \ell }{4+\ell ^2}+\pi -2 \tan ^{-1}\left(\frac{\ell }{2}\right)\right)}{\pi }
+\end{aligned}
+$$
+
+```js
+const acf1 = await show`FullSimplify[1 - ${esjd}/2]`
+```
+
+$$
+\begin{aligned}
+&\rho_1(\ell) = 1 - \frac{1}{2}\operatorname{ESJD}(\ell) \\
+&= 1-\frac{\ell ^2 \left(-\frac{4 \ell }{4+\ell ^2}+\pi -2 \tan ^{-1}\left(\frac{\ell }{2}\right)\right)}{2 \pi }
+\end{aligned}
+$$
+
+```js
+const ellStar = toJS(await wl`ell /. FindRoot[D[${esjd}, ell] == 0, {ell, 2.4}]`)
+const accOpt = toJS(await wl`N[(2/Pi)*ArcCot[${ellStar}/2]]`)
+const acfMin = toJS(await wl`N[${acf1} /. ell -> ${ellStar}]`)
+console.log(`1D optimum (tau = 1): ell* = ${ellStar.toFixed(3)}, acceptance rate = ${accOpt.toFixed(3)}, min lag-1 ACF = ${acfMin.toFixed(3)}`)
+```
+
+```text
+1D optimum (tau = 1): ell* = 2.426, acceptance rate = 0.439, min lag-1 ACF = 0.628
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch10-reflect" >}}
 Show that for $0 < \delta \le 1$ the reflecting random walk has density $J(b \mid a) = \frac{1}{2\delta}\bigl[\mathbf{1}(\lvert b - a \rvert < \delta) + \mathbf{1}(a + b < \delta) + \mathbf{1}(2 - a - b < \delta)\bigr]$ on $(0,1)$, and conclude that it is symmetric. What goes wrong if out-of-range proposals are instead redrawn until they fall inside $(0, 1)$, with no Hastings correction?
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 10.2: Normalization & symmetry of reflecting random walk vs. naive-redraw boundary depletion
+const normInt = await show`Assuming[0 < d <= 1/2 && 0 < a < d,
+  FullSimplify[Integrate[1/(2*d), {b, 0, a + d}] + Integrate[1/(2*d), {b, 0, d - a}]]]`
+```
+
+$$
+\int_0^1 J_{\text{refl}}(b \mid a)\,db = 1
+$$
+
+```js
+const statFactor = await show`(Min[1, a + d] - Max[0, a - d]) / (2*d)`
+```
+
+$$
+\begin{aligned}
+&\frac{\pi_{\text{redraw}}(a)}{\pi(a)} \propto \frac{Z(a)}{2d} \\
+&= \frac{-\max (0,a-d)+\min (1,a+d)}{2 d}
+\end{aligned}
+$$
+
+```js
+const fEdge = toJS(await wl`N[${statFactor} /. {a -> 1/1000, d -> 1/5}]`)
+console.log(`Reflecting kernel integrates to ${toJS(normInt)} and is symmetric; naive redraw shrinks stationary boundary density to ${fEdge.toFixed(3)}x (rejecting out-of-range proposals is valid!)`)
+```
+
+```text
+Reflecting kernel integrates to 1 and is symmetric; naive redraw shrinks stationary boundary density to 0.502x (rejecting out-of-range proposals is valid!)
+```
+
+{{< /details >}}
 
 {{< thm kind="exercise" label="ex:ch10-logscale" >}}
 To sample a positive parameter $\theta$, propose $\theta^* = \theta e^{\epsilon}$ with $\epsilon \sim \operatorname{normal}(0, \delta^2)$. Compute the Hastings correction $J(\theta \mid \theta^*)/J(\theta^* \mid \theta)$ and show that it equals $\theta^*/\theta$. Verify that the same algorithm arises by running a symmetric Metropolis walk on $\log\theta$ with the Jacobian included in the target, and demonstrate by simulation what distribution is sampled when the correction is omitted.
 {{< /thm >}}
 
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 10.3: Log-scale multiplicative proposal Hastings ratio J(th | th*) / J(th* | th) = th* / th
+const jFwd = await wl`Exp[-(Log[thP/th])^2/(2*d^2)] / (thP*d*Sqrt[2*Pi])`
+const jRev = await wl`Exp[-(Log[th/thP])^2/(2*d^2)] / (th*d*Sqrt[2*Pi])`
+const hRatio = await show`Assuming[th > 0 && thP > 0 && d > 0, FullSimplify[${jRev} / ${jFwd}]]`
+```
+
+$$
+\frac{J(\theta \mid \theta^*)}{J(\theta^* \mid \theta)} = \frac{\theta^* }{\theta }
+$$
+
+```js
+const rVal = toJS(await wl`N[${hRatio} /. {th -> 1, thP -> 2}]`)
+console.log(`At th = 1 -> th* = 2: Hastings factor = ${rVal.toFixed(1)}; omitting th*/th targets pi(th)/th (which may diverge at 0)`)
+```
+
+```text
+At th = 1 -> th* = 2: Hastings factor = 2.0; omitting th*/th targets pi(th)/th (which may diverge at 0)
+```
+
+{{< /details >}}
+
 {{< thm kind="exercise" label="ex:ch10-collapse" >}}
 In {{< xref "alg:ch10-mwg" "full" >}} the update of $\rho$ conditions on $\boldsymbol{\beta}$. Integrate $\boldsymbol{\beta}$ out of {{< eqref "eq:ch10-ar1" >}} analytically to obtain $p(\mathbf{y} \mid \mathbf{X}, \sigma^2, \rho)$, and implement the alternative scan that first updates $\rho$ given $\sigma^2$ and then draws $\boldsymbol{\beta}$ given $(\rho, \sigma^2)$. Explain why the pair of steps is a valid update of $(\rho, \boldsymbol{\beta})$ jointly, and compare effective sample sizes per second.
 {{< /thm >}}
+
+{{< details summary="Symbolic Solution & Instantiation" >}}
+
+```js
+// Ex 10.4: Marginal covariance of y | X, sigma^2, rho after integrating out beta ~ N(b0, S0)
+const margCov = await show`s2 * cMat[rho] + xMat . s0Mat . Transpose[xMat]`
+```
+
+$$
+\operatorname{Cov}(y \mid X, \sigma^2, \rho) = \sigma^2 C (\rho )+X .\Sigma_0 .X ^T
+$$
+
+```js
+// Concrete 2x2 verification (p = 1, X = {{1}, {2}}, S0 = {{4}}, s2 = 1, rho = 1/2)
+const mVal = toJS(await wl`N[{{1, 1/2}, {1/2, 1}} + {{1}, {2}}.{{4}}.{{1, 2}}]`)
+console.log('Concrete marginal Cov(y | X, s2=1, rho=0.5) [mean = X*b0]:', JSON.stringify(mVal))
+```
+
+```text
+Concrete marginal Cov(y | X, s2=1, rho=0.5) [mean = X*b0]: [[5,8.5],[8.5,17]]
+```
+
+{{< /details >}}
