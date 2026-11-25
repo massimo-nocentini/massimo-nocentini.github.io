@@ -315,7 +315,7 @@ print(f"AR(1): accept={acc / 10_000:.2f}, slope 95% CI={np.quantile(keep[:, 0], 
 
 ## Symbolic Check in Wolfram Language {#sec:ch10-wolfram}
 
-Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode to obtain $\frac{2}{\pi}\operatorname{arccot}(\ell/2) = \frac{2}{\pi}\arctan(2/\ell)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and reproduces the three theoretical acceptance rates.
+Evaluates the stationary normal random-walk acceptance integral symbolically in `wolfram-ws-bridge` JavaScript mode, abstracts the normal-target example to general $(n, \sigma^2, \tau_0^2, \delta)$, verifies the closed-form AR(1) determinant and tridiagonal precision matrix for $n = 5$, and instantiates the symbolic acceptance formula on Hoff’s 5-point normal target.
 
 ```js
 const accRate = await show`Assuming[ell > 0,
@@ -324,7 +324,18 @@ const accRate = await show`Assuming[ell > 0,
 
 
 $$
-\frac{2 \cot ^{-1}\left(\frac{\text{ell}}{2}\right)}{\pi }
+\int_{-\infty}^\infty \operatorname{erfc}\!\left(\frac{\lvert \text{ell}\,w \rvert}{2\sqrt{2}}\right)\frac{e^{-w^2/2}}{\sqrt{2\pi}}\,dw \;=\; \frac{2 \cot ^{-1}\left(\frac{\text{ell}}{2}\right)}{\pi }
+$$
+
+```js
+// Abstract the normal-target example: ell = delta / tau_n with 1/tau_n^2 = n/s2 + 1/t0^2
+const accNormal = await show`Assuming[d > 0 && n > 0 && s2 > 0 && t0 > 0,
+  FullSimplify[${accRate} /. ell -> d * Sqrt[n/s2 + 1/t0^2]]]`
+```
+
+
+$$
+\alpha(\delta;\, n, \sigma^2, \tau_0^2) = \left.\frac{2}{\pi}\cot^{-1}\!\left(\frac{\text{ell}}{2}\right)\right|_{\text{ell}=d\sqrt{n/\text{s2}+1/\text{t0}^2}} \;=\; \frac{2 \cot ^{-1}\left(\frac{1}{2} d \sqrt{\frac{n}{\text{s2}}+\frac{1}{\text{t0}^2}}\right)}{\pi }
 $$
 
 ```js
@@ -334,7 +345,7 @@ await show`Factor[Det[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]]`
 
 
 $$
-(-1+\rho )^4 (1+\rho )^4
+\det\!\left(\rho^{\lvert i - j \rvert}\right)_{1 \le i,j \le 5} \;=\; (-1+\rho )^4 (1+\rho )^4
 $$
 
 ```js
@@ -343,13 +354,13 @@ await show`Simplify[(1 - rho^2) * Inverse[Table[rho^Abs[i - j], {i, 5}, {j, 5}]]
 
 
 $$
-\left( \begin{array}{ccccc} 1 & -\rho  & 0 & 0 & 0 \\ -\rho  & 1+\rho ^2 & -\rho  & 0 & 0 \\ 0 & -\rho  & 1+\rho ^2 & -\rho  & 0 \\ 0 & 0 & -\rho  & 1+\rho ^2 & -\rho  \\ 0 & 0 & 0 & -\rho  & 1 \\ \end{array} \right)
+(1 - \rho^2)\,C_\rho^{-1} \;=\; \left( \begin{array}{ccccc} 1 & -\rho  & 0 & 0 & 0 \\ -\rho  & 1+\rho ^2 & -\rho  & 0 & 0 \\ 0 & -\rho  & 1+\rho ^2 & -\rho  & 0 \\ 0 & 0 & -\rho  & 1+\rho ^2 & -\rho  \\ 0 & 0 & 0 & -\rho  & 1 \\ \end{array} \right)
 $$
 
 ```js
-// Instantiate acceptance rate on Hoff's 5-point normal target (tau^2 = 1/5.1)
+// Instantiate symbolic accNormal on Hoff's 5-point normal target (n = 5, s2 = 1, t0^2 = 10)
 for (const [label, num, den] of [['1/32', 1, 32], ['2', 2, 1], ['64', 64, 1]]) {
-  const rate = toJS(await wl`N[${accRate} /. ell -> Sqrt[(${num}/${den}) * 51/10]]`)
+  const rate = toJS(await wl`N[${accNormal} /. {n -> 5, s2 -> 1, t0 -> Sqrt[10], d -> Sqrt[${num}/${den}]}]`)
   console.log(`delta^2 = ${label.padStart(4)} -> exact acceptance rate = ${rate.toFixed(3)}`)
 }
 ```

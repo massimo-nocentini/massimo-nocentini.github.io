@@ -125,7 +125,7 @@ print(f"PPC tail prob Pr(t(Y_rep) >= 2.0) = {p_ppc:.4f} +/- {2*np.sqrt(p_ppc*(1-
 
 ## Symbolic Check in Wolfram Language {#sec:ch04-wolfram}
 
-Derives the exact push-forward log-odds density via change-of-variables Jacobian and the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), then computes the exact incomplete-Beta benchmark for $\Pr(\theta_1 > \theta_2 \mid y)$ in `wolfram-ws-bridge` JavaScript mode.
+Derives the exact push-forward log-odds density via change-of-variables Jacobian, the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), the symbolic Gamma CDF $\Pr(\theta_2 < c)$, and the general Beta representation of $\Pr(\theta_1 > \theta_2)$, then instantiates all symbolic expressions on the GSS fertility posteriors to benchmark the Monte Carlo estimates.
 
 ```js
 const thOfG = await wl`th /. First[Solve[Log[th / (1 - th)] == g, th, Reals]]`
@@ -135,18 +135,18 @@ await show`FullSimplify[(${thOfG}^(a - 1)*(1 - ${thOfG})^(b - 1)/Beta[a, b]) * $
 
 
 $$
-\frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
+\frac{\theta(g)^{a-1}(1-\theta(g))^{b-1}}{B(a,b)}\,\frac{d\theta}{dg} \;=\; \frac{e^{a g} \left(1+e^g\right)^{-a-b}}{B(a,b)}
 $$
 
 ```js
-// Exact moments of ratio R = th1 / th2 for independent Gamma(a1,b1), Gamma(a2,b2)
+// Exact symbolic moments of ratio R = th1 / th2 for independent Gamma(a1,b1), Gamma(a2,b2)
 const eR = await show`Assuming[a1 > 0 && b1 > 0 && a2 > 1 && b2 > 0,
   FullSimplify[(a1/b1)*Integrate[(b2^a2/Gamma[a2])*t^(a2 - 2)*Exp[-b2*t], {t, 0, Infinity}]]]`
 ```
 
 
 $$
-\frac{\text{a1} \text{b2}}{(-1+\text{a2}) \text{b1}}
+\frac{\text{a1}}{\text{b1}}\int_0^\infty \frac{\text{b2}^{\text{a2}}}{\Gamma(\text{a2})}\,t^{\text{a2}-2} e^{-\text{b2}\,t}\,dt \;=\; \frac{\text{a1} \text{b2}}{(-1+\text{a2}) \text{b1}}
 $$
 
 ```js
@@ -156,13 +156,36 @@ await show`Assuming[a1 > 0 && b1 > 0 && a2 > 2 && b2 > 0,
 
 
 $$
-\frac{\text{a1} (-1+\text{a1}+\text{a2}) \text{b2}^2}{(-2+\text{a2}) (-1+\text{a2})^2 \text{b1}^2}
+\begin{aligned}
+\frac{\text{a1}(\text{a1}+1)}{\text{b1}^2}\int_0^\infty \frac{\text{b2}^{\text{a2}}}{\Gamma(\text{a2})}\,t^{\text{a2}-3} e^{-\text{b2}\,t}\,dt - E\!\left[\frac{\theta_1}{\theta_2}\right]^2 \\
+&= \frac{\text{a1} (-1+\text{a1}+\text{a2}) \text{b2}^2}{(-2+\text{a2}) (-1+\text{a2})^2 \text{b1}^2}
+\end{aligned}
 $$
 
 ```js
-// Exact incomplete-Beta benchmark for Pr(th1 > th2 | y) (Gamma(219,112) vs Gamma(68,45))
-const pGt = toJS(await wl`N[1 - Beta[112/157, 219, 68] / Beta[219, 68]]`)
-const pLt175 = toJS(await wl`N[1 - Gamma[68, 45 * 7/4] / Gamma[68]]`)
+// Symbolic Gamma CDF Pr(th2 < c) and general Beta representation of Pr(th1 > th2)
+const gamCdf = await show`Assuming[a2 > 0 && b2 > 0 && c > 0,
+  FullSimplify[Integrate[(b2^a2/Gamma[a2])*t^(a2 - 1)*Exp[-b2*t], {t, 0, c}]]]`
+```
+
+
+$$
+\Pr(\theta_2 < c) = \int_0^c \frac{\text{b2}^{\text{a2}}}{\Gamma(\text{a2})}\,t^{\text{a2}-1} e^{-\text{b2}\,t}\,dt \;=\; 1-\frac{\Gamma (\text{a2},\text{b2} c)}{\Gamma (\text{a2})}
+$$
+
+```js
+const pGtSym = await show`1 - Beta[b1 / (b1 + b2), a1, a2] / Beta[a1, a2]`
+```
+
+
+$$
+\Pr(\theta_1 > \theta_2) \;=\; 1-\frac{B_{\frac{\text{b1}}{\text{b1}+\text{b2}}}(\text{a1},\text{a2})}{B(\text{a1},\text{a2})}
+$$
+
+```js
+// Instantiate at GSS fertility posteriors Gamma(219,112) vs Gamma(68,45) and c = 7/4
+const pGt = toJS(await wl`N[${pGtSym} /. {a1 -> 219, b1 -> 112, a2 -> 68, b2 -> 45}]`)
+const pLt175 = toJS(await wl`N[${gamCdf} /. {a2 -> 68, b2 -> 45, c -> 7/4}]`)
 console.log(`Exact Pr(th1 > th2 | y) = ${pGt.toFixed(4)}  |  Exact Pr(th2 < 1.75 | y) = ${pLt175.toFixed(4)}`)
 ```
 

@@ -195,10 +195,9 @@ print(f"Total MSE vs truth: unpooled={np.mean((ybar - th_true)**2):.2f}, "
 
 ## Symbolic Check in Wolfram Language {#sec:ch08-wolfram}
 
-Derives the two-group prior correlation from $(\theta_1, \theta_2) = (\mu + \delta, \mu - \delta)$, the shrinkage weight $B_j$, and (non-circularly from the log-density derivative) both the shape and $\nu_0/2$-scaled rate of $\sigma_0^2$, then evaluates plug-in shrinkage at $(\hat{\mu}, \hat{\tau}, \hat{\sigma}) = (48.1, 5.0, 9.2)$ for Schools 46 and 82 (compare Hoff’s full MCMC means $41.31$ and $42.53$, which also integrate over hyperparameter uncertainty).
+Derives the two-group prior correlation from $(\theta_1, \theta_2) = (\mu + \delta, \mu - \delta)$, the shrinkage weight $B_j$, the symbolic shrunk-mean gap $\hat{\theta}_2 - \hat{\theta}_1$ governing ranking reversals between two groups $(n_1, \bar{y}_1)$ and $(n_2, \bar{y}_2)$, and (non-circularly from the log-density derivative) both the shape and $\nu_0/2$-scaled rate of $\sigma_0^2$, then evaluates plug-in shrinkage on Schools 46 and 82 (compare Hoff’s full MCMC means $41.31$ and $42.53$).
 
 ```js
-// 1. Derive Corr(theta_1, theta_2) from (theta_1, theta_2) = (mu + delta, mu - delta)
 const A = [[1, 1], [1, -1]]
 const cov2 = await wl`${A} . DiagonalMatrix[{g0^2, t0^2}] . Transpose[${A}]`
 await show`Together[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`
@@ -206,21 +205,34 @@ await show`Together[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`
 
 
 $$
-\frac{\text{g0}^2-\text{t0}^2}{\text{g0}^2+\text{t0}^2}
+\frac{(A\operatorname{diag}(\text{g0}^2, \text{t0}^2)A^T)_{1,2}}{(A\operatorname{diag}(\text{g0}^2, \text{t0}^2)A^T)_{1,1}} \;=\; \frac{\text{g0}^2-\text{t0}^2}{\text{g0}^2+\text{t0}^2}
 $$
 
 ```js
-// 2. Shrinkage weight B_j
+// Shrinkage weight B_j and symbolic shrunk-mean gap thetaHat_2 - thetaHat_1
 const Bj = await show`Together[(nj / s2) / (nj / s2 + 1 / t2)]`
 ```
 
 
 $$
-\frac{\text{nj} \text{t2}}{\text{s2}+\text{nj} \text{t2}}
+B_j = \frac{\text{nj}/\text{s2}}{\text{nj}/\text{s2} + 1/\text{t2}} \;=\; \frac{\text{nj} \text{t2}}{\text{s2}+\text{nj} \text{t2}}
 $$
 
 ```js
-// 3. Non-circular derivation of sigma_0^2 full conditional shape & rate (m = 3)
+const gapSym = await show`FullSimplify[((${Bj} /. nj -> n2)*yb2 + (1 - (${Bj} /. nj -> n2))*mu)
+  - ((${Bj} /. nj -> n1)*yb1 + (1 - (${Bj} /. nj -> n1))*mu)]`
+```
+
+
+$$
+\begin{aligned}
+\hat{\theta}_2 - \hat{\theta}_1 = \bigl[B_2\bar{y}_2 + (1 - B_2)\mu\bigr] - \bigl[B_1\bar{y}_1 + (1 - B_1)\mu\bigr] \\
+&= \frac{\text{t2} (\mu  (\text{n1}-\text{n2}) \text{s2}-\text{n1} (\text{s2}+\text{n2} \text{t2}) \text{yb1}+\text{n2} (\text{s2}+\text{n1} \text{t2}) \text{yb2})}{(\text{s2}+\text{n1} \text{t2}) (\text{s2}+\text{n2} \text{t2})}
+\end{aligned}
+$$
+
+```js
+// Non-circular derivation of sigma_0^2 full conditional shape & rate (m = 3)
 const logp = await wl`(a - 1)*Log[s0] - b*s0 + Sum[nu0/2*Log[nu0*s0/2] - LogGamma[nu0/2]
   + (nu0/2 - 1)*Log[x] - nu0*s0*x/2, {x, {x1, x2, x3}}]`
 const dLogp = await wl`Expand[D[${logp}, s0]]`
@@ -229,7 +241,7 @@ await show`Simplify[1 + Coefficient[${dLogp}, s0, -1]]`
 
 
 $$
-a+\frac{3 \text{nu0}}{2}
+1 + [\text{s0}^{-1}]\frac{\partial}{\partial \text{s0}}\log p(\text{s0} \mid \text{nu0}, \text{x1}, \text{x2}, \text{x3}) \;=\; a+\frac{3 \text{nu0}}{2}
 $$
 
 ```js
@@ -238,22 +250,24 @@ await show`Simplify[-Coefficient[${dLogp}, s0, 0]]`
 
 
 $$
-b+\frac{1}{2} \text{nu0} (\text{x1}+\text{x2}+\text{x3})
+-[\text{s0}^0]\frac{\partial}{\partial \text{s0}}\log p(\text{s0} \mid \text{nu0}, \text{x1}, \text{x2}, \text{x3}) \;=\; b+\frac{1}{2} \text{nu0} (\text{x1}+\text{x2}+\text{x3})
 $$
 
 ```js
-// 4. Plug-in shrinkage at (mu, tau, sigma) = (48.1, 5.0, 9.2) for School 46 vs. School 82
+// Instantiate plug-in shrinkage on School 46 (n1=21, yb1=40.18) vs School 82 (n2=5, yb2=38.76)
+const gapVal = toJS(await wl`N[${gapSym} /. {n1 -> 21, yb1 -> 40.18, n2 -> 5, yb2 -> 38.76, mu -> 48.1, t2 -> 25, s2 -> 84.64}]`)
 for (const [label, nj, yb] of [['School 46', 21, 40.18], ['School 82', 5, 38.76]]) {
   const w = toJS(await wl`N[${Bj} /. {nj -> ${nj}, t2 -> 25, s2 -> 84.64}]`)
-  const plugMean = w * yb + (1 - w) * 48.1
-  console.log(`${label} (n=${nj}, ybar=${yb.toFixed(2)}): B_j = ${w.toFixed(3)}, plug-in mean = ${plugMean.toFixed(2)}`)
+  console.log(`${label} (n=${nj}, ybar=${yb.toFixed(2)}): B_j = ${w.toFixed(3)}, plug-in mean = ${(w*yb + (1 - w)*48.1).toFixed(2)}`)
 }
+console.log(`Shrunk ranking reversal (School 82 - School 46) = +${gapVal.toFixed(2)} (raw gap = -1.42)`)
 ```
 
 
 ```text
 School 46 (n=21, ybar=40.18): B_j = 0.861, plug-in mean = 41.28
 School 82 (n=5, ybar=38.76): B_j = 0.596, plug-in mean = 42.53
+Shrunk ranking reversal (School 82 - School 46) = +1.25 (raw gap = -1.42)
 ```
 
 ## Exercises {#sec:ch08-exercises}

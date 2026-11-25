@@ -198,7 +198,7 @@ print(f"Pr(theta_2 > 0 | y) = {np.mean(theta_s[burn:, 1] > 0):.3f}, "
 
 ## Symbolic Check in Wolfram Language {#sec:ch11-wolfram}
 
-Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, and computes the exact $2 \times 2$ LME slope posterior variance conditional on $(\Sigma, \sigma^2)$.
+Proves symbolically in `wolfram-ws-bridge` JavaScript mode that the Poisson GLMM population-average rate $E[\exp(\tilde{\boldsymbol{\beta}}^T\mathbf{x})]$ exceeds the typical-group rate $\exp(\boldsymbol{\theta}^T\mathbf{x})$ by a factor of $\exp(\tfrac12 \mathbf{x}^T\Sigma\mathbf{x})$, derives both the general $2 \times 2$ LME slope posterior variance $(V_j)_{2,2}$ and the closed-form diagonal-$\Sigma$ shrinkage vector $\mathbf{m}_j$, and instantiates the conditional slope SD for small and large schools.
 
 ```js
 const popAvg = await show`Assuming[v > 0 && Element[m, Reals],
@@ -207,7 +207,7 @@ const popAvg = await show`Assuming[v > 0 && Element[m, Reals],
 
 
 $$
-e^{m+\frac{v}{2}}
+\int_{-\infty}^\infty e^{m + \sqrt{v}\,z}\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz \;=\; e^{m+\frac{v}{2}}
 $$
 
 ```js
@@ -216,18 +216,33 @@ await show`FullSimplify[${popAvg} / Exp[m]]`
 
 
 $$
-e^{v/2}
+\frac{E[e^\eta]}{e^m} \;=\; e^{v/2}
 $$
 
 ```js
-// Symbolic 2x2 LME conditional posterior variance V_j for centered x (X_j^T X_j = diag(nj, sxx))
+// Symbolic 2x2 LME posterior covariance V_j and diagonal-Sigma shrinkage mean m_j
 const Vj = await wl`FullSimplify[Inverse[Inverse[{{s11, s12}, {s12, s22}}] + DiagonalMatrix[{nj, sxx}]/sig2]]`
 const v22Sym = await show`FullSimplify[${Vj}[[2, 2]]]`
 ```
 
 
 $$
-\frac{\text{sig2} \left(-\text{nj} \text{s12}^2+\text{nj} \text{s11} \text{s22}+\text{s22} \text{sig2}\right)}{-\text{nj} \text{s12}^2 \text{sxx}+\text{nj} \text{s11} (\text{sig2}+\text{s22} \text{sxx})+\text{sig2} (\text{sig2}+\text{s22} \text{sxx})}
+\begin{aligned}
+\left[\left(\Sigma^{-1} + \frac{1}{\text{sig2}}\operatorname{diag}(\text{nj}, \text{sxx})\right)^{-1}\right]_{2,2} \\
+&= \frac{\text{sig2} \left(-\text{nj} \text{s12}^2+\text{nj} \text{s11} \text{s22}+\text{s22} \text{sig2}\right)}{-\text{nj} \text{s12}^2 \text{sxx}+\text{nj} \text{s11} (\text{sig2}+\text{s22} \text{sxx})+\text{sig2} (\text{sig2}+\text{s22} \text{sxx})}
+\end{aligned}
+$$
+
+```js
+await show`FullSimplify[Inverse[DiagonalMatrix[{1/t1^2, 1/t2^2}] + DiagonalMatrix[{nj, sxx}]/sig2] . {th1/t1^2 + nj*yb/sig2, th2/t2^2 + sxx*b2ols/sig2}]`
+```
+
+
+$$
+\begin{aligned}
+\mathbf{m}_j^{\text{diag}} = \left(\operatorname{diag}(\text{t1}^{-2}, \text{t2}^{-2}) + \frac{1}{\text{sig2}}\operatorname{diag}(\text{nj}, \text{sxx})\right)^{-1}\begin{pmatrix} \text{th1}/\text{t1}^2 + \text{nj}\,\text{yb}/\text{sig2} \\ \text{th2}/\text{t2}^2 + \text{sxx}\,\text{b2ols}/\text{sig2} \end{pmatrix} \\
+&= \left\{\frac{\text{sig2} \text{th1}+\text{nj} \text{t1}^2 \text{yb}}{\text{sig2}+\text{nj} \text{t1}^2},\frac{\text{b2ols} \text{sxx} \text{t2}^2+\text{sig2} \text{th2}}{\text{sig2}+\text{sxx} \text{t2}^2}\right\}
+\end{aligned}
 $$
 
 ```js

@@ -189,7 +189,7 @@ print("Pred PMF (no degree, y=0..5):", np.round(pmf1, 3))
 
 ## Symbolic Check in Wolfram Language {#sec:ch03-wolfram}
 
-Integrates $\theta$ out of the Poisson–Gamma posterior symbolically in `wolfram-ws-bridge` JavaScript mode to recover the Negative Binomial predictive PMF, mean, and variance, then cross-checks the GSS predictive PMF and solves for the numerical $\operatorname{beta}(3, 9)$ 95% HPD interval.
+Integrates $\theta$ out of the Poisson–Gamma posterior symbolically in `wolfram-ws-bridge` JavaScript mode to recover the Negative Binomial predictive PMF, mean, and variance, derives the general symbolic Beta interval mass $\int_l^u p(t \mid a, b)\,dt$, and then instantiates both on the GSS fertility counts and the $\operatorname{beta}(3, 9)$ 95% HPD interval.
 
 ```js
 const { Times, Divide, Power, Exp, Minus, Subtract, Gamma, Factorial, th, yt, an, bn } = W
@@ -201,7 +201,7 @@ const pred = await show`Assuming[an > 0 && bn > 0 && yt >= 0 && Element[yt, Inte
 
 
 $$
-\frac{\text{bn}^{\text{an}} (1+\text{bn})^{-\text{an}-\text{yt}} \Gamma (\text{an}+\text{yt})}{\text{yt}! \Gamma (\text{an})}
+\int_0^\infty \frac{\theta^{\text{yt}} e^{-\theta}}{\text{yt}!}\,\frac{\text{bn}^{\text{an}}}{\Gamma(\text{an})}\,\theta^{\text{an}-1} e^{-\text{bn}\,\theta}\,d\theta \;=\; \frac{\text{bn}^{\text{an}} (1+\text{bn})^{-\text{an}-\text{yt}} \Gamma (\text{an}+\text{yt})}{\text{yt}! \Gamma (\text{an})}
 $$
 
 ```js
@@ -210,7 +210,7 @@ const predMean = await show`Assuming[an > 0 && bn > 0, FullSimplify[Sum[yt * ${p
 
 
 $$
-\frac{\text{an}}{\text{bn}}
+\sum_{\text{yt}=0}^{\infty} \text{yt}\cdot p(\text{yt} \mid y) \;=\; \frac{\text{an}}{\text{bn}}
 $$
 
 ```js
@@ -220,17 +220,27 @@ await show`Assuming[an > 0 && bn > 0,
 
 
 $$
-\frac{\text{an} (1+\text{bn})}{\text{bn}^2}
+\sum_{\text{yt}=0}^{\infty} \text{yt}^2\,p(\text{yt} \mid y) - \left(\frac{\text{an}}{\text{bn}}\right)^2 \;=\; \frac{\text{an} (1+\text{bn})}{\text{bn}^2}
+$$
+
+```js
+// Symbolic interval probability Int_l^u Beta(a, b) for the general HPD system
+const betaMass = await show`Assuming[a > 0 && b > 0 && 0 < l < u < 1,
+  FullSimplify[Integrate[t^(a - 1)*(1 - t)^(b - 1) / Beta[a, b], {t, l, u}]]]`
+```
+
+
+$$
+\int_l^u \frac{t^{a-1}(1-t)^{b-1}}{B(a,b)}\,dt \;=\; \frac{-B_l(a,b)+B_u(a,b)}{B(a,b)}
 $$
 
 ```js
 // Instantiate GSS no-degree group (an = 219, bn = 112) and numerical Beta(3, 9) 95% HPD
 const pmf = toJS(await wl`N[Table[${pred} /. {an -> 219, bn -> 112}, {yt, 0, 5}]]`)
 console.log('GSS pred PMF (y=0..5):', pmf.map(v => v.toFixed(3)).join(', '))
-
 const hpd = toJS(await wl`{l, u} /. FindRoot[{
-  l^2 (1 - l)^8 == u^2 (1 - u)^8,
-  Integrate[t^2 (1 - t)^8 / Beta[3, 9], {t, l, u}] == 95/100}, {{l, 0.04}, {u, 0.48}}]`)
+  l^(a - 1)*(1 - l)^(b - 1) == u^(a - 1)*(1 - u)^(b - 1),
+  (${betaMass}) == 95/100} /. {a -> 3, b -> 9}, {{l, 0.04}, {u, 0.48}}]`)
 console.log(`Beta(3,9) 95% HPD = [${hpd[0].toFixed(4)}, ${hpd[1].toFixed(4)}], width = ${(hpd[1] - hpd[0]).toFixed(4)}`)
 ```
 

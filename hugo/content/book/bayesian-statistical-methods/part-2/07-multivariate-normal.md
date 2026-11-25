@@ -187,7 +187,7 @@ print(f"Pr(Ytilde_2 > Ytilde_1 | Y) = {np.mean(y_pred[:, 1] > y_pred[:, 0]):.3f}
 
 ## Symbolic Check in Wolfram Language {#sec:ch07-wolfram}
 
-Verifies symbolically for a general $3 \times 3$ covariance matrix $\Sigma$ in `wolfram-ws-bridge` JavaScript mode that the Schur-complement partial regression vector equals $-\Omega_{1,1}^{-1}\Omega_{1,23}^T$, then instantiates Hoff’s reading-comprehension conditional regression.
+Verifies symbolically for a general $3 \times 3$ covariance matrix $\Sigma$ in `wolfram-ws-bridge` JavaScript mode that the Schur-complement partial regression vector equals $-\Omega_{1,1}^{-1}\Omega_{1,23}^T$, derives the general $2 \times 2$ conditional slope and conditional variance symbolically in terms of $(s_1, s_2, \rho)$, and instantiates them on Hoff’s reading-comprehension covariance.
 
 ```js
 const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
@@ -196,7 +196,7 @@ const betaSchur = await show`FullSimplify[Inverse[{{s22, s23}, {s23, s33}}] . {s
 
 
 $$
-\left\{\frac{\text{s13} \text{s23}-\text{s12} \text{s33}}{\text{s23}^2-\text{s22} \text{s33}},\frac{\text{s13} \text{s22}-\text{s12} \text{s23}}{-\text{s23}^2+\text{s22} \text{s33}}\right\}
+\begin{pmatrix} \text{s22} & \text{s23} \\ \text{s23} & \text{s33} \end{pmatrix}^{-1}\begin{pmatrix} \text{s12} \\ \text{s13} \end{pmatrix} \;=\; \left\{\frac{\text{s13} \text{s23}-\text{s12} \text{s33}}{\text{s23}^2-\text{s22} \text{s33}},\frac{\text{s13} \text{s22}-\text{s12} \text{s23}}{-\text{s23}^2+\text{s22} \text{s33}}\right\}
 $$
 
 ```js
@@ -206,14 +206,33 @@ await show`FullSimplify[${betaSchur} - ${betaPrec}]`
 
 
 $$
-\{0,0\}
+\boldsymbol{\beta}_{1 \mid 2,3}^{\text{Schur}} - \left(-\Omega_{1,1}^{-1}\Omega_{1,23}^T\right) \;=\; \{0,0\}
 $$
 
 ```js
-// Instantiate on Hoff's reading-comprehension covariance (s1^2=182.16, s2^2=243.65, r=0.70)
-const cov2 = [[182.16, 147.45], [147.45, 243.65]]
-const slope = toJS(await wl`N[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`)
-const condVar = toJS(await wl`N[${cov2}[[2, 2]] - ${cov2}[[1, 2]]^2 / ${cov2}[[1, 1]]]`)
+// Abstract 2x2 covariance {{s1^2, rho*s1*s2}, {rho*s1*s2, s2^2}}: symbolic slope & cond. variance
+const covSym = [[W.Power(W.s1, 2), W.Times(W.rho, W.s1, W.s2)], [W.Times(W.rho, W.s1, W.s2), W.Power(W.s2, 2)]]
+const slopeSym = await show`FullSimplify[${covSym}[[1, 2]] / ${covSym}[[1, 1]]]`
+```
+
+
+$$
+\beta_{2 \mid 1} = \frac{\Sigma_{1,2}}{\Sigma_{1,1}} \;=\; \frac{\rho  \text{s2}}{\text{s1}}
+$$
+
+```js
+const cvarSym = await show`FullSimplify[${covSym}[[2, 2]] - ${covSym}[[1, 2]]^2 / ${covSym}[[1, 1]]]`
+```
+
+
+$$
+\operatorname{Var}(Y_2 \mid Y_1) = \Sigma_{2,2} - \frac{\Sigma_{1,2}^2}{\Sigma_{1,1}} \;=\; -\left(\left(-1+\rho ^2\right) \text{s2}^2\right)
+$$
+
+```js
+// Instantiate on Hoff's reading-comprehension covariance (s1^2 = 182.16, s2^2 = 243.65, r = 0.70)
+const slope = toJS(await wl`N[${slopeSym} /. {s1 -> Sqrt[182.16], s2 -> Sqrt[243.65], rho -> 147.45/Sqrt[182.16*243.65]}]`)
+const condVar = toJS(await wl`N[${cvarSym} /. {s1 -> Sqrt[182.16], s2 -> Sqrt[243.65], rho -> 147.45/Sqrt[182.16*243.65]}]`)
 console.log(`Reading scores: E[Y2 | Y1] slope = ${slope.toFixed(4)}, cond SD = ${Math.sqrt(condVar).toFixed(2)}`)
 ```
 

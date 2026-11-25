@@ -170,7 +170,7 @@ for N in [20, 100, 1000]:
 
 ## Symbolic Check in Wolfram Language {#sec:ch02-wolfram}
 
-This `wolfram-ws-bridge` JavaScript-mode sequence derives Bayes’ rule, the Bayes factor $s/f$, and the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$ symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
+This `wolfram-ws-bridge` JavaScript-mode sequence derives Bayes’ rule, the Bayes factor $s/f$, the negative finite-urn covariance $\operatorname{Cov}(Y_1, Y_2)$, and the exact finite-population hypergeometric sample-sum variance symbolically, then instantiates the screening example and exact Diaconis–Freedman total-variation distances.
 
 ```js
 const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
@@ -178,7 +178,7 @@ const post = await show`Simplify[(s * p0) / (s * p0 + f * (1 - p0))]`
 
 
 $$
-\frac{\text{p0} s}{f-f \text{p0}+\text{p0} s}
+\Pr(H_1 \mid E) = \frac{s\,\text{p0}}{s\,\text{p0} + f(1 - \text{p0})} \;=\; \frac{\text{p0} s}{f-f \text{p0}+\text{p0} s}
 $$
 
 ```js
@@ -187,17 +187,29 @@ await show`Simplify[((${post} / (1 - ${post})) / (p0 / (1 - p0)))]`
 
 
 $$
-\frac{s}{f}
+\frac{\Pr(H_1 \mid E)/(1 - \Pr(H_1 \mid E))}{\text{p0}/(1 - \text{p0})} \;=\; \frac{s}{f}
 $$
 
 ```js
-// Finite-population without-replacement covariance Cov(Y1, Y2) < 0
+// Finite-population without-replacement covariance Cov(Y1, Y2) < 0 and sample-sum variance
 const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
 ```
 
 
 $$
-\frac{\text{kRed} (\text{kRed}-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}
+\operatorname{Cov}(Y_1, Y_2) = \frac{\text{kRed}}{\text{nPop}}\cdot\frac{\text{kRed}-1}{\text{nPop}-1} - \left(\frac{\text{kRed}}{\text{nPop}}\right)^2 \;=\; \frac{\text{kRed} (\text{kRed}-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}
+$$
+
+```js
+const varHyper = await show`FullSimplify[n*(kRed/nPop)*(1 - kRed/nPop) + n*(n - 1)*(${covF})]`
+```
+
+
+$$
+\begin{aligned}
+\operatorname{Var}\!\left(\sum_{i=1}^n Y_i\right) = n\,\frac{\text{kRed}}{\text{nPop}}\!\left(1 - \frac{\text{kRed}}{\text{nPop}}\right) + n(n-1)\operatorname{Cov}(Y_1, Y_2) \\
+&= \frac{\text{kRed} n (\text{kRed}-\text{nPop}) (n-\text{nPop})}{(-1+\text{nPop}) \text{nPop}^2}
+\end{aligned}
 $$
 
 ```js
@@ -211,13 +223,13 @@ Limit of Cov(Y1, Y2) as N -> Infinity = 0
 ```
 
 ```js
-// Screening example (p0 = 1/100, s = 95/100, f = 5/100)
+// Instantiate screening example (p0 = 1/100, s = 95/100, f = 5/100)
 const pExact = await show`${post} /. {p0 -> 1/100, s -> 95/100, f -> 5/100}`
 ```
 
 
 $$
-\frac{19}{118}
+\left.\Pr(H_1 \mid E)\right|_{\text{p0}=\frac{1}{100},\, s=\frac{95}{100},\, f=\frac{5}{100}} \;=\; \frac{19}{118}
 $$
 
 ```js

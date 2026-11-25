@@ -173,7 +173,7 @@ print("Posterior E[C | Y]:\n", np.round(C_draws[150:].mean(axis=0), 2))
 
 ## Symbolic Check in Wolfram Language {#sec:ch12-wolfram}
 
-Verifies ordered-probit shift/scale invariance symbolically in `wolfram-ws-bridge` JavaScript mode, solves $(C^{-1})_{1,3} = 0$ for a $3 \times 3$ correlation matrix to prove $Z_1 \perp Z_3 \mid Z_2 \iff C_{1,3} = C_{1,2}C_{2,3}$, and contrasts exact conditional independence ($C_{1,3} = 0.325$) against the Python simulation ($C_{1,3} = 0.30$).
+Verifies ordered-probit shift/scale invariance symbolically in `wolfram-ws-bridge` JavaScript mode, derives both the precision entry $\Omega_{1,3}$ and the symbolic partial correlation $\rho_{13 \mid 2} = -\Omega_{1,3}/\sqrt{\Omega_{1,1}\Omega_{3,3}}$ for a general $3 \times 3$ Gaussian copula correlation matrix, solves $\Omega_{1,3} = 0$, and contrasts exact conditional independence ($C_{1,3} = 0.325$) against the Python simulation ($C_{1,3} = 0.30$).
 
 ```js
 const invResid = toJS(await wl`Assuming[a > 0, Simplify[
@@ -187,35 +187,50 @@ Ordered-probit shift/scale invariance residual = 0
 ```
 
 ```js
-// Latent conditional independence Z1 _|_ Z3 | Z2 iff (C^(-1))_{1,3} == 0
+// Latent precision Omega_{1,3}, partial correlation rho_{13|2}, and conditional-independence condition
 const C3 = [[1, W.r12, W.r13], [W.r12, 1, W.r23], [W.r13, W.r23, 1]]
-const omega13 = await show`Factor[Inverse[${C3}][[1, 3]]]`
+const Om = await wl`Inverse[${C3}]`
+const omega13 = await show`Factor[${Om}[[1, 3]]]`
 ```
 
 
 $$
-\frac{\text{r13}-\text{r12} \text{r23}}{-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2}
+\Omega_{1,3} = \left(C^{-1}\right)_{1,3} \;=\; \frac{\text{r13}-\text{r12} \text{r23}}{-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2}
 $$
 
 ```js
-const solR13 = await show`r13 /. First[Solve[${omega13} == 0, r13]]`
+const pcorr13 = await show`Assuming[-1 < r12 < 1 && -1 < r23 < 1,
+  FullSimplify[-${Om}[[1, 3]] / Sqrt[${Om}[[1, 1]] * ${Om}[[3, 3]]]]]`
 ```
 
 
 $$
-\text{r12} \text{r23}
+\begin{aligned}
+\rho_{13 \mid 2} = -\frac{\Omega_{1,3}}{\sqrt{\Omega_{1,1}\,\Omega_{3,3}}} \\
+&= \frac{-\text{r13}+\text{r12} \text{r23}}{\sqrt{\frac{\left(-1+\text{r12}^2\right) \left(-1+\text{r23}^2\right)}{\left(-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2\right)^2}} \left(-1+\text{r12}^2+\text{r13}^2-2 \text{r12} \text{r13} \text{r23}+\text{r23}^2\right)}
+\end{aligned}
 $$
 
 ```js
-// Contrast exact conditional independence (r13 = 13/40 = 0.325) vs. Ch. 12 Python (r13 = 3/10 = 0.30)
+await show`r13 /. First[Solve[${omega13} == 0, r13]]`
+```
+
+
+$$
+\text{r13}\big|_{\Omega_{1,3} = 0} \;=\; \text{r12} \text{r23}
+$$
+
+```js
+// Instantiate at (r12, r23) = (0.65, 0.50): r13 = 0.325 (exact CI) vs. Ch. 12 Python (r13 = 0.30)
 const omZero = toJS(await wl`${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 13/40}`)
 const omPy = toJS(await wl`N[${omega13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}]`)
-console.log(`At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = ${omZero},  Omega_13(0.30) = ${omPy.toFixed(4)}`)
+const pcPy = toJS(await wl`N[${pcorr13} /. {r12 -> 13/20, r23 -> 1/2, r13 -> 3/10}]`)
+console.log(`At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = ${omZero},  Omega_13(0.30) = ${omPy.toFixed(4)} (pcorr = ${pcPy.toFixed(4)})`)
 ```
 
 
 ```text
-At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = 0,  Omega_13(0.30) = 0.0578
+At (r12, r23) = (0.65, 0.50): Omega_13(0.325) = 0,  Omega_13(0.30) = 0.0578 (pcorr = -0.0380)
 ```
 
 ## Exercises {#sec:ch12-exercises}

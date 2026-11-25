@@ -164,7 +164,7 @@ print(f"ESS(theta) = {ess_fft(theta):.0f} / {S}, ESS(sigma^2) = {ess_fft(sigma2)
 
 ## Symbolic Check in Wolfram Language {#sec:ch06-wolfram}
 
-Computes the bivariate-normal Gibbs transition mean and variance symbolically in `wolfram-ws-bridge` JavaScript mode, extracts the AR(1) contraction factor $\alpha = \rho^2$, and sums the integrated autocorrelation time to derive $S_{\text{eff}}/S = (1 - \rho^2)/(1 + \rho^2)$, instantiated at $\rho = 0.99$.
+Computes the bivariate-normal Gibbs transition mean and variance symbolically in `wolfram-ws-bridge` JavaScript mode, extracts the AR(1) contraction factor $\alpha = \rho^2$, sums the integrated autocorrelation time to derive $S_{\text{eff}}/S = (1 - \rho^2)/(1 + \rho^2)$, verifies the $O(1)$ sum-of-squares decomposition symbolically, and instantiates $S_{\text{eff}}$ at $\rho = 0.99$.
 
 ```js
 const transMean = await show`Assuming[v > 0 && Element[m, Reals],
@@ -173,7 +173,7 @@ const transMean = await show`Assuming[v > 0 && Element[m, Reals],
 
 
 $$
-\rho ^2 x
+\left.\int_{-\infty}^\infty \rho(m + \sqrt{v}\,z)\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right|_{m=\rho x,\, v=1-\rho^2} \;=\; \rho ^2 x
 $$
 
 ```js
@@ -183,7 +183,7 @@ await show`Simplify[(v + Integrate[(rho*Sqrt[v]*z)^2*Exp[-z^2/2]/Sqrt[2*Pi], {z,
 
 
 $$
-1-\rho ^4
+\left.\left(v + \int_{-\infty}^\infty (\rho\sqrt{v}\,z)^2\frac{e^{-z^2/2}}{\sqrt{2\pi}}\,dz\right)\right|_{v=1-\rho^2} \;=\; 1-\rho ^4
 $$
 
 ```js
@@ -192,7 +192,7 @@ const tauInt = await show`Assuming[-1 < rho < 1, Together[Sum[2*(${alpha})^k, {k
 
 
 $$
-\frac{-1-\rho ^2}{-1+\rho ^2}
+1 + 2\sum_{k=1}^{\infty} (\rho^2)^k \;=\; \frac{-1-\rho ^2}{-1+\rho ^2}
 $$
 
 ```js
@@ -201,17 +201,23 @@ const essRatio = await show`Together[1 / ${tauInt}]`
 
 
 $$
-\frac{1-\rho ^2}{1+\rho ^2}
+\frac{S_{\text{eff}}}{S} = \frac{1}{\tau_{\text{int}}} \;=\; \frac{1-\rho ^2}{1+\rho ^2}
 $$
 
 ```js
-// Instantiate at rho = 99/100, S = 10,000
+// Symbolic verification of the O(1) Gibbs sum-of-squares decomposition (n = 3)
+const ssResid = toJS(await wl`Expand[Sum[(y[i] - th)^2, {i, 3}]
+  - (Sum[(y[i] - (y[1] + y[2] + y[3])/3)^2, {i, 3}] + 3*((y[1] + y[2] + y[3])/3 - th)^2)]`)
+console.log('Sum-of-squares decomposition residual =', ssResid)
+
+// Instantiate exact S_eff at rho = 99/100, S = 10,000
 const ess99 = toJS(await wl`N[10000 * (${essRatio} /. rho -> 99/100)]`)
 console.log(`At rho = 0.99, S = 10,000 -> exact S_eff = ${ess99.toFixed(2)}`)
 ```
 
 
 ```text
+Sum-of-squares decomposition residual = 0
 At rho = 0.99, S = 10,000 -> exact S_eff = 100.50
 ```
 

@@ -134,7 +134,7 @@ for theta in [0.05, 0.10, 0.20]:
 
 ## Symbolic Check in Wolfram Language {#sec:ch01-wolfram}
 
-Run the following `wolfram-ws-bridge` JavaScript-mode sequence (`W`, `wl`, `show`, `toJS`) to integrate the Beta–Binomial normalizer $Z$, posterior mean, mode (valid for $a + y > 1$ and $b + n - y > 1$), and shrinkage identity symbolically, then instantiate all three priors at $n = 20, y = 0$ to cross-check the Python output above. Each `show` call is followed immediately by its rendered Wolfram `TeXForm` output.
+Run the following `wolfram-ws-bridge` JavaScript-mode sequence (`W`, `wl`, `show`, `toJS`) to derive the Beta–Binomial normalizer $Z$, posterior mean, posterior variance, mode (for $a+y > 1$, $b+n-y > 1$), and symbolic tail probability $\Pr(\theta < c \mid Y = y)$ completely symbolically, then instantiate the symbolic formulas at $(n, y, c) = (20, 0, 1/10)$ to cross-check the Python output above.
 
 ```js
 const { Times, Power, Plus, Subtract, Minus, th, a, b, n, y } = W
@@ -148,7 +148,7 @@ const Z = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
 
 
 $$
-\frac{\Gamma (b+n-y) \Gamma (a+y)}{\Gamma (a+b+n)}
+\int_0^1 \theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \;=\; \frac{\Gamma (b+n-y) \Gamma (a+y)}{\Gamma (a+b+n)}
 $$
 
 ```js
@@ -158,7 +158,17 @@ const mean = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
 
 
 $$
-\frac{a+y}{a+b+n}
+\frac{1}{Z}\int_0^1 \theta\cdot\theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \;=\; \frac{a+y}{a+b+n}
+$$
+
+```js
+const postVar = await show`Assuming[a > 0 && b > 0 && y >= 0 && n >= y,
+  FullSimplify[Integrate[th^2 * ${kernel}, {th, 0, 1}] / ${Z} - (${mean})^2]]`
+```
+
+
+$$
+\operatorname{Var}[\theta \mid y] = E[\theta^2 \mid y] - E[\theta \mid y]^2 \;=\; \frac{(b+n-y) (a+y)}{(a+b+n)^2 (1+a+b+n)}
 $$
 
 ```js
@@ -168,7 +178,18 @@ await show`FullSimplify[th /. First[Solve[D[Log[${kernel}], th] == 0, th]]]`
 
 
 $$
-\frac{-1+a+y}{-2+a+b+n}
+\arg\max_{\theta \in (0,1)} \log\!\left[\theta^{a+y-1}(1-\theta)^{b+n-y-1}\right] \;=\; \frac{-1+a+y}{-2+a+b+n}
+$$
+
+```js
+// Symbolic tail probability Pr(theta < c | y) for arbitrary c in (0, 1)
+const cdfSym = await show`Assuming[al > 0 && be > 0 && 0 < c < 1,
+  FullSimplify[Integrate[th^(al - 1)*(1 - th)^(be - 1), {th, 0, c}] / Beta[al, be]]] /. {al -> a + y, be -> b + n - y}`
+```
+
+
+$$
+\Pr(\theta < c \mid y) = \frac{1}{Z}\int_0^c \theta^{a+y-1}(1-\theta)^{b+n-y-1}\,d\theta \;=\; \frac{B_c(a+y,b+n-y)}{B(a+y,b+n-y)}
 $$
 
 ```js
@@ -176,10 +197,10 @@ const resid = toJS(await wl`Simplify[
   ${mean} - (n/(n + w)*(y/n) + w/(n + w)*(a/w)) /. w -> a + b]`)
 console.log('Shrinkage identity residual =', resid)
 
-// Instantiate at n = 20, y = 0 across all three priors (cross-check with Python)
+// Instantiate symbolic mean & CDF at n = 20, y = 0, c = 1/10 (cross-check with Python)
 for (const [name, a0, b0] of [['Uniform', 1, 1], ['Epidemiological', 2, 20], ['Strong wrong', 10, 10]]) {
   const m = toJS(await wl`N[${mean} /. {a -> ${a0}, b -> ${b0}, n -> 20, y -> 0}]`)
-  const pLt = toJS(await wl`N[Beta[1/10, ${a0}, ${b0 + 20}] / Beta[${a0}, ${b0 + 20}]]`)
+  const pLt = toJS(await wl`N[${cdfSym} /. {a -> ${a0}, b -> ${b0}, n -> 20, y -> 0, c -> 1/10}]`)
   console.log(`${name.padEnd(16)} -> mean = ${m.toFixed(3)}, Pr(theta < 0.10 | y=0) = ${pLt.toFixed(3)}`)
 }
 ```

@@ -187,7 +187,7 @@ print("MC 95% CI for sigma:  ", np.round(np.quantile(np.sqrt(s2_mc), [0.025, 0.9
 
 ## Symbolic Check in Wolfram Language {#sec:ch05-wolfram}
 
-Integrates precision $p = 1/\sigma^2$ out of the Normal–Inverse-Gamma joint posterior in `wolfram-ws-bridge` JavaScript mode, verifies that the ratio to the Student-$t$ kernel has zero derivative in $\theta$, factors $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$, and cross-checks the exact midge 95% credible interval.
+Integrates precision $p = 1/\sigma^2$ out of the Normal–Inverse-Gamma joint posterior in `wolfram-ws-bridge` JavaScript mode, verifies that the ratio to the Student-$t$ kernel has zero derivative in $\theta$, derives the exact symbolic Student-$t$ posterior variance $\operatorname{Var}[\theta \mid y]$, factors $(n + \kappa_0)^2(\operatorname{MSE}(\hat{\theta}_b) - \operatorname{MSE}(\bar{y}))$, and instantiates all symbolic formulas on Hoff’s midge wing lengths.
 
 ```js
 const marg = await show`Assuming[nun > 0 && rate > 0,
@@ -196,7 +196,10 @@ const marg = await show`Assuming[nun > 0 && rate > 0,
 
 
 $$
-2^{\frac{1+\text{nun}}{2}} \left(\frac{1}{\text{nun} \text{s2n}+\text{kn} (-\text{mun}+\text{th})^2}\right)^{\frac{1+\text{nun}}{2}} \Gamma \left(\frac{1+\text{nun}}{2}\right)
+\begin{aligned}
+\left.\int_0^\infty p^{\frac{\text{nun}+1}{2}-1} e^{-\text{rate}\cdot p/2}\,dp\right|_{\text{rate}=\text{nun}\,\text{s2n}+\text{kn}(\text{th}-\text{mun})^2} \\
+&= 2^{\frac{1+\text{nun}}{2}} \left(\frac{1}{\text{nun} \text{s2n}+\text{kn} (-\text{mun}+\text{th})^2}\right)^{\frac{1+\text{nun}}{2}} \Gamma \left(\frac{1+\text{nun}}{2}\right)
+\end{aligned}
 $$
 
 ```js
@@ -212,6 +215,20 @@ d/dth log(marginal / Student-t kernel) = 0
 ```
 
 ```js
+// Symbolic Student-t posterior variance Var[theta | y] for nun > 2
+const tVar = await show`Assuming[nun > 2 && kn > 0 && s2n > 0,
+  FullSimplify[(s2n/kn) * Integrate[u^2*(1 + u^2/nun)^(-(nun + 1)/2) / (Sqrt[nun]*Beta[1/2, nun/2]), {u, -Infinity, Infinity}]]]`
+```
+
+
+$$
+\begin{aligned}
+\operatorname{Var}[\theta \mid y] = \frac{\text{s2n}}{\text{kn}}\int_{-\infty}^\infty u^2\,\frac{(1 + u^2/\text{nun})^{-(\text{nun}+1)/2}}{\sqrt{\text{nun}}\,B(\tfrac12, \text{nun}/2)}\,du \\
+&= \frac{\text{nun} \text{s2n}}{\text{kn} (-2+\text{nun})}
+\end{aligned}
+$$
+
+```js
 // Scaled MSE difference (n + k0)^2 * (MSE(theta_b) - MSE(ybar))
 const { Plus, Times, Power, Divide, Subtract, n, k0, s2, mu0, th0 } = W
 const mseB = Plus(
@@ -223,23 +240,24 @@ await show`Factor[Together[(${mseB} - s2/n) * (n + k0)^2]]`
 
 
 $$
-\frac{\text{k0} \left(\text{k0} \text{mu0}^2 n-\text{k0} \text{s2}-2 n \text{s2}-2 \text{k0} \text{mu0} n \text{th0}+\text{k0} n \text{th0}^2\right)}{n}
+(n + \text{k0})^2\!\left[\operatorname{MSE}(\hat{\theta}_b) - \frac{\text{s2}}{n}\right] \;=\; \frac{\text{k0} \left(\text{k0} \text{mu0}^2 n-\text{k0} \text{s2}-2 n \text{s2}-2 \text{k0} \text{mu0} n \text{th0}+\text{k0} n \text{th0}^2\right)}{n}
 $$
 
 ```js
-// Instantiate on Hoff's midge wing lengths (n = 9) and verify exact t_10 95% CI
+// Instantiate symbolic formulas on Hoff's midge wing lengths (n = 9)
 const y = [1.64, 1.70, 1.72, 1.74, 1.82, 1.82, 1.82, 1.90, 2.08]
 const mun = toJS(await wl`N[(19/10 + Total[${y}]) / 10]`)
 const s2n = toJS(await wl`N[(1/100 + 8*Variance[${y}] + (9/10)*(Mean[${y}] - 19/10)^2) / 10]`)
+const sdPost = Math.sqrt(toJS(await wl`N[${tVar} /. {nun -> 10, kn -> 10, s2n -> ${s2n}}]`))
 const tCrit = toJS(await wl`t /. FindRoot[
   Integrate[(1 + u^2/10)^(-11/2) / (Sqrt[10]*Beta[1/2, 5]), {u, -t, t}] == 95/100, {t, 2.2}]`)
 const lo = mun - tCrit * Math.sqrt(s2n / 10), hi = mun + tCrit * Math.sqrt(s2n / 10)
-console.log(`Midge exact: mu_n = ${mun.toFixed(4)}, s2_n = ${s2n.toFixed(5)}, 95% CI = [${lo.toFixed(4)}, ${hi.toFixed(4)}]`)
+console.log(`Midge exact: mu_n = ${mun.toFixed(4)}, s2_n = ${s2n.toFixed(5)}, post SD = ${sdPost.toFixed(4)}, 95% CI = [${lo.toFixed(4)}, ${hi.toFixed(4)}]`)
 ```
 
 
 ```text
-Midge exact: mu_n = 1.8140, s2_n = 0.01532, 95% CI = [1.7268, 1.9012]
+Midge exact: mu_n = 1.8140, s2_n = 0.01532, post SD = 0.0438, 95% CI = [1.7268, 1.9012]
 ```
 
 ## Exercises {#sec:ch05-exercises}

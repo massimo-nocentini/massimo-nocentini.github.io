@@ -274,7 +274,7 @@ print("model-averaged beta:", bma.round(2))
 
 ## Symbolic Check in Wolfram Language {#sec:ch09-wolfram}
 
-Integrates $\gamma = 1/\sigma^2$ symbolically in `wolfram-ws-bridge` JavaScript mode to derive $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$, verifies both the Lindley limit ($g \to \infty$) and the information-paradox supremum (as $r_1 \to 0, \sigma_0^2 \to 0$), and instantiates `margZ` directly to reproduce Table 9.1.
+Integrates $\gamma = 1/\sigma^2$ symbolically in `wolfram-ws-bridge` JavaScript mode to derive $p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ and the general symbolic Bayes factor $\operatorname{BF}_{a,b}$ (retaining model-specific $s_a^2, s_b^2$), verifies both the Lindley limit ($g \to \infty$) and the information-paradox supremum, and instantiates `margZ` directly to reproduce Table 9.1.
 
 ```js
 const margZ = await show`Assuming[nu0 > 0 && s20 > 0 && ssr > 0 && g > 0 && n > 0,
@@ -284,7 +284,21 @@ const margZ = await show`Assuming[nu0 > 0 && s20 > 0 && ssr > 0 && g > 0 && n > 
 
 
 $$
-\frac{(1+g)^{-\text{pz}/2} \pi ^{-n/2} (\text{nu0} \text{s20})^{\text{nu0}/2} (\text{nu0} \text{s20}+\text{ssr})^{\frac{1}{2} (-n-\text{nu0})} \Gamma \left(\frac{n+\text{nu0}}{2}\right)}{\Gamma \left(\frac{\text{nu0}}{2}\right)}
+\begin{aligned}
+\int_0^\infty (1+g)^{-\text{pz}/2}(2\pi)^{-n/2}\frac{(\text{nu0}\,\text{s20}/2)^{\text{nu0}/2}}{\Gamma(\text{nu0}/2)}\,\gamma^{\frac{\text{nu0}+n}{2}-1} e^{-\gamma(\text{nu0}\,\text{s20}+\text{ssr})/2}\,d\gamma \\
+&= \frac{(1+g)^{-\text{pz}/2} \pi ^{-n/2} (\text{nu0} \text{s20})^{\text{nu0}/2} (\text{nu0} \text{s20}+\text{ssr})^{\frac{1}{2} (-n-\text{nu0})} \Gamma \left(\frac{n+\text{nu0}}{2}\right)}{\Gamma \left(\frac{\text{nu0}}{2}\right)}
+\end{aligned}
+$$
+
+```js
+// General symbolic Bayes factor BF_{a,b} retaining model-specific s20_a, s20_b
+await show`Assuming[nu0 > 0 && sa > 0 && sb > 0 && ssra > 0 && ssrb > 0 && g > 0 && n > 0,
+  FullSimplify[(${margZ} /. {pz -> pa, s20 -> sa, ssr -> ssra}) / (${margZ} /. {pz -> pb, s20 -> sb, ssr -> ssrb})]]`
+```
+
+
+$$
+\operatorname{BF}_{a,b} = \frac{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_a)}{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_b)} \;=\; (1+g)^{\frac{1}{2} (-\text{pa}+\text{pb})} \left(\frac{\text{sa}}{\text{sb}}\right)^{\text{nu0}/2} \left(\frac{\text{nu0} \text{sa}+\text{ssra}}{\text{nu0} \text{sb}+\text{ssrb}}\right)^{\frac{1}{2} (-n-\text{nu0})}
 $$
 
 ```js
@@ -308,7 +322,7 @@ await show`Assuming[p1 > 0 && g > 0 && nu0 > 0 && yy > 0 && n > 0,
 
 
 $$
-(1+g)^{\frac{1}{2} (n+\text{nu0}-\text{p1})}
+\lim_{r_1 \to 0}\left.\operatorname{BF}_{10}\right|_{\text{s20}=0} \;=\; (1+g)^{\frac{1}{2} (n+\text{nu0}-\text{p1})}
 $$
 
 ```js
