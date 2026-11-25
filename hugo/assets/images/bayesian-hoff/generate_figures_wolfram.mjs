@@ -55,9 +55,9 @@ function postprocessSvg(rawSvg) {
     }
     return match
   })
-  // 2. Remove Cairo's full-canvas white background rect so the SVG is transparent on cream & dark themes
-  svg = svg.replace(/<rect[^>]*style="fill:rgb\(100%,\s*99\.99\d*%,\s*100%\);[^"]*"[^>]*\/>/g, '')
-  svg = svg.replace(/<rect[^>]*style="fill:rgb\(100%,\s*100%,\s*100%\);[^"]*"[^>]*\/>/g, '')
+  // 2. Remove Cairo's full-canvas white background <rect> or <path> so the SVG is transparent on cream & dark themes
+  svg = svg.replace(/<(?:rect|path)[^>]*fill:\s*rgb\(100%,\s*99\.99\d*%,\s*100%\)[^>]*\/>/g, '')
+  svg = svg.replace(/<(?:rect|path)[^>]*fill:\s*rgb\(100%,\s*100%,\s*100%\)[^>]*\/>/g, '')
   // 3. Inject dark-mode CSS right after opening <svg ...>
   svg = svg.replace(/(<svg\b[^>]*>)/, `$1${DARK_CSS}`)
   return svg
