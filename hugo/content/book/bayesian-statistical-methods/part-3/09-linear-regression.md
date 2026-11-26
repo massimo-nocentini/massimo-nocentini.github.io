@@ -489,11 +489,23 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Divide the marginal of a $p_1$-regressor model, $\operatorname{SSR}_g = \tfrac{g}{g+1} r_1 + \tfrac{1}{g+1}\mathbf{y}^T\mathbf{y}$, by that of the null model ($p_z = 0$, $\operatorname{SSR}_g = \mathbf{y}^T\mathbf{y}$).{{< /marginnote >}}
+
+```js
+const bf = await show`FullSimplify[
+  (${margZ} /. {pz -> p1, ssr -> (g/(g+1))*r1 + (1/(g+1))*yy}) / (${margZ} /. {pz -> 0, ssr -> yy})]`
+```
+
+$$
+\begin{aligned}
+&\operatorname{BF}_{10}(g) = \frac{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_1)}{p(\mathbf{y} \mid \mathbf{X}, \mathbf{z}_0)} \\
+&= (1+g)^{-p_1/2} \left(\frac{\nu_0 \sigma_0^2 + \frac{g\, r_1 + \mathbf{y}^T\mathbf{y}}{1+g}}{\nu_0 \sigma_0^2 + \mathbf{y}^T\mathbf{y}}\right)^{-\frac{n+\nu_0}{2}}
+\end{aligned}
+$$
+
 {{< marginnote >}}Take $g \to \infty$ to prove Lindley’s paradox: diffuse $g$-priors force $\operatorname{BF}_{10} \to 0$ in favor of the null.{{< /marginnote >}}
 
 ```js
-const bf = await wl`FullSimplify[
-  (${margZ} /. {pz -> p1, ssr -> (g/(g+1))*r1 + (1/(g+1))*yy}) / (${margZ} /. {pz -> 0, ssr -> yy})]`
 await show`Assuming[p1 > 0 && nu0 > 0 && s20 > 0 && yy > 0 && r1 > 0 && n > 0, Limit[${bf}, g -> Infinity]]`
 ```
 
@@ -515,7 +527,7 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Instantiate $\log p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ on all five models of Hoff’s Oxygen Uptake Table 9.1.{{< /marginnote >}}
+{{< marginnote >}}Write the OLS estimate $\hat{\boldsymbol{\beta}}_{\text{ols}}$ as a symbolic function of a design $\mathbf{X}_z$ and the response $\mathbf{y}$.{{< /marginnote >}}
 
 ```js
 // Instantiate margZ directly on Hoff's Oxygen uptake Table 9.1 (g = n = 12, nu0 = 1, s20 = s_z^2)
@@ -523,16 +535,40 @@ const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
 const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
 const y = [-0.87, -10.74, -3.27, -1.97, 7.50, -7.25, 17.05, 4.96, 10.40, 11.05, 0.26, 2.51]
 const Xfull = age.map((a, i) => [1, grp[i], a, grp[i] * a])
-const logMargs = []
-for (const cols of [[0], [0, 1], [0, 2], [0, 1, 2], [0, 1, 2, 3]]) {
-  const Xz = Xfull.map(row => cols.map(c => row[c]))
-  const pz = cols.length
-  const bOls = await wl`LinearSolve[Transpose[${Xz}].${Xz}, Transpose[${Xz}].${y}]`
-  const s2z = await wl`Total[(${y} - ${Xz}.${bOls})^2] / (12 - ${pz})`
-  const ssrG = await wl`${y}.${y} - (12/13)*(${y}.${Xz}.${bOls})`
-  logMargs.push(toJS(await wl`N[Log[${margZ} /. {n -> 12, g -> 12, nu0 -> 1, pz -> ${pz}, s20 -> ${s2z}, ssr -> ${ssrG}}]]`))
-}
-await show`N[${logMargs}]`
+const olsB = await show`Function[{xm, yv}, LinearSolve[Transpose[xm].xm, Transpose[xm].yv]]`
+```
+
+$$
+\hat{\boldsymbol{\beta}}_{\text{ols}}(\mathbf{X}_z, \mathbf{y}) = (\mathbf{X}_z^T\mathbf{X}_z)^{-1}\mathbf{X}_z^T\mathbf{y}
+$$
+
+{{< marginnote >}}Write the residual variance $s_z^2$ used as the prior guess $\sigma_0^2$, with $p_z$ the number of fitted coefficients.{{< /marginnote >}}
+
+```js
+const s2Fn = await show`Function[{xm, yv, bv}, (yv - xm.bv).(yv - xm.bv) / (Length[yv] - Length[bv])]`
+```
+
+$$
+s_z^2(\mathbf{X}_z, \mathbf{y}, \hat{\boldsymbol{\beta}}) = \frac{(\mathbf{y} - \mathbf{X}_z\hat{\boldsymbol{\beta}})^T(\mathbf{y} - \mathbf{X}_z\hat{\boldsymbol{\beta}})}{n - p_z}
+$$
+
+{{< marginnote >}}Write the $g$-prior residual sum of squares $\operatorname{SSR}_g$ in terms of the OLS fit.{{< /marginnote >}}
+
+```js
+const ssrFn = await show`Function[{xm, yv, bv, g}, yv.yv - (g/(g + 1))*(yv.xm.bv)]`
+```
+
+$$
+\operatorname{SSR}_g(\mathbf{X}_z, \mathbf{y}, \hat{\boldsymbol{\beta}}) = \mathbf{y}^T\mathbf{y} - \frac{g}{g+1}\,\mathbf{y}^T\mathbf{X}_z\hat{\boldsymbol{\beta}}
+$$
+
+{{< marginnote >}}Instantiate $\log p(\mathbf{y} \mid \mathbf{X}, \mathbf{z})$ on all five models of Hoff’s Oxygen Uptake Table 9.1, plugging in $s_z^2$ and $\operatorname{SSR}_g$ for each column subset.{{< /marginnote >}}
+
+```js
+const logMargs = await show`N[Table[With[{xz = ${Xfull}[[All, cols]]}, With[{bh = ${olsB}[xz, ${y}]},
+  Log[${margZ} /. {n -> 12, g -> 12, nu0 -> 1, pz -> Length[cols],
+    s20 -> ${s2Fn}[xz, ${y}, bh], ssr -> ${ssrFn}[xz, ${y}, bh, 12]}]]],
+  {cols, {{1}, {1, 2}, {1, 3}, {1, 2, 3}, {1, 2, 3, 4}}}]]`
 ```
 
 $$
@@ -571,7 +607,7 @@ const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
 const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
 const y = [-0.87, -10.74, -3.27, -1.97, 7.50, -7.25, 17.05, 4.96, 10.40, 11.05, 0.26, 2.51]
 const X = age.map((a, i) => [1, grp[i], a, grp[i] * a])
-await show`(g/(g + 1))*cXtXinvC * (nu0*s20 + ssrG) / (nu0 + n)`
+const scale2 = await show`(g/(g + 1))*cXtXinvC * (nu0*s20 + ssrG) / (nu0 + n)`
 ```
 
 $$
@@ -581,15 +617,53 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Filter ages $20, \dots, 31$ where the exact $95\%$ $t_{13}$ credible interval for Aerobics minus Running lies strictly above $0$.{{< /marginnote >}}
+{{< marginnote >}}Write the OLS estimate as a symbolic function of the design and response.{{< /marginnote >}}
 
 ```js
-const bOls = await wl`LinearSolve[Transpose[${X}].${X}, Transpose[${X}].${y}]`
-const XtXinv = await wl`Inverse[Transpose[${X}].${X}]`
-const s20 = await wl`N[Total[(${y} - ${X}.${bOls})^2] / 8]`
-const ssrG = await wl`N[${y}.${y} - (12/13)*(${y}.${X}.${bOls})]`
-const t13 = await wl`t /. FindRoot[1 - Beta[13/(13 + t^2), 13/2, 1/2]/Beta[13/2, 1/2] == 95/100, {t, 2.16}]`
-await show`Select[Range[20, 31], ((12/13)*({0, 1, 0, #}.${bOls}) - ${t13}*Sqrt[(12/13)*({0, 1, 0, #}.${XtXinv}.{0, 1, 0, #})*(${s20} + ${ssrG})/13]) > 0 &]`
+const olsB = await show`Function[{xm, yv}, LinearSolve[Transpose[xm].xm, Transpose[xm].yv]]`
+```
+
+$$
+\hat{\beta}_{\text{ols}}(X, y) = (X^\top X)^{-1} X^\top y
+$$
+
+{{< marginnote >}}Write the residual variance $s^2$, the prior guess $\sigma_0^2$ (here $n - p = 8$).{{< /marginnote >}}
+
+```js
+const s2Fn = await show`Function[{xm, yv, bv}, (yv - xm.bv).(yv - xm.bv) / (Length[yv] - Length[bv])]`
+```
+
+$$
+s^2(X, y, \hat{\beta}) = \frac{(y - X\hat{\beta})^\top (y - X\hat{\beta})}{n - p}
+$$
+
+{{< marginnote >}}Write the $g$-prior residual sum of squares $\operatorname{SSR}_g$ in terms of the OLS fit.{{< /marginnote >}}
+
+```js
+const ssrFn = await show`Function[{xm, yv, bv, g}, yv.yv - (g/(g + 1))*(yv.xm.bv)]`
+```
+
+$$
+\operatorname{SSR}_g(X, y, \hat{\beta}) = y^\top y - \frac{g}{g+1}\, y^\top X \hat{\beta}
+$$
+
+{{< marginnote >}}Solve $\Pr(\lvert T \rvert \le t) = 0.95$ for $T \sim t_{13}$, via the regularized incomplete beta function, to get the two-sided $95\%$ quantile.{{< /marginnote >}}
+
+```js
+const t13 = await show`t /. FindRoot[1 - Beta[13/(13 + t^2), 13/2, 1/2]/Beta[13/2, 1/2] == 95/100, {t, 2.16}]`
+```
+
+$$
+t_{13,\,0.975} = 2.16037
+$$
+
+{{< marginnote >}}Filter ages $20, \dots, 31$ where the exact $95\%$ $t_{13}$ credible interval for Aerobics minus Running lies strictly above $0$, plugging $s^2$, $\operatorname{SSR}_g$ and $c^\top (X^\top X)^{-1} c$ into the scale.{{< /marginnote >}}
+
+```js
+await show`With[{bh = ${olsB}[${X}, ${y}]},
+  Select[Range[20, 31], (12/13)*({0, 1, 0, #}.bh) - ${t13}*Sqrt[${scale2} /. {g -> 12, n -> 12, nu0 -> 1,
+    cXtXinvC -> {0, 1, 0, #}.Inverse[Transpose[${X}].${X}].{0, 1, 0, #},
+    s20 -> ${s2Fn}[${X}, ${y}, bh], ssrG -> ${ssrFn}[${X}, ${y}, bh, 12]}] > 0 &]]`
 ```
 
 $$
@@ -640,15 +714,6 @@ Verify both halves of {{< xref "rem:ch09-paradox" "full" >}}. Derive the bound $
 
 ```js
 // Ex 9.3: Exact switch point g* where Lindley's paradox flips A=(1,1,1,0) vs B=(1,0,1,0) on oxygen data (nu0 = 1)
-const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
-const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
-const y = [-0.87, -10.74, -3.27, -1.97, 7.50, -7.25, 17.05, 4.96, 10.40, 11.05, 0.26, 2.51]
-const Xfull = age.map((a, i) => [1, grp[i], a, grp[i] * a])
-const fitSum = async cols => {
-  const Xz = Xfull.map(r => cols.map(c => r[c]))
-  return toJS(await wl`N[${y}.${Xz}.LinearSolve[Transpose[${Xz}].${Xz}, Transpose[${Xz}].${y}]]`)
-}
-const yy = toJS(await wl`N[${y}.${y}]`), fA = await fitSum([0, 1, 2]), fB = await fitSum([0, 2])
 const bfG = await show`(1 + g)^(-1/2) * ((s20 + yy - (g/(g + 1))*fB) / (s20 + yy - (g/(g + 1))*fA))^((n + 1)/2)`
 ```
 
@@ -659,10 +724,25 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Solve $\operatorname{BF}_{A, B}(g^*) = 1$ numerically to locate the exact Lindley-paradox crossover $g^*$.{{< /marginnote >}}
+{{< marginnote >}}Write the fitted sum $F_z = y^\top X_z \hat{\beta}_{\text{ols}}$ of a model as a symbolic function of its design $X_z$ and the response.{{< /marginnote >}}
 
 ```js
-await show`g /. FindRoot[(${bfG} /. {s20 -> 8.54, yy -> ${yy}, fA -> ${fA}, fB -> ${fB}, n -> 12}) == 1, {g, 200}]`
+const age = [23, 22, 22, 25, 27, 20, 31, 23, 27, 28, 22, 24]
+const grp = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+const y = [-0.87, -10.74, -3.27, -1.97, 7.50, -7.25, 17.05, 4.96, 10.40, 11.05, 0.26, 2.51]
+const Xfull = age.map((a, i) => [1, grp[i], a, grp[i] * a])
+const fitSum = await show`Function[{xm, yv}, yv.xm.LinearSolve[Transpose[xm].xm, Transpose[xm].yv]]`
+```
+
+$$
+F(X_z, y) = y^\top X_z (X_z^\top X_z)^{-1} X_z^\top y
+$$
+
+{{< marginnote >}}Instantiate $y^\top y$, $F_A$ (columns $1, 2, 3$) and $F_B$ (columns $1, 3$) on the oxygen data and solve $\operatorname{BF}_{A, B}(g^*) = 1$ numerically to locate the exact Lindley-paradox crossover $g^*$.{{< /marginnote >}}
+
+```js
+await show`g /. FindRoot[(${bfG} /. {s20 -> 8.54, yy -> N[${y}.${y}], n -> 12,
+  fA -> N[${fitSum}[${Xfull}[[All, {1, 2, 3}]], ${y}]], fB -> N[${fitSum}[${Xfull}[[All, {1, 3}]], ${y}]]}) == 1, {g, 200}]`
 ```
 
 $$

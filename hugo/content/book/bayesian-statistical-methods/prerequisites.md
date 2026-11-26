@@ -35,12 +35,21 @@ The variance decomposition reappears throughout the book: posterior predictive o
 
 Consider the three-component normal mixture from {{< xref "ch:gibbs" "full" >}} with weights $w_j$, means $\theta_j$, and variances $\sigma_j^2$. We verify symbolically that $\operatorname{Var}(X)$ splits into within-component and between-component terms, rewrite the between-component variance as a pairwise sum $\sum_{i<j} w_i w_j (\theta_i - \theta_j)^2$, and instantiate on Hoff’s trimodal target ($w = (0.45, 0.10, 0.45)$, $\theta = (-3, 0, 3)$, $\sigma_j^2 = 1/3$):
 
-{{< marginnote >}}Compute the first two raw moments of a $\mathcal{N}(m, v)$ component by symbolic integration.{{< /marginnote >}}
+{{< marginnote >}}Write the density of a single $\mathcal{N}(m, v)$ mixture component.{{< /marginnote >}}
 
 ```js
 // 1a. Law of total variance on Chapter 6's trimodal normal mixture
 const { x, m, v } = W
-const phi = await wl`Exp[-(${x} - ${m})^2/(2*${v})]/Sqrt[2*Pi*${v}]`
+const phi = await show`Exp[-(${x} - ${m})^2/(2*${v})]/Sqrt[2*Pi*${v}]`
+```
+
+$$
+\phi(x \mid m, v) = \frac{e^{-\frac{(x-m)^2}{2 v}}}{\sqrt{2 \pi} \sqrt{v}}
+$$
+
+{{< marginnote >}}Compute the first two raw moments of a $\mathcal{N}(m, v)$ component by symbolic integration.{{< /marginnote >}}
+
+```js
 const mom = await show`Assuming[v > 0 && Element[m, Reals],
   Table[Integrate[x^k*${phi}, {x, -Infinity, Infinity}], {k, 1, 2}]]`
 ```
@@ -49,11 +58,29 @@ $$
 \bigl(E[X \mid m, v],\; E[X^2 \mid m, v]\bigr) = \left\{m,m^2+v\right\}
 $$
 
+{{< marginnote >}}Write the within-component variance: the $w$-weighted average of the $\sigma_j^2$.{{< /marginnote >}}
+
+```js
+const within = await show`Sum[w[j]*s2[j], {j, 3}]`
+```
+
+$$
+E\{\operatorname{Var}(X \mid Z)\} = w_1 \sigma_1^2 + w_2 \sigma_2^2 + w_3 \sigma_3^2
+$$
+
+{{< marginnote >}}Write the between-component variance: the $w$-weighted variance of the means $\theta_j$.{{< /marginnote >}}
+
+```js
+const between = await show`Sum[w[j]*th[j]^2, {j, 3}] - Sum[w[j]*th[j], {j, 3}]^2`
+```
+
+$$
+\operatorname{Var}(E[X \mid Z]) = w_1 \theta_1^2 + w_2 \theta_2^2 + w_3 \theta_3^2 - \left(w_1 \theta_1 + w_2 \theta_2 + w_3 \theta_3\right)^2
+$$
+
 {{< marginnote >}}Verify the law of total variance symbolically for a 3-component normal mixture.{{< /marginnote >}}
 
 ```js
-const within = await wl`Sum[w[j]*s2[j], {j, 3}]`
-const between = await wl`Sum[w[j]*th[j]^2, {j, 3}] - Sum[w[j]*th[j], {j, 3}]^2`
 await show`Simplify[Sum[w[j]*(${mom}[[2]] /. {m -> th[j], v -> s2[j]}), {j, 3}] -
   Sum[w[j]*(${mom}[[1]] /. m -> th[j]), {j, 3}]^2 - (${within} + ${between})]`
 ```
@@ -75,10 +102,23 @@ $$
 \operatorname{Var}(E[X \mid Z]) - \sum_{i<j} w_i w_j (\theta_i - \theta_j)^2 = 0
 $$
 
+{{< marginnote >}}Write Chapter 6’s trimodal target as a list of substitution rules.{{< /marginnote >}}
+
+```js
+const hoff = await show`{w[1] -> 9/20, w[2] -> 1/10, w[3] -> 9/20, th[1] -> -3, th[2] -> 0, th[3] -> 3, s2[1] -> 1/3, s2[2] -> 1/3, s2[3] -> 1/3}`
+```
+
+$$
+\begin{aligned}
+&\bigl(w,\; \theta,\; \sigma^2\bigr)_{\text{Ch. 6}} \\
+&= \Bigl\{w_1\to \frac{9}{20},w_2\to \frac{1}{10},w_3\to \frac{9}{20},\theta_1\to -3,\theta_2\to 0,\theta_3\to 3, \\
+&\qquad \sigma_1^2\to \frac{1}{3},\sigma_2^2\to \frac{1}{3},\sigma_3^2\to \frac{1}{3}\Bigr\}
+\end{aligned}
+$$
+
 {{< marginnote >}}Instantiate the within, between, and total variance on Chapter 6’s trimodal mixture.{{< /marginnote >}}
 
 ```js
-const hoff = await wl`{w[1] -> 9/20, w[2] -> 1/10, w[3] -> 9/20, th[1] -> -3, th[2] -> 0, th[3] -> 3, s2[1] -> 1/3, s2[2] -> 1/3, s2[3] -> 1/3}`
 await show`{${within}, ${between}, Integrate[x^2*Sum[w[j]*(${phi} /. {m -> th[j], v -> s2[j]}), {j, 3}] /. ${hoff}, {x, -Infinity, Infinity}]} /. ${hoff}`
 ```
 
@@ -103,12 +143,21 @@ Jensen’s inequality governs every nonlinear reparameterization in the book: lo
 
 For $X \sim \operatorname{gamma}(a, b)$ (shape $a$, rate $b$), $x \mapsto 1/x$ is strictly convex while $x \mapsto \log x$ is strictly concave. Computing both expectations symbolically exposes the exact Jensen gaps, which we instantiate at the midge precision posterior $(a, b) = (5, 3/40)$:
 
-{{< marginnote >}}Integrate $1/x$ against a $\operatorname{gamma}(a, b)$ density to obtain $E[1/X]$ symbolically.{{< /marginnote >}}
+{{< marginnote >}}Write the $\operatorname{gamma}(a, b)$ density in shape–rate form.{{< /marginnote >}}
 
 ```js
 // 1b. Two Jensen gaps for a Gamma(a, b) precision random variable
 const { a, b, x } = W
-const dens = await wl`${b}^${a}/Gamma[${a}]*${x}^(${a} - 1)*Exp[-${b}*${x}]`
+const dens = await show`${b}^${a}/Gamma[${a}]*${x}^(${a} - 1)*Exp[-${b}*${x}]`
+```
+
+$$
+p(x \mid a, b) = \frac{b^a e^{-b x} x^{-1+a}}{\Gamma (a)}
+$$
+
+{{< marginnote >}}Integrate $1/x$ against a $\operatorname{gamma}(a, b)$ density to obtain $E[1/X]$ symbolically.{{< /marginnote >}}
+
+```js
 const eInv = await show`Assuming[a > 1 && b > 0, FullSimplify[Integrate[${dens}/x, {x, 0, Infinity}]]]`
 ```
 
@@ -239,13 +288,26 @@ $$
 
 We verify all three conjugate score fingerprints simultaneously (Beta–Binomial, Gamma–Poisson, Normal–Normal), and then confirm that dividing the joint density $p(y \mid \theta)\,p(\theta)$ by the recognized posterior $p(\theta \mid y)$ recovers the exact marginal evidence $p(y)$—instantiated on the rare-infection example ($a=2, b=20, n=20, y=0$) of {{< xref "ch:intro" "full" >}}:
 
-{{< marginnote >}}Check that the log-derivatives of the Beta, Gamma, and Normal kernels match their claimed posterior scores.{{< /marginnote >}}
+{{< marginnote >}}Write the three log joint kernels $\log\{p(y \mid \theta)\,p(\theta)\}$: Beta–Binomial, Gamma–Poisson, Normal–Normal.{{< /marginnote >}}
 
 ```js
 // 2b. Score fingerprints (Beta, Gamma, Normal) and marginal evidence p(y)
-const logK = await wl`{y*Log[t] + (n - y)*Log[1 - t] + (a - 1)*Log[t] + (b - 1)*Log[1 - t],
+const logK = await show`{y*Log[t] + (n - y)*Log[1 - t] + (a - 1)*Log[t] + (b - 1)*Log[1 - t],
   sy*Log[t] - n*t + (a - 1)*Log[t] - b*t,
   -n*(yb - t)^2/(2*s2) - (t - mu0)^2/(2*t0^2)}`
+```
+
+$$
+\begin{aligned}
+&\bigl(\log k_{\text{beta}},\; \log k_{\text{gamma}},\; \log k_{\text{normal}}\bigr)(\theta) \\
+&= \Bigl\{(-1+a) \log (\theta)+y \log (\theta)+(-1+b) \log (1-\theta)+(n-y) \log (1-\theta), \\
+&\qquad -b \theta-n \theta+(-1+a) \log (\theta)+s_y \log (\theta),\; -\frac{n (\bar{y}-\theta)^2}{2 \sigma^2}-\frac{(\theta-\mu_0)^2}{2 \tau_0^2}\Bigr\}
+\end{aligned}
+$$
+
+{{< marginnote >}}Check that the log-derivatives of the Beta, Gamma, and Normal kernels match their claimed posterior scores.{{< /marginnote >}}
+
+```js
 await show`Simplify[D[${logK}, t] - {
   (a + y - 1)/t - (b + n - y - 1)/(1 - t),
   (a + sy - 1)/t - (b + n),
@@ -259,10 +321,19 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Write the Beta–Binomial joint density $p(y \mid \theta)\,p(\theta)$.{{< /marginnote >}}
+
+```js
+const joint = await show`Binomial[n, y]*t^y*(1 - t)^(n - y)*t^(a - 1)*(1 - t)^(b - 1)/Beta[a, b]`
+```
+
+$$
+p(y \mid \theta)\,p(\theta) = \frac{(1-\theta)^{-1+b+n-y} \theta^{-1+a+y} \binom{n}{y}}{B(a,b)}
+$$
+
 {{< marginnote >}}Integrate out $\theta$ to compute the exact Beta–Binomial marginal likelihood $p(y)$.{{< /marginnote >}}
 
 ```js
-const joint = await wl`Binomial[n, y]*t^y*(1 - t)^(n - y)*t^(a - 1)*(1 - t)^(b - 1)/Beta[a, b]`
 const py = await show`Assuming[a > 0 && b > 0 && n >= y >= 0,
   Integrate[${joint}, {t, 0, 1}] /. Gamma[b + n - y]*Gamma[a + y] -> Beta[a + y, b + n - y]*Gamma[a + b + n]]`
 ```
@@ -334,11 +405,20 @@ Log-concavity guarantees well-behaved posterior geometry in GLMs ({{< xref "ch:m
 
 Starting from $\tilde{\sigma}^2 \sim \operatorname{gamma}(a, b)$, we transform to variance $\sigma^2 = 1/\tilde{\sigma}^2$ and log-precision $\eta = \log\tilde{\sigma}^2$. Notice how the modes fail to commute ($1/\operatorname{mode}(\tilde{\sigma}^2) \ne \operatorname{mode}(\sigma^2)$) whereas the medians match identically, and how $\eta$ is strictly log-concave for *every* $a > 0$ (while $\tilde{\sigma}^2$ requires $a \ge 1$ and $\sigma^2$ is never globally log-concave). Here $(a, b) = (5, 3/40)$ is the midge posterior with $\sigma_n^2 \approx 0.015$, and Wolfram’s `GammaDistribution` uses *scale* $1/b = 40/3$:
 
-{{< marginnote >}}Apply the 1-D change-of-variables formula to map $\tilde{\sigma}^2 \sim \operatorname{gamma}(a, b)$ to variance $\sigma^2 = 1/\tilde{\sigma}^2$.{{< /marginnote >}}
+{{< marginnote >}}Write the $\operatorname{gamma}(a, b)$ density of the precision $\tilde{\sigma}^2$.{{< /marginnote >}}
 
 ```js
 // 3a. Gamma precision on three scales: precision, variance, and log-precision
-const px = await wl`b^a/Gamma[a]*x^(a - 1)*Exp[-b*x]`
+const px = await show`b^a/Gamma[a]*x^(a - 1)*Exp[-b*x]`
+```
+
+$$
+p_{\tilde{\sigma}^2}(x) = \frac{b^a e^{-b x} x^{-1+a}}{\Gamma (a)}
+$$
+
+{{< marginnote >}}Apply the 1-D change-of-variables formula to map $\tilde{\sigma}^2 \sim \operatorname{gamma}(a, b)$ to variance $\sigma^2 = 1/\tilde{\sigma}^2$.{{< /marginnote >}}
+
+```js
 const pv = await show`Assuming[a > 0 && b > 0 && v > 0, FullSimplify[(${px} /. x -> 1/v)*Abs[D[1/v, v]]]]`
 ```
 
@@ -436,11 +516,23 @@ $$
 \det\frac{\partial(x_1, x_2)}{\partial(s, u)} = -s
 $$
 
+{{< marginnote >}}Push the two independent gamma densities through $(s, u)$ and multiply by $\lvert -s \rvert$ to get the joint density of $(S, U)$.{{< /marginnote >}}
+
+```js
+const joint = await show`Assuming[s > 0 && 0 < u < 1 && a > 0 && b > 0, Simplify[PowerExpand[
+  (x1^(a - 1)*Exp[-x1]/Gamma[a])*(x2^(b - 1)*Exp[-x2]/Gamma[b]) /. {x1 -> s*u, x2 -> s*(1 - u)}]*Abs[${jac}]]]`
+```
+
+$$
+\begin{aligned}
+&p_{S,U}(s,u) = p_{X_1}(su)\,p_{X_2}\bigl(s(1-u)\bigr)\,\lvert -s \rvert \\
+&= \frac{e^{-s} s^{-1+a+b} (1-u)^{-1+b} u^{-1+a}}{\Gamma (a) \Gamma (b)}
+\end{aligned}
+$$
+
 {{< marginnote >}}Integrate out the total $s$ to derive the $\operatorname{beta}(a, b)$ marginal density of $u = X_1/(X_1 + X_2)$.{{< /marginnote >}}
 
 ```js
-const joint = await wl`Assuming[s > 0 && 0 < u < 1 && a > 0 && b > 0, Simplify[PowerExpand[
-  (x1^(a - 1)*Exp[-x1]/Gamma[a])*(x2^(b - 1)*Exp[-x2]/Gamma[b]) /. {x1 -> s*u, x2 -> s*(1 - u)}]*Abs[${jac}]]]`
 const margU = await show`Assuming[0 < u < 1 && a > 0 && b > 0, FullSimplify[Integrate[${joint}, {s, 0, Infinity}]]]`
 ```
 
@@ -551,10 +643,19 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Write a general $2 \times 2$ covariance matrix in standard-deviation and correlation form.{{< /marginnote >}}
+
+```js
+const cov = await show`{{s1^2, rho*s1*s2}, {rho*s1*s2, s2^2}}`
+```
+
+$$
+\Sigma = \left( \begin{array}{cc} \sigma_1^2 & \rho \sigma_1 \sigma_2 \\ \rho \sigma_1 \sigma_2 & \sigma_2^2 \\ \end{array} \right)
+$$
+
 {{< marginnote >}}Compute the symbolic lower-triangular Cholesky factor $L$ of a $2 \times 2$ covariance matrix.{{< /marginnote >}}
 
 ```js
-const cov = await wl`{{s1^2, rho*s1*s2}, {rho*s1*s2, s2^2}}`
 const L = await show`Assuming[s1 > 0 && s2 > 0 && -1 < rho < 1, FullSimplify[Transpose[CholeskyDecomposition[${cov}]]]]`
 ```
 
@@ -582,14 +683,35 @@ $$
 
 First we verify both Schur-complement identities on a general symbolic $3 \times 3$ covariance matrix $\Sigma$, then instantiate at $\Sigma_{1,1} = \Sigma_{2,2} = \Sigma_{3,3} = 4$, $\Sigma_{1,2} = \Sigma_{1,3} = 2$, $\Sigma_{2,3} = 1$—where the regression coefficient on $Y_2$ vanishes ($\{1/2, 0\}$), proving $Y_2 \perp Y_3 \mid Y_1$ despite $\Sigma_{2,3} \ne 0$:
 
-{{< marginnote >}}Verify both the Schur-complement determinant factorization and the precision identity $\Omega_{b,b}\Sigma_{b\mid a} = 1$ in $3 \times 3$.{{< /marginnote >}}
+{{< marginnote >}}Compute the regression coefficients $\Sigma_{b,a}\Sigma_{a,a}^{-1}$ of $z_3$ on $(z_1, z_2)$ for a general symmetric $3 \times 3$ $\Sigma$.{{< /marginnote >}}
 
 ```js
 // 4b-i. 3x3 Schur complement determinant & quadratic-form factorization
 const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
 const z = [W.z1, W.z2, W.z3], za = [W.z1, W.z2]
-const coef = await wl`${Sig}[[3, {1, 2}]] . Inverse[${Sig}[[{1, 2}, {1, 2}]]]`
-const schur = await wl`${Sig}[[3, 3]] - ${coef} . ${Sig}[[{1, 2}, 3]]`
+const coef = await show`${Sig}[[3, {1, 2}]] . Inverse[${Sig}[[{1, 2}, {1, 2}]]]`
+```
+
+$$
+\begin{aligned}
+&\Sigma_{b,a}\Sigma_{a,a}^{-1} \\
+&= \left\{\frac{\Sigma_{1,3} \Sigma_{2,2}-\Sigma_{1,2} \Sigma_{2,3}}{\Sigma_{1,1} \Sigma_{2,2}-\Sigma_{1,2}^2},\frac{\Sigma_{1,1} \Sigma_{2,3}-\Sigma_{1,2} \Sigma_{1,3}}{\Sigma_{1,1} \Sigma_{2,2}-\Sigma_{1,2}^2}\right\}
+\end{aligned}
+$$
+
+{{< marginnote >}}Form the Schur complement $\Sigma_{b\mid a} = \Sigma_{3,3} - \Sigma_{b,a}\Sigma_{a,a}^{-1}\Sigma_{a,b}$, the conditional variance of $z_3$.{{< /marginnote >}}
+
+```js
+const schur = await show`${Sig}[[3, 3]] - ${coef} . ${Sig}[[{1, 2}, 3]]`
+```
+
+$$
+\Sigma_{b\mid a} = \Sigma_{3,3} - \frac{\Sigma_{2,2} \Sigma_{1,3}^2 - 2 \Sigma_{1,2} \Sigma_{1,3} \Sigma_{2,3} + \Sigma_{1,1} \Sigma_{2,3}^2}{\Sigma_{1,1} \Sigma_{2,2}-\Sigma_{1,2}^2}
+$$
+
+{{< marginnote >}}Verify both the Schur-complement determinant factorization and the precision identity $\Omega_{b,b}\Sigma_{b\mid a} = 1$ in $3 \times 3$.{{< /marginnote >}}
+
+```js
 await show`Simplify[{Det[${Sig}] - Det[${Sig}[[{1, 2}, {1, 2}]]]*${schur}, Inverse[${Sig}][[3, 3]]*${schur}}]`
 ```
 
@@ -632,12 +754,24 @@ $$
 \mathbf{y}^T P_X \mathbf{y} + \mathbf{y}^T(I_3 - P_X)\mathbf{y} = \frac{79}{2} + \frac{3}{2} = 41 = \mathbf{y}^T \mathbf{y}.
 $$
 
-{{< marginnote >}}Verify symbolically that the OLS hat matrix $P_X$ is idempotent and orthogonal to the residual space.{{< /marginnote >}}
+{{< marginnote >}}Build the hat matrix $P_X$ of a straight-line design with intercept and covariate values $x_1, x_2, x_3$; here $D = (x_1-x_2)^2+(x_1-x_3)^2+(x_2-x_3)^2$.{{< /marginnote >}}
 
 ```js
 // 4b-ii. OLS projection matrix P_X, g-prior determinant & inverse, and Pythagoras
 const X = [[1, W.x1], [1, W.x2], [1, W.x3]]
-const P = await wl`Simplify[${X} . Inverse[Transpose[${X}] . ${X}] . Transpose[${X}]]`
+const P = await show`Simplify[${X} . Inverse[Transpose[${X}] . ${X}] . Transpose[${X}]]`
+```
+
+$$
+\begin{aligned}
+&P_X = X(X^TX)^{-1}X^T \\
+&= \frac{1}{D}\left( \begin{array}{ccc} (x_1-x_2)^2+(x_1-x_3)^2 & (x_1-x_3) (x_2-x_3) & (x_1-x_2) (x_3-x_2) \\ (x_1-x_3) (x_2-x_3) & (x_1-x_2)^2+(x_2-x_3)^2 & (x_2-x_1) (x_3-x_1) \\ (x_1-x_2) (x_3-x_2) & (x_2-x_1) (x_3-x_1) & (x_1-x_3)^2+(x_2-x_3)^2 \\ \end{array} \right)
+\end{aligned}
+$$
+
+{{< marginnote >}}Verify symbolically that the OLS hat matrix $P_X$ is idempotent and orthogonal to the residual space.{{< /marginnote >}}
+
+```js
 await show`Simplify[{${P} . ${P} - ${P}, Transpose[${X}] . (IdentityMatrix[3] - ${P})}]`
 ```
 

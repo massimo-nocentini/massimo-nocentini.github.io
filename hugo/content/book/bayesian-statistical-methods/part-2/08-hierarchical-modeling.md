@@ -349,12 +349,21 @@ $$
 
 Derives the two-group prior correlation from $(\theta_1, \theta_2) = (\mu + \delta, \mu - \delta)$, the shrinkage weight $B_j$, the symbolic shrunk-mean gap $\hat{\theta}_2 - \hat{\theta}_1$ governing ranking reversals between two groups $(n_1, \bar{y}_1)$ and $(n_2, \bar{y}_2)$, and (non-circularly from the log-density derivative) both the shape and $\nu_0/2$-scaled rate of $\sigma_0^2$, then evaluates plug-in shrinkage on Schools 46 and 82 (compare Hoff’s full MCMC means $41.31$ and $42.53$).
 
-{{< marginnote >}}Compute the prior correlation between two group means under the $(\mu, \delta)$ parameterization.{{< /marginnote >}}
+{{< marginnote >}}Push $\operatorname{diag}(\gamma_0^2, \tau_0^2)$ through $(\theta_1, \theta_2)^\top = A(\mu, \delta)^\top$ to get the prior covariance of the two group means.{{< /marginnote >}}
 
 ```js
 // Chapter 8: Symbolic two-group correlation, ranking-reversal condition & sigma_0^2 full conditional
 const A = [[1, 1], [1, -1]]
-const cov2 = await wl`${A} . DiagonalMatrix[{g0^2, t0^2}] . Transpose[${A}]`
+const cov2 = await show`${A} . DiagonalMatrix[{g0^2, t0^2}] . Transpose[${A}]`
+```
+
+$$
+\operatorname{Cov}(\theta_1, \theta_2) = A\operatorname{diag}(\gamma_0^2, \tau_0^2)A^\top = \left( \begin{array}{cc} \gamma_0^2+\tau_0^2 & \gamma_0^2-\tau_0^2 \\ \gamma_0^2-\tau_0^2 & \gamma_0^2+\tau_0^2 \\ \end{array} \right)
+$$
+
+{{< marginnote >}}Compute the prior correlation between two group means under the $(\mu, \delta)$ parameterization.{{< /marginnote >}}
+
+```js
 await show`Together[${cov2}[[1, 2]] / ${cov2}[[1, 1]]]`
 ```
 
@@ -390,13 +399,34 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Extract the $[(\sigma_0^2)^{-1}]$ coefficient of $\partial_{\sigma_0^2}\log p$ to verify the Gamma full-conditional shape ($m = 3$).{{< /marginnote >}}
+{{< marginnote >}}Write $\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3)$: a $\operatorname{gamma}(a, b)$ prior times three $\operatorname{gamma}(\nu_0/2, \nu_0\sigma_0^2/2)$ likelihood terms ($m = 3$).{{< /marginnote >}}
 
 ```js
 // Non-circular derivation of sigma_0^2 full conditional shape & rate (m = 3)
-const logp = await wl`(a - 1)*Log[s0] - b*s0 + Sum[nu0/2*Log[nu0*s0/2] - LogGamma[nu0/2]
+const logp = await show`(a - 1)*Log[s0] - b*s0 + Sum[nu0/2*Log[nu0*s0/2] - LogGamma[nu0/2]
   + (nu0/2 - 1)*Log[x] - nu0*s0*x/2, {x, {x1, x2, x3}}]`
-const dLogp = await wl`Expand[D[${logp}, s0]]`
+```
+
+$$
+\begin{aligned}
+&\log p(\sigma_0^2 \mid \nu_0, x_1, x_2, x_3) = (a-1)\log\sigma_0^2 - b\,\sigma_0^2 + \frac{3\nu_0}{2}\log\frac{\nu_0\sigma_0^2}{2} - 3\log\Gamma\!\left(\frac{\nu_0}{2}\right) \\
+&\quad + \left(\frac{\nu_0}{2}-1\right)(\log x_1+\log x_2+\log x_3) - \frac{\nu_0\sigma_0^2}{2}(x_1+x_2+x_3)
+\end{aligned}
+$$
+
+{{< marginnote >}}Differentiate in $\sigma_0^2$ and expand into powers of $\sigma_0^2$.{{< /marginnote >}}
+
+```js
+const dLogp = await show`Expand[D[${logp}, s0]]`
+```
+
+$$
+\frac{\partial}{\partial \sigma_0^2}\log p = -b-\frac{1}{\sigma_0^2}+\frac{a}{\sigma_0^2}+\frac{3 \nu_0}{2 \sigma_0^2}-\frac{\nu_0 x_1}{2}-\frac{\nu_0 x_2}{2}-\frac{\nu_0 x_3}{2}
+$$
+
+{{< marginnote >}}Extract the $[(\sigma_0^2)^{-1}]$ coefficient of $\partial_{\sigma_0^2}\log p$ to verify the Gamma full-conditional shape ($m = 3$).{{< /marginnote >}}
+
+```js
 await show`Simplify[1 + Coefficient[${dLogp}, s0, -1]]`
 ```
 

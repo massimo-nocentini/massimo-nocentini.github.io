@@ -360,10 +360,22 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Verify that the Schur slope vector equals $-\Omega_{11}^{-1}\Omega_{1,23}$ from the inverse covariance $\Omega = \Sigma^{-1}$.{{< /marginnote >}}
+{{< marginnote >}}Compute the precision-based slope vector $-\Omega_{11}^{-1}\Omega_{1,23}$ from the inverse covariance $\Omega = \Sigma^{-1}$.{{< /marginnote >}}
 
 ```js
-const betaPrec = await wl`FullSimplify[-Inverse[${Sig}][[1, {2, 3}]] / Inverse[${Sig}][[1, 1]]]`
+const betaPrec = await show`FullSimplify[-Inverse[${Sig}][[1, {2, 3}]] / Inverse[${Sig}][[1, 1]]]`
+```
+
+$$
+\begin{aligned}
+&\beta_{\text{prec}} = -\Omega_{11}^{-1}\Omega_{1,23} \\
+&= \left\{\frac{\Sigma_{13} \Sigma_{23} -\Sigma_{12} \Sigma_{33}}{\Sigma_{23}^2-\Sigma_{22} \Sigma_{33}},\frac{\Sigma_{13} \Sigma_{22} -\Sigma_{12} \Sigma_{23}}{-\Sigma_{23}^2+\Sigma_{22} \Sigma_{33}}\right\}
+\end{aligned}
+$$
+
+{{< marginnote >}}Verify that the Schur slope vector equals $-\Omega_{11}^{-1}\Omega_{1,23}$: the difference vanishes identically.{{< /marginnote >}}
+
+```js
 await show`FullSimplify[${betaSchur} - ${betaPrec}]`
 ```
 
@@ -418,14 +430,44 @@ Let $\Omega = \Sigma^{-1}$ be the precision matrix of $\mathbf{Y} \sim \mathcal{
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
-{{< marginnote >}}Invert a general symbolic $3 \times 3$ covariance $\Sigma$ and verify $\Sigma_{1,23}\Sigma_{23,23}^{-1} - (-\Omega_{11}^{-1}\Omega_{1,23}) = \mathbf{0}$.{{< /marginnote >}}
+{{< marginnote >}}Invert a general symbolic $3 \times 3$ covariance $\Sigma$: the precision $\Omega$ is the adjugate over $\Delta = \det\Sigma$.{{< /marginnote >}}
 
 ```js
 // Ex 7.1: 3x3 block-matrix proof that beta_{1|2,3} = Sigma_{1,23}*Sigma_{23,23}^(-1) = -Omega_{11}^(-1)*Omega_{1,23}
 const Sig = [[W.s11, W.s12, W.s13], [W.s12, W.s22, W.s23], [W.s13, W.s23, W.s33]]
-const Om = await wl`Inverse[${Sig}]`
-const betaCov = await wl`${Sig}[[1, {2, 3}]] . Inverse[${Sig}[[{2, 3}, {2, 3}]]]`
-const betaPrec = await wl`-${Om}[[1, {2, 3}]] / ${Om}[[1, 1]]`
+const Om = await show`Inverse[${Sig}]`
+```
+
+$$
+\begin{aligned}
+&\Omega = \Sigma^{-1} = \frac{1}{\Delta}\left( \begin{array}{ccc} \Sigma_{22}\Sigma_{33}-\Sigma_{23}^2 & \Sigma_{13}\Sigma_{23}-\Sigma_{12}\Sigma_{33} & \Sigma_{12}\Sigma_{23}-\Sigma_{13}\Sigma_{22} \\ \Sigma_{13}\Sigma_{23}-\Sigma_{12}\Sigma_{33} & \Sigma_{11}\Sigma_{33}-\Sigma_{13}^2 & \Sigma_{12}\Sigma_{13}-\Sigma_{11}\Sigma_{23} \\ \Sigma_{12}\Sigma_{23}-\Sigma_{13}\Sigma_{22} & \Sigma_{12}\Sigma_{13}-\Sigma_{11}\Sigma_{23} & \Sigma_{11}\Sigma_{22}-\Sigma_{12}^2 \\ \end{array} \right), \\
+&\Delta = -\Sigma_{13}^2\Sigma_{22}+2\Sigma_{12}\Sigma_{13}\Sigma_{23}-\Sigma_{11}\Sigma_{23}^2-\Sigma_{12}^2\Sigma_{33}+\Sigma_{11}\Sigma_{22}\Sigma_{33}
+\end{aligned}
+$$
+
+{{< marginnote >}}Form the covariance-side slope $\Sigma_{1,23}\Sigma_{23,23}^{-1}$ from the $2 \times 2$ block inverse.{{< /marginnote >}}
+
+```js
+const betaCov = await show`${Sig}[[1, {2, 3}]] . Inverse[${Sig}[[{2, 3}, {2, 3}]]]`
+```
+
+$$
+\Sigma_{1,23}\Sigma_{23,23}^{-1} = \left\{\frac{\Sigma_{12}\Sigma_{33}-\Sigma_{13}\Sigma_{23}}{\Sigma_{22}\Sigma_{33}-\Sigma_{23}^2},\frac{\Sigma_{13}\Sigma_{22}-\Sigma_{12}\Sigma_{23}}{\Sigma_{22}\Sigma_{33}-\Sigma_{23}^2}\right\}
+$$
+
+{{< marginnote >}}Form the precision-side slope $-\Omega_{11}^{-1}\Omega_{1,23}$: the common factor $1/\Delta$ cancels.{{< /marginnote >}}
+
+```js
+const betaPrec = await show`-${Om}[[1, {2, 3}]] / ${Om}[[1, 1]]`
+```
+
+$$
+-\Omega_{11}^{-1}\Omega_{1,23} = \left\{-\frac{\Sigma_{13}\Sigma_{23}-\Sigma_{12}\Sigma_{33}}{\Sigma_{22}\Sigma_{33}-\Sigma_{23}^2},-\frac{\Sigma_{12}\Sigma_{23}-\Sigma_{13}\Sigma_{22}}{\Sigma_{22}\Sigma_{33}-\Sigma_{23}^2}\right\}
+$$
+
+{{< marginnote >}}Verify $\Sigma_{1,23}\Sigma_{23,23}^{-1} - (-\Omega_{11}^{-1}\Omega_{1,23}) = \mathbf{0}$.{{< /marginnote >}}
+
+```js
 await show`FullSimplify[${betaCov} - ${betaPrec}]`
 ```
 
@@ -456,10 +498,19 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Find the $20\%$ standard normal quantile $z_{0.20}$ and evaluate the resulting MNAR upward bias.{{< /marginnote >}}
+{{< marginnote >}}Solve $\Phi(z) = \tfrac15$ for the $20\%$ standard normal quantile $z_{0.20}$.{{< /marginnote >}}
 
 ```js
-const z20 = await wl`z /. FindRoot[1/2*Erfc[-z/Sqrt[2]] == 1/5, {z, -0.84}]`
+const z20 = await show`z /. FindRoot[1/2*Erfc[-z/Sqrt[2]] == 1/5, {z, -0.84}]`
+```
+
+$$
+z_{0.20} : \; \tfrac12\operatorname{erfc}\!\left(-\tfrac{z}{\sqrt{2}}\right) = \tfrac15 \;\Longrightarrow\; z = -0.841621
+$$
+
+{{< marginnote >}}Evaluate the resulting MNAR upward bias $\mathbb{E}[Z \mid Z > z_{0.20}]$.{{< /marginnote >}}
+
+```js
 await show`N[{${z20}, ${shift} /. z0 -> ${z20}}]`
 ```
 

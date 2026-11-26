@@ -398,10 +398,19 @@ $$
 \end{aligned}
 $$
 
+{{< marginnote >}}Write the unnormalized $t_{\nu_n}(\mu_n, \sigma_n^2/\kappa_n)$ kernel in $\theta$.{{< /marginnote >}}
+
+```js
+const tKer = await show`(1 + kn*(th - mun)^2 / (nun*s2n))^(-(nun + 1)/2)`
+```
+
+$$
+t_{\nu_n}(\theta \mid \mu_n, \sigma_n^2/\kappa_n) \propto \left(1+\frac{\kappa_n (\theta -\mu_n)^2}{\nu_n \sigma_n^2}\right)^{-\frac{1+\nu_n}{2}}
+$$
+
 {{< marginnote >}}Check that the log-ratio of the integrated kernel to the $t_{\nu_n}(\mu_n, \sigma_n^2/\kappa_n)$ kernel has zero derivative in $\theta$.{{< /marginnote >}}
 
 ```js
-const tKer = await wl`(1 + kn*(th - mun)^2 / (nun*s2n))^(-(nun + 1)/2)`
 await show`Assuming[kn > 0 && nun > 0 && s2n > 0 && Element[{th, mun}, Reals],
   FullSimplify[D[Log[${marg} / ${tKer}], th]]]`
 ```
@@ -444,14 +453,41 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Instantiate the exact posterior mean, variance, SD, and $95\%$ Student-$t$ credible interval on Hoff’s midge data.{{< /marginnote >}}
+{{< marginnote >}}Posterior mean $\mu_n = (\kappa_0\mu_0 + n\bar{y})/\kappa_n$ on Hoff’s midge data, with $(\mu_0, \kappa_0) = (1.9, 1)$ and $n = 9$.{{< /marginnote >}}
 
 ```js
 // Instantiate symbolic formulas on Hoff's midge wing lengths (n = 9)
 const y = [1.64, 1.70, 1.72, 1.74, 1.82, 1.82, 1.82, 1.90, 2.08]
-const mun = await wl`N[(19/10 + Total[${y}]) / 10]`
-const s2n = await wl`N[(1/100 + 8*Variance[${y}] + (9/10)*(Mean[${y}] - 19/10)^2) / 10]`
-const tCrit = await wl`t /. FindRoot[1 - Beta[10/(10 + t^2), 5, 1/2]/Beta[5, 1/2] == 95/100, {t, 2.2}]`
+const mun = await show`N[(19/10 + Total[${y}]) / 10]`
+```
+
+$$
+\mu_n = \frac{\kappa_0 \mu_0 + \sum_{i=1}^{9} y_i}{\kappa_0 + n} = \frac{1.9 + 16.24}{10} = 1.814
+$$
+
+{{< marginnote >}}Posterior scale $\sigma_n^2 = [\nu_0\sigma_0^2 + (n-1)s^2 + \frac{\kappa_0 n}{\kappa_n}(\bar{y} - \mu_0)^2]/\nu_n$, with $(\nu_0, \sigma_0^2) = (1, 0.01)$.{{< /marginnote >}}
+
+```js
+const s2n = await show`N[(1/100 + 8*Variance[${y}] + (9/10)*(Mean[${y}] - 19/10)^2) / 10]`
+```
+
+$$
+\sigma_n^2 = \frac{\nu_0\sigma_0^2 + (n-1)s^2 + \frac{\kappa_0 n}{\kappa_n}(\bar{y}-\mu_0)^2}{\nu_n} = 0.015324
+$$
+
+{{< marginnote >}}Solve $1 - I_{10/(10+t^2)}(5, \tfrac12) = 0.95$ for the two-sided $97.5\%$ quantile of $t_{10}$.{{< /marginnote >}}
+
+```js
+const tCrit = await show`t /. FindRoot[1 - Beta[10/(10 + t^2), 5, 1/2]/Beta[5, 1/2] == 95/100, {t, 2.2}]`
+```
+
+$$
+t_{10,\,0.975} : \; 1 - \frac{B\bigl(\tfrac{10}{10+t^2};\, 5, \tfrac12\bigr)}{B\bigl(5, \tfrac12\bigr)} = 0.95 \;\Longrightarrow\; t = 2.22814
+$$
+
+{{< marginnote >}}Instantiate the exact posterior mean, variance, SD, and $95\%$ Student-$t$ credible interval on Hoff’s midge data.{{< /marginnote >}}
+
+```js
 await show`N[{${mun}, ${s2n}, Sqrt[${tVar} /. {nun -> 10, kn -> 10, s2n -> ${s2n}}], ${mun} - ${tCrit}*Sqrt[${s2n}/10], ${mun} + ${tCrit}*Sqrt[${s2n}/10]}]`
 ```
 

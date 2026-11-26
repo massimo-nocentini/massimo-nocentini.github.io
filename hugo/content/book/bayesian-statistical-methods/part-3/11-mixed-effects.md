@@ -351,11 +351,24 @@ $$
 \frac{\mathbb{E}[e^\eta]}{e^m} = e^{v/2}
 $$
 
-{{< marginnote >}}Invert the $2 \times 2$ LME posterior precision matrix to extract the conditional slope variance $[V_j]_{2,2}$.{{< /marginnote >}}
+{{< marginnote >}}Invert the $2 \times 2$ LME posterior precision matrix to get the conditional covariance $V_j$; write $D = \Sigma_{11}\Sigma_{22} - \Sigma_{12}^2 = \det\Sigma$.{{< /marginnote >}}
 
 ```js
 // Symbolic 2x2 LME posterior covariance V_j and diagonal-Sigma shrinkage mean m_j
-const Vj = await wl`FullSimplify[Inverse[Inverse[{{s11, s12}, {s12, s22}}] + DiagonalMatrix[{nj, sxx}]/sig2]]`
+const Vj = await show`FullSimplify[Inverse[Inverse[{{s11, s12}, {s12, s22}}] + DiagonalMatrix[{nj, sxx}]/sig2]]`
+```
+
+$$
+\begin{aligned}
+&V_j = \left(\Sigma^{-1} + \frac{1}{\sigma^2}\operatorname{diag}(n_j, S_{xx})\right)^{-1} \\
+&= \frac{\sigma^2}{\sigma^4 + \sigma^2 (n_j \Sigma_{11} + S_{xx} \Sigma_{22}) + n_j S_{xx} D} \\
+&\quad \times \left( \begin{array}{cc} \sigma^2 \Sigma_{11} + S_{xx} D & \sigma^2 \Sigma_{12} \\ \sigma^2 \Sigma_{12} & \sigma^2 \Sigma_{22} + n_j D \\ \end{array} \right)
+\end{aligned}
+$$
+
+{{< marginnote >}}Extract its $(2,2)$ entry, the conditional slope variance $[V_j]_{2,2}$.{{< /marginnote >}}
+
+```js
 const v22Sym = await show`FullSimplify[${Vj}[[2, 2]]]`
 ```
 

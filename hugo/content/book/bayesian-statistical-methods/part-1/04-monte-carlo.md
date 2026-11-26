@@ -258,12 +258,30 @@ $$
 
 Derives the exact push-forward log-odds density via change-of-variables Jacobian, the closed-form Gamma-ratio mean and variance (exposing the poles at $a_2 = 1, 2$), the symbolic Gamma CDF $\Pr(\theta_2 < c)$, and the general Beta representation of $\Pr(\theta_1 > \theta_2)$, then instantiates all symbolic expressions on the GSS fertility posteriors to benchmark the Monte Carlo estimates.
 
-{{< marginnote >}}Invert $\gamma = \operatorname{logit}(\theta)$ and multiply by its Jacobian to derive the exact log-odds density.{{< /marginnote >}}
+{{< marginnote >}}Invert $\gamma = \operatorname{logit}(\theta)$: the inverse is the logistic function.{{< /marginnote >}}
 
 ```js
 // Chapter 4: Symbolic log-odds density, Gamma-ratio moments & symbolic Gamma tail probabilities
-const thOfG = await wl`th /. First[Solve[Log[th / (1 - th)] == g, th, Reals]]`
-const jac = await wl`FullSimplify[D[${thOfG}, g], Element[g, Reals]]`
+const thOfG = await show`th /. First[Solve[Log[th / (1 - th)] == g, th, Reals]]`
+```
+
+$$
+\theta(g) = \operatorname{logit}^{-1}(g) = \frac{e^g}{1+e^g}
+$$
+
+{{< marginnote >}}Differentiate the inverse map to get the Jacobian $d\theta/dg = \theta(1 - \theta)$.{{< /marginnote >}}
+
+```js
+const jac = await show`FullSimplify[D[${thOfG}, g], Element[g, Reals]]`
+```
+
+$$
+\frac{d\theta}{dg} = \frac{e^g}{\left(1+e^g\right)^2}
+$$
+
+{{< marginnote >}}Multiply the beta density at $\theta(g)$ by the Jacobian to derive the exact log-odds density.{{< /marginnote >}}
+
+```js
 await show`FullSimplify[(${thOfG}^(a - 1)*(1 - ${thOfG})^(b - 1)/Beta[a, b]) * ${jac}, Element[g, Reals]]`
 ```
 

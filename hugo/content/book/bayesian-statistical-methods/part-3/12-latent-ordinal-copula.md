@@ -319,12 +319,24 @@ $$
 \Phi\!\left(\frac{(ag+c)-(a\eta+c)}{a}\right) - \Phi(g - \eta) = 0
 $$
 
-{{< marginnote >}}Invert the $3 \times 3$ correlation matrix $C$ to obtain the closed-form precision entry $\Omega_{1,3}$.{{< /marginnote >}}
+{{< marginnote >}}Invert the symbolic $3 \times 3$ copula correlation matrix $C$ to obtain the latent precision $\Omega = C^{-1}$ (adjugate over determinant).{{< /marginnote >}}
 
 ```js
 // Latent precision Omega_{1,3}, partial correlation rho_{13|2}, and conditional-independence condition
 const C3 = [[1, W.r12, W.r13], [W.r12, 1, W.r23], [W.r13, W.r23, 1]]
-const Om = await wl`Inverse[${C3}]`
+const Om = await show`Inverse[${C3}]`
+```
+
+$$
+\begin{aligned}
+&\Omega = C^{-1} = \frac{1}{1-r_{12}^2-r_{13}^2-r_{23}^2+2 r_{12} r_{13} r_{23}} \\
+&\quad \times \left( \begin{array}{ccc} 1-r_{23}^2 & r_{13} r_{23}-r_{12} & r_{12} r_{23}-r_{13} \\ r_{13} r_{23}-r_{12} & 1-r_{13}^2 & r_{12} r_{13}-r_{23} \\ r_{12} r_{23}-r_{13} & r_{12} r_{13}-r_{23} & 1-r_{12}^2 \\ \end{array} \right)
+\end{aligned}
+$$
+
+{{< marginnote >}}Factor its $(1,3)$ entry into the closed-form precision $\Omega_{1,3}$.{{< /marginnote >}}
+
+```js
 const omega13 = await show`Factor[${Om}[[1, 3]]]`
 ```
 
@@ -446,12 +458,21 @@ In the copula script above, construct a 3-variable precision matrix $\Omega$ wit
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
-{{< marginnote >}}Invert a $3 \times 3$ tridiagonal precision matrix ($\Omega_{1,3} = 0$) and compute the marginal correlation $C_{12}$.{{< /marginnote >}}
+{{< marginnote >}}Invert a $3 \times 3$ tridiagonal precision matrix $\Omega$ ($\Omega_{1,3} = 0$) to obtain the latent covariance $\Sigma = \Omega^{-1}$.{{< /marginnote >}}
 
 ```js
 // Ex 12.3: Constructing a 3-variable Gaussian copula C from a tridiagonal precision Omega (Omega_{1,3} = 0)
 const Om = [[W.a, W.Minus(W.b), 0], [W.Minus(W.b), W.a, W.Minus(W.b)], [0, W.Minus(W.b), W.a]]
-const Sig = await wl`Inverse[${Om}]`
+const Sig = await show`Inverse[${Om}]`
+```
+
+$$
+\Sigma = \Omega^{-1} = \frac{1}{a (a^2-2 b^2)} \left( \begin{array}{ccc} a^2-b^2 & a b & b^2 \\ a b & a^2 & a b \\ b^2 & a b & a^2-b^2 \\ \end{array} \right)
+$$
+
+{{< marginnote >}}Normalize $\Sigma_{12}$ by $\sqrt{\Sigma_{11}\Sigma_{22}}$ to get the marginal correlation $C_{12}$.{{< /marginnote >}}
+
+```js
 const c12 = await show`Assuming[a > 0 && b > 0 && a^2 > 2*b^2, FullSimplify[${Sig}[[1, 2]] / Sqrt[${Sig}[[1, 1]]*${Sig}[[2, 2]]]]]`
 ```
 

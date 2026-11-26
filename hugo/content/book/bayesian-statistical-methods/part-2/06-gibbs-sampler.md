@@ -328,10 +328,19 @@ $$
 \mathbb{E}\!\left[X^{(s+1)} \mid X^{(s)} = x\right] = \rho^2 x
 $$
 
+{{< marginnote >}}Differentiate the transition mean in $x$ to read off the AR(1) contraction coefficient $\alpha$.{{< /marginnote >}}
+
+```js
+const alpha = await show`D[${transMean}, x]`   // AR(1) lag-1 contraction coefficient = rho^2
+```
+
+$$
+\alpha = \frac{\partial}{\partial x}\,\mathbb{E}\!\left[X^{(s+1)} \mid X^{(s)} = x\right] = \rho^2
+$$
+
 {{< marginnote >}}Compute the one-step conditional variance $1 - \rho^4$, confirming an exact AR(1) transition.{{< /marginnote >}}
 
 ```js
-const alpha = await wl`D[${transMean}, x]`   // AR(1) lag-1 contraction coefficient = rho^2
 await show`Simplify[(v + Integrate[(rho*Sqrt[v]*z)^2*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]) /. v -> 1 - rho^2]`
 ```
 
@@ -494,10 +503,22 @@ $$
 \mathbb{E}[\text{steps before escaping mode } -3] = \frac{1}{p_{\text{esc}}}
 $$
 
-{{< marginnote >}}Integrate the one-step escape probability numerically and evaluate the expected number of trapped iterations.{{< /marginnote >}}
+{{< marginnote >}}Integrate numerically the probability that, from $\theta \sim \mathcal{N}(-3, \tfrac13)$, the next $\delta$-update leaves mode $-3$.{{< /marginnote >}}
 
 ```js
-const esc = await wl`NIntegrate[(Exp[-(th + 3)^2/(2/3)]/Sqrt[2*Pi/3]) * (1 - (45/100*Exp[-(th + 3)^2/(2/3)]) / (45/100*Exp[-(th + 3)^2/(2/3)] + 10/100*Exp[-th^2/(2/3)] + 45/100*Exp[-(th - 3)^2/(2/3)])), {th, -7, 7}]`
+const esc = await show`NIntegrate[(Exp[-(th + 3)^2/(2/3)]/Sqrt[2*Pi/3]) * (1 - (45/100*Exp[-(th + 3)^2/(2/3)]) / (45/100*Exp[-(th + 3)^2/(2/3)] + 10/100*Exp[-th^2/(2/3)] + 45/100*Exp[-(th - 3)^2/(2/3)])), {th, -7, 7}]`
+```
+
+$$
+\begin{aligned}
+&p_{\text{esc}} = \int_{-7}^{7} \sqrt{\tfrac{3}{2\pi}}\, e^{-\frac{3}{2}(\theta+3)^2} \left(1-\frac{0.45\, e^{-\frac{3}{2}(\theta+3)^2}}{0.45\, e^{-\frac{3}{2}(\theta+3)^2}+0.10\, e^{-\frac{3}{2}\theta^2}+0.45\, e^{-\frac{3}{2}(\theta-3)^2}}\right) d\theta \\
+&= 0.00327041
+\end{aligned}
+$$
+
+{{< marginnote >}}Plug $p_{\text{esc}}$ into $1/p_{\text{esc}}$ to get the expected number of trapped iterations.{{< /marginnote >}}
+
+```js
 await show`N[{${esc}, ${meanRes} /. pEsc -> ${esc}}]`
 ```
 

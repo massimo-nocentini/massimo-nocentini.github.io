@@ -449,13 +449,22 @@ const p10 = await show`FullSimplify[(kRed/nPop)*((nPop - kRed)/(nPop - 1))]`
 ```
 
 $$
-\Pr(Y_1 = 1, Y_2 = 0) = \Pr(Y_1 = 0, Y_2 = 1) = \frac{K (-K +N)}{(-1+N) N}
+\Pr(Y_1 = 1, Y_2 = 0) = \frac{K (-K +N)}{(-1+N) N}
+$$
+
+{{< marginnote >}}Compute $\Pr(Y_1 = 0, Y_2 = 1)$ for the reversed draw order: the same expression.{{< /marginnote >}}
+
+```js
+const p01 = await show`FullSimplify[((nPop - kRed)/nPop)*(kRed/(nPop - 1))]`
+```
+
+$$
+\Pr(Y_1 = 0, Y_2 = 1) = \frac{K (-K +N)}{(-1+N) N}
 $$
 
 {{< marginnote >}}Compute $\operatorname{Cov}(Y_1, Y_2)$ symbolically, showing it is strictly negative for $0 < K < N$.{{< /marginnote >}}
 
 ```js
-const p01 = await wl`FullSimplify[((nPop - kRed)/nPop)*(kRed/(nPop - 1))]`
 const covF = await show`FullSimplify[(kRed/nPop)*((kRed - 1)/(nPop - 1)) - (kRed/nPop)^2]`
 ```
 

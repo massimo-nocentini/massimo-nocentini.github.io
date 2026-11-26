@@ -563,11 +563,30 @@ $$
 \end{aligned}
 $$
 
-{{< marginnote >}}Maximize $\operatorname{ESJD}(\ell)$ numerically to obtain the 1-D optimum $(\ell^*, \alpha(\ell^*), \rho_1(\ell^*))$.{{< /marginnote >}}
+{{< marginnote >}}Write the stationary acceptance rate $\alpha(\ell)$ of the 1-D Gaussian random-walk Metropolis at scale $\ell$.{{< /marginnote >}}
 
 ```js
-const ellStar = await wl`ell /. FindRoot[D[${esjd}, ell] == 0, {ell, 2.4}]`
-await show`N[{${ellStar}, (2/Pi)*ArcCot[${ellStar}/2], ${acf1} /. ell -> ${ellStar}}]`
+const accRate = await show`(2/Pi)*ArcCot[ell/2]`
+```
+
+$$
+\alpha(\ell) = \frac{2 \cot^{-1}\left(\frac{\ell}{2}\right)}{\pi}
+$$
+
+{{< marginnote >}}Maximize $\operatorname{ESJD}(\ell)$ numerically by solving $\operatorname{ESJD}'(\ell) = 0$ near $\ell = 2.4$.{{< /marginnote >}}
+
+```js
+const ellStar = await show`ell /. FindRoot[D[${esjd}, ell] == 0, {ell, 2.4}]`
+```
+
+$$
+\ell^* = \arg\max_{\ell}\, \operatorname{ESJD}(\ell) = 2.4264
+$$
+
+{{< marginnote >}}Instantiate $\alpha(\ell)$ and $\rho_1(\ell)$ at $\ell^*$ to obtain the 1-D optimum $(\ell^*, \alpha(\ell^*), \rho_1(\ell^*))$.{{< /marginnote >}}
+
+```js
+await show`N[{${ellStar}, ${accRate} /. ell -> ${ellStar}, ${acf1} /. ell -> ${ellStar}}]`
 ```
 
 $$
@@ -631,12 +650,30 @@ To sample a positive parameter $\theta$, propose $\theta^* = \theta e^{\epsilon}
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
-{{< marginnote >}}Take the ratio of reverse to forward log-normal proposal densities to derive the Hastings factor $\theta^*/\theta$.{{< /marginnote >}}
+{{< marginnote >}}Write the forward log-normal proposal density of $\theta^* = \theta e^{\epsilon}$, $\epsilon \sim \operatorname{normal}(0, \delta^2)$.{{< /marginnote >}}
 
 ```js
 // Ex 10.3: Log-scale multiplicative proposal Hastings ratio J(th | th*) / J(th* | th) = th* / th
-const jFwd = await wl`Exp[-(Log[thP/th])^2/(2*d^2)] / (thP*d*Sqrt[2*Pi])`
-const jRev = await wl`Exp[-(Log[th/thP])^2/(2*d^2)] / (th*d*Sqrt[2*Pi])`
+const jFwd = await show`Exp[-(Log[thP/th])^2/(2*d^2)] / (thP*d*Sqrt[2*Pi])`
+```
+
+$$
+J(\theta^* \mid \theta) = \frac{e^{-\frac{\log^2(\theta^*/\theta)}{2 \delta^2}}}{\sqrt{2 \pi}\, \delta\, \theta^*}
+$$
+
+{{< marginnote >}}Write the reverse proposal density, swapping the roles of $\theta$ and $\theta^*$.{{< /marginnote >}}
+
+```js
+const jRev = await show`Exp[-(Log[th/thP])^2/(2*d^2)] / (th*d*Sqrt[2*Pi])`
+```
+
+$$
+J(\theta \mid \theta^*) = \frac{e^{-\frac{\log^2(\theta/\theta^*)}{2 \delta^2}}}{\sqrt{2 \pi}\, \delta\, \theta}
+$$
+
+{{< marginnote >}}Take the ratio of reverse to forward log-normal proposal densities to derive the Hastings factor $\theta^*/\theta$.{{< /marginnote >}}
+
+```js
 const hRatio = await show`Assuming[th > 0 && thP > 0 && d > 0, FullSimplify[${jRev} / ${jFwd}]]`
 ```
 

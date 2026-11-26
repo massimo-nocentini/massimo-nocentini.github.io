@@ -498,12 +498,30 @@ Using the law of total variance, derive the exact mean and variance of the beta�
 
 {{< details summary="Symbolic Solution & Instantiation" >}}
 
-{{< marginnote >}}Compute the Beta–Binomial posterior predictive mean $E[\tilde{S}_m \mid y]$ symbolically.{{< /marginnote >}}
+{{< marginnote >}}Write the posterior mean $\bar{\theta}$ of $\theta \sim \operatorname{beta}(a_n, b_n)$.{{< /marginnote >}}
 
 ```js
 // Ex 3.2: Beta-Binomial posterior predictive mean, variance & overdispersion factor
-const meanT = await wl`an / (an + bn)`
-const varT = await wl`(an*bn) / ((an + bn)^2*(an + bn + 1))`
+const meanT = await show`an / (an + bn)`
+```
+
+$$
+\mathbb{E}[\theta \mid y] = \frac{a_n}{a_n +b_n}
+$$
+
+{{< marginnote >}}Write the posterior variance of $\theta \sim \operatorname{beta}(a_n, b_n)$.{{< /marginnote >}}
+
+```js
+const varT = await show`(an*bn) / ((an + bn)^2*(an + bn + 1))`
+```
+
+$$
+\operatorname{Var}(\theta \mid y) = \frac{a_n b_n}{(a_n +b_n)^2 (1+a_n +b_n)}
+$$
+
+{{< marginnote >}}Compute the Beta–Binomial posterior predictive mean $E[\tilde{S}_m \mid y]$ symbolically.{{< /marginnote >}}
+
+```js
 const meanS = await show`Factor[m * ${meanT}]`
 ```
 
