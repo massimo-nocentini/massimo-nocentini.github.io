@@ -273,16 +273,25 @@ for th in (35.0, 48.1, 60.0):
     print(f"theta = {th}: coverage FAB {fab.mean():.4f}, credible {cred.mean():.4f}")
 ```
 
-{{< marginnote >}}Integrate the exponential density beyond $U$ and substitute the PC rate $\lambda = -\log(\alpha)/U$.{{< /marginnote >}}
+{{< marginnote >}}Integrate the exponential density beyond $U$.{{< /marginnote >}}
 
 ```js
 // Chapter 8 (modern): exact PC-prior tail probability & exact FAB coverage
-const pcTail = await wl`Assuming[lam > 0 && u > 0, Integrate[lam*Exp[-lam*x], {x, u, Infinity}]]`
+const pcTail = await show`Assuming[lam > 0 && u > 0, Integrate[lam*Exp[-lam*x], {x, u, Infinity}]]`
+```
+
+$$
+\Pr(\tau > U) = \int_U^\infty \lambda e^{-\lambda\tau}\,d\tau = e^{-\lambda U}
+$$
+
+{{< marginnote >}}Substitute the PC rate $\lambda = -\log(\alpha)/U$: the tail mass is exactly $\alpha$.{{< /marginnote >}}
+
+```js
 await show`Simplify[${pcTail} /. lam -> -Log[al]/u]`
 ```
 
 $$
-\Pr(\tau > U) = \int_U^\infty \lambda e^{-\lambda\tau}\,d\tau\,\bigg|_{\lambda = -\log(\alpha)/U} = \alpha
+\Pr(\tau > U)\,\big|_{\lambda = -\log(\alpha)/U} = \alpha
 $$
 
 {{< marginnote >}}Instantiate $\lambda$ and $\Pr(\tau < 3)$ at $(U, \alpha) = (10, 0.05)$.{{< /marginnote >}}
@@ -295,12 +304,30 @@ $$
 \bigl(\lambda,\; \Pr(\tau < 3)\bigr)_{U=10,\;\alpha=0.05} = \{0.299573,0.592909\}
 $$
 
-{{< marginnote >}}Evaluate $\Pr_\theta(\theta \in C) = \Phi\bigl(\Phi^{-1}(1 - \alpha w)\bigr) - \Phi\bigl(\Phi^{-1}(\alpha(1 - w))\bigr)$, since $(\theta - \bar{Y})/s$ is standard normal at every $\theta$: the split $w$ cancels.{{< /marginnote >}}
+{{< marginnote >}}Lower normal quantile of the FAB interval, via $\Phi^{-1}(p) = -\sqrt{2}\,\operatorname{erfc}^{-1}(2p)$.{{< /marginnote >}}
 
 ```js
 // Normal quantile: Phi^(-1)(p) = -Sqrt[2]*InverseErfc[2*p]
-const qLo = await wl`-Sqrt[2]*InverseErfc[2*al*(1 - w)]`
-const qHi = await wl`-Sqrt[2]*InverseErfc[2*(1 - al*w)]`
+const qLo = await show`-Sqrt[2]*InverseErfc[2*al*(1 - w)]`
+```
+
+$$
+\Phi^{-1}\bigl(\alpha(1 - w)\bigr) = -\sqrt{2}\, \operatorname{erfc}^{-1}\bigl(2 \alpha (1-w)\bigr)
+$$
+
+{{< marginnote >}}Upper normal quantile of the FAB interval, by the same identity.{{< /marginnote >}}
+
+```js
+const qHi = await show`-Sqrt[2]*InverseErfc[2*(1 - al*w)]`
+```
+
+$$
+\Phi^{-1}(1 - \alpha w) = -\sqrt{2}\, \operatorname{erfc}^{-1}\bigl(2 (1-\alpha w)\bigr)
+$$
+
+{{< marginnote >}}Evaluate $\Pr_\theta(\theta \in C) = \Phi\bigl(\Phi^{-1}(1 - \alpha w)\bigr) - \Phi\bigl(\Phi^{-1}(\alpha(1 - w))\bigr)$, since $(\theta - \bar{Y})/s$ is standard normal at every $\theta$: the split $w$ cancels.{{< /marginnote >}}
+
+```js
 await show`FullSimplify[1/2*Erfc[-(${qHi})/Sqrt[2]] - 1/2*Erfc[-(${qLo})/Sqrt[2]]]`
 ```
 

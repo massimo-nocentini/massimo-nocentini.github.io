@@ -292,10 +292,19 @@ $$
 \mathbb{E}_0[\operatorname{BF}_{10}] = \int_0^1 \sum_{y=0}^n \binom{n}{y}\theta^y(1-\theta)^{n-y}\,p(\theta \mid H_1)\,d\theta = 1
 $$
 
-{{< marginnote >}}Check by exact summation over $y = 0, \dots, n$ with a symbolic null value $\theta_0$ and a $\operatorname{beta}(2, 3)$ alternative.{{< /marginnote >}}
+{{< marginnote >}}Write the Bayes factor of a $\operatorname{beta}(2, 3)$ alternative against a symbolic point null $\theta_0$; $B(2, 3) = \tfrac{1}{12}$.{{< /marginnote >}}
 
 ```js
-const bf10 = await wl`Beta[2 + y, 3 + n - y] / (Beta[2, 3]*th0^y*(1 - th0)^(n - y))`
+const bf10 = await show`Beta[2 + y, 3 + n - y] / (Beta[2, 3]*th0^y*(1 - th0)^(n - y))`
+```
+
+$$
+\operatorname{BF}_{10}(y) = \frac{B(2+y,\,3+n-y)}{B(2,3)\,\theta_0^{y}(1-\theta_0)^{n-y}} = 12\,B(2+y,\,3+n-y)\,\theta_0^{-y}(1-\theta_0)^{y-n}
+$$
+
+{{< marginnote >}}Check by exact summation over $y = 0, \dots, n$ that its null expectation is $1$ for $n = 5, 10, 20$.{{< /marginnote >}}
+
+```js
 await show`Table[Simplify[Sum[Binomial[n, y]*th0^y*(1 - th0)^(n - y)*(${bf10}), {y, 0, n}]], {n, {5, 10, 20}}]`
 ```
 

@@ -418,11 +418,23 @@ t, h = np.array([0.1, 1.0, 7.0]), lambda t: t / (1 + t)
 print("balance h(t) - t h(1/t):", np.round(h(t) - t * h(1 / t), 12))
 ```
 
-{{< marginnote >}}Differentiate one leapfrog step for an *arbitrary* potential $U$: both $U''$ terms cancel, so the determinant is $1$ for every $\epsilon$.{{< /marginnote >}}
+{{< marginnote >}}Compose one leapfrog step ($M = 1$) for an *arbitrary* potential $U$: half-step in $p$, full step in $q$, half-step in $p$.{{< /marginnote >}}
 
 ```js
 // One leapfrog step (M = 1) for a general potential U, and its Jacobian determinant
-const leap = await wl`With[{ph = p - eps/2*U'[q]}, With[{qn = q + eps*ph}, {qn, ph - eps/2*U'[qn]}]]`
+const leap = await show`With[{ph = p - eps/2*U'[q]}, With[{qn = q + eps*ph}, {qn, ph - eps/2*U'[qn]}]]`
+```
+
+$$
+\begin{aligned}
+(q', p') = \Bigl\{&q+\epsilon \left(p-\tfrac{1}{2} \epsilon\, U'(q)\right), \\
+&p-\tfrac{1}{2} \epsilon\, U'(q)-\tfrac{1}{2} \epsilon\, U'\!\left(q+\epsilon \left(p-\tfrac{1}{2} \epsilon\, U'(q)\right)\right)\Bigr\}
+\end{aligned}
+$$
+
+{{< marginnote >}}Differentiate the step with respect to $(q, p)$: both $U''$ terms cancel, so the determinant is $1$ for every $\epsilon$.{{< /marginnote >}}
+
+```js
 await show`Simplify[Det[D[${leap}, {{q, p}}]]]`
 ```
 

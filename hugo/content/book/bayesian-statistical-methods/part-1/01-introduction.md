@@ -212,11 +212,29 @@ $$
 \frac{1}{m_j(y)}\int_0^1 \theta^y(1-\theta)^{n-y}\,p_j(\theta)\,d\theta = 1
 $$
 
+{{< marginnote >}}Write the posterior weight $\omega^*$ of the informative component against the uniform one, $m_0(y) = B(1 + y, 1 + n - y)$.{{< /marginnote >}}
+
+```js
+const wStar = await show`om*(${mj}) / (om*(${mj}) + (1 - om)*Beta[1 + y, 1 + n - y])`
+```
+
+$$
+\omega^{*} = \frac{\omega\,\dfrac{B(a+y,\,b+n-y)}{B(a,b)}}{\omega\,\dfrac{B(a+y,\,b+n-y)}{B(a,b)} + (1-\omega)\,B(1+y,\,1+n-y)}
+$$
+
+{{< marginnote >}}Write the mixture posterior mean: the $\omega^*$-weighted average of the two component posterior means.{{< /marginnote >}}
+
+```js
+const mixMean = await show`(${wStar})*(a + y)/(a + b + n) + (1 - (${wStar}))*(1 + y)/(2 + n)`
+```
+
+$$
+\mathbb{E}[\theta \mid y] = \omega^{*}\,\frac{a+y}{a+b+n} + \bigl(1-\omega^{*}\bigr)\,\frac{1+y}{2+n}
+$$
+
 {{< marginnote >}}Evaluate $(\omega^*, E[\theta \mid y])$ for $(a, b, y) = (2, 20, 0)$, $(2, 20, 10)$, $(10, 10, 0)$.{{< /marginnote >}}
 
 ```js
-const wStar = await wl`om*(${mj}) / (om*(${mj}) + (1 - om)*Beta[1 + y, 1 + n - y])`
-const mixMean = await wl`(${wStar})*(a + y)/(a + b + n) + (1 - (${wStar}))*(1 + y)/(2 + n)`
 await show`N[Table[{${wStar}, ${mixMean}} /. {n -> 20, om -> 4/5, a -> p[[1]], b -> p[[2]], y -> p[[3]]},
   {p, {{2, 20, 0}, {2, 20, 10}, {10, 10, 0}}}]]`
 ```

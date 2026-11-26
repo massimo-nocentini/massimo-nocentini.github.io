@@ -223,11 +223,20 @@ $$
 \frac{1}{\operatorname{NB}(y_i)}\int_0^\infty \operatorname{Poisson}(y_i \mid \theta)\,\operatorname{Gamma}(\theta \mid a_n - y_i, b_n - 1)\,d\theta = 1
 $$
 
-{{< marginnote >}}Integrate $1/p(y_i \mid \theta)$ over the *full* posterior and invert: the harmonic-mean identity returns the same probability.{{< /marginnote >}}
+{{< marginnote >}}Integrate $1/p(y_i \mid \theta)$ over the *full* posterior $\operatorname{gamma}(a_n, b_n)$: the posterior mean of the inverse likelihood.{{< /marginnote >}}
 
 ```js
-const invP = await wl`Assuming[bn > 1 && yi >= 0 && an > yi && Element[yi, Integers], FullSimplify[
+const invP = await show`Assuming[bn > 1 && yi >= 0 && an > yi && Element[yi, Integers], FullSimplify[
   Integrate[yi!*Exp[th]*th^(-yi) * bn^an/Gamma[an]*th^(an - 1)*Exp[-bn*th], {th, 0, Infinity}]]]`
+```
+
+$$
+\mathbb{E}\bigl[p(y_i \mid \theta)^{-1} \mid y\bigr] = \frac{y_i!\; b_n^{a_n}\,(b_n-1)^{y_i-a_n}\,\Gamma(a_n-y_i)}{\Gamma(a_n)}
+$$
+
+{{< marginnote >}}Invert it and divide by the exact LOO predictive: the harmonic-mean identity returns the same probability.{{< /marginnote >}}
+
+```js
 await show`Assuming[bn > 1 && yi >= 0 && an > yi && Element[yi, Integers], FullSimplify[(1/(${invP})) / (${looNB})]]`
 ```
 

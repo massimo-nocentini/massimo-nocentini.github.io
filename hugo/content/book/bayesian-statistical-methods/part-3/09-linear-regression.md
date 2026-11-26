@@ -377,12 +377,30 @@ alpha = np.exp(lbf - lbf.max())
 print("PIPs:", (alpha / alpha.sum()).round(3), "(exact 1/2, 1/2, ~0)")
 ```
 
-{{< marginnote >}}Change variables from $\lambda = \sqrt{1-\kappa}/\sqrt{\kappa}$ to $\kappa$ (a decreasing map, hence the minus sign) and divide by the $\operatorname{Beta}(\tfrac12, \tfrac12)$ density.{{< /marginnote >}}
+{{< marginnote >}}Invert $\kappa = 1/(1+\lambda^2)$ on $\lambda > 0$: the local scale as a function of the shrinkage factor.{{< /marginnote >}}
 
 ```js
 // Horseshoe: the half-Cauchy prior on lambda induces kappa = 1/(1 + lambda^2) ~ Beta(1/2, 1/2)
-const lamK = await wl`Sqrt[1 - k]/Sqrt[k]`
-const densK = await wl`Assuming[0 < k < 1, FullSimplify[-D[${lamK}, k] * 2/(Pi*(1 + (${lamK})^2))]]`
+const lamK = await show`Sqrt[1 - k]/Sqrt[k]`
+```
+
+$$
+\lambda(\kappa) = \frac{\sqrt{1-\kappa}}{\sqrt{\kappa}}
+$$
+
+{{< marginnote >}}Change variables in the half-Cauchy density $2/(\pi(1+\lambda^2))$ from $\lambda$ to $\kappa$ (a decreasing map, hence the minus sign).{{< /marginnote >}}
+
+```js
+const densK = await show`Assuming[0 < k < 1, FullSimplify[-D[${lamK}, k] * 2/(Pi*(1 + (${lamK})^2))]]`
+```
+
+$$
+p_\kappa(\kappa) = p_\lambda(\lambda(\kappa))\,\left\lvert\frac{d\lambda}{d\kappa}\right\rvert = \frac{1}{\pi \sqrt{(1-\kappa) \kappa}}
+$$
+
+{{< marginnote >}}Divide the induced density by the $\operatorname{Beta}(\tfrac12, \tfrac12)$ density: the ratio is identically $1$.{{< /marginnote >}}
+
+```js
 await show`Assuming[0 < k < 1, FullSimplify[(${densK}) / (k^(-1/2)*(1 - k)^(-1/2)/Beta[1/2, 1/2])]]`
 ```
 
@@ -403,12 +421,21 @@ $$
 \bigl(\mathbb{E}[\kappa],\; \operatorname{Var}[\kappa]\bigr) = \left\{\frac{1}{2},\frac{1}{8}\right\}
 $$
 
-{{< marginnote >}}Integrate the effect $b$ out of the normal likelihood and divide by the closed form of $\operatorname{BF}_{lj}$ stated above.{{< /marginnote >}}
+{{< marginnote >}}Integrate the effect $b \sim \mathcal{N}(0, \sigma_0^2)$ out of the normal likelihood of $\hat{b}$ and divide by its value at $b = 0$.{{< /marginnote >}}
 
 ```js
 // SuSiE: Bayes factor as a ratio of normal marginals, then PIPs of two duplicate regressors
-const bfOne = await wl`Assuming[s2 > 0 && v > 0 && Element[bh, Reals], FullSimplify[Exp[bh^2/(2*s2)]
+const bfOne = await show`Assuming[s2 > 0 && v > 0 && Element[bh, Reals], FullSimplify[Exp[bh^2/(2*s2)]
   *Integrate[Exp[-(bh - b)^2/(2*s2)]*Exp[-b^2/(2*v)]/Sqrt[2*Pi*v], {b, -Infinity, Infinity}]]]`
+```
+
+$$
+\operatorname{BF}_{lj} = \frac{\int p(\hat{b} \mid b)\,p(b)\,db}{p(\hat{b} \mid b = 0)} = e^{\frac{\hat{b}^2 \sigma_0^2}{2 s^2 (s^2+\sigma_0^2)}} \sqrt{\frac{s^2}{s^2+\sigma_0^2}}
+$$
+
+{{< marginnote >}}Divide the integrated Bayes factor by the closed form of $\operatorname{BF}_{lj}$ stated above.{{< /marginnote >}}
+
+```js
 await show`Assuming[s2 > 0 && v > 0 && Element[bh, Reals],
   FullSimplify[(${bfOne}) / (Sqrt[s2/(s2 + v)]*Exp[bh^2/(2*s2)*v/(s2 + v)])]]`
 ```

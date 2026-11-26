@@ -248,21 +248,35 @@ beta = 0.5 * T + math.sqrt(0.5) * rng.normal(size=T.size)
 print(f"SUN draws: mean={beta.mean():.4f}, var={beta.var():.4f}")
 ```
 
-{{< marginnote >}}Integrate $\Phi(\beta)\phi(\beta)$ and $\beta\,\Phi(\beta)\phi(\beta)$ directly, with $\Phi(\beta) = \tfrac12\operatorname{erfc}(-\beta/\sqrt{2})$, and take their ratio.{{< /marginnote >}}
+{{< marginnote >}}Integrate $\Phi(\beta)\phi(\beta)$ directly, with $\Phi(\beta) = \tfrac12\operatorname{erfc}(-\beta/\sqrt{2})$: the evidence $p(y = 1)$.{{< /marginnote >}}
 
 ```js
 // Exact binary probit posterior, n = x = y = Sigma0 = 1: evidence and posterior mean
-const pyInt = await wl`Integrate[1/2*Erfc[-b/Sqrt[2]]*Exp[-b^2/2]/Sqrt[2*Pi], {b, -Infinity, Infinity}]`
-const numInt = await wl`Integrate[b*1/2*Erfc[-b/Sqrt[2]]*Exp[-b^2/2]/Sqrt[2*Pi], {b, -Infinity, Infinity}]`
-const meanPost = await wl`FullSimplify[(${numInt}) / (${pyInt})]`
-await show`{${pyInt}, ${numInt}, ${meanPost}}`
+const pyInt = await show`Integrate[1/2*Erfc[-b/Sqrt[2]]*Exp[-b^2/2]/Sqrt[2*Pi], {b, -Infinity, Infinity}]`
 ```
 
 $$
-\begin{aligned}
-&\left(\int\Phi\,\phi\,d\beta,\; \int\beta\,\Phi\,\phi\,d\beta,\; \mathbb{E}[\beta \mid y = 1]\right) \\
-&= \left\{\frac{1}{2},\frac{1}{2 \sqrt{\pi}},\frac{1}{\sqrt{\pi}}\right\}
-\end{aligned}
+p(y = 1) = \int\Phi(\beta)\,\phi(\beta)\,d\beta = \frac{1}{2}
+$$
+
+{{< marginnote >}}Integrate $\beta\,\Phi(\beta)\phi(\beta)$: the unnormalized first moment of the posterior.{{< /marginnote >}}
+
+```js
+const numInt = await show`Integrate[b*1/2*Erfc[-b/Sqrt[2]]*Exp[-b^2/2]/Sqrt[2*Pi], {b, -Infinity, Infinity}]`
+```
+
+$$
+\int\beta\,\Phi(\beta)\,\phi(\beta)\,d\beta = \frac{1}{2 \sqrt{\pi}}
+$$
+
+{{< marginnote >}}Take the ratio of the two integrals: the exact posterior mean.{{< /marginnote >}}
+
+```js
+const meanPost = await show`FullSimplify[(${numInt}) / (${pyInt})]`
+```
+
+$$
+\mathbb{E}[\beta \mid y = 1] = \frac{1}{\sqrt{\pi}}
 $$
 
 {{< marginnote >}}Compute $\tfrac12\,\mathbb{E}[T \mid T > 0]$ for $T \sim \mathcal{N}(0, 2)$ from the unified skew-normal formula.{{< /marginnote >}}

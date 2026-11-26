@@ -274,13 +274,34 @@ keep = 1 + 2 * r.prod(axis=1) - (r**2).sum(axis=1) > 0
 print(f"LKJ p = 3: Var(rho_12) = {r[keep, 0].var():.4f} (exact 0.25; uniform 0.3333)")
 ```
 
-{{< marginnote >}}Change variables $\Sigma \mapsto (\sigma_1, \sigma_2, \rho)$, integrate out both scales, and check that the log-ratio to $(1 - \rho^2)^{\nu/2 - 1}$ has zero derivative; $a_1, a_2$ enter only as constants.{{< /marginnote >}}
+{{< marginnote >}}After the change of variables $\Sigma \mapsto (\sigma_1, \sigma_2, \rho)$, each scale is integrated out by this one-dimensional integral.{{< /marginnote >}}
 
 ```js
 // Chapter 7 (modern): Huang-Wand (p = 2) correlation marginal & LKJ density
-const sInt = await wl`Assuming[nu > 0 && k > 0,
+const sInt = await show`Assuming[nu > 0 && k > 0,
   FullSimplify[Integrate[s^(-(nu + 2))*Exp[-k/s^2], {s, 0, Infinity}]]]`
-const rhoKer = await wl`(1 - r^2)^(-(nu + 4)/2) * (${sInt} /. k -> nu/(a1*(1 - r^2))) * (${sInt} /. k -> nu/(a2*(1 - r^2)))`
+```
+
+$$
+\int_0^\infty s^{-(\nu+2)} e^{-k/s^2}\,ds = \frac{1}{2} k^{-\frac{1+\nu}{2}} \Gamma \left(\frac{1+\nu}{2}\right)
+$$
+
+{{< marginnote >}}Assemble the kernel of $\rho$: the factor $(1 - \rho^2)^{-(\nu+4)/2}$ times both integrated scales, with $k = \nu/[a_j(1 - \rho^2)]$; $a_1, a_2$ enter only as constants.{{< /marginnote >}}
+
+```js
+const rhoKer = await show`(1 - r^2)^(-(nu + 4)/2) * (${sInt} /. k -> nu/(a1*(1 - r^2))) * (${sInt} /. k -> nu/(a2*(1 - r^2)))`
+```
+
+$$
+\begin{aligned}
+&p(\rho \mid a_1, a_2) \propto \\
+&\frac{1}{4} \left(1-\rho^2\right)^{-\frac{4+\nu}{2}} \left(\frac{\nu}{a_1 (1-\rho^2)}\right)^{-\frac{1+\nu}{2}} \left(\frac{\nu}{a_2 (1-\rho^2)}\right)^{-\frac{1+\nu}{2}} \Gamma \left(\frac{1+\nu}{2}\right)^2
+\end{aligned}
+$$
+
+{{< marginnote >}}Check that the log-ratio of this kernel to $(1 - \rho^2)^{\nu/2 - 1}$ has zero derivative in $\rho$.{{< /marginnote >}}
+
+```js
 await show`Assuming[nu > 0 && a1 > 0 && a2 > 0 && -1 < r < 1,
   FullSimplify[D[Log[${rhoKer} / (1 - r^2)^(nu/2 - 1)], r]]]`
 ```

@@ -247,12 +247,21 @@ for s in range(S):
 print(f"Gibbs: SD {x.std():.3f}, lag-1 ACF {np.corrcoef(x[:-1], x[1:])[0, 1]:.4f} (exact {rho**2:.4f})")
 ```
 
-{{< marginnote >}}Average $\log p(x \mid Y)$ over $q_Y$ with mean $m_Y$ and variance $v_Y$; the curvature in $x$ gives the CAVI variance, whatever $v_Y$ is.{{< /marginnote >}}
+{{< marginnote >}}Average the log kernel of $p(x \mid Y)$ over $q_Y$ with mean $m_Y$ and variance $v_Y$, writing $Y = m_Y + \sqrt{v_Y}\,Z$ with $Z \sim \mathcal{N}(0, 1)$.{{< /marginnote >}}
 
 ```js
 // Chapter 6 (modern): CAVI fixed-point update on the standardized bivariate normal
-const eLog = await wl`Assuming[vY > 0 && Element[{mY, x, rho}, Reals],
+const eLog = await show`Assuming[vY > 0 && Element[{mY, x, rho}, Reals],
   Integrate[-(x - rho*(mY + Sqrt[vY]*z))^2/(2*(1 - rho^2))*Exp[-z^2/2]/Sqrt[2*Pi], {z, -Infinity, Infinity}]]`
+```
+
+$$
+E_{q_Y}\!\left[-\frac{(x - \rho Y)^2}{2(1-\rho^2)}\right] = -\frac{(x-\rho m_Y)^2+\rho^2 v_Y}{2 \left(1-\rho^2\right)}
+$$
+
+{{< marginnote >}}The curvature in $x$ gives the CAVI variance, whatever $v_Y$ is.{{< /marginnote >}}
+
+```js
 const qVar = await show`Simplify[-1/D[${eLog}, {x, 2}]]`
 ```
 

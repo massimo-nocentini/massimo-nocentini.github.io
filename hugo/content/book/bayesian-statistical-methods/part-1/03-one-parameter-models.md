@@ -280,11 +280,20 @@ p = [conf_p(k) for k in range(9)]
 print(np.round(p, 3), "80% set:", [k for k in range(9) if p[k] > 0.2])
 ```
 
-{{< marginnote >}}Take $n \to \infty$ in the effective sample size $\zeta_n n$: it saturates at $\alpha$.{{< /marginnote >}}
+{{< marginnote >}}Write the effective sample size $\zeta_n n$ of the coarsened posterior, with $\zeta_n = \alpha/(\alpha + n)$.{{< /marginnote >}}
 
 ```js
 // Chapter 3 (modern): coarsened beta posterior & conformal negative-binomial score
-const ess = await wl`al*n/(al + n)`
+const ess = await show`al*n/(al + n)`
+```
+
+$$
+\zeta_n n = \frac{\alpha\, n}{\alpha + n}
+$$
+
+{{< marginnote >}}Take $n \to \infty$ in the effective sample size $\zeta_n n$: it saturates at $\alpha$.{{< /marginnote >}}
+
+```js
 await show`Limit[${ess}, n -> Infinity, Assumptions -> al > 0]`
 ```
 

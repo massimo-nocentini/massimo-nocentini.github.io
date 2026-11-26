@@ -275,11 +275,20 @@ for z in (1e2, 1e8, 1e100):
     print(f"z = {z:.0e}: Student-t {t_ratio:.4f}, log-regularly varying {lrv_ratio:.4f}")
 ```
 
-{{< marginnote >}}Apply Tweedie’s mean formula to the Normal–Normal marginal $m = \mathcal{N}(\mu_0, \tau_0^2 + v)$.{{< /marginnote >}}
+{{< marginnote >}}Write the log of the Normal–Normal marginal $m = \mathcal{N}(\mu_0, \tau_0^2 + v)$ as a function of $\bar{y}$.{{< /marginnote >}}
 
 ```js
 // Chapter 5 (modern): Tweedie on the Normal-Normal marginal & outlier-factor limits
-const logM = await wl`-(yb - mu0)^2/(2*(t2 + v)) - Log[2*Pi*(t2 + v)]/2`
+const logM = await show`-(yb - mu0)^2/(2*(t2 + v)) - Log[2*Pi*(t2 + v)]/2`
+```
+
+$$
+\log m(\bar{y}) = -\frac{(\bar{y}-\mu_0)^2}{2 (\tau_0^2+v)}-\frac{1}{2} \log \bigl(2 \pi (\tau_0^2+v)\bigr)
+$$
+
+{{< marginnote >}}Apply Tweedie’s mean formula $\bar{y} + v\,(\log m)'(\bar{y})$ to that marginal.{{< /marginnote >}}
+
+```js
 const twMean = await show`Factor[yb + v*D[${logM}, yb]]`
 ```
 
@@ -317,10 +326,19 @@ $$
 \bigl(E[\theta \mid \bar{y}],\; \operatorname{Var}(\theta \mid \bar{y})\bigr) = \left\{\frac{13}{5},\frac{4}{5}\right\}
 $$
 
-{{< marginnote >}}Student-$t$ outlier factor: the limit $\sigma^\nu$ still involves the scale (partial robustness).{{< /marginnote >}}
+{{< marginnote >}}Student-$t$ outlier factor: the ratio of the location–scale $t_\nu$ density at an outlier $z$ to the standard $t_\nu$ density there.{{< /marginnote >}}
 
 ```js
-const tFac = await wl`(1/s)*((1 + ((z - th)/s)^2/nu)/(1 + z^2/nu))^(-(nu + 1)/2)`
+const tFac = await show`(1/s)*((1 + ((z - th)/s)^2/nu)/(1 + z^2/nu))^(-(nu + 1)/2)`
+```
+
+$$
+\frac{\frac{1}{\sigma}\,t_\nu\!\left(\frac{z - \theta}{\sigma}\right)}{t_\nu(z)} = \frac{1}{\sigma}\left(\frac{1+\frac{(z-\theta)^2}{\nu \sigma^2}}{1+\frac{z^2}{\nu}}\right)^{-\frac{1+\nu}{2}}
+$$
+
+{{< marginnote >}}Its limit as $z \to \infty$ is $\sigma^\nu$, which still involves the scale (partial robustness).{{< /marginnote >}}
+
+```js
 await show`Assuming[nu > 0 && s > 0 && Element[th, Reals], FullSimplify[Limit[${tFac}, z -> Infinity]]]`
 ```
 
@@ -328,10 +346,19 @@ $$
 \lim_{z \to \infty} \frac{\frac{1}{\sigma}\,t_\nu\!\left(\frac{z - \theta}{\sigma}\right)}{t_\nu(z)} = \sigma^\nu
 $$
 
-{{< marginnote >}}Log-regularly varying outlier factor ($b = 2$): the limit is free of $\theta$ and $\sigma$ (whole robustness).{{< /marginnote >}}
+{{< marginnote >}}Log-regularly varying outlier factor for $f(z) \propto 1/[z(\log z)^2]$, i.e. $b = 2$.{{< /marginnote >}}
 
 ```js
-const lrvFac = await wl`z/(z - th)*(Log[z]/Log[(z - th)/s])^2`
+const lrvFac = await show`z/(z - th)*(Log[z]/Log[(z - th)/s])^2`
+```
+
+$$
+\frac{\frac{1}{\sigma}\,f\!\left(\frac{z - \theta}{\sigma}\right)}{f(z)}\bigg|_{f(z) \propto 1/[z(\log z)^2]} = \frac{z}{z-\theta}\left(\frac{\log z}{\log \frac{z-\theta}{\sigma}}\right)^2
+$$
+
+{{< marginnote >}}Its limit as $z \to \infty$ is free of $\theta$ and $\sigma$ (whole robustness).{{< /marginnote >}}
+
+```js
 await show`Assuming[s > 0 && Element[th, Reals], Limit[${lrvFac}, z -> Infinity]]`
 ```
 
